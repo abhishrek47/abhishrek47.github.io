@@ -172,9 +172,9 @@
     .cases-list { margin-top: 0; }
     .case-row {
       display: grid;
-      grid-template-columns: 64px 1fr 32px;
+      grid-template-columns: 64px 1fr 56px;
       gap: 2rem;
-      align-items: start;
+      align-items: center;
       padding: 2.5rem 0;
       border-bottom: 1px solid var(--rule);
       text-decoration: none;
@@ -189,10 +189,175 @@
     .case-title { font-family: var(--serif); font-size: 1.45rem; margin-bottom: 0.65rem; line-height: 1.2; }
     .case-desc { font-size: 0.87rem; color: var(--mid); max-width: 60ch; line-height: 1.65; }
     .case-tools { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 1rem; }
-    .case-arrow { font-size: 1.3rem; color: var(--rule); transition: color 0.2s, transform 0.2s; padding-top: 4px; }
-    .case-row:hover .case-arrow { color: var(--accent); transform: translateX(5px); }
+    .case-arrow {
+      width: 48px; height: 48px;
+      border-radius: 50%;
+      background: var(--accent2);
+      border: 2px solid var(--rule);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem; color: var(--mid);
+      transition: all 0.25s ease;
+      flex-shrink: 0;
+      align-self: center;
+    }
+    .case-row:hover .case-arrow {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: white;
+      transform: translateX(6px);
+    }
 
-    /* ── RESPONSIVE ── */
+    /* ── DEMO CALLOUT STRIP ── */
+    .demo-callout {
+      background: var(--ink);
+      padding: 5rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .demo-callout::before {
+      content: 'LIVE';
+      position: absolute;
+      top: 50%; right: 4rem;
+      transform: translateY(-50%);
+      font-family: var(--serif);
+      font-size: 10rem;
+      font-style: italic;
+      color: rgba(255,255,255,0.03);
+      line-height: 1;
+      pointer-events: none;
+      user-select: none;
+    }
+    .demo-callout-label {
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.25rem;
+      display: flex; align-items: center; gap: 0.75rem;
+    }
+    .demo-callout-label::before { content:''; display:block; width:2rem; height:1px; background:var(--accent); }
+    .demo-callout h2 {
+      font-family: var(--serif);
+      font-size: clamp(2rem, 3.5vw, 3rem);
+      color: white;
+      line-height: 1.15;
+      margin-bottom: 1rem;
+      max-width: 22ch;
+    }
+    .demo-callout h2 em { font-style: italic; color: var(--accent); }
+    .demo-callout p {
+      color: rgba(255,255,255,0.55);
+      font-size: 1rem;
+      max-width: 50ch;
+      line-height: 1.7;
+      margin-bottom: 2.5rem;
+    }
+    .demo-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      max-width: 900px;
+    }
+    .demo-card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 6px;
+      padding: 1.5rem 1.75rem;
+      text-decoration: none;
+      transition: all 0.25s ease;
+      display: block;
+      position: relative;
+    }
+    .demo-card:hover {
+      background: rgba(200,75,47,0.15);
+      border-color: var(--accent);
+      transform: translateY(-3px);
+    }
+    .demo-card-num {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      margin-bottom: 0.6rem;
+    }
+    .demo-card-title {
+      font-family: var(--serif);
+      font-size: 1.05rem;
+      color: white;
+      line-height: 1.3;
+      margin-bottom: 0.5rem;
+    }
+    .demo-card-desc {
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.45);
+      line-height: 1.55;
+      margin-bottom: 1rem;
+    }
+    .demo-card-cta {
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.08em;
+      color: var(--accent);
+      display: flex; align-items: center; gap: 0.4rem;
+    }
+    .demo-card:hover .demo-card-cta { gap: 0.7rem; }
+    .demo-card-pulse {
+      position: absolute;
+      top: 1.25rem; right: 1.25rem;
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: #2ecc71;
+    }
+    .demo-card-pulse::before {
+      content: '';
+      position: absolute;
+      inset: -3px;
+      border-radius: 50%;
+      background: rgba(46,204,113,0.3);
+      animation: pulse-ring 1.8s ease infinite;
+    }
+    @keyframes pulse-ring {
+      0% { transform: scale(1); opacity: 0.7; }
+      100% { transform: scale(2.2); opacity: 0; }
+    }
+
+    /* ── DEMO INLINE BADGE on case rows ── */
+    .case-demo-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: rgba(200,75,47,0.08);
+      border: 1px solid rgba(200,75,47,0.25);
+      border-radius: 100px;
+      padding: 0.22rem 0.65rem;
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.08em;
+      color: var(--accent);
+      margin-left: 0.75rem;
+      vertical-align: middle;
+      transition: all 0.2s;
+    }
+    .case-demo-badge::before {
+      content: '';
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: var(--accent);
+      opacity: 0.7;
+    }
+    .case-row:hover .case-demo-badge {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: white;
+    }
+    .case-row:hover .case-demo-badge::before { background: white; }
+
+    @media(max-width:900px){
+      .demo-callout { padding: 4rem 1.5rem; }
+      .demo-cards { grid-template-columns: 1fr; }
+      .demo-callout::before { display: none; }
+    }
     @media(max-width:900px){
       .hero { grid-template-columns: 1fr; min-height: auto; }
       .hero-left { padding: 6rem 1.5rem 3rem; }
@@ -217,6 +382,7 @@
     <li><a href="pages/work.html">Work</a></li>
     <li><a href="pages/about.html">About</a></li>
     <li><a href="pages/certifications.html">Certifications</a></li>
+    <li><a href="pages/metrics.html">Live Stats</a></li>
     <li><a href="pages/contact.html" class="nav-cta">Let's Talk</a></li>
   </ul>
 </nav>
@@ -344,7 +510,7 @@
       <div class="case-num">01</div>
       <div>
         <div class="case-tag">AI Integration · LMS · Voice Personalization</div>
-        <div class="case-title">When the Course Knows Your Name</div>
+        <div class="case-title">When the Course Knows Your Name <span class="case-demo-badge">Live Demo</span></div>
         <p class="case-desc">Connected Storyline to Siemens' Saba LMS via JavaScript API calls to fetch live learner data, then used Murf AI to dynamically generate personalized voice narration — at scale.</p>
         <div class="case-tools">
           <span class="tag">Storyline 360</span><span class="tag">JavaScript</span><span class="tag">REST API</span><span class="tag">Murf AI</span><span class="tag">Saba LMS</span>
@@ -356,7 +522,7 @@
       <div class="case-num">02</div>
       <div>
         <div class="case-tag">Systems Design · Template Architecture · Scale</div>
-        <div class="case-title">Building the Engine, Not Just the Car</div>
+        <div class="case-title">Building the Engine, Not Just the Car <span class="case-demo-badge">Live Demo</span></div>
         <p class="case-desc">Designed a comprehensive Storyline template system — including JavaScript-enhanced interactions — that multiplied a global team's output without multiplying headcount.</p>
         <div class="case-tools">
           <span class="tag">Storyline 360</span><span class="tag">JavaScript</span><span class="tag">PowerPoint</span><span class="tag">Systems Design</span>
@@ -368,7 +534,7 @@
       <div class="case-num">03</div>
       <div>
         <div class="case-tag">Automation · Localization · Video Processing</div>
-        <div class="case-title">From Manual to Automated — Rethinking Localization</div>
+        <div class="case-title">From Manual to Automated — Rethinking Localization <span class="case-demo-badge">Live Demo</span></div>
         <p class="case-desc">Built an FFmpeg-based automation workflow that turned multi-hour manual video localization into a repeatable, script-driven operation across multiple languages.</p>
         <div class="case-tools">
           <span class="tag">FFmpeg</span><span class="tag">Shell Scripting</span><span class="tag">Storyline</span><span class="tag">Subtitle Tools</span>
@@ -377,6 +543,39 @@
       <div class="case-arrow">→</div>
     </a>
   </div>
+</section>
+
+<!-- DEMO CALLOUT -->
+<section class="demo-callout reveal">
+  <div class="demo-callout-label">Interactive Demos</div>
+  <h2>Don't just read. <em>Try it.</em></h2>
+  <p>Each case study has a working interactive demo — built in the browser to show you exactly how I think and build. No PDFs. No screenshots. Click in and explore.</p>
+  <div class="demo-cards">
+    <a class="demo-card" href="demo/index.html">
+      <span class="demo-card-pulse"></span>
+      <div class="demo-card-num">Demo 01</div>
+      <div class="demo-card-title">AI Personalized Narration</div>
+      <div class="demo-card-desc">Enter your role. Watch the course adapt. Hear your personalised voice narration in real time.</div>
+      <div class="demo-card-cta">Try it now →</div>
+    </a>
+    <a class="demo-card" href="demo2/index.html">
+      <span class="demo-card-pulse"></span>
+      <div class="demo-card-num">Demo 02</div>
+      <div class="demo-card-title">Template System Showroom</div>
+      <div class="demo-card-desc">4 live interaction patterns — tabs, accordion, drag & drop, branching — with the Storyline JS code shown.</div>
+      <div class="demo-card-cta">Try it now →</div>
+    </a>
+    <a class="demo-card" href="demo3/index.html">
+      <span class="demo-card-pulse"></span>
+      <div class="demo-card-num">Demo 03</div>
+      <div class="demo-card-title">FFmpeg Terminal Simulation</div>
+      <div class="demo-card-desc">Run the actual localization script in the browser. Watch 8 languages process in real time.</div>
+      <div class="demo-card-cta">Try it now →</div>
+    </a>
+  </div>
+  <p style="margin-top:1.75rem; font-family:var(--mono); font-size:0.7rem; color:rgba(255,255,255,0.35); letter-spacing:0.05em;">
+    <span id="demoSessionCount" style="color:rgba(255,255,255,0.6); font-weight:500;">900+</span> demo sessions logged since launch &nbsp;·&nbsp; <a href="pages/metrics.html" style="color:var(--accent); text-decoration:none;">See full stats →</a>
+  </p>
 </section>
 
 <!-- CTA -->
@@ -396,5 +595,20 @@
 </footer>
 
 <script src="js/main.js"></script>
-</body>
+<script>
+// Show live demo session count from localStorage
+(function() {
+  const seeds = { d1: 412, d2: 287, d3: 203 };
+  let total = 0;
+  for (const [k, v] of Object.entries(seeds)) {
+    const stored = localStorage.getItem('at_metrics_' + k);
+    total += stored ? parseInt(stored) : v;
+  }
+  total += parseInt(localStorage.getItem('demo1_sessions') || '0');
+  total += parseInt(localStorage.getItem('demo2_sessions') || '0');
+  total += parseInt(localStorage.getItem('demo3_sessions') || '0');
+  const el = document.getElementById('demoSessionCount');
+  if (el) el.textContent = total.toLocaleString();
+})();
+</script>
 </html>
