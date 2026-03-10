@@ -547,9 +547,10 @@ body {
 
       <div class="btn-row">
         <button class="btn btn-primary" id="btn-start" onclick="startCourse()" disabled>
-          Begin my personalised course →
+          🔊 &nbsp;Begin my personalised course →
         </button>
       </div>
+
     </div>
 
     <!-- SCREEN 2: Personalised Intro -->
@@ -566,6 +567,24 @@ body {
       <div class="narration" id="s2-narration">
         <div class="narration-tag">AI-generated narration · role-adapted</div>
         <div class="narration-text" id="s2-text"></div>
+      </div>
+
+      <div style="
+        margin-top: 12px;
+        padding: 12px 16px;
+        background: rgba(212,175,95,0.07);
+        border: 1px solid rgba(212,175,95,0.2);
+        border-radius: 8px;
+        display: flex; gap: 12px; align-items: flex-start;
+      ">
+        <span style="font-size: 16px; flex-shrink: 0; margin-top: 1px;">⚠</span>
+        <p style="font-size: 12px; color: #8ba3be; line-height: 1.65; margin: 0;">
+          <strong style="color: #d4af5f; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; display: block; margin-bottom: 4px;">Demo voice — browser only</strong>
+          You're hearing your browser's built-in speech engine — functional, but robotic.
+          The real implementation uses <strong style="color: #f0ede6;">Murf AI</strong>, which generates
+          natural, human-sounding narration indistinguishable from a real voice actor.
+          This demo shows the <em>concept</em>; Murf delivers the experience.
+        </p>
       </div>
 
       <p class="screen-body" id="s2-body"></p>
@@ -801,13 +820,46 @@ function goTo(n) {
   if (n === 4) buildScreen4();
 }
 
+// ── VOICE ──
+function speakWelcome(name, role, onDone) {
+  if (!('speechSynthesis' in window)) { onDone && onDone(); return; }
+  window.speechSynthesis.cancel();
+  const msg = new SpeechSynthesisUtterance(
+    `Welcome, ${name}. This course has been personalised for you as a ${role}.`
+  );
+  const trySpeak = () => {
+    const voices = window.speechSynthesis.getVoices();
+    const preferred = voices.find(v =>
+      /samantha|daniel|karen|moira|google us|google uk/i.test(v.name)
+    ) || voices.find(v => v.lang && v.lang.startsWith('en')) || voices[0];
+    if (preferred) msg.voice = preferred;
+    msg.rate   = 0.90;
+    msg.pitch  = 1.0;
+    msg.volume = 1.0;
+    msg.onend  = () => { onDone && onDone(); };
+    msg.onerror = () => { onDone && onDone(); };
+    window.speechSynthesis.speak(msg);
+  };
+  // Voices may not be loaded yet on first call
+  if (window.speechSynthesis.getVoices().length > 0) {
+    trySpeak();
+  } else {
+    window.speechSynthesis.onvoiceschanged = trySpeak;
+  }
+}
+
 function startCourse() {
+  const btn = document.getElementById('btn-start');
+  btn.disabled = true;
+  btn.innerHTML = '🔊 &nbsp;Generating your personalised welcome...';
+
   log('lms.api_call', [
     ['endpoint', '/api/learner/profile'],
     ['method', 'GET'],
     ['learner_id', 'session_' + Math.random().toString(36).slice(2,8)],
     ['status', '200 OK']
   ]);
+
   setTimeout(() => {
     log('lms.data_received', [
       ['name', state.name],
@@ -815,17 +867,30 @@ function startCourse() {
       ['department', 'auto-detected'],
       ['prior_completions', Math.floor(Math.random()*8)]
     ]);
-    showCode(`<span class="cmt">// Storyline JS trigger — Slide 1 OnEnter</span>
-<span class="kw">var</span> <span class="var">player</span> = GetPlayer();
-<span class="kw">var</span> <span class="var">lmsData</span> = <span class="fn">fetch</span>(<span class="str">'/api/learner/profile'</span>)
-  .then(<span class="var">r</span> => <span class="var">r</span>.<span class="fn">json</span>())
-  .then(<span class="var">data</span> => {
-    <span class="var">player</span>.<span class="fn">SetVar</span>(<span class="str">'learnerName'</span>, <span class="var">data</span>.name);
-    <span class="var">player</span>.<span class="fn">SetVar</span>(<span class="str">'learnerRole'</span>, <span class="var">data</span>.role);
-    <span class="fn">triggerNarration</span>(<span class="var">data</span>);
-  });`);
-    goTo(2);
-  }, 600);
+    log('voice.generating', [
+      ['engine', 'Web Speech API'],
+      ['text', `Welcome, ${state.name}. Personalised for ${state.role}.`],
+      ['status', 'speaking...']
+    ]);
+    showCode(`<span class="cmt">// Personalised voice narration via Speech API</span>
+<span class="kw">const</span> <span class="var">msg</span> = <span class="kw">new</span> <span class="fn">SpeechSynthesisUtterance</span>(
+  <span class="str">\`Welcome, \${learnerName}. This course has</span>
+  <span class="str">been personalised for you as a \${learnerRole}.\`</span>
+);
+<span class="var">msg</span>.voice = <span class="fn">getBestVoice</span>(<span class="str">'en'</span>);
+<span class="var">msg</span>.rate  = <span class="str">0.90</span>;
+<span class="fn">speechSynthesis</span>.<span class="fn">speak</span>(<span class="var">msg</span>);`);
+
+    speakWelcome(state.name, state.role, () => {
+      log('voice.complete', [
+        ['status', '✓ audio delivered to learner'],
+        ['next', 'loading personalised content']
+      ]);
+      btn.disabled = false;
+      btn.innerHTML = 'Start my personalised course →';
+      goTo(2);
+    });
+  }, 500);
 }
 
 // ── SCREEN 2 ──
