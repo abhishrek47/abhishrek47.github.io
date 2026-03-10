@@ -144,7 +144,7 @@
       line-height: 1;
       margin-bottom: 0.4rem;
     }
-    .kpi-num span { color: var(--accent); }
+    .kpi-num span { color: var(--mid); }
     .kpi-sub { font-size: 0.8rem; color: var(--mid); }
     .kpi-trend {
       position: absolute;
@@ -347,7 +347,7 @@
     </div>
     <div class="kpi-card">
       <div class="kpi-label">Completion Rate</div>
-      <div class="kpi-num" id="completionRate">—<span>%</span></div>
+      <div class="kpi-num" id="completionRate">—</div>
       <div class="kpi-sub">started → finished</div>
     </div>
   </div>
@@ -606,7 +606,7 @@ function init() {
   // KPIs
   animateNum(document.getElementById('totalSessions'), total);
   document.getElementById('avgTime').textContent = avgMin;
-  document.getElementById('completionRate').innerHTML = compRate + '<span>%</span>';
+  document.getElementById('completionRate').textContent = compRate + '%';
 
   // Demo cards
   document.getElementById('d1sessions').innerHTML = d.d1.toLocaleString() + '<small>sessions</small>';
