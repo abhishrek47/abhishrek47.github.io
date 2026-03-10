@@ -548,7 +548,120 @@ body {
   font-family: 'JetBrains Mono', monospace;
 }
 
-/* ── MOBILE OPTIMISATION ── */
+/* ══════════════════════════════════
+   SCREEN 1 — LIVE TEASERS
+══════════════════════════════════ */
+.teaser-card {
+  background: white;
+  border: 1.5px solid var(--rule);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.teaser-card:hover { border-color: #c0b8ad; box-shadow: 0 3px 16px rgba(0,0,0,0.07); }
+.teaser-header {
+  display: flex; align-items: center; gap: 12px; margin-bottom: 12px;
+}
+.teaser-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; color: var(--accent);
+  letter-spacing: 0.1em; text-transform: uppercase;
+  width: 22px; flex-shrink: 0;
+}
+.teaser-name { font-weight: 700; font-size: 13px; color: var(--ink); line-height: 1.2; }
+.teaser-hint { font-size: 11px; color: var(--mid); margin-top: 1px; }
+.teaser-go {
+  margin-left: auto; flex-shrink: 0;
+  background: transparent; border: 1.5px solid var(--accent);
+  color: var(--accent); font-size: 11px; font-weight: 600;
+  padding: 5px 11px; border-radius: 100px; cursor: pointer;
+  letter-spacing: 0.02em; white-space: nowrap;
+  transition: all 0.2s;
+}
+.teaser-go:hover { background: var(--accent); color: white; }
+
+/* Mini Tabs */
+.teaser-mini-tabs {
+  display: flex; gap: 0; border-bottom: 1px solid var(--rule);
+  margin-bottom: 10px;
+}
+.mini-tab {
+  padding: 6px 12px; font-size: 12px; font-weight: 600;
+  color: var(--mid); cursor: pointer; border-bottom: 2px solid transparent;
+  transition: all 0.15s; user-select: none;
+}
+.mini-tab:hover { color: var(--accent); }
+.mini-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+.teaser-mini-panels { min-height: 36px; }
+.mini-panel { display: none; font-size: 12px; color: var(--mid); line-height: 1.55; }
+.mini-panel.active { display: block; animation: fadeUp 0.2s ease; }
+
+/* Mini Accordion */
+.mini-acc { display: flex; flex-direction: column; gap: 4px; }
+.mini-acc-item {
+  border: 1px solid var(--rule); border-radius: 6px; overflow: hidden; cursor: pointer;
+  transition: border-color 0.2s;
+}
+.mini-acc-item:hover { border-color: #b8b0a5; }
+.mini-acc-item.open { border-color: var(--accent); }
+.mini-acc-q {
+  padding: 8px 12px; font-size: 12px; font-weight: 600;
+  color: var(--ink); display: flex; justify-content: space-between; align-items: center;
+  user-select: none;
+}
+.mini-acc-item.open .mini-acc-q { color: var(--accent); }
+.mini-acc-icon { font-size: 14px; color: var(--mid); transition: transform 0.25s; flex-shrink: 0; }
+.mini-acc-item.open .mini-acc-icon { transform: rotate(45deg); color: var(--accent); }
+.mini-acc-a {
+  max-height: 0; overflow: hidden;
+  font-size: 12px; color: var(--mid); line-height: 1.5;
+  transition: max-height 0.3s ease, padding 0.3s ease;
+  padding: 0 12px;
+}
+.mini-acc-item.open .mini-acc-a { max-height: 80px; padding: 0 12px 8px; }
+
+/* Mini Match (tap-to-match) */
+.mini-match { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; align-items: start; }
+.mini-match-items { display: flex; flex-direction: column; gap: 5px; }
+.mini-chip {
+  padding: 6px 11px; background: var(--paper);
+  border: 1.5px solid var(--rule); border-radius: 6px;
+  font-size: 12px; font-weight: 500; cursor: pointer;
+  transition: all 0.15s; color: var(--ink); user-select: none;
+}
+.mini-chip:hover { border-color: var(--navy); }
+.mini-chip.selected { border-color: var(--navy); background: rgba(26,58,92,0.07); color: var(--navy); }
+.mini-chip.correct { border-color: var(--green); background: rgba(46,139,87,0.08); color: var(--green); cursor: default; }
+.mini-chip.wrong { border-color: var(--accent); background: rgba(200,75,47,0.08); color: var(--accent); }
+.mini-match-zones { display: flex; flex-direction: column; gap: 5px; }
+.mini-zone {
+  padding: 6px 11px; border: 2px dashed var(--rule); border-radius: 6px;
+  font-size: 12px; color: var(--mid); cursor: pointer; transition: all 0.15s;
+  user-select: none;
+}
+.mini-zone:hover { border-color: var(--navy); color: var(--ink); }
+.mini-zone.correct { border-style: solid; border-color: var(--green); color: var(--green); background: rgba(46,139,87,0.07); cursor: default; }
+.mini-zone.wrong { border-style: solid; border-color: var(--accent); color: var(--accent); background: rgba(200,75,47,0.07); }
+
+/* Mini Branch */
+.mini-branch-q { font-size: 12px; color: var(--ink); margin-bottom: 8px; line-height: 1.5; font-weight: 500; }
+.mini-branch-opts { display: flex; flex-direction: column; gap: 5px; }
+.mini-branch-opt {
+  padding: 7px 12px; background: var(--paper);
+  border: 1.5px solid var(--rule); border-radius: 6px;
+  font-size: 12px; cursor: pointer; color: var(--ink);
+  transition: all 0.15s; user-select: none;
+}
+.mini-branch-opt:hover { border-color: var(--navy); background: white; }
+.mini-branch-opt.good { border-color: var(--green); background: rgba(46,139,87,0.08); color: #1e6640; pointer-events: none; }
+.mini-branch-opt.bad { border-color: var(--accent); background: rgba(200,75,47,0.08); color: #8b2010; pointer-events: none; }
+.mini-branch-result {
+  margin-top: 7px; padding: 7px 10px; border-radius: 6px;
+  font-size: 11.5px; line-height: 1.5; display: none; font-weight: 500;
+}
+.mini-branch-result.show.good { display: block; background: rgba(46,139,87,0.08); color: #1e6640; border-left: 3px solid var(--green); }
+.mini-branch-result.show.bad  { display: block; background: rgba(200,75,47,0.08); color: #8b2010; border-left: 3px solid var(--accent); }
+
 @media(max-width:600px){
   .header { padding: 14px 16px; gap: 8px; }
   .header-logo { font-size: 18px; }
@@ -610,29 +723,98 @@ body {
       </div>
       <div class="screen-tag">// Case Study 02 — Template System</div>
       <h1 class="screen-title">Most teams build courses.<br>I built the <span class="highlight">engine.</span></h1>
-      <p class="screen-body">A Storyline template system isn't just a time-saver — it's infrastructure. Every interaction pattern below was designed, built, and JavaScript-enhanced as a reusable component. One build. Infinite reuse.<br><br>Click through to experience the four interaction types from the inside.</p>
+      <p class="screen-body">A Storyline template system isn't just a time-saver — it's infrastructure. Every interaction pattern below is <strong style="color:var(--ink)">live and working</strong> — click, tap, match, and choose right here. Then go deeper into each one.</p>
 
-      <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; max-width:520px;">
-        <div style="background:white;border:1px solid var(--rule);border-radius:var(--radius);padding:16px;">
-          <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--accent);margin-bottom:6px;text-transform:uppercase;letter-spacing:.08em;">01</div>
-          <div style="font-weight:600;font-size:14px;margin-bottom:4px;">Tabs</div>
-          <div style="font-size:12px;color:var(--mid);">Click-to-reveal content panels</div>
+      <div style="display:flex; flex-direction:column; gap:10px; max-width:560px;">
+
+        <!-- TEASER 1: TABS (live mini tab) -->
+        <div class="teaser-card" id="teaser-tabs">
+          <div class="teaser-header">
+            <div class="teaser-num">01</div>
+            <div>
+              <div class="teaser-name">Tabs</div>
+              <div class="teaser-hint">Click a tab below ↓</div>
+            </div>
+            <button class="teaser-go" onclick="goTo(2)">Try full demo →</button>
+          </div>
+          <div class="teaser-mini-tabs">
+            <div class="mini-tab active" onclick="miniTab(this,0)">Design</div>
+            <div class="mini-tab" onclick="miniTab(this,1)">Build</div>
+            <div class="mini-tab" onclick="miniTab(this,2)">Deploy</div>
+          </div>
+          <div class="teaser-mini-panels">
+            <div class="mini-panel active">PowerPoint blueprints reviewed before a single Storyline slide was built — eliminating late-stage rework.</div>
+            <div class="mini-panel">Approved designs built as Storyline master slides with JavaScript-enhanced interaction logic.</div>
+            <div class="mini-panel">Packaged with full documentation so any developer on the team could use them independently.</div>
+          </div>
         </div>
-        <div style="background:white;border:1px solid var(--rule);border-radius:var(--radius);padding:16px;">
-          <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--accent);margin-bottom:6px;text-transform:uppercase;letter-spacing:.08em;">02</div>
-          <div style="font-weight:600;font-size:14px;margin-bottom:4px;">Accordion</div>
-          <div style="font-size:12px;color:var(--mid);">Expand/collapse sections</div>
+
+        <!-- TEASER 2: ACCORDION (live mini accordion) -->
+        <div class="teaser-card" id="teaser-acc">
+          <div class="teaser-header">
+            <div class="teaser-num">02</div>
+            <div>
+              <div class="teaser-name">Accordion</div>
+              <div class="teaser-hint">Tap a question ↓</div>
+            </div>
+            <button class="teaser-go" onclick="goTo(3)">Try full demo →</button>
+          </div>
+          <div class="mini-acc">
+            <div class="mini-acc-item" onclick="miniAccToggle(this)">
+              <div class="mini-acc-q">Why build a template system? <span class="mini-acc-icon">+</span></div>
+              <div class="mini-acc-a">One build. Infinite reuse. Every course starts from a working foundation rather than a blank slide.</div>
+            </div>
+            <div class="mini-acc-item" onclick="miniAccToggle(this)">
+              <div class="mini-acc-q">What does JavaScript add? <span class="mini-acc-icon">+</span></div>
+              <div class="mini-acc-a">API calls, dynamic content, complex conditional logic — things Storyline's native triggers can't handle alone.</div>
+            </div>
+          </div>
         </div>
-        <div style="background:white;border:1px solid var(--rule);border-radius:var(--radius);padding:16px;">
-          <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--accent);margin-bottom:6px;text-transform:uppercase;letter-spacing:.08em;">03</div>
-          <div style="font-weight:600;font-size:14px;margin-bottom:4px;">Drag & Drop</div>
-          <div style="font-size:12px;color:var(--mid);">Match-the-items interaction</div>
+
+        <!-- TEASER 3: DRAG & DROP (live mini match) -->
+        <div class="teaser-card" id="teaser-dnd">
+          <div class="teaser-header">
+            <div class="teaser-num">03</div>
+            <div>
+              <div class="teaser-name">Drag & Drop</div>
+              <div class="teaser-hint">Tap to match ↓</div>
+            </div>
+            <button class="teaser-go" onclick="goTo(4)">Try full demo →</button>
+          </div>
+          <div class="mini-match" id="mini-match">
+            <div class="mini-match-items">
+              <div class="mini-chip" data-match="a" onclick="miniSelect(this)">JavaScript</div>
+              <div class="mini-chip" data-match="b" onclick="miniSelect(this)">PowerPoint</div>
+              <div class="mini-chip" data-match="c" onclick="miniSelect(this)">SCORM</div>
+            </div>
+            <div class="mini-match-zones">
+              <div class="mini-zone" data-target="a" onclick="miniDrop(this)">Logic layer</div>
+              <div class="mini-zone" data-target="b" onclick="miniDrop(this)">Design layer</div>
+              <div class="mini-zone" data-target="c" onclick="miniDrop(this)">Tracking layer</div>
+            </div>
+          </div>
         </div>
-        <div style="background:white;border:1px solid var(--rule);border-radius:var(--radius);padding:16px;">
-          <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--accent);margin-bottom:6px;text-transform:uppercase;letter-spacing:.08em;">04</div>
-          <div style="font-weight:600;font-size:14px;margin-bottom:4px;">Branching Scenario</div>
-          <div style="font-size:12px;color:var(--mid);">Decision tree with consequences</div>
+
+        <!-- TEASER 4: BRANCHING (live mini scenario) -->
+        <div class="teaser-card" id="teaser-branch">
+          <div class="teaser-header">
+            <div class="teaser-num">04</div>
+            <div>
+              <div class="teaser-name">Branching Scenario</div>
+              <div class="teaser-hint">Make a choice ↓</div>
+            </div>
+            <button class="teaser-go" onclick="goTo(5)">Try full demo →</button>
+          </div>
+          <div class="mini-branch" id="mini-branch">
+            <div class="mini-branch-q">A stakeholder asks you to add 15 dense policy slides. You:</div>
+            <div class="mini-branch-opts">
+              <div class="mini-branch-opt" onclick="miniBranch(this, false)">A. Agree — they know best.</div>
+              <div class="mini-branch-opt" onclick="miniBranch(this, true)">B. Push back with a smarter design.</div>
+            </div>
+            <div class="mini-branch-result" id="mini-branch-result"></div>
+          </div>
         </div>
+
       </div>
 
       <div class="btn-row">
@@ -1092,6 +1274,55 @@ function restart() {
   document.getElementById('log-container').innerHTML = '';
   document.getElementById('code-display').classList.remove('show');
   goTo(1);
+}
+
+// ── TEASER INTERACTIONS (Screen 1) ──
+function miniTab(el, idx) {
+  document.querySelectorAll('.mini-tab').forEach((t,i) => t.classList.toggle('active', i===idx));
+  document.querySelectorAll('.mini-panel').forEach((p,i) => p.classList.toggle('active', i===idx));
+}
+
+let miniAccOpen = null;
+function miniAccToggle(el) {
+  const isOpen = el.classList.contains('open');
+  document.querySelectorAll('.mini-acc-item').forEach(i => i.classList.remove('open'));
+  if (!isOpen) el.classList.add('open');
+  miniAccOpen = isOpen ? null : el;
+}
+
+let miniSelected = null;
+function miniSelect(chip) {
+  if (chip.classList.contains('correct') || chip.classList.contains('wrong')) return;
+  document.querySelectorAll('.mini-chip').forEach(c => c.classList.remove('selected'));
+  chip.classList.add('selected');
+  miniSelected = chip;
+}
+function miniDrop(zone) {
+  if (!miniSelected) return;
+  if (zone.classList.contains('correct') || zone.classList.contains('wrong')) return;
+  const correct = miniSelected.dataset.match === zone.dataset.target;
+  miniSelected.classList.remove('selected');
+  miniSelected.classList.add(correct ? 'correct' : 'wrong');
+  zone.classList.add(correct ? 'correct' : 'wrong');
+  zone.textContent = (correct ? '✓ ' : '✗ ') + zone.textContent;
+  miniSelected = null;
+}
+
+function miniBranch(el, correct) {
+  document.querySelectorAll('.mini-branch-opt').forEach(o => {
+    o.style.pointerEvents = 'none'; o.style.opacity = '0.45';
+  });
+  el.style.opacity = '1';
+  el.classList.add(correct ? 'good' : 'bad');
+  if (!correct) {
+    document.querySelectorAll('.mini-branch-opt')[1].classList.add('good');
+    document.querySelectorAll('.mini-branch-opt')[1].style.opacity = '1';
+  }
+  const res = document.getElementById('mini-branch-result');
+  res.textContent = correct
+    ? '✓ Exactly right. Use the accordion template to handle depth without padding course length.'
+    : '✗ 15 dense slides will tank completion rates. The template system gives you better options.';
+  res.className = 'mini-branch-result show ' + (correct ? 'good' : 'bad');
 }
 
 // Init log
