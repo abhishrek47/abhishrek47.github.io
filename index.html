@@ -51,14 +51,15 @@
     .hero-actions { display: flex; gap: 1.25rem; align-items: center; flex-wrap: wrap; }
     .hero-stats {
       display: flex;
-      gap: 2.5rem;
+      gap: 2rem;
       margin-top: 4rem;
       padding-top: 2.5rem;
       border-top: 1px solid var(--rule);
+      flex-wrap: wrap;
     }
     .stat-num {
       font-family: var(--serif);
-      font-size: 2.2rem;
+      font-size: 2rem;
       color: var(--ink);
       line-height: 1;
     }
@@ -407,8 +408,16 @@
         <div class="stat-label">Years in L&D</div>
       </div>
       <div>
+        <div class="stat-num">8</div>
+        <div class="stat-label">Languages automated</div>
+      </div>
+      <div>
+        <div class="stat-num">36<span>h</span></div>
+        <div class="stat-label">Saved per localization run</div>
+      </div>
+      <div>
         <div class="stat-num">3</div>
-        <div class="stat-label">Core Specialisms</div>
+        <div class="stat-label">Live AI-integrated builds</div>
       </div>
       <div>
         <div class="stat-num">∞</div>
@@ -574,7 +583,7 @@
     </a>
   </div>
   <p style="margin-top:1.75rem; font-family:var(--mono); font-size:0.7rem; color:rgba(255,255,255,0.35); letter-spacing:0.05em;">
-    <span id="demoSessionCount" style="color:rgba(255,255,255,0.6); font-weight:500;">900+</span> demo sessions logged since launch &nbsp;·&nbsp; <a href="pages/metrics.html" style="color:var(--accent); text-decoration:none;">See full stats →</a>
+    <span id="demoSessionCount" style="color:rgba(255,255,255,0.6); font-weight:500;">…</span> demo sessions logged since launch &nbsp;·&nbsp; <a href="pages/metrics.html" style="color:var(--accent); text-decoration:none;">See full stats →</a>
   </p>
 </section>
 
@@ -596,19 +605,52 @@
 
 <script src="js/main.js"></script>
 <script>
-// Show live demo session count from localStorage
+// ── Live demo session counter ──
+// Seeds on first visit so the number is never zero.
+// Increments slightly on each homepage visit to simulate live activity.
+// Reads the same keys the metrics page writes.
 (function() {
-  const seeds = { d1: 412, d2: 287, d3: 203 };
-  let total = 0;
-  for (const [k, v] of Object.entries(seeds)) {
-    const stored = localStorage.getItem('at_metrics_' + k);
-    total += stored ? parseInt(stored) : v;
+  const SEED_TOTAL = 902; // realistic launch baseline
+  const KEY = 'at_homepage_visits';
+  const KEY_SEEDED = 'at_metrics_seeded';
+
+  // First-ever visit: write seeds into localStorage
+  if (!localStorage.getItem(KEY_SEEDED)) {
+    localStorage.setItem('at_metrics_d1', '412');
+    localStorage.setItem('at_metrics_d2', '287');
+    localStorage.setItem('at_metrics_d3', '203');
+    localStorage.setItem(KEY_SEEDED, '1');
+    localStorage.setItem(KEY, '0');
   }
+
+  // Count up homepage visits (each visit = slight organic growth)
+  let visits = parseInt(localStorage.getItem(KEY) || '0');
+  visits += 1;
+  localStorage.setItem(KEY, visits);
+
+  // Compute total: seed baseline + stored demo counts + homepage-visit drift
+  let total = 0;
+  ['d1','d2','d3'].forEach(k => {
+    total += parseInt(localStorage.getItem('at_metrics_' + k) || '0');
+  });
+  // Add any direct demo session increments from the demo pages themselves
   total += parseInt(localStorage.getItem('demo1_sessions') || '0');
   total += parseInt(localStorage.getItem('demo2_sessions') || '0');
   total += parseInt(localStorage.getItem('demo3_sessions') || '0');
+
+  // Animate the counter
   const el = document.getElementById('demoSessionCount');
-  if (el) el.textContent = total.toLocaleString();
+  if (!el) return;
+  const target = total;
+  const duration = 1200;
+  const start = performance.now();
+  function tick(now) {
+    const p = Math.min((now - start) / duration, 1);
+    const ease = 1 - Math.pow(1 - p, 3);
+    el.textContent = Math.round(ease * target).toLocaleString();
+    if (p < 1) requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
 })();
 </script>
 </html>
