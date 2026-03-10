@@ -492,6 +492,43 @@ body {
   .stage { padding: 32px 24px; }
 }
 
+
+/* ── HBT LABELED BUTTON ── */
+.hbt-btn-labeled {
+  width: auto !important;
+  height: 32px !important;
+  border-radius: 100px !important;
+  padding: 0 14px 0 10px !important;
+  gap: 6px !important;
+  flex-direction: row !important;
+  font-size: 0 !important;
+  display: inline-flex !important;
+}
+.hbt-btn-icon {
+  font-family: 'DM Serif Display', serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: inherit;
+  line-height: 1;
+  width: 18px;
+  height: 18px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.hbt-btn-text {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.7);
+  white-space: nowrap;
+}
+.hbt-btn-labeled:hover .hbt-btn-text { color: #c84b2f; }
+@media(max-width:480px){
+  .hbt-btn-text { display: none; }
+  .hbt-btn-labeled { padding: 0 !important; width: 32px !important; justify-content: center; }
+}
+
 /* ── HOW I BUILT THIS DRAWER ── */
 .hbt-btn {
   width: 32px; height: 32px; border-radius: 50%;
@@ -591,6 +628,41 @@ body {
   font-size: 12px; color: #4a6280;
   font-family: 'JetBrains Mono', monospace;
 }
+
+/* ── MOBILE OPTIMISATION ── */
+@media(max-width:600px){
+  .header { padding: 14px 16px; gap: 8px; }
+  .header-logo { font-size: 18px; }
+  .header-badge { font-size: 9px; padding: 4px 8px; letter-spacing: 0.05em; }
+  .header-by { display: none; }
+  .hbt-btn-wrap { margin-left: auto; }
+  .progress-step { height: 3px; border-radius: 2px; }
+  .screen-inner { padding: 24px 16px 40px !important; }
+  .screen-title { font-size: clamp(1.4rem, 5vw, 1.8rem) !important; }
+  .screen-body { font-size: 14px !important; }
+  .btn-primary, .btn-secondary { padding: 12px 20px !important; font-size: 13px !important; }
+  .nav-btns { gap: 8px !important; flex-wrap: wrap; }
+  .stage { padding: 20px 16px !important; }
+  .hbt-drawer { width: 100vw !important; }
+  /* Demo 1 specific */
+  .role-grid { grid-template-columns: 1fr 1fr !important; gap: 10px !important; }
+  .role-card { padding: 14px 12px !important; }
+  .name-input { font-size: 15px !important; }
+  .narration-box { font-size: 13px !important; padding: 14px !important; }
+  /* Demo 2 specific */
+  .tab-list { gap: 4px !important; overflow-x: auto; flex-wrap: nowrap !important; }
+  .tab-btn { padding: 8px 12px !important; font-size: 12px !important; white-space: nowrap; }
+  .dnd-wrapper { grid-template-columns: 1fr !important; }
+  .dnd-items { gap: 6px !important; }
+  .dnd-item { padding: 10px 12px !important; font-size: 13px !important; }
+  /* Demo 3 specific */
+  .terminal { padding: 14px !important; font-size: 11px !important; line-height: 1.5 !important; }
+  .terminal-line { word-break: break-all; }
+  .cmd-row { flex-direction: column; gap: 8px !important; align-items: stretch !important; }
+  .cmd-input { font-size: 12px !important; }
+  .pain-stat-num { font-size: 2rem !important; }
+  .result-stat-num { font-size: 2rem !important; }
+}
 </style>
 </head>
 <body>
@@ -598,7 +670,10 @@ body {
 <header class="header">
   <div class="header-logo">AT<span>.</span></div>
   <div class="header-badge">Live Portfolio Demo</div>
-  <button class="hbt-btn" onclick="openHBT()" title="How I built this">?</button>
+  <button class="hbt-btn hbt-btn-labeled" onclick="openHBT()" title="How I built this" aria-label="How I built this">
+    <span class="hbt-btn-icon">?</span>
+    <span class="hbt-btn-text">How I built this</span>
+  </button>
   <div class="header-by">by <a href="https://abhishektrivedi.com" target="_blank">Abhishek Trivedi</a></div>
 </header>
 
