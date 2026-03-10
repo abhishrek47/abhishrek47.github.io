@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Abhishek Trivedi | Learning Experience Technologist</title>
+  <meta name="description" content="Learning Experience Technologist with 15+ years building AI-integrated, technically advanced eLearning solutions. Storyline, JavaScript, APIs, xAPI, automation." />
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      padding-top: 72px;
+    }
+    .hero-left {
+      padding: 6rem 4rem 4rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+    }
+    .hero-tag {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.25rem;
+      display: flex; align-items: center; gap: 0.75rem;
+    }
+    .hero-tag::before { content:''; display:block; width:2rem; height:1px; background:var(--accent); }
+    .hero h1 {
+      font-family: var(--serif);
+      font-size: clamp(2.8rem, 4.5vw, 4.2rem);
+      line-height: 1.1;
+      color: var(--ink);
+      margin-bottom: 1.5rem;
+    }
+    .hero h1 em { font-style: italic; color: var(--accent); }
+    .hero-sub {
+      font-size: 1rem;
+      color: var(--mid);
+      max-width: 44ch;
+      line-height: 1.75;
+      margin-bottom: 2.5rem;
+      font-weight: 300;
+    }
+    .hero-actions { display: flex; gap: 1.25rem; align-items: center; flex-wrap: wrap; }
+    .hero-stats {
+      display: flex;
+      gap: 2.5rem;
+      margin-top: 4rem;
+      padding-top: 2.5rem;
+      border-top: 1px solid var(--rule);
+    }
+    .stat-num {
+      font-family: var(--serif);
+      font-size: 2.2rem;
+      color: var(--ink);
+      line-height: 1;
+    }
+    .stat-num span { color: var(--accent); }
+    .stat-label { font-size: 0.78rem; color: var(--mid); margin-top: 0.25rem; font-weight: 500; }
+
+    /* ── HERO RIGHT ── */
+    .hero-right {
+      background: var(--accent2);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 4rem 3rem;
+      position: relative;
+      overflow: hidden;
+      gap: 2rem;
+    }
+    .hero-right::before {
+      content: '';
+      position: absolute;
+      top: -120px; right: -120px;
+      width: 380px; height: 380px;
+      border-radius: 50%;
+      background: rgba(200,75,47,0.12);
+      pointer-events: none;
+    }
+    .hero-right::after {
+      content: '';
+      position: absolute;
+      bottom: -80px; left: -80px;
+      width: 260px; height: 260px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.04);
+      pointer-events: none;
+    }
+    .profile-wrap {
+      position: relative;
+      z-index: 2;
+    }
+    .profile-img {
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      object-fit: cover;
+      object-position: center top;
+      border: 4px solid rgba(255,255,255,0.15);
+      display: block;
+    }
+    .profile-badge {
+      position: absolute;
+      bottom: 8px; right: -8px;
+      background: var(--accent);
+      color: white;
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      padding: 0.3rem 0.65rem;
+      border-radius: 100px;
+      white-space: nowrap;
+    }
+    .tech-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+      width: 100%;
+      max-width: 320px;
+      position: relative;
+      z-index: 2;
+    }
+    .tech-card {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      padding: 1rem 1.1rem;
+      border-radius: 4px;
+      transition: background 0.25s;
+    }
+    .tech-card:hover { background: rgba(255,255,255,0.11); }
+    .tc-label {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      color: rgba(255,255,255,0.42);
+      text-transform: uppercase;
+      margin-bottom: 0.2rem;
+    }
+    .tc-val { font-size: 0.8rem; color: rgba(255,255,255,0.88); font-weight: 500; }
+
+    /* ── SERVICES ── */
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border: 1px solid var(--rule);
+      margin-top: 0;
+    }
+    .service-card {
+      padding: 2.5rem;
+      border-right: 1px solid var(--rule);
+      transition: background 0.25s;
+      position: relative;
+    }
+    .service-card:last-child { border-right: none; }
+    .service-card:hover { background: white; }
+    .svc-num { font-family: var(--mono); font-size: 0.68rem; color: var(--accent); letter-spacing: 0.1em; margin-bottom: 1.5rem; }
+    .svc-title { font-family: var(--serif); font-size: 1.4rem; margin-bottom: 0.85rem; line-height: 1.2; }
+    .svc-desc { font-size: 0.88rem; color: var(--mid); line-height: 1.72; }
+    .svc-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 1.5rem; }
+
+    /* ── CASE STUDIES ── */
+    .cases-section { padding: 6rem 4rem; background: white; }
+    .cases-list { margin-top: 0; }
+    .case-row {
+      display: grid;
+      grid-template-columns: 64px 1fr 32px;
+      gap: 2rem;
+      align-items: start;
+      padding: 2.5rem 0;
+      border-bottom: 1px solid var(--rule);
+      text-decoration: none;
+      color: inherit;
+      transition: padding-left 0.3s ease;
+      cursor: pointer;
+    }
+    .case-row:first-child { border-top: 1px solid var(--rule); }
+    .case-row:hover { padding-left: 1rem; }
+    .case-num { font-family: var(--mono); font-size: 0.68rem; color: var(--accent); letter-spacing: 0.1em; padding-top: 4px; }
+    .case-tag { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--mid); margin-bottom: 0.4rem; }
+    .case-title { font-family: var(--serif); font-size: 1.45rem; margin-bottom: 0.65rem; line-height: 1.2; }
+    .case-desc { font-size: 0.87rem; color: var(--mid); max-width: 60ch; line-height: 1.65; }
+    .case-tools { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 1rem; }
+    .case-arrow { font-size: 1.3rem; color: var(--rule); transition: color 0.2s, transform 0.2s; padding-top: 4px; }
+    .case-row:hover .case-arrow { color: var(--accent); transform: translateX(5px); }
+
+    /* ── RESPONSIVE ── */
+    @media(max-width:900px){
+      .hero { grid-template-columns: 1fr; min-height: auto; }
+      .hero-left { padding: 6rem 1.5rem 3rem; }
+      .hero-right { padding: 3rem 1.5rem; }
+      .services-grid { grid-template-columns: 1fr; }
+      .service-card { border-right: none; border-bottom: 1px solid var(--rule); }
+      .cases-section { padding: 4rem 1.5rem; }
+      .case-row { grid-template-columns: 48px 1fr 24px; gap: 1rem; }
+      .hero-stats { gap: 1.5rem; flex-wrap: wrap; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">AT<span>.</span></a>
+  <button class="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+  <ul class="nav-links">
+    <li><a href="pages/work.html">Work</a></li>
+    <li><a href="pages/about.html">About</a></li>
+    <li><a href="pages/certifications.html">Certifications</a></li>
+    <li><a href="pages/contact.html" class="nav-cta">Let's Talk</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="available-badge fade-in">
+      <span class="available-dot"></span>
+      Available for new opportunities
+    </div>
+    <div class="hero-tag fade-in">Learning Experience Technologist</div>
+    <h1 class="fade-in">I build learning experiences that <em>think.</em></h1>
+    <p class="hero-sub fade-in">15+ years designing and engineering eLearning — from AI-personalized courses to automated localization workflows. I connect instructional design with JavaScript, APIs, and AI tooling to build what most designers can't imagine.</p>
+    <div class="hero-actions fade-in">
+      <a href="pages/work.html" class="btn-primary">See My Work →</a>
+      <a href="pages/contact.html" class="btn-secondary">Let's Talk</a>
+    </div>
+    <div class="hero-stats fade-in">
+      <div>
+        <div class="stat-num">15<span>+</span></div>
+        <div class="stat-label">Years in L&D</div>
+      </div>
+      <div>
+        <div class="stat-num">3</div>
+        <div class="stat-label">Core Specialisms</div>
+      </div>
+      <div>
+        <div class="stat-num">∞</div>
+        <div class="stat-label">Curiosity</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="profile-wrap">
+      <img src="images/profile.jpeg" alt="Abhishek Trivedi" class="profile-img" />
+      <span class="profile-badge">Open to Work</span>
+    </div>
+    <div class="tech-grid">
+      <div class="tech-card"><div class="tc-label">Authoring</div><div class="tc-val">Storyline 360</div></div>
+      <div class="tech-card"><div class="tc-label">Integration</div><div class="tc-val">JS + APIs</div></div>
+      <div class="tech-card"><div class="tc-label">AI Tools</div><div class="tc-val">Murf · GPT</div></div>
+      <div class="tech-card"><div class="tc-label">Automation</div><div class="tc-val">FFmpeg · Scripts</div></div>
+      <div class="tech-card"><div class="tc-label">Tracking</div><div class="tc-val">xAPI · SCORM</div></div>
+      <div class="tech-card"><div class="tc-label">Video</div><div class="tc-val">Camtasia · Synthesia</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <span class="marquee-item">Articulate Storyline 360</span><span class="marquee-item marquee-dot">◆</span>
+    <span class="marquee-item">JavaScript Integration</span><span class="marquee-item marquee-dot">◆</span>
+    <span class="marquee-item">REST API Connections</span><span class="marquee-item marquee-dot">◆</span>
+    <span class="marquee-item">xAPI & SCORM</span><span class="marquee-item marquee-dot">◆</span>
+    <span class="marquee-item">AI Voice Personalization</span><span class="marquee-item marquee-dot">◆</span>
+    <span class="marquee-item">FFmpeg Automation</span><span class="marquee-item marquee-dot">◆</span>
+    <span class="marquee-item">LMS Architecture</span><span class="marquee-item marquee-dot">◆</span>
+    <span class="marquee-item">Camtasia · Synthesia</span><span class="marquee-item marquee-dot">◆</span>
+    <span class="marquee-item">Articulate Rise 360</span><span class="marquee-item marquee-dot">◆</span>
+    <span class="marquee-item">Multilingual eLearning</span><span class="marquee-item marquee-dot">◆</span>
+    <!-- duplicate for seamless loop -->
+    <span class="marquee-item">Articulate Storyline 360</span><span class="marquee-item marquee-dot">◆</span>
+    <span class="marquee-item">JavaScript Integration</span><span class="marquee-item marquee-dot">◆</span>
+    <span class="marquee-item">REST API Connections</span><span class="marquee-item marquee-dot">◆</span>
+    <span class="marquee-item">xAPI & SCORM</span><span class="marquee-item marquee-dot">◆</span>
+    <span class="marquee-item">AI Voice Personalization</span><span class="marquee-item marquee-dot">◆</span>
+    <span class="marquee-item">FFmpeg Automation</span><span class="marquee-item marquee-dot">◆</span>
+    <span class="marquee-item">LMS Architecture</span><span class="marquee-item marquee-dot">◆</span>
+    <span class="marquee-item">Camtasia · Synthesia</span><span class="marquee-item marquee-dot">◆</span>
+    <span class="marquee-item">Articulate Rise 360</span><span class="marquee-item marquee-dot">◆</span>
+    <span class="marquee-item">Multilingual eLearning</span><span class="marquee-item marquee-dot">◆</span>
+  </div>
+</div>
+
+<!-- WHAT I DO -->
+<section class="section reveal" id="services">
+  <div class="section-label">What I Do</div>
+  <h2 class="section-heading">Design thinking meets<br>engineering curiosity</h2>
+  <div class="services-grid">
+    <div class="service-card">
+      <div class="svc-num">01</div>
+      <div class="svc-title">Learning Experience Design</div>
+      <p class="svc-desc">Branching scenarios, performance-based assessments, and content architecture grounded in instructional theory. I design for behavior change — not just completion rates.</p>
+      <div class="svc-tags">
+        <span class="tag">Instructional Design</span>
+        <span class="tag">Storyline 360</span>
+        <span class="tag">Rise 360</span>
+        <span class="tag">Storyboarding</span>
+      </div>
+    </div>
+    <div class="service-card">
+      <div class="svc-num">02</div>
+      <div class="svc-title">Learning Technology & Integration</div>
+      <p class="svc-desc">Extending authoring tools beyond their defaults using JavaScript, APIs, and LMS integration. I connect systems and surface data to create smarter learner experiences.</p>
+      <div class="svc-tags">
+        <span class="tag">JavaScript</span>
+        <span class="tag">REST APIs</span>
+        <span class="tag">xAPI</span>
+        <span class="tag">LMS Admin</span>
+      </div>
+    </div>
+    <div class="service-card">
+      <div class="svc-num">03</div>
+      <div class="svc-title">AI & Workflow Automation</div>
+      <p class="svc-desc">AI-enhanced workflows — from voice personalization to automated localization pipelines. If a human is doing something repetitive, a script should be doing it instead.</p>
+      <div class="svc-tags">
+        <span class="tag">Murf AI</span>
+        <span class="tag">GPT Workflows</span>
+        <span class="tag">FFmpeg</span>
+        <span class="tag">Synthesia</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CASE STUDIES PREVIEW -->
+<section class="cases-section reveal">
+  <div class="section-label">Selected Work</div>
+  <h2 class="section-heading">Case studies that show<br>how I think</h2>
+  <div class="cases-list">
+    <a class="case-row" href="pages/work.html#case1">
+      <div class="case-num">01</div>
+      <div>
+        <div class="case-tag">AI Integration · LMS · Voice Personalization</div>
+        <div class="case-title">When the Course Knows Your Name</div>
+        <p class="case-desc">Connected Storyline to Siemens' Saba LMS via JavaScript API calls to fetch live learner data, then used Murf AI to dynamically generate personalized voice narration — at scale.</p>
+        <div class="case-tools">
+          <span class="tag">Storyline 360</span><span class="tag">JavaScript</span><span class="tag">REST API</span><span class="tag">Murf AI</span><span class="tag">Saba LMS</span>
+        </div>
+      </div>
+      <div class="case-arrow">→</div>
+    </a>
+    <a class="case-row" href="pages/work.html#case2">
+      <div class="case-num">02</div>
+      <div>
+        <div class="case-tag">Systems Design · Template Architecture · Scale</div>
+        <div class="case-title">Building the Engine, Not Just the Car</div>
+        <p class="case-desc">Designed a comprehensive Storyline template system — including JavaScript-enhanced interactions — that multiplied a global team's output without multiplying headcount.</p>
+        <div class="case-tools">
+          <span class="tag">Storyline 360</span><span class="tag">JavaScript</span><span class="tag">PowerPoint</span><span class="tag">Systems Design</span>
+        </div>
+      </div>
+      <div class="case-arrow">→</div>
+    </a>
+    <a class="case-row" href="pages/work.html#case3">
+      <div class="case-num">03</div>
+      <div>
+        <div class="case-tag">Automation · Localization · Video Processing</div>
+        <div class="case-title">From Manual to Automated — Rethinking Localization</div>
+        <p class="case-desc">Built an FFmpeg-based automation workflow that turned multi-hour manual video localization into a repeatable, script-driven operation across multiple languages.</p>
+        <div class="case-tools">
+          <span class="tag">FFmpeg</span><span class="tag">Shell Scripting</span><span class="tag">Storyline</span><span class="tag">Subtitle Tools</span>
+        </div>
+      </div>
+      <div class="case-arrow">→</div>
+    </a>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-strip reveal">
+  <h2>Building something that needs <em>design thinking</em> and engineering curiosity?</h2>
+  <a href="pages/contact.html" class="btn-light">Let's Talk →</a>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-name">© 2026 Abhishek Trivedi · Learning Experience Technologist</div>
+  <ul class="footer-links">
+    <li><a href="https://www.linkedin.com/in/trivedi-abhishek/" target="_blank">LinkedIn</a></li>
+    <li><a href="pages/contact.html">Contact</a></li>
+    <li><a href="pages/work.html">Work</a></li>
+  </ul>
+</footer>
+
+<script src="js/main.js"></script>
+</body>
+</html>

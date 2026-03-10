@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Certifications | Abhishek Trivedi</title>
+  <meta name="description" content="Professional certifications held by Abhishek Trivedi — TechSmith Camtasia Explorer, Articulate Storyline, and more." />
+  <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    .certs-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2px;
+      margin-top: 3rem;
+      border: 1px solid var(--rule);
+      background: var(--rule);
+    }
+    .cert-card {
+      background: var(--paper);
+      padding: 3rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      transition: background 0.25s;
+    }
+    .cert-card:hover { background: white; }
+    .cert-icon {
+      width: 52px; height: 52px;
+      background: var(--ink);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+    }
+    .cert-issuer {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+    .cert-name {
+      font-family: var(--serif);
+      font-size: 1.5rem;
+      line-height: 1.2;
+    }
+    .cert-desc {
+      font-size: 0.88rem;
+      color: var(--mid);
+      line-height: 1.7;
+    }
+    .cert-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: var(--rule);
+      padding: 0.3rem 0.75rem;
+      border-radius: 2px;
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--mid);
+      align-self: flex-start;
+    }
+    .cert-badge.verified { background: #e8f5ea; color: #2d7a3a; }
+    .cert-badge.verified::before { content: '✓ '; }
+    .skills-strip {
+      padding: 5rem 4rem;
+      background: white;
+    }
+    .skills-strip h2 {
+      font-family: var(--serif);
+      font-size: 2rem;
+      margin-bottom: 2rem;
+    }
+    .all-skills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+    }
+    .skill-pill {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.45rem 1rem;
+      border: 1px solid var(--rule);
+      color: var(--mid);
+      border-radius: 2px;
+      transition: all 0.2s;
+    }
+    .skill-pill:hover { border-color: var(--accent); color: var(--accent); }
+
+    @media(max-width:900px){
+      .certs-grid { grid-template-columns: 1fr; }
+      .cert-card { padding: 2rem 1.5rem; }
+      .skills-strip { padding: 3rem 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="../index.html" class="nav-logo">AT<span>.</span></a>
+  <button class="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+  <ul class="nav-links">
+    <li><a href="work.html">Work</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="certifications.html" class="active">Certifications</a></li>
+    <li><a href="contact.html" class="nav-cta">Let's Talk</a></li>
+  </ul>
+</nav>
+
+<div class="page-hero">
+  <div class="section-label">Credentials</div>
+  <h1>Certifications &<br>Expertise</h1>
+  <p>Formally verified skills backed by 15+ years of hands-on practice in learning design and technology.</p>
+</div>
+
+<section class="section">
+  <div class="section-label">Certifications</div>
+
+  <div class="certs-grid">
+    <div class="cert-card reveal">
+      <div class="cert-icon">🎬</div>
+      <div class="cert-issuer">TechSmith</div>
+      <div class="cert-name">Camtasia Explorer Certified</div>
+      <p class="cert-desc">Formal certification in Camtasia video production and editing — covering screen recording, multi-track editing, interactive elements, captions, and production workflows for eLearning and training video.</p>
+      <span class="cert-badge verified">Verified</span>
+    </div>
+
+    <div class="cert-card reveal">
+      <div class="cert-icon">⚡</div>
+      <div class="cert-issuer">Articulate</div>
+      <div class="cert-name">Articulate Storyline Certified</div>
+      <p class="cert-desc">Certified proficiency in Articulate Storyline 360 — the industry-leading eLearning authoring tool. Advanced use includes JavaScript integration, custom interactions, API connections, and complex branching logic.</p>
+      <span class="cert-badge verified">Verified</span>
+    </div>
+  </div>
+</section>
+
+<div class="skills-strip reveal">
+  <div class="section-label">Full Skills Profile</div>
+  <h2>Tools & Technologies</h2>
+  <div class="all-skills">
+    <span class="skill-pill">Articulate Storyline 360</span>
+    <span class="skill-pill">Articulate Rise 360</span>
+    <span class="skill-pill">Camtasia</span>
+    <span class="skill-pill">JavaScript</span>
+    <span class="skill-pill">REST API Integration</span>
+    <span class="skill-pill">xAPI</span>
+    <span class="skill-pill">SCORM</span>
+    <span class="skill-pill">Murf AI</span>
+    <span class="skill-pill">Synthesia</span>
+    <span class="skill-pill">GPT Workflows</span>
+    <span class="skill-pill">FFmpeg</span>
+    <span class="skill-pill">Shell Scripting</span>
+    <span class="skill-pill">Saba LMS</span>
+    <span class="skill-pill">LMS Administration</span>
+    <span class="skill-pill">Video Localization</span>
+    <span class="skill-pill">Subtitling & Captions</span>
+    <span class="skill-pill">Instructional Design</span>
+    <span class="skill-pill">Storyboarding</span>
+    <span class="skill-pill">Accessibility (WCAG)</span>
+    <span class="skill-pill">Learning Analytics</span>
+    <span class="skill-pill">Template Architecture</span>
+    <span class="skill-pill">Multimedia Production</span>
+    <span class="skill-pill">Project Coordination</span>
+  </div>
+</div>
+
+<section class="cta-strip reveal">
+  <h2>Want to see these skills <em>in action?</em></h2>
+  <a href="work.html" class="btn-light">View Case Studies →</a>
+</section>
+
+<footer>
+  <div class="footer-name">© 2026 Abhishek Trivedi · Learning Experience Technologist</div>
+  <ul class="footer-links">
+    <li><a href="https://www.linkedin.com/in/trivedi-abhishek/" target="_blank">LinkedIn</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <li><a href="../index.html">Home</a></li>
+  </ul>
+</footer>
+
+<script src="../js/main.js"></script>
+</body>
+</html>

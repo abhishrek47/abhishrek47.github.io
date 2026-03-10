@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About | Abhishek Trivedi</title>
+  <meta name="description" content="About Abhishek Trivedi — Learning Experience Technologist with 15+ years in L&D, specialising in AI integration, JavaScript, and learning system design." />
+  <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.6fr;
+      gap: 6rem;
+      padding: 5rem 4rem;
+      align-items: start;
+    }
+    .about-left { position: sticky; top: 100px; }
+    .about-photo {
+      width: 100%;
+      max-width: 320px;
+      aspect-ratio: 4/5;
+      object-fit: cover;
+      object-position: center top;
+      display: block;
+      border-radius: 4px;
+    }
+    .about-name {
+      font-family: var(--serif);
+      font-size: 1.6rem;
+      margin-top: 1.5rem;
+      margin-bottom: 0.25rem;
+    }
+    .about-title {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+    .about-contact-list {
+      list-style: none;
+      margin-top: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+    .about-contact-list a {
+      font-size: 0.85rem;
+      color: var(--mid);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: color 0.2s;
+    }
+    .about-contact-list a:hover { color: var(--accent); }
+    .about-right {}
+    .bio-section { margin-bottom: 3.5rem; }
+    .bio-section h2 {
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.25rem;
+      display: flex; align-items: center; gap: 0.6rem;
+    }
+    .bio-section h2::before { content:''; display:block; width:1.25rem; height:1px; background:var(--accent); }
+    .bio-section p {
+      font-size: 0.95rem;
+      color: var(--mid);
+      line-height: 1.8;
+      margin-bottom: 1rem;
+    }
+    .bio-section p strong { color: var(--ink); font-weight: 600; }
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+    }
+    .skill-group h3 {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--mid);
+      margin-bottom: 0.75rem;
+    }
+    .skill-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+    .timeline { border-left: 2px solid var(--rule); padding-left: 2rem; }
+    .timeline-item { position: relative; margin-bottom: 2rem; }
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -2.4rem;
+      top: 0.35rem;
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: var(--accent);
+      border: 2px solid var(--paper);
+      box-shadow: 0 0 0 2px var(--accent);
+    }
+    .timeline-year {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      margin-bottom: 0.25rem;
+    }
+    .timeline-role {
+      font-weight: 600;
+      font-size: 0.95rem;
+      margin-bottom: 0.15rem;
+    }
+    .timeline-company { font-size: 0.85rem; color: var(--mid); }
+
+    @media(max-width:900px){
+      .about-grid { grid-template-columns: 1fr; gap: 3rem; padding: 3rem 1.5rem; }
+      .about-left { position: static; }
+      .about-photo { max-width: 240px; }
+      .skills-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="../index.html" class="nav-logo">AT<span>.</span></a>
+  <button class="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+  <ul class="nav-links">
+    <li><a href="work.html">Work</a></li>
+    <li><a href="about.html" class="active">About</a></li>
+    <li><a href="certifications.html">Certifications</a></li>
+    <li><a href="contact.html" class="nav-cta">Let's Talk</a></li>
+  </ul>
+</nav>
+
+<div class="about-grid">
+  <div class="about-left fade-in">
+    <img src="../images/profile.jpeg" alt="Abhishek Trivedi" class="about-photo" />
+    <div class="about-name">Abhishek Trivedi</div>
+    <div class="about-title">Learning Experience Technologist</div>
+    <ul class="about-contact-list">
+      <li>
+        <a href="https://www.linkedin.com/in/trivedi-abhishek/" target="_blank">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
+          linkedin.com/in/trivedi-abhishek
+        </a>
+      </li>
+      <li>
+        <a href="mailto:work.abhishektrivedi@gmail.com">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          work.abhishektrivedi@gmail.com
+        </a>
+      </li>
+      <li>
+        <a href="#">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          Pune, India
+        </a>
+      </li>
+    </ul>
+    <div style="margin-top:1.5rem">
+      <div class="available-badge">
+        <span class="available-dot"></span>
+        Open to opportunities
+      </div>
+    </div>
+  </div>
+
+  <div class="about-right">
+    <div class="bio-section fade-in">
+      <h2>About Me</h2>
+      <p><strong>Most instructional designers build courses. I build learning systems.</strong></p>
+      <p>Over 15 years, I've worked with global organizations — including Siemens — to design and engineer eLearning experiences that go beyond templates and SCORM checkboxes. My work combines deep instructional design expertise with technical skills most designers don't have: JavaScript, API integrations, AI tools, automation workflows, and LMS architecture.</p>
+      <p>I'm drawn to the intersection of design and engineering — the place where a well-structured learning experience meets a cleanly architected technical solution. I think in systems and platforms, not just slides.</p>
+      <p>I'm at my best when working with organizations that are serious about learning effectiveness — <strong>SaaS companies, EdTech platforms, and corporate L&D teams</strong> that want to move beyond content production into genuine learning innovation.</p>
+    </div>
+
+    <div class="bio-section reveal">
+      <h2>My Approach</h2>
+      <p>I start every project by asking why. Why this format? Why this interaction? Why is a human doing this when a script could? That instinct has driven me to build AI-powered personalization systems, automated localization workflows, and scalable template architectures — all inside an L&D context where most practitioners accept the status quo.</p>
+      <p>I'm never satisfied with "good enough" when "genuinely better" is possible with a bit more technical thinking.</p>
+    </div>
+
+    <div class="bio-section reveal">
+      <h2>Skills</h2>
+      <div class="skills-grid">
+        <div class="skill-group">
+          <h3>Authoring & Design</h3>
+          <div class="skill-tags">
+            <span class="tag">Storyline 360</span>
+            <span class="tag">Rise 360</span>
+            <span class="tag">Storyboarding</span>
+            <span class="tag">Instructional Design</span>
+          </div>
+        </div>
+        <div class="skill-group">
+          <h3>Technical</h3>
+          <div class="skill-tags">
+            <span class="tag">JavaScript</span>
+            <span class="tag">REST APIs</span>
+            <span class="tag">xAPI</span>
+            <span class="tag">SCORM</span>
+            <span class="tag">LMS Admin</span>
+          </div>
+        </div>
+        <div class="skill-group">
+          <h3>AI & Automation</h3>
+          <div class="skill-tags">
+            <span class="tag">Murf AI</span>
+            <span class="tag">Synthesia</span>
+            <span class="tag">GPT Workflows</span>
+            <span class="tag">FFmpeg</span>
+          </div>
+        </div>
+        <div class="skill-group">
+          <h3>Video & Media</h3>
+          <div class="skill-tags">
+            <span class="tag">Camtasia</span>
+            <span class="tag">Video Editing</span>
+            <span class="tag">Localization</span>
+            <span class="tag">Subtitling</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bio-section reveal">
+      <h2>Career Timeline</h2>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-year">2009 – Present</div>
+          <div class="timeline-role">Senior Instructional Designer / Learning Technologist</div>
+          <div class="timeline-company">15+ years across global L&D environments</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-year">Siemens</div>
+          <div class="timeline-role">Senior Instructional Designer</div>
+          <div class="timeline-company">AI personalization, template systems, localization automation</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-year">Now</div>
+          <div class="timeline-role">Learning Experience Technologist</div>
+          <div class="timeline-company">Available · Open to the right opportunity</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section class="cta-strip reveal">
+  <h2>If this sounds like the kind of <em>thinking your team needs</em> — let's talk.</h2>
+  <a href="contact.html" class="btn-light">Get in Touch →</a>
+</section>
+
+<footer>
+  <div class="footer-name">© 2026 Abhishek Trivedi · Learning Experience Technologist</div>
+  <ul class="footer-links">
+    <li><a href="https://www.linkedin.com/in/trivedi-abhishek/" target="_blank">LinkedIn</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <li><a href="../index.html">Home</a></li>
+  </ul>
+</footer>
+
+<script src="../js/main.js"></script>
+</body>
+</html>

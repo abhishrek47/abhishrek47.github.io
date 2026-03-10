@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Work & Case Studies | Abhishek Trivedi</title>
+  <meta name="description" content="Case studies by Abhishek Trivedi — AI personalization, scalable template systems, and video localization automation for global eLearning." />
+  <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    .case-study {
+      padding: 5rem 4rem;
+      border-bottom: 1px solid var(--rule);
+    }
+    .case-study:nth-child(even) { background: white; }
+    .case-header {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 2rem;
+      align-items: start;
+      margin-bottom: 3rem;
+    }
+    .case-number {
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      color: var(--accent);
+      letter-spacing: 0.12em;
+      margin-bottom: 0.5rem;
+    }
+    .case-category {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--mid);
+      margin-bottom: 0.75rem;
+    }
+    .case-study h2 {
+      font-family: var(--serif);
+      font-size: clamp(1.8rem, 2.8vw, 2.5rem);
+      line-height: 1.15;
+      max-width: 22ch;
+    }
+    .case-tools-header {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      align-items: flex-start;
+      padding-top: 0.5rem;
+    }
+    .case-body {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 3rem;
+    }
+    .case-block h3 {
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1rem;
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+    .case-block h3::before { content:''; display:block; width:1rem; height:1px; background:var(--accent); }
+    .case-block p {
+      font-size: 0.92rem;
+      color: var(--mid);
+      line-height: 1.75;
+    }
+    .outcome-highlight {
+      background: var(--paper);
+      border-left: 3px solid var(--accent);
+      padding: 1.25rem 1.5rem;
+      margin-top: 2rem;
+      border-radius: 0 4px 4px 0;
+    }
+    .outcome-highlight p {
+      font-size: 0.88rem;
+      color: var(--ink);
+      line-height: 1.65;
+      font-weight: 500;
+    }
+    .insight-box {
+      grid-column: 1 / -1;
+      background: var(--accent2);
+      color: white;
+      padding: 2rem 2.5rem;
+      border-radius: 4px;
+      margin-top: 1rem;
+    }
+    .insight-label {
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.5);
+      margin-bottom: 0.5rem;
+    }
+    .insight-box p {
+      font-size: 0.95rem;
+      color: rgba(255,255,255,0.88);
+      line-height: 1.65;
+    }
+    .insight-box strong { color: white; }
+
+    @media(max-width:900px){
+      .case-study { padding: 3rem 1.5rem; }
+      .case-header { grid-template-columns: 1fr; }
+      .case-body { grid-template-columns: 1fr; gap: 2rem; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="../index.html" class="nav-logo">AT<span>.</span></a>
+  <button class="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+  <ul class="nav-links">
+    <li><a href="work.html" class="active">Work</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="certifications.html">Certifications</a></li>
+    <li><a href="contact.html" class="nav-cta">Let's Talk</a></li>
+  </ul>
+</nav>
+
+<div class="page-hero">
+  <div class="section-label">Case Studies</div>
+  <h1>Work that shows<br>how I think</h1>
+  <p>Three projects from my time at Siemens — each one demonstrates a different dimension of technical instructional design: AI integration, systems thinking, and automation engineering.</p>
+</div>
+
+<!-- CASE STUDY 1 -->
+<div class="case-study reveal" id="case1">
+  <div class="case-header">
+    <div>
+      <div class="case-number">Case Study 01</div>
+      <div class="case-category">AI Integration · LMS Data · Voice Personalization</div>
+      <h2>When the Course Knows Your Name</h2>
+    </div>
+    <div class="case-tools-header">
+      <span class="tag">Storyline 360</span>
+      <span class="tag">JavaScript</span>
+      <span class="tag">REST API</span>
+      <span class="tag">Murf AI</span>
+      <span class="tag">Saba LMS</span>
+      <span class="tag">SCORM</span>
+    </div>
+  </div>
+
+  <div class="case-body">
+    <div class="case-block">
+      <h3>The Problem</h3>
+      <p>Standard eLearning treats every learner identically. Generic narration, static content, one-size-fits-all delivery. For a global technology organization deploying training to thousands of employees across regions, this created low engagement and a fundamental disconnect — the course didn't know who it was talking to.</p>
+    </div>
+    <div class="case-block">
+      <h3>The Approach</h3>
+      <p>I designed and engineered a personalized learning experience using Articulate Storyline as the delivery layer — but extended far beyond what Storyline is typically used for. Using JavaScript embedded in Storyline, I built API calls that fetched learner data directly from the Saba LMS at course launch. This data — including the learner's name — was passed to the Murf AI voice system, which dynamically generated a personalized audio welcome message in real time. Each learner heard their own name spoken by a natural-sounding AI voice the moment the course launched.</p>
+    </div>
+    <div class="case-block">
+      <h3>The Outcome</h3>
+      <p>Demonstrated a scalable model for AI-personalized learning without rebuilding the LMS or requiring a custom platform. Proved that LMS learner data can be surfaced dynamically inside Storyline. Opened a pathway for future personalization based on learner role, region, or performance data.</p>
+      <div class="outcome-highlight">
+        <p>This project challenged the assumption that eLearning personalization requires expensive custom infrastructure. It can be done with the tools most L&D teams already have.</p>
+      </div>
+    </div>
+
+    <div class="insight-box">
+      <div class="insight-label">What This Demonstrates</div>
+      <p><strong>The ability to think beyond the authoring tool</strong> — treating Storyline as a front-end layer while connecting to external systems via APIs. This is the gap between an instructional designer and a learning experience technologist.</p>
+    </div>
+  </div>
+</div>
+
+<!-- CASE STUDY 2 -->
+<div class="case-study reveal" id="case2">
+  <div class="case-header">
+    <div>
+      <div class="case-number">Case Study 02</div>
+      <div class="case-category">Systems Design · Template Architecture · Global Scale</div>
+      <h2>Building the Engine, Not Just the Car</h2>
+    </div>
+    <div class="case-tools-header">
+      <span class="tag">Storyline 360</span>
+      <span class="tag">JavaScript</span>
+      <span class="tag">PowerPoint</span>
+      <span class="tag">Interaction Design</span>
+      <span class="tag">Systems Thinking</span>
+    </div>
+  </div>
+
+  <div class="case-body">
+    <div class="case-block">
+      <h3>The Problem</h3>
+      <p>A global L&D team at Siemens producing dozens of courses per year was rebuilding the same interactions from scratch each time. This wasted development hours, created visual inconsistency across the course library, and made quality control a constant challenge. The team needed a way to scale output without scaling headcount.</p>
+    </div>
+    <div class="case-block">
+      <h3>The Approach</h3>
+      <p>I designed a comprehensive Storyline template system from the ground up. The process began in PowerPoint — creating a visual design language and interaction blueprint reviewable by stakeholders before a single Storyline slide was built. This reduced revision cycles significantly. Once approved, I converted designs into fully functional Storyline master templates: reusable slide layouts, pre-built interaction patterns (tabs, accordions, drag-and-drop, branching), and JavaScript-enhanced components for logic that Storyline's native triggers couldn't handle.</p>
+    </div>
+    <div class="case-block">
+      <h3>The Outcome</h3>
+      <p>Reduced per-course development time significantly by eliminating rebuild cycles. Ensured visual and functional consistency across all courses in the library. Lowered the technical barrier for less experienced developers. Created a reusable asset that continued delivering value long after the initial build.</p>
+      <div class="outcome-highlight">
+        <p>The template system didn't just speed up one project — it fundamentally changed how the team operated.</p>
+      </div>
+    </div>
+
+    <div class="insight-box">
+      <div class="insight-label">What This Demonstrates</div>
+      <p><strong>Systems thinking applied to L&D</strong> — building infrastructure that multiplies team capacity, not just completing individual tasks. This is the difference between a developer who builds courses and an architect who builds systems.</p>
+    </div>
+  </div>
+</div>
+
+<!-- CASE STUDY 3 -->
+<div class="case-study reveal" id="case3">
+  <div class="case-header">
+    <div>
+      <div class="case-number">Case Study 03</div>
+      <div class="case-category">Automation · Localization · Video Processing</div>
+      <h2>From Manual to Automated —<br>Rethinking Localization</h2>
+    </div>
+    <div class="case-tools-header">
+      <span class="tag">FFmpeg</span>
+      <span class="tag">Shell Scripting</span>
+      <span class="tag">Storyline</span>
+      <span class="tag">Subtitle Tools</span>
+      <span class="tag">Video Workflow</span>
+    </div>
+  </div>
+
+  <div class="case-body">
+    <div class="case-block">
+      <h3>The Problem</h3>
+      <p>Delivering multilingual training across Siemens' global teams meant manually re-editing videos for every language version — re-timing narration, re-syncing subtitles, re-exporting from multiple tools. For a large course library spanning multiple languages, this was a significant, repetitive time cost that scaled badly.</p>
+    </div>
+    <div class="case-block">
+      <h3>The Approach</h3>
+      <p>I designed and built an automated video localization workflow using FFmpeg — an open-source command-line tool for video processing — scripted to handle the repetitive transformation tasks that editors were doing manually. The workflow extracted video and audio components from Storyline-published outputs, processed localized audio tracks (resizing, syncing, mixing), merged new audio with existing video, and applied subtitle overlays — all through scripted automation executable with a single command per language.</p>
+    </div>
+    <div class="case-block">
+      <h3>The Outcome</h3>
+      <p>Eliminated hours of manual editing per language version. Created a repeatable, documented workflow usable by team members without video editing expertise. Made rapid localization into new languages operationally feasible. Reduced human error in timing and sync that routinely occurred during manual editing.</p>
+      <div class="outcome-highlight">
+        <p>What previously took a skilled editor several hours per language became a script that anyone could run.</p>
+      </div>
+    </div>
+
+    <div class="insight-box">
+      <div class="insight-label">What This Demonstrates</div>
+      <p><strong>Engineering mindset applied to L&D operations</strong> — identifying where automation can eliminate friction, then building the solution. Most instructional designers accept manual workflows. I look for where a script should be doing the work instead.</p>
+    </div>
+  </div>
+</div>
+
+<!-- CTA -->
+<section class="cta-strip reveal">
+  <h2>Interested in what I can build <em>for your team?</em></h2>
+  <a href="contact.html" class="btn-light">Let's Talk →</a>
+</section>
+
+<footer>
+  <div class="footer-name">© 2026 Abhishek Trivedi · Learning Experience Technologist</div>
+  <ul class="footer-links">
+    <li><a href="https://www.linkedin.com/in/trivedi-abhishek/" target="_blank">LinkedIn</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <li><a href="../index.html">Home</a></li>
+  </ul>
+</footer>
+
+<script src="../js/main.js"></script>
+</body>
+</html>
