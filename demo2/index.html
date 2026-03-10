@@ -410,6 +410,106 @@ body {
   .stage{padding:28px 20px}
   .dnd-wrapper{grid-template-columns:1fr}
 }
+
+/* ── HOW I BUILT THIS DRAWER ── */
+.hbt-btn {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  color: rgba(255,255,255,0.6);
+  font-family: 'DM Serif Display', serif;
+  font-size: 15px; font-weight: 600;
+  cursor: pointer; display: flex;
+  align-items: center; justify-content: center;
+  transition: all 0.2s; flex-shrink: 0;
+  margin-left: 12px;
+}
+.hbt-btn:hover {
+  background: rgba(200,75,47,0.2);
+  border-color: rgba(200,75,47,0.5);
+  color: #c84b2f; transform: scale(1.08);
+}
+.hbt-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 900; opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+  backdrop-filter: blur(3px);
+}
+.hbt-overlay.open { opacity: 1; pointer-events: all; }
+.hbt-drawer {
+  position: fixed; top: 0; right: 0; bottom: 0;
+  width: min(480px, 95vw);
+  background: #0d1520;
+  border-left: 1px solid rgba(255,255,255,0.08);
+  z-index: 901;
+  transform: translateX(100%);
+  transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
+  overflow-y: auto;
+  display: flex; flex-direction: column;
+}
+.hbt-drawer.open { transform: translateX(0); }
+.hbt-drawer-header {
+  padding: 22px 24px 18px;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+  display: flex; align-items: center; justify-content: space-between;
+  position: sticky; top: 0; background: #0d1520; z-index: 1;
+}
+.hbt-drawer-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 18px; color: #f0ede6;
+}
+.hbt-close {
+  width: 30px; height: 30px; border-radius: 50%;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: rgba(255,255,255,0.5); font-size: 16px;
+  cursor: pointer; display: flex;
+  align-items: center; justify-content: center;
+  transition: all 0.2s;
+}
+.hbt-close:hover { background: rgba(200,75,47,0.2); color: #c84b2f; }
+.hbt-body { padding: 24px; flex: 1; }
+.hbt-section { margin-bottom: 28px; }
+.hbt-section-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; letter-spacing: 0.12em;
+  text-transform: uppercase; margin-bottom: 12px;
+  display: flex; align-items: center; gap: 8px;
+}
+.hbt-section-label.real   { color: #3dba6e; }
+.hbt-section-label.sim    { color: #d4af5f; }
+.hbt-section-label.prod   { color: #c84b2f; }
+.hbt-section-label::after { content:''; flex:1; height:1px; background: currentColor; opacity:0.2; }
+.hbt-item {
+  display: flex; gap: 10px; align-items: flex-start;
+  padding: 10px 12px; border-radius: 6px;
+  margin-bottom: 6px; font-size: 13px; line-height: 1.6;
+}
+.hbt-item.real { background: rgba(61,186,110,0.07); color: #a8d8b8; border: 1px solid rgba(61,186,110,0.12); }
+.hbt-item.sim  { background: rgba(212,175,95,0.07);  color: #d4c08a; border: 1px solid rgba(212,175,95,0.12); }
+.hbt-item.prod { background: rgba(200,75,47,0.07);   color: #e8a898; border: 1px solid rgba(200,75,47,0.12); }
+.hbt-item-icon { flex-shrink: 0; font-size: 14px; margin-top: 1px; }
+.hbt-arch {
+  background: #060d18;
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 8px; padding: 16px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px; color: #8ba3be;
+  line-height: 1.9; margin-top: 8px;
+  white-space: pre;
+}
+.hbt-arch .node  { color: #7eb8f7; }
+.hbt-arch .arrow { color: #4a6280; }
+.hbt-arch .label { color: #3dba6e; }
+.hbt-arch .note  { color: #d4af5f; }
+.hbt-footer {
+  padding: 16px 24px;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  font-size: 12px; color: #4a6280;
+  font-family: 'JetBrains Mono', monospace;
+}
 </style>
 </head>
 <body>
@@ -417,6 +517,7 @@ body {
 <header class="header">
   <div class="header-logo">AT<span>.</span></div>
   <div class="header-badge">Live Portfolio Demo</div>
+  <button class="hbt-btn" onclick="openHBT()" title="How I built this">?</button>
   <div class="header-by">by <a href="https://abhishektrivedi.com" target="_blank">Abhishek Trivedi</a></div>
 </header>
 
@@ -920,6 +1021,59 @@ function restart() {
 
 // Init log
 logScreen('demo.init', 'Template Showroom ready', [['version','2.0'],['interactions','4'],['built_by','Abhishek Trivedi']],null);
+
+// ── HOW I BUILT THIS ──
+function openHBT() {
+  document.getElementById('hbt-overlay').classList.add('open');
+  document.getElementById('hbt-drawer').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeHBT() {
+  document.getElementById('hbt-overlay').classList.remove('open');
+  document.getElementById('hbt-drawer').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeHBT(); });
 </script>
+
+<div class="hbt-overlay" id="hbt-overlay" onclick="closeHBT()"></div>
+<div class="hbt-drawer" id="hbt-drawer">
+  <div class="hbt-drawer-header">
+    <div class="hbt-drawer-title">How I Built This</div>
+    <button class="hbt-close" onclick="closeHBT()">✕</button>
+  </div>
+  <div class="hbt-body">
+
+    <div class="hbt-section">
+      <div class="hbt-section-label real">✓ What's real in this demo</div>
+      <div class="hbt-item real"><span class="hbt-item-icon">📑</span><span>All 4 interaction patterns — tabs, accordion, drag-and-drop and branching — are the exact patterns built into the Storyline template system, rebuilt faithfully in HTML/JS</span></div>
+      <div class="hbt-item real"><span class="hbt-item-icon">🔀</span><span>Accordion one-at-a-time logic — only one item open at a time, matching Storyline's variable-controlled state management</span></div>
+      <div class="hbt-item real"><span class="hbt-item-icon">🎯</span><span>Drag-and-drop validation — correct/incorrect feedback per item, same scoring logic used in the SCORM templates</span></div>
+      <div class="hbt-item real"><span class="hbt-item-icon">⚡</span><span>Branching consequence reveal — chosen path highlighted, correct path shown if wrong, mirrors production branching behaviour</span></div>
+    </div>
+
+    <div class="hbt-section">
+      <div class="hbt-section-label sim">~ What's simulated</div>
+      <div class="hbt-item sim"><span class="hbt-item-icon">🎬</span><span>Storyline environment — GetPlayer() and SetVar() calls shown in the log are real Storyline JS API calls, but run here in a browser sandbox instead</span></div>
+      <div class="hbt-item sim"><span class="hbt-item-icon">📊</span><span>SCORM variable passing — the xAPI log entries reflect the real event structure but no LMS is receiving them here</span></div>
+    </div>
+
+    <div class="hbt-section">
+      <div class="hbt-section-label prod">→ Production architecture</div>
+      <div class="hbt-arch"><span class="node">PowerPoint</span> <span class="arrow">──approved──▶</span> <span class="node">Storyline Master Slides</span>
+  <span class="arrow">│</span>            <span class="note">// visual design + layout blueprint</span>
+  <span class="arrow">└──▶</span> <span class="node">Interaction templates</span>
+       <span class="arrow">├──▶</span> <span class="label">Tabs</span>      <span class="arrow">──</span> <span class="node">JS state manager</span>
+       <span class="arrow">├──▶</span> <span class="label">Accordion</span> <span class="arrow">──</span> <span class="node">JS toggle + SetVar</span>
+       <span class="arrow">├──▶</span> <span class="label">Drag/Drop</span> <span class="arrow">──</span> <span class="node">JS validator + score</span>
+       <span class="arrow">└──▶</span> <span class="label">Branching</span> <span class="arrow">──</span> <span class="node">JS router + xAPI</span>
+  <span class="arrow">│</span>
+  <span class="arrow">└──▶</span> <span class="node">SCORM 2004 package</span> <span class="arrow">──▶</span> <span class="label">Saba LMS</span></div>
+    </div>
+
+  </div>
+  <div class="hbt-footer">Built by Abhishek Trivedi · abhishektrivedi.com</div>
+</div>
+
 </body>
 </html>
