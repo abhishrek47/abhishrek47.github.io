@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="../css/style.css" />
   <style>
     :root {
       --ink: #1A3A5C;
@@ -307,6 +307,7 @@
     <li><a href="work.html">Work</a></li>
     <li><a href="about.html">About</a></li>
     <li><a href="certifications.html">Certifications</a></li>
+    <li><a href="metrics.html" class="active">Live Stats</a></li>
     <li><a href="contact.html" class="nav-cta">Let's Talk</a></li>
   </ul>
 </nav>
@@ -608,8 +609,6 @@ function init() {
   document.getElementById('completionRate').innerHTML = compRate + '<span>%</span>';
 
   // Demo cards
-  const d1el = document.getElementById('d1sessions');
-  if (d1el) { animateNum(d1el.querySelector ? d1el : d1el, d.d1); d1el.innerHTML = d.d1.toLocaleString() + '<small>sessions</small>'; }
   document.getElementById('d1sessions').innerHTML = d.d1.toLocaleString() + '<small>sessions</small>';
   document.getElementById('d2sessions').innerHTML = d.d2.toLocaleString() + '<small>sessions</small>';
   document.getElementById('d3sessions').innerHTML = d.d3.toLocaleString() + '<small>sessions</small>';
