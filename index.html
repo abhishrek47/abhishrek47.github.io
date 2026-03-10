@@ -12,15 +12,33 @@
     .hero {
       min-height: 100vh;
       display: grid;
-      grid-template-columns: 1.1fr 0.9fr;
-      padding-top: 72px;
+      grid-template-columns: 1.05fr 0.95fr;
+      padding-top: 64px; /* nav height only */
     }
     .hero-left {
-      padding: 6rem 4rem 4rem;
+      padding: 3.5rem 4rem 3rem;
       display: flex;
       flex-direction: column;
       justify-content: center;
       position: relative;
+      gap: 0;
+    }
+    /* Remove the "available" badge from flow — integrated into h1 area */
+    .available-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(46,180,96,0.08);
+      border: 1px solid rgba(46,180,96,0.25);
+      border-radius: 100px;
+      padding: 0.3rem 0.85rem 0.3rem 0.6rem;
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #1e8a4a;
+      margin-bottom: 1.1rem;
+      width: fit-content;
     }
     .hero-tag {
       font-family: var(--mono);
@@ -28,97 +46,142 @@
       letter-spacing: 0.16em;
       text-transform: uppercase;
       color: var(--accent);
-      margin-bottom: 1.25rem;
+      margin-bottom: 0.9rem;
       display: flex; align-items: center; gap: 0.75rem;
     }
     .hero-tag::before { content:''; display:block; width:2rem; height:1px; background:var(--accent); }
     .hero h1 {
       font-family: var(--serif);
-      font-size: clamp(2.8rem, 4.5vw, 4.2rem);
-      line-height: 1.1;
+      font-size: clamp(3rem, 4.8vw, 5rem);
+      line-height: 1.05;
       color: var(--ink);
-      margin-bottom: 1.5rem;
+      margin-bottom: 1.25rem;
+      letter-spacing: -0.01em;
     }
     .hero h1 em { font-style: italic; color: var(--accent); }
     .hero-sub {
       font-size: 1rem;
       color: var(--mid);
-      max-width: 44ch;
+      max-width: 46ch;
       line-height: 1.75;
-      margin-bottom: 2.5rem;
+      margin-bottom: 2rem;
       font-weight: 300;
     }
     .hero-actions { display: flex; gap: 1.25rem; align-items: center; flex-wrap: wrap; }
-    .hero-stats {
+
+    /* ── PROOF BAR replaces floaty stats ── */
+    .hero-proof {
       display: flex;
-      gap: 2rem;
-      margin-top: 4rem;
-      padding-top: 2.5rem;
-      border-top: 1px solid var(--rule);
-      flex-wrap: wrap;
+      gap: 0;
+      margin-top: 2.5rem;
+      border: 1px solid var(--rule);
+      border-radius: 8px;
+      overflow: hidden;
+      background: white;
     }
-    .stat-num {
+    .proof-item {
+      flex: 1;
+      padding: 1rem 1.25rem;
+      border-right: 1px solid var(--rule);
+      position: relative;
+    }
+    .proof-item:last-child { border-right: none; }
+    .proof-item::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: var(--accent);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.35s ease;
+    }
+    .proof-item:hover::before { transform: scaleX(1); }
+    .proof-num {
       font-family: var(--serif);
-      font-size: 2rem;
+      font-size: 1.75rem;
       color: var(--ink);
       line-height: 1;
+      margin-bottom: 0.2rem;
     }
-    .stat-num span { color: var(--ink); }
-    .stat-label { font-size: 0.78rem; color: var(--mid); margin-top: 0.25rem; font-weight: 500; }
+    .proof-label {
+      font-size: 0.72rem;
+      color: var(--mid);
+      font-weight: 500;
+      line-height: 1.3;
+    }
 
     /* ── HERO RIGHT ── */
     .hero-right {
       background: var(--accent2);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-end;
-      padding: 0 3rem 3rem;
+      display: grid;
+      grid-template-rows: 1fr auto;
+      align-items: end;
+      padding: 0 2.5rem 2rem;
       position: relative;
       overflow: hidden;
-      gap: 0;
     }
     .hero-right::before {
       content: '';
       position: absolute;
-      top: -60px; right: -100px;
-      width: 380px; height: 380px;
+      top: -80px; right: -80px;
+      width: 360px; height: 360px;
       border-radius: 50%;
-      background: rgba(200,75,47,0.1);
+      background: rgba(200,75,47,0.09);
       pointer-events: none;
     }
     .hero-right::after {
       content: '';
       position: absolute;
-      bottom: -60px; left: -80px;
-      width: 240px; height: 240px;
+      bottom: -50px; left: -60px;
+      width: 220px; height: 220px;
       border-radius: 50%;
       background: rgba(255,255,255,0.03);
       pointer-events: none;
     }
+
+    /* Name + title overlay on the right panel */
+    .hero-right-name {
+      position: absolute;
+      top: 2.5rem; left: 2.5rem; right: 2.5rem;
+      z-index: 3;
+    }
+    .hero-right-name-text {
+      font-family: var(--serif);
+      font-size: 1.5rem;
+      color: white;
+      line-height: 1.2;
+      margin-bottom: 0.3rem;
+    }
+    .hero-right-name-role {
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.45);
+    }
+
     .profile-wrap {
       position: relative;
       z-index: 2;
       width: 100%;
       display: flex;
       justify-content: center;
-      padding-top: 2rem;
-      flex: 1;
-      align-items: flex-end;
+      align-self: end;
     }
     .profile-img {
-      width: min(280px, 75%);
+      width: min(300px, 80%);
       height: auto;
       aspect-ratio: 3/4;
-      border-radius: 140px 140px 0 0;
+      border-radius: 150px 150px 0 0;
       object-fit: cover;
       object-position: center top;
-      border: 3px solid rgba(255,255,255,0.12);
+      border: 3px solid rgba(255,255,255,0.1);
       display: block;
     }
     .profile-badge {
       position: absolute;
-      bottom: 12px; right: calc(50% - 170px);
+      bottom: 6px; right: calc(50% - 175px);
       background: var(--accent);
       color: white;
       font-family: var(--mono);
@@ -127,28 +190,29 @@
       padding: 0.3rem 0.75rem;
       border-radius: 100px;
       white-space: nowrap;
+      z-index: 4;
     }
     .tech-grid {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.5rem;
+      gap: 0.4rem;
       width: 100%;
       position: relative;
       z-index: 2;
       justify-content: center;
-      padding-top: 1.5rem;
+      padding-top: 1.25rem;
     }
     .tech-card {
       background: rgba(255,255,255,0.07);
       border: 1px solid rgba(255,255,255,0.12);
-      padding: 0.4rem 0.9rem;
+      padding: 0.35rem 0.85rem;
       border-radius: 100px;
       transition: background 0.25s;
-      display: flex; align-items: center; gap: 0.5rem;
+      display: flex; align-items: center;
     }
     .tech-card:hover { background: rgba(255,255,255,0.14); }
     .tc-label { display: none; }
-    .tc-val { font-size: 0.78rem; color: rgba(255,255,255,0.8); font-weight: 400; font-family: var(--mono); letter-spacing: 0.03em; }
+    .tc-val { font-size: 0.75rem; color: rgba(255,255,255,0.75); font-weight: 400; font-family: var(--mono); letter-spacing: 0.03em; }
 
     /* ── SERVICES ── */
     .services-grid {
@@ -363,13 +427,14 @@
     }
     @media(max-width:900px){
       .hero { grid-template-columns: 1fr; min-height: auto; }
-      .hero-left { padding: 6rem 1.5rem 3rem; }
-      .hero-right { padding: 3rem 1.5rem; }
+      .hero-left { padding: 2.5rem 1.5rem 2rem; }
+      .hero-right { padding: 2rem 1.5rem; min-height: 60vw; }
       .services-grid { grid-template-columns: 1fr; }
       .service-card { border-right: none; border-bottom: 1px solid var(--rule); }
       .cases-section { padding: 4rem 1.5rem; }
       .case-row { grid-template-columns: 48px 1fr 24px; gap: 1rem; }
-      .hero-stats { gap: 1.5rem; flex-wrap: wrap; }
+      .hero-proof { flex-wrap: wrap; }
+      .proof-item { min-width: 80px; }
     }
   </style>
 </head>
@@ -398,37 +463,37 @@
       Available for new opportunities
     </div>
     <div class="hero-tag fade-in">Learning Experience Technologist</div>
-    <h1 class="fade-in">I build learning experiences that <em>think.</em></h1>
-    <p class="hero-sub fade-in">15+ years designing and engineering eLearning — from AI-personalized courses to automated localization workflows. I connect instructional design with JavaScript, APIs, and AI tooling to build what most designers can't imagine.</p>
+    <h1 class="fade-in">I build learning<br>experiences that <em>think.</em></h1>
+    <p class="hero-sub fade-in">15+ years at the intersection of instructional design and engineering. I write JavaScript inside Storyline, connect courses to live APIs, automate workflows that used to take days, and integrate AI where others use static slides.</p>
     <div class="hero-actions fade-in">
       <a href="pages/work.html" class="btn-primary">See My Work →</a>
       <a href="pages/contact.html" class="btn-secondary">Let's Talk</a>
     </div>
-    <div class="hero-stats fade-in">
-      <div>
-        <div class="stat-num">15<span>+</span></div>
-        <div class="stat-label">Years in L&D</div>
+    <div class="hero-proof fade-in">
+      <div class="proof-item">
+        <div class="proof-num">15+</div>
+        <div class="proof-label">Years in L&D</div>
       </div>
-      <div>
-        <div class="stat-num">8</div>
-        <div class="stat-label">Languages automated</div>
+      <div class="proof-item">
+        <div class="proof-num">36h</div>
+        <div class="proof-label">Saved per<br>localization run</div>
       </div>
-      <div>
-        <div class="stat-num">36<span>h</span></div>
-        <div class="stat-label">Saved per localization run</div>
+      <div class="proof-item">
+        <div class="proof-num">8</div>
+        <div class="proof-label">Languages<br>automated</div>
       </div>
-      <div>
-        <div class="stat-num">3</div>
-        <div class="stat-label">Live AI-integrated builds</div>
-      </div>
-      <div>
-        <div class="stat-num">∞</div>
-        <div class="stat-label">Curiosity</div>
+      <div class="proof-item">
+        <div class="proof-num">3</div>
+        <div class="proof-label">Live AI-integrated<br>builds</div>
       </div>
     </div>
   </div>
 
   <div class="hero-right">
+    <div class="hero-right-name">
+      <div class="hero-right-name-text">Abhishek Trivedi</div>
+      <div class="hero-right-name-role">Pune, India · Open to remote</div>
+    </div>
     <div class="profile-wrap">
       <img src="images/profile.jpeg" alt="Abhishek Trivedi" class="profile-img" />
       <span class="profile-badge">Open to Work</span>
