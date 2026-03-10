@@ -1,234 +1,174 @@
 <!DOCTYPE html>
-<!-- saved from url=(0039)file:///Users/at/Downloads/contact.html -->
-<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Contact | Abhishek Trivedi</title>
-  <meta name="description" content="Get in touch with Abhishek Trivedi — Learning Experience Technologist open to full-time and contract opportunities.">
-  <link rel="stylesheet" href="file:///Users/at/css/style.css">
+  <meta name="description" content="Get in touch with Abhishek Trivedi — Learning Experience Technologist open to full-time and contract opportunities." />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
-    .contact-layout {
-      display: grid;
-      grid-template-columns: 1fr 1.2fr;
-      min-height: calc(100vh - 72px);
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --ink: #0f0f0f;
+      --paper: #f5f2eb;
+      --accent: #c84b2f;
+      --mid: #6b6459;
+      --rule: #d4cfc6;
+      --mono: 'JetBrains Mono', monospace;
+      --serif: 'DM Serif Display', serif;
+      --sans: 'DM Sans', sans-serif;
     }
-    .contact-left {
-      padding: 6rem 4rem;
-      border-right: 1px solid var(--rule);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-    .contact-left h1 {
-      font-family: var(--serif);
-      font-size: clamp(2.2rem, 3.5vw, 3.2rem);
-      line-height: 1.15;
-      margin-bottom: 1.5rem;
-    }
-    .contact-left h1 em { font-style: italic; color: var(--accent); }
-    .contact-left p {
-      font-size: 0.95rem;
-      color: var(--mid);
-      line-height: 1.75;
-      max-width: 40ch;
-      margin-bottom: 3rem;
-    }
-    .contact-methods { display: flex; flex-direction: column; gap: 1.25rem; }
-    .contact-method {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      text-decoration: none;
-      color: var(--ink);
-      padding: 1.1rem 1.25rem;
-      border: 1px solid var(--rule);
-      border-radius: 4px;
-      transition: all 0.2s;
-    }
-    .contact-method:hover { border-color: var(--accent); background: white; }
-    .cm-icon {
-      width: 40px; height: 40px;
-      background: var(--ink);
-      border-radius: 4px;
-      display: flex; align-items: center; justify-content: center;
-      color: white;
-      flex-shrink: 0;
-      font-size: 0.9rem;
-    }
-    .cm-label { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--mid); }
-    .cm-value { font-size: 0.9rem; font-weight: 500; color: var(--ink); }
-    .open-to {
-      margin-top: 2.5rem;
-      padding: 1.5rem;
-      background: #e8f5ea;
-      border: 1px solid #b5d9b9;
-      border-radius: 4px;
-    }
-    .open-to-label {
-      font-family: var(--mono);
-      font-size: 0.62rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: #2d7a3a;
-      margin-bottom: 0.75rem;
-      display: flex; align-items: center; gap: 0.5rem;
-    }
-    .open-to-items { display: flex; flex-wrap: wrap; gap: 0.5rem; }
-    .open-to-item {
-      font-size: 0.82rem;
-      background: white;
-      border: 1px solid #b5d9b9;
-      padding: 0.3rem 0.7rem;
-      border-radius: 2px;
-      color: #2d7a3a;
-      font-weight: 500;
-    }
-    .contact-right {
-      padding: 6rem 4rem;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-    .form-group { margin-bottom: 1.5rem; }
-    .form-group label {
-      display: block;
-      font-family: var(--mono);
-      font-size: 0.65rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--mid);
-      margin-bottom: 0.5rem;
-    }
-    .form-group input,
-    .form-group textarea,
-    .form-group select {
-      width: 100%;
-      padding: 0.85rem 1rem;
-      background: white;
-      border: 1px solid var(--rule);
-      color: var(--ink);
-      font-family: var(--sans);
-      font-size: 0.92rem;
-      border-radius: 2px;
-      outline: none;
-      transition: border-color 0.2s;
-      -webkit-appearance: none;
-    }
-    .form-group input:focus,
-    .form-group textarea:focus,
-    .form-group select:focus { border-color: var(--accent); }
-    .form-group textarea { resize: vertical; min-height: 120px; }
-    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-    .submit-btn {
-      width: 100%;
-      background: var(--ink);
-      color: var(--paper);
-      padding: 1rem 2rem;
-      font-family: var(--sans);
-      font-size: 0.88rem;
-      font-weight: 600;
-      letter-spacing: 0.04em;
-      border: none;
-      cursor: pointer;
-      border-radius: 2px;
-      transition: background 0.2s;
-      text-align: center;
-      text-decoration: none;
-      display: block;
-    }
-    .submit-btn:hover { background: var(--accent); }
-    .form-note {
-      font-size: 0.78rem;
-      color: var(--mid);
-      margin-top: 1rem;
-      text-align: center;
-    }
-    .form-success {
-      display: none;
-      text-align: center;
-      padding: 2rem;
-    }
-    .form-success h3 { font-family: var(--serif); font-size: 1.8rem; margin-bottom: 0.5rem; }
-    .form-success p { color: var(--mid); }
+    html { scroll-behavior: smooth; }
+    body { background: var(--paper); color: var(--ink); font-family: var(--sans); font-size: 16px; line-height: 1.6; overflow-x: hidden; }
 
+    /* NAV */
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; padding: 1.2rem 4rem; background: rgba(245,242,235,0.97); backdrop-filter: blur(8px); border-bottom: 1px solid var(--rule); }
+    .nav-logo { font-family: var(--mono); font-size: 0.9rem; font-weight: 500; letter-spacing: 0.05em; color: var(--ink); text-decoration: none; }
+    .nav-logo span { color: var(--accent); }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; align-items: center; }
+    .nav-links a { font-size: 0.82rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--mid); text-decoration: none; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--accent); }
+    .nav-cta { background: var(--accent) !important; color: white !important; padding: 0.5rem 1.3rem; border-radius: 2px; }
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 4px; }
+    .hamburger span { display: block; width: 22px; height: 2px; background: var(--ink); }
+
+    /* PAGE */
+    .contact-wrap { display: grid; grid-template-columns: 1fr 1.2fr; min-height: calc(100vh - 72px); margin-top: 72px; }
+
+    /* LEFT */
+    .c-left { padding: 5rem 4rem; border-right: 1px solid var(--rule); display: flex; flex-direction: column; justify-content: center; }
+    .eyebrow { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); margin-bottom: 1rem; }
+    .c-left h1 { font-family: var(--serif); font-size: clamp(1.9rem, 3vw, 2.8rem); line-height: 1.15; margin-bottom: 1.25rem; }
+    .c-left h1 em { font-style: italic; color: var(--accent); }
+    .c-left > p { font-size: 0.92rem; color: var(--mid); line-height: 1.75; max-width: 40ch; margin-bottom: 2rem; }
+    .methods { display: flex; flex-direction: column; gap: 0.85rem; }
+    .method { display: flex; align-items: center; gap: 1rem; text-decoration: none; color: var(--ink); padding: 1rem 1.25rem; border: 1px solid var(--rule); border-radius: 4px; background: white; transition: border-color 0.2s; }
+    .method:hover { border-color: var(--accent); }
+    .m-icon { width: 38px; height: 38px; background: var(--ink); border-radius: 4px; display: flex; align-items: center; justify-content: center; color: white; flex-shrink: 0; font-size: 0.85rem; font-family: var(--mono); }
+    .m-label { font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--mid); margin-bottom: 0.15rem; }
+    .m-val { font-size: 0.85rem; font-weight: 500; }
+    .open-to { margin-top: 1.5rem; padding: 1.25rem; background: #e8f5ea; border: 1px solid #b5d9b9; border-radius: 4px; }
+    .ot-label { font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase; color: #2d7a3a; margin-bottom: 0.65rem; display: flex; align-items: center; gap: 0.5rem; }
+    .dot { width: 6px; height: 6px; border-radius: 50%; background: #2d7a3a; display: inline-block; flex-shrink: 0; animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.35} }
+    .ot-pills { display: flex; flex-wrap: wrap; gap: 0.45rem; }
+    .ot-pill { font-size: 0.78rem; background: white; border: 1px solid #b5d9b9; padding: 0.25rem 0.6rem; border-radius: 2px; color: #2d7a3a; font-weight: 500; }
+
+    /* RIGHT */
+    .c-right { padding: 5rem 4rem; display: flex; flex-direction: column; justify-content: center; }
+    .c-right .eyebrow { margin-bottom: 0.6rem; }
+    .c-right h2 { font-family: var(--serif); font-size: 1.7rem; margin-bottom: 1.75rem; line-height: 1.2; }
+    .fg { margin-bottom: 1.1rem; }
+    .fg label { display: block; font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--mid); margin-bottom: 0.4rem; }
+    .fg input, .fg textarea, .fg select {
+      width: 100%; padding: 0.78rem 1rem; background: white; border: 1px solid var(--rule);
+      color: var(--ink); font-family: var(--sans); font-size: 0.88rem; border-radius: 2px;
+      outline: none; transition: border-color 0.2s; appearance: none; -webkit-appearance: none;
+    }
+    .fg input:focus, .fg textarea:focus, .fg select:focus { border-color: var(--accent); }
+    .fg textarea { resize: vertical; min-height: 105px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .submit-btn { width: 100%; background: var(--ink); color: var(--paper); padding: 0.95rem 2rem; font-family: var(--sans); font-size: 0.88rem; font-weight: 600; letter-spacing: 0.04em; border: none; cursor: pointer; border-radius: 2px; transition: background 0.2s; margin-top: 0.25rem; }
+    .submit-btn:hover { background: var(--accent); }
+    .form-note { font-size: 0.74rem; color: var(--mid); margin-top: 0.75rem; text-align: center; }
+    .form-note a { color: var(--accent); text-decoration: none; }
+
+    /* FOOTER */
+    footer { padding: 2.5rem 4rem; border-top: 1px solid var(--rule); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+    .f-name { font-family: var(--mono); font-size: 0.73rem; color: var(--mid); }
+    .f-links { display: flex; gap: 2rem; list-style: none; }
+    .f-links a { font-size: 0.78rem; color: var(--mid); text-decoration: none; }
+    .f-links a:hover { color: var(--accent); }
+
+    /* FADE */
+    .fade { opacity: 0; transform: translateY(18px); animation: fi 0.6s ease forwards; }
+    .fade:nth-child(2) { animation-delay: 0.12s; }
+    @keyframes fi { to { opacity:1; transform:translateY(0); } }
+
+    /* RESPONSIVE */
     @media(max-width:900px){
-      .contact-layout { grid-template-columns: 1fr; }
-      .contact-left { padding: 5rem 1.5rem 3rem; border-right: none; border-bottom: 1px solid var(--rule); }
-      .contact-right { padding: 3rem 1.5rem; }
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { display: none; flex-direction: column; position: absolute; top: 100%; left: 0; right: 0; background: var(--paper); border-bottom: 1px solid var(--rule); padding: 1.5rem; gap: 1.2rem; }
+      .nav-links.open { display: flex; }
+      .hamburger { display: flex; }
+      .contact-wrap { grid-template-columns: 1fr; }
+      .c-left { padding: 3rem 1.5rem; border-right: none; border-bottom: 1px solid var(--rule); }
+      .c-right { padding: 3rem 1.5rem; }
       .form-row { grid-template-columns: 1fr; }
+      footer { padding: 2rem 1.5rem; flex-direction: column; align-items: flex-start; }
     }
   </style>
 </head>
 <body>
 
 <nav>
-  <a href="file:///Users/at/index.html" class="nav-logo">AT<span>.</span></a>
-  <button class="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+  <a href="../index.html" class="nav-logo">AT<span>.</span></a>
+  <button class="hamburger" aria-label="Menu" onclick="document.querySelector('.nav-links').classList.toggle('open')">
+    <span></span><span></span><span></span>
+  </button>
   <ul class="nav-links">
-    <li><a href="file:///Users/at/Downloads/work.html">Work</a></li>
-    <li><a href="file:///Users/at/Downloads/about.html">About</a></li>
-    <li><a href="file:///Users/at/Downloads/certifications.html">Certifications</a></li>
-    <li><a href="file:///Users/at/Downloads/contact.html" class="active nav-cta">Let's Talk</a></li>
+    <li><a href="work.html">Work</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="certifications.html">Certifications</a></li>
+    <li><a href="contact.html" class="nav-cta">Let's Talk</a></li>
   </ul>
 </nav>
 
-<div class="contact-layout">
-  <div class="contact-left fade-in">
-    <div class="section-label">Contact</div>
-    <h1>Let's build something <em>worth building.</em></h1>
-    <p>I'm open to full-time roles and contract engagements with organizations serious about learning effectiveness. If you're looking for someone who thinks in systems and builds with technical precision, let's talk.</p>
+<div class="contact-wrap">
 
-    <div class="contact-methods">
-      <a href="mailto:work.abhishektrivedi@gmail.com" class="contact-method">
-        <div class="cm-icon">✉</div>
+  <div class="c-left fade">
+    <div class="eyebrow">Contact</div>
+    <h1>Let's build something <em>worth building.</em></h1>
+    <p>I'm open to full-time roles and contract engagements with organisations serious about learning effectiveness. If you're looking for someone who thinks in systems and builds with technical precision — let's talk.</p>
+
+    <div class="methods">
+      <a href="mailto:work.abhishektrivedi@gmail.com" class="method">
+        <div class="m-icon">✉</div>
         <div>
-          <div class="cm-label">Email</div>
-          <div class="cm-value">work.abhishektrivedi@gmail.com</div>
+          <div class="m-label">Email</div>
+          <div class="m-val">work.abhishektrivedi@gmail.com</div>
         </div>
       </a>
-      <a href="https://www.linkedin.com/in/trivedi-abhishek/" target="_blank" class="contact-method">
-        <div class="cm-icon">in</div>
+      <a href="https://www.linkedin.com/in/trivedi-abhishek/" target="_blank" class="method">
+        <div class="m-icon">in</div>
         <div>
-          <div class="cm-label">LinkedIn</div>
-          <div class="cm-value">linkedin.com/in/trivedi-abhishek</div>
+          <div class="m-label">LinkedIn</div>
+          <div class="m-val">linkedin.com/in/trivedi-abhishek</div>
         </div>
       </a>
     </div>
 
     <div class="open-to">
-      <div class="open-to-label">
-        <span class="available-dot" style="width:6px;height:6px;border-radius:50%;background:#2d7a3a;display:inline-block;animation:pulse 2s infinite;"></span>
-        Currently open to
-      </div>
-      <div class="open-to-items">
-        <span class="open-to-item">Full-time Employment</span>
-        <span class="open-to-item">Contract / Freelance</span>
-        <span class="open-to-item">Remote</span>
-        <span class="open-to-item">India or Global</span>
+      <div class="ot-label"><span class="dot"></span> Currently open to</div>
+      <div class="ot-pills">
+        <span class="ot-pill">Full-time Employment</span>
+        <span class="ot-pill">Contract / Freelance</span>
+        <span class="ot-pill">Remote</span>
+        <span class="ot-pill">India or Global</span>
       </div>
     </div>
   </div>
 
-  <div class="contact-right fade-in">
-    <div class="section-label">Send a Message</div>
-    <h2 style="font-family:var(--serif);font-size:1.8rem;margin-bottom:2rem;line-height:1.2;">Tell me about<br>your project or role</h2>
+  <div class="c-right fade">
+    <div class="eyebrow">Send a Message</div>
+    <h2>Tell me about your<br>project or role</h2>
 
-    <form id="contactForm" action="https://formspree.io/f/mojkeqnp" method="POST">
+    <form action="https://formspree.io/f/mojkeqnp" method="POST">
       <div class="form-row">
-        <div class="form-group">
+        <div class="fg">
           <label for="name">Your Name</label>
-          <input type="text" id="name" name="name" placeholder="Jane Smith" required="">
+          <input type="text" id="name" name="name" placeholder="Jane Smith" required />
         </div>
-        <div class="form-group">
-          <label for="company">Company / Organisation</label>
-          <input type="text" id="company" name="company" placeholder="Acme Corp">
+        <div class="fg">
+          <label for="company">Company</label>
+          <input type="text" id="company" name="company" placeholder="Acme Corp" />
         </div>
       </div>
-      <div class="form-group">
+      <div class="fg">
         <label for="email">Email Address</label>
-        <input type="email" id="email" name="email" placeholder="jane@company.com" required="">
+        <input type="email" id="email" name="email" placeholder="jane@company.com" required />
       </div>
-      <div class="form-group">
+      <div class="fg">
         <label for="type">Type of Engagement</label>
         <select id="type" name="type">
           <option value="">Select one...</option>
@@ -238,26 +178,25 @@
           <option value="other">Just want to connect</option>
         </select>
       </div>
-      <div class="form-group">
+      <div class="fg">
         <label for="message">Message</label>
-        <textarea id="message" name="message" placeholder="Tell me about the role, project, or what you&#39;re looking to build..." required=""></textarea>
+        <textarea id="message" name="message" placeholder="Tell me about the role, project, or what you're looking to build..."></textarea>
       </div>
       <button type="submit" class="submit-btn">Send Message →</button>
-      <p class="form-note">Or email directly: <a href="mailto:work.abhishektrivedi@gmail.com" style="color:var(--accent)">work.abhishektrivedi@gmail.com</a></p>
+      <p class="form-note">Or email directly: <a href="mailto:work.abhishektrivedi@gmail.com">work.abhishektrivedi@gmail.com</a></p>
     </form>
   </div>
+
 </div>
 
 <footer>
-  <div class="footer-name">© 2026 Abhishek Trivedi · Learning Experience Technologist</div>
-  <ul class="footer-links">
+  <div class="f-name">© 2026 Abhishek Trivedi · Learning Experience Technologist</div>
+  <ul class="f-links">
     <li><a href="https://www.linkedin.com/in/trivedi-abhishek/" target="_blank">LinkedIn</a></li>
-    <li><a href="file:///Users/at/Downloads/work.html">Work</a></li>
-    <li><a href="file:///Users/at/index.html">Home</a></li>
+    <li><a href="work.html">Work</a></li>
+    <li><a href="../index.html">Home</a></li>
   </ul>
 </footer>
 
-<script src="file:///Users/at/js/main.js"></script>
-
-
-</body></html>
+</body>
+</html>
