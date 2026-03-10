@@ -63,7 +63,7 @@
       color: var(--ink);
       line-height: 1;
     }
-    .stat-num span { color: var(--accent); }
+    .stat-num span { color: var(--ink); }
     .stat-label { font-size: 0.78rem; color: var(--mid); margin-top: 0.25rem; font-weight: 500; }
 
     /* ── HERO RIGHT ── */
@@ -72,81 +72,83 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      padding: 4rem 3rem;
+      justify-content: flex-end;
+      padding: 0 3rem 3rem;
       position: relative;
       overflow: hidden;
-      gap: 2rem;
+      gap: 0;
     }
     .hero-right::before {
       content: '';
       position: absolute;
-      top: -120px; right: -120px;
+      top: -60px; right: -100px;
       width: 380px; height: 380px;
       border-radius: 50%;
-      background: rgba(200,75,47,0.12);
+      background: rgba(200,75,47,0.1);
       pointer-events: none;
     }
     .hero-right::after {
       content: '';
       position: absolute;
-      bottom: -80px; left: -80px;
-      width: 260px; height: 260px;
+      bottom: -60px; left: -80px;
+      width: 240px; height: 240px;
       border-radius: 50%;
-      background: rgba(255,255,255,0.04);
+      background: rgba(255,255,255,0.03);
       pointer-events: none;
     }
     .profile-wrap {
       position: relative;
       z-index: 2;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      padding-top: 2rem;
+      flex: 1;
+      align-items: flex-end;
     }
     .profile-img {
-      width: 200px;
-      height: 200px;
-      border-radius: 50%;
+      width: min(280px, 75%);
+      height: auto;
+      aspect-ratio: 3/4;
+      border-radius: 140px 140px 0 0;
       object-fit: cover;
       object-position: center top;
-      border: 4px solid rgba(255,255,255,0.15);
+      border: 3px solid rgba(255,255,255,0.12);
       display: block;
     }
     .profile-badge {
       position: absolute;
-      bottom: 8px; right: -8px;
+      bottom: 12px; right: calc(50% - 170px);
       background: var(--accent);
       color: white;
       font-family: var(--mono);
       font-size: 0.6rem;
       letter-spacing: 0.1em;
-      padding: 0.3rem 0.65rem;
+      padding: 0.3rem 0.75rem;
       border-radius: 100px;
       white-space: nowrap;
     }
     .tech-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0.75rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
       width: 100%;
-      max-width: 320px;
       position: relative;
       z-index: 2;
+      justify-content: center;
+      padding-top: 1.5rem;
     }
     .tech-card {
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.1);
-      padding: 1rem 1.1rem;
-      border-radius: 4px;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.12);
+      padding: 0.4rem 0.9rem;
+      border-radius: 100px;
       transition: background 0.25s;
+      display: flex; align-items: center; gap: 0.5rem;
     }
-    .tech-card:hover { background: rgba(255,255,255,0.11); }
-    .tc-label {
-      font-family: var(--mono);
-      font-size: 0.6rem;
-      letter-spacing: 0.1em;
-      color: rgba(255,255,255,0.42);
-      text-transform: uppercase;
-      margin-bottom: 0.2rem;
-    }
-    .tc-val { font-size: 0.8rem; color: rgba(255,255,255,0.88); font-weight: 500; }
+    .tech-card:hover { background: rgba(255,255,255,0.14); }
+    .tc-label { display: none; }
+    .tc-val { font-size: 0.78rem; color: rgba(255,255,255,0.8); font-weight: 400; font-family: var(--mono); letter-spacing: 0.03em; }
 
     /* ── SERVICES ── */
     .services-grid {
@@ -432,12 +434,14 @@
       <span class="profile-badge">Open to Work</span>
     </div>
     <div class="tech-grid">
-      <div class="tech-card"><div class="tc-label">Authoring</div><div class="tc-val">Storyline 360</div></div>
-      <div class="tech-card"><div class="tc-label">Integration</div><div class="tc-val">JS + APIs</div></div>
-      <div class="tech-card"><div class="tc-label">AI Tools</div><div class="tc-val">Murf · GPT</div></div>
-      <div class="tech-card"><div class="tc-label">Automation</div><div class="tc-val">FFmpeg · Scripts</div></div>
-      <div class="tech-card"><div class="tc-label">Tracking</div><div class="tc-val">xAPI · SCORM</div></div>
-      <div class="tech-card"><div class="tc-label">Video</div><div class="tc-val">Camtasia · Synthesia</div></div>
+      <div class="tech-card"><div class="tc-val">Storyline 360</div></div>
+      <div class="tech-card"><div class="tc-val">JS + APIs</div></div>
+      <div class="tech-card"><div class="tc-val">Murf AI</div></div>
+      <div class="tech-card"><div class="tc-val">FFmpeg</div></div>
+      <div class="tech-card"><div class="tc-val">xAPI · SCORM</div></div>
+      <div class="tech-card"><div class="tc-val">Synthesia</div></div>
+      <div class="tech-card"><div class="tc-val">Camtasia</div></div>
+      <div class="tech-card"><div class="tc-val">GPT Workflows</div></div>
     </div>
   </div>
 </section>
