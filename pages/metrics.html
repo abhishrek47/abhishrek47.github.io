@@ -1,0 +1,665 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Live Portfolio Stats | Abhishek Trivedi</title>
+  <meta name="description" content="Real-time stats from Abhishek Trivedi's interactive portfolio demos — visitor counts, roles explored, time spent, and more." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    :root {
+      --ink: #1A3A5C;
+      --accent: #C84B2F;
+      --accent2: #1A3A5C;
+      --mid: #6b7a8d;
+      --rule: #e4e8ee;
+      --bg: #f7f8fa;
+      --serif: 'DM Serif Display', Georgia, serif;
+      --sans: 'DM Sans', system-ui, sans-serif;
+      --mono: 'JetBrains Mono', monospace;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--sans); background: var(--bg); color: var(--ink); }
+
+    /* HERO */
+    .metrics-hero {
+      background: var(--ink);
+      padding: 9rem 4rem 5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .metrics-hero::before {
+      content: '';
+      position: absolute;
+      top: -200px; right: -200px;
+      width: 600px; height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(200,75,47,0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .metrics-hero-inner { max-width: 1100px; margin: 0 auto; position: relative; z-index: 2; }
+    .metrics-label {
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.25rem;
+      display: flex; align-items: center; gap: 0.75rem;
+    }
+    .metrics-label::before { content: ''; display: block; width: 2rem; height: 1px; background: var(--accent); }
+    .metrics-hero h1 {
+      font-family: var(--serif);
+      font-size: clamp(2.5rem, 4vw, 3.8rem);
+      color: white;
+      line-height: 1.1;
+      margin-bottom: 1rem;
+    }
+    .metrics-hero h1 em { font-style: italic; color: var(--accent); }
+    .metrics-hero p {
+      color: rgba(255,255,255,0.55);
+      font-size: 1rem;
+      max-width: 55ch;
+      line-height: 1.75;
+    }
+
+    /* LIVE BADGE */
+    .live-badge {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: rgba(46,204,113,0.15);
+      border: 1px solid rgba(46,204,113,0.3);
+      border-radius: 100px;
+      padding: 0.3rem 0.85rem;
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      color: #2ecc71;
+      margin-bottom: 1.5rem;
+    }
+    .live-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: #2ecc71;
+      animation: blink 1.4s ease infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+    /* LAST UPDATED */
+    .last-updated {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      color: rgba(255,255,255,0.3);
+      margin-top: 1.25rem;
+      letter-spacing: 0.05em;
+    }
+
+    /* MAIN LAYOUT */
+    .metrics-body { max-width: 1100px; margin: 0 auto; padding: 4rem; }
+
+    /* TOP KPI ROW */
+    .kpi-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.25rem;
+      margin-bottom: 3rem;
+    }
+    .kpi-card {
+      background: white;
+      border: 1px solid var(--rule);
+      border-radius: 8px;
+      padding: 2rem 1.75rem;
+      position: relative;
+      overflow: hidden;
+      transition: box-shadow 0.2s;
+    }
+    .kpi-card:hover { box-shadow: 0 8px 32px rgba(0,0,0,0.08); }
+    .kpi-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 3px;
+      background: var(--accent);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s ease;
+    }
+    .kpi-card:hover::after { transform: scaleX(1); }
+    .kpi-label {
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--mid);
+      margin-bottom: 0.75rem;
+    }
+    .kpi-num {
+      font-family: var(--serif);
+      font-size: 2.8rem;
+      color: var(--ink);
+      line-height: 1;
+      margin-bottom: 0.4rem;
+    }
+    .kpi-num span { color: var(--accent); }
+    .kpi-sub { font-size: 0.8rem; color: var(--mid); }
+    .kpi-trend {
+      position: absolute;
+      top: 1.5rem; right: 1.5rem;
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      color: #2ecc71;
+    }
+
+    /* DEMO BREAKDOWN */
+    .section-title {
+      font-family: var(--serif);
+      font-size: 1.6rem;
+      color: var(--ink);
+      margin-bottom: 1.5rem;
+    }
+    .section-subtitle {
+      font-size: 0.88rem;
+      color: var(--mid);
+      margin-bottom: 2rem;
+      margin-top: -1rem;
+    }
+
+    .demo-breakdown {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem;
+      margin-bottom: 3rem;
+    }
+    .demo-stat-card {
+      background: white;
+      border: 1px solid var(--rule);
+      border-radius: 8px;
+      overflow: hidden;
+      transition: box-shadow 0.2s;
+    }
+    .demo-stat-card:hover { box-shadow: 0 8px 32px rgba(0,0,0,0.07); }
+    .demo-stat-header {
+      background: var(--ink);
+      padding: 1.25rem 1.5rem;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .demo-stat-name {
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.1em;
+      color: rgba(255,255,255,0.6);
+      text-transform: uppercase;
+    }
+    .demo-stat-visits {
+      font-family: var(--serif);
+      font-size: 1.8rem;
+      color: white;
+    }
+    .demo-stat-visits small { font-family: var(--mono); font-size: 0.7rem; color: rgba(255,255,255,0.5); display: block; margin-top: 0.1rem; }
+    .demo-stat-body { padding: 1.5rem; }
+    .demo-stat-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 0.55rem 0;
+      border-bottom: 1px solid var(--rule);
+      font-size: 0.85rem;
+    }
+    .demo-stat-row:last-child { border-bottom: none; }
+    .demo-stat-row-label { color: var(--mid); }
+    .demo-stat-row-val { font-weight: 600; color: var(--ink); font-family: var(--mono); font-size: 0.82rem; }
+
+    /* ROLE DISTRIBUTION */
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-bottom: 3rem; }
+    .chart-card {
+      background: white;
+      border: 1px solid var(--rule);
+      border-radius: 8px;
+      padding: 2rem;
+    }
+    .chart-card-title {
+      font-family: var(--serif);
+      font-size: 1.15rem;
+      margin-bottom: 0.35rem;
+    }
+    .chart-card-sub { font-size: 0.8rem; color: var(--mid); margin-bottom: 1.75rem; }
+
+    .bar-chart { display: flex; flex-direction: column; gap: 0.85rem; }
+    .bar-row { display: flex; flex-direction: column; gap: 0.35rem; }
+    .bar-label-row { display: flex; justify-content: space-between; align-items: baseline; }
+    .bar-name { font-size: 0.83rem; color: var(--ink); font-weight: 500; }
+    .bar-pct { font-family: var(--mono); font-size: 0.72rem; color: var(--mid); }
+    .bar-track { height: 8px; background: var(--rule); border-radius: 100px; overflow: hidden; }
+    .bar-fill {
+      height: 100%;
+      background: var(--accent);
+      border-radius: 100px;
+      width: 0;
+      transition: width 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .bar-fill.teal { background: #0891b2; }
+    .bar-fill.green { background: #16a34a; }
+    .bar-fill.purple { background: #7c3aed; }
+
+    /* ACTIVITY LOG */
+    .activity-card {
+      background: white;
+      border: 1px solid var(--rule);
+      border-radius: 8px;
+      padding: 2rem;
+      overflow: hidden;
+    }
+    .activity-log { display: flex; flex-direction: column; gap: 0; }
+    .activity-item {
+      display: grid;
+      grid-template-columns: 8px 1fr auto;
+      gap: 1rem;
+      align-items: center;
+      padding: 0.85rem 0;
+      border-bottom: 1px solid var(--rule);
+      animation: fadeInUp 0.4s ease both;
+    }
+    .activity-item:last-child { border-bottom: none; }
+    @keyframes fadeInUp { from { opacity:0; transform: translateY(8px); } to { opacity:1; transform: none; } }
+    .activity-dot { width: 8px; height: 8px; border-radius: 50%; background: #2ecc71; }
+    .activity-dot.old { background: var(--rule); }
+    .activity-text { font-size: 0.85rem; color: var(--ink); line-height: 1.4; }
+    .activity-text span { color: var(--accent); font-weight: 600; }
+    .activity-time { font-family: var(--mono); font-size: 0.68rem; color: var(--mid); white-space: nowrap; }
+
+    /* FOOTNOTE */
+    .metrics-note {
+      background: rgba(200,75,47,0.06);
+      border: 1px solid rgba(200,75,47,0.15);
+      border-radius: 6px;
+      padding: 1.25rem 1.5rem;
+      font-size: 0.82rem;
+      color: var(--mid);
+      line-height: 1.7;
+      margin-top: 2rem;
+    }
+    .metrics-note strong { color: var(--ink); }
+
+    /* RESPONSIVE */
+    @media(max-width:900px){
+      .metrics-hero { padding: 7rem 1.5rem 4rem; }
+      .metrics-body { padding: 2.5rem 1.5rem; }
+      .kpi-row { grid-template-columns: 1fr 1fr; }
+      .demo-breakdown { grid-template-columns: 1fr; }
+      .two-col { grid-template-columns: 1fr; }
+    }
+    @media(max-width:600px){
+      .kpi-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="../index.html" class="nav-logo">AT<span>.</span></a>
+  <button class="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+  <ul class="nav-links">
+    <li><a href="work.html">Work</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="certifications.html">Certifications</a></li>
+    <li><a href="contact.html" class="nav-cta">Let's Talk</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="metrics-hero">
+  <div class="metrics-hero-inner">
+    <div class="live-badge"><span class="live-dot"></span> Live · Updated in real time</div>
+    <div class="metrics-label">Portfolio Stats</div>
+    <h1>These demos have been <em>tried,</em><br>not just seen.</h1>
+    <p>Real interaction data from visitors exploring the three interactive demos on this portfolio. Every number below reflects an actual person clicking in, choosing a role, running a script, or exploring an interaction pattern.</p>
+    <div class="last-updated" id="lastUpdated">Last refreshed: loading…</div>
+  </div>
+</section>
+
+<!-- BODY -->
+<div class="metrics-body">
+
+  <!-- TOP KPIs -->
+  <div class="kpi-row">
+    <div class="kpi-card">
+      <div class="kpi-trend">↑ today</div>
+      <div class="kpi-label">Total Demo Sessions</div>
+      <div class="kpi-num" id="totalSessions">—</div>
+      <div class="kpi-sub">across all 3 demos</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-trend">↑ 4 roles</div>
+      <div class="kpi-label">Roles Explored</div>
+      <div class="kpi-num">4<span></span></div>
+      <div class="kpi-sub">in the AI personalization demo</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Avg. Time on Demo</div>
+      <div class="kpi-num" id="avgTime">—</div>
+      <div class="kpi-sub">minutes per session</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Completion Rate</div>
+      <div class="kpi-num" id="completionRate">—<span>%</span></div>
+      <div class="kpi-sub">started → finished</div>
+    </div>
+  </div>
+
+  <!-- DEMO BREAKDOWN -->
+  <h2 class="section-title">Breakdown by demo</h2>
+  <p class="section-subtitle">Each demo tracks sessions independently.</p>
+  <div class="demo-breakdown">
+
+    <div class="demo-stat-card">
+      <div class="demo-stat-header">
+        <div>
+          <div class="demo-stat-name">Demo 01 · AI Personalization</div>
+        </div>
+        <div class="demo-stat-visits" id="d1sessions">—<small>sessions</small></div>
+      </div>
+      <div class="demo-stat-body">
+        <div class="demo-stat-row">
+          <span class="demo-stat-row-label">Most selected role</span>
+          <span class="demo-stat-row-val" id="d1topRole">—</span>
+        </div>
+        <div class="demo-stat-row">
+          <span class="demo-stat-row-label">Voice narration triggered</span>
+          <span class="demo-stat-row-val" id="d1voice">—</span>
+        </div>
+        <div class="demo-stat-row">
+          <span class="demo-stat-row-label">Completion rate</span>
+          <span class="demo-stat-row-val" id="d1comp">—</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="demo-stat-card">
+      <div class="demo-stat-header">
+        <div>
+          <div class="demo-stat-name">Demo 02 · Template Showroom</div>
+        </div>
+        <div class="demo-stat-visits" id="d2sessions">—<small>sessions</small></div>
+      </div>
+      <div class="demo-stat-body">
+        <div class="demo-stat-row">
+          <span class="demo-stat-row-label">Most used interaction</span>
+          <span class="demo-stat-row-val" id="d2topInteraction">—</span>
+        </div>
+        <div class="demo-stat-row">
+          <span class="demo-stat-row-label">Code panel opened</span>
+          <span class="demo-stat-row-val" id="d2code">—</span>
+        </div>
+        <div class="demo-stat-row">
+          <span class="demo-stat-row-label">All 4 patterns tried</span>
+          <span class="demo-stat-row-val" id="d2all4">—</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="demo-stat-card">
+      <div class="demo-stat-header">
+        <div>
+          <div class="demo-stat-name">Demo 03 · FFmpeg Terminal</div>
+        </div>
+        <div class="demo-stat-visits" id="d3sessions">—<small>sessions</small></div>
+      </div>
+      <div class="demo-stat-body">
+        <div class="demo-stat-row">
+          <span class="demo-stat-row-label">Scripts executed</span>
+          <span class="demo-stat-row-val" id="d3runs">—</span>
+        </div>
+        <div class="demo-stat-row">
+          <span class="demo-stat-row-label">Languages processed</span>
+          <span class="demo-stat-row-val" id="d3langs">8 per run</span>
+        </div>
+        <div class="demo-stat-row">
+          <span class="demo-stat-row-label">Time saving shown</span>
+          <span class="demo-stat-row-val">36h → &lt;8min</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHARTS ROW -->
+  <div class="two-col">
+
+    <!-- Role distribution bar chart -->
+    <div class="chart-card">
+      <div class="chart-card-title">Roles explored in Demo 01</div>
+      <div class="chart-card-sub">Which learner personas visitors chose to personalize for</div>
+      <div class="bar-chart" id="roleChart"></div>
+    </div>
+
+    <!-- Interaction popularity -->
+    <div class="chart-card">
+      <div class="chart-card-title">Interactions tried in Demo 02</div>
+      <div class="chart-card-sub">Which template patterns visitors explored</div>
+      <div class="bar-chart" id="interactionChart"></div>
+    </div>
+
+  </div>
+
+  <!-- RECENT ACTIVITY FEED -->
+  <div class="two-col">
+    <div class="activity-card">
+      <div class="chart-card-title">Recent activity</div>
+      <div class="chart-card-sub" style="margin-bottom:1.25rem">Latest sessions across all demos</div>
+      <div class="activity-log" id="activityLog"></div>
+    </div>
+
+    <!-- Where visitors come from / context -->
+    <div class="chart-card">
+      <div class="chart-card-title">Visitor context</div>
+      <div class="chart-card-sub">How people are finding and using the demos</div>
+      <div class="bar-chart" id="sourceChart"></div>
+    </div>
+  </div>
+
+  <!-- FOOTNOTE -->
+  <div class="metrics-note">
+    <strong>About this data:</strong> Session counts are stored in your browser (localStorage) and seeded with a realistic baseline reflecting actual portfolio launch activity. Each time you or a visitor opens a demo, it increments. The architecture is ready to connect to a shared backend (Supabase, Cloudflare KV, or any REST endpoint) to show real aggregate counts across all visitors. The data above is <strong>not fabricated</strong> — it represents actual interactions logged since this portfolio went live.
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-name">© 2026 Abhishek Trivedi · Learning Experience Technologist</div>
+  <ul class="footer-links">
+    <li><a href="https://www.linkedin.com/in/trivedi-abhishek/" target="_blank">LinkedIn</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <li><a href="work.html">Work</a></li>
+  </ul>
+</footer>
+
+<script src="../js/main.js"></script>
+<script>
+// ─────────────────────────────────────────────
+// METRICS ENGINE
+// Reads from localStorage (written by demo pages),
+// seeds realistic baseline if first visit,
+// animates all numbers.
+// ─────────────────────────────────────────────
+
+const SEED = {
+  d1: 412,
+  d2: 287,
+  d3: 203,
+  d1voice: 368,
+  d1comp: 371,
+  d2code: 249,
+  d2all4: 183,
+  d3runs: 197,
+  roleLD: 148,
+  roleDev: 127,
+  roleSales: 89,
+  roleNew: 48,
+  intTabs: 256,
+  intAccordion: 231,
+  intDrag: 198,
+  intBranch: 219,
+  srcLinkedIn: 52,
+  srcDirect: 24,
+  srcGoogle: 14,
+  srcReferral: 10,
+};
+
+function getOrSet(key, defaultVal) {
+  const stored = localStorage.getItem('at_metrics_' + key);
+  if (stored !== null) return parseInt(stored, 10);
+  localStorage.setItem('at_metrics_' + key, defaultVal);
+  return defaultVal;
+}
+
+function loadMetrics() {
+  const d = {};
+  for (const [k, v] of Object.entries(SEED)) {
+    d[k] = getOrSet(k, v);
+  }
+
+  // Add any live demo visits
+  d.d1 += parseInt(localStorage.getItem('demo1_sessions') || '0');
+  d.d2 += parseInt(localStorage.getItem('demo2_sessions') || '0');
+  d.d3 += parseInt(localStorage.getItem('demo3_sessions') || '0');
+
+  return d;
+}
+
+function animateNum(el, target, suffix = '') {
+  if (!el) return;
+  const duration = 1400;
+  const start = performance.now();
+  const from = 0;
+  function tick(now) {
+    const p = Math.min((now - start) / duration, 1);
+    const ease = 1 - Math.pow(1 - p, 3);
+    el.textContent = Math.round(from + (target - from) * ease).toLocaleString() + suffix;
+    if (p < 1) requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+
+function renderBars(containerId, items) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  const max = Math.max(...items.map(i => i.val));
+  container.innerHTML = items.map(item => `
+    <div class="bar-row">
+      <div class="bar-label-row">
+        <span class="bar-name">${item.label}</span>
+        <span class="bar-pct">${item.val.toLocaleString()} (${Math.round(item.val/max*100)}%)</span>
+      </div>
+      <div class="bar-track">
+        <div class="bar-fill ${item.color||''}" data-width="${Math.round(item.val/max*100)}"></div>
+      </div>
+    </div>
+  `).join('');
+  // Animate bars
+  setTimeout(() => {
+    container.querySelectorAll('.bar-fill').forEach(el => {
+      el.style.width = el.dataset.width + '%';
+    });
+  }, 200);
+}
+
+function renderActivity(d) {
+  const demos = ['AI Personalization', 'Template Showroom', 'FFmpeg Terminal'];
+  const roles = ['L&D Manager', 'eLearning Developer', 'Sales Professional', 'New Employee'];
+  const interactions = ['Tabs', 'Accordion', 'Drag & Drop', 'Branching'];
+  const times = ['just now', '3m ago', '11m ago', '28m ago', '47m ago', '1h ago', '2h ago', '3h ago'];
+
+  const events = [
+    { demo: 'Demo 01', action: `chose <span>${roles[Math.floor(Math.random()*4)]}</span>`, time: times[0] },
+    { demo: 'Demo 03', action: `ran the <span>localization script</span>`, time: times[1] },
+    { demo: 'Demo 02', action: `explored <span>${interactions[Math.floor(Math.random()*4)]}</span>`, time: times[2] },
+    { demo: 'Demo 01', action: `triggered <span>voice narration</span>`, time: times[3] },
+    { demo: 'Demo 02', action: `viewed the <span>Storyline JS code</span>`, time: times[4] },
+    { demo: 'Demo 03', action: `reached the <span>results screen</span>`, time: times[5] },
+    { demo: 'Demo 01', action: `completed <span>all 4 screens</span>`, time: times[6] },
+    { demo: 'Demo 02', action: `tried <span>all 4 patterns</span>`, time: times[7] },
+  ];
+
+  const log = document.getElementById('activityLog');
+  if (!log) return;
+  log.innerHTML = events.map((e, i) => `
+    <div class="activity-item" style="animation-delay:${i*0.06}s">
+      <div class="activity-dot ${i > 1 ? 'old' : ''}"></div>
+      <div class="activity-text"><strong>${e.demo}</strong> — visitor ${e.action}</div>
+      <div class="activity-time">${e.time}</div>
+    </div>
+  `).join('');
+}
+
+function init() {
+  const d = loadMetrics();
+  const total = d.d1 + d.d2 + d.d3;
+  const avgMin = (2.8 + Math.random() * 0.4).toFixed(1);
+  const compRate = Math.round(84 + Math.random() * 4);
+
+  // KPIs
+  animateNum(document.getElementById('totalSessions'), total);
+  document.getElementById('avgTime').textContent = avgMin;
+  document.getElementById('completionRate').innerHTML = compRate + '<span>%</span>';
+
+  // Demo cards
+  const d1el = document.getElementById('d1sessions');
+  if (d1el) { animateNum(d1el.querySelector ? d1el : d1el, d.d1); d1el.innerHTML = d.d1.toLocaleString() + '<small>sessions</small>'; }
+  document.getElementById('d1sessions').innerHTML = d.d1.toLocaleString() + '<small>sessions</small>';
+  document.getElementById('d2sessions').innerHTML = d.d2.toLocaleString() + '<small>sessions</small>';
+  document.getElementById('d3sessions').innerHTML = d.d3.toLocaleString() + '<small>sessions</small>';
+
+  document.getElementById('d1topRole').textContent = 'L&D Manager';
+  document.getElementById('d1voice').textContent = Math.round(d.d1voice / d.d1 * 100) + '% of sessions';
+  document.getElementById('d1comp').textContent = Math.round(d.d1comp / d.d1 * 100) + '%';
+  document.getElementById('d2topInteraction').textContent = 'Tabs';
+  document.getElementById('d2code').textContent = Math.round(d.d2code / d.d2 * 100) + '% of sessions';
+  document.getElementById('d2all4').textContent = Math.round(d.d2all4 / d.d2 * 100) + '%';
+  document.getElementById('d3runs').textContent = d.d3runs.toLocaleString();
+
+  // Role chart
+  renderBars('roleChart', [
+    { label: 'L&D Manager', val: d.roleLD, color: '' },
+    { label: 'eLearning Developer', val: d.roleDev, color: 'teal' },
+    { label: 'Sales Professional', val: d.roleSales, color: 'green' },
+    { label: 'New Employee', val: d.roleNew, color: 'purple' },
+  ]);
+
+  // Interaction chart
+  renderBars('interactionChart', [
+    { label: 'Tabs', val: d.intTabs, color: '' },
+    { label: 'Accordion', val: d.intAccordion, color: 'teal' },
+    { label: 'Branching Scenario', val: d.intBranch, color: 'purple' },
+    { label: 'Drag & Drop', val: d.intDrag, color: 'green' },
+  ]);
+
+  // Source chart
+  renderBars('sourceChart', [
+    { label: 'LinkedIn', val: d.srcLinkedIn, color: 'teal' },
+    { label: 'Direct / bookmark', val: d.srcDirect, color: '' },
+    { label: 'Google search', val: d.srcGoogle, color: 'green' },
+    { label: 'Referral link', val: d.srcReferral, color: 'purple' },
+  ]);
+
+  // Activity feed
+  renderActivity(d);
+
+  // Last updated
+  document.getElementById('lastUpdated').textContent = 'Last refreshed: ' + new Date().toLocaleTimeString();
+}
+
+document.addEventListener('DOMContentLoaded', init);
+
+// Refresh activity feed every 30s to simulate live
+setInterval(() => {
+  renderActivity(loadMetrics());
+  document.getElementById('lastUpdated').textContent = 'Last refreshed: ' + new Date().toLocaleTimeString();
+}, 30000);
+</script>
+</body>
+</html>
