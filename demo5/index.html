@@ -1,0 +1,1624 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Storyboard Creator · Demo 05 · Abhishek Trivedi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy:    #0a1628;
+  --navy-m:  #122040;
+  --navy-l:  #1a3a5c;
+  --accent:  #c84b2f;
+  --accent-l:#e8633e;
+  --gold:    #d4af5f;
+  --white:   #f5f2eb;
+  --dim:     #8ba3be;
+  --code-bg: #061018;
+  --green:   #3dba6e;
+  --purple:  #8b6cf7;
+  --teal:    #2abfb0;
+  --pink:    #e06fa0;
+  --radius:  10px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--navy);color:var(--white);font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden;}
+
+/* ── HEADER ── */
+.header{display:flex;align-items:center;justify-content:space-between;padding:16px 32px;border-bottom:3px solid var(--accent);background:rgba(10,22,40,0.97);backdrop-filter:blur(10px);position:sticky;top:0;z-index:100;}
+.header-left{display:flex;align-items:center;gap:16px;}
+.header-logo{font-family:'DM Serif Display',serif;font-size:20px;color:var(--white);}
+.header-logo span{color:var(--accent);}
+.header-breadcrumb{font-family:'JetBrains Mono',monospace;font-size:0.62rem;color:var(--dim);letter-spacing:0.08em;}
+.header-breadcrumb a{color:var(--dim);text-decoration:none;}
+.header-breadcrumb a:hover{color:var(--accent);}
+.header-badge{background:rgba(200,75,47,0.15);border:1px solid rgba(200,75,47,0.4);border-radius:100px;padding:4px 14px;font-family:'JetBrains Mono',monospace;font-size:0.62rem;letter-spacing:0.08em;color:var(--accent);}
+
+/* ── MAIN LAYOUT ── */
+.app{display:grid;grid-template-columns:340px 1fr 300px;gap:0;height:calc(100vh - 61px);}
+
+/* ── LEFT PANEL — INPUT ── */
+.panel-input{background:var(--navy-m);border-right:1px solid rgba(255,255,255,0.07);overflow-y:auto;display:flex;flex-direction:column;}
+.panel-title{font-family:'JetBrains Mono',monospace;font-size:0.6rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--accent);padding:20px 24px 0;margin-bottom:16px;display:flex;align-items:center;gap:8px;}
+.panel-title::before{content:'';display:block;width:20px;height:1px;background:var(--accent);}
+
+.input-section{padding:0 20px 20px;}
+.field-label{font-size:0.72rem;font-weight:600;color:var(--dim);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:6px;margin-top:16px;display:flex;align-items:center;gap:6px;}
+.field-label .req{color:var(--accent);font-size:0.9em;}
+
+input[type=text],textarea,select{
+  width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);
+  border-radius:var(--radius);padding:10px 12px;color:var(--white);font-family:'DM Sans',sans-serif;
+  font-size:0.88rem;transition:border-color 0.2s,background 0.2s;outline:none;
+}
+input[type=text]:focus,textarea:focus,select:focus{border-color:var(--accent);background:rgba(200,75,47,0.06);}
+textarea{resize:vertical;min-height:80px;line-height:1.55;}
+select option{background:#122040;color:var(--white);}
+
+.model-selector{position:relative;}
+.model-selector select{padding-right:32px;appearance:none;cursor:pointer;}
+.model-selector::after{content:'▾';position:absolute;right:12px;top:50%;transform:translateY(-50%);color:var(--dim);pointer-events:none;font-size:0.8rem;}
+
+/* Model info chip */
+.model-info{margin-top:8px;padding:10px 12px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:8px;font-size:0.75rem;color:var(--dim);line-height:1.55;transition:all 0.3s;}
+
+/* Slider row */
+.slider-row{display:flex;align-items:center;gap:10px;margin-top:4px;}
+.slider-row input[type=range]{flex:1;-webkit-appearance:none;height:4px;border-radius:2px;background:rgba(255,255,255,0.1);cursor:pointer;}
+.slider-row input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:var(--accent);cursor:pointer;}
+.slider-val{font-family:'JetBrains Mono',monospace;font-size:0.78rem;color:var(--white);min-width:28px;text-align:right;}
+
+/* Audience chips */
+.chip-group{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;}
+.chip{padding:4px 12px;border-radius:100px;border:1px solid rgba(255,255,255,0.12);font-size:0.75rem;color:var(--dim);cursor:pointer;transition:all 0.2s;background:rgba(255,255,255,0.03);}
+.chip.active{border-color:var(--accent);color:var(--white);background:rgba(200,75,47,0.15);}
+.chip:hover:not(.active){border-color:rgba(255,255,255,0.25);color:var(--white);}
+
+/* Generate button */
+.btn-generate{width:100%;margin:20px 20px 0;width:calc(100% - 40px);padding:14px;background:var(--accent);color:white;border:none;border-radius:var(--radius);font-family:'DM Sans',sans-serif;font-size:0.95rem;font-weight:600;cursor:pointer;transition:all 0.25s;display:flex;align-items:center;justify-content:center;gap:10px;letter-spacing:0.02em;}
+.btn-generate:hover{background:var(--accent-l);transform:translateY(-1px);}
+.btn-generate:disabled{opacity:0.5;cursor:not-allowed;transform:none;}
+.btn-generate .btn-icon{font-size:1.1rem;}
+
+/* HBT toggle */
+.hbt-toggle{margin:12px 20px 20px;width:calc(100% - 40px);padding:10px;background:transparent;color:var(--dim);border:1px solid rgba(255,255,255,0.1);border-radius:var(--radius);font-family:'JetBrains Mono',monospace;font-size:0.65rem;letter-spacing:0.1em;cursor:pointer;transition:all 0.2s;text-transform:uppercase;}
+.hbt-toggle:hover{border-color:var(--gold);color:var(--gold);}
+
+/* ── CENTRE PANEL — STORYBOARD ── */
+.panel-board{overflow-y:auto;padding:24px;background:var(--navy);display:flex;flex-direction:column;gap:16px;}
+
+/* Empty / loading state */
+.empty-state{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;text-align:center;padding:40px;opacity:0.4;}
+.empty-icon{font-size:3rem;}
+.empty-title{font-family:'DM Serif Display',serif;font-size:1.4rem;color:var(--white);}
+.empty-sub{font-size:0.85rem;color:var(--dim);max-width:28ch;line-height:1.6;}
+
+/* Storyboard header bar */
+.board-header{display:flex;align-items:center;justify-content:space-between;padding-bottom:4px;border-bottom:1px solid rgba(255,255,255,0.07);margin-bottom:4px;}
+.board-title{font-family:'DM Serif Display',serif;font-size:1.1rem;color:var(--white);}
+.board-meta{font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--dim);letter-spacing:0.06em;}
+.board-actions{display:flex;gap:8px;}
+.btn-small{padding:6px 14px;border-radius:6px;border:1px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.04);color:var(--dim);font-size:0.72rem;cursor:pointer;font-family:'JetBrains Mono',monospace;letter-spacing:0.06em;transition:all 0.2s;}
+.btn-small:hover{border-color:var(--accent);color:var(--accent);}
+
+/* Slide card */
+.slide-card{background:var(--navy-m);border:1px solid rgba(255,255,255,0.08);border-radius:var(--radius);animation:slideIn 0.4s ease both;overflow:visible;}
+@keyframes slideIn{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+.slide-card:nth-child(2){animation-delay:0.05s;}
+.slide-card:nth-child(3){animation-delay:0.1s;}
+.slide-card:nth-child(4){animation-delay:0.15s;}
+.slide-card:nth-child(5){animation-delay:0.2s;}
+.slide-card:nth-child(6){animation-delay:0.25s;}
+.slide-card:nth-child(7){animation-delay:0.3s;}
+
+.slide-header{display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.02);}
+.slide-num{font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:var(--accent);letter-spacing:0.1em;min-width:48px;}
+.slide-type-badge{font-family:'JetBrains Mono',monospace;font-size:0.6rem;padding:2px 10px;border-radius:100px;letter-spacing:0.08em;}
+.slide-model-tag{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:0.58rem;padding:2px 8px;border-radius:4px;letter-spacing:0.06em;opacity:0.7;}
+
+.slide-body{display:grid;grid-template-columns:1fr 1fr;gap:0;}
+.slide-col{padding:14px 16px;min-height:80px;}
+.slide-col+.slide-col{border-left:1px solid rgba(255,255,255,0.06);}
+.slide-col-label{font-family:'JetBrains Mono',monospace;font-size:0.58rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--dim);margin-bottom:6px;}
+.slide-col-content{font-size:0.83rem;color:var(--white);line-height:1.6;display:block;word-break:break-word;}
+.slide-col-content.narration{font-style:italic;color:rgba(245,242,235,0.85);}
+
+.slide-footer{display:grid;grid-template-columns:1fr 1fr 1fr;border-top:1px solid rgba(255,255,255,0.06);}
+.slide-footer-cell{padding:10px 14px;}
+.slide-footer-cell+.slide-footer-cell{border-left:1px solid rgba(255,255,255,0.06);}
+.sfc-label{font-family:'JetBrains Mono',monospace;font-size:0.55rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--dim);margin-bottom:3px;}
+.sfc-val{font-size:0.78rem;color:var(--white);}
+
+/* Loading skeleton */
+.loading-wrap{display:flex;flex-direction:column;gap:16px;}
+.skeleton-card{background:var(--navy-m);border:1px solid rgba(255,255,255,0.06);border-radius:var(--radius);padding:20px;display:flex;flex-direction:column;gap:10px;}
+.skel{background:rgba(255,255,255,0.06);border-radius:4px;animation:shimmer 1.4s ease infinite alternate;}
+@keyframes shimmer{from{opacity:0.4;}to{opacity:0.9;}}
+.skel-h{height:12px;}
+.skel-p{height:8px;}
+
+/* ── RIGHT PANEL — ID MODEL ── */
+.panel-model{background:var(--navy-m);border-left:1px solid rgba(255,255,255,0.07);overflow-y:auto;display:flex;flex-direction:column;}
+.model-panel-inner{padding:20px;}
+.model-framework-title{font-family:'DM Serif Display',serif;font-size:1.1rem;color:var(--white);margin-bottom:4px;}
+.model-framework-sub{font-size:0.75rem;color:var(--dim);line-height:1.55;margin-bottom:16px;}
+
+/* Phase blocks */
+.phase-block{margin-bottom:12px;border-radius:8px;overflow:hidden;border:1px solid rgba(255,255,255,0.06);}
+.phase-header{display:flex;align-items:center;gap:10px;padding:10px 14px;}
+.phase-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.phase-name{font-weight:600;font-size:0.82rem;color:var(--white);}
+.phase-slides{font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--dim);margin-left:auto;letter-spacing:0.06em;}
+.phase-desc{padding:8px 14px 12px;font-size:0.75rem;color:var(--dim);line-height:1.6;border-top:1px solid rgba(255,255,255,0.05);}
+.phase-slide-refs{display:flex;flex-wrap:wrap;gap:4px;padding:0 14px 10px;}
+.phase-ref{font-family:'JetBrains Mono',monospace;font-size:0.6rem;padding:2px 8px;border-radius:4px;color:white;}
+
+/* Model legend */
+.model-legend{margin-top:16px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.07);}
+.legend-title{font-family:'JetBrains Mono',monospace;font-size:0.6rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--dim);margin-bottom:10px;}
+.legend-item{display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:0.75rem;color:var(--dim);}
+.legend-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+
+/* Insight strip */
+.insight-strip{margin-top:16px;padding:12px 14px;background:rgba(212,175,95,0.07);border:1px solid rgba(212,175,95,0.2);border-radius:8px;}
+.insight-label{font-family:'JetBrains Mono',monospace;font-size:0.58rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold);margin-bottom:6px;}
+.insight-text{font-size:0.75rem;color:rgba(245,242,235,0.8);line-height:1.6;}
+
+/* ── HBT DRAWER ── */
+.hbt-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:200;opacity:0;pointer-events:none;transition:opacity 0.3s;}
+.hbt-overlay.open{opacity:1;pointer-events:all;}
+.hbt-drawer{position:fixed;bottom:0;left:0;right:0;background:#0d1e35;border-top:2px solid var(--accent);padding:28px 40px;z-index:201;transform:translateY(100%);transition:transform 0.4s cubic-bezier(0.22,1,0.36,1);max-height:70vh;overflow-y:auto;}
+.hbt-drawer.open{transform:translateY(0);}
+.hbt-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px;}
+.hbt-title{font-family:'DM Serif Display',serif;font-size:1.4rem;color:var(--white);}
+.hbt-close{background:none;border:1px solid rgba(255,255,255,0.15);color:var(--dim);width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;transition:all 0.2s;}
+.hbt-close:hover{border-color:var(--accent);color:var(--accent);}
+.hbt-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+.hbt-col-title{font-family:'JetBrains Mono',monospace;font-size:0.65rem;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:10px;}
+.hbt-col-title.real{color:var(--green);}
+.hbt-col-title.sim{color:var(--gold);}
+.hbt-col-title.prod{color:var(--purple);}
+.hbt-item{font-size:0.8rem;color:rgba(245,242,235,0.75);line-height:1.6;margin-bottom:6px;padding-left:14px;position:relative;}
+.hbt-item::before{content:'→';position:absolute;left:0;color:var(--dim);}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:2px;}
+
+/* ── LOADING SPINNER ── */
+.spinner{width:18px;height:18px;border:2px solid rgba(255,255,255,0.3);border-top-color:white;border-radius:50%;animation:spin 0.7s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* ── RESPONSIVE ── */
+@media(max-width:1100px){
+  .app{grid-template-columns:300px 1fr 260px;}
+}
+@media(max-width:900px){
+  .app{grid-template-columns:1fr;height:auto;}
+  .panel-input{height:auto;}
+  .panel-board{min-height:60vh;}
+  .panel-model{min-height:40vh;}
+  .hbt-grid{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-left">
+    <div class="header-logo">AT<span>.</span></div>
+    <div class="header-breadcrumb">
+      <a href="../../index.html">Portfolio</a> / <a href="../../pages/work.html">Work</a> / Demo 05
+    </div>
+  </div>
+  <div style="display:flex;align-items:center;gap:12px;">
+    <span class="header-badge">● LIVE DEMO</span>
+    <a href="../demo4/index.html" style="font-family:'JetBrains Mono',monospace;font-size:0.62rem;color:var(--dim);text-decoration:none;letter-spacing:0.06em;">← Case Study 04</a>
+  </div>
+</header>
+
+<!-- APP -->
+<div class="app">
+
+  <!-- ── LEFT: INPUT PANEL ── -->
+  <aside class="panel-input">
+    <div class="panel-title">Storyboard Input</div>
+
+    <div class="input-section">
+
+      <!-- Topic Selector -->
+      <div class="field-label">Course Topic <span class="req">*</span></div>
+      <div class="model-selector">
+        <select id="topicSelect" onchange="onTopicChange()">
+          <option value="">— Select a topic —</option>
+          <option value="safety">Workplace Safety &amp; Compliance</option>
+          <option value="onboarding">New Employee Onboarding</option>
+          <option value="customer">Customer Service Excellence</option>
+          <option value="leadership">Leadership &amp; Management Skills</option>
+        </select>
+      </div>
+
+      <!-- Topic preview card -->
+      <div id="topicPreview" style="margin-top:8px;padding:10px 12px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:8px;display:none;">
+        <div id="topicPreviewIcon" style="font-size:1.4rem;margin-bottom:4px;"></div>
+        <div id="topicPreviewAudience" style="font-family:'JetBrains Mono',monospace;font-size:0.6rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);margin-bottom:4px;"></div>
+        <div id="topicPreviewDesc" style="font-size:0.78rem;color:var(--dim);line-height:1.55;"></div>
+        <div id="topicPreviewMeta" style="font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:rgba(255,255,255,0.3);margin-top:6px;"></div>
+      </div>
+
+      <div class="field-label" style="margin-top:16px;">ID Model <span class="req">*</span></div>
+      <div class="model-selector">
+        <select id="modelSelect" onchange="onModelChange()">
+          <option value="ADDIE">ADDIE</option>
+          <option value="Bloom">Bloom's Taxonomy</option>
+          <option value="Gagne">Gagne's 9 Events</option>
+          <option value="SAM">SAM (Successive Approximation)</option>
+          <option value="Merrill">Merrill's First Principles</option>
+          <option value="4CID">4C/ID Model</option>
+          <option value="Kirkpatrick">Kirkpatrick Model</option>
+        </select>
+      </div>
+      <div class="model-info" id="modelInfo">Linear phase-gated model: Analyse > Design > Develop > Implement > Evaluate. Best for large-scale, well-scoped projects.</div>
+
+      <!-- Coverage indicator -->
+      <div id="coverageTag" style="margin-top:8px;display:none;padding:6px 10px;border-radius:6px;font-family:'JetBrains Mono',monospace;font-size:0.62rem;letter-spacing:0.08em;"></div>
+
+    </div>
+
+    <!-- Status strip -->
+    <div style="padding:0 20px 4px;">
+      <div style="font-size:0.68rem;color:var(--dim);line-height:1.5;padding:8px 10px;background:rgba(61,186,110,0.05);border-radius:6px;border:1px solid rgba(61,186,110,0.15);display:flex;align-items:center;gap:8px;">
+        <span style="width:6px;height:6px;border-radius:50%;background:var(--green);display:inline-block;flex-shrink:0;box-shadow:0 0 6px var(--green);"></span>
+        <span>28 pre-built storyboards — 4 topics x 7 ID models. Select and explore instantly.</span>
+      </div>
+    </div>
+
+    <button class="btn-generate" id="generateBtn" onclick="showStoryboard()" disabled style="opacity:0.4;">
+      <span class="btn-icon">&#9654;</span> Show Storyboard
+    </button>
+    <button class="hbt-toggle" onclick="openHBT()">⟨/⟩ How I Built This</button>
+  </aside>
+
+  <!-- ── CENTRE: STORYBOARD PANEL ── -->
+  <main class="panel-board" id="boardPanel">
+    <div class="empty-state" id="emptyState">
+      <div class="empty-icon">⬡</div>
+      <div class="empty-title">Your storyboard will appear here</div>
+      <div class="empty-sub">Fill in the details on the left and hit Generate</div>
+    </div>
+  </main>
+
+  <!-- ── RIGHT: ID MODEL PANEL ── -->
+  <aside class="panel-model" id="modelPanel">
+    <div class="panel-title">ID Model Analysis</div>
+    <div class="model-panel-inner" id="modelPanelContent">
+      <div style="opacity:0.35;text-align:center;padding:40px 20px;">
+        <div style="font-family:'DM Serif Display',serif;font-size:1rem;margin-bottom:8px;">Model breakdown</div>
+        <div style="font-size:0.78rem;color:var(--dim);line-height:1.6;">Generate a storyboard to see how your chosen ID model shaped the output.</div>
+      </div>
+    </div>
+  </aside>
+
+</div>
+
+<!-- HBT DRAWER -->
+<div class="hbt-overlay" id="hbtOverlay" onclick="closeHBT()"></div>
+<div class="hbt-drawer" id="hbtDrawer">
+  <div class="hbt-top">
+    <div class="hbt-title">How I Built This</div>
+    <button class="hbt-close" onclick="closeHBT()">✕</button>
+  </div>
+  <div class="hbt-grid">
+    <div>
+      <div class="hbt-col-title real">✓ Real &amp; Accurate</div>
+      <div class="hbt-item">28 hand-authored storyboards — 4 topics × 7 ID models, every screen written by an instructional designer (me), not generated randomly</div>
+      <div class="hbt-item">Each ID model produces structurally distinct output — ADDIE phases, Bloom cognitive levels, Gagné's 9 Events, SAM iterations, Merrill's principles, 4C/ID task types, and Kirkpatrick's backward design are all genuinely different</div>
+      <div class="hbt-item">Narration scripts, visual descriptions, interaction types, and design rationale notes are all real ID deliverables — written to the standard I would submit to a client</div>
+      <div class="hbt-item">The ID Model Analysis panel (right) accurately maps each screen to its model phase — that mapping is genuine, not decorative</div>
+    </div>
+    <div>
+      <div class="hbt-col-title sim">~ Simulated / Simplified</div>
+      <div class="hbt-item">Topic selection is fixed to 4 pre-built scenarios — a production tool would accept any free-text topic and generate via API</div>
+      <div class="hbt-item">A Cloudflare Worker proxy is already built and deployed — the switch to live Claude API generation requires only adding API credits</div>
+      <div class="hbt-item">The ~1 second loading delay is intentional — it simulates real generation latency and signals that meaningful processing is happening</div>
+      <div class="hbt-item">Export to DOCX or Google Slides is not wired up in this demo — the storyboard JSON is fully structured and ready for that pipeline</div>
+    </div>
+    <div>
+      <div class="hbt-col-title prod">→ In Production</div>
+      <div class="hbt-item">Live API generation via Cloudflare Worker: any topic, any audience, any ID model — storyboard built from scratch in 3–6 seconds</div>
+      <div class="hbt-item">Export pipeline: storyboard JSON → DOCX (Articulate Storyline-ready) or Google Slides via API, preserving narration, visuals, and interaction specs</div>
+      <div class="hbt-item">SME review workflow: comment threads per screen, tracked changes, approval status per slide — stored in SharePoint or LMS</div>
+      <div class="hbt-item">Version history: every regeneration saved with timestamp and model used — compare ADDIE vs Bloom output side by side</div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── PRE-BUILT STORYBOARD DATA ──
+// 4 topics × 7 ID models = 28 complete storyboards
+// Each screen has: type, title, modelPhase, narration, visualDescription, interaction, duration, designNote
+
+const TOPICS = {
+  safety: {
+    id: 'safety',
+    label: 'Workplace Safety & Compliance',
+    audience: 'Frontline Workers',
+    duration: '20 min',
+    description: 'Fire safety, hazard identification, PPE usage and emergency procedures in a manufacturing environment.',
+    icon: '🦺',
+    color: '#c84b2f'
+  },
+  onboarding: {
+    id: 'onboarding',
+    label: 'New Employee Onboarding',
+    audience: 'New Employees',
+    duration: '15 min',
+    description: 'Company culture, policies, tools, and team introductions for day-one hires across all departments.',
+    icon: '🤝',
+    color: '#3dba6e'
+  },
+  customer: {
+    id: 'customer',
+    label: 'Customer Service Excellence',
+    audience: 'Customer-Facing Teams',
+    duration: '25 min',
+    description: 'Handling complaints, active listening, de-escalation techniques, and building long-term customer relationships.',
+    icon: '💬',
+    color: '#5ba3f5'
+  },
+  leadership: {
+    id: 'leadership',
+    label: 'Leadership & Management Skills',
+    audience: 'Managers',
+    duration: '30 min',
+    description: 'Delegation, feedback delivery, coaching conversations, and building high-performing teams.',
+    icon: '🎯',
+    color: '#8b6cf7'
+  }
+};
+
+const STORYBOARDS = {
+
+  // ════════════════════════════════════════════════════
+  // WORKPLACE SAFETY — 7 MODELS
+  // ════════════════════════════════════════════════════
+
+  safety_ADDIE: {
+    title: 'Workplace Safety & Compliance',
+    description: 'A structured safety training following ADDIE phases — from needs analysis through to evaluation.',
+    screens: [
+      { id:1, type:'Title', modelPhase:'Analysis', title:'Workplace Safety & Compliance',
+        narration:'This course was designed following a thorough analysis of incident reports, near-miss data, and regulatory requirements across your site. The gaps identified during that analysis directly shaped every screen you are about to see.',
+        visualDescription:'Full-screen title card. Background shows a real factory floor with a blue overlay. Bold white title centred. Stats strip at bottom: 2.3M workplace injuries reported in the last year — one is too many.',
+        interaction:'Click Begin to start', duration:'45 sec',
+        designNote:'ADDIE Analysis phase: opening screen reflects findings from the needs assessment, not generic content.' },
+      { id:2, type:'Objective', modelPhase:'Analysis', title:'What the Data Told Us',
+        narration:'Before building this course, we analysed 18 months of incident data. Three behaviours account for 74% of all reportable injuries on site: skipping PPE, ignoring isolation procedures, and failing to report near-misses. This course targets exactly those three.',
+        visualDescription:'Data visualisation screen. Animated bar chart reveals the 74% statistic. Three highlighted behaviour categories below with incident count per category. Source cited at bottom.',
+        interaction:'Explore the data by clicking each bar for detail', duration:'75 sec',
+        designNote:'Showing learners the evidence behind the training increases buy-in — they understand why this matters.' },
+      { id:3, type:'Content', modelPhase:'Design', title:'The Hierarchy of Controls',
+        narration:'The Hierarchy of Controls is the framework your organisation uses to evaluate and manage risk. It runs from elimination at the top — the most effective control — down to PPE at the bottom, which is always the last line of defence, never the first.',
+        visualDescription:'Inverted triangle diagram. Each level animates in from top to bottom: Elimination, Substitution, Engineering Controls, Administrative Controls, PPE. Each level has colour coding, brief description, and site-specific example.',
+        interaction:'Click each level to expand with a real example from your workplace', duration:'90 sec',
+        designNote:'Hierarchy model frames all subsequent content — learners have a mental model before encountering specific procedures.' },
+      { id:4, type:'Scenario', modelPhase:'Development', title:'The Isolation Shortcut',
+        narration:'It is 4:45 PM on a Friday. A machine on Line 3 has jammed. Your shift ends at 5. Your supervisor says it will only take two minutes to clear it manually — no need to go through full isolation. What do you do?',
+        visualDescription:'Illustrated scene: factory floor, clock visible showing 4:45, supervisor character. Speech bubble shows the shortcut request. Tension cue: subtle red tint on the machine. Three decision buttons below: Follow isolation procedure in full / Clear it quickly as instructed / Report the machine and leave it for next shift.',
+        interaction:'Choose your response — each triggers a branching consequence', duration:'120 sec',
+        designNote:'Scenario placed in Development phase introduces real-world pressure testing of the conceptual content. Time pressure is a known trigger for safety shortcuts.' },
+      { id:5, type:'Activity', modelPhase:'Development', title:'Spot the Hazard',
+        narration:'Here is a typical workstation on your site. Your task is to identify every safety hazard you can see before your shift begins. There are seven. How many can you find?',
+        visualDescription:'High-resolution photograph of a workstation with subtle hazards embedded: trailing cable, missing guard, unlabelled chemical, blocked exit, no PPE visible, worn floor tape, obstructed fire point. Hotspot interaction layer over the image.',
+        interaction:'Click on each hazard you identify. Correct clicks reveal the hazard name and risk level. Timer visible. Score shown at end.', duration:'150 sec',
+        designNote:'Visual hazard identification builds perceptual skill — learners train their eye to notice deviations from safe conditions.' },
+      { id:6, type:'Assessment', modelPhase:'Evaluation', title:'Knowledge Check',
+        narration:'Four questions based on the content you have covered. These questions reflect the exact situations your site risk assessment identified as highest priority. There is no time limit — read each one carefully.',
+        visualDescription:'Clean quiz interface. One question at a time. Q1: Hierarchy of Controls ordering. Q2: Isolation scenario decision. Q3: Near-miss reporting obligation. Q4: PPE selection for chemical handling. Immediate feedback with rationale on each answer.',
+        interaction:'Select answer and click Submit. Review feedback before proceeding to next question.', duration:'180 sec',
+        designNote:'Evaluation phase: assessment questions map directly back to the Analysis phase gaps — closing the ADDIE loop.' },
+      { id:7, type:'Summary', modelPhase:'Evaluation', title:'Your Safety Commitment',
+        narration:'You have completed Workplace Safety and Compliance. The three behaviours this course targeted — wearing PPE, following isolation procedures, and reporting near-misses — are the same three that account for 74% of site injuries. Your next shift is your first opportunity to apply this.',
+        visualDescription:'Summary screen with three commitment tiles, each with an icon and one-line action: Always wear full PPE before entering the work area / Never bypass isolation procedures regardless of time pressure / Report every near-miss within 2 hours using the Safety App. Digital badge awarded. Link to Safety App QR code.',
+        interaction:'Click each tile to confirm your commitment. Click Complete to record course completion.', duration:'60 sec',
+        designNote:'Commitments tied to specific behaviours are more likely to transfer than generic knowledge summaries.' }
+    ],
+    phaseMappings: { Analysis:['1','2'], Design:['3'], Development:['4','5'], Implementation:[], Evaluation:['6','7'] },
+    modelInsight: 'Every screen in this storyboard traces back to a specific ADDIE phase. The Analysis screens (1-2) justify the training with real incident data. Design (3) delivers the framework. Development (4-5) tests it through scenario and activity. Evaluation (6-7) closes the loop against the original performance gaps identified in Analysis.'
+  },
+
+  safety_Bloom: {
+    title: 'Workplace Safety & Compliance',
+    description: 'Safety training structured across Bloom\'s six cognitive levels — from recall to real decision-making.',
+    screens: [
+      { id:1, type:'Title', modelPhase:'Remember', title:'Workplace Safety & Compliance',
+        narration:'This course builds your safety knowledge from the ground up — starting with the facts and rules you need to recall, through to the complex decisions you will face under pressure on the shop floor.',
+        visualDescription:'Title card. Clean dark background with safety yellow accent. Course structure visualised as a staircase with six steps labelled with Bloom levels. Learner sees the journey ahead.',
+        interaction:'Click Start', duration:'40 sec',
+        designNote:'Showing learners the cognitive journey ahead sets expectations and reduces anxiety about the challenge ahead.' },
+      { id:2, type:'Content', modelPhase:'Remember', title:'Safety Essentials: What You Must Know',
+        narration:'Before anything else, there are five things every person on this site must be able to recall instantly: the location of emergency exits, the site emergency number, the isolation point for your workstation, the PPE required for your role, and how to report a near-miss.',
+        visualDescription:'Five information cards arranged in a grid. Each card has a bold icon, a short label, and a site-specific fact. Cards are designed to be screenshot-able as a job aid. Bright colour coding per category.',
+        interaction:'Click each card to see the site-specific detail. Mark each as Reviewed before continuing.', duration:'90 sec',
+        designNote:'Remember level: pure retrieval focus. Information is chunked into exactly five items — within working memory limits.' },
+      { id:3, type:'Content', modelPhase:'Understand', title:'Why Each Rule Exists',
+        narration:'Rules without reasons are rules that get broken. Every safety procedure on this site exists because someone was hurt — or nearly was. Understanding the reason behind each rule transforms compliance from a tick-box into a genuine protective habit.',
+        visualDescription:'Side-by-side layout for each rule. Left: the rule stated plainly. Right: the incident or near-miss that prompted it, shown as a brief illustrated timeline. Warm, human tone — not bureaucratic.',
+        interaction:'Toggle between The Rule and The Reason for each of the five essentials', duration:'100 sec',
+        designNote:'Understand level: meaning-making through causal explanation. The why is more durable than the what.' },
+      { id:4, type:'Activity', modelPhase:'Apply', title:'Apply It: Pre-Shift Safety Check',
+        narration:'You are starting your shift. Walk through the standard pre-shift safety check for your workstation. Apply what you know about PPE requirements, hazard identification, and isolation verification.',
+        visualDescription:'Interactive workstation walkthrough. First-person perspective simulation. Learner clicks through 8 checkpoints: PPE check, isolation verification, guard inspection, emergency exit clear, chemical labelling, floor marking intact, fire point accessible, near-miss log reviewed. Each checkpoint shows pass or flag.',
+        interaction:'Click each checkpoint in sequence. Flag any that fail the check. Submit completed checklist.', duration:'150 sec',
+        designNote:'Apply level: learner executes a real procedure in a low-stakes simulation before doing it for real.' },
+      { id:5, type:'Scenario', modelPhase:'Analyse', title:'What Went Wrong Here?',
+        narration:'Watch this 60-second incident reconstruction. A near-miss on a packing line — no one was hurt, but it was close. Your task is to analyse the sequence of events and identify the three control failures that allowed this situation to develop.',
+        visualDescription:'Animated incident reconstruction. Step-by-step sequence shown as illustrated panels. Three control failure points are embedded in the sequence but not labelled. Learner must identify them by clicking on the panels they believe show a failure.',
+        interaction:'Click on panels showing control failures. Select the type of failure (PPE / Isolation / Reporting). Submit your analysis.', duration:'180 sec',
+        designNote:'Analyse level: breaking down a complex event into component failures builds systemic safety thinking, not just rule-following.' },
+      { id:6, type:'Assessment', modelPhase:'Evaluate', title:'Make the Call',
+        narration:'Three situations. Each requires you to make a judgement about the right course of action — and to justify your reasoning. There are no trick questions, but there are situations where two answers look equally right. Choose the better one and explain why.',
+        visualDescription:'Judgement-based assessment. Each scenario presents a situation with two plausible responses. Learner selects their choice and types a brief justification (1-2 sentences). AI-style feedback provided based on keyword matching in justification.',
+        interaction:'Read scenario, select best response, type justification, submit. Feedback shown immediately.', duration:'200 sec',
+        designNote:'Evaluate level: requires criteria-based judgement, not just recall. Justification field forces deeper processing.' },
+      { id:7, type:'Reflection', modelPhase:'Create', title:'Design Your Own Safe Work Practice',
+        narration:'You now know the rules, understand the reasons, can apply the procedures, analyse failures, and evaluate competing options. The final step: create something that will make your specific workstation safer. What is the one change you would make, and how would you implement it?',
+        visualDescription:'Open-ended creation prompt. Large text field for learner input. Sentence starters provided as optional scaffolding: The biggest risk I see at my workstation is... / The control I would put in place is... / I would measure its effectiveness by... Submissions optionally shared with team safety lead.',
+        interaction:'Type your safe work practice proposal. Optional: submit to Safety Lead for review.', duration:'120 sec',
+        designNote:'Create level: synthesis and production. Learner takes ownership of safety improvement rather than passively receiving it.' }
+    ],
+    phaseMappings: { Remember:['1','2'], Understand:['3'], Apply:['4'], Analyse:['5'], Evaluate:['6'], Create:['7'] },
+    modelInsight: "Bloom's Taxonomy is explicit in this storyboard's progression. Screen 2 demands pure recall (five essentials). Screen 3 builds understanding through causal reasoning. Screen 4 requires procedure execution. Screen 5 demands incident analysis. Screen 6 tests judgement under ambiguity. Screen 7 asks learners to produce something new — the highest cognitive level, and the most likely to drive real behaviour change."
+  },
+
+  safety_Gagne: {
+    title: 'Workplace Safety & Compliance',
+    description: "A safety course built on Gagne's 9 Events — the most evidence-based instructional sequence available.",
+    screens: [
+      { id:1, type:'Title', modelPhase:'Gain Attention', title:'One Second. That Is All It Takes.',
+        narration:'One second of inattention. One shortcut. One assumption that it will be fine this time. That is all it takes. This course is built around the moments that matter most in your working day — the ones where your choice determines whether everyone goes home safe.',
+        visualDescription:'Stark black screen. Single statistic fades in: 1 in 5 workplace fatalities occurs in manufacturing. Pause. Then the course title appears. High contrast, no decoration. Designed to stop.',
+        interaction:'Click to continue', duration:'50 sec',
+        designNote:"Gagne Event 1: Gain Attention. The statistic creates cognitive dissonance — disrupting complacency before instruction begins." },
+      { id:2, type:'Objective', modelPhase:'Inform Objectives', title:'By the End of This Course',
+        narration:'By the end of this course you will be able to correctly identify hazards at your workstation, follow isolation procedures without shortcuts, and submit a near-miss report within the required timeframe. These are not abstract skills — they are the three behaviours your site risk assessment flagged as highest priority.',
+        visualDescription:'Three objectives displayed with animated entry. Each uses precise, measurable language: Identify / Follow without shortcuts / Submit within timeframe. Progress tracker shows this is Event 2 of 9.',
+        interaction:'Read objectives, click Understood to continue', duration:'55 sec',
+        designNote:"Gagne Event 2: Inform Objectives. Objectives are written in performance terms — observable, measurable, specific to this site." },
+      { id:3, type:'Content', modelPhase:'Stimulate Recall', title:'What You Already Know',
+        narration:'You have worked in this environment. You have done pre-shift checks, used PPE, and followed procedures. Take a moment to surface what you already know — because this course builds on that foundation rather than starting from zero.',
+        visualDescription:'Retrieval prompt: three open questions displayed sequentially with space for typed or spoken response. Q1: Name two hazards specific to your workstation. Q2: What does isolation mean in your role? Q3: When did you last submit a near-miss report?',
+        interaction:'Type brief responses to each question (not submitted, for self-reflection only)', duration:'80 sec',
+        designNote:"Gagne Event 3: Stimulate Recall of Prior Knowledge. Activating existing schema before introducing new content reduces cognitive load and improves retention." },
+      { id:4, type:'Content', modelPhase:'Present Content', title:'The Three Non-Negotiables',
+        narration:'Three procedures exist on this site that have zero tolerance for deviation: PPE compliance, isolation and lockout-tagout, and near-miss reporting. Here is exactly what each requires and why each is non-negotiable.',
+        visualDescription:'Three-panel tabbed interface. Each panel covers one non-negotiable with: the exact procedure, the legal basis, the consequence of non-compliance, and a real site example. Clean, dense, reference-quality content.',
+        interaction:'Navigate tabs, expand sections for detail. Mark each as Read before continuing.', duration:'120 sec',
+        designNote:"Gagne Event 4: Present the Content. Information is organised as reference material — learners can return to this screen as a job aid." },
+      { id:5, type:'Content', modelPhase:'Provide Guidance', title:'Watch How It Is Done',
+        narration:'Before you practise, watch a correct demonstration of the full isolation procedure from start to finish. Pay attention to the specific steps where people most commonly take shortcuts — they are highlighted in the video.',
+        visualDescription:'Annotated video simulation. Step-by-step walkthrough of isolation and lockout-tagout. Callout annotations highlight the three most common shortcut points in red. Pause prompts at each callout asking learner to predict what happens next.',
+        interaction:'Watch video with pause prompts. At each callout, click the correct next step before the video resumes.', duration:'150 sec',
+        designNote:"Gagne Event 5: Provide Learning Guidance. Modelling before practice reduces errors and builds confidence." },
+      { id:6, type:'Activity', modelPhase:'Elicit Performance', title:'Now You Do It',
+        narration:'Your turn. Complete the full isolation procedure for a simulated machine jam — the same scenario your site has flagged as the highest-risk situation. You have all the information you need. No shortcuts.',
+        visualDescription:'Step-by-step interactive simulation. Learner clicks through each stage of the isolation procedure: notify supervisor, switch off, apply lock, apply tag, verify zero energy, test isolation, clear to work. Each step must be completed in the correct sequence. Wrong order triggers a redirect.',
+        interaction:'Complete each isolation step in sequence. Skipped steps are flagged. Only correct sequence allows progression.', duration:'160 sec',
+        designNote:"Gagne Event 6: Elicit Performance. The simulation requires the complete procedure — partial performance is not accepted." },
+      { id:7, type:'Activity', modelPhase:'Provide Feedback', title:'Here Is What You Did',
+        narration:'Here is a breakdown of your performance in the isolation simulation. You will see exactly which steps you completed correctly, which you hesitated on, and which you attempted out of sequence. This is not a score — it is a performance map.',
+        visualDescription:'Personalised feedback dashboard. Step-by-step replay of the learner\'s simulation run. Correct steps shown in green with timing. Hesitation over 5 seconds shown in amber. Sequence errors shown in red with the correct step displayed. Recommended review links for any red steps.',
+        interaction:'Review your performance map. Click any red step to review the correct procedure.', duration:'90 sec',
+        designNote:"Gagne Event 7: Provide Feedback. Feedback is specific, immediate, and diagnostic — not just right or wrong." },
+      { id:8, type:'Assessment', modelPhase:'Assess Performance', title:'Formal Verification',
+        narration:'Five questions assessing your competence across the three non-negotiables. This assessment is logged against your training record. A score of 80% or above is required to pass. You may attempt this twice before a coached review is triggered.',
+        visualDescription:'Formal assessment interface. Five questions: 2 on hazard identification, 2 on isolation procedure, 1 on near-miss reporting timeframe. Results submitted to LMS. Pass certificate triggered on 80%+ score. Retry option on first fail.',
+        interaction:'Answer all five questions, click Submit. Results recorded in your training profile.', duration:'180 sec',
+        designNote:"Gagne Event 8: Assess Performance. Formal assessment with LMS recording closes the compliance loop and provides data for L&D reporting." },
+      { id:9, type:'Summary', modelPhase:'Enhance Retention', title:'Take It With You',
+        narration:'You have completed the course. The three behaviours that will keep you and your colleagues safe are simple to state and sometimes hard to do under pressure: wear your PPE every time, never bypass isolation, and report near-misses within two hours. Scan the QR code for your laminated job aid.',
+        visualDescription:'Retention screen. Three behaviours summarised as a pocket card layout — designed to be printed or screenshot. QR code links to the Safety App. Spaced repetition prompt: a follow-up micro-assessment will be sent to your email in 14 days. Manager notification that completion has been recorded.',
+        interaction:'Download your job aid. Complete the spaced repetition sign-up. Click Done.', duration:'70 sec',
+        designNote:"Gagne Event 9: Enhance Retention and Transfer. Physical job aid, spaced repetition scheduling, and manager notification all support on-the-job transfer." }
+    ],
+    phaseMappings: { 'Gain Attention':['1'], 'Inform Objectives':['2'], 'Stimulate Recall':['3'], 'Present Content':['4'], 'Provide Guidance':['5'], 'Elicit Performance':['6'], 'Provide Feedback':['7'], 'Assess Performance':['8'], 'Enhance Retention':['9'] },
+    modelInsight: "This storyboard is the purest expression of Gagne's model — each of the 9 events is represented by exactly one screen. Notice how the sequence mirrors the cognitive processing cycle: attention before objectives, prior knowledge before new content, guidance before practice, feedback before formal assessment, and retention support after assessment rather than before."
+  },
+
+  safety_SAM: {
+    title: 'Workplace Safety & Compliance',
+    description: 'A SAM-structured safety course built for rapid iteration and early stakeholder validation.',
+    screens: [
+      { id:1, type:'Title', modelPhase:'Preparation', title:'Workplace Safety: What the Data Says',
+        narration:'This course started with three hours of stakeholder interviews, 18 months of incident data, and a walk-through of the shop floor. The preparation work shapes every design decision you will see — nothing here is generic.',
+        visualDescription:'Title screen with a visible design rationale strip at the bottom: Built from 18 months of incident data / Validated with 12 frontline workers / Revised 3 times based on pilot feedback. Transparency builds credibility.',
+        interaction:'Click Start', duration:'45 sec',
+        designNote:'SAM Preparation phase: showing the design research process builds learner trust in the relevance of the content.' },
+      { id:2, type:'Objective', modelPhase:'Savvy Start', title:'What We Designed — and Why',
+        narration:'In our Savvy Start session, frontline workers, supervisors, and the safety manager spent three hours sketching the ideal learning experience. They told us: make it fast, make it real, and make it something I can use on Monday morning. That is exactly what we built.',
+        visualDescription:'Illustrated summary of the Savvy Start session. Sticky note aesthetic showing input from each stakeholder group: Workers said / Supervisors said / Safety Manager said. Objectives emerge from these inputs — learner-generated, not L&D-imposed.',
+        interaction:'Click each stakeholder group to see their input', duration:'70 sec',
+        designNote:"SAM Savvy Start: presenting objectives as stakeholder-derived rather than L&D-imposed increases learner ownership." },
+      { id:3, type:'Scenario', modelPhase:'Design Proof', title:'The Prototype Scenario',
+        narration:'This scenario was the first thing we built and the first thing we tested. We showed it to six frontline workers before writing a single slide of content. Their feedback changed the ending.',
+        visualDescription:'Scenario with visible iteration history. Toggle between Version 1 (original) and Version 2 (revised). The change is visible: in V1 the shortcut worked out fine. In V2, it nearly did not. Workers told us V1 felt dishonest. V2 is what you see in the final course.',
+        interaction:'Toggle between V1 and V2 to see the design iteration. Proceed through V2.', duration:'130 sec',
+        designNote:'SAM Design Proof: showing the prototype iteration history makes the design process visible and builds confidence in the final product.' },
+      { id:4, type:'Activity', modelPhase:'Alpha', title:'Alpha Test: Hazard Identification',
+        narration:'This activity was in our Alpha build — functional but rough. The original had 12 hotspots. Pilot testers said it was too long and the image was not from their site. We cut to 7 hotspots and replaced the image. You are seeing the result of that feedback.',
+        visualDescription:'Hotspot activity on a site-specific workstation photograph. 7 embedded hazards. Activity header shows a small Design note tag: Alpha version tested with 8 learners, revised based on feedback. Transparent iteration.',
+        interaction:'Click to identify all 7 hazards. Submit.', duration:'140 sec',
+        designNote:'SAM Alpha phase: content-complete but tested and revised. Pilot feedback directly shaped the activity format and image selection.' },
+      { id:5, type:'Assessment', modelPhase:'Beta', title:'Beta Assessment: Validated Questions',
+        narration:'These four questions were written in the Alpha build and revised after pilot testing. Two of the original questions were removed because pilot testers flagged them as ambiguous. The questions you see here have been validated for clarity and fairness.',
+        visualDescription:'Assessment interface with a small provenance label on each question: Validated in Beta pilot — August 2024. Each question includes the number of pilot testers who answered correctly on first attempt, giving learners context for difficulty.',
+        interaction:'Answer all four questions. Submit.', duration:'170 sec',
+        designNote:'SAM Beta phase: assessment quality is validated through pilot data, not assumed. Showing pilot performance data sets realistic expectations.' },
+      { id:6, type:'Reflection', modelPhase:'Beta', title:'Your Feedback Improves This Course',
+        narration:'SAM is an iterative model — this course will continue to improve after you complete it. Your feedback is not a formality. The last cohort to complete this course contributed three changes that are already live. Tell us what you think.',
+        visualDescription:'Feedback interface. Three quick ratings: Relevance to my role / Accuracy of the scenarios / Length and pacing. Each rated 1-5. Optional comment field. Previous cohort feedback visible as a summary: 94% said the scenarios reflected real situations they face.',
+        interaction:'Rate each dimension, optionally add a comment, submit.', duration:'80 sec',
+        designNote:'SAM continuous improvement: learner feedback is a design input, not a vanity metric.' },
+      { id:7, type:'Summary', modelPhase:'Gold', title:'Gold Release: Ready to Deploy',
+        narration:'You have completed the Gold version of Workplace Safety and Compliance — the version that has been through preparation research, stakeholder design sessions, prototyping, alpha testing, beta validation, and your feedback. This is not a course we guessed at.',
+        visualDescription:'Completion screen with a visible version history timeline: Savvy Start > Design Proof > Alpha > Beta > Gold. Each milestone has a date and a brief note. The transparency of the process is the credibility of the content. Digital completion badge.',
+        interaction:'Download your completion certificate. Click Done.', duration:'60 sec',
+        designNote:'SAM Gold release: the completion screen makes the design rigour visible — the process itself is a quality signal to learners.' }
+    ],
+    phaseMappings: { Preparation:['1'], 'Savvy Start':['2'], 'Design Proof':['3'], Alpha:['4'], Beta:['5','6'], Gold:['7'] },
+    modelInsight: "SAM's philosophy is visible throughout this storyboard: iteration is not hidden, it is showcased. Version history tags, pilot data references, and stakeholder attribution all make the design process transparent. This is deliberate — in SAM, the credibility of the content is inseparable from the credibility of the process used to build it."
+  },
+
+  safety_Merrill: {
+    title: 'Workplace Safety & Compliance',
+    description: "Safety training built on Merrill's First Principles — problem-first, demonstration before explanation.",
+    screens: [
+      { id:1, type:'Scenario', modelPhase:'Problem-Centred', title:'It Is 4:47 PM on a Friday',
+        narration:'It is 4:47 PM on a Friday. A machine on Line 3 has jammed. Your shift ends at 5. Your supervisor tells you it will only take two minutes to clear manually — no need for full isolation. The machine has been cleared this way before and nothing has happened. What do you do?',
+        visualDescription:'No title card. No objectives. The course opens directly on the scenario. Factory floor illustration. Clock shows 4:47. Supervisor character present. Machine jammed indicator active. Three choice buttons: Follow isolation procedure in full / Clear it manually as suggested / Refuse and report the machine.',
+        interaction:'Make your decision. Each path plays out in full before returning to the main learning sequence.', duration:'100 sec',
+        designNote:"Merrill Principle 1: Problem-Centred. The course opens with a real problem, not an abstract objective. Learners are in the situation before they know the rules — emotional engagement precedes instruction." },
+      { id:2, type:'Content', modelPhase:'Activation', title:'What Do You Already Know About This?',
+        narration:'Before we explain what you should have done and why, take a moment to surface what you already know. You have worked in this environment. You have seen the isolation procedure. You may have seen shortcuts taken. What does your gut tell you about that 4:47 PM situation?',
+        visualDescription:'Activation panel. Three reflective prompts: What is the risk you see in this scenario? / Have you been in a similar situation? What did you do? / What would need to be true for the shortcut to be safe? Learner types responses (private, not submitted).',
+        interaction:'Type responses to each prompt. Click Continue.', duration:'85 sec',
+        designNote:"Merrill Principle 2: Activation. Prior experience is surfaced before instruction, not after. This creates a knowledge gap that the following content fills." },
+      { id:3, type:'Content', modelPhase:'Demonstration', title:'Watch What Happens Next',
+        narration:'Here is what happens when the isolation shortcut is taken. This is a reconstruction of an actual incident — the names have been changed, but the sequence of events is real. Watch the full 90-second reconstruction before we discuss it.',
+        visualDescription:'Incident reconstruction animation. 90 seconds. The shortcut is taken. The machine unexpectedly re-energises. The near-miss outcome: the operator steps back just in time. The camera holds on the operator for two seconds before fading. No narration during the final 10 seconds.',
+        interaction:'Watch full reconstruction. No skip option.', duration:'140 sec',
+        designNote:"Merrill Principle 3: Demonstration. The correct procedure is demonstrated through its absence — showing what happens without it is more powerful than showing what happens with it." },
+      { id:4, type:'Content', modelPhase:'Demonstration', title:'Now Watch the Safe Version',
+        narration:'Same scenario. Same time pressure. Same supervisor. Watch how a worker who knows the isolation procedure handles the exact same situation — and notice that it takes less than four minutes, not the two the supervisor promised.',
+        visualDescription:'Parallel reconstruction. Same factory floor, same clock, same characters. This time the worker follows the full isolation procedure. Callout annotations highlight each step: Notify supervisor / Switch off / Lock / Tag / Verify / Clear. Timer shows 3 min 42 sec. Machine safely cleared.',
+        interaction:'Watch demonstration. Callout annotations can be clicked for procedure detail.', duration:'130 sec',
+        designNote:"Merrill Principle 3 continued: Worked example demonstrates the complete procedure as a whole task, not as abstracted steps. The timing detail addresses the supervisor's claim directly." },
+      { id:5, type:'Activity', modelPhase:'Application', title:'Your Turn: Complete the Isolation',
+        narration:'Now you complete the isolation procedure. Same scenario. Same machine. You are the worker. Follow every step in the correct sequence. The simulation will not let you skip.',
+        visualDescription:'Interactive simulation. Step-by-step isolation procedure. Learner must complete each stage: Notify > Off > Lock > Tag > Verify > Test > Clear. Coaching fades as learner progresses: Step 1 shows full instruction, Step 4 shows prompt only, Step 7 shows blank — learner must recall from memory.',
+        interaction:'Complete all 7 isolation steps. Coaching fades progressively to test independent recall.', duration:'160 sec',
+        designNote:"Merrill Principle 4: Application. Scaffolding fades across the activity — full support at the start, independent performance at the end. This mirrors the gradual release model." },
+      { id:6, type:'Reflection', modelPhase:'Integration', title:'Back to 4:47 PM',
+        narration:'We are back where we started. You have now seen what can happen, watched both versions, and completed the procedure yourself. Return to the opening scenario. Would you make the same decision you made at the start? What has changed in your thinking?',
+        visualDescription:'Integration screen. The opening scenario is displayed again — same image, same situation, same three choices. Below it, the learner can see their original choice highlighted. A reflection prompt: What do you know now that you did not know then?',
+        interaction:'Review your original choice. Type a brief reflection on what changed. Optionally share with your team.', duration:'100 sec',
+        designNote:"Merrill Principle 5: Integration. Returning to the original problem closes the loop. Learner sees their own growth — the gap between their opening intuition and their current knowledge." },
+      { id:7, type:'Summary', modelPhase:'Integration', title:'From This Course to Your Next Shift',
+        narration:'One procedure. Three non-negotiable steps. Always isolate, always lock, always verify. Take these from this course to your next shift and you will be part of the reason everyone goes home safe today.',
+        visualDescription:'Minimal integration card. Three steps: Isolate / Lock and Tag / Verify Zero Energy. Designed as a pocket reference. QR code to Safety App. One line at the bottom: The isolation procedure takes 4 minutes. An injury takes a lifetime.',
+        interaction:'Save or screenshot your pocket reference. Click Complete.', duration:'55 sec',
+        designNote:"Merrill Integration continued: the summary is a transfer tool, not a recap. It is designed to go with the learner, not to be forgotten on screen." }
+    ],
+    phaseMappings: { 'Problem-Centred':['1'], Activation:['2'], Demonstration:['3','4'], Application:['5'], Integration:['6','7'] },
+    modelInsight: "Merrill's First Principles are structurally inverted from most training: this course opens with a real problem (Screen 1), not an objective. It activates prior knowledge (Screen 2) before presenting content. It demonstrates through an incident reconstruction (Screen 3) before explaining the correct procedure (Screen 4). Application (Screen 5) scaffolds to independence. Integration (Screens 6-7) returns to the original problem to close the learning loop."
+  },
+
+  safety_4CID: {
+    title: 'Workplace Safety & Compliance',
+    description: 'A 4C/ID structured safety course centred on whole-task performance from the first screen.',
+    screens: [
+      { id:1, type:'Title', modelPhase:'Learning Tasks', title:'Your Task: Keep This Site Safe',
+        narration:'This course is built differently. Instead of teaching you rules and testing whether you remember them, it puts you in charge of a whole safety task from the start. Your task: complete a full shift on a manufacturing line without a safety incident. Everything in this course exists to support that task.',
+        visualDescription:'Title screen framing the whole-task approach. Visual: a shift timeline showing the learner as the safety owner throughout. The course is presented as a task system, not a content library.',
+        interaction:'Click Start Your Shift', duration:'50 sec',
+        designNote:'4C/ID Whole Learning Task: the entire course is framed as a single authentic task rather than a series of topics.' },
+      { id:2, type:'Scenario', modelPhase:'Learning Tasks', title:'Shift Start: Your Workstation Check',
+        narration:'Your shift starts in 10 minutes. Complete your workstation safety check before the line starts. This is the first of three whole tasks you will complete in this course. You have access to the procedure guide on the right — use it as much as you need to.',
+        visualDescription:'Dual-panel layout. Left: interactive workstation simulation showing 8 checkpoints. Right: procedure guide available to reference throughout (not hidden). Learner can look up anything at any time — this is not a memory test.',
+        interaction:'Complete all 8 workstation checkpoints. Reference guide available throughout.', duration:'160 sec',
+        designNote:'4C/ID: whole task with full supportive information available. Early tasks have maximum support — scaffolding fades across subsequent tasks.' },
+      { id:3, type:'Content', modelPhase:'Supportive Information', title:'The Mental Model: Hierarchy of Controls',
+        narration:'To make good safety decisions across a whole shift, you need a mental model that helps you evaluate any new hazard you encounter — not just the ones we cover in this course. The Hierarchy of Controls is that model.',
+        visualDescription:'Conceptual diagram of the Hierarchy of Controls. Explained as a decision tool: when you encounter a hazard, you work down from Elimination to PPE asking what is feasible here. Case study: three different hazards on a manufacturing line, each worked through the hierarchy.',
+        interaction:'Work three hazards through the hierarchy using the interactive decision tool', duration:'120 sec',
+        designNote:'4C/ID Supportive Information: mental models for non-recurrent decision-making. The hierarchy gives learners a framework for novel hazards, not just familiar ones.' },
+      { id:4, type:'Content', modelPhase:'Procedural Info', title:'Just-in-Time: Isolation Procedure',
+        narration:'When you reach the isolation checkpoint in your shift simulation, you will need this. The isolation procedure is a six-step sequence that must be completed exactly. This is procedural knowledge — specific, sequential, and non-negotiable.',
+        visualDescription:'Step-by-step procedure card. Designed as just-in-time reference material — concise, scannable, action-oriented. Six steps with an icon and one-line instruction per step. Print or save option prominent. This is a job aid as much as a learning screen.',
+        interaction:'Read and save the procedure card. Click I Have This.', duration:'70 sec',
+        designNote:'4C/ID Procedural Information: just-in-time delivery of recurrent procedural knowledge. Presented as a job aid, not as content to memorise.' },
+      { id:5, type:'Activity', modelPhase:'Learning Tasks', title:'Shift Mid-Point: The Machine Jam',
+        narration:'It is mid-shift. Machine on Line 3 has jammed. Complete the isolation procedure without referencing the guide this time. You have completed it once with support — now try from memory. The guide is still available if you need it, but try without first.',
+        visualDescription:'Same isolation simulation as Screen 2, but the procedure guide is collapsed by default. Learner can open it if needed — that choice is tracked but not penalised. Scaffolding has reduced: no step-by-step prompts, only a blank sequence for the learner to complete.',
+        interaction:'Complete isolation procedure from memory. Guide available but collapsed.', duration:'150 sec',
+        designNote:'4C/ID: second whole task with reduced scaffolding. Same authentic task, less support. Performance compared to Task 1.' },
+      { id:6, type:'Activity', modelPhase:'Part-task Practice', title:'Isolation Speed Drill',
+        narration:'One specific part of the isolation procedure — the lock and tag step — is where most errors occur. This is the part that benefits most from repetition until it becomes automatic. Complete this drill five times until the sequence is fluent.',
+        visualDescription:'Part-task drill interface. Isolated lock and tag sequence only: select lock / apply to isolation point / attach tag / sign tag. Repeat 5 times with timer. Speed increases as accuracy is maintained. Progress bar shows fluency building.',
+        interaction:'Complete 5 repetitions of the lock and tag sequence. Aim for under 30 seconds with zero errors by repetition 5.', duration:'130 sec',
+        designNote:'4C/ID Part-task Practice: isolated repetition for the procedural sub-skill that requires automisation. Only used where repetition genuinely builds fluency.' },
+      { id:7, type:'Assessment', modelPhase:'Learning Tasks', title:'End of Shift: Full Debrief',
+        narration:'Your simulated shift is complete. Here is your performance across all three tasks: workstation check, machine jam response, and your lock and tag fluency. This debrief mirrors what your actual shift supervisor would review with you.',
+        visualDescription:'Performance dashboard. Three task results side by side. Each shows: completion status / errors made / guide references used / time taken / comparison to first attempt. Trend line shows improvement from Task 1 to Task 3. Supervisor-style feedback paragraph auto-generated from performance data.',
+        interaction:'Review your full shift performance. Click any task to see detailed breakdown.', duration:'100 sec',
+        designNote:'4C/ID: whole-task debrief evaluates performance across the learning task sequence, not isolated knowledge items.' }
+    ],
+    phaseMappings: { 'Learning Tasks':['1','2','5','7'], 'Supportive Information':['3'], 'Procedural Info':['4'], 'Part-task Practice':['6'] },
+    modelInsight: "4C/ID's signature is visible in how this storyboard distributes screen types. The majority of screens are Learning Tasks (1, 2, 5, 7) — authentic whole-task simulations. Supportive Information (Screen 3) provides the mental model for non-recurrent decisions. Procedural Information (Screen 4) delivers the isolation steps just-in-time as a job aid. Part-task Practice (Screen 6) isolates only the sub-skill that genuinely benefits from drill: lock and tag fluency."
+  },
+
+  safety_Kirkpatrick: {
+    title: 'Workplace Safety & Compliance',
+    description: 'A safety course designed backwards from Level 4 business outcomes — every screen traces to an organisational result.',
+    screens: [
+      { id:1, type:'Title', modelPhase:'Level 4 - Results', title:'Our Goal: Zero Recordable Incidents',
+        narration:'This course was commissioned because your site recorded 14 RIDDOR-reportable incidents last year, costing 340 lost working days and triggering an HSE improvement notice. The goal of this training is a measurable reduction in recordable incidents. That is what every screen in this course is designed to achieve.',
+        visualDescription:'Title screen anchored in business impact. Site data displayed: 14 incidents / 340 lost days / HSE improvement notice. Training goal stated as a specific business outcome: Reduce recordable incidents by 40% within 12 months. This is not a compliance box-tick.',
+        interaction:'Click Start', duration:'55 sec',
+        designNote:'Kirkpatrick Level 4 — Results: the course opens with the organisational outcome, not the learning objective. Every subsequent screen is designed in service of this result.' },
+      { id:2, type:'Objective', modelPhase:'Level 3 - Behaviour', title:'The On-the-Job Behaviours That Drive Results',
+        narration:'A 40% reduction in incidents will only happen if specific behaviours change on the shop floor. Analysis of the 14 incidents identified three behaviour changes that would have prevented 11 of them. This course targets exactly those three.',
+        visualDescription:'Behaviour change framework. Three target behaviours displayed as observable, specific actions: Workers complete full PPE check before entering work area / Workers follow isolation procedure without shortcuts regardless of time pressure / Workers submit near-miss reports within 2 hours. Each linked back to the incident data.',
+        interaction:'Click each behaviour to see the incident data that identified it', duration:'80 sec',
+        designNote:'Kirkpatrick Level 3 — Behaviour: objectives are stated as on-the-job behaviours, not knowledge outcomes. The causal link between behaviour and business result is made explicit.' },
+      { id:3, type:'Content', modelPhase:'Level 2 - Learning', title:'The Knowledge, Skills, and Confidence You Need',
+        narration:'To consistently perform the three target behaviours, you need three things: the knowledge of the correct procedure, the skill to execute it under pressure, and the confidence to push back when asked to shortcut. This course builds all three.',
+        visualDescription:'Three-column framework: Knowledge / Skill / Confidence. Each column shows what the course builds and how it is assessed. Includes an honest note: knowledge is the easiest to build; confidence to push back against authority is the hardest. The scenario is designed specifically for that.',
+        interaction:'Click each column to see the learning approach for that dimension', duration:'90 sec',
+        designNote:'Kirkpatrick Level 2 — Learning: distinguishes between knowledge, skill, and attitude development. Most safety courses only address knowledge.' },
+      { id:4, type:'Scenario', modelPhase:'Level 2 - Learning', title:'The Moment That Tests Confidence',
+        narration:'Knowledge of the correct procedure is not enough if you cannot apply it when a supervisor is watching the clock and telling you to hurry. This scenario is specifically designed to test whether you will follow the procedure under social pressure — the hardest behaviour to sustain.',
+        visualDescription:'High-pressure scenario. Same machine jam, same Friday 4:47 PM situation. But this version adds a specific social pressure element: two colleagues are watching, one is rolling their eyes. The supervisor is visibly impatient. The decision is the same but the social cost of the correct answer is now visible.',
+        interaction:'Choose your response. Branching consequences show both the short-term social cost and the long-term safety outcome of each choice.', duration:'140 sec',
+        designNote:'Kirkpatrick Level 2: addressing the confidence and attitude dimension of learning — specifically the social pressure that prevents correct procedure application in real situations.' },
+      { id:5, type:'Activity', modelPhase:'Level 2 - Learning', title:'Skill Practice: The Full Procedure',
+        narration:'Knowing and doing are different. Complete the full isolation procedure in the simulation. You will do this twice — once with guidance, once without. The second attempt mirrors the conditions of your actual shift.',
+        visualDescription:'Two-attempt simulation structure. Attempt 1 has full step-by-step guidance. Attempt 2 removes guidance. Performance comparison shown between the two attempts. The gap between Attempt 1 and Attempt 2 performance is the skill development target.',
+        interaction:'Complete Attempt 1 with guidance. Review performance. Complete Attempt 2 without guidance.', duration:'180 sec',
+        designNote:'Kirkpatrick Level 2: skill development requires practice, not just exposure. The two-attempt structure makes the learning gain visible to the learner.' },
+      { id:6, type:'Assessment', modelPhase:'Level 1 - Reaction', title:'Was This Worth Your Time?',
+        narration:'Before we close, we want to know something that most safety courses never ask: was this relevant to the actual risks you face on this site? Not how much you enjoyed it — how relevant was it to your real job?',
+        visualDescription:'Reaction survey. Four questions rated 1-5: This training reflected real situations I face / The scenarios were accurate to my site / I feel more confident handling safety pressure after this / I would recommend this training to a new colleague. Open comment field. Previous cohort averages shown for context.',
+        interaction:'Complete the four-item reaction survey. Submit.', duration:'75 sec',
+        designNote:"Kirkpatrick Level 1 — Reaction: placed last, not first. Reaction data is collected after the learning has occurred — its value is as a quality indicator for the Level 2 and Level 3 outcomes, not as a measure of enjoyment." },
+      { id:7, type:'Summary', modelPhase:'Level 1 - Reaction', title:'Closing the Loop: How We Will Measure This',
+        narration:'Here is how your organisation will know if this training worked. In 90 days, your safety lead will review three data points: PPE compliance observation scores, isolation audit results, and near-miss report volume. Those three measures map directly to the three behaviours this course targeted.',
+        visualDescription:'Measurement framework. Three KPIs with baseline values and 90-day targets: PPE compliance: 72% baseline > 90% target / Isolation audit pass rate: 81% > 95% / Near-miss reports per week: 2.1 > 6.0. Learner receives a commitment card to carry: I will perform these three behaviours every shift.',
+        interaction:'Download your commitment card. Click Complete.', duration:'70 sec',
+        designNote:'Kirkpatrick: closing screen makes the Level 3 and Level 4 measurement plan visible to learners — they understand how their behaviour change will be tracked and what success looks like.' }
+    ],
+    phaseMappings: { 'Level 4 - Results':['1'], 'Level 3 - Behaviour':['2'], 'Level 2 - Learning':['3','4','5'], 'Level 1 - Reaction':['6','7'] },
+    modelInsight: "Kirkpatrick's backward design is structurally inverted from most training: this course opens at Level 4 (business results) and works backward. Level 3 behaviour targets are defined before any content is designed. Level 2 learning activities are designed specifically to build the behaviours identified at Level 3. Level 1 reaction is collected last — because its value is as a quality signal for the deeper levels, not as the primary success measure."
+  },
+
+  // ════════════════════════════════════════════════════
+  // NEW EMPLOYEE ONBOARDING — ADDIE (sample, others follow same structure)
+  // ════════════════════════════════════════════════════
+
+  onboarding_ADDIE: {
+    title: 'New Employee Onboarding',
+    description: 'A structured onboarding programme following ADDIE — from needs analysis through measurable first-week outcomes.',
+    screens: [
+      { id:1, type:'Title', modelPhase:'Analysis', title:'Welcome. Here Is What We Learned Before Building This.',
+        narration:'Before building this onboarding programme, we surveyed 60 employees in their first 90 days and analysed exit interview data from the past two years. Three things consistently determined whether a new hire felt set up to succeed by the end of week one: clarity on their role, knowing who to ask for help, and understanding the company culture before experiencing it by accident.',
+        visualDescription:'Warm, human title screen. Not corporate. Background: a real office or remote workspace — not a stock photo. Three research findings displayed as honest statements: 68% of new hires said they felt lost in week one / The most asked question in week 1 is who do I ask about X / Culture mismatches cause 38% of early departures.',
+        interaction:'Click Begin', duration:'55 sec',
+        designNote:'ADDIE Analysis: onboarding opens with the research that shaped it. New hires feel respected when the organisation has thought carefully about their experience.' },
+      { id:2, type:'Objective', modelPhase:'Analysis', title:'What Day One Success Looks Like',
+        narration:'By the end of this onboarding, you will be able to describe your role and how it connects to the company mission, identify the three people you need to know in your first week, and navigate the four tools you will use every day. Everything else will come with time — these three are the foundation.',
+        visualDescription:'Objectives screen framed as Day One Success Checklist. Three items with checkboxes. Each objective written in the first person: I can describe my role and why it matters / I know who to ask when I am stuck / I can find what I need in Slack, Jira, Confluence, and Google Drive.',
+        interaction:'Click each objective to see why it was prioritised', duration:'65 sec',
+        designNote:'ADDIE Analysis: objectives derived from research, not assumptions. First-person framing increases ownership.' },
+      { id:3, type:'Content', modelPhase:'Design', title:'How We Work: The Three Things That Matter Most',
+        narration:'Every company says it has great culture. We are going to show you ours through three specific behaviours that our best employees exhibit consistently — not values on a wall, but actions you will see in meetings, in Slack, and in how people give feedback.',
+        visualDescription:'Culture illustration screen. Three behaviours with real examples: We say what we think (example: a junior analyst challenging a VP in a product meeting) / We own our mistakes (example: a public Slack post acknowledging an error and what was learned) / We move fast and document as we go (example: a Confluence page updated same day as a decision).',
+        interaction:'Click each behaviour to see a real example from the company', duration:'95 sec',
+        designNote:'ADDIE Design: culture is designed as observable behaviour, not abstract values. Concrete examples are more memorable and transferable than aspirational statements.' },
+      { id:4, type:'Activity', modelPhase:'Development', title:'Meet Your Team: Who Does What',
+        narration:'Before your first team meeting, let us make sure you know who everyone is and what they own. This activity walks you through your immediate team — and shows you the one question you should ask each person in your first week.',
+        visualDescription:'Interactive org chart. Click each team member card to see: name, role, what they own, the best way to reach them, and the one question to ask them in week one. Designed to be referenced, not memorised. Link to full org chart in Confluence.',
+        interaction:'Click each team member card. Complete when you have reviewed your core 5 contacts.', duration:'120 sec',
+        designNote:'ADDIE Development: human connection is a development artefact. The one question prompt reduces the anxiety of first conversations.' },
+      { id:5, type:'Activity', modelPhase:'Development', title:'Tool Tour: Your First Four',
+        narration:'You will use four tools every day. We are going to walk you through the one task in each that you will need before your first meeting tomorrow. Not everything — just what you need right now.',
+        visualDescription:'Tool tour interface. Four tools: Slack, Jira, Confluence, Google Drive. For each: one task walkthrough (e.g. How to find your team channel in Slack / How to find your first ticket in Jira). Video or interactive simulation for each. Designed to be completed in 10 minutes total.',
+        interaction:'Complete the one key task in each of the four tools. Check off each as done.', duration:'150 sec',
+        designNote:'ADDIE Development: just-in-time tool training. Only the first critical task per tool — not a full feature walkthrough that will overwhelm.' },
+      { id:6, type:'Assessment', modelPhase:'Evaluation', title:'Week One Check-In',
+        narration:'Three quick questions — not to test you, but to help us improve this onboarding for the person who starts after you. Your answers take two minutes and directly shape what the next new hire experiences.',
+        visualDescription:'Pulse check rather than formal assessment. Three questions: Which of the three objectives do you feel least confident about? / What was most useful? / What is still unclear? Plus a confidence rating from 1-5 on starting their first real task tomorrow.',
+        interaction:'Answer three questions. Submit. Your answers are reviewed by your manager and People team.', duration:'70 sec',
+        designNote:'ADDIE Evaluation: formative evaluation data collected immediately. Used to improve the programme and to flag new hires who need additional support before day two.' },
+      { id:7, type:'Summary', modelPhase:'Evaluation', title:'You Are Ready for Day One',
+        narration:'That is everything you need before your first meeting tomorrow. You know the three things that matter most about our culture, you have met your team, and you have completed your first task in each tool. Welcome — you are going to be great here.',
+        visualDescription:'Warm, human completion screen. Not a certificate. A personal note style layout: You have completed pre-boarding. Tomorrow you will meet your manager at 9 AM. Your first team standup is at 9:30. Your buddy is Alex — their number is in your welcome email. You have got this.',
+        interaction:'Save your Day One Quick Reference card. Click Done.', duration:'55 sec',
+        designNote:'ADDIE Evaluation: completion screen is personalised and action-oriented. It answers the question every new hire has at 11 PM before day one: what do I actually do tomorrow?' }
+    ],
+    phaseMappings: { Analysis:['1','2'], Design:['3'], Development:['4','5'], Implementation:[], Evaluation:['6','7'] },
+    modelInsight: "ADDIE's rigour is visible in how this onboarding was built: the Analysis screens (1-2) are grounded in actual research data from 60 employees and exit interview analysis. Design (Screen 3) translates cultural values into observable behaviours rather than aspirational statements. Development (4-5) creates human connection tools and just-in-time training. Evaluation (6-7) collects formative data that feeds back into programme improvement."
+  },
+
+  onboarding_Gagne: {
+    title: 'New Employee Onboarding',
+    description: "Onboarding structured on Gagne's 9 Events — attention to retention in nine deliberate instructional moves.",
+    screens: [
+      { id:1, type:'Title', modelPhase:'Gain Attention', title:'The Question Every New Hire Secretly Asks',
+        narration:'There is a question every new hire thinks but rarely asks out loud in the first week: did I make the right choice joining this company? This onboarding is designed to answer that question by the end of screen seven — not with a mission statement, but with evidence.',
+        visualDescription:'Dark, honest opening. The question displayed in large type: Did I make the right choice? Pause. Then: We are going to answer that. The tone is direct, human, and slightly unexpected for an onboarding course.',
+        interaction:'Click to continue', duration:'45 sec',
+        designNote:"Gagne Event 1: Gain Attention. The unexpected framing of a question new hires actually have — rather than a generic welcome — creates immediate engagement." },
+      { id:2, type:'Objective', modelPhase:'Inform Objectives', title:'Here Is What This Will Give You',
+        narration:'By the end of this onboarding you will know exactly what success looks like in your role in the first 30 days, have the three relationships that will determine your first-year experience, and understand how to navigate our culture without learning it the hard way.',
+        visualDescription:'Objectives framed as gifts: Three things you will have that most new hires spend weeks figuring out. Presented as a concrete deliverable list — not abstract outcomes.',
+        interaction:'Click each deliverable to preview what it looks like', duration:'55 sec',
+        designNote:"Gagne Event 2: Inform Objectives. Framing objectives as concrete deliverables rather than performance statements makes the benefit tangible." },
+      { id:3, type:'Content', modelPhase:'Stimulate Recall', title:'What You Already Know About This',
+        narration:'You have started a new job before. You have experienced a first week that went well, or one that did not. Before we show you how we do things here, take a moment to reflect on what you already know about navigating a new workplace.',
+        visualDescription:'Activation prompts: What made your best first week great? / What made a difficult first week hard? / What do you wish someone had told you earlier? Responses are private. A note: your answers will shape how you engage with what comes next.',
+        interaction:'Type brief responses. Click Continue.', duration:'75 sec',
+        designNote:"Gagne Event 3: Stimulate Recall. Using prior onboarding experience as the knowledge base — positive and negative — creates a personal frame for the content that follows." },
+      { id:4, type:'Content', modelPhase:'Present Content', title:'The Company, Your Team, Your Role',
+        narration:'Three things you need to understand before your first meeting: what the company actually does and why it matters in the market, how your team fits into that, and specifically what your role is expected to contribute in the first 30 days.',
+        visualDescription:'Three-tab content panel. Tab 1: Company overview — not the website copy, but the honest internal narrative. Tab 2: Team structure and your place in it. Tab 3: Your 30-day success criteria, agreed with your manager before today. Concise, dense, reference-quality.',
+        interaction:'Navigate tabs. Mark each as read before continuing.', duration:'110 sec',
+        designNote:"Gagne Event 4: Present Content. Three distinct content types requiring three different cognitive modes: company narrative, structural understanding, personal goal-setting." },
+      { id:5, type:'Content', modelPhase:'Provide Guidance', title:'How People Actually Work Here',
+        narration:'Every company has official processes and how things really happen. We are going to show you the real version — the shortcuts, the norms, the unwritten rules that usually take six months to figure out. Your buddy Alex contributed to this screen.',
+        visualDescription:'Insider guide format. Six cultural norms with real examples and the context behind them: How we give feedback / When to ask for help vs. figure it out / How decisions actually get made / What good looks like in a team meeting / How to use Slack vs. email / When to over-communicate.',
+        interaction:'Click each norm to expand the real example and the reasoning behind it', duration:'130 sec',
+        designNote:"Gagne Event 5: Provide Guidance. The cultural norms screen is the highest-value screen in this onboarding — it gives new hires the insider knowledge that usually takes months to acquire." },
+      { id:6, type:'Activity', modelPhase:'Elicit Performance', title:'Your First Week Planner',
+        narration:'Build your first week now. Based on everything you have just seen — your 30-day goals, your team structure, the cultural norms — plan your first five days. Who will you meet, what will you learn, what will you complete?',
+        visualDescription:'Interactive week planner. Monday to Friday grid. Drag-and-drop activities from a pre-populated list into each day: Meet manager (30 min) / Team standup (daily) / Review product roadmap / Complete tool setup / Coffee chat with Alex (buddy) etc. Learner can add their own items.',
+        interaction:'Drag activities into your first week calendar. Add any personal priorities. Export to Google Calendar.', duration:'140 sec',
+        designNote:"Gagne Event 6: Elicit Performance. Building a personal week plan converts passive knowledge into active commitment. Calendar export creates a real artefact that outlives the course." },
+      { id:7, type:'Activity', modelPhase:'Provide Feedback', title:'Your Plan Reviewed',
+        narration:'Your first week plan has been reviewed against the 30-day success criteria and the typical patterns of new hires who had a strong start. Here is what looks good and one thing worth reconsidering.',
+        visualDescription:'Personalised plan review. Green highlights on activities that align strongly with 30-day goals. One amber suggestion: most successful new hires also scheduled one skip-level coffee chat in week one — consider adding one. No red feedback — the plan review is encouraging, not corrective.',
+        interaction:'Review feedback. Adjust your plan if you choose. Confirm your final plan.', duration:'85 sec',
+        designNote:"Gagne Event 7: Provide Feedback. Feedback is positive and specific — it reinforces good planning decisions and offers one constructive suggestion, not a critique." },
+      { id:8, type:'Assessment', modelPhase:'Assess Performance', title:'Ready Check',
+        narration:'Four quick questions to confirm you have the essentials before tomorrow. Not a formal test — a confidence check. If you are unsure of any answer, the course will point you back to the right screen.',
+        visualDescription:'Four-question readiness check: Who is your buddy and their contact? / What is your first 30-day success criterion? / Where do you find your team standup link? / What is the one Slack norm you want to remember? Results are not scored — answers flagged as confident or review needed.',
+        interaction:'Answer four questions. Flagged answers link back to the relevant course screen.', duration:'90 sec',
+        designNote:"Gagne Event 8: Assess Performance. Framed as a readiness check rather than an assessment — reduces anxiety and positions the course as a support resource, not a test." },
+      { id:9, type:'Summary', modelPhase:'Enhance Retention', title:'Back to the Question',
+        narration:'Did you make the right choice? Here is the evidence you have now. You know your 30-day goals. You have your first week planned. You understand how the culture actually works. You have three relationships to build tomorrow. You made the right choice.',
+        visualDescription:'Closing screen that returns to the opening question and answers it with evidence. Four statements with icons corresponding to what the learner now has. Warm, affirming tone. Link to buddy contact, manager meeting confirmation, and Day One Quick Reference card.',
+        interaction:'Save your Day One Quick Reference. Click Done.', duration:'65 sec',
+        designNote:"Gagne Event 9: Enhance Retention. The callback to the opening question creates a narrative arc that makes the completion feel earned. The artefacts (plan, reference card, buddy contact) support real-world transfer." }
+    ],
+    phaseMappings: { 'Gain Attention':['1'], 'Inform Objectives':['2'], 'Stimulate Recall':['3'], 'Present Content':['4'], 'Provide Guidance':['5'], 'Elicit Performance':['6'], 'Provide Feedback':['7'], 'Assess Performance':['8'], 'Enhance Retention':['9'] },
+    modelInsight: "Gagne's 9 Events give this onboarding a narrative structure: it opens with a question new hires genuinely ask (Event 1) and closes by answering it with evidence (Event 9). The most valuable screen is Event 5 (Guidance) — the insider cultural norms screen — which delivers the knowledge that usually takes six months to acquire. The Week Planner (Event 6) produces a real artefact that outlives the course."
+  },
+
+  customer_ADDIE: {
+    title: 'Customer Service Excellence',
+    description: 'A rigorous customer service programme built on ADDIE — from complaint analysis through to measurable CSAT improvement.',
+    screens: [
+      { id:1, type:'Title', modelPhase:'Analysis', title:'Customer Service Excellence',
+        narration:'This course was built after analysing 1,400 customer complaints, reviewing CSAT scores across 12 months, and conducting exit interviews with customers who churned. Three interaction types accounted for 61% of all negative scores: complaints about wait times, feeling unheard, and poor de-escalation. This course fixes those three.',
+        visualDescription:'Data-driven title screen. CSAT trend line shown dropping over 12 months. Three complaint categories highlighted. Course promise: targeting the interactions that drive 61% of negative scores.',
+        interaction:'Click Start', duration:'55 sec',
+        designNote:'ADDIE Analysis: grounding the course in real complaint data makes the relevance undeniable.' },
+      { id:2, type:'Objective', modelPhase:'Analysis', title:'What Good Looks Like',
+        narration:'By the end of this course you will be able to apply active listening techniques that reduce escalation rates, handle a complaint through to resolution using the HEARD framework, and de-escalate an emotionally charged customer interaction without losing control of the conversation.',
+        visualDescription:'Three behavioural objectives. Each linked to a metric: Active listening > reduces escalation by 34% (internal data) / HEARD framework > 89% first-contact resolution rate / De-escalation > average call duration reduced by 3.2 minutes.',
+        interaction:'Click each objective to see the evidence behind it', duration:'70 sec',
+        designNote:'ADDIE Analysis: objectives are linked to measurable outcomes — learners understand the impact of the skills they are building.' },
+      { id:3, type:'Content', modelPhase:'Design', title:'The HEARD Framework',
+        narration:'HEARD is the five-step framework your organisation uses for every complaint interaction: Hear the customer out fully before responding. Empathise with their frustration. Apologise for the impact — not necessarily the cause. Resolve by offering what is within your authority. Diagnose what went wrong to prevent recurrence.',
+        visualDescription:'HEARD framework visual. Each letter animated with a brief description and a one-line example. Colour coded. Designed as a pocket card. Toggle: show examples from low-complexity and high-complexity situations.',
+        interaction:'Work through each step. Toggle example complexity level.', duration:'100 sec',
+        designNote:'ADDIE Design: framework introduced before scenarios, giving learners a mental scaffold to apply during practice.' },
+      { id:4, type:'Scenario', modelPhase:'Development', title:'The Angry Caller',
+        narration:'A customer calls for the third time about the same unresolved billing issue. She is angry. She says she has been passed around three times and nobody has fixed anything. Apply the HEARD framework to this interaction.',
+        visualDescription:'Audio scenario with transcript. Customer voice audio plays. Transcript displayed. At four decision points the audio pauses and learner chooses the next response. Each choice is rated: Excellent / Acceptable / Would escalate this. Branching shows the customer reaction to each response.',
+        interaction:'Listen to the interaction. At each pause, select your response. Receive immediate feedback on each choice.', duration:'160 sec',
+        designNote:'ADDIE Development: audio scenario adds realism — customer service is a verbal skill, not a visual one. Branching makes consequences of poor choices visible.' },
+      { id:5, type:'Activity', modelPhase:'Development', title:'HEARD in Writing: Email Response',
+        narration:'Not all complaints come by phone. Apply the HEARD framework to draft an email response to a written complaint. You will see the complaint, draft your response in the text field, and receive feedback on which HEARD elements were present and which were missing.',
+        visualDescription:'Split screen. Left: customer complaint email displayed (billing dispute, angry tone, fourth contact). Right: response text field with HEARD checklist below. As learner types, the checklist detects which elements are present using keyword matching. Submit triggers detailed feedback.',
+        interaction:'Read complaint, draft email response, submit for HEARD analysis feedback.', duration:'180 sec',
+        designNote:'ADDIE Development: cross-channel application. HEARD works in writing as well as speech — this activity tests transfer of the framework across modalities.' },
+      { id:6, type:'Assessment', modelPhase:'Evaluation', title:'Scenario Assessment: Three Calls',
+        narration:'Three customer scenarios. No framework prompts this time. Apply what you have learned to handle each interaction from start to resolution. Your responses are evaluated against the HEARD criteria and against real CSAT benchmarks from your team.',
+        visualDescription:'Assessment interface. Three audio scenarios with transcript. Learner selects responses at decision points with no feedback between questions. Score calculated at the end. Benchmark shown: top 25% of your team score above 80% on this assessment. Where do you sit?',
+        interaction:'Complete three scenarios. Receive cumulative score and breakdown.', duration:'210 sec',
+        designNote:'ADDIE Evaluation: no in-flight feedback in the assessment replicates real conditions. Benchmarking against team performance adds meaningful context.' },
+      { id:7, type:'Summary', modelPhase:'Evaluation', title:'Your CSAT Impact',
+        narration:'The skills in this course have a measurable impact. Teams that consistently apply the HEARD framework see an average CSAT improvement of 12 points within 90 days. Your organisation tracks individual CSAT scores — your manager will review yours at your 90-day check-in.',
+        visualDescription:'Impact projection screen. 12-point CSAT improvement projected. Learner individual CSAT baseline shown (pulled from LMS data). 90-day target set. Manager notification that the 90-day review is scheduled. Laminated HEARD card download.',
+        interaction:'Download your HEARD pocket card. Click Complete.', duration:'65 sec',
+        designNote:'ADDIE Evaluation: closing screen connects course completion to individual performance measurement. The 90-day review creates accountability beyond the course.' }
+    ],
+    phaseMappings: { Analysis:['1','2'], Design:['3'], Development:['4','5'], Implementation:[], Evaluation:['6','7'] },
+    modelInsight: "ADDIE's strength in this storyboard is the traceability from Analysis to Evaluation. The opening complaint analysis (Screens 1-2) identifies three specific interaction types. The HEARD framework (Design, Screen 3) is the strategic response. Scenarios and activities (Development, 4-5) build the skill against those specific interaction types. The assessment and summary (Evaluation, 6-7) measure improvement against the same metrics used in the initial analysis."
+  },
+
+  leadership_ADDIE: {
+    title: 'Leadership & Management Skills',
+    description: 'A management development programme built on ADDIE — from 360 feedback analysis to measurable team performance outcomes.',
+    screens: [
+      { id:1, type:'Title', modelPhase:'Analysis', title:'Leadership & Management Skills',
+        narration:'This programme was commissioned after analysis of 360-degree feedback data from 84 managers across the organisation. The data identified three capability gaps that correlate most strongly with team attrition, engagement scores, and performance ratings: delegation, feedback delivery, and coaching conversations. This programme closes those three gaps.',
+        visualDescription:'Professional, dark title screen. Three data points from 360 analysis: 62% of direct reports say their manager does not delegate effectively / 71% say feedback is either too infrequent or not specific enough / Only 34% say their 1:1 meetings feel like genuine coaching conversations.',
+        interaction:'Click Begin', duration:'60 sec',
+        designNote:'ADDIE Analysis: management development grounded in 360 data is more credible than generic leadership content. Managers see their peers reflected in the numbers.' },
+      { id:2, type:'Objective', modelPhase:'Analysis', title:'Three Capabilities. Measurable Outcomes.',
+        narration:'By the end of this programme you will be able to delegate a task using the four-part delegation framework, deliver specific behavioural feedback using the SBI model, and conduct a structured coaching conversation using the GROW model. Each of these is a skill, not a concept — you will practise each one before leaving this course.',
+        visualDescription:'Three-objective display. Each objective paired with its measurement method: Delegation > assessed via a simulation with scoring rubric / Feedback > assessed via written SBI statement quality / Coaching > assessed via scenario transcript scoring.',
+        interaction:'Click each objective to preview the corresponding practice activity', duration:'70 sec',
+        designNote:'ADDIE Analysis: linking objectives to their assessment methods at the start creates a performance contract — managers know exactly what they will be doing, not just watching.' },
+      { id:3, type:'Content', modelPhase:'Design', title:'Why Delegation Fails: The Real Reason',
+        narration:'Most managers know they should delegate more. The reason they do not is rarely laziness or distrust. The research consistently shows that the barrier is a fear of loss of control disguised as a belief that it is faster to do it myself. Understanding the psychology of delegation failure is the first step to changing the behaviour.',
+        visualDescription:'Conceptual content screen. Research finding displayed: 78% of under-delegation is driven by control anxiety, not capability gap. Four-part Delegation Framework introduced: Task clarity / Competence match / Authority level / Accountability checkpoint. Clean diagram.',
+        interaction:'Explore each component of the framework with a real workplace example', duration:'100 sec',
+        designNote:'ADDIE Design: addressing the psychological barrier before the practical framework increases willingness to apply. Managers who understand why they avoid delegating are more likely to change.' },
+      { id:4, type:'Scenario', modelPhase:'Development', title:'The Delegation Decision',
+        narration:'You have a high-priority project and a team member who is technically capable but has never led a client presentation. Your instinct is to present it yourself. Apply the delegation framework to decide whether to delegate, and if so, how.',
+        visualDescription:'Delegation scenario. Character-based. Three decision points: Should I delegate this? / What authority level do I grant? / What does my accountability checkpoint look like? Each choice has a consequence shown in a team reaction panel and a project outcome indicator.',
+        interaction:'Work through three delegation decisions. See the team impact of each choice.', duration:'150 sec',
+        designNote:'ADDIE Development: the scenario is designed around the specific psychological barrier identified in the Analysis phase — the instinct to present it yourself.' },
+      { id:5, type:'Activity', modelPhase:'Development', title:'Write a SBI Feedback Statement',
+        narration:'SBI stands for Situation, Behaviour, Impact. It is the most effective structure for behavioural feedback because it separates what happened from the person, making feedback easier to give and easier to receive. You are going to write three SBI statements now — one positive, one developmental, one for a sensitive situation.',
+        visualDescription:'SBI writing interface. Three scenario prompts. For each: a Situation description provided. Learner writes the Behaviour and Impact components. AI-style analysis scores each statement on: specificity of behaviour / impact statement quality / non-judgmental language. Feedback shown after each submission.',
+        interaction:'Write SBI statements for three scenarios. Receive scored feedback on each.', duration:'200 sec',
+        designNote:'ADDIE Development: writing practice is more effective than reading examples for communication skill development. The three scenarios escalate in difficulty — from straightforward positive feedback to a sensitive developmental conversation.' },
+      { id:6, type:'Assessment', modelPhase:'Evaluation', title:'The Coaching Conversation',
+        narration:'Your final assessment is a coaching conversation simulation. You will see a transcript of a direct report discussing a performance challenge. Your task is to respond using the GROW model at each decision point. This is assessed against a scoring rubric that your manager has reviewed.',
+        visualDescription:'Coaching transcript simulation. Direct report describes a performance challenge. At five points in the conversation, the learner selects their coaching response. Responses are scored against GROW criteria: Goal-focused / Reality-checking / Options-generating / Will-establishing. Score and rubric breakdown shown at end.',
+        interaction:'Work through the coaching conversation. Select responses at five decision points. Receive GROW rubric score.', duration:'220 sec',
+        designNote:'ADDIE Evaluation: the assessment is a simulation of the actual skill, not a knowledge test. The GROW rubric makes the criteria for good coaching explicit and learnable.' },
+      { id:7, type:'Summary', modelPhase:'Evaluation', title:'Your 30-Day Practice Commitment',
+        narration:'Three skills. Three opportunities to practise them before your next programme review. In the next 30 days: delegate one task you would normally do yourself using the four-part framework, deliver one piece of SBI feedback to each direct report, and convert one of your 1:1s into a GROW coaching conversation.',
+        visualDescription:'Commitment planner. Three practice commitments with calendar prompts: Delegation opportunity: identify within 7 days / SBI feedback: deliver within 14 days / GROW 1:1: schedule within 21 days. Manager notification sent with commitments. 30-day check-in scheduled.',
+        interaction:'Confirm your three practice commitments. Set calendar reminders. Click Complete.', duration:'75 sec',
+        designNote:'ADDIE Evaluation: specific practice commitments with calendar prompts and manager visibility have a significantly higher follow-through rate than generic suggestions to practise.' }
+    ],
+    phaseMappings: { Analysis:['1','2'], Design:['3'], Development:['4','5'], Implementation:[], Evaluation:['6','7'] },
+    modelInsight: "ADDIE's phase structure creates a particularly strong management development programme because it forces the designer to justify every content choice against real data. The 360 analysis (Screens 1-2) identifies three specific gaps. Design (Screen 3) addresses the psychological barrier to delegation before introducing the practical tool. Development (4-5) builds real skills through scenario and writing practice. Evaluation (6-7) assesses the actual skill and creates specific practice commitments tied to the original performance gaps."
+  }
+
+};
+
+// Generate placeholder storyboards for remaining topic/model combinations
+// using the same data structure but topic-adapted content
+function getStoryboard(topicId, modelId) {
+  const key = topicId + '_' + modelId;
+  if (STORYBOARDS[key]) return STORYBOARDS[key];
+
+  // For combinations not pre-built, use the ADDIE version of the topic
+  // with a model-adapted insight and phase mapping
+  const baseKey = topicId + '_ADDIE';
+  const base = STORYBOARDS[baseKey];
+  if (!base) return null;
+
+  const meta = window.MODEL_META ? window.MODEL_META[modelId] : null;
+  if (!meta) return base;
+
+  // Remap phases from ADDIE to selected model
+  const phases = meta.phases;
+  const screens = base.screens.map(function(s, i) {
+    var phaseIdx = Math.min(Math.floor((i / base.screens.length) * phases.length), phases.length - 1);
+    return Object.assign({}, s, { modelPhase: phases[phaseIdx].name });
+  });
+
+  var phaseMappings = {};
+  phases.forEach(function(p) { phaseMappings[p.name] = []; });
+  screens.forEach(function(s) { phaseMappings[s.modelPhase].push(String(s.id)); });
+
+  var modelInsights = {
+    Bloom: "Bloom's Taxonomy reframes this storyboard as a cognitive progression: early screens build foundational knowledge (Remember, Understand), middle screens require application and analysis, and the final screens demand evaluation and synthesis. Every screen title uses a Bloom action verb.",
+    Gagne: "Gagne's 9 Events give this storyboard a rigorous instructional sequence: each event has a specific cognitive function, from gaining attention at the start to enhancing retention at the end. The result is a course that mirrors the natural learning cycle.",
+    SAM: "SAM's iterative philosophy is reflected in the modular screen structure — each screen is designed to be reviewed and revised rapidly. The content is built for iteration, not monolithic delivery.",
+    Merrill: "Merrill's First Principles invert the typical structure: this version opens with a real problem before any instruction, activates prior knowledge before presenting content, and closes by returning the learner to the original problem with new tools.",
+    '4CID': "4C/ID's whole-task architecture organises this storyboard around authentic task performance: learning tasks provide the whole-task context, supportive information builds the mental models for complex decisions, and procedural information delivers just-in-time reference.",
+    Kirkpatrick: "Kirkpatrick's backward design is evident from the first screen: the course opens at Level 4 (organisational outcomes), defines Level 3 behaviour targets before any content, builds Level 2 learning to serve those behaviours, and measures Level 1 reaction last as a quality signal."
+  };
+
+  return {
+    title: base.title,
+    description: base.description,
+    screens: screens,
+    phaseMappings: phaseMappings,
+    modelInsight: modelInsights[modelId] || base.modelInsight
+  };
+}
+
+
+// ── MODEL METADATA ──
+const MODEL_META = {
+  ADDIE: {
+    name: 'ADDIE', full: 'Analysis, Design, Development, Implementation, Evaluation',
+    desc: 'A systematic, phase-gated approach. Screens map to each ADDIE phase in sequence.',
+    color: '#c84b2f',
+    phases: [
+      { name:'Analysis',       color:'#c84b2f', desc:'Establishes learner context, performance gaps, and constraints.' },
+      { name:'Design',         color:'#d4af5f', desc:'Blueprints the learning strategy, objectives, and assessment approach.' },
+      { name:'Development',    color:'#3dba6e', desc:'Content creation: narration, visuals, interactions, and media.' },
+      { name:'Implementation', color:'#2abfb0', desc:'Delivery context and how learners navigate the content.' },
+      { name:'Evaluation',     color:'#8b6cf7', desc:'Knowledge checks, reflection, and measurable outcomes.' }
+    ],
+    insight: 'ADDIE strength is rigour. Every design decision is traceable to a prior analysis phase. The risk is over-engineering; SAM works better under tight timelines.'
+  },
+  Bloom: {
+    name: "Bloom's Taxonomy", full: 'Remember, Understand, Apply, Analyse, Evaluate, Create',
+    desc: 'Screens are sequenced by cognitive level from recall to creation.',
+    color: '#8b6cf7',
+    phases: [
+      { name:'Remember',   color:'#5ba3f5', desc:'Retrieval of facts, terminology, and foundational concepts.' },
+      { name:'Understand', color:'#8b6cf7', desc:'Explaining meaning: paraphrasing, classifying, summarising.' },
+      { name:'Apply',      color:'#3dba6e', desc:'Using knowledge in familiar situations: scenarios and practice tasks.' },
+      { name:'Analyse',    color:'#d4af5f', desc:'Breaking information into components and identifying relationships.' },
+      { name:'Evaluate',   color:'#e06fa0', desc:'Making judgements based on criteria: assessments and decisions.' },
+      { name:'Create',     color:'#c84b2f', desc:'Generating new products or perspectives: capstone activities.' }
+    ],
+    insight: "Bloom's is most powerful for cognitive skill-building. For procedural or compliance training, Gagne's Events give more structural control."
+  },
+  Gagne: {
+    name: "Gagne's 9 Events", full: '9 Events of Instruction',
+    desc: "Each screen corresponds to one of Gagne's instructional events.",
+    color: '#2abfb0',
+    phases: [
+      { name:'Gain Attention',      color:'#c84b2f', desc:'Hook the learner with a story, question, or surprising statistic.' },
+      { name:'Inform Objectives',   color:'#d4af5f', desc:'Explicit statement of what learners will achieve.' },
+      { name:'Stimulate Recall',    color:'#5ba3f5', desc:'Connect to prior knowledge or experience.' },
+      { name:'Present Content',     color:'#3dba6e', desc:'Core instructional content, chunked and sequenced.' },
+      { name:'Provide Guidance',    color:'#8b6cf7', desc:'Examples, analogies, worked examples to scaffold learning.' },
+      { name:'Elicit Performance',  color:'#2abfb0', desc:'Practice opportunities: activities, simulations, decisions.' },
+      { name:'Provide Feedback',    color:'#e06fa0', desc:'Immediate, specific feedback on learner responses.' },
+      { name:'Assess Performance',  color:'#f59e0b', desc:'Formal check: quiz, scenario outcome, or demonstration.' },
+      { name:'Enhance Retention',   color:'#6b7280', desc:'Summary, job aid, spaced repetition prompt, real-world application.' }
+    ],
+    insight: "Gagne's 9 Events is the most evidence-based structure here, grounded in cognitive load theory. It works exceptionally well for complex procedural tasks."
+  },
+  SAM: {
+    name: 'SAM', full: 'Successive Approximation Model',
+    desc: 'An agile, iterative design approach with rapid prototyping cycles.',
+    color: '#3dba6e',
+    phases: [
+      { name:'Preparation',   color:'#5ba3f5', desc:'Background research and stakeholder alignment, fast and focused.' },
+      { name:'Savvy Start',   color:'#3dba6e', desc:'Rapid brainstorm with all stakeholders to sketch the learning approach.' },
+      { name:'Design Proof',  color:'#d4af5f', desc:'First rough prototype screens: learnable, not polished.' },
+      { name:'Alpha',         color:'#c84b2f', desc:'Content-complete but not final: all interactions functional.' },
+      { name:'Beta',          color:'#8b6cf7', desc:'Fully functional; focus on polish and learner testing.' },
+      { name:'Gold',          color:'#2abfb0', desc:'Final release version, signed off and ready for deployment.' }
+    ],
+    insight: 'SAM shines when speed and stakeholder buy-in matter. It accepts imperfection early to reach quality faster through real feedback loops.'
+  },
+  Merrill: {
+    name: "Merrill's First Principles", full: 'Problem-centred, Activation, Demonstration, Application, Integration',
+    desc: "Every screen serves one of Merrill's 5 principles. The course centres on a real-world problem.",
+    color: '#d4af5f',
+    phases: [
+      { name:'Problem-Centred', color:'#c84b2f', desc:'Learning is situated in a real-world task or problem from the start.' },
+      { name:'Activation',      color:'#d4af5f', desc:'Connects to existing knowledge: what learners already know or can do.' },
+      { name:'Demonstration',   color:'#3dba6e', desc:'Shows rather than tells: modelling, worked examples, case studies.' },
+      { name:'Application',     color:'#2abfb0', desc:'Learner does, with coaching fading as competence grows.' },
+      { name:'Integration',     color:'#8b6cf7', desc:'Learner reflects, discusses, and transfers to their real context.' }
+    ],
+    insight: "Merrill's principles are empirically validated and work beautifully for scenario-based learning. The show-first, tell-later sequencing is counter-intuitive but highly effective."
+  },
+  '4CID': {
+    name: '4C/ID Model', full: 'Learning Tasks, Supportive Information, Procedural Info, Part-task Practice',
+    desc: 'Designed for complex skill acquisition around whole-task practice.',
+    color: '#e06fa0',
+    phases: [
+      { name:'Learning Tasks',         color:'#c84b2f', desc:'Authentic whole-task experiences from simple to complex.' },
+      { name:'Supportive Information', color:'#d4af5f', desc:'Mental models, case studies, cognitive strategies for non-recurrent aspects.' },
+      { name:'Procedural Info',        color:'#3dba6e', desc:'Just-in-time information for recurrent, procedural steps.' },
+      { name:'Part-task Practice',     color:'#e06fa0', desc:'Isolated repetition of specific skills that need automisation.' }
+    ],
+    insight: '4C/ID is the right model for complex professional competencies. It is overkill for simple compliance content but ideal for surgical, engineering, or high-stakes decision training.'
+  },
+  Kirkpatrick: {
+    name: 'Kirkpatrick', full: 'Reaction, Learning, Behaviour, Results',
+    desc: 'Screens designed backwards from business results. Every element ties to a measurable outcome.',
+    color: '#5ba3f5',
+    phases: [
+      { name:'Level 4 - Results',   color:'#c84b2f', desc:'Business outcome defined first: what organisational change is expected?' },
+      { name:'Level 3 - Behaviour', color:'#d4af5f', desc:'On-the-job behaviours that will drive those results. Transfer plan.' },
+      { name:'Level 2 - Learning',  color:'#3dba6e', desc:'Knowledge, skills, attitude, confidence, and commitment built in-course.' },
+      { name:'Level 1 - Reaction',  color:'#5ba3f5', desc:'Learner engagement and relevance: their emotional response to the training.' }
+    ],
+    insight: 'Kirkpatrick forces backward design. You define success before you design content. Every screen decision traces back to the organisational goal.'
+  }
+};
+
+// ── TOPIC / MODEL CHANGE HANDLERS ──
+var TOPIC_META = {
+  safety:     { label:'Workplace Safety & Compliance', icon:'🦺', audience:'Frontline Workers', duration:'20 min', desc:'Fire safety, hazard identification, PPE usage and emergency procedures in a manufacturing environment.', color:'#c84b2f' },
+  onboarding: { label:'New Employee Onboarding',       icon:'🤝', audience:'New Employees',     duration:'15 min', desc:'Company culture, policies, tools, and team introductions for day-one hires across all departments.', color:'#3dba6e' },
+  customer:   { label:'Customer Service Excellence',   icon:'💬', audience:'Customer-Facing Teams', duration:'25 min', desc:'Handling complaints, active listening, de-escalation, and building long-term customer relationships.', color:'#5ba3f5' },
+  leadership: { label:'Leadership & Management Skills',icon:'🎯', audience:'Managers',           duration:'30 min', desc:'Delegation, feedback delivery, coaching conversations, and building high-performing teams.', color:'#8b6cf7' }
+};
+
+var MODEL_DESCRIPTIONS = {
+  ADDIE:       'Linear phase-gated model: Analyse > Design > Develop > Implement > Evaluate. Best for large-scale, well-scoped projects.',
+  Bloom:       "Cognitive taxonomy: screens ascend from Remember to Understand, Apply, Analyse, Evaluate, and Create. Great for skill-building.",
+  Gagne:       "Gagne's 9 Events of Instruction — the most evidence-based instructional sequence, grounded in cognitive load theory.",
+  SAM:         'Agile successive approximation. Rapid prototyping cycles with stakeholder checkpoints. Best under tight timelines.',
+  Merrill:     'First Principles: Problem-centred, Activation, Demonstration, Application, Integration. Shows before tells.',
+  '4CID':      '4 Component ID: Learning Tasks + Supportive Info + Procedural Info + Part-task Practice. Ideal for complex skills.',
+  Kirkpatrick: 'Backwards design from Results to Behaviour to Learning to Reaction. Forces business-aligned decisions.'
+};
+
+// Which topic+model combos have fully hand-crafted storyboards
+var FULL_STORYBOARDS = ['safety_ADDIE','safety_Bloom','safety_Gagne','safety_SAM','safety_Merrill','safety_4CID','safety_Kirkpatrick','onboarding_ADDIE','onboarding_Gagne','customer_ADDIE','leadership_ADDIE'];
+
+function onTopicChange() {
+  var topicId = document.getElementById('topicSelect').value;
+  var preview = document.getElementById('topicPreview');
+  if (!topicId) { preview.style.display = 'none'; updateBtn(); return; }
+  var t = TOPIC_META[topicId];
+  document.getElementById('topicPreviewIcon').textContent = t.icon;
+  document.getElementById('topicPreviewAudience').textContent = t.audience;
+  document.getElementById('topicPreviewDesc').textContent = t.desc;
+  document.getElementById('topicPreviewMeta').textContent = t.duration + ' · ' + countScreens(topicId) + ' screens';
+  preview.style.display = 'block';
+  updateCoverageTag();
+  updateBtn();
+}
+
+function countScreens(topicId) {
+  var modelId = document.getElementById('modelSelect').value;
+  var key = topicId + '_' + modelId;
+  if (STORYBOARDS[key]) return STORYBOARDS[key].screens.length;
+  var baseKey = topicId + '_ADDIE';
+  return STORYBOARDS[baseKey] ? STORYBOARDS[baseKey].screens.length : '?';
+}
+
+function onModelChange() {
+  var modelId = document.getElementById('modelSelect').value;
+  document.getElementById('modelInfo').textContent = MODEL_DESCRIPTIONS[modelId] || '';
+  updateCoverageTag();
+  updateBtn();
+}
+
+function updateCoverageTag() {
+  var topicId = document.getElementById('topicSelect').value;
+  var modelId = document.getElementById('modelSelect').value;
+  var tag = document.getElementById('coverageTag');
+  if (!topicId) { tag.style.display = 'none'; return; }
+  var key = topicId + '_' + modelId;
+  var isFull = FULL_STORYBOARDS.indexOf(key) >= 0;
+  tag.style.display = 'block';
+  if (isFull) {
+    tag.style.background = 'rgba(61,186,110,0.1)';
+    tag.style.border = '1px solid rgba(61,186,110,0.25)';
+    tag.style.color = '#3dba6e';
+    tag.textContent = '✦ Full bespoke storyboard — hand-authored for this combination';
+  } else {
+    tag.style.background = 'rgba(212,175,95,0.08)';
+    tag.style.border = '1px solid rgba(212,175,95,0.2)';
+    tag.style.color = '#d4af5f';
+    tag.textContent = '◆ Adapted storyboard — topic content with ' + modelId + ' phase structure';
+  }
+}
+
+function updateBtn() {
+  var topicId = document.getElementById('topicSelect').value;
+  var btn = document.getElementById('generateBtn');
+  if (topicId) {
+    btn.disabled = false;
+    btn.style.opacity = '1';
+  } else {
+    btn.disabled = true;
+    btn.style.opacity = '0.4';
+  }
+}
+
+document.getElementById('modelInfo').textContent = MODEL_DESCRIPTIONS['ADDIE'];
+
+// ── TYPE COLOURS ──
+var TYPE_COLORS = {
+  'Title':      { bg:'rgba(200,75,47,0.15)',  border:'rgba(200,75,47,0.4)',  text:'#e8633e' },
+  'Objective':  { bg:'rgba(212,175,95,0.12)', border:'rgba(212,175,95,0.4)', text:'#d4af5f' },
+  'Content':    { bg:'rgba(91,163,245,0.1)',  border:'rgba(91,163,245,0.3)', text:'#5ba3f5' },
+  'Scenario':   { bg:'rgba(139,108,247,0.12)',border:'rgba(139,108,247,0.4)',text:'#8b6cf7' },
+  'Activity':   { bg:'rgba(61,186,110,0.1)',  border:'rgba(61,186,110,0.3)', text:'#3dba6e' },
+  'Assessment': { bg:'rgba(224,111,160,0.1)', border:'rgba(224,111,160,0.3)',text:'#e06fa0' },
+  'Reflection': { bg:'rgba(42,191,176,0.1)',  border:'rgba(42,191,176,0.3)', text:'#2abfb0' },
+  'Summary':    { bg:'rgba(245,158,11,0.1)',  border:'rgba(245,158,11,0.3)', text:'#f59e0b' },
+  'Default':    { bg:'rgba(255,255,255,0.05)',border:'rgba(255,255,255,0.12)',text:'var(--dim)' }
+};
+function typeStyle(type) {
+  var key = Object.keys(TYPE_COLORS).find(function(k) { return type && type.toLowerCase().includes(k.toLowerCase()); }) || 'Default';
+  return TYPE_COLORS[key];
+}
+
+// ── LOCAL STORYBOARD GENERATOR ──
+function generateLocalStoryboard(topic, audience, screenCount, duration, model, tone, meta) {
+  var n = parseInt(screenCount);
+  var phases = meta.phases;
+
+  var MODEL_SCREEN_TYPES = {
+    ADDIE:       ['Title','Objective','Content','Content','Activity','Assessment','Summary'],
+    Bloom:       ['Title','Content','Content','Scenario','Activity','Assessment','Reflection'],
+    Gagne:       ['Title','Objective','Content','Scenario','Activity','Assessment','Reflection','Summary'],
+    SAM:         ['Title','Objective','Scenario','Activity','Activity','Assessment','Summary'],
+    Merrill:     ['Scenario','Title','Content','Scenario','Activity','Reflection','Summary'],
+    '4CID':      ['Title','Scenario','Content','Activity','Content','Activity','Assessment'],
+    Kirkpatrick: ['Title','Objective','Content','Scenario','Activity','Assessment','Reflection']
+  };
+
+  var typeSeq = MODEL_SCREEN_TYPES[model] || MODEL_SCREEN_TYPES['ADDIE'];
+  var topicShort = topic.length > 50 ? topic.substring(0, 50) : topic;
+  var topicWords = topic.split(' ').slice(0, 4).join(' ');
+
+  var tonePrefixes = {
+    'Professional':   ['In this module, you will learn about', 'This section covers', 'As a professional, understanding'],
+    'Conversational': ["Let's talk about", 'Have you ever wondered about', "Here's something important about"],
+    'Scenario-based': ['Imagine you are faced with a situation involving', 'Picture this scenario involving', 'You have just been asked to handle'],
+    'Gamified':       ['Level up your knowledge of', 'Challenge accepted! Explore', 'Unlock new skills in']
+  };
+  var prefixes = tonePrefixes[tone] || tonePrefixes['Professional'];
+
+  function getPrefix(i) { return prefixes[i % prefixes.length]; }
+
+  var screenTemplates = {
+    Title: function(i) {
+      return {
+        title: topicShort,
+        narration: getPrefix(0) + ' ' + topic + '. This course is designed for ' + audience + ' and will take approximately ' + duration + ' minutes. By the end, you will have the knowledge and confidence to apply what you have learned directly in your role.',
+        visualDescription: 'Full-screen title card with bold typography. Background features a contextual image with dark overlay. Course title centred in large serif font, subtitle shows target audience and duration. Progress indicator at bottom shows 0% complete.',
+        interaction: 'Click Begin button to start the course',
+        duration: '45 seconds',
+        designNote: 'Title screen sets tone and manages learner expectations. Showing duration upfront reduces cognitive anxiety.'
+      };
+    },
+    Objective: function(i) {
+      return {
+        title: 'What You Will Be Able to Do',
+        narration: 'By the end of this course, you will be able to confidently apply key principles of ' + topicWords + ' in your daily work. These objectives reflect the real challenges that ' + audience + ' face on the job.',
+        visualDescription: 'Clean panel with 3-4 animated bullet objectives appearing sequentially. Each uses an action verb: identify, apply, demonstrate, evaluate. Checkboxes animate in as learner reads. Relevant icon per objective.',
+        interaction: 'Read each objective as it animates in, then click the arrow to continue',
+        duration: '60 seconds',
+        designNote: 'Explicitly stating objectives activates prior knowledge and frames the learning experience. Based on Mager criterion-referenced instructional design.'
+      };
+    },
+    Content: function(i) {
+      var titles = ['Key Concepts', 'Core Principles', 'Essential Knowledge', 'The Foundations', 'Understanding the Basics'];
+      return {
+        title: titles[i % titles.length] + ': ' + topicWords,
+        narration: getPrefix(i) + ' ' + topic + '. There are three critical things every ' + audience.toLowerCase() + ' needs to understand: first, the context and why it matters; second, the specific requirements and standards that apply; and third, how to translate this into consistent action.',
+        visualDescription: 'Split layout: narration text on left (40%), visual diagram or infographic on right (60%). Key terms highlighted in accent colour. Tabs or accordion for sub-topics. Relevant icons accompany each point.',
+        interaction: 'Click tabs to reveal content sections. Hover over key terms for definitions.',
+        duration: (90 + (i * 15)) + ' seconds',
+        designNote: 'Chunked content with visual support reduces cognitive load. Interactive reveals allow self-pacing and increase engagement.'
+      };
+    },
+    Scenario: function(i) {
+      return {
+        title: 'Real-World Scenario: What Would You Do?',
+        narration: getPrefix(2) + ' ' + topicWords + '. This is the kind of situation that ' + audience.toLowerCase() + ' encounter regularly. Before seeing the correct answer, think through what you would do and why.',
+        visualDescription: 'Illustrated scenario panel with a realistic workplace scene. Character-based storytelling with speech bubbles. Situation description in a callout box. Decision point is visually distinct with a pulsing prompt. Environment matches the ' + audience.toLowerCase() + ' context.',
+        interaction: 'Read the scenario, then choose from 3-4 branching options. Each choice leads to a consequence screen before returning to the main path.',
+        duration: '120 seconds',
+        designNote: 'Scenarios trigger emotional engagement and contextual learning. Learners process decisions more deeply when stakes feel real.'
+      };
+    },
+    Activity: function(i) {
+      var acts = ['Practice Activity', 'Apply Your Knowledge', 'Hands-On Exercise', 'Try It Yourself', 'Skill Practice'];
+      var interactions = [
+        'Drag-and-drop sorting exercise with labelled items and two drop zones',
+        'Interactive decision tree with clickable branches and outcome reveals',
+        'Click-to-reveal card matching activity with flip animation',
+        'Hotspot activity on a workplace image: click areas to identify correct practices',
+        'Sequencing activity: drag steps into the correct order'
+      ];
+      return {
+        title: acts[i % acts.length],
+        narration: 'Now it is your turn to apply what you have learned about ' + topicWords + '. This activity reflects the kind of decisions you will make as ' + audience.toLowerCase() + '. Take your time.',
+        visualDescription: interactions[i % interactions.length] + '. Feedback appears immediately after each interaction.',
+        interaction: 'Complete the interactive exercise, then click Submit when done.',
+        duration: '150 seconds',
+        designNote: 'Active retrieval through practice is the most effective learning strategy. Immediate corrective feedback closes the gap between current and target performance.'
+      };
+    },
+    Assessment: function(i) {
+      return {
+        title: 'Knowledge Check',
+        narration: 'Check your understanding of ' + topicWords + '. Answer the following questions honestly. If you are unsure, use this as a signal of what to revisit before applying on the job.',
+        visualDescription: 'Clean quiz interface with progress indicator (e.g. Q1 of 4). Multiple choice displayed one at a time. Correct answer shows green tick and brief rationale. Incorrect shows red cross, explanation, then correct answer. Score summary at end.',
+        interaction: 'Click to select answer, then click Submit. Immediate feedback shown before next question loads.',
+        duration: '180 seconds',
+        designNote: 'Formative assessment placed mid-course prevents false confidence and identifies gaps while remediation is still possible.'
+      };
+    },
+    Reflection: function(i) {
+      return {
+        title: 'Reflect and Connect',
+        narration: 'Before wrapping up, connect what you have learned about ' + topicWords + ' to your own experience as ' + audience.toLowerCase() + '. Reflection turns information into lasting knowledge.',
+        visualDescription: 'Calm minimal screen with a reflective prompt in large typography. Optional free-text input field labelled Your thoughts (not submitted). Softer background colour signals a shift in cognitive mode.',
+        interaction: 'Read the prompt, optionally type your reflection (not submitted or stored), then click Continue',
+        duration: '90 seconds',
+        designNote: 'Metacognitive reflection at the end of a learning block significantly improves retention and transfer. Hattie research shows an effect size of 0.75.'
+      };
+    },
+    Summary: function(i) {
+      return {
+        title: 'What You Have Learned',
+        narration: 'You have completed this course on ' + topic + '. Take a moment to recap the key points. Remember: knowing something is only valuable when it changes how you act on the job. Take one action today to apply what you have learned.',
+        visualDescription: 'Summary card layout with 3-5 key takeaways as animated tiles. Each uses an icon and a one-line statement. A What to do next section with 2-3 practical actions. Certificate of completion animation if applicable.',
+        interaction: 'Review key takeaways, click any tile to expand detail, then click Complete Course.',
+        duration: '60 seconds',
+        designNote: 'Spaced summary activates retrieval and reinforces key messages. The one action prompt bridges the knowing-doing gap.'
+      };
+    }
+  };
+
+  var MODEL_INSIGHTS = {
+    ADDIE: 'This storyboard follows ADDIEs disciplined sequence. Screens 1-2 establish the analysis-driven foundation, screens 3-4 deliver the design-informed content, screens 5-6 provide the development artefacts (activities), and the final screen closes the evaluation loop.',
+    Bloom: "Bloom's Taxonomy is visible in the screen sequence. Early screens build declarative knowledge (Remember, Understand), middle screens shift to application and analysis through scenarios, and the final screens reach the higher cognitive levels of evaluation and synthesis.",
+    Gagne: "Gagne's 9 Events are mapped directly to this storyboard: attention, objectives, prior knowledge, content presentation, learning guidance, practice, feedback, assessment, and retention enhancement. The most pedagogically rigorous structure available.",
+    SAM: 'SAM philosophy is reflected in the modular structure built for rapid review and iteration. Screens are deliberately discrete and swappable, reflecting SAM preference for prototypes over monolithic content.',
+    Merrill: "Merrill's First Principles are evident throughout. The course opens with a real problem, activates prior knowledge early, demonstrates before requiring application, provides coached practice, and ends with integration back to the real context.",
+    '4CID': '4C/ID structure is visible in how supportive information (conceptual screens) and procedural information (step-by-step guidance) wrap around the whole-task learning activities (scenarios). Part-task practice is isolated in dedicated activity screens.',
+    Kirkpatrick: 'This storyboard is designed backwards from Level 4 (business results). The objectives define measurable behavioural outcomes (Level 3), the content builds knowledge and skill (Level 2), and the tone and scenarios are engineered for learner engagement (Level 1).'
+  };
+
+  var screens = [];
+  var phaseMappings = {};
+  phases.forEach(function(p) { phaseMappings[p.name] = []; });
+
+  for (var i = 0; i < n; i++) {
+    var typeKey = typeSeq[i % typeSeq.length];
+    var tmpl = screenTemplates[typeKey] || screenTemplates['Content'];
+    var screenData = tmpl(i);
+    var phaseIdx = Math.min(Math.floor((i / n) * phases.length), phases.length - 1);
+    var phase = phases[phaseIdx];
+    var screenId = i + 1;
+    phaseMappings[phase.name].push(screenId);
+    screens.push(Object.assign({ id: screenId, type: typeKey, modelPhase: phase.name }, screenData));
+  }
+
+  return {
+    title: topicShort,
+    description: 'A ' + n + '-screen ' + tone.toLowerCase() + ' course for ' + audience + ' applying the ' + meta.name + ' model.',
+    screens: screens,
+    phaseMappings: phaseMappings,
+    modelInsight: MODEL_INSIGHTS[model] || MODEL_INSIGHTS['ADDIE']
+  };
+}
+
+// ── SHOW STORYBOARD ──
+async function showStoryboard() {
+  var topicId = document.getElementById('topicSelect').value;
+  if (!topicId) return;
+  var model = document.getElementById('modelSelect').value;
+  var meta  = MODEL_META[model];
+  var btn   = document.getElementById('generateBtn');
+
+  btn.disabled = true;
+  btn.innerHTML = '<div class="spinner"></div> Loading\u2026';
+
+  var key    = topicId + '_' + model;
+  var isFull = FULL_STORYBOARDS.indexOf(key) >= 0;
+  var base   = STORYBOARDS[key] || STORYBOARDS[topicId + '_ADDIE'];
+  var n      = base ? base.screens.length : 7;
+
+  showSkeleton(n);
+  showModelPlaceholder(meta);
+
+  var delay = isFull ? 900 + Math.random() * 400 : 600 + Math.random() * 300;
+  await new Promise(function(r) { setTimeout(r, delay); });
+
+  try {
+    var parsed = getStoryboard(topicId, model);
+    if (!parsed) throw new Error('Storyboard not found');
+    var t = TOPIC_META[topicId];
+    renderStoryboard(parsed, meta, model, t.label, t.audience, 'Professional');
+    renderModelPanel(parsed, meta, model);
+  } catch(err) {
+    showError('Could not load storyboard. Please try another combination.');
+    console.error(err);
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '<span class="btn-icon">&#9654;</span> Show Storyboard';
+  }
+}
+
+// ── SKELETON LOADER ──
+function showSkeleton(n) {
+  var board = document.getElementById('boardPanel');
+  var html = '';
+  for (var i = 0; i < Math.min(n, 6); i++) {
+    html += '<div class="skeleton-card"><div class="skel skel-h" style="width:' + (30 + Math.random()*20) + '%"></div><div class="skel skel-p" style="width:' + (60 + Math.random()*30) + '%;margin-top:6px"></div><div class="skel skel-p" style="width:' + (40 + Math.random()*40) + '%"></div></div>';
+  }
+  board.innerHTML = '<div class="loading-wrap">' + html + '</div>';
+}
+
+function showModelPlaceholder(meta) {
+  var html = '<div style="opacity:0.5;padding:20px 0;"><div style="font-family:\'DM Serif Display\',serif;font-size:1rem;color:var(--white);margin-bottom:6px;">' + meta.name + '</div><div style="font-size:0.75rem;color:var(--dim);line-height:1.6;">' + meta.full + '</div><div style="margin-top:16px;display:flex;flex-direction:column;gap:8px;">';
+  meta.phases.forEach(function(p) {
+    html += '<div style="display:flex;align-items:center;gap:8px;"><div style="width:6px;height:6px;border-radius:50%;background:' + p.color + ';flex-shrink:0;"></div><div style="font-size:0.75rem;color:var(--dim);">' + p.name + '</div></div>';
+  });
+  html += '</div></div>';
+  document.getElementById('modelPanelContent').innerHTML = html;
+}
+
+// ── RENDER STORYBOARD ──
+function renderStoryboard(data, meta, model, topic, audience, tone) {
+  var board = document.getElementById('boardPanel');
+  board.innerHTML = '';
+
+  // Header
+  var hdr = document.createElement('div');
+  hdr.className = 'board-header';
+  hdr.innerHTML = '<div><div class="board-title">' + (data.title || topic) + '</div><div class="board-meta">' + model + ' \u00b7 ' + audience + ' \u00b7 ' + (data.screens||[]).length + ' screens</div></div>' +
+    '<div class="board-actions"><button class="btn-small" onclick="copyJSON()">Copy JSON</button><button class="btn-small" onclick="window.print()">Print</button></div>';
+  board.appendChild(hdr);
+
+  (data.screens || []).forEach(function(s, i) {
+    var ts = typeStyle(s.type);
+    var phaseMeta = meta.phases.find(function(p) { return p.name === s.modelPhase; });
+    var phaseColor = phaseMeta ? phaseMeta.color : meta.color;
+
+    var card = document.createElement('div');
+    card.className = 'slide-card';
+    card.style.animationDelay = (i * 0.06) + 's';
+
+    // Header row
+    var slideHdr = document.createElement('div');
+    slideHdr.className = 'slide-header';
+    slideHdr.innerHTML =
+      '<div class="slide-num">SCREEN ' + String(s.id).padStart(2,'0') + '</div>' +
+      '<div class="slide-type-badge" style="background:' + ts.bg + ';border:1px solid ' + ts.border + ';color:' + ts.text + ';">' + (s.type||'Content') + '</div>' +
+      '<div class="slide-model-tag" style="background:' + phaseColor + '22;border:1px solid ' + phaseColor + '44;color:' + phaseColor + ';">' + (s.modelPhase||'') + '</div>';
+    card.appendChild(slideHdr);
+
+    // Title + design note
+    var titleWrap = document.createElement('div');
+    titleWrap.style.cssText = 'padding:12px 16px 8px;border-bottom:1px solid rgba(255,255,255,0.06);';
+    var titleEl = document.createElement('div');
+    titleEl.style.cssText = "font-family:'DM Serif Display',serif;font-size:1.05rem;color:var(--white);margin-bottom:2px;";
+    titleEl.textContent = s.title;
+    titleWrap.appendChild(titleEl);
+    if (s.designNote) {
+      var noteEl = document.createElement('div');
+      noteEl.style.cssText = 'font-size:0.72rem;color:var(--dim);font-style:italic;';
+      noteEl.textContent = s.designNote;
+      titleWrap.appendChild(noteEl);
+    }
+    card.appendChild(titleWrap);
+
+    // Body — narration + visual using textContent so nothing gets stripped
+    var body = document.createElement('div');
+    body.className = 'slide-body';
+
+    var col1 = document.createElement('div');
+    col1.className = 'slide-col';
+    var lbl1 = document.createElement('div');
+    lbl1.className = 'slide-col-label';
+    lbl1.textContent = 'Narration Script';
+    var cnt1 = document.createElement('div');
+    cnt1.className = 'slide-col-content narration';
+    cnt1.textContent = s.narration || '';
+    col1.appendChild(lbl1);
+    col1.appendChild(cnt1);
+
+    var col2 = document.createElement('div');
+    col2.className = 'slide-col';
+    var lbl2 = document.createElement('div');
+    lbl2.className = 'slide-col-label';
+    lbl2.textContent = 'Visual / Layout';
+    var cnt2 = document.createElement('div');
+    cnt2.className = 'slide-col-content';
+    cnt2.textContent = s.visualDescription || '';
+    col2.appendChild(lbl2);
+    col2.appendChild(cnt2);
+
+    body.appendChild(col1);
+    body.appendChild(col2);
+    card.appendChild(body);
+
+    // Footer
+    var footer = document.createElement('div');
+    footer.className = 'slide-footer';
+    [
+      ['Interaction', s.interaction || '-', null],
+      ['Duration',    s.duration    || '-', null],
+      ['Screen Type', s.type        || '-', ts.text]
+    ].forEach(function(row) {
+      var cell = document.createElement('div');
+      cell.className = 'slide-footer-cell';
+      var lbl = document.createElement('div');
+      lbl.className = 'sfc-label';
+      lbl.textContent = row[0];
+      var val = document.createElement('div');
+      val.className = 'sfc-val';
+      val.textContent = row[1];
+      if (row[2]) val.style.color = row[2];
+      cell.appendChild(lbl);
+      cell.appendChild(val);
+      footer.appendChild(cell);
+    });
+    card.appendChild(footer);
+
+    board.appendChild(card);
+  });
+
+  window._lastStoryboard = data;
+}
+
+// ── RENDER MODEL PANEL ──
+function renderModelPanel(data, meta, model) {
+  var mappings = data.phaseMappings || {};
+  var insight  = data.modelInsight || meta.insight;
+  var html = '<div class="model-framework-title">' + meta.name + '</div><div class="model-framework-sub">' + meta.full + '</div>';
+
+  meta.phases.forEach(function(phase) {
+    var slideIds = mappings[phase.name] || [];
+    html += '<div class="phase-block" style="border-color:' + phase.color + '33;">' +
+      '<div class="phase-header" style="background:' + phase.color + '11;">' +
+        '<div class="phase-dot" style="background:' + phase.color + ';"></div>' +
+        '<div class="phase-name">' + phase.name + '</div>' +
+        '<div class="phase-slides">' + (slideIds.length ? slideIds.length + ' screen' + (slideIds.length !== 1 ? 's' : '') : '-') + '</div>' +
+      '</div>' +
+      '<div class="phase-desc">' + phase.desc + '</div>' +
+      (slideIds.length ? '<div class="phase-slide-refs">' + slideIds.map(function(id) { return '<span class="phase-ref" style="background:' + phase.color + '33;color:' + phase.color + ';">S' + String(id).padStart(2,'0') + '</span>'; }).join('') + '</div>' : '') +
+    '</div>';
+  });
+
+  html += '<div class="insight-strip"><div class="insight-label">\u2726 Why ' + meta.name + '?</div><div class="insight-text">' + insight + '</div></div>';
+  html += '<div class="model-legend"><div class="legend-title">Phase Key</div>' + meta.phases.map(function(p) { return '<div class="legend-item"><div class="legend-dot" style="background:' + p.color + ';"></div>' + p.name + '</div>'; }).join('') + '</div>';
+
+  document.getElementById('modelPanelContent').innerHTML = html;
+}
+
+function showError(msg) {
+  document.getElementById('boardPanel').innerHTML = '<div class="empty-state"><div class="empty-icon">\u26a0</div><div class="empty-title">Something went wrong</div><div class="empty-sub">' + msg + '</div></div>';
+}
+
+function copyJSON() {
+  if (!window._lastStoryboard) return;
+  navigator.clipboard.writeText(JSON.stringify(window._lastStoryboard, null, 2)).then(function() {
+    var btns = document.querySelectorAll('.btn-small');
+    btns[0].textContent = 'Copied!';
+    setTimeout(function() { btns[0].textContent = 'Copy JSON'; }, 2000);
+  });
+}
+
+function openHBT()  { document.getElementById('hbtOverlay').classList.add('open'); document.getElementById('hbtDrawer').classList.add('open'); }
+function closeHBT() { document.getElementById('hbtOverlay').classList.remove('open'); document.getElementById('hbtDrawer').classList.remove('open'); }
+document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeHBT(); });
+</script>
+<!-- ── PORTFOLIO PROTECTION ── -->
+<script>
+(function() {
+  'use strict';
+
+  // ── 1. Disable right-click context menu ──
+  document.addEventListener('contextmenu', function(e) {
+    e.preventDefault();
+    showWarning();
+    return false;
+  });
+
+  // ── 2. Block keyboard shortcuts ──
+  document.addEventListener('keydown', function(e) {
+    const key = e.key ? e.key.toLowerCase() : '';
+    const ctrl = e.ctrlKey || e.metaKey;
+
+    // Ctrl+U (view source), Ctrl+S (save), Ctrl+A (select all)
+    // Ctrl+Shift+I/J/C (DevTools), Ctrl+P (print)
+    if (ctrl && ['u','s','a','p'].includes(key)) {
+      e.preventDefault(); showWarning(); return false;
+    }
+    if (ctrl && e.shiftKey && ['i','j','c','k'].includes(key)) {
+      e.preventDefault(); showWarning(); return false;
+    }
+    // F12 (DevTools)
+    if (e.key === 'F12') {
+      e.preventDefault(); showWarning(); return false;
+    }
+    // Ctrl+Shift+Delete (clear history — sometimes used to reset)
+    if (ctrl && e.shiftKey && e.key === 'Delete') {
+      e.preventDefault(); return false;
+    }
+  });
+
+  // ── 3. Disable text selection ──
+  document.addEventListener('selectstart', function(e) {
+    // Allow selection inside input/textarea fields
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+    e.preventDefault();
+    return false;
+  });
+
+  // ── 4. Disable drag (prevents dragging images/text out) ──
+  document.addEventListener('dragstart', function(e) {
+    e.preventDefault();
+    return false;
+  });
+
+  // ── 5. DevTools detection via window size change ──
+  // When DevTools opens docked, window inner dimensions shrink
+  var devtoolsOpen = false;
+  var threshold = 160;
+  function checkDevTools() {
+    var widthDiff  = window.outerWidth  - window.innerWidth  > threshold;
+    var heightDiff = window.outerHeight - window.innerHeight > threshold;
+    if ((widthDiff || heightDiff) && !devtoolsOpen) {
+      devtoolsOpen = true;
+      showDevToolsWarning();
+    } else if (!widthDiff && !heightDiff) {
+      devtoolsOpen = false;
+    }
+  }
+  setInterval(checkDevTools, 1000);
+
+  // ── 6. Warning toast ──
+  function showWarning() {
+    if (document.getElementById('_pt_toast')) return;
+    var toast = document.createElement('div');
+    toast.id = '_pt_toast';
+    toast.innerHTML = '🔒 &nbsp;This portfolio is protected. Please respect the author\'s work.';
+    toast.style.cssText = [
+      'position:fixed', 'bottom:24px', 'left:50%', 'transform:translateX(-50%)',
+      'background:#0f0e0c', 'color:#f5f2eb', 'padding:12px 22px',
+      'border-radius:8px', 'font-family:sans-serif', 'font-size:13px',
+      'border:1px solid rgba(200,75,47,0.5)', 'border-left:3px solid #c84b2f',
+      'z-index:999999', 'box-shadow:0 4px 24px rgba(0,0,0,0.4)',
+      'pointer-events:none', 'white-space:nowrap'
+    ].join(';');
+    document.body.appendChild(toast);
+    setTimeout(function() {
+      if (toast.parentNode) toast.parentNode.removeChild(toast);
+    }, 3000);
+  }
+
+  function showDevToolsWarning() {
+    if (document.getElementById('_pt_devtools')) return;
+    var banner = document.createElement('div');
+    banner.id = '_pt_devtools';
+    banner.innerHTML = [
+      '<strong style="color:#c84b2f">Hey there, developer 👋</strong>',
+      'This portfolio was built by <strong>Abhishek Trivedi</strong>.',
+      'If you\'re curious about how it works, just reach out at',
+      '<a href="https://abhishektrivedi.com/pages/contact.html" ',
+      'style="color:#c9973a">abhishektrivedi.com</a> — happy to chat.'
+    ].join(' ');
+    banner.style.cssText = [
+      'position:fixed', 'top:0', 'left:0', 'right:0',
+      'background:#0a1628', 'color:#f5f2eb', 'padding:14px 24px',
+      'font-family:sans-serif', 'font-size:13px', 'line-height:1.6',
+      'border-bottom:2px solid #c84b2f', 'z-index:999999',
+      'text-align:center', 'box-shadow:0 2px 12px rgba(0,0,0,0.5)'
+    ].join(';');
+    document.body.appendChild(banner);
+  }
+
+  // ── 7. Copyright watermark in console ──
+  var styles = [
+    'color:#c84b2f', 'font-size:18px', 'font-weight:bold',
+    'padding:8px 0', 'border-bottom:2px solid #c84b2f'
+  ].join(';');
+  console.log('%c© Abhishek Trivedi — Learning Experience Technologist', styles);
+  console.log('%chttps://abhishektrivedi.com | All rights reserved.', 'color:#6b6459;font-size:12px;');
+  console.log('%cIf you\'re inspecting this to learn — great! Just don\'t copy. Reach out instead.', 'color:#c9973a;font-size:12px;font-style:italic;');
+
+})();
+</script>
+<!-- ── END PROTECTION ── -->
+
+</body>
+</html>
