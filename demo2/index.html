@@ -1,5 +1,6 @@
 
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1445,7 +1446,9 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeHBT(); 
   });
 
   // ── 4. Disable drag (prevents dragging images/text out) ──
+  // Allow drag-and-drop interaction items; block everything else
   document.addEventListener('dragstart', function(e) {
+    if (e.target.classList && e.target.classList.contains('drag-item')) return;
     e.preventDefault();
     return false;
   });
