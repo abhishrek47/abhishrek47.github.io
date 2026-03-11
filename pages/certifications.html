@@ -1,102 +1,391 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Certifications | Abhishek Trivedi</title>
-  <meta name="description" content="Professional certifications held by Abhishek Trivedi — TechSmith Camtasia Explorer, Articulate Storyline, and more." />
+  <meta name="description" content="Professional certifications held by Abhishek Trivedi — TechSmith Camtasia Explorer, Articulate Storyline, LinkedIn Learning, and more." />
   <link rel="stylesheet" href="../css/style.css" />
   <style>
+
+    /* ══════════════════════════════
+       PAGE HERO
+    ══════════════════════════════ */
+    .certs-hero-note {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      color: var(--mid);
+      letter-spacing: 0.06em;
+      margin-top: 1rem;
+      opacity: 0.7;
+    }
+
+    /* ══════════════════════════════
+       CERT CARDS SECTION
+    ══════════════════════════════ */
+    .certs-section {
+      padding: 4rem 4rem 5rem;
+      background: var(--paper);
+    }
     .certs-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 2px;
-      margin-top: 3rem;
-      border: 1px solid var(--rule);
-      background: var(--rule);
+      gap: 1.5rem;
+      margin-top: 2.5rem;
     }
-    .cert-card {
-      background: var(--paper);
-      padding: 3rem;
+
+    /* The card outer — handles perspective for flip */
+    .cert-card-wrap {
+      perspective: 1000px;
+      height: 340px;
+    }
+    .cert-card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transform-style: preserve-3d;
+      transition: transform 0.65s cubic-bezier(0.4,0.2,0.2,1);
+      cursor: pointer;
+    }
+    .cert-card-wrap:hover .cert-card-inner,
+    .cert-card-wrap.flipped .cert-card-inner {
+      transform: rotateY(180deg);
+    }
+
+    /* Front & back shared */
+    .cert-front, .cert-back {
+      position: absolute;
+      inset: 0;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    /* FRONT */
+    .cert-front {
+      background: var(--ink);
       display: flex;
       flex-direction: column;
-      gap: 1.25rem;
-      transition: background 0.25s;
+      padding: 2.25rem;
+      gap: 0;
     }
-    .cert-card:hover { background: white; }
-    .cert-icon {
-      width: 52px; height: 52px;
-      background: var(--ink);
-      border-radius: 4px;
+    /* Subtle grid texture */
+    .cert-front::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 28px 28px;
+      pointer-events: none;
+    }
+    /* Diagonal ribbon */
+    .cert-front::after {
+      content: 'CERTIFIED';
+      position: absolute;
+      top: 28px; right: -30px;
+      background: var(--accent);
+      color: white;
+      font-family: var(--mono);
+      font-size: 0.52rem;
+      letter-spacing: 0.18em;
+      padding: 4px 42px;
+      transform: rotate(45deg);
+      transform-origin: center;
+      font-weight: 700;
+    }
+    .cert-issuer-row {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: auto;
+    }
+    .cert-logo-box {
+      width: 42px; height: 42px;
+      border-radius: 6px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.4rem;
+      font-size: 1.3rem;
+      flex-shrink: 0;
     }
-    .cert-issuer {
+    .cert-issuer-name {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.4);
+    }
+    .cert-front-title {
+      font-family: var(--serif);
+      font-size: 1.55rem;
+      line-height: 1.2;
+      color: white;
+      margin-bottom: 0.75rem;
+      position: relative;
+      z-index: 1;
+    }
+    .cert-front-title em {
+      font-style: italic;
+      color: var(--accent);
+    }
+    .cert-front-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: auto;
+      position: relative;
+      z-index: 1;
+    }
+    .cert-verified-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: rgba(46,180,96,0.15);
+      border: 1px solid rgba(46,180,96,0.3);
+      border-radius: 100px;
+      padding: 0.25rem 0.75rem;
+      font-family: var(--mono);
+      font-size: 0.58rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #3dba6e;
+    }
+    .cert-verified-dot {
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: #3dba6e;
+      animation: certPulse 2s infinite;
+    }
+    @keyframes certPulse {
+      0%,100% { opacity:1; } 50% { opacity:0.3; }
+    }
+    .cert-flip-hint {
+      font-family: var(--mono);
+      font-size: 0.58rem;
+      color: rgba(255,255,255,0.25);
+      letter-spacing: 0.06em;
+    }
+
+    /* BACK */
+    .cert-back {
+      background: white;
+      transform: rotateY(180deg);
+      display: flex;
+      flex-direction: column;
+      padding: 2rem 2.25rem;
+      border: 1px solid var(--rule);
+    }
+    .cert-back-label {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.75rem;
+    }
+    .cert-back-title {
+      font-family: var(--serif);
+      font-size: 1.1rem;
+      color: var(--ink);
+      margin-bottom: 0.75rem;
+      line-height: 1.25;
+    }
+    .cert-back-desc {
+      font-size: 0.82rem;
+      color: var(--mid);
+      line-height: 1.7;
+      flex: 1;
+    }
+    .cert-skills-covered {
+      margin-top: 1rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+    }
+    .cert-skill-tag {
+      font-family: var(--mono);
+      font-size: 0.58rem;
+      letter-spacing: 0.06em;
+      padding: 3px 8px;
+      border-radius: 2px;
+      background: var(--paper);
+      color: var(--mid);
+      border: 1px solid var(--rule);
+    }
+    .cert-back-close {
+      margin-top: 1rem;
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      color: rgba(107,100,89,0.4);
+      letter-spacing: 0.06em;
+      align-self: flex-end;
+    }
+
+    /* Wide card spans full width */
+    .cert-card-wide {
+      grid-column: 1 / -1;
+      height: auto;
+      perspective: none;
+    }
+    .cert-card-wide .cert-card-inner {
+      transform-style: flat;
+      transition: none;
+      height: auto;
+    }
+    .cert-card-wide:hover .cert-card-inner {
+      transform: none;
+    }
+    .cert-card-wide .cert-front {
+      position: relative;
+      backface-visibility: visible;
+      -webkit-backface-visibility: visible;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      height: auto;
+      border-radius: 8px;
+      padding: 0;
+      cursor: default;
+    }
+    .cert-card-wide .cert-front::after { display: none; }
+    .cert-wide-half {
+      padding: 2.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      position: relative;
+    }
+    .cert-wide-half + .cert-wide-half {
+      border-left: 1px solid rgba(255,255,255,0.06);
+    }
+    .cert-wide-half::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+      background-size: 28px 28px;
+      pointer-events: none;
+    }
+    .cert-wide-ribbon {
+      position: absolute;
+      top: 18px; right: -28px;
+      background: var(--accent);
+      color: white;
+      font-family: var(--mono);
+      font-size: 0.48rem;
+      letter-spacing: 0.15em;
+      padding: 3px 38px;
+      transform: rotate(45deg);
+      font-weight: 700;
+      overflow: hidden;
+    }
+    .cert-wide-half-title {
+      font-family: var(--serif);
+      font-size: 1.25rem;
+      color: white;
+      line-height: 1.2;
+    }
+    .cert-wide-half-title em { font-style:italic; color: var(--accent); }
+    .cert-wide-half-desc {
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.45);
+      line-height: 1.65;
+      flex: 1;
+    }
+
+    /* ══════════════════════════════
+       SKILLS SECTION
+    ══════════════════════════════ */
+    .skills-section {
+      padding: 5rem 4rem;
+      background: white;
+      border-top: 1px solid var(--rule);
+    }
+    .skills-categories {
+      margin-top: 2.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2.5rem;
+    }
+    .skill-category {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      gap: 2rem;
+      align-items: start;
+      padding-bottom: 2.5rem;
+      border-bottom: 1px solid var(--rule);
+    }
+    .skill-category:last-child { border-bottom: none; padding-bottom: 0; }
+    .skill-cat-label {
       font-family: var(--mono);
       font-size: 0.65rem;
       letter-spacing: 0.12em;
       text-transform: uppercase;
       color: var(--accent);
-    }
-    .cert-name {
-      font-family: var(--serif);
-      font-size: 1.5rem;
-      line-height: 1.2;
-    }
-    .cert-desc {
-      font-size: 0.88rem;
-      color: var(--mid);
-      line-height: 1.7;
-    }
-    .cert-badge {
-      display: inline-flex;
-      align-items: center;
+      padding-top: 4px;
+      display: flex;
+      flex-direction: column;
       gap: 0.4rem;
-      background: var(--rule);
-      padding: 0.3rem 0.75rem;
-      border-radius: 2px;
-      font-family: var(--mono);
-      font-size: 0.62rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--mid);
-      align-self: flex-start;
     }
-    .cert-badge.verified { background: #e8f5ea; color: #2d7a3a; }
-    .cert-badge.verified::before { content: '✓ '; }
-    .skills-strip {
-      padding: 5rem 4rem;
-      background: white;
-    }
-    .skills-strip h2 {
-      font-family: var(--serif);
+    .skill-cat-count {
       font-size: 2rem;
-      margin-bottom: 2rem;
+      font-family: var(--serif);
+      color: var(--ink);
+      line-height: 1;
+      letter-spacing: -0.02em;
     }
-    .all-skills {
+    .skill-pills-group {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.6rem;
+      gap: 0.5rem;
+      align-items: flex-start;
     }
     .skill-pill {
       font-family: var(--mono);
-      font-size: 0.7rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      padding: 0.45rem 1rem;
+      font-size: 0.68rem;
+      letter-spacing: 0.06em;
+      padding: 0.4rem 0.9rem;
+      border-radius: 3px;
       border: 1px solid var(--rule);
       color: var(--mid);
-      border-radius: 2px;
+      background: var(--paper);
       transition: all 0.2s;
+      cursor: default;
     }
-    .skill-pill:hover { border-color: var(--accent); color: var(--accent); }
+    .skill-pill:hover,
+    .skill-pill.lit {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: rgba(200,75,47,0.04);
+    }
+    .skill-pill.core {
+      font-size: 0.78rem;
+      padding: 0.5rem 1.1rem;
+      background: var(--ink);
+      border-color: var(--ink);
+      color: white;
+      font-weight: 500;
+    }
+    .skill-pill.core:hover {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: white;
+    }
 
     @media(max-width:900px){
+      .certs-section { padding: 3rem 1.5rem; }
       .certs-grid { grid-template-columns: 1fr; }
-      .cert-card { padding: 2rem 1.5rem; }
-      .skills-strip { padding: 3rem 1.5rem; }
+      .cert-card-wrap { height: 300px; }
+      .cert-card-wide .cert-front { grid-template-columns: 1fr; }
+      .cert-wide-half + .cert-wide-half { border-left: none; border-top: 1px solid rgba(255,255,255,0.06); }
+      .skills-section { padding: 3rem 1.5rem; }
+      .skill-category { grid-template-columns: 1fr; gap: 1rem; }
     }
   </style>
 </head>
@@ -117,59 +406,254 @@
   <div class="section-label">Credentials</div>
   <h1>Certifications &<br>Expertise</h1>
   <p>Formally verified skills backed by 15+ years of hands-on practice in learning design and technology.</p>
+  <p class="certs-hero-note">Hover each card to see the skills covered →</p>
 </div>
 
-<section class="section">
+<!-- CERTIFICATIONS -->
+<section class="certs-section reveal">
   <div class="section-label">Certifications</div>
 
   <div class="certs-grid">
-    <div class="cert-card reveal">
-      <div class="cert-icon">🎬</div>
-      <div class="cert-issuer">TechSmith</div>
-      <div class="cert-name">Camtasia Explorer Certified</div>
-      <p class="cert-desc">Formal certification in Camtasia video production and editing — covering screen recording, multi-track editing, interactive elements, captions, and production workflows for eLearning and training video.</p>
-      <span class="cert-badge verified">Verified</span>
+
+    <!-- CARD 1: TechSmith Camtasia -->
+    <div class="cert-card-wrap reveal" onclick="this.classList.toggle('flipped')" tabindex="0" onkeydown="if(event.key==='Enter')this.classList.toggle('flipped')" aria-label="TechSmith Camtasia Explorer Certified — click to see details">
+      <div class="cert-card-inner">
+        <div class="cert-front">
+          <div class="cert-issuer-row">
+            <div class="cert-logo-box" style="background:rgba(0,168,189,0.15);">🎬</div>
+            <div class="cert-issuer-name">TechSmith</div>
+          </div>
+          <div class="cert-front-title">Camtasia Explorer<br><em>Certified</em></div>
+          <div class="cert-front-bottom">
+            <span class="cert-verified-pill">
+              <span class="cert-verified-dot"></span>
+              Verified
+            </span>
+            <span class="cert-flip-hint">Hover for details →</span>
+          </div>
+        </div>
+        <div class="cert-back">
+          <div class="cert-back-label">TechSmith · Camtasia</div>
+          <div class="cert-back-title">Camtasia Explorer Certified</div>
+          <p class="cert-back-desc">Formal certification covering Camtasia's full production workflow — screen recording, multi-track timeline editing, interactive elements, annotations, captions, and export pipelines for eLearning and training video contexts.</p>
+          <div class="cert-skills-covered">
+            <span class="cert-skill-tag">Screen Recording</span>
+            <span class="cert-skill-tag">Multi-track Editing</span>
+            <span class="cert-skill-tag">Captions & Subtitles</span>
+            <span class="cert-skill-tag">Interactive Elements</span>
+            <span class="cert-skill-tag">eLearning Export</span>
+            <span class="cert-skill-tag">Video Production</span>
+          </div>
+          <span class="cert-back-close">↩ Hover to flip back</span>
+        </div>
+      </div>
     </div>
 
-    <div class="cert-card reveal">
-      <div class="cert-icon">⚡</div>
-      <div class="cert-issuer">Articulate</div>
-      <div class="cert-name">Articulate Storyline Certified</div>
-      <p class="cert-desc">Certified proficiency in Articulate Storyline 360 — the industry-leading eLearning authoring tool. Advanced use includes JavaScript integration, custom interactions, API connections, and complex branching logic.</p>
-      <span class="cert-badge verified">Verified</span>
+    <!-- CARD 2: Articulate Storyline -->
+    <div class="cert-card-wrap reveal" onclick="this.classList.toggle('flipped')" tabindex="0" onkeydown="if(event.key==='Enter')this.classList.toggle('flipped')" aria-label="Articulate Storyline Certified — click to see details">
+      <div class="cert-card-inner">
+        <div class="cert-front">
+          <div class="cert-issuer-row">
+            <div class="cert-logo-box" style="background:rgba(228,77,38,0.15);">⚡</div>
+            <div class="cert-issuer-name">Articulate</div>
+          </div>
+          <div class="cert-front-title">Articulate Storyline<br><em>Certified</em></div>
+          <div class="cert-front-bottom">
+            <span class="cert-verified-pill">
+              <span class="cert-verified-dot"></span>
+              Verified
+            </span>
+            <span class="cert-flip-hint">Hover for details →</span>
+          </div>
+        </div>
+        <div class="cert-back">
+          <div class="cert-back-label">Articulate · Storyline 360</div>
+          <div class="cert-back-title">Articulate Storyline Certified</div>
+          <p class="cert-back-desc">Certified in Storyline 360 — the industry standard authoring tool. Advanced use extends well beyond the certification: JavaScript integration, REST API connections, custom focus order, xAPI statement design, and reusable template architecture.</p>
+          <div class="cert-skills-covered">
+            <span class="cert-skill-tag">Storyline 360</span>
+            <span class="cert-skill-tag">JavaScript Integration</span>
+            <span class="cert-skill-tag">Custom Interactions</span>
+            <span class="cert-skill-tag">Branching Logic</span>
+            <span class="cert-skill-tag">xAPI / SCORM</span>
+            <span class="cert-skill-tag">Accessibility</span>
+          </div>
+          <span class="cert-back-close">↩ Hover to flip back</span>
+        </div>
+      </div>
     </div>
+
+    <!-- WIDE CARD: LinkedIn Learning (2 certs) -->
+    <div class="cert-card-wrap cert-card-wide reveal">
+      <div class="cert-card-inner">
+        <div class="cert-front">
+          <div class="cert-wide-half" style="overflow:hidden;">
+            <div style="position:relative;z-index:1;">
+              <div class="cert-issuer-row" style="margin-bottom:0.75rem;">
+                <div class="cert-logo-box" style="background:rgba(0,119,181,0.15);">🎓</div>
+                <div class="cert-issuer-name">LinkedIn Learning</div>
+              </div>
+              <div class="cert-wide-half-title">Certified<br><em>L&D Professional</em></div>
+              <p class="cert-wide-half-desc">Learning & Development strategy, needs analysis, training design, programme evaluation, and stakeholder management across enterprise L&D functions.</p>
+              <span class="cert-verified-pill" style="margin-top:0.5rem;">
+                <span class="cert-verified-dot"></span>
+                Verified
+              </span>
+            </div>
+            <div class="cert-wide-ribbon">CERTIFIED</div>
+          </div>
+          <div class="cert-wide-half" style="overflow:hidden;">
+            <div style="position:relative;z-index:1;">
+              <div class="cert-issuer-row" style="margin-bottom:0.75rem;">
+                <div class="cert-logo-box" style="background:rgba(0,119,181,0.15);">📐</div>
+                <div class="cert-issuer-name">LinkedIn Learning</div>
+              </div>
+              <div class="cert-wide-half-title">Certified Instructional<br><em>Developer</em></div>
+              <p class="cert-wide-half-desc">Instructional design principles, adult learning theory, content sequencing, assessment design, and multimedia development for diverse learning contexts.</p>
+              <span class="cert-verified-pill" style="margin-top:0.5rem;">
+                <span class="cert-verified-dot"></span>
+                Verified
+              </span>
+            </div>
+            <div class="cert-wide-ribbon">CERTIFIED</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WIDE CARD: AMA certs -->
+    <div class="cert-card-wrap cert-card-wide reveal">
+      <div class="cert-card-inner">
+        <div class="cert-front">
+          <div class="cert-wide-half" style="overflow:hidden;">
+            <div style="position:relative;z-index:1;">
+              <div class="cert-issuer-row" style="margin-bottom:0.75rem;">
+                <div class="cert-logo-box" style="background:rgba(200,75,47,0.15);">🎤</div>
+                <div class="cert-issuer-name">AMA · Ahmedabad</div>
+              </div>
+              <div class="cert-wide-half-title">Certified<br><em>Train The Trainer</em></div>
+              <p class="cert-wide-half-desc">Facilitation techniques, learner engagement, classroom management, and designing training delivery for varied audiences and contexts.</p>
+              <span class="cert-verified-pill" style="margin-top:0.5rem;">
+                <span class="cert-verified-dot"></span>
+                Verified
+              </span>
+            </div>
+            <div class="cert-wide-ribbon">CERTIFIED</div>
+          </div>
+          <div class="cert-wide-half" style="overflow:hidden;">
+            <div style="position:relative;z-index:1;">
+              <div class="cert-issuer-row" style="margin-bottom:0.75rem;">
+                <div class="cert-logo-box" style="background:rgba(200,75,47,0.15);">🗣️</div>
+                <div class="cert-issuer-name">AMA · Ahmedabad</div>
+              </div>
+              <div class="cert-wide-half-title">Effective<br><em>Public Speaker</em></div>
+              <p class="cert-wide-half-desc">Structured delivery, vocal presence, audience reading, and confidence under pressure — applied directly in Community of Practice facilitation and stakeholder presentations.</p>
+              <span class="cert-verified-pill" style="margin-top:0.5rem;">
+                <span class="cert-verified-dot"></span>
+                Verified
+              </span>
+            </div>
+            <div class="cert-wide-ribbon">CERTIFIED</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </section>
 
-<div class="skills-strip reveal">
+<!-- SKILLS -->
+<section class="skills-section reveal">
   <div class="section-label">Full Skills Profile</div>
-  <h2>Tools & Technologies</h2>
-  <div class="all-skills">
-    <span class="skill-pill">Articulate Storyline 360</span>
-    <span class="skill-pill">Articulate Rise 360</span>
-    <span class="skill-pill">Camtasia</span>
-    <span class="skill-pill">JavaScript</span>
-    <span class="skill-pill">REST API Integration</span>
-    <span class="skill-pill">xAPI</span>
-    <span class="skill-pill">SCORM</span>
-    <span class="skill-pill">Murf AI</span>
-    <span class="skill-pill">Synthesia</span>
-    <span class="skill-pill">GPT Workflows</span>
-    <span class="skill-pill">FFmpeg</span>
-    <span class="skill-pill">Shell Scripting</span>
-    <span class="skill-pill">Saba LMS</span>
-    <span class="skill-pill">LMS Administration</span>
-    <span class="skill-pill">Video Localization</span>
-    <span class="skill-pill">Subtitling & Captions</span>
-    <span class="skill-pill">Instructional Design</span>
-    <span class="skill-pill">Storyboarding</span>
-    <span class="skill-pill">Accessibility (WCAG)</span>
-    <span class="skill-pill">Learning Analytics</span>
-    <span class="skill-pill">Template Architecture</span>
-    <span class="skill-pill">Multimedia Production</span>
-    <span class="skill-pill">Project Coordination</span>
+  <h2 class="section-heading" style="margin-bottom:0.5rem;">Tools & Technologies</h2>
+  <p style="font-size:0.9rem;color:var(--mid);max-width:52ch;line-height:1.7;">Organised by practice area. Core tools shown in dark — these are daily-use, deep-expertise skills.</p>
+
+  <div class="skills-categories">
+
+    <div class="skill-category reveal">
+      <div class="skill-cat-label">
+        <span class="skill-cat-count">01</span>
+        Authoring &<br>Production
+      </div>
+      <div class="skill-pills-group" data-cat="authoring">
+        <span class="skill-pill core">Articulate Storyline 360</span>
+        <span class="skill-pill core">Articulate Rise 360</span>
+        <span class="skill-pill core">Camtasia</span>
+        <span class="skill-pill">Adobe Captivate</span>
+        <span class="skill-pill">PowerPoint</span>
+        <span class="skill-pill">Multimedia Production</span>
+        <span class="skill-pill">Storyboarding</span>
+      </div>
+    </div>
+
+    <div class="skill-category reveal">
+      <div class="skill-cat-label">
+        <span class="skill-cat-count">02</span>
+        Development &<br>Integration
+      </div>
+      <div class="skill-pills-group" data-cat="dev">
+        <span class="skill-pill core">JavaScript</span>
+        <span class="skill-pill core">REST API Integration</span>
+        <span class="skill-pill core">xAPI / Tin Can</span>
+        <span class="skill-pill core">SCORM</span>
+        <span class="skill-pill">HTML5</span>
+        <span class="skill-pill">Shell Scripting</span>
+        <span class="skill-pill">FFmpeg</span>
+        <span class="skill-pill">Template Architecture</span>
+      </div>
+    </div>
+
+    <div class="skill-category reveal">
+      <div class="skill-cat-label">
+        <span class="skill-cat-count">03</span>
+        AI &<br>Automation
+      </div>
+      <div class="skill-pills-group" data-cat="ai">
+        <span class="skill-pill core">Murf AI</span>
+        <span class="skill-pill core">GPT Workflows</span>
+        <span class="skill-pill">Synthesia</span>
+        <span class="skill-pill">HeyGen</span>
+        <span class="skill-pill">Custom GPT Bots</span>
+        <span class="skill-pill">Video Localization</span>
+        <span class="skill-pill">Workflow Automation</span>
+      </div>
+    </div>
+
+    <div class="skill-category reveal">
+      <div class="skill-cat-label">
+        <span class="skill-cat-count">04</span>
+        LMS &<br>Analytics
+      </div>
+      <div class="skill-pills-group" data-cat="lms">
+        <span class="skill-pill core">Saba LMS</span>
+        <span class="skill-pill core">LMS Administration</span>
+        <span class="skill-pill">Zing HR LMS</span>
+        <span class="skill-pill">ABARA LMS</span>
+        <span class="skill-pill">Learning Analytics</span>
+        <span class="skill-pill">xAPI LRS</span>
+      </div>
+    </div>
+
+    <div class="skill-category reveal">
+      <div class="skill-cat-label">
+        <span class="skill-cat-count">05</span>
+        Instructional<br>Design
+      </div>
+      <div class="skill-pills-group" data-cat="id">
+        <span class="skill-pill core">Instructional Design</span>
+        <span class="skill-pill core">Accessibility (WCAG 2.1)</span>
+        <span class="skill-pill">ADDIE · SAM</span>
+        <span class="skill-pill">Bloom's Taxonomy</span>
+        <span class="skill-pill">Gagné's 9 Events</span>
+        <span class="skill-pill">Kirkpatrick Model</span>
+        <span class="skill-pill">4C/ID · Merrill</span>
+        <span class="skill-pill">Subtitling & Captions</span>
+        <span class="skill-pill">Project Coordination</span>
+      </div>
+    </div>
+
   </div>
-</div>
+</section>
 
 <section class="cta-strip reveal">
   <h2>Want to see these skills <em>in action?</em></h2>
@@ -186,5 +670,18 @@
 </footer>
 
 <script src="../js/main.js"></script>
+<script>
+// Skill pill hover — light up whole category on hover
+document.querySelectorAll('.skill-pill').forEach(pill => {
+  pill.addEventListener('mouseenter', () => {
+    const group = pill.closest('.skill-pills-group');
+    group.querySelectorAll('.skill-pill').forEach(p => p.classList.add('lit'));
+  });
+  pill.addEventListener('mouseleave', () => {
+    const group = pill.closest('.skill-pills-group');
+    group.querySelectorAll('.skill-pill').forEach(p => p.classList.remove('lit'));
+  });
+});
+</script>
 </body>
 </html>
