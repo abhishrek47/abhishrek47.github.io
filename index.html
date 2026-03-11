@@ -502,9 +502,9 @@
     }
     .demo-cards {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(4, 1fr);
       gap: 1rem;
-      max-width: 900px;
+      max-width: 1200px;
     }
     .demo-card {
       background: rgba(255,255,255,0.05);
@@ -605,14 +605,14 @@
       /* Hero: stack vertically */
       .hero { grid-template-columns: 1fr; min-height: auto; max-height: none; }
       .hero-left { padding: 2.5rem 1.75rem 2rem; justify-content: flex-start; }
-      /* Right panel: side-by-side on tablet */
+      /* Right panel: side-by-side on tablet — name left, image right */
       .hero-right { flex-direction: row; align-items: flex-end; min-height: 260px; padding: 0; }
-      .hero-right-name { padding: 2rem 1.75rem; flex: 1; align-self: center; }
-      .profile-wrap { flex: 0 0 auto; width: 180px; align-items: flex-end; }
+      .hero-right-name { padding: 2rem 1.75rem; flex: 1; align-self: center; margin-top: 0; }
+      .profile-wrap { flex: 0 0 180px; width: 180px; align-items: flex-end; margin-top: 0; }
       .profile-img { width: 180px; border-radius: 90px 90px 0 0; }
       .profile-badge { display: none; }
       .tech-grid { display: none; }
-      /* Demo cards: 2-col */
+      /* Demo cards: 2-col on tablet */
       .demo-callout { padding: 4rem 1.75rem; }
       .demo-cards { grid-template-columns: 1fr 1fr; max-width: 100%; }
       .demo-callout::before { display: none; }
@@ -629,16 +629,34 @@
       .hero h1 { font-size: 2.1rem; }
       .hero-sub { font-size: 0.88rem; margin-bottom: 1.25rem; }
       .hero-actions { gap: 0.75rem; }
-      /* Phone: stack name + image vertically */
-      .hero-right { flex-direction: column; min-height: auto; align-items: center; }
-      .hero-right-name { padding: 1.5rem 1.25rem 0.5rem; width: 100%; flex: none; }
-      .profile-wrap { width: 100%; flex: 0 0 auto; align-items: flex-end; }
-      .profile-img { width: min(200px, 58%); border-radius: 100px 100px 0 0; }
+      /* Phone: name above image, fully sequential, NO overlap */
+      .hero-right {
+        flex-direction: column;
+        align-items: stretch;
+        min-height: auto;
+      }
+      .hero-right-name {
+        position: static;   /* override any inherited positioning */
+        flex: 0 0 auto;
+        width: 100%;
+        padding: 1.5rem 1.25rem 0.75rem;
+        margin-top: 0;
+      }
+      .profile-wrap {
+        position: static;
+        flex: 0 0 auto;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: flex-end;
+        margin-top: 0;
+      }
+      .profile-img { width: min(200px, 55%); border-radius: 100px 100px 0 0; }
       /* Proof bar */
       .proof-item { min-width: 44%; }
       .proof-num { font-size: 1.3rem; }
       .proof-label { font-size: 0.62rem; }
-      /* Demo cards: single col */
+      /* Demo cards: single col on phone */
       .demo-cards { grid-template-columns: 1fr; }
       .demo-callout { padding: 3rem 1.25rem; }
       /* Case rows */
@@ -831,6 +849,18 @@
       </div>
       <div class="case-arrow">→</div>
     </a>
+    <a class="case-row" href="demo4/index.html">
+      <div class="case-num">04</div>
+      <div>
+        <div class="case-tag">xAPI · Learning Analytics · LRS · Data Visibility</div>
+        <div class="case-title">The Invisible Student <span class="case-demo-badge">Live Demo</span></div>
+        <p class="case-desc">Built a live xAPI stream visualiser — step through a real course and watch every learner action generate a structured statement in real time, exactly as it appears in an LRS.</p>
+        <div class="case-tools">
+          <span class="tag">xAPI / Tin Can</span><span class="tag">LRS</span><span class="tag">Learning Analytics</span><span class="tag">JavaScript</span><span class="tag">Live JSON</span>
+        </div>
+      </div>
+      <div class="case-arrow">→</div>
+    </a>
   </div>
 </section>
 
@@ -859,6 +889,13 @@
       <div class="demo-card-num">Demo 03</div>
       <div class="demo-card-title">FFmpeg Terminal Simulation</div>
       <div class="demo-card-desc">Run the actual localization script in the browser. Watch 8 languages process in real time.</div>
+      <div class="demo-card-cta">Try it now →</div>
+    </a>
+    <a class="demo-card" href="demo4/index.html">
+      <span class="demo-card-pulse"></span>
+      <div class="demo-card-num">Demo 04</div>
+      <div class="demo-card-title">The Invisible Student</div>
+      <div class="demo-card-desc">Step through a course and watch every action become a live xAPI statement — the data layer most never see.</div>
       <div class="demo-card-cta">Try it now →</div>
     </a>
   </div>
@@ -899,24 +936,23 @@
     localStorage.setItem('at_metrics_d1', '412');
     localStorage.setItem('at_metrics_d2', '287');
     localStorage.setItem('at_metrics_d3', '203');
+    localStorage.setItem('at_metrics_d4', '47');
     localStorage.setItem(KEY_SEEDED, '1');
     localStorage.setItem(KEY, '0');
   }
 
-  // Count up homepage visits (each visit = slight organic growth)
   let visits = parseInt(localStorage.getItem(KEY) || '0');
   visits += 1;
   localStorage.setItem(KEY, visits);
 
-  // Compute total: seed baseline + stored demo counts + homepage-visit drift
   let total = 0;
-  ['d1','d2','d3'].forEach(k => {
+  ['d1','d2','d3','d4'].forEach(k => {
     total += parseInt(localStorage.getItem('at_metrics_' + k) || '0');
   });
-  // Add any direct demo session increments from the demo pages themselves
   total += parseInt(localStorage.getItem('demo1_sessions') || '0');
   total += parseInt(localStorage.getItem('demo2_sessions') || '0');
   total += parseInt(localStorage.getItem('demo3_sessions') || '0');
+  total += parseInt(localStorage.getItem('demo4_sessions') || '0');
 
   // Animate the counter
   const el = document.getElementById('demoSessionCount');
