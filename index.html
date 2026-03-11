@@ -811,6 +811,308 @@
   </div>
 </section>
 
+<!-- SKILLS RADAR -->
+<section class="radar-section reveal" id="skills">
+  <div class="radar-inner">
+    <div class="radar-left">
+      <div class="section-label">Competency Map</div>
+      <h2 class="section-heading" style="margin-bottom:1rem;">Where I sit across<br>the L&D spectrum</h2>
+      <p class="radar-desc">Most L&D professionals are strong in one dimension. The chart maps five axes honestly — hover each axis to see what it means in practice.</p>
+      <div class="radar-legend" id="radar-legend">
+        <div class="radar-leg-item active" data-axis="0" onmouseenter="highlightAxis(0)" onmouseleave="resetAxis()">
+          <div class="radar-leg-dot" style="background:#c84b2f"></div>
+          <div>
+            <div class="radar-leg-title">Instructional Design</div>
+            <div class="radar-leg-desc" id="leg-desc-0">ID models, storyboarding, learning theory applied as structural constraints — not just labels.</div>
+          </div>
+        </div>
+        <div class="radar-leg-item" data-axis="1" onmouseenter="highlightAxis(1)" onmouseleave="resetAxis()">
+          <div class="radar-leg-dot" style="background:#c9973a"></div>
+          <div>
+            <div class="radar-leg-title">Technical Development</div>
+            <div class="radar-leg-desc" id="leg-desc-1">JavaScript in Storyline, REST APIs, SCORM/xAPI architecture, FFmpeg scripting.</div>
+          </div>
+        </div>
+        <div class="radar-leg-item" data-axis="2" onmouseenter="highlightAxis(2)" onmouseleave="resetAxis()">
+          <div class="radar-leg-dot" style="background:#3dba6e"></div>
+          <div>
+            <div class="radar-leg-title">AI Integration</div>
+            <div class="radar-leg-desc" id="leg-desc-2">Live API voice generation, GPT workflow tools, AI-powered storyboard generation.</div>
+          </div>
+        </div>
+        <div class="radar-leg-item" data-axis="3" onmouseenter="highlightAxis(3)" onmouseleave="resetAxis()">
+          <div class="radar-leg-dot" style="background:#5b6abf"></div>
+          <div>
+            <div class="radar-leg-title">Automation & Systems</div>
+            <div class="radar-leg-desc" id="leg-desc-3">Template architecture, localization pipelines, workflow automation that multiplies team output.</div>
+          </div>
+        </div>
+        <div class="radar-leg-item" data-axis="4" onmouseenter="highlightAxis(4)" onmouseleave="resetAxis()">
+          <div class="radar-leg-dot" style="background:#2a9d8f"></div>
+          <div>
+            <div class="radar-leg-title">Analytics & Data</div>
+            <div class="radar-leg-desc" id="leg-desc-4">xAPI statement architecture, LRS data visibility, learning measurement strategy.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="radar-right">
+      <canvas id="radarCanvas" width="420" height="420"></canvas>
+    </div>
+  </div>
+</section>
+
+<style>
+/* ══════════════════════════════════
+   SKILLS RADAR SECTION
+══════════════════════════════════ */
+.radar-section {
+  background: white;
+  padding: 5rem 4rem;
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+}
+.radar-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.radar-desc {
+  font-size: 0.95rem;
+  color: var(--mid);
+  line-height: 1.75;
+  margin-bottom: 2rem;
+  max-width: 42ch;
+}
+.radar-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.radar-leg-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.6rem 0.75rem;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  cursor: default;
+  transition: background 0.2s, border-color 0.2s;
+}
+.radar-leg-item:hover,
+.radar-leg-item.active {
+  background: var(--paper);
+  border-color: var(--rule);
+}
+.radar-leg-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 4px;
+}
+.radar-leg-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 2px;
+}
+.radar-leg-desc {
+  font-size: 0.75rem;
+  color: var(--mid);
+  line-height: 1.5;
+}
+.radar-right {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#radarCanvas {
+  max-width: 100%;
+  height: auto;
+}
+@media(max-width:900px) {
+  .radar-inner { grid-template-columns: 1fr; gap: 2.5rem; }
+  .radar-right { order: -1; }
+  #radarCanvas { max-width: 320px; }
+}
+@media(max-width:600px) {
+  .radar-section { padding: 3rem 1.5rem; }
+}
+</style>
+
+<script>
+(function() {
+  const canvas = document.getElementById('radarCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const W = 420, H = 420;
+  const cx = W / 2, cy = H / 2;
+  const R = 160; // outer radius
+
+  const axes = [
+    { label: 'Instructional\nDesign',  value: 0.88, color: '#c84b2f' },
+    { label: 'Technical\nDevelopment', value: 0.82, color: '#c9973a' },
+    { label: 'AI\nIntegration',        value: 0.78, color: '#3dba6e' },
+    { label: 'Automation\n& Systems',  value: 0.85, color: '#5b6abf' },
+    { label: 'Analytics\n& Data',      value: 0.70, color: '#2a9d8f' },
+  ];
+
+  const N = axes.length;
+  let highlighted = -1;
+  let animProgress = 0;
+  let animFrame;
+
+  function angleOf(i) {
+    return (Math.PI * 2 * i / N) - Math.PI / 2;
+  }
+
+  function pointAt(i, r) {
+    const a = angleOf(i);
+    return { x: cx + r * Math.cos(a), y: cy + r * Math.sin(a) };
+  }
+
+  function drawGrid() {
+    const levels = 5;
+    for (let l = 1; l <= levels; l++) {
+      const r = R * (l / levels);
+      ctx.beginPath();
+      for (let i = 0; i < N; i++) {
+        const p = pointAt(i, r);
+        i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y);
+      }
+      ctx.closePath();
+      ctx.strokeStyle = l === levels ? 'rgba(15,14,12,0.12)' : 'rgba(15,14,12,0.06)';
+      ctx.lineWidth = l === levels ? 1.5 : 1;
+      ctx.stroke();
+
+      // Level label on rightmost axis
+      if (l < levels) {
+        const lp = pointAt(1, r);
+        ctx.fillStyle = 'rgba(107,100,89,0.4)';
+        ctx.font = '10px sans-serif';
+        ctx.textAlign = 'left';
+        ctx.fillText((l * 20) + '%', lp.x + 4, lp.y + 3);
+      }
+    }
+    // Spokes
+    for (let i = 0; i < N; i++) {
+      const p = pointAt(i, R);
+      ctx.beginPath();
+      ctx.moveTo(cx, cy);
+      ctx.lineTo(p.x, p.y);
+      ctx.strokeStyle = 'rgba(15,14,12,0.08)';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+    }
+  }
+
+  function drawShape(progress, highlightIdx) {
+    // Fill
+    ctx.beginPath();
+    for (let i = 0; i < N; i++) {
+      const v = axes[i].value * progress;
+      const p = pointAt(i, R * v);
+      i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y);
+    }
+    ctx.closePath();
+    ctx.fillStyle = 'rgba(200,75,47,0.08)';
+    ctx.fill();
+
+    // Stroke
+    ctx.beginPath();
+    for (let i = 0; i < N; i++) {
+      const v = axes[i].value * progress;
+      const p = pointAt(i, R * v);
+      i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y);
+    }
+    ctx.closePath();
+    ctx.strokeStyle = 'rgba(200,75,47,0.5)';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // Dots
+    for (let i = 0; i < N; i++) {
+      const v = axes[i].value * progress;
+      const p = pointAt(i, R * v);
+      const isHL = highlightIdx === i;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, isHL ? 7 : 5, 0, Math.PI * 2);
+      ctx.fillStyle = isHL ? axes[i].color : 'white';
+      ctx.fill();
+      ctx.strokeStyle = axes[i].color;
+      ctx.lineWidth = isHL ? 2.5 : 2;
+      ctx.stroke();
+
+      // Value label on hover
+      if (isHL && progress >= 1) {
+        const pct = Math.round(axes[i].value * 100);
+        ctx.fillStyle = axes[i].color;
+        ctx.font = 'bold 13px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(pct + '%', p.x, p.y - 14);
+      }
+    }
+  }
+
+  function drawLabels(highlightIdx) {
+    const PAD = 28;
+    ctx.textAlign = 'center';
+    for (let i = 0; i < N; i++) {
+      const p = pointAt(i, R + PAD);
+      const lines = axes[i].label.split('\n');
+      const isHL = highlightIdx === i;
+      ctx.fillStyle = isHL ? axes[i].color : 'rgba(15,14,12,0.65)';
+      ctx.font = isHL ? 'bold 12px sans-serif' : '11px sans-serif';
+      lines.forEach((line, li) => {
+        ctx.fillText(line, p.x, p.y + li * 14 - (lines.length - 1) * 7);
+      });
+    }
+  }
+
+  function draw(progress, hlIdx) {
+    ctx.clearRect(0, 0, W, H);
+    drawGrid();
+    drawShape(progress, hlIdx);
+    drawLabels(hlIdx);
+  }
+
+  // Animate in on first render
+  function animate() {
+    animProgress = Math.min(animProgress + 0.03, 1);
+    draw(animProgress, highlighted);
+    if (animProgress < 1) animFrame = requestAnimationFrame(animate);
+  }
+
+  // Intersection observer — start animation when section scrolls in
+  const section = document.getElementById('skills');
+  let started = false;
+  const obs = new IntersectionObserver(entries => {
+    if (entries[0].isIntersecting && !started) {
+      started = true;
+      animate();
+    }
+  }, { threshold: 0.3 });
+  if (section) obs.observe(section);
+
+  // Expose highlight function
+  window.highlightAxis = function(idx) {
+    highlighted = idx;
+    document.querySelectorAll('.radar-leg-item').forEach((el, i) => {
+      el.classList.toggle('active', i === idx);
+    });
+    draw(1, idx);
+  };
+  window.resetAxis = function() {
+    highlighted = -1;
+    document.querySelectorAll('.radar-leg-item').forEach(el => el.classList.remove('active'));
+    draw(1, -1);
+  };
+})();
+</script>
+
 <!-- CASE STUDIES PREVIEW -->
 <section class="cases-section reveal">
   <div class="section-label">Selected Work</div>
