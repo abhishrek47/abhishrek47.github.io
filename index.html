@@ -876,6 +876,745 @@
   </div>
 </section>
 
+<!-- ACCESSIBILITY SIMULATOR -->
+<section class="a11y-section reveal" id="accessibility">
+  <div class="a11y-header">
+    <div class="a11y-label">Accessibility Practice</div>
+    <h2 class="a11y-heading">Accessibility isn't a checklist.<br>It's an <em>architectural decision.</em></h2>
+    <p class="a11y-sub">Most eLearning developers add alt text at the end and call it done. The four scenarios below show what accessibility actually means inside Storyline — built into the template from the start, not retrofitted after the fact. Toggle each one to feel the difference.</p>
+  </div>
+
+  <div class="a11y-grid">
+
+    <!-- SCENARIO 1: FOCUS ORDER -->
+    <div class="a11y-card" id="a11y-focus">
+      <div class="a11y-card-header">
+        <div class="a11y-card-num">01</div>
+        <div>
+          <div class="a11y-card-title">Focus Order</div>
+          <div class="a11y-card-sub">Tab through the buttons below</div>
+        </div>
+        <div class="a11y-toggle-wrap">
+          <span class="a11y-toggle-label">OFF</span>
+          <button class="a11y-toggle" id="toggle-focus" onclick="toggleScenario('focus')" aria-pressed="false" aria-label="Toggle focus order fix">
+            <span class="a11y-toggle-knob"></span>
+          </button>
+          <span class="a11y-toggle-label">ON</span>
+        </div>
+      </div>
+      <div class="a11y-card-body">
+        <div class="a11y-demo-area">
+          <p class="a11y-demo-hint" id="focus-hint">Tab key moves focus in Storyline's broken default order — unpredictable, confusing for keyboard users.</p>
+          <div class="focus-buttons" id="focus-buttons">
+            <button class="focus-btn" tabindex="3" data-label="Next →">Next →</button>
+            <button class="focus-btn" tabindex="1" data-label="Start Course">Start Course</button>
+            <button class="focus-btn" tabindex="5" data-label="Resources">Resources</button>
+            <button class="focus-btn" tabindex="2" data-label="Menu">Menu</button>
+            <button class="focus-btn" tabindex="4" data-label="Back ←">Back ←</button>
+          </div>
+          <div class="a11y-tab-indicator">
+            <span class="tab-order-label">Tab order:</span>
+            <div class="tab-order-pills" id="focus-order-pills">
+              <span class="tab-pill active-pill">Next →</span>
+              <span class="tab-pill">Start Course</span>
+              <span class="tab-pill">Resources</span>
+              <span class="tab-pill">Menu</span>
+              <span class="tab-pill">Back ←</span>
+            </div>
+          </div>
+        </div>
+        <div class="a11y-fix-note" id="focus-fix-note">
+          <span class="fix-badge">✓ Fixed</span> Focus order now follows logical reading flow: Start Course → Menu → Back → Next → Resources. Defined explicitly in Storyline's Focus Order panel on every master slide.
+        </div>
+      </div>
+    </div>
+
+    <!-- SCENARIO 2: COLOUR CONTRAST -->
+    <div class="a11y-card" id="a11y-contrast">
+      <div class="a11y-card-header">
+        <div class="a11y-card-num">02</div>
+        <div>
+          <div class="a11y-card-title">Colour Contrast</div>
+          <div class="a11y-card-sub">WCAG 2.1 AA requires 4.5:1 ratio</div>
+        </div>
+        <div class="a11y-toggle-wrap">
+          <span class="a11y-toggle-label">OFF</span>
+          <button class="a11y-toggle" id="toggle-contrast" onclick="toggleScenario('contrast')" aria-pressed="false" aria-label="Toggle contrast fix">
+            <span class="a11y-toggle-knob"></span>
+          </button>
+          <span class="a11y-toggle-label">ON</span>
+        </div>
+      </div>
+      <div class="a11y-card-body">
+        <div class="a11y-demo-area">
+          <div class="contrast-demo" id="contrast-demo">
+            <div class="contrast-slide contrast-fail" id="contrast-slide">
+              <div class="contrast-badge-row">
+                <span class="contrast-ratio-badge fail" id="contrast-ratio">Ratio: 2.1:1 ✗ FAIL</span>
+                <span class="contrast-wcag-badge fail" id="contrast-wcag">Below WCAG AA</span>
+              </div>
+              <div class="contrast-card" id="contrast-card">
+                <div class="contrast-label" id="contrast-label">Module Introduction</div>
+                <div class="contrast-body" id="contrast-body">By the end of this module, you will be able to identify the three core compliance requirements and apply them in your daily workflow.</div>
+                <button class="contrast-btn" id="contrast-btn">Continue →</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="a11y-fix-note" id="contrast-fix-note">
+          <span class="fix-badge">✓ Fixed</span> Contrast ratio raised to 7.2:1 — exceeds WCAG AA (4.5:1) and meets AAA. Enforced at the Storyline theme colour level so every text element inherits it automatically.
+        </div>
+      </div>
+    </div>
+
+    <!-- SCENARIO 3: ALT TEXT -->
+    <div class="a11y-card" id="a11y-alt">
+      <div class="a11y-card-header">
+        <div class="a11y-card-num">03</div>
+        <div>
+          <div class="a11y-card-title">Alt Text Strategy</div>
+          <div class="a11y-card-sub">What a screen reader would announce</div>
+        </div>
+        <div class="a11y-toggle-wrap">
+          <span class="a11y-toggle-label">OFF</span>
+          <button class="a11y-toggle" id="toggle-alt" onclick="toggleScenario('alt')" aria-pressed="false" aria-label="Toggle alt text fix">
+            <span class="a11y-toggle-knob"></span>
+          </button>
+          <span class="a11y-toggle-label">ON</span>
+        </div>
+      </div>
+      <div class="a11y-card-body">
+        <div class="a11y-demo-area">
+          <div class="alt-demo">
+            <div class="alt-slide">
+              <div class="alt-image-mock">
+                <div class="alt-image-inner">
+                  <div class="alt-img-icon">📊</div>
+                  <div class="alt-img-caption">Workflow diagram</div>
+                </div>
+              </div>
+              <div class="alt-sr-output">
+                <div class="alt-sr-label">
+                  <span class="sr-icon">🔊</span> Screen reader announces:
+                </div>
+                <div class="alt-sr-text" id="alt-sr-text">"image"</div>
+              </div>
+            </div>
+            <div class="alt-tag-row">
+              <div class="alt-tag-item">
+                <div class="alt-tag-type" id="alt-tag-type">Missing alt text</div>
+                <div class="alt-tag-code" id="alt-tag-code">alt=""</div>
+              </div>
+              <div class="alt-tag-item" id="alt-decorative-item" style="opacity:0.35">
+                <div class="alt-tag-type">Decorative image</div>
+                <div class="alt-tag-code">marked decorative</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="a11y-fix-note" id="alt-fix-note">
+          <span class="fix-badge">✓ Fixed</span> Informational images get descriptive alt text explaining the content. Decorative images are explicitly marked as decorative in Storyline — screen readers skip them entirely, reducing noise.
+        </div>
+      </div>
+    </div>
+
+    <!-- SCENARIO 4: KEYBOARD NAVIGATION -->
+    <div class="a11y-card" id="a11y-keyboard">
+      <div class="a11y-card-header">
+        <div class="a11y-card-num">04</div>
+        <div>
+          <div class="a11y-card-title">Keyboard Navigation</div>
+          <div class="a11y-card-sub">Try interacting without a mouse</div>
+        </div>
+        <div class="a11y-toggle-wrap">
+          <span class="a11y-toggle-label">OFF</span>
+          <button class="a11y-toggle" id="toggle-keyboard" onclick="toggleScenario('keyboard')" aria-pressed="false" aria-label="Toggle keyboard navigation fix">
+            <span class="a11y-toggle-knob"></span>
+          </button>
+          <span class="a11y-toggle-label">ON</span>
+        </div>
+      </div>
+      <div class="a11y-card-body">
+        <div class="a11y-demo-area">
+          <div class="keyboard-demo">
+            <p class="a11y-demo-hint" id="keyboard-hint">This accordion only responds to mouse clicks. Keyboard users are completely locked out.</p>
+            <div class="kb-accordion" id="kb-accordion">
+              <div class="kb-acc-item">
+                <div class="kb-acc-header" id="kb-header-1" onclick="kbAccToggle(1)" tabindex="-1" data-kbindex="1">
+                  <span>What is WCAG 2.1?</span>
+                  <span class="kb-acc-icon">+</span>
+                </div>
+                <div class="kb-acc-body" id="kb-body-1">
+                  Web Content Accessibility Guidelines — the international standard for accessible digital content. Level AA is the benchmark most organisations target for legal compliance.
+                </div>
+              </div>
+              <div class="kb-acc-item">
+                <div class="kb-acc-header" id="kb-header-2" onclick="kbAccToggle(2)" tabindex="-1" data-kbindex="2">
+                  <span>Why does Storyline need custom focus management?</span>
+                  <span class="kb-acc-icon">+</span>
+                </div>
+                <div class="kb-acc-body" id="kb-body-2">
+                  Storyline's default tab order is based on object creation sequence, not logical reading order. Without explicit focus order management, keyboard navigation becomes unpredictable.
+                </div>
+              </div>
+              <div class="kb-acc-item">
+                <div class="kb-acc-header" id="kb-header-3" onclick="kbAccToggle(3)" tabindex="-1" data-kbindex="3">
+                  <span>What does "accessible by design" mean?</span>
+                  <span class="kb-acc-icon">+</span>
+                </div>
+                <div class="kb-acc-body" id="kb-body-3">
+                  Building accessibility requirements into the template architecture from the start — not patching individual courses after the fact. One correct template decision propagates to every course built on it.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="a11y-fix-note" id="keyboard-fix-note">
+          <span class="fix-badge">✓ Fixed</span> Accordion headers are now focusable (tabindex="0") and respond to Enter and Space keys. Focus is managed programmatically so keyboard users have the same experience as mouse users.
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="a11y-standard-strip">
+    <div class="a11y-standard-item">
+      <div class="a11y-standard-label">Standard</div>
+      <div class="a11y-standard-val">WCAG 2.1 AA</div>
+    </div>
+    <div class="a11y-standard-item">
+      <div class="a11y-standard-label">Minimum contrast ratio</div>
+      <div class="a11y-standard-val">4.5 : 1</div>
+    </div>
+    <div class="a11y-standard-item">
+      <div class="a11y-standard-label">Keyboard navigable</div>
+      <div class="a11y-standard-val">All interactions</div>
+    </div>
+    <div class="a11y-standard-item">
+      <div class="a11y-standard-label">Focus order</div>
+      <div class="a11y-standard-val">Explicitly defined</div>
+    </div>
+    <div class="a11y-standard-item">
+      <div class="a11y-standard-label">Alt text strategy</div>
+      <div class="a11y-standard-val">Informational + Decorative</div>
+    </div>
+  </div>
+</section>
+
+<style>
+/* ══════════════════════════════════
+   ACCESSIBILITY SIMULATOR SECTION
+══════════════════════════════════ */
+.a11y-section {
+  background: #0f1f0f;
+  padding: 5rem 4rem;
+  position: relative;
+  overflow: hidden;
+}
+.a11y-section::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #2e8b57, #3dba6e, #2e8b57);
+}
+.a11y-header {
+  max-width: 680px;
+  margin-bottom: 3rem;
+}
+.a11y-label {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #3dba6e;
+  margin-bottom: 0.75rem;
+  display: flex; align-items: center; gap: 0.75rem;
+}
+.a11y-label::before { content:''; display:block; width:1.5rem; height:1px; background:#3dba6e; }
+.a11y-heading {
+  font-family: var(--serif);
+  font-size: clamp(1.8rem, 2.8vw, 2.6rem);
+  color: #f0ede6;
+  line-height: 1.2;
+  margin-bottom: 1rem;
+}
+.a11y-heading em { font-style: italic; color: #3dba6e; }
+.a11y-sub {
+  font-size: 0.95rem;
+  color: rgba(240,237,230,0.55);
+  line-height: 1.75;
+}
+.a11y-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 2.5rem;
+}
+@media(max-width:900px) { .a11y-grid { grid-template-columns: 1fr; } }
+
+/* Card */
+.a11y-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(61,186,110,0.15);
+  border-radius: 8px;
+  overflow: hidden;
+  transition: border-color 0.3s;
+}
+.a11y-card.fixed { border-color: rgba(61,186,110,0.45); }
+.a11y-card-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.1rem 1.4rem;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  background: rgba(255,255,255,0.03);
+}
+.a11y-card-num {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  color: #3dba6e;
+  letter-spacing: 0.1em;
+  flex-shrink: 0;
+}
+.a11y-card-title {
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: #f0ede6;
+  line-height: 1.2;
+}
+.a11y-card-sub {
+  font-size: 0.72rem;
+  color: rgba(240,237,230,0.4);
+  margin-top: 2px;
+  font-family: var(--mono);
+}
+.a11y-card-body { padding: 1.25rem 1.4rem; }
+.a11y-demo-area {
+  background: rgba(0,0,0,0.25);
+  border-radius: 6px;
+  padding: 1.25rem;
+  margin-bottom: 1rem;
+  min-height: 160px;
+}
+.a11y-demo-hint {
+  font-size: 0.78rem;
+  color: rgba(240,237,230,0.45);
+  margin-bottom: 1rem;
+  font-style: italic;
+  line-height: 1.5;
+}
+
+/* Toggle */
+.a11y-toggle-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+.a11y-toggle-label {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.08em;
+  color: rgba(240,237,230,0.35);
+}
+.a11y-toggle {
+  width: 44px; height: 24px;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 100px;
+  cursor: pointer;
+  position: relative;
+  transition: background 0.3s, border-color 0.3s;
+  padding: 0;
+}
+.a11y-toggle.on {
+  background: rgba(61,186,110,0.3);
+  border-color: #3dba6e;
+}
+.a11y-toggle-knob {
+  position: absolute;
+  top: 3px; left: 3px;
+  width: 16px; height: 16px;
+  background: rgba(255,255,255,0.5);
+  border-radius: 50%;
+  transition: transform 0.25s, background 0.25s;
+  display: block;
+}
+.a11y-toggle.on .a11y-toggle-knob {
+  transform: translateX(20px);
+  background: #3dba6e;
+}
+
+/* Fix note */
+.a11y-fix-note {
+  font-size: 0.8rem;
+  color: rgba(240,237,230,0.5);
+  line-height: 1.6;
+  padding: 0.75rem 1rem;
+  background: rgba(61,186,110,0.06);
+  border-radius: 4px;
+  border-left: 2px solid rgba(61,186,110,0.3);
+  display: none;
+}
+.a11y-fix-note.show { display: block; }
+.fix-badge {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.08em;
+  color: #3dba6e;
+  font-weight: 700;
+  margin-right: 0.5rem;
+}
+
+/* ── FOCUS ORDER DEMO ── */
+.focus-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+.focus-btn {
+  padding: 7px 14px;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 4px;
+  color: rgba(240,237,230,0.8);
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: var(--sans);
+}
+.focus-btn:focus {
+  outline: 2px solid #3dba6e;
+  outline-offset: 2px;
+  background: rgba(61,186,110,0.12);
+  color: #f0ede6;
+}
+.a11y-tab-indicator { margin-top: 0.5rem; }
+.tab-order-label {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  color: rgba(240,237,230,0.35);
+  letter-spacing: 0.06em;
+  display: block;
+  margin-bottom: 0.4rem;
+}
+.tab-order-pills { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+.tab-pill {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  padding: 3px 8px;
+  border-radius: 3px;
+  background: rgba(255,255,255,0.06);
+  color: rgba(240,237,230,0.3);
+  letter-spacing: 0.04em;
+}
+.tab-pill.active-pill { background: rgba(61,186,110,0.2); color: #3dba6e; }
+
+/* ── CONTRAST DEMO ── */
+.contrast-demo { width: 100%; }
+.contrast-slide { border-radius: 6px; padding: 1rem; transition: all 0.4s; }
+.contrast-fail { background: #1a2535; }
+.contrast-pass { background: #0d1520; }
+.contrast-badge-row { display: flex; gap: 0.5rem; margin-bottom: 0.75rem; flex-wrap: wrap; }
+.contrast-ratio-badge, .contrast-wcag-badge {
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.06em;
+  padding: 3px 9px;
+  border-radius: 3px;
+  font-weight: 600;
+}
+.contrast-ratio-badge.fail { background: rgba(200,75,47,0.2); color: #e07060; border: 1px solid rgba(200,75,47,0.3); }
+.contrast-ratio-badge.pass { background: rgba(61,186,110,0.2); color: #3dba6e; border: 1px solid rgba(61,186,110,0.3); }
+.contrast-wcag-badge.fail { background: rgba(200,75,47,0.1); color: #c06050; border: 1px solid rgba(200,75,47,0.2); }
+.contrast-wcag-badge.pass { background: rgba(61,186,110,0.1); color: #2ea05a; border: 1px solid rgba(61,186,110,0.2); }
+.contrast-card { border-radius: 4px; padding: 1rem; transition: all 0.4s; }
+.contrast-fail .contrast-card { background: #243040; }
+.contrast-pass .contrast-card { background: #0a1628; }
+.contrast-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 0.4rem;
+  transition: color 0.4s;
+}
+.contrast-fail .contrast-label { color: #6a8aaa; }
+.contrast-pass .contrast-label { color: #f0ede6; }
+.contrast-body {
+  font-size: 0.82rem;
+  line-height: 1.6;
+  margin-bottom: 0.75rem;
+  transition: color 0.4s;
+}
+.contrast-fail .contrast-body { color: #5a7090; }
+.contrast-pass .contrast-body { color: #c8c2b8; }
+.contrast-btn {
+  font-size: 0.75rem;
+  padding: 6px 14px;
+  border-radius: 3px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.4s;
+  font-family: var(--sans);
+}
+.contrast-fail .contrast-btn { background: #2a3f55; color: #4a6a88; }
+.contrast-pass .contrast-btn { background: #c84b2f; color: white; }
+
+/* ── ALT TEXT DEMO ── */
+.alt-slide { display: flex; gap: 1rem; align-items: flex-start; }
+.alt-image-mock {
+  width: 100px; height: 80px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 4px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.alt-image-inner { text-align: center; }
+.alt-img-icon { font-size: 1.5rem; }
+.alt-img-caption { font-size: 0.6rem; color: rgba(240,237,230,0.3); margin-top: 4px; font-family: var(--mono); }
+.alt-sr-output {
+  flex: 1;
+  background: rgba(0,0,0,0.3);
+  border-radius: 4px;
+  padding: 0.75rem;
+}
+.alt-sr-label {
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  color: rgba(240,237,230,0.35);
+  letter-spacing: 0.06em;
+  margin-bottom: 0.4rem;
+}
+.alt-sr-text {
+  font-size: 0.85rem;
+  color: #f0ede6;
+  line-height: 1.5;
+  font-style: italic;
+  transition: color 0.3s;
+}
+.alt-tag-row { display: flex; gap: 0.75rem; margin-top: 0.75rem; flex-wrap: wrap; }
+.alt-tag-item {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 4px;
+  padding: 0.5rem 0.75rem;
+  transition: opacity 0.3s;
+}
+.alt-tag-type { font-size: 0.68rem; font-weight: 600; color: rgba(240,237,230,0.6); margin-bottom: 2px; }
+.alt-tag-code { font-family: var(--mono); font-size: 0.6rem; color: #3dba6e; }
+
+/* ── KEYBOARD DEMO ── */
+.kb-accordion { display: flex; flex-direction: column; gap: 6px; }
+.kb-acc-item {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 4px;
+  overflow: hidden;
+  transition: border-color 0.2s;
+}
+.kb-acc-item.open { border-color: rgba(61,186,110,0.35); }
+.kb-acc-header {
+  padding: 10px 14px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: rgba(240,237,230,0.8);
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  user-select: none;
+  transition: background 0.15s;
+  outline: none;
+}
+.kb-acc-header:focus {
+  outline: 2px solid #3dba6e;
+  outline-offset: -2px;
+  background: rgba(61,186,110,0.08);
+}
+.kb-acc-header:hover { background: rgba(255,255,255,0.04); }
+.kb-acc-icon { font-size: 1rem; color: rgba(240,237,230,0.4); transition: transform 0.25s; flex-shrink: 0; }
+.kb-acc-item.open .kb-acc-icon { transform: rotate(45deg); color: #3dba6e; }
+.kb-acc-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease, padding 0.3s ease;
+  font-size: 0.78rem;
+  color: rgba(240,237,230,0.5);
+  line-height: 1.6;
+  padding: 0 14px;
+}
+.kb-acc-item.open .kb-acc-body { max-height: 120px; padding: 0 14px 12px; }
+
+/* ── STANDARDS STRIP ── */
+.a11y-standard-strip {
+  display: flex;
+  border: 1px solid rgba(61,186,110,0.15);
+  border-radius: 6px;
+  overflow: hidden;
+}
+.a11y-standard-item {
+  flex: 1;
+  padding: 1rem 1.25rem;
+  border-right: 1px solid rgba(61,186,110,0.1);
+  background: rgba(255,255,255,0.02);
+}
+.a11y-standard-item:last-child { border-right: none; }
+.a11y-standard-label {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(240,237,230,0.3);
+  margin-bottom: 0.35rem;
+}
+.a11y-standard-val {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #3dba6e;
+}
+@media(max-width:700px) {
+  .a11y-section { padding: 3rem 1.5rem; }
+  .a11y-standard-strip { flex-direction: column; }
+  .a11y-standard-item { border-right: none; border-bottom: 1px solid rgba(61,186,110,0.1); }
+}
+</style>
+
+<script>
+// ── ACCESSIBILITY SIMULATOR ──
+const states = { focus: false, contrast: false, alt: false, keyboard: false };
+
+function toggleScenario(id) {
+  states[id] = !states[id];
+  const btn = document.getElementById('toggle-' + id);
+  btn.classList.toggle('on', states[id]);
+  btn.setAttribute('aria-pressed', states[id]);
+  document.getElementById('a11y-' + id).classList.toggle('fixed', states[id]);
+  document.getElementById(id + '-fix-note').classList.toggle('show', states[id]);
+
+  if (id === 'focus')    applyFocus(states[id]);
+  if (id === 'contrast') applyContrast(states[id]);
+  if (id === 'alt')      applyAlt(states[id]);
+  if (id === 'keyboard') applyKeyboard(states[id]);
+}
+
+// FOCUS ORDER
+function applyFocus(on) {
+  const hint = document.getElementById('focus-hint');
+  const btns = document.querySelectorAll('.focus-btn');
+  const pills = document.querySelectorAll('.tab-pill');
+  if (on) {
+    // Logical order: Start Course(1), Menu(2), Back(3), Next(4), Resources(5)
+    const order = ['Start Course','Menu','Back ←','Next →','Resources'];
+    btns.forEach(b => {
+      const idx = order.indexOf(b.dataset.label);
+      b.tabIndex = idx + 1;
+    });
+    // Reorder pills display
+    pills.forEach((p, i) => {
+      p.textContent = order[i];
+      p.classList.toggle('active-pill', i === 0);
+    });
+    hint.textContent = 'Focus now follows logical reading flow. Tab through to feel the difference.';
+  } else {
+    const broken = ['Next →','Start Course','Resources','Menu','Back ←'];
+    btns.forEach(b => {
+      const idx = broken.indexOf(b.dataset.label);
+      b.tabIndex = idx + 1;
+    });
+    pills.forEach((p, i) => {
+      p.textContent = broken[i];
+      p.classList.toggle('active-pill', i === 0);
+    });
+    hint.textContent = "Tab key moves focus in Storyline's broken default order — unpredictable, confusing for keyboard users.";
+  }
+}
+
+// CONTRAST
+function applyContrast(on) {
+  const slide = document.getElementById('contrast-slide');
+  const ratio = document.getElementById('contrast-ratio');
+  const wcag  = document.getElementById('contrast-wcag');
+  if (on) {
+    slide.classList.replace('contrast-fail','contrast-pass');
+    ratio.className = 'contrast-ratio-badge pass';
+    ratio.textContent = 'Ratio: 7.2:1 ✓ PASS';
+    wcag.className = 'contrast-wcag-badge pass';
+    wcag.textContent = 'Exceeds WCAG AA';
+  } else {
+    slide.classList.replace('contrast-pass','contrast-fail');
+    ratio.className = 'contrast-ratio-badge fail';
+    ratio.textContent = 'Ratio: 2.1:1 ✗ FAIL';
+    wcag.className = 'contrast-wcag-badge fail';
+    wcag.textContent = 'Below WCAG AA';
+  }
+}
+
+// ALT TEXT
+function applyAlt(on) {
+  const srText = document.getElementById('alt-sr-text');
+  const tagType = document.getElementById('alt-tag-type');
+  const tagCode = document.getElementById('alt-tag-code');
+  const decorItem = document.getElementById('alt-decorative-item');
+  if (on) {
+    srText.textContent = '"Bar chart showing three-step compliance workflow: Identify, Apply, Verify — with percentage completion per step."';
+    srText.style.color = '#3dba6e';
+    tagType.textContent = 'Informational image';
+    tagCode.textContent = 'alt="[descriptive text]"';
+    decorItem.style.opacity = '1';
+    decorItem.querySelector('.alt-tag-code').textContent = 'role="presentation"';
+  } else {
+    srText.textContent = '"image"';
+    srText.style.color = '#f0ede6';
+    tagType.textContent = 'Missing alt text';
+    tagCode.textContent = 'alt=""';
+    decorItem.style.opacity = '0.35';
+    decorItem.querySelector('.alt-tag-code').textContent = 'marked decorative';
+  }
+}
+
+// KEYBOARD NAVIGATION
+let kbOpen = null;
+function applyKeyboard(on) {
+  const headers = document.querySelectorAll('.kb-acc-header');
+  const hint = document.getElementById('keyboard-hint');
+  headers.forEach(h => {
+    h.tabIndex = on ? 0 : -1;
+    if (on) {
+      h.addEventListener('keydown', kbKeyHandler);
+    } else {
+      h.removeEventListener('keydown', kbKeyHandler);
+    }
+  });
+  hint.textContent = on
+    ? 'Accordion headers are now keyboard accessible. Tab to focus, Enter or Space to open.'
+    : 'This accordion only responds to mouse clicks. Keyboard users are completely locked out.';
+  // Close all on reset
+  if (!on) {
+    document.querySelectorAll('.kb-acc-item').forEach(i => i.classList.remove('open'));
+    kbOpen = null;
+  }
+}
+function kbKeyHandler(e) {
+  if (e.key === 'Enter' || e.key === ' ') {
+    e.preventDefault();
+    kbAccToggle(parseInt(this.dataset.kbindex));
+  }
+}
+function kbAccToggle(n) {
+  const item = document.getElementById('kb-header-' + n).closest('.kb-acc-item');
+  const isOpen = item.classList.contains('open');
+  document.querySelectorAll('.kb-acc-item').forEach(i => i.classList.remove('open'));
+  if (!isOpen) item.classList.add('open');
+  kbOpen = isOpen ? null : n;
+}
+</script>
+
 <!-- DEMO CALLOUT -->
 <section class="demo-callout reveal">
   <div class="demo-callout-label">Interactive Demos</div>
