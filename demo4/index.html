@@ -373,6 +373,107 @@ pre { font-family: 'JetBrains Mono', monospace; font-size: 12px; line-height: 1.
   .dnd-area { grid-template-columns: 1fr; }
   .header { padding: 14px 20px; }
 }
+
+/* ── HBT LABELED BUTTON ── */
+.hbt-btn-labeled {
+  width: auto !important; height: 32px !important;
+  border-radius: 100px !important; padding: 0 14px 0 10px !important;
+  gap: 6px !important; flex-direction: row !important;
+  font-size: 0 !important; display: inline-flex !important;
+}
+.hbt-btn-icon {
+  font-family: 'DM Serif Display', serif; font-size: 15px; font-weight: 600;
+  color: inherit; line-height: 1; width: 18px; height: 18px;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.hbt-btn-text {
+  font-family: 'JetBrains Mono', monospace; font-size: 11px;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  color: rgba(255,255,255,0.7); white-space: nowrap;
+}
+.hbt-btn-labeled:hover .hbt-btn-text { color: #c84b2f; }
+@media(max-width:480px){
+  .hbt-btn-text { display: none; }
+  .hbt-btn-labeled { padding: 0 !important; width: 32px !important; justify-content: center; }
+}
+
+/* ── HBT TRIGGER BUTTON ── */
+.hbt-btn {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15);
+  color: rgba(255,255,255,0.6); font-family: 'DM Serif Display', serif;
+  font-size: 15px; font-weight: 600; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s; flex-shrink: 0; margin-left: 12px;
+}
+.hbt-btn:hover {
+  background: rgba(200,75,47,0.2); border-color: rgba(200,75,47,0.5);
+  color: #c84b2f; transform: scale(1.08);
+}
+
+/* ── HBT OVERLAY + DRAWER ── */
+.hbt-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+  z-index: 900; opacity: 0; pointer-events: none;
+  transition: opacity 0.3s; backdrop-filter: blur(3px);
+}
+.hbt-overlay.open { opacity: 1; pointer-events: all; }
+.hbt-drawer {
+  position: fixed; top: 0; right: 0; bottom: 0;
+  width: min(480px, 95vw); background: #0d1520;
+  border-left: 1px solid rgba(255,255,255,0.08);
+  z-index: 901; transform: translateX(100%);
+  transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
+  overflow-y: auto; display: flex; flex-direction: column;
+}
+.hbt-drawer.open { transform: translateX(0); }
+.hbt-drawer-header {
+  padding: 22px 24px 18px; border-bottom: 1px solid rgba(255,255,255,0.07);
+  display: flex; align-items: center; justify-content: space-between;
+  position: sticky; top: 0; background: #0d1520; z-index: 1;
+}
+.hbt-drawer-title { font-family: 'DM Serif Display', serif; font-size: 18px; color: #f0ede6; }
+.hbt-close {
+  width: 30px; height: 30px; border-radius: 50%;
+  background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+  color: rgba(255,255,255,0.5); font-size: 16px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; transition: all 0.2s;
+}
+.hbt-close:hover { background: rgba(200,75,47,0.2); color: #c84b2f; }
+.hbt-body { padding: 24px; flex: 1; }
+.hbt-section { margin-bottom: 28px; }
+.hbt-section-label {
+  font-family: 'JetBrains Mono', monospace; font-size: 10px;
+  letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 12px;
+  display: flex; align-items: center; gap: 8px;
+}
+.hbt-section-label.real   { color: #3dba6e; }
+.hbt-section-label.sim    { color: #d4af5f; }
+.hbt-section-label.prod   { color: #c84b2f; }
+.hbt-section-label::after { content:''; flex:1; height:1px; background: currentColor; opacity:0.2; }
+.hbt-item {
+  display: flex; gap: 10px; align-items: flex-start;
+  padding: 10px 12px; border-radius: 6px; margin-bottom: 6px;
+  font-size: 13px; line-height: 1.6;
+}
+.hbt-item.real { background: rgba(61,186,110,0.07); color: #a8d8b8; border: 1px solid rgba(61,186,110,0.12); }
+.hbt-item.sim  { background: rgba(212,175,95,0.07);  color: #d4c08a; border: 1px solid rgba(212,175,95,0.12); }
+.hbt-item.prod { background: rgba(200,75,47,0.07);   color: #e8a898; border: 1px solid rgba(200,75,47,0.12); }
+.hbt-item-icon { flex-shrink: 0; font-size: 14px; margin-top: 1px; }
+.hbt-arch {
+  background: #060d18; border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 8px; padding: 16px; font-family: 'JetBrains Mono', monospace;
+  font-size: 11px; color: #8ba3be; line-height: 1.9; margin-top: 8px; white-space: pre;
+}
+.hbt-arch .node  { color: #7eb8f7; }
+.hbt-arch .arrow { color: #4a6280; }
+.hbt-arch .label { color: #3dba6e; }
+.hbt-arch .note  { color: #d4af5f; }
+.hbt-footer {
+  padding: 16px 24px; border-top: 1px solid rgba(255,255,255,0.06);
+  font-size: 12px; color: #4a6280; font-family: 'JetBrains Mono', monospace;
+}
+@media(max-width:600px){ .hbt-drawer { width: 100vw !important; } }
 </style>
 </head>
 <body>
@@ -381,6 +482,10 @@ pre { font-family: 'JetBrains Mono', monospace; font-size: 12px; line-height: 1.
   <div class="header-logo">AT<span>.</span></div>
   <div class="header-badge">Case Study 04 — xAPI</div>
   <div class="header-live"><div class="live-dot"></div>Streaming to LRS</div>
+  <button class="hbt-btn hbt-btn-labeled" onclick="openHBT()" title="How I built this" aria-label="How I built this">
+    <span class="hbt-btn-icon">?</span>
+    <span class="hbt-btn-text">How I built this</span>
+  </button>
   <div class="header-by">by <a href="https://abhishektrivedi.com" target="_blank">Abhishek Trivedi</a></div>
 </header>
 
@@ -784,6 +889,60 @@ function showAnalytics(){
     rows.appendChild(row);
   });
 }
+
+// ── HOW I BUILT THIS ──
+function openHBT() {
+  document.getElementById('hbt-overlay').classList.add('open');
+  document.getElementById('hbt-drawer').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeHBT() {
+  document.getElementById('hbt-overlay').classList.remove('open');
+  document.getElementById('hbt-drawer').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeHBT(); });
 </script>
+
+<div class="hbt-overlay" id="hbt-overlay" onclick="closeHBT()"></div>
+<div class="hbt-drawer" id="hbt-drawer">
+  <div class="hbt-drawer-header">
+    <div class="hbt-drawer-title">How I Built This</div>
+    <button class="hbt-close" onclick="closeHBT()">✕</button>
+  </div>
+  <div class="hbt-body">
+
+    <div class="hbt-section">
+      <div class="hbt-section-label real">✓ What's real in this demo</div>
+      <div class="hbt-item real"><span class="hbt-item-icon">📡</span><span>Every xAPI statement is built to the <strong>full xAPI 1.0.3 specification</strong> — real actor IRI, real verb IRI from the ADL registry, real object ID, real result and context objects. These would be accepted by any conformant LRS.</span></div>
+      <div class="hbt-item real"><span class="hbt-item-icon">🧩</span><span>The 4-screen course structure mirrors an actual LMS-delivered module — video with milestone tracking, knowledge check with retry logic, drag-and-drop sorting, and open reflection with a character threshold.</span></div>
+      <div class="hbt-item real"><span class="hbt-item-icon">📊</span><span>The analytics section reflects <strong>real statement data</strong> generated by your specific interactions — verb counts, quiz score, engagement count, and reflection length are all computed from the actual statement log, not hardcoded.</span></div>
+      <div class="hbt-item real"><span class="hbt-item-icon">🔍</span><span>The JSON modal shows the <strong>exact statement object</strong> that was generated — including timestamps, IRI structures, and result fields — formatted exactly as it would appear in an LRS query response.</span></div>
+    </div>
+
+    <div class="hbt-section">
+      <div class="hbt-section-label sim">~ What's simulated</div>
+      <div class="hbt-item sim"><span class="hbt-item-icon">🌐</span><span>No real LRS is connected — statements are generated in-memory in JavaScript. In a production deployment, each <code style="font-family:'JetBrains Mono',monospace;font-size:11px;">sendStatement()</code> call would POST to an endpoint like SCORM Cloud, Watershed, or a self-hosted LRS.</span></div>
+      <div class="hbt-item sim"><span class="hbt-item-icon">🎬</span><span>The video player is a styled simulation — the progress bar and milestone events (50%, 100%) fire on a timer. In production this would be a real video element with <code style="font-family:'JetBrains Mono',monospace;font-size:11px;">timeupdate</code> event listeners.</span></div>
+      <div class="hbt-item sim"><span class="hbt-item-icon">👤</span><span>The learner identity (Alex Chen / alex.chen@learner.org) is a fixed simulation. In a real LMS integration, this would be pulled from the learner's authenticated session via the LMS API or xAPI launch parameters.</span></div>
+    </div>
+
+    <div class="hbt-section">
+      <div class="hbt-section-label prod">→ Production architecture</div>
+      <div class="hbt-arch"><span class="node">Storyline / LMS</span> <span class="arrow">──launch──▶</span> <span class="node">xAPI launch params</span>
+  <span class="arrow">│</span>          <span class="note">// endpoint, auth token, actor IRI</span>
+  <span class="arrow">└──▶</span> <span class="node">JS trigger</span> <span class="arrow">──▶</span> <span class="node">ADL xAPIWrapper</span>
+       <span class="arrow">│</span>    <span class="note">// builds statement object per spec</span>
+       <span class="arrow">└──▶</span> <span class="node">POST /statements</span> <span class="arrow">──▶</span> <span class="label">LRS</span>
+                  <span class="note">// SCORM Cloud / Watershed / self-hosted</span>
+  <span class="arrow">│</span>
+  <span class="arrow">└──▶</span> <span class="node">GET /statements</span> <span class="arrow">──▶</span> <span class="label">Analytics dashboard</span>
+                  <span class="note">// query by actor, verb, activity, date</span></div>
+    </div>
+
+  </div>
+  <div class="hbt-footer">Built by Abhishek Trivedi · abhishektrivedi.com</div>
+</div>
+
 </body>
 </html>
