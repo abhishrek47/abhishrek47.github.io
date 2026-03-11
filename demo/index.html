@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1253,6 +1254,125 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeHBT(); 
   </div>
   <div class="hbt-footer">Built by Abhishek Trivedi · abhishektrivedi.com</div>
 </div>
+
+<!-- ── PORTFOLIO PROTECTION ── -->
+<script>
+(function() {
+  'use strict';
+
+  // ── 1. Disable right-click context menu ──
+  document.addEventListener('contextmenu', function(e) {
+    e.preventDefault();
+    showWarning();
+    return false;
+  });
+
+  // ── 2. Block keyboard shortcuts ──
+  document.addEventListener('keydown', function(e) {
+    const key = e.key ? e.key.toLowerCase() : '';
+    const ctrl = e.ctrlKey || e.metaKey;
+
+    // Ctrl+U (view source), Ctrl+S (save), Ctrl+A (select all)
+    // Ctrl+Shift+I/J/C (DevTools), Ctrl+P (print)
+    if (ctrl && ['u','s','a','p'].includes(key)) {
+      e.preventDefault(); showWarning(); return false;
+    }
+    if (ctrl && e.shiftKey && ['i','j','c','k'].includes(key)) {
+      e.preventDefault(); showWarning(); return false;
+    }
+    // F12 (DevTools)
+    if (e.key === 'F12') {
+      e.preventDefault(); showWarning(); return false;
+    }
+    // Ctrl+Shift+Delete (clear history — sometimes used to reset)
+    if (ctrl && e.shiftKey && e.key === 'Delete') {
+      e.preventDefault(); return false;
+    }
+  });
+
+  // ── 3. Disable text selection ──
+  document.addEventListener('selectstart', function(e) {
+    // Allow selection inside input/textarea fields
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+    e.preventDefault();
+    return false;
+  });
+
+  // ── 4. Disable drag (prevents dragging images/text out) ──
+  document.addEventListener('dragstart', function(e) {
+    e.preventDefault();
+    return false;
+  });
+
+  // ── 5. DevTools detection via window size change ──
+  // When DevTools opens docked, window inner dimensions shrink
+  var devtoolsOpen = false;
+  var threshold = 160;
+  function checkDevTools() {
+    var widthDiff  = window.outerWidth  - window.innerWidth  > threshold;
+    var heightDiff = window.outerHeight - window.innerHeight > threshold;
+    if ((widthDiff || heightDiff) && !devtoolsOpen) {
+      devtoolsOpen = true;
+      showDevToolsWarning();
+    } else if (!widthDiff && !heightDiff) {
+      devtoolsOpen = false;
+    }
+  }
+  setInterval(checkDevTools, 1000);
+
+  // ── 6. Warning toast ──
+  function showWarning() {
+    if (document.getElementById('_pt_toast')) return;
+    var toast = document.createElement('div');
+    toast.id = '_pt_toast';
+    toast.innerHTML = '🔒 &nbsp;This portfolio is protected. Please respect the author\'s work.';
+    toast.style.cssText = [
+      'position:fixed', 'bottom:24px', 'left:50%', 'transform:translateX(-50%)',
+      'background:#0f0e0c', 'color:#f5f2eb', 'padding:12px 22px',
+      'border-radius:8px', 'font-family:sans-serif', 'font-size:13px',
+      'border:1px solid rgba(200,75,47,0.5)', 'border-left:3px solid #c84b2f',
+      'z-index:999999', 'box-shadow:0 4px 24px rgba(0,0,0,0.4)',
+      'pointer-events:none', 'white-space:nowrap'
+    ].join(';');
+    document.body.appendChild(toast);
+    setTimeout(function() {
+      if (toast.parentNode) toast.parentNode.removeChild(toast);
+    }, 3000);
+  }
+
+  function showDevToolsWarning() {
+    if (document.getElementById('_pt_devtools')) return;
+    var banner = document.createElement('div');
+    banner.id = '_pt_devtools';
+    banner.innerHTML = [
+      '<strong style="color:#c84b2f">Hey there, developer 👋</strong>',
+      'This portfolio was built by <strong>Abhishek Trivedi</strong>.',
+      'If you\'re curious about how it works, just reach out at',
+      '<a href="https://abhishektrivedi.com/pages/contact.html" ',
+      'style="color:#c9973a">abhishektrivedi.com</a> — happy to chat.'
+    ].join(' ');
+    banner.style.cssText = [
+      'position:fixed', 'top:0', 'left:0', 'right:0',
+      'background:#0a1628', 'color:#f5f2eb', 'padding:14px 24px',
+      'font-family:sans-serif', 'font-size:13px', 'line-height:1.6',
+      'border-bottom:2px solid #c84b2f', 'z-index:999999',
+      'text-align:center', 'box-shadow:0 2px 12px rgba(0,0,0,0.5)'
+    ].join(';');
+    document.body.appendChild(banner);
+  }
+
+  // ── 7. Copyright watermark in console ──
+  var styles = [
+    'color:#c84b2f', 'font-size:18px', 'font-weight:bold',
+    'padding:8px 0', 'border-bottom:2px solid #c84b2f'
+  ].join(';');
+  console.log('%c© Abhishek Trivedi — Learning Experience Technologist', styles);
+  console.log('%chttps://abhishektrivedi.com | All rights reserved.', 'color:#6b6459;font-size:12px;');
+  console.log('%cIf you\'re inspecting this to learn — great! Just don\'t copy. Reach out instead.', 'color:#c9973a;font-size:12px;font-style:italic;');
+
+})();
+</script>
+<!-- ── END PROTECTION ── -->
 
 </body>
 </html>
