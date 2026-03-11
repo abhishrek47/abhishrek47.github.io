@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -311,14 +312,64 @@
   </div>
 </div>
 
+<!-- CASE STUDY 4 -->
+<div class="case-study reveal" id="case4">
+  <img src="../images/case4-xapi.png" alt="Case Study 04 — The Invisible Student" class="case-img">
+  <div class="case-header">
+    <div>
+      <div class="case-number">Case Study 04</div>
+      <div class="case-category">xAPI · Learning Analytics · LRS · Data Visibility</div>
+      <h2>The Invisible Student</h2>
+    </div>
+    <div class="case-tools-header">
+      <span class="tag">xAPI / Tin Can</span>
+      <span class="tag">LRS</span>
+      <span class="tag">Learning Analytics</span>
+      <span class="tag">JavaScript</span>
+      <span class="tag">Live JSON</span>
+    </div>
+  </div>
+
+  <div class="case-body">
+    <div class="case-block">
+      <h3>The Problem</h3>
+      <p>Most eLearning deployments track only two things: did the learner complete the course, and did they pass. Every decision in between — what they clicked, where they hesitated, which branches they chose, how long they spent on each interaction — disappears. Learners are effectively invisible inside the LMS, and L&D teams make curriculum decisions with almost no behavioural data to support them.</p>
+    </div>
+    <div class="case-block">
+      <h3>The Approach</h3>
+      <p>I built a live xAPI stream visualiser that makes learner behaviour visible in real time. Step through a real course interaction and watch every action — a click, a drag, a choice, a completion — generate a structured xAPI statement instantly, exactly as it would appear inside a Learning Record Store. Each statement is displayed as live JSON with its actor, verb, object, and result fields populated, showing precisely what data is captured and how it is structured for analysis.</p>
+    </div>
+    <div class="case-block">
+      <h3>The Outcome</h3>
+      <p>A working demonstration that closes the gap between "we use xAPI" and understanding what xAPI actually produces. Stakeholders can see the data layer behind a course for the first time — not as a concept, but as a live feed. The tool makes the case for richer analytics instrumentation by showing exactly what is being lost when courses only report pass/fail.</p>
+      <div class="outcome-highlight">
+        <p>Most L&D teams know xAPI exists. Very few have seen what it actually generates. This makes it impossible to ignore.</p>
+      </div>
+    </div>
+
+    <div class="insight-box">
+      <div class="insight-label">What This Demonstrates</div>
+      <p><strong>Data literacy applied to learning design</strong> — understanding the full instrumentation layer of a course, not just the authoring layer. The ability to show stakeholders what their data infrastructure is — and isn't — capturing is a rare and valuable capability in L&D.</p>
+    </div>
+
+    <div class="demo-row">
+      <a href="../demo4/index.html" target="_blank" class="demo-btn">
+        <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><circle cx="7.5" cy="7.5" r="6.5" stroke="white" stroke-width="1.2"></circle><polygon points="6,4.5 11,7.5 6,10.5" fill="white"></polygon></svg>
+        Try the Live Demo
+      </a>
+      <span class="demo-note">Live xAPI stream · Real statements · No login required</span>
+    </div>
+  </div>
+</div>
+
 <!-- CASE STUDY 5 -->
 <div class="case-study reveal" id="case5">
-  <img src="../images/case5-storyboard.png" alt="Case Study 05 — From Brief to Blueprint" class="case-img">
+  <img src="../images/case5-storyboard.png" alt="Case Study 05 — AI Storyboard Converter" class="case-img">
   <div class="case-header">
     <div>
       <div class="case-number">Case Study 05</div>
       <div class="case-category">Instructional Design · AI Tooling · ID Models · Storyboarding</div>
-      <h2>From Brief to Blueprint</h2>
+      <h2>AI Storyboard Converter</h2>
     </div>
     <div class="case-tools-header">
       <span class="tag">Instructional Design</span>
@@ -424,7 +475,9 @@
   });
 
   // ── 4. Disable drag (prevents dragging images/text out) ──
+  // Allow drag-and-drop interaction items; block everything else
   document.addEventListener('dragstart', function(e) {
+    if (e.target.classList && e.target.classList.contains('drag-item')) return;
     e.preventDefault();
     return false;
   });
