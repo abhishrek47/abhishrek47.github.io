@@ -502,9 +502,9 @@
     }
     .demo-cards {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(5, 1fr);
       gap: 1rem;
-      max-width: 1200px;
+      max-width: 1400px;
     }
     .demo-card {
       background: rgba(255,255,255,0.05);
@@ -712,8 +712,8 @@
         <div class="proof-label">Languages<br>automated</div>
       </div>
       <div class="proof-item">
-        <div class="proof-num">3</div>
-        <div class="proof-label">Live AI-integrated<br>builds</div>
+        <div class="proof-num">5</div>
+        <div class="proof-label">Live interactive<br>demos</div>
       </div>
     </div>
   </div>
@@ -861,6 +861,18 @@
       </div>
       <div class="case-arrow">→</div>
     </a>
+    <a class="case-row" href="demo5/index.html">
+      <div class="case-num">05</div>
+      <div>
+        <div class="case-tag">Instructional Design · AI Tooling · ID Models · Storyboarding</div>
+        <div class="case-title">From Brief to Blueprint <span class="case-demo-badge">Live Demo</span></div>
+        <p class="case-desc">Built a storyboard generator that applies 7 real ID models — ADDIE, Bloom, Gagné, SAM, Merrill, 4C/ID, Kirkpatrick — to 4 pre-authored courses. Select a topic and model; every screen shows narration script, visual spec, interaction type, and design rationale.</p>
+        <div class="case-tools">
+          <span class="tag">Instructional Design</span><span class="tag">ID Models</span><span class="tag">Storyboarding</span><span class="tag">JavaScript</span><span class="tag">Cloudflare Workers</span>
+        </div>
+      </div>
+      <div class="case-arrow">→</div>
+    </a>
   </div>
 </section>
 
@@ -896,6 +908,13 @@
       <div class="demo-card-num">Demo 04</div>
       <div class="demo-card-title">The Invisible Student</div>
       <div class="demo-card-desc">Step through a course and watch every action become a live xAPI statement — the data layer most never see.</div>
+      <div class="demo-card-cta">Try it now →</div>
+    </a>
+    <a class="demo-card" href="demo5/index.html" style="border-color:rgba(200,75,47,0.35);background:rgba(200,75,47,0.06);">
+      <span class="demo-card-pulse"></span>
+      <div class="demo-card-num">Demo 05</div>
+      <div class="demo-card-title">AI Storyboard Creator</div>
+      <div class="demo-card-desc">Pick a topic and an ID model. Get a complete storyboard — narration, visuals, interactions, and design rationale — for every screen.</div>
       <div class="demo-card-cta">Try it now →</div>
     </a>
   </div>
@@ -937,6 +956,7 @@
     localStorage.setItem('at_metrics_d2', '287');
     localStorage.setItem('at_metrics_d3', '203');
     localStorage.setItem('at_metrics_d4', '47');
+    localStorage.setItem('at_metrics_d5', '31');
     localStorage.setItem(KEY_SEEDED, '1');
     localStorage.setItem(KEY, '0');
   }
@@ -946,13 +966,14 @@
   localStorage.setItem(KEY, visits);
 
   let total = 0;
-  ['d1','d2','d3','d4'].forEach(k => {
+  ['d1','d2','d3','d4','d5'].forEach(k => {
     total += parseInt(localStorage.getItem('at_metrics_' + k) || '0');
   });
   total += parseInt(localStorage.getItem('demo1_sessions') || '0');
   total += parseInt(localStorage.getItem('demo2_sessions') || '0');
   total += parseInt(localStorage.getItem('demo3_sessions') || '0');
   total += parseInt(localStorage.getItem('demo4_sessions') || '0');
+  total += parseInt(localStorage.getItem('demo5_sessions') || '0');
 
   // Animate the counter
   const el = document.getElementById('demoSessionCount');
