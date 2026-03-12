@@ -920,13 +920,7 @@
 <!-- HERO -->
 <section class="hero">
   <div class="hero-left">
-    <div class="view-toggle-wrap fade-in">
-      <span class="vt-label" id="vtLabelLeft">My Story</span>
-      <button class="vt-switch" id="recruiterToggle" onclick="toggleRecruiterMode()" aria-pressed="false" role="switch" aria-label="Toggle recruiter view">
-        <span class="vt-thumb" id="vtThumb"></span>
-      </button>
-      <span class="vt-label" id="vtLabelRight">Recruiter View</span>
-    </div>
+
     <div class="available-badge fade-in" id="availableBadge">
       <span class="available-dot"></span>
       <span id="availableText">Available for new opportunities</span>
@@ -937,6 +931,14 @@
     <div class="hero-actions fade-in">
       <a href="pages/work.html" class="btn-primary" id="heroCta">See My Work →</a>
       <a href="pages/contact.html" class="btn-secondary">Let's Talk</a>
+    </div>
+    <!-- ── RECRUITER TOGGLE ── -->
+    <div class="view-toggle-wrap fade-in" id="recruiterToggleWrap" style="display:inline-flex!important;opacity:1!important;visibility:visible!important;margin-top:1.25rem;">
+      <span class="vt-label" id="vtLabelLeft">My Story</span>
+      <button class="vt-switch" id="recruiterToggle" onclick="toggleRecruiterMode()" aria-pressed="false" role="switch" aria-label="Toggle recruiter view">
+        <span class="vt-thumb" id="vtThumb"></span>
+      </button>
+      <span class="vt-label" id="vtLabelRight">Recruiter View</span>
     </div>
     <div class="hero-proof fade-in">
       <div class="proof-item">
@@ -3112,27 +3114,42 @@ window.addEventListener('scroll', function() {
 /* ── Hamburger open state (inline fallback) ── */
 .nav-links.open {
   display: flex !important;
-  flex-direction: column;
-  position: absolute;
-  top: 100%;
-  left: 0; right: 0;
-  background: var(--paper, #f5f0e8);
+  flex-direction: column !important;
+  position: absolute !important;
+  top: 100% !important;
+  left: 0 !important;
+  right: 0 !important;
+  background: var(--paper, #f5f0e8) !important;
   border-top: 1px solid rgba(0,0,0,0.08);
-  border-bottom: 1px solid rgba(0,0,0,0.08);
-  padding: 1rem 1.5rem;
-  gap: 0;
-  z-index: 999;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+  border-bottom: 1px solid rgba(0,0,0,0.12);
+  padding: 0.75rem 1.5rem 1rem !important;
+  gap: 0 !important;
+  z-index: 9999 !important;
+  box-shadow: 0 12px 32px rgba(0,0,0,0.12) !important;
+  list-style: none !important;
+  margin: 0 !important;
 }
 .nav-links.open li {
-  border-bottom: 1px solid rgba(0,0,0,0.06);
-  padding: 0.65rem 0;
+  border-bottom: 1px solid rgba(0,0,0,0.06) !important;
+  padding: 0.75rem 0 !important;
+  margin: 0 !important;
 }
-.nav-links.open li:last-child { border-bottom: none; }
-.nav-links.open a { font-size: 1rem; display: block; width: 100%; }
-.hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
-.hamburger.open span:nth-child(2) { opacity: 0; }
-.hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+.nav-links.open li:last-child { border-bottom: none !important; }
+.nav-links.open a {
+  font-size: 1rem !important;
+  display: block !important;
+  width: 100% !important;
+  padding: 0 !important;
+  color: var(--ink, #1a1a18) !important;
+  text-decoration: none !important;
+}
+.nav-links.open a.nav-cta {
+  color: var(--accent, #c84b2f) !important;
+  font-weight: 600 !important;
+}
+.hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px) !important; }
+.hamburger.open span:nth-child(2) { opacity: 0 !important; transform: scaleX(0) !important; }
+.hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px) !important; }
 </style>
 <script>
 (function(){
@@ -3159,4 +3176,42 @@ window.addEventListener('scroll', function() {
   });
 })();
 </script>
+
+<style>
+/* ── Force toggle visible on all screen sizes ── */
+#recruiterToggleWrap,
+.view-toggle-wrap {
+  display: inline-flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+@media (max-width: 600px) {
+  .view-toggle-wrap {
+    margin-top: 1rem;
+    margin-bottom: 0.25rem;
+    gap: 0.6rem;
+    align-items: center;
+  }
+  .vt-label {
+    font-size: 0.72rem !important;
+    letter-spacing: 0.07em;
+    white-space: nowrap;
+  }
+  .vt-switch {
+    width: 52px !important;
+    height: 28px !important;
+    min-width: 52px;
+    flex-shrink: 0;
+  }
+  .vt-thumb {
+    width: 20px !important;
+    height: 20px !important;
+    top: 3px !important;
+    left: 3px !important;
+  }
+  .vt-switch.on .vt-thumb {
+    transform: translateX(24px) !important;
+  }
+}
+</style>
 </html>
