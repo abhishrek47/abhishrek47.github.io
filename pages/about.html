@@ -1043,5 +1043,247 @@
   reveals.forEach(el => observer.observe(el));
 </script>
 
+<!-- ── xAPI LIVE STATEMENT PANEL ── -->
+<div id="xapiPanel" class="xapi-panel">
+  <div class="xapi-panel-header">
+    <div class="xapi-header-left">
+      <span class="xapi-dot"></span>
+      <span class="xapi-label">xAPI · Live Statement</span>
+    </div>
+    <button class="xapi-close" onclick="document.getElementById('xapiPanel').classList.add('xapi-hidden')" aria-label="Close">✕</button>
+  </div>
+
+  <div class="xapi-body">
+    <div class="xapi-json" id="xapiJson">
+      <div class="xapi-line"><span class="xk">{</span></div>
+      <div class="xapi-line pl1"><span class="xk">"actor"</span><span class="xp">: {</span></div>
+      <div class="xapi-line pl2"><span class="xk">"name"</span><span class="xp">: </span><span class="xv xv-str" id="xActorName">"Abhishek Trivedi"</span><span class="xp">,</span></div>
+      <div class="xapi-line pl2"><span class="xk">"mbox"</span><span class="xp">: </span><span class="xv xv-str">"mailto:hello@abhishektrivedi.com"</span></div>
+      <div class="xapi-line pl1"><span class="xp">},</span></div>
+      <div class="xapi-line pl1"><span class="xk">"verb"</span><span class="xp">: {</span></div>
+      <div class="xapi-line pl2"><span class="xk">"id"</span><span class="xp">: </span><span class="xv xv-str">"https://adlnet.gov/expapi/verbs/experienced"</span><span class="xp">,</span></div>
+      <div class="xapi-line pl2"><span class="xk">"display"</span><span class="xp">: </span><span class="xv xv-str" id="xVerb">"experienced"</span></div>
+      <div class="xapi-line pl1"><span class="xp">},</span></div>
+      <div class="xapi-line pl1"><span class="xk">"object"</span><span class="xp">: {</span></div>
+      <div class="xapi-line pl2"><span class="xk">"id"</span><span class="xp">: </span><span class="xv xv-str">"https://abhishektrivedi.com/pages/about"</span><span class="xp">,</span></div>
+      <div class="xapi-line pl2"><span class="xk">"definition"</span><span class="xp">: { </span><span class="xk">"name"</span><span class="xp">: </span><span class="xv xv-str">"About Page"</span><span class="xp"> }</span></div>
+      <div class="xapi-line pl1"><span class="xp">},</span></div>
+      <div class="xapi-line pl1"><span class="xk">"result"</span><span class="xp">: {</span></div>
+      <div class="xapi-line pl2"><span class="xk">"duration"</span><span class="xp">: </span><span class="xv xv-num" id="xDuration">"PT0S"</span><span class="xp">,</span></div>
+      <div class="xapi-line pl2"><span class="xk">"extensions"</span><span class="xp">: {</span></div>
+      <div class="xapi-line pl3"><span class="xk">"scroll_depth"</span><span class="xp">: </span><span class="xv xv-num" id="xScroll">0</span><span class="xp">%,</span></div>
+      <div class="xapi-line pl3"><span class="xk">"dwell_seconds"</span><span class="xp">: </span><span class="xv xv-num" id="xDwell">0</span></div>
+      <div class="xapi-line pl2"><span class="xp">}</span></div>
+      <div class="xapi-line pl1"><span class="xp">},</span></div>
+      <div class="xapi-line pl1"><span class="xk">"timestamp"</span><span class="xp">: </span><span class="xv xv-str" id="xTimestamp">"..."</span></div>
+      <div class="xapi-line"><span class="xk">}</span></div>
+    </div>
+  </div>
+
+  <div class="xapi-footer">
+    <span class="xapi-status" id="xapiStatus">● Streaming to LRS</span>
+    <span class="xapi-stmt-count">stmt #<span id="xStmtCount">1</span></span>
+  </div>
+</div>
+
+<style>
+.xapi-panel {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  width: 380px;
+  background: #0b0d0b;
+  border: 1px solid rgba(61,186,110,0.25);
+  border-radius: 8px;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.6), 0 0 0 1px rgba(61,186,110,0.08);
+  font-family: 'Courier New', monospace;
+  z-index: 800;
+  transform: translateY(20px);
+  opacity: 0;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  overflow: hidden;
+}
+.xapi-panel.xapi-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.xapi-panel.xapi-hidden {
+  opacity: 0;
+  transform: translateY(20px);
+  pointer-events: none;
+}
+
+/* Header */
+.xapi-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.6rem 0.9rem;
+  background: #111410;
+  border-bottom: 1px solid rgba(61,186,110,0.12);
+}
+.xapi-header-left {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.xapi-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: #3dba6e;
+  animation: xPulse 2s infinite;
+  flex-shrink: 0;
+}
+@keyframes xPulse {
+  0%,100%{ box-shadow: 0 0 0 0 rgba(61,186,110,0.5); }
+  50%    { box-shadow: 0 0 0 5px rgba(61,186,110,0); }
+}
+.xapi-label {
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #3dba6e;
+}
+.xapi-close {
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.25);
+  font-size: 0.7rem;
+  cursor: pointer;
+  padding: 0.1rem 0.3rem;
+  border-radius: 3px;
+  transition: color 0.2s;
+}
+.xapi-close:hover { color: rgba(255,255,255,0.6); }
+
+/* JSON body */
+.xapi-body {
+  padding: 0.85rem 1rem;
+}
+.xapi-json { font-size: 0.67rem; line-height: 1.7; }
+.xapi-line { white-space: nowrap; }
+.pl1 { padding-left: 1rem; }
+.pl2 { padding-left: 2rem; }
+.pl3 { padding-left: 3rem; }
+.xk  { color: #9cdcfe; }   /* key — blue */
+.xp  { color: rgba(255,255,255,0.3); } /* punctuation */
+.xv-str { color: #ce9178; }  /* string — orange */
+.xv-num { color: #b5cea8; }  /* number — green */
+
+/* Highlight flash when value updates */
+@keyframes xFlash {
+  0%  { background: rgba(61,186,110,0.25); border-radius: 2px; }
+  100%{ background: transparent; }
+}
+.xapi-flash { animation: xFlash 0.6s ease; }
+
+/* Footer */
+.xapi-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0.9rem;
+  background: #0b0d0b;
+  border-top: 1px solid rgba(61,186,110,0.1);
+}
+.xapi-status {
+  font-size: 0.58rem;
+  letter-spacing: 0.08em;
+  color: #3dba6e;
+  text-transform: uppercase;
+}
+.xapi-stmt-count {
+  font-size: 0.58rem;
+  color: rgba(255,255,255,0.2);
+  letter-spacing: 0.06em;
+}
+
+@media (max-width: 480px) {
+  .xapi-panel { width: calc(100vw - 2rem); right: 1rem; bottom: 1rem; }
+}
+</style>
+
+<script>
+(function(){
+  const panel      = document.getElementById('xapiPanel');
+  const xDwell     = document.getElementById('xDwell');
+  const xDuration  = document.getElementById('xDuration');
+  const xScroll    = document.getElementById('xScroll');
+  const xTimestamp = document.getElementById('xTimestamp');
+  const xStmtCount = document.getElementById('xStmtCount');
+  const xapiStatus = document.getElementById('xapiStatus');
+
+  const startTime  = Date.now();
+  let dwell = 0, stmtCount = 1;
+
+  // Show panel after 2.5s
+  setTimeout(() => panel.classList.add('xapi-visible'), 2500);
+
+  function flash(el) {
+    el.classList.remove('xapi-flash');
+    void el.offsetWidth; // reflow
+    el.classList.add('xapi-flash');
+  }
+
+  function pad(n) { return String(n).padStart(2,'0'); }
+
+  function isoDuration(secs) {
+    const m = Math.floor(secs / 60);
+    const s = secs % 60;
+    return m > 0 ? `"PT${m}M${s}S"` : `"PT${s}S"`;
+  }
+
+  function isoTimestamp() {
+    return '"' + new Date().toISOString() + '"';
+  }
+
+  function scrollDepth() {
+    const el  = document.documentElement;
+    const pct = Math.round((window.scrollY / (el.scrollHeight - el.clientHeight)) * 100);
+    return isNaN(pct) ? 0 : Math.min(pct, 100);
+  }
+
+  // Update every second
+  setInterval(() => {
+    dwell++;
+    stmtCount++;
+
+    const sd = scrollDepth();
+
+    // Duration
+    const durEl = xDuration;
+    const newDur = isoDuration(dwell);
+    if (durEl.textContent !== newDur) { durEl.textContent = newDur; flash(durEl); }
+
+    // Dwell
+    if (xDwell.textContent !== String(dwell)) { xDwell.textContent = dwell; flash(xDwell); }
+
+    // Scroll
+    if (xScroll.textContent !== String(sd)) { xScroll.textContent = sd; flash(xScroll); }
+
+    // Timestamp
+    xTimestamp.textContent = isoTimestamp();
+
+    // Stmt count
+    xStmtCount.textContent = stmtCount;
+
+    // Status pulses between states every 8s
+    if (dwell % 8 === 0) {
+      xapiStatus.textContent = '● Sending statement…';
+      setTimeout(() => { xapiStatus.textContent = '● Streaming to LRS'; }, 900);
+    }
+
+  }, 1000);
+
+  // Update scroll depth on scroll too
+  window.addEventListener('scroll', () => {
+    const sd = scrollDepth();
+    if (xScroll.textContent !== String(sd)) { xScroll.textContent = sd; flash(xScroll); }
+  }, { passive: true });
+
+})();
+</script>
+<!-- ── END xAPI PANEL ── -->
+
 </body>
 </html>
