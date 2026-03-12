@@ -2832,6 +2832,34 @@ window.addEventListener('scroll', function() {
   transition: background 0.2s, transform 0.15s;
 }
 .rec-cta-primary:hover { background: #a83a22; transform: translateY(-1px); }
+.rec-cta-group {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+.rec-cta-download {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: transparent;
+  color: #1a1a18;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 600;
+  padding: 0.8rem 1.25rem;
+  border-radius: 6px;
+  text-decoration: none;
+  border: 1.5px solid rgba(0,0,0,0.2);
+  transition: border-color 0.2s, background 0.2s, transform 0.15s;
+}
+.rec-cta-download:hover {
+  border-color: #1a1a18;
+  background: rgba(0,0,0,0.04);
+  transform: translateY(-1px);
+}
 
 /* ── Mobile ── */
 @media (max-width: 640px) {
@@ -2918,9 +2946,15 @@ window.addEventListener('scroll', function() {
         <span class="rec-available-dot"></span>
         Available now · Pune, India · Open to remote
       </div>
-      <a href="pages/contact.html" class="rec-cta-primary">
-        Get in touch →
-      </a>
+      <div class="rec-cta-group">
+        <a href="Abhishek_Trivedi_Resume.pdf" download="Abhishek_Trivedi_Resume.pdf" class="rec-cta-download">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1v8M4 6l3 3 3-3M2 11h10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Download Resume
+        </a>
+        <a href="pages/contact.html" class="rec-cta-primary">
+          Get in touch →
+        </a>
+      </div>
     </div>
 
   </div>
