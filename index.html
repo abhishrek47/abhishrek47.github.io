@@ -2484,10 +2484,8 @@ function kbAccToggle(n) {
   0%   { opacity: 0.8; inset: -2px; }
   100% { opacity: 0;   inset: -10px; }
 }
-@media(max-width:600px) {
-  .a11y-fab { padding: 10px 12px 10px 10px; gap: 7px; }
-  .a11y-fab-title { font-size: 0.7rem; }
-  .a11y-fab-icon { width: 26px; height: 26px; }
+@media(max-width:768px) {
+  .a11y-fab { display: none !important; }
 }
 </style>
 
@@ -2880,6 +2878,7 @@ window.addEventListener('scroll', function() {
 @media (max-width: 640px) {
   .rec-cards { grid-template-columns: 1fr 1fr; }
   .rec-back-bar { padding-bottom: 1.25rem; }
+  #recEscHint, .rec-esc-hint { display: none !important; }
   .rec-overlay { padding-top: 1.25rem; }
   .rec-bottom { flex-direction: column; align-items: flex-start; }
 }
@@ -2897,7 +2896,7 @@ window.addEventListener('scroll', function() {
       <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9 2L4 7L9 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
       Back to my story
     </button>
-    <span class="rec-esc-hint"><span class="rec-esc-key">ESC</span> also works</span>
+    <span class="rec-esc-hint" id="recEscHint"><span class="rec-esc-key">ESC</span> also works</span>
   </div>
 
   <div class="rec-panel">
@@ -2998,6 +2997,11 @@ window.addEventListener('scroll', function() {
 
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape' && on) toggleRecruiterMode();
+  });
+
+  // Click outside the panel closes the overlay
+  document.getElementById('recOverlay').addEventListener('click', function(e) {
+    if (e.target === this) toggleRecruiterMode();
   });
 })();
 </script>
@@ -3112,6 +3116,9 @@ window.addEventListener('scroll', function() {
 
 <style>
 /* ── Hamburger open state (inline fallback) ── */
+nav, .site-nav, header nav, .nav-wrap, .navbar {
+  position: relative !important;
+}
 .nav-links.open {
   display: flex !important;
   flex-direction: column !important;
@@ -3156,23 +3163,37 @@ window.addEventListener('scroll', function() {
   var btn = document.querySelector('.hamburger');
   var nav = document.querySelector('.nav-links');
   if (!btn || !nav) return;
-  btn.addEventListener('click', function(e){
+
+  function toggleMenu(e) {
+    e.preventDefault();
     e.stopPropagation();
     var open = nav.classList.toggle('open');
     btn.classList.toggle('open', open);
-    btn.setAttribute('aria-expanded', open);
-  });
+    btn.setAttribute('aria-expanded', String(open));
+    document.body.style.overflow = open ? 'hidden' : '';
+  }
+
+  btn.addEventListener('click', toggleMenu);
+  btn.addEventListener('touchend', toggleMenu, { passive: false });
+
+  function closeMenu() {
+    nav.classList.remove('open');
+    btn.classList.remove('open');
+    btn.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  }
+
   document.addEventListener('click', function(e){
-    if (!btn.contains(e.target) && !nav.contains(e.target)){
-      nav.classList.remove('open');
-      btn.classList.remove('open');
-    }
+    if (nav.classList.contains('open') && !btn.contains(e.target) && !nav.contains(e.target)) closeMenu();
   });
+
   nav.querySelectorAll('a').forEach(function(a){
-    a.addEventListener('click', function(){
-      nav.classList.remove('open');
-      btn.classList.remove('open');
-    });
+    a.addEventListener('click', closeMenu);
+  });
+
+  // ESC key closes menu
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape') closeMenu();
   });
 })();
 </script>
@@ -3211,6 +3232,40 @@ window.addEventListener('scroll', function() {
   }
   .vt-switch.on .vt-thumb {
     transform: translateX(24px) !important;
+  }
+}
+</style>
+
+<style>
+/* ── Hamburger button base (inline override) ── */
+button.hamburger {
+  display: none; /* style.css shows it at mobile breakpoint */
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 10px;
+  min-width: 44px;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 5px;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  z-index: 1000;
+  position: relative;
+}
+button.hamburger span {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: currentColor;
+  border-radius: 2px;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+@media (max-width: 768px) {
+  button.hamburger {
+    display: flex !important;
   }
 }
 </style>
