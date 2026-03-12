@@ -901,6 +901,14 @@
 
   // Small initial pause then kick off
   setTimeout(runStep, 300);
+
+  // Safety net — force dismiss after 6s regardless
+  setTimeout(function() {
+    var ol = document.getElementById('courseLoader');
+    if (ol && !ol.classList.contains('done')) {
+      ol.classList.add('done');
+    }
+  }, 6000);
 })();
 </script>
 <!-- ── END COURSE LOADER ── -->
@@ -2242,6 +2250,64 @@ function kbAccToggle(n) {
 </section>
 
 <!-- CTA -->
+
+<!-- ══════════════════════════════════════════════
+     INTERACTIVE CAREER TIMELINE
+     ══════════════════════════════════════════════ -->
+<section class="tl-section reveal" id="timeline">
+  <div class="tl-inner">
+
+    <div class="tl-header">
+      <div class="tl-eyebrow">— 15 years · 9 roles · one direction</div>
+      <h2 class="tl-title">The journey that<br>built this <em>skillset.</em></h2>
+      <p class="tl-sub">Started training call centre associates in Ahmedabad in 2010. Every role since has added a layer — instructional design, then eLearning dev, then LMS admin, then JavaScript, then AI. Drag the timeline or click any role to explore.</p>
+    </div>
+
+    <!-- SCRUBBER -->
+    <div class="tl-scrubber-wrap">
+      <div class="tl-year-start">2010</div>
+      <div class="tl-track-wrap" id="tlTrackWrap">
+        <div class="tl-track" id="tlTrack">
+          <div class="tl-fill" id="tlFill"></div>
+          <div class="tl-thumb" id="tlThumb" tabindex="0" role="slider" aria-label="Career timeline" aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
+        <!-- Role markers on track -->
+        <div class="tl-markers" id="tlMarkers"></div>
+      </div>
+      <div class="tl-year-end">2026</div>
+    </div>
+
+    <!-- ROLE CARD -->
+    <div class="tl-card-wrap">
+      <div class="tl-card" id="tlCard">
+        <div class="tl-card-top">
+          <div class="tl-card-left">
+            <div class="tl-card-period" id="tlPeriod"></div>
+            <div class="tl-card-role" id="tlRole"></div>
+            <div class="tl-card-company" id="tlCompany"></div>
+            <div class="tl-card-location" id="tlLocation"></div>
+          </div>
+          <div class="tl-card-right">
+            <div class="tl-card-index" id="tlIndex"></div>
+            <div class="tl-skill-chips" id="tlChips"></div>
+          </div>
+        </div>
+        <div class="tl-card-body">
+          <div class="tl-card-highlight" id="tlHighlight"></div>
+          <p class="tl-card-desc" id="tlDesc"></p>
+        </div>
+        <div class="tl-card-nav">
+          <button class="tl-nav-btn" id="tlPrev" onclick="tlNavigate(-1)">← Previous</button>
+          <div class="tl-dots" id="tlDots"></div>
+          <button class="tl-nav-btn" id="tlNext" onclick="tlNavigate(1)">Next →</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
 <section class="cta-strip reveal">
   <h2>Building something that needs <em>design thinking</em> and engineering curiosity?</h2>
   <a href="pages/contact.html" class="btn-light">Let's Talk →</a>
@@ -2534,6 +2600,17 @@ window.addEventListener('scroll', function() {
 }, { passive: true });
 </script>
 <!-- ── END A11Y FAB ── -->
+
+<!-- ── JOURNEY PEEK BUTTON ── -->
+<button class="journey-trigger" id="journeyTrigger" onclick="document.getElementById('timeline').scrollIntoView({behavior:'smooth', block:'start'})" aria-label="See my career journey">
+  <svg width="16" height="16" viewBox="0 0 18 18" fill="none">
+    <circle cx="9" cy="9" r="7" stroke="currentColor" stroke-width="1.6"/>
+    <path d="M9 5v4l2.5 2.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+  </svg>
+  <span class="journey-trigger-text">My Journey</span>
+</button>
+<!-- ── END JOURNEY PEEK BUTTON ── -->
+
 
 <!-- ── RECRUITER MODE ── -->
 <style>
@@ -3292,4 +3369,607 @@ button.hamburger span {
   }
 }
 </style>
+
+
+
+
+
+
+<style>
+/* ══════════════════════════════════
+   CAREER TIMELINE
+   ══════════════════════════════════ */
+.tl-section {
+  padding: 6rem 0 5rem;
+  background: #f5f0e8;
+  overflow: hidden;
+  position: relative;
+}
+.tl-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    90deg,
+    transparent,
+    transparent 80px,
+    rgba(200,75,47,0.04) 80px,
+    rgba(200,75,47,0.04) 81px
+  );
+  pointer-events: none;
+}
+.tl-inner {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+@media(max-width:600px) { .tl-inner { padding: 0 1.25rem; } }
+
+/* ── Header ── */
+.tl-eyebrow {
+  font-family: var(--mono, 'JetBrains Mono', monospace);
+  font-size: 0.65rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--accent, #c84b2f);
+  margin-bottom: 0.85rem;
+}
+.tl-title {
+  font-family: var(--serif, 'DM Serif Display', serif);
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  color: #1a1a18;
+  line-height: 1.15;
+  margin-bottom: 1rem;
+}
+.tl-title em { color: var(--accent, #c84b2f); font-style: italic; }
+.tl-sub {
+  font-size: 0.92rem;
+  color: rgba(26,26,24,0.6);
+  line-height: 1.75;
+  max-width: 600px;
+  margin-bottom: 3rem;
+}
+
+/* ── Scrubber ── */
+.tl-scrubber-wrap {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2.5rem;
+  user-select: none;
+}
+.tl-year-start, .tl-year-end {
+  font-family: var(--mono, monospace);
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  color: rgba(26,26,24,0.4);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.tl-track-wrap {
+  flex: 1;
+  position: relative;
+  padding: 1.5rem 0;
+  cursor: pointer;
+}
+.tl-track {
+  height: 3px;
+  background: rgba(26,26,24,0.12);
+  border-radius: 3px;
+  position: relative;
+}
+.tl-fill {
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  background: var(--accent, #c84b2f);
+  border-radius: 3px;
+  transition: width 0.3s ease;
+  width: 0%;
+}
+.tl-thumb {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  background: #1a1a18;
+  border: 3px solid var(--accent, #c84b2f);
+  cursor: grab;
+  transition: transform 0.15s, left 0.3s ease;
+  box-shadow: 0 0 0 4px rgba(200,75,47,0.15);
+  z-index: 3;
+}
+.tl-thumb:active { cursor: grabbing; transform: translate(-50%, -50%) scale(1.2); }
+.tl-thumb:focus-visible { outline: 2px solid var(--accent, #c84b2f); outline-offset: 4px; }
+
+/* Role markers on track */
+.tl-markers {
+  position: absolute;
+  top: 50%;
+  left: 0; right: 0;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+.tl-marker {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: rgba(26,26,24,0.2);
+  border: 1.5px solid rgba(26,26,24,0.15);
+  transition: background 0.2s, transform 0.2s;
+  pointer-events: all;
+  cursor: pointer;
+  z-index: 2;
+}
+.tl-marker:hover { background: rgba(26,26,24,0.5); transform: translate(-50%, -50%) scale(1.4); }
+.tl-marker.active {
+  background: var(--accent, #c84b2f);
+  border-color: #f5f0e8;
+  transform: translate(-50%, -50%) scale(1.2);
+}
+
+/* ── Role Card ── */
+.tl-card-wrap { position: relative; }
+.tl-card {
+  background: #fff;
+  border: 1px solid rgba(26,26,24,0.1);
+  border-radius: 12px;
+  padding: 2rem;
+  transition: opacity 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+.tl-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: var(--accent, #c84b2f);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s ease;
+}
+.tl-card.loaded::before { transform: scaleX(1); }
+
+.tl-card-top {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+}
+.tl-card-left { flex: 1; min-width: 200px; }
+.tl-card-right { flex-shrink: 0; text-align: right; }
+
+.tl-card-period {
+  font-family: var(--mono, monospace);
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent, #c84b2f);
+  margin-bottom: 0.5rem;
+}
+.tl-card-role {
+  font-family: var(--serif, serif);
+  font-size: 1.35rem;
+  color: #1a1a18;
+  line-height: 1.25;
+  margin-bottom: 0.3rem;
+}
+.tl-card-company {
+  font-family: var(--sans, sans-serif);
+  font-size: 0.9rem;
+  color: rgba(26,26,24,0.85);
+  font-weight: 600;
+  margin-bottom: 0.2rem;
+}
+.tl-card-location {
+  font-family: var(--mono, monospace);
+  font-size: 0.62rem;
+  color: rgba(26,26,24,0.45);
+  letter-spacing: 0.06em;
+}
+
+.tl-card-index {
+  font-family: var(--serif, serif);
+  font-size: 3rem;
+  color: rgba(26,26,24,0.06);
+  line-height: 1;
+  margin-bottom: 0.5rem;
+}
+.tl-skill-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  justify-content: flex-end;
+}
+@media(max-width:600px) {
+  .tl-card-right { text-align: left; }
+  .tl-skill-chips { justify-content: flex-start; }
+}
+.tl-chip {
+  font-family: var(--mono, monospace);
+  font-size: 0.58rem;
+  letter-spacing: 0.06em;
+  color: rgba(26,26,24,0.55);
+  background: rgba(26,26,24,0.05);
+  border: 1px solid rgba(26,26,24,0.1);
+  border-radius: 3px;
+  padding: 0.15rem 0.45rem;
+}
+
+.tl-card-highlight {
+  font-family: var(--serif, serif);
+  font-size: 1.05rem;
+  color: rgba(26,26,24,0.85);
+  font-style: italic;
+  line-height: 1.55;
+  margin-bottom: 0.85rem;
+  padding-left: 1rem;
+  border-left: 2px solid var(--accent, #c84b2f);
+}
+.tl-card-desc {
+  font-family: var(--sans, sans-serif);
+  font-size: 0.88rem;
+  color: rgba(26,26,24,0.55);
+  line-height: 1.75;
+}
+
+/* ── Nav ── */
+.tl-card-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 1.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid rgba(26,26,24,0.08);
+}
+.tl-nav-btn {
+  background: none;
+  border: none;
+  font-family: var(--mono, monospace);
+  font-size: 0.65rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(26,26,24,0.4);
+  cursor: pointer;
+  padding: 0;
+  transition: color 0.2s;
+}
+.tl-nav-btn:hover { color: rgba(26,26,24,0.9); }
+.tl-nav-btn:disabled { opacity: 0.15; cursor: default; }
+.tl-dots {
+  display: flex;
+  gap: 0.45rem;
+  align-items: center;
+}
+.tl-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: rgba(26,26,24,0.15);
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+  border: none;
+  padding: 0;
+}
+.tl-dot.active {
+  background: var(--accent, #c84b2f);
+  transform: scale(1.3);
+}
+</style>
+
+
+<script>
+// ══════════════════════════════════════════════
+// CAREER TIMELINE DATA — from Abhishek's resume
+// ══════════════════════════════════════════════
+const TL_ROLES = [
+  {
+    period:    'Jul 2010 – Sep 2014',
+    startYear: 2010.5,
+    role:      'Floor & Product Trainer',
+    company:   'Effective Teleservices Pvt. Ltd.',
+    location:  'Ahmedabad, Gujarat',
+    skills:    ['Training Design', 'TNA/TNI', 'Facilitation', 'Performance Mgmt'],
+    highlight: 'Where it all started — training call centre associates from scratch and learning what makes people actually retain what they hear.',
+    desc:      'Managed batches of 5–20 new hires and tenured associates through incubation and on-the-job training. Identified training needs, conducted refresher sessions, and handled MIS and performance reporting. The foundation for everything that came after — real classroom delivery with real stakes.',
+  },
+  {
+    period:    'Sep 2014 – Feb 2015',
+    startYear: 2014.75,
+    role:      'Senior Technical Support Engineer',
+    company:   'Excellence Infocom Pvt. Ltd.',
+    location:  'Ahmedabad, Gujarat',
+    skills:    ['Documentation', 'Enterprise Support', 'Knowledge Base'],
+    highlight: 'A short but formative detour into enterprise tech support — where I learned that clear documentation is a form of teaching.',
+    desc:      'Point of contact for enterprise customers of HHAExchange. Created support documentation that empowered users to self-serve. Developed an instinct for translating complex technical processes into plain language — a skill that directly feeds into instructional design.',
+  },
+  {
+    period:    'Mar 2015 – Jul 2016',
+    startYear: 2015.25,
+    role:      'Sr. Tech Support Engineer & Product Trainer',
+    company:   'Asite Solutions Pvt. Ltd.',
+    location:  'Ahmedabad, Gujarat',
+    skills:    ['Adobe Captivate', 'Product Simulation', 'TNA', 'UX Design'],
+    highlight: 'First real encounter with authoring tools — built product simulations in Adobe Captivate and crossed into instructional design territory properly.',
+    desc:      'Created product simulation videos for Asite\'s suite using Adobe Captivate. Collaborated with developers and QA teams to design training that matched how the product actually worked. Started applying ID principles formally — this is where the career pivot from trainer to eLearning developer began.',
+  },
+  {
+    period:    'Jul 2016 – May 2018',
+    startYear: 2016.5,
+    role:      'Product Trainer & Sub-Editor',
+    company:   'Astro Vaastu Research Center',
+    location:  'Ahmedabad, Gujarat',
+    skills:    ['Instructional Design', 'CRM Training', 'Mobile App Training', 'Curriculum Design'],
+    highlight: 'Took on the interim Director of Instructional Design role — a significant jump in responsibility that forced rapid growth in ID theory and leadership.',
+    desc:      'Trained real estate dealers and brokers on CRM tools and a new Android/iOS app. Collaborated with developers and QA testers to create product simulations using ID principles. Evaluated curriculum alignment between outcomes, assessments, and instructional practice. First leadership role in ID.',
+  },
+  {
+    period:    'May 2018 – Jun 2019',
+    startYear: 2018.4,
+    role:      'Product Trainer & Documentation Lead',
+    company:   'eClinicalWorks',
+    location:  'Ahmedabad, Gujarat',
+    skills:    ['Product Training', 'Remote Delivery', 'Curriculum Writing', 'Assessment Design'],
+    highlight: 'First experience training across multiple India locations simultaneously via Skype — an early test of designing for remote and distributed learners.',
+    desc:      'Facilitated product and process training for HMiS across all India locations. Conducted weekly Change Log sessions via Skype, developed release notes and training presentations, and designed assessments against learning outcomes. Early experience with the full content lifecycle — from curriculum co-writing to delivery to evaluation.',
+  },
+  {
+    period:    'Jul 2019 – Jul 2020',
+    startYear: 2019.5,
+    role:      'Product Consultant (L&D Manager) & LMS Administrator',
+    company:   'Mindarray Systems Pvt. Ltd.',
+    location:  'Ahmedabad, Gujarat',
+    skills:    ['ABARA LMS', 'SCORM', 'LMS Implementation', 'Global Training'],
+    highlight: 'Single-handedly implemented an LMS from scratch — built all SCORM content for internal teams and global distributors. First time owning the entire L&D infrastructure of an organisation.',
+    desc:      'Implemented ABARA LMS end-to-end within the company. Built SCORM training packages for internal employees and global product partners. Developed group and individual training programs to address specific business needs. First solo ownership of a full L&D function — design, development, admin, and delivery all in one role.',
+  },
+  {
+    period:    'Jul 2020 – Dec 2020',
+    startYear: 2020.5,
+    role:      'L&D Manager · ID · LMS Administrator',
+    company:   'EMXCEL Travel Solutions',
+    location:  'Ahmedabad, Gujarat',
+    skills:    ['Zing HR LMS', 'OD Training', 'ROI Evaluation', 'Soft Skills'],
+    highlight: 'Added organisational development and ROI evaluation to the toolkit — moving from pure content creation into strategic L&D management.',
+    desc:      'Led TNI/TNA with SMEs across product teams. Created eLearning content for soft skills and OD training on Zing HR LMS. Conducted classroom training and evaluated ROI across teams. Led digital marketing and enrollment teams. A broader, more strategic role that connected L&D work to business outcomes.',
+  },
+  {
+    period:    'May 2021 – Jul 2024',
+    startYear: 2021.4,
+    role:      'Senior Instructional Designer & eLearning Developer',
+    company:   'Rayden Interactive',
+    location:  'Pune, Maharashtra',
+    skills:    ['Storyline 360', 'JavaScript', 'SCORM/xAPI', 'Camtasia', 'Branching Scenarios'],
+    highlight: 'Three years of deep technical eLearning development — this is where Articulate Storyline became a development environment, not just a slide tool.',
+    desc:      'Built complex Storyline modules with custom variables, triggers, branching scenarios, and JavaScript. Created simulation-based screen recordings and animated videos in Camtasia. Managed end-to-end timelines and client review cycles across concurrent projects. Led remote workshops for knowledge transfer. The role where technical craft was forged.',
+  },
+  {
+    period:    'Jul 2024 – Mar 2026',
+    startYear: 2024.5,
+    role:      'Team Lead — ID & eLearning Development',
+    company:   'Siemens DISW',
+    location:  'Pune, Maharashtra',
+    skills:    ['AI Integration', 'REST API', 'FFmpeg', 'GPT Bots', 'Team Leadership', 'xAPI'],
+    highlight: 'The convergence point — 15 years of training, design, development, and systems thinking, now applied at scale with AI, automation, and a team to lead.',
+    desc:      'Led a team of 3 IDs and developers on digital learning for global Siemens business units. Built an AI personalisation system connecting Storyline to Saba LMS via JavaScript and REST API, dynamically generating personalised Murf AI voice narration per learner. Automated multilingual video localisation with FFmpeg. Deployed 3 custom GPT bots. Led Community of Practice sessions on AI and JavaScript in L&D.',
+  },
+];
+
+// ── Compute positions ──
+const TL_START = 2010;
+const TL_END   = 2026.25;
+const TL_SPAN  = TL_END - TL_START;
+
+function yearToPct(year) {
+  return Math.max(0, Math.min(100, ((year - TL_START) / TL_SPAN) * 100));
+}
+
+let tlCurrentIndex = 0;
+
+// ── Init ──
+function tlInit() {
+  const markersEl = document.getElementById('tlMarkers');
+  if (!markersEl) return;
+
+  // Build markers
+  markersEl.innerHTML = '';
+  TL_ROLES.forEach((role, i) => {
+    const pct = yearToPct(role.startYear);
+    const m = document.createElement('div');
+    m.className = 'tl-marker' + (i === 0 ? ' active' : '');
+    m.style.left = pct + '%';
+    m.title = role.company;
+    m.addEventListener('click', () => tlGoTo(i));
+    markersEl.appendChild(m);
+  });
+
+  // Build dots
+  const dotsEl = document.getElementById('tlDots');
+  dotsEl.innerHTML = '';
+  TL_ROLES.forEach((_, i) => {
+    const d = document.createElement('button');
+    d.className = 'tl-dot' + (i === 0 ? ' active' : '');
+    d.addEventListener('click', () => tlGoTo(i));
+    dotsEl.appendChild(d);
+  });
+
+  tlGoTo(0, false);
+  tlInitDrag();
+}
+
+function tlGoTo(index, animate = true) {
+  if (index < 0 || index >= TL_ROLES.length) return;
+  tlCurrentIndex = index;
+  const role = TL_ROLES[index];
+  const pct  = yearToPct(role.startYear);
+
+  // Update scrubber
+  document.getElementById('tlFill').style.width  = pct + '%';
+  document.getElementById('tlThumb').style.left  = pct + '%';
+  if (!animate) {
+    document.getElementById('tlFill').style.transition  = 'none';
+    document.getElementById('tlThumb').style.transition = 'none';
+    setTimeout(() => {
+      document.getElementById('tlFill').style.transition  = '';
+      document.getElementById('tlThumb').style.transition = '';
+    }, 50);
+  }
+
+  // Update markers
+  document.querySelectorAll('.tl-marker').forEach((m, i) => {
+    m.classList.toggle('active', i === index);
+  });
+
+  // Update dots
+  document.querySelectorAll('.tl-dot').forEach((d, i) => {
+    d.classList.toggle('active', i === index);
+  });
+
+  // Update card
+  const card = document.getElementById('tlCard');
+  card.classList.remove('loaded');
+
+  document.getElementById('tlPeriod').textContent    = role.period;
+  document.getElementById('tlRole').textContent      = role.role;
+  document.getElementById('tlCompany').textContent   = role.company;
+  document.getElementById('tlLocation').textContent  = '📍 ' + role.location;
+  document.getElementById('tlIndex').textContent     = String(index + 1).padStart(2, '0');
+  document.getElementById('tlHighlight').textContent = role.highlight;
+  document.getElementById('tlDesc').textContent      = role.desc;
+
+  // Chips
+  const chipsEl = document.getElementById('tlChips');
+  chipsEl.innerHTML = '';
+  role.skills.forEach(s => {
+    const c = document.createElement('span');
+    c.className = 'tl-chip';
+    c.textContent = s;
+    chipsEl.appendChild(c);
+  });
+
+  // Nav buttons
+  document.getElementById('tlPrev').disabled = index === 0;
+  document.getElementById('tlNext').disabled = index === TL_ROLES.length - 1;
+
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => card.classList.add('loaded'));
+  });
+}
+
+function tlNavigate(dir) {
+  tlGoTo(tlCurrentIndex + dir);
+}
+
+// ── Drag scrubber ──
+function tlInitDrag() {
+  const thumb = document.getElementById('tlThumb');
+  const wrap  = document.getElementById('tlTrackWrap');
+
+  function pctFromEvent(e) {
+    const rect = wrap.getBoundingClientRect();
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    return Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
+  }
+
+  function pctToNearestRole(pct) {
+    const year = TL_START + pct * TL_SPAN;
+    let best = 0, bestDist = Infinity;
+    TL_ROLES.forEach((r, i) => {
+      const d = Math.abs(r.startYear - year);
+      if (d < bestDist) { bestDist = d; best = i; }
+    });
+    return best;
+  }
+
+  let dragging = false;
+
+  function onStart(e) {
+    dragging = true;
+    e.preventDefault();
+    onMove(e);
+  }
+  function onMove(e) {
+    if (!dragging) return;
+    const pct = pctFromEvent(e);
+    const idx = pctToNearestRole(pct);
+    if (idx !== tlCurrentIndex) tlGoTo(idx);
+  }
+  function onEnd() { dragging = false; }
+
+  thumb.addEventListener('mousedown',  onStart);
+  thumb.addEventListener('touchstart', onStart, { passive: false });
+  document.addEventListener('mousemove',  onMove);
+  document.addEventListener('touchmove',  onMove, { passive: false });
+  document.addEventListener('mouseup',    onEnd);
+  document.addEventListener('touchend',   onEnd);
+
+  // Click on track
+  wrap.addEventListener('click', function(e) {
+    if (e.target === thumb) return;
+    const pct = pctFromEvent(e);
+    tlGoTo(pctToNearestRole(pct));
+  });
+
+  // Keyboard
+  thumb.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { e.preventDefault(); tlGoTo(tlCurrentIndex + 1); }
+    if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   { e.preventDefault(); tlGoTo(tlCurrentIndex - 1); }
+  });
+}
+
+// ── Kick off after DOM ready ──
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', tlInit);
+} else {
+  tlInit();
+}
+</script>
+<!-- ── END CAREER TIMELINE ── -->
+
+
+<style>
+/* ── Journey Peek Button ── */
+.journey-trigger {
+  position: fixed;
+  left: 0;
+  bottom: 5.5rem;
+  z-index: 8500;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  background: #f5f0e8;
+  color: #1a1a18;
+  border: 1.5px solid rgba(26,26,24,0.18);
+  border-left: none;
+  border-radius: 0 8px 8px 0;
+  padding: 0.65rem 1rem 0.65rem 0.85rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transform: translateX(-100%);
+  animation: journeyPeek 0.55s cubic-bezier(0.34,1.2,0.64,1) 4.2s both;
+  transition: background 0.2s, transform 0.2s, border-color 0.2s, color 0.2s;
+  box-shadow: 2px 2px 12px rgba(0,0,0,0.1);
+}
+@keyframes journeyPeek {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(0px); }
+}
+.journey-trigger:hover {
+  background: #1a1a18;
+  color: #f5f0e8;
+  border-color: #1a1a18;
+  transform: translateX(5px);
+}
+@media(max-width:768px) {
+  .journey-trigger { bottom: 4.5rem; padding: 0.65rem 0.8rem; }
+  .journey-trigger-text { display: none; }
+}
+</style>
+
 </html>
