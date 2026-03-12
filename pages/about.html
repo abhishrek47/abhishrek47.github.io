@@ -728,6 +728,265 @@
   </div>
 </section>
 
+<!-- CV COMPARISON -->
+<section class="cv-compare reveal">
+  <div class="cv-compare-inner">
+    <div class="cv-compare-header">
+      <div class="section-label">The Honest Comparison</div>
+      <h2 class="cv-compare-title">Most L&D CVs say the <em>same things.</em></h2>
+      <p class="cv-compare-sub">Here's what that usually looks like — and what's actually different here.</p>
+    </div>
+
+    <div class="cv-table">
+
+      <!-- Table header -->
+      <div class="cv-row cv-row-head">
+        <div class="cv-col cv-col-label"></div>
+        <div class="cv-col cv-col-generic">
+          <span class="cv-col-badge generic">Typical L&D CV</span>
+        </div>
+        <div class="cv-col cv-col-real">
+          <span class="cv-col-badge real">Abhishek Trivedi</span>
+        </div>
+      </div>
+
+      <!-- Row 1 -->
+      <div class="cv-row reveal-row">
+        <div class="cv-col cv-col-label">Authoring Tools</div>
+        <div class="cv-col cv-col-generic">
+          <span class="cv-chip dim">"Proficient in Storyline 360"</span>
+        </div>
+        <div class="cv-col cv-col-real">
+          <span class="cv-chip bright">JavaScript inside Storyline — custom triggers, API calls, dynamic branching, live variable injection</span>
+        </div>
+      </div>
+
+      <!-- Row 2 -->
+      <div class="cv-row reveal-row">
+        <div class="cv-col cv-col-label">ID Methodology</div>
+        <div class="cv-col cv-col-generic">
+          <span class="cv-chip dim">"Experienced in ADDIE and instructional design principles"</span>
+        </div>
+        <div class="cv-col cv-col-real">
+          <span class="cv-chip bright">7 frameworks — ADDIE, SAM, Gagne, Bloom, Merrill, Agile ID, Kirkpatrick — with 28 storyboards showing which model fits which problem</span>
+        </div>
+      </div>
+
+      <!-- Row 3 -->
+      <div class="cv-row reveal-row">
+        <div class="cv-col cv-col-label">AI in L&D</div>
+        <div class="cv-col cv-col-generic">
+          <span class="cv-chip dim">"Familiar with AI tools and their applications in learning"</span>
+        </div>
+        <div class="cv-col cv-col-real">
+          <span class="cv-chip bright">Built a live AI voice personalisation system — LLM + TTS pipeline wired to a simulated LMS, deployed in a browser demo you can use right now</span>
+        </div>
+      </div>
+
+      <!-- Row 4 -->
+      <div class="cv-row reveal-row">
+        <div class="cv-col cv-col-label">Efficiency Gains</div>
+        <div class="cv-col cv-col-generic">
+          <span class="cv-chip dim">"Delivered projects on time and within budget"</span>
+        </div>
+        <div class="cv-col cv-col-real">
+          <span class="cv-chip bright">FFmpeg automation pipeline — 8-language video localisation in under 90 seconds. Previously a full day's manual work per language</span>
+        </div>
+      </div>
+
+      <!-- Row 5 -->
+      <div class="cv-row reveal-row">
+        <div class="cv-col cv-col-label">Learning Data</div>
+        <div class="cv-col cv-col-generic">
+          <span class="cv-chip dim">"Experience with LMS platforms and SCORM packaging"</span>
+        </div>
+        <div class="cv-col cv-col-real">
+          <span class="cv-chip bright">Custom xAPI statement schemas, live LRS integration, real-time learner action streams — the data layer most SCORM implementations never touch</span>
+        </div>
+      </div>
+
+      <!-- Row 6 -->
+      <div class="cv-row reveal-row">
+        <div class="cv-col cv-col-label">Portfolio</div>
+        <div class="cv-col cv-col-generic">
+          <span class="cv-chip dim">"Portfolio available on request — PDF with screenshots and case write-ups"</span>
+        </div>
+        <div class="cv-col cv-col-real">
+          <span class="cv-chip bright">5 live interactive demos. In the browser. That you can use, break, and inspect the code of. Right now.</span>
+        </div>
+      </div>
+
+      <!-- Row 7 — the kicker -->
+      <div class="cv-row reveal-row cv-row-kicker">
+        <div class="cv-col cv-col-label">Proof</div>
+        <div class="cv-col cv-col-generic">
+          <span class="cv-chip dim">"References available on request"</span>
+        </div>
+        <div class="cv-col cv-col-real">
+          <span class="cv-chip bright">
+            <a href="https://abhishektrivedi.com" target="_blank" style="color:inherit;text-decoration:underline;text-underline-offset:3px;">abhishektrivedi.com →</a>
+          </span>
+        </div>
+      </div>
+
+    </div><!-- /.cv-table -->
+  </div>
+</section>
+
+<style>
+/* ── Section wrapper ── */
+.cv-compare {
+  padding: 6rem 4rem;
+  background: #0d0e0c;
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+.cv-compare-inner {
+  max-width: 1060px;
+  margin: 0 auto;
+}
+.cv-compare-header {
+  margin-bottom: 3rem;
+}
+.cv-compare-title {
+  font-family: var(--serif);
+  font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+  color: #fff;
+  line-height: 1.15;
+  margin: 0.6rem 0 0.75rem;
+}
+.cv-compare-title em { font-style: italic; color: #c84b2f; }
+.cv-compare-sub {
+  font-size: 0.92rem;
+  color: rgba(255,255,255,0.4);
+  max-width: 480px;
+  line-height: 1.6;
+}
+
+/* ── Table ── */
+.cv-table {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.cv-row {
+  display: grid;
+  grid-template-columns: 160px 1fr 1fr;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  transition: background 0.2s;
+}
+.cv-row:last-child { border-bottom: none; }
+.cv-row:not(.cv-row-head):hover { background: rgba(255,255,255,0.02); }
+
+/* Header row */
+.cv-row-head {
+  background: #161810;
+}
+
+/* Kicker row */
+.cv-row-kicker {
+  background: rgba(200,75,47,0.05);
+}
+.cv-row-kicker:hover { background: rgba(200,75,47,0.09) !important; }
+
+/* Columns */
+.cv-col {
+  padding: 1rem 1.25rem;
+  display: flex;
+  align-items: center;
+}
+.cv-col-label {
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.3);
+  border-right: 1px solid rgba(255,255,255,0.06);
+}
+.cv-col-generic {
+  border-right: 1px solid rgba(255,255,255,0.06);
+}
+.cv-col-real {}
+
+/* Badge pills in header */
+.cv-col-badge {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.75rem;
+  border-radius: 100px;
+}
+.cv-col-badge.generic {
+  background: rgba(255,255,255,0.06);
+  color: rgba(255,255,255,0.35);
+  border: 1px solid rgba(255,255,255,0.1);
+}
+.cv-col-badge.real {
+  background: rgba(200,75,47,0.12);
+  color: #c84b2f;
+  border: 1px solid rgba(200,75,47,0.3);
+}
+
+/* Content chips */
+.cv-chip {
+  font-size: 0.82rem;
+  line-height: 1.55;
+  display: block;
+}
+.cv-chip.dim {
+  color: rgba(255,255,255,0.25);
+  font-style: italic;
+}
+.cv-chip.bright {
+  color: rgba(255,255,255,0.88);
+}
+
+/* Row reveal animation */
+.reveal-row {
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.45s ease, transform 0.45s ease;
+}
+.reveal-row.visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* ── Responsive ── */
+@media (max-width: 760px) {
+  .cv-compare { padding: 4rem 1.5rem; }
+  .cv-row { grid-template-columns: 1fr; }
+  .cv-col-label {
+    border-right: none;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    padding-bottom: 0.5rem;
+  }
+  .cv-col-generic { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.06); }
+  .cv-col { padding: 0.75rem 1rem; }
+  .cv-row-head .cv-col-label { display: none; }
+}
+</style>
+
+<script>
+(function(){
+  const rows = document.querySelectorAll('.reveal-row');
+  const obs  = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        // Stagger each row by 80ms
+        const idx = Array.from(rows).indexOf(entry.target);
+        setTimeout(() => entry.target.classList.add('visible'), idx * 80);
+        obs.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  rows.forEach(r => obs.observe(r));
+})();
+</script>
+
 <!-- CTA STRIP -->
 <section class="cta-strip reveal">
   <h2>Want to see the work<br>that backs all this up?</h2>
