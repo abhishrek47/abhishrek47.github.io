@@ -1,997 +1,562 @@
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>About | Abhishek Trivedi</title>
-  <meta name="description" content="Abhishek Trivedi — Learning Experience Technologist with 15+ years building AI-integrated, technically advanced eLearning. Based in Pune, India. Open to remote opportunities." />
+  <meta name="description" content="Abhishek Trivedi — Learning Experience Technologist. 15+ years building AI-integrated, technically advanced eLearning. Pune, India. Open to remote." />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../css/style.css" />
-  <style>
-
-    /* ── PAGE LAYOUT ── */
-    .about-hero {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      min-height: 560px;
-      border-bottom: 1px solid var(--rule);
-    }
-
-    /* LEFT — dark navy panel */
-    .about-hero-left {
-      background: var(--accent2, #0f1e38);
-      padding: 5rem 4rem 4rem;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      position: relative;
-      overflow: hidden;
-    }
-    .about-hero-left::before {
-      content: 'AT.';
-      position: absolute;
-      bottom: -2rem;
-      right: -1rem;
-      font-family: var(--serif);
-      font-size: 14rem;
-      font-style: italic;
-      color: rgba(255,255,255,0.03);
-      line-height: 1;
-      pointer-events: none;
-      user-select: none;
-    }
-    .about-eyebrow {
-      font-family: var(--mono);
-      font-size: 0.65rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--accent);
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      margin-bottom: 2rem;
-    }
-    .about-eyebrow::before {
-      content: '';
-      display: block;
-      width: 2rem;
-      height: 1px;
-      background: var(--accent);
-    }
-    .about-hero-left h1 {
-      font-family: var(--serif);
-      font-size: clamp(2.8rem, 4vw, 4rem);
-      line-height: 1.08;
-      color: white;
-      letter-spacing: -0.01em;
-      max-width: 14ch;
-    }
-    .about-hero-left h1 em {
-      font-style: italic;
-      color: var(--accent);
-    }
-    .about-hero-tagline {
-      font-size: 0.95rem;
-      color: rgba(255,255,255,0.55);
-      line-height: 1.75;
-      max-width: 38ch;
-      font-weight: 300;
-      margin-top: 1.75rem;
-    }
-    .about-location {
-      font-family: var(--mono);
-      font-size: 0.68rem;
-      letter-spacing: 0.1em;
-      color: rgba(255,255,255,0.35);
-      margin-top: 2.5rem;
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-    }
-    .about-location::before {
-      content: '◎';
-      color: var(--accent);
-    }
-
-    /* RIGHT — light paper panel */
-    .about-hero-right {
-      background: var(--paper, #f8f6f1);
-      padding: 5rem 4rem 4rem;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      border-left: 1px solid var(--rule);
-    }
-    .about-intro-label {
-      font-family: var(--mono);
-      font-size: 0.62rem;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 1.5rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-    .about-intro-label::before {
-      content: '';
-      display: block;
-      width: 1rem;
-      height: 1px;
-      background: var(--accent);
-    }
-    .about-intro p {
-      font-size: 1.05rem;
-      color: var(--ink);
-      line-height: 1.8;
-      margin-bottom: 1.25rem;
-      font-weight: 400;
-    }
-    .about-intro p:last-child { margin-bottom: 0; }
-    .about-intro strong { color: var(--ink); font-weight: 600; }
-
-    /* ── WHAT I DO ── */
-    .what-i-do {
-      padding: 5rem 4rem;
-      background: white;
-      border-bottom: 1px solid var(--rule);
-    }
-    .section-label {
-      font-family: var(--mono);
-      font-size: 0.65rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--accent);
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      margin-bottom: 3rem;
-    }
-    .section-label::before {
-      content: '';
-      display: block;
-      width: 2rem;
-      height: 1px;
-      background: var(--accent);
-    }
-    .capabilities-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 0;
-      border: 1px solid var(--rule);
-    }
-    .cap-card {
-      padding: 2.5rem;
-      border-right: 1px solid var(--rule);
-      transition: background 0.25s;
-      position: relative;
-    }
-    .cap-card:last-child { border-right: none; }
-    .cap-card:nth-child(4),
-    .cap-card:nth-child(5),
-    .cap-card:nth-child(6) {
-      border-top: 1px solid var(--rule);
-    }
-    .cap-card:nth-child(3),
-    .cap-card:nth-child(6) { border-right: none; }
-    .cap-card:hover { background: var(--paper); }
-    .cap-num {
-      font-family: var(--mono);
-      font-size: 0.62rem;
-      color: var(--accent);
-      letter-spacing: 0.1em;
-      margin-bottom: 1.25rem;
-    }
-    .cap-title {
-      font-family: var(--serif);
-      font-size: 1.25rem;
-      line-height: 1.2;
-      color: var(--ink);
-      margin-bottom: 0.85rem;
-    }
-    .cap-desc {
-      font-size: 0.87rem;
-      color: var(--mid);
-      line-height: 1.7;
-    }
-    .cap-tools {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.35rem;
-      margin-top: 1.25rem;
-    }
-
-    /* ── TIMELINE / JOURNEY ── */
-    .journey-section {
-      padding: 5rem 4rem;
-      background: var(--paper);
-      border-bottom: 1px solid var(--rule);
-    }
-    .journey-section h2 {
-      font-family: var(--serif);
-      font-size: clamp(1.75rem, 2.5vw, 2.25rem);
-      margin-bottom: 3rem;
-      line-height: 1.2;
-      color: var(--ink);
-    }
-    .journey-section h2 em { font-style: italic; color: var(--accent); }
-    .timeline {
-      display: flex;
-      flex-direction: column;
-      gap: 0;
-      position: relative;
-      max-width: 780px;
-    }
-    .timeline::before {
-      content: '';
-      position: absolute;
-      left: 6px;
-      top: 8px;
-      bottom: 0;
-      width: 1px;
-      background: var(--rule);
-    }
-    .timeline-item {
-      display: grid;
-      grid-template-columns: 32px 1fr;
-      gap: 1.5rem;
-      padding-bottom: 3rem;
-      position: relative;
-    }
-    .timeline-item:last-child { padding-bottom: 0; }
-    .timeline-dot {
-      width: 13px;
-      height: 13px;
-      border-radius: 50%;
-      background: white;
-      border: 2px solid var(--rule);
-      margin-top: 4px;
-      flex-shrink: 0;
-      transition: border-color 0.25s, background 0.25s;
-      position: relative;
-      z-index: 1;
-    }
-    .timeline-item:hover .timeline-dot {
-      border-color: var(--accent);
-      background: var(--accent);
-    }
-    .timeline-year {
-      font-family: var(--mono);
-      font-size: 0.62rem;
-      letter-spacing: 0.1em;
-      color: var(--accent);
-      margin-bottom: 0.4rem;
-    }
-    .timeline-title {
-      font-family: var(--serif);
-      font-size: 1.15rem;
-      color: var(--ink);
-      margin-bottom: 0.5rem;
-      line-height: 1.25;
-    }
-    .timeline-desc {
-      font-size: 0.87rem;
-      color: var(--mid);
-      line-height: 1.7;
-    }
-
-    /* ── HOW I WORK ── */
-    .how-i-work {
-      padding: 5rem 4rem;
-      background: white;
-      border-bottom: 1px solid var(--rule);
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 5rem;
-      align-items: start;
-    }
-    .how-left h2 {
-      font-family: var(--serif);
-      font-size: clamp(1.75rem, 2.5vw, 2.25rem);
-      line-height: 1.2;
-      margin-top: 1rem;
-      margin-bottom: 1.5rem;
-    }
-    .how-left h2 em { font-style: italic; color: var(--accent); }
-    .how-left p {
-      font-size: 0.93rem;
-      color: var(--mid);
-      line-height: 1.8;
-      margin-bottom: 1rem;
-    }
-    .principle-list {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-      display: flex;
-      flex-direction: column;
-      gap: 1.5rem;
-    }
-    .principle-item {
-      display: grid;
-      grid-template-columns: 1.5rem 1fr;
-      gap: 1rem;
-      align-items: start;
-    }
-    .principle-arrow {
-      color: var(--accent);
-      font-family: var(--mono);
-      font-size: 0.75rem;
-      padding-top: 2px;
-    }
-    .principle-text strong {
-      display: block;
-      font-size: 0.92rem;
-      color: var(--ink);
-      font-weight: 600;
-      margin-bottom: 0.25rem;
-    }
-    .principle-text span {
-      font-size: 0.85rem;
-      color: var(--mid);
-      line-height: 1.6;
-    }
-
-    /* ── CURRENTLY ── */
-    .currently-section {
-      padding: 5rem 4rem;
-      background: var(--accent2, #0f1e38);
-      border-bottom: 1px solid var(--rule);
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 5rem;
-      align-items: center;
-    }
-    .currently-left .section-label { color: rgba(255,255,255,0.4); }
-    .currently-left .section-label::before { background: rgba(255,255,255,0.2); }
-    .currently-left h2 {
-      font-family: var(--serif);
-      font-size: clamp(1.75rem, 2.5vw, 2.25rem);
-      color: white;
-      line-height: 1.2;
-      margin-bottom: 1.5rem;
-    }
-    .currently-left h2 em { font-style: italic; color: var(--accent); }
-    .currently-left p {
-      font-size: 0.93rem;
-      color: rgba(255,255,255,0.55);
-      line-height: 1.8;
-      margin-bottom: 1rem;
-    }
-    .currently-left p:last-child { margin-bottom: 0; }
-    .availability-card {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 8px;
-      padding: 2rem 2.25rem;
-    }
-    .availability-status {
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      font-family: var(--mono);
-      font-size: 0.65rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: #3dba6e;
-      margin-bottom: 1.5rem;
-    }
-    .avail-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: #3dba6e;
-      position: relative;
-    }
-    .avail-dot::before {
-      content: '';
-      position: absolute;
-      inset: -3px;
-      border-radius: 50%;
-      background: rgba(61,186,110,0.3);
-      animation: pulse-ring 1.8s ease infinite;
-    }
-    @keyframes pulse-ring {
-      0%   { transform: scale(1); opacity: 0.7; }
-      100% { transform: scale(2.2); opacity: 0; }
-    }
-    .avail-items {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
-    }
-    .avail-item {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      font-size: 0.88rem;
-      color: rgba(255,255,255,0.75);
-    }
-    .avail-item::before {
-      content: '→';
-      color: var(--accent);
-      font-family: var(--mono);
-      font-size: 0.75rem;
-    }
-    .avail-cta {
-      margin-top: 1.75rem;
-      padding-top: 1.5rem;
-      border-top: 1px solid rgba(255,255,255,0.08);
-    }
-    .avail-cta a {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      background: var(--accent);
-      color: white;
-      font-family: var(--sans);
-      font-size: 0.88rem;
-      font-weight: 600;
-      padding: 0.85rem 1.75rem;
-      border-radius: 4px;
-      text-decoration: none;
-      transition: background 0.2s, transform 0.2s;
-    }
-    .avail-cta a:hover { background: #b03d22; transform: translateY(-2px); }
-    .avail-cta-note {
-      font-family: var(--mono);
-      font-size: 0.65rem;
-      color: rgba(255,255,255,0.3);
-      margin-top: 0.75rem;
-      letter-spacing: 0.06em;
-    }
-
-    /* ── RESPONSIVE ── */
-    @media(max-width:900px){
-      .about-hero { grid-template-columns: 1fr; }
-      .about-hero-left { padding: 3.5rem 1.75rem 3rem; min-height: auto; }
-      .about-hero-right { padding: 3rem 1.75rem; border-left: none; border-top: 1px solid var(--rule); }
-      .what-i-do { padding: 4rem 1.75rem; }
-      .capabilities-grid { grid-template-columns: 1fr; }
-      .cap-card { border-right: none; border-bottom: 1px solid var(--rule); }
-      .cap-card:last-child { border-bottom: none; }
-      .cap-card:nth-child(4),
-      .cap-card:nth-child(5),
-      .cap-card:nth-child(6) { border-top: none; }
-      .journey-section { padding: 4rem 1.75rem; }
-      .how-i-work { grid-template-columns: 1fr; gap: 2.5rem; padding: 4rem 1.75rem; }
-      .currently-section { grid-template-columns: 1fr; gap: 2.5rem; padding: 4rem 1.75rem; }
-    }
-    @media(max-width:480px){
-      .about-hero-left { padding: 2.5rem 1.25rem 2.5rem; }
-      .about-hero-right { padding: 2.5rem 1.25rem; }
-      .what-i-do,
-      .journey-section,
-      .how-i-work,
-      .currently-section { padding: 3rem 1.25rem; }
-    }
-  </style>
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+  <style>
+  /* ── RESET & BASE ── */
+  body { background: #0f0e0c; color: #f0ece4; }
+
+  /* ── NAV override for dark bg ── */
+  nav { background: #0f0e0c; border-bottom: 1px solid rgba(255,255,255,0.07); }
+
+  /* ── HERO ── */
+  .ab-hero {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 7rem 2.5rem 5rem;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+  }
+  .ab-eyebrow {
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .ab-eyebrow::before {
+    content: '';
+    display: inline-block;
+    width: 24px; height: 1px;
+    background: var(--accent);
+  }
+  .ab-hero h1 {
+    font-family: var(--serif);
+    font-size: clamp(2.8rem, 6vw, 4.8rem);
+    line-height: 1.1;
+    font-weight: 400;
+    color: #fff;
+    margin: 0 0 1.75rem;
+    letter-spacing: -0.02em;
+  }
+  .ab-hero h1 em { font-style: italic; color: var(--accent); }
+  .ab-hero-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: start;
+  }
+  .ab-intro {
+    font-size: 1.02rem;
+    line-height: 1.75;
+    color: rgba(255,255,255,0.78);
+  }
+  .ab-intro strong { color: #fff; font-weight: 600; }
+  .ab-intro p + p { margin-top: 1rem; }
+  .ab-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  .ab-location {
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    color: rgba(255,255,255,0.45);
+    text-transform: uppercase;
+  }
+  .ab-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    border-left: 2px solid rgba(200,75,47,0.3);
+    padding-left: 1.25rem;
+  }
+  .ab-stat-item { display: flex; flex-direction: column; gap: 0.15rem; }
+  .ab-stat-num {
+    font-family: var(--serif);
+    font-size: 1.9rem;
+    color: #fff;
+    line-height: 1;
+    font-style: italic;
+  }
+  .ab-stat-label {
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.45);
+  }
+  .ab-available {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(61,186,110,0.08);
+    border: 1px solid rgba(61,186,110,0.25);
+    border-radius: 100px;
+    padding: 0.4rem 0.9rem;
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #3dba6e;
+    width: fit-content;
+  }
+  .ab-available-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: #3dba6e;
+    animation: abPulse 2s infinite;
+  }
+  @keyframes abPulse {
+    0%,100%{ box-shadow: 0 0 0 0 rgba(61,186,110,0.4); }
+    50%    { box-shadow: 0 0 0 5px rgba(61,186,110,0); }
+  }
+
+  /* ── CAPABILITIES ── */
+  .ab-section {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 4.5rem 2.5rem;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+  }
+  .ab-section-label {
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.35);
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .ab-section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: rgba(255,255,255,0.07);
+  }
+  .ab-cap-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .ab-cap-item {
+    padding: 1.5rem 1.75rem;
+    border-right: 1px solid rgba(255,255,255,0.07);
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    transition: background 0.2s;
+  }
+  .ab-cap-item:hover { background: rgba(255,255,255,0.02); }
+  .ab-cap-item:nth-child(2n) { border-right: none; }
+  .ab-cap-item:nth-last-child(-n+2) { border-bottom: none; }
+  .ab-cap-num {
+    font-family: var(--mono);
+    font-size: 0.58rem;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    margin-bottom: 0.5rem;
+  }
+  .ab-cap-title {
+    font-family: var(--serif);
+    font-size: 1.05rem;
+    color: #fff;
+    margin-bottom: 0.5rem;
+    line-height: 1.2;
+  }
+  .ab-cap-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+    margin-top: 0.65rem;
+  }
+  .ab-cap-tag {
+    font-family: var(--mono);
+    font-size: 0.58rem;
+    letter-spacing: 0.06em;
+    color: rgba(255,255,255,0.45);
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 3px;
+    padding: 0.15rem 0.45rem;
+  }
+
+  /* ── NARRATIVE (journey + approach merged) ── */
+  .ab-narrative {
+    font-size: 1rem;
+    line-height: 1.82;
+    color: rgba(255,255,255,0.72);
+    max-width: 640px;
+  }
+  .ab-narrative strong { color: #fff; font-weight: 600; }
+  .ab-narrative p + p { margin-top: 1.25rem; }
+  .ab-pull {
+    font-family: var(--serif);
+    font-size: 1.55rem;
+    font-style: italic;
+    color: rgba(255,255,255,0.88);
+    line-height: 1.4;
+    border-left: 3px solid var(--accent);
+    padding-left: 1.5rem;
+    margin: 2.5rem 0;
+    max-width: 560px;
+  }
+
+  /* ── CV COMPARISON ── */
+  .ab-cv {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 4.5rem 2.5rem;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+  }
+  .cv-table {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 6px;
+    overflow: hidden;
+    margin-top: 2rem;
+  }
+  .cv-row {
+    display: grid;
+    grid-template-columns: 140px 1fr 1fr;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    transition: background 0.2s;
+  }
+  .cv-row:last-child { border-bottom: none; }
+  .cv-row:not(.cv-row-head):hover { background: rgba(255,255,255,0.02); }
+  .cv-row-head { background: #161410; }
+  .cv-row-kicker { background: rgba(200,75,47,0.04); }
+  .cv-row-kicker:hover { background: rgba(200,75,47,0.08) !important; }
+  .cv-col { padding: 0.9rem 1.1rem; display: flex; align-items: center; }
+  .cv-col-label {
+    font-family: var(--mono);
+    font-size: 0.58rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.35);
+    border-right: 1px solid rgba(255,255,255,0.06);
+  }
+  .cv-col-generic { border-right: 1px solid rgba(255,255,255,0.06); }
+  .cv-col-badge {
+    font-family: var(--mono);
+    font-size: 0.58rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.2rem 0.65rem;
+    border-radius: 100px;
+  }
+  .cv-col-badge.generic {
+    background: rgba(255,255,255,0.05);
+    color: rgba(255,255,255,0.4);
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+  .cv-col-badge.real {
+    background: rgba(200,75,47,0.1);
+    color: var(--accent);
+    border: 1px solid rgba(200,75,47,0.3);
+  }
+  .cv-chip { font-size: 0.8rem; line-height: 1.5; display: block; }
+  .cv-chip.dim  { color: rgba(255,255,255,0.52); font-style: italic; }
+  .cv-chip.bright { color: rgba(255,255,255,0.88); }
+  .reveal-row {
+    opacity: 0; transform: translateY(10px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+  }
+  .reveal-row.visible { opacity: 1; transform: none; }
+
+  /* ── AVAILABLE / CTA ── */
+  .ab-cta {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 4.5rem 2.5rem 6rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: start;
+  }
+  .ab-cta-left h2 {
+    font-family: var(--serif);
+    font-size: clamp(1.8rem, 3vw, 2.4rem);
+    line-height: 1.15;
+    color: #fff;
+    margin-bottom: 1rem;
+  }
+  .ab-cta-left h2 em { font-style: italic; color: var(--accent); }
+  .ab-cta-left p {
+    font-size: 0.92rem;
+    line-height: 1.7;
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 1.75rem;
+  }
+  .ab-cta-right {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    padding-top: 0.5rem;
+  }
+  .ab-role-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.88rem;
+    color: rgba(255,255,255,0.72);
+    padding: 0.65rem 0;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .ab-role-item:last-child { border-bottom: none; }
+  .ab-role-item::before {
+    content: '→';
+    color: var(--accent);
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    flex-shrink: 0;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid rgba(255,255,255,0.07);
+    background: #0f0e0c;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 720px) {
+    .ab-hero-body { grid-template-columns: 1fr; gap: 2rem; }
+    .ab-cap-grid  { grid-template-columns: 1fr; }
+    .ab-cap-item  { border-right: none; }
+    .ab-cap-item:nth-last-child(-n+2) { border-bottom: 1px solid rgba(255,255,255,0.07); }
+    .ab-cap-item:last-child { border-bottom: none; }
+    .cv-row       { grid-template-columns: 1fr; }
+    .cv-col-label { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.06); }
+    .cv-col-generic { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.06); }
+    .ab-cta       { grid-template-columns: 1fr; gap: 2rem; }
+    .ab-hero, .ab-section, .ab-cv, .ab-cta { padding-left: 1.5rem; padding-right: 1.5rem; }
+  }
+
+  /* Reveal animation */
+  .reveal { opacity:0; transform:translateY(18px); transition: opacity 0.55s ease, transform 0.55s ease; }
+  .reveal.visible { opacity:1; transform:none; }
+  </style>
 </head>
+
 <body>
 
 <!-- NAV -->
 <nav>
   <a href="../index.html" class="nav-logo">AT<span>.</span></a>
-  <button class="hamburger" aria-label="Menu">
-    <span></span><span></span><span></span>
-  </button>
+  <button class="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
   <ul class="nav-links">
     <li><a href="work.html">Work</a></li>
-    <li><a href="about.html" class="nav-active">About</a></li>
+    <li><a href="about.html">About</a></li>
     <li><a href="certifications.html">Certifications</a></li>
     <li><a href="contact.html" class="nav-cta">Let's Talk</a></li>
   </ul>
 </nav>
 
-<!-- HERO -->
-<section class="about-hero">
-  <div class="about-hero-left">
-    <div>
-      <div class="about-eyebrow">Learning Experience Technologist</div>
-      <h1>The person<br>behind the <em>work.</em></h1>
-      <p class="about-hero-tagline">
-        I've spent 15+ years at the intersection of instructional design and engineering — building eLearning that behaves less like content and more like software.
-      </p>
+<!-- ── HERO ── -->
+<section class="ab-hero">
+  <div class="ab-eyebrow">Learning Experience Technologist</div>
+  <h1>The person behind<br>the <em>work.</em></h1>
+
+  <div class="ab-hero-body">
+    <div class="ab-intro">
+      <p>I started in L&D the way most people do — building slides, recording voiceovers, packaging SCORM files. But I kept running into the same ceiling: <strong>the tools stopped where the problems didn't.</strong></p>
+      <p>So I learned to write JavaScript inside Storyline. Then to connect courses to live APIs. Then to automate workflows that used to eat entire project weeks. Not because I wanted to be a developer — but because <strong>the learner experience I wanted to create required it.</strong></p>
+      <p>Today I sit at a specific intersection: I think like an instructional designer and build like an engineer. That combination is rare, and it's where I do my best work.</p>
     </div>
-    <div class="about-location">Pune, India &nbsp;·&nbsp; Open to remote &nbsp;·&nbsp; Full-time &amp; contract</div>
-  </div>
 
-  <div class="about-hero-right">
-    <div class="about-intro-label">In my own words</div>
-    <div class="about-intro">
-      <p>
-        I started in L&D the way most people do — building slides, recording voiceovers, packaging SCORM files. But I kept running into the same ceiling: <strong>the tools stopped where the problems didn't.</strong>
-      </p>
-      <p>
-        So I learned to write JavaScript inside Storyline. Then to connect those courses to live APIs. Then to automate the workflows that used to eat entire project weeks. Not because I wanted to be a developer — but because <strong>the learner experience I wanted to create required it.</strong>
-      </p>
-      <p>
-        Today I sit in a specific niche: I think like an instructional designer and build like an engineer. I understand pedagogy and performance objectives, and I can also write a Cloudflare Worker proxy, script FFmpeg across 8 languages, or wire an xAPI stream to an LRS. That combination is rare, and it's where I do my best work.
-      </p>
-    </div>
-  </div>
-</section>
-
-<!-- WHAT I DO -->
-<section class="what-i-do">
-  <div class="section-label">Capabilities</div>
-  <div class="capabilities-grid">
-
-    <div class="cap-card">
-      <div class="cap-num">01</div>
-      <div class="cap-title">Advanced eLearning Development</div>
-      <p class="cap-desc">Storyline 360 builds that go well beyond standard interactions — JavaScript-driven logic, dynamic branching, API-connected content, and custom animations that would look at home in a production app.</p>
-      <div class="cap-tools">
-        <span class="tag">Storyline 360</span>
-        <span class="tag">JavaScript</span>
-        <span class="tag">SCORM / xAPI</span>
+    <div class="ab-meta">
+      <div class="ab-available">
+        <span class="ab-available-dot"></span>
+        Available for new opportunities
+      </div>
+      <div class="ab-location">Pune, India &nbsp;·&nbsp; Open to remote &nbsp;·&nbsp; IST</div>
+      <div class="ab-stats">
+        <div class="ab-stat-item">
+          <span class="ab-stat-num">15+</span>
+          <span class="ab-stat-label">Years in L&D</span>
+        </div>
+        <div class="ab-stat-item">
+          <span class="ab-stat-num">28</span>
+          <span class="ab-stat-label">Storyboards hand-authored</span>
+        </div>
+        <div class="ab-stat-item">
+          <span class="ab-stat-num">7</span>
+          <span class="ab-stat-label">ID frameworks applied</span>
+        </div>
+        <div class="ab-stat-item">
+          <span class="ab-stat-num">36h</span>
+          <span class="ab-stat-label">Saved per production run</span>
+        </div>
       </div>
     </div>
-
-    <div class="cap-card">
-      <div class="cap-num">02</div>
-      <div class="cap-title">AI Integration & Tooling</div>
-      <p class="cap-desc">Building AI into learning workflows — not as a gimmick, but as infrastructure. Personalised narration via LLM + TTS, AI storyboard generation, intelligent branching, Cloudflare Worker proxies to keep API keys off the client.</p>
-      <div class="cap-tools">
-        <span class="tag">Claude API</span>
-        <span class="tag">Murf AI</span>
-        <span class="tag">Cloudflare Workers</span>
-        <span class="tag">Synthesia</span>
-      </div>
-    </div>
-
-    <div class="cap-card">
-      <div class="cap-num">03</div>
-      <div class="cap-title">Automation & Workflow Design</div>
-      <p class="cap-desc">Turning repetitive, manual processes into repeatable systems. FFmpeg-driven video localisation across multiple languages, shell-scripted batch operations, automated subtitle embedding — work that used to take a week, done in hours.</p>
-      <div class="cap-tools">
-        <span class="tag">FFmpeg</span>
-        <span class="tag">Shell Scripting</span>
-        <span class="tag">Batch Processing</span>
-      </div>
-    </div>
-
-    <div class="cap-card">
-      <div class="cap-num">04</div>
-      <div class="cap-title">Learning Data & xAPI</div>
-      <p class="cap-desc">Designing the data layer that most LMS implementations ignore. Custom xAPI statement schemas, LRS integration, real-time learner action streams, and dashboards that surface what a SCORM completion score never could.</p>
-      <div class="cap-tools">
-        <span class="tag">xAPI / Tin Can</span>
-        <span class="tag">LRS</span>
-        <span class="tag">Learning Analytics</span>
-      </div>
-    </div>
-
-    <div class="cap-card">
-      <div class="cap-num">05</div>
-      <div class="cap-title">Instructional Design & Strategy</div>
-      <p class="cap-desc">The technical work always starts with sound ID practice. ADDIE, Bloom's Taxonomy, Gagne's Nine Events, SAM, Merrill's Principles — I know when to use each model and, more importantly, when to combine them. Learning objectives that actually drive design decisions, not box-ticking.</p>
-      <div class="cap-tools">
-        <span class="tag">ADDIE</span>
-        <span class="tag">Bloom's</span>
-        <span class="tag">Gagne</span>
-        <span class="tag">SAM</span>
-        <span class="tag">Storyboarding</span>
-      </div>
-    </div>
-
-    <div class="cap-card">
-      <div class="cap-num">06</div>
-      <div class="cap-title">Scalable Systems Thinking</div>
-      <p class="cap-desc">Building once, deploying everywhere. Modular template libraries, reusable interaction patterns with documented Storyline JS, component-based design systems that let a team produce at consistent quality without starting from scratch every time.</p>
-      <div class="cap-tools">
-        <span class="tag">Template Systems</span>
-        <span class="tag">Component Design</span>
-        <span class="tag">Documentation</span>
-      </div>
-    </div>
-
   </div>
 </section>
 
-<!-- JOURNEY -->
-<section class="journey-section">
-  <div class="section-label">Journey</div>
-  <h2>15+ years of <em>learning</em><br>how to build learning.</h2>
-  <div class="timeline">
+<!-- ── CAPABILITIES ── -->
+<section class="ab-section reveal">
+  <div class="ab-section-label">What I do</div>
+  <div class="ab-cap-grid">
 
-    <div class="timeline-item">
-      <div class="timeline-dot"></div>
-      <div>
-        <div class="timeline-year">EARLY CAREER</div>
-        <div class="timeline-title">Getting the fundamentals right</div>
-        <p class="timeline-desc">Started in L&D with classic Instructional Design work — storyboarding, scripting, building in early-era authoring tools. Learned quickly that the gap between "what I want to build" and "what the tools let me build" was the most interesting problem in the field.</p>
+    <div class="ab-cap-item">
+      <div class="ab-cap-num">01</div>
+      <div class="ab-cap-title">Advanced eLearning Development</div>
+      <div class="ab-cap-tags">
+        <span class="ab-cap-tag">Storyline 360</span>
+        <span class="ab-cap-tag">JavaScript</span>
+        <span class="ab-cap-tag">SCORM / xAPI</span>
+        <span class="ab-cap-tag">API-connected</span>
       </div>
     </div>
 
-    <div class="timeline-item">
-      <div class="timeline-dot"></div>
-      <div>
-        <div class="timeline-year">MID CAREER</div>
-        <div class="timeline-title">Moving into Storyline & JavaScript</div>
-        <p class="timeline-desc">Began extending Articulate Storyline with JavaScript — custom triggers, dynamic content, live variable manipulation. What started as workarounds became a systematic approach: write the interaction logic in JS, use Storyline as a rendering layer. This changed what was possible.</p>
+    <div class="ab-cap-item">
+      <div class="ab-cap-num">02</div>
+      <div class="ab-cap-title">AI Integration & Tooling</div>
+      <div class="ab-cap-tags">
+        <span class="ab-cap-tag">Claude API</span>
+        <span class="ab-cap-tag">Murf AI</span>
+        <span class="ab-cap-tag">Cloudflare Workers</span>
+        <span class="ab-cap-tag">Synthesia</span>
       </div>
     </div>
 
-    <div class="timeline-item">
-      <div class="timeline-dot"></div>
-      <div>
-        <div class="timeline-year">GLOBAL SCALE</div>
-        <div class="timeline-title">Automation & localization at enterprise scale</div>
-        <p class="timeline-desc">Worked on high-volume multilingual projects where manual processes simply didn't scale. Built FFmpeg-based automation workflows that reduced per-language video localisation from hours to minutes. Saved 36+ hours per production run. Built reusable template systems that allowed consistent quality across teams.</p>
+    <div class="ab-cap-item">
+      <div class="ab-cap-num">03</div>
+      <div class="ab-cap-title">Automation & Workflow Design</div>
+      <div class="ab-cap-tags">
+        <span class="ab-cap-tag">FFmpeg</span>
+        <span class="ab-cap-tag">Shell Scripting</span>
+        <span class="ab-cap-tag">Batch Processing</span>
       </div>
     </div>
 
-    <div class="timeline-item">
-      <div class="timeline-dot"></div>
-      <div>
-        <div class="timeline-year">RECENT</div>
-        <div class="timeline-title">AI integration & API-connected learning</div>
-        <p class="timeline-desc">Moved into the AI-in-L&D space before it became a buzzword. Built real systems: AI-personalised narration in Storyline via Claude + Murf TTS, xAPI live data dashboards, an AI storyboard generator with 28 pre-built outputs across 7 ID models. The question I always start with: what would this enable that wasn't possible before?</p>
+    <div class="ab-cap-item">
+      <div class="ab-cap-num">04</div>
+      <div class="ab-cap-title">Learning Data & xAPI</div>
+      <div class="ab-cap-tags">
+        <span class="ab-cap-tag">xAPI / Tin Can</span>
+        <span class="ab-cap-tag">LRS</span>
+        <span class="ab-cap-tag">Learning Analytics</span>
       </div>
     </div>
 
-    <div class="timeline-item">
-      <div class="timeline-dot"></div>
-      <div>
-        <div class="timeline-year">NOW</div>
-        <div class="timeline-title">Open to the next challenge</div>
-        <p class="timeline-desc">Looking for an organisation that sees L&D as a strategic capability — not just a compliance checkbox. Whether that's a senior individual contributor role, a lead position, or a contract engagement, I'm interested in work where engineering curiosity and learning science both matter.</p>
+    <div class="ab-cap-item">
+      <div class="ab-cap-num">05</div>
+      <div class="ab-cap-title">Instructional Design & Strategy</div>
+      <div class="ab-cap-tags">
+        <span class="ab-cap-tag">ADDIE</span>
+        <span class="ab-cap-tag">Bloom's</span>
+        <span class="ab-cap-tag">Gagne</span>
+        <span class="ab-cap-tag">SAM</span>
+        <span class="ab-cap-tag">Storyboarding</span>
+      </div>
+    </div>
+
+    <div class="ab-cap-item">
+      <div class="ab-cap-num">06</div>
+      <div class="ab-cap-title">Scalable Systems Thinking</div>
+      <div class="ab-cap-tags">
+        <span class="ab-cap-tag">Template Systems</span>
+        <span class="ab-cap-tag">Component Design</span>
+        <span class="ab-cap-tag">Documentation</span>
       </div>
     </div>
 
   </div>
 </section>
 
-<!-- HOW I WORK -->
-<section class="how-i-work">
-  <div class="how-left">
-    <div class="section-label">Approach</div>
-    <h2>How I <em>actually</em><br>think about this work.</h2>
-    <p>
-      Most L&D professionals start with content. I start with behaviour — what the learner needs to do differently after, and what's currently stopping them from doing it. Everything else follows from that.
-    </p>
-    <p>
-      I build things I'd want to use myself. If I'm bored building it, the learner will be bored using it. If I'm proud of it, they usually notice.
-    </p>
-  </div>
-  <div class="how-right">
-    <ul class="principle-list">
-      <li class="principle-item">
-        <span class="principle-arrow">→</span>
-        <div class="principle-text">
-          <strong>Technology is a means, not a signal</strong>
-          <span>I use complex tech when it solves a real problem, and simple tech when that's what the problem needs. xAPI isn't impressive for its own sake — it's impressive when the data changes what you do next.</span>
-        </div>
-      </li>
-      <li class="principle-item">
-        <span class="principle-arrow">→</span>
-        <div class="principle-text">
-          <strong>Build once, run everywhere</strong>
-          <span>I default to reusable systems over one-off solutions. Every template, component, and automation I build is documented well enough that someone else can maintain and extend it.</span>
-        </div>
-      </li>
-      <li class="principle-item">
-        <span class="principle-arrow">→</span>
-        <div class="principle-text">
-          <strong>The learner is always the user</strong>
-          <span>I test everything from the learner's perspective first. Stakeholder approval and SME sign-off matter, but they're not the measure of success. Behaviour change is.</span>
-        </div>
-      </li>
-      <li class="principle-item">
-        <span class="principle-arrow">→</span>
-        <div class="principle-text">
-          <strong>If you can automate it, you probably should</strong>
-          <span>Manual repetition is a signal that there's a systems problem waiting to be solved. I'd rather spend two days automating a five-hour weekly task than keep doing the five-hour task.</span>
-        </div>
-      </li>
-    </ul>
+<!-- ── NARRATIVE ── -->
+<section class="ab-section reveal">
+  <div class="ab-section-label">How I got here</div>
+  <div class="ab-narrative">
+    <p>I started with the fundamentals — storyboarding, scripting, building in early-era authoring tools. The gap between "what I want to build" and "what the tools allow" was the most interesting problem in the field, so I learned to close it.</p>
+    <p>That meant writing JavaScript inside Storyline. Then wiring courses to live APIs. Then building FFmpeg pipelines that reduced per-language video localisation from a full day's work to under 90 seconds across 8 languages.</p>
+
+    <div class="ab-pull">"I build things I'd want to use myself. If I'm bored building it, the learner will be bored using it."</div>
+
+    <p>Most L&D professionals start with content. I start with behaviour — what the learner needs to do differently, and what's currently stopping them. The technical work always follows from that question, never the other way around.</p>
+    <p>I use complex tech when it solves a real problem, and simple tech when that's what the problem needs. xAPI isn't impressive for its own sake — it's impressive when the data changes what you do next. I build once and document well enough that someone else can maintain it. And if something is being done manually and repeatedly, there's almost certainly a systems fix waiting to be written.</p>
   </div>
 </section>
 
-<!-- CURRENTLY / AVAILABILITY -->
-<section class="currently-section">
-  <div class="currently-left">
-    <div class="section-label">Currently</div>
+<!-- ── CV COMPARISON ── -->
+<section class="ab-cv reveal">
+  <div class="ab-section-label">The honest comparison</div>
+
+  <div class="cv-table">
+    <div class="cv-row cv-row-head">
+      <div class="cv-col cv-col-label"></div>
+      <div class="cv-col cv-col-generic"><span class="cv-col-badge generic">Typical L&D CV</span></div>
+      <div class="cv-col cv-col-real"><span class="cv-col-badge real">Abhishek Trivedi</span></div>
+    </div>
+    <div class="cv-row reveal-row">
+      <div class="cv-col cv-col-label">Authoring</div>
+      <div class="cv-col cv-col-generic"><span class="cv-chip dim">"Proficient in Storyline 360"</span></div>
+      <div class="cv-col cv-col-real"><span class="cv-chip bright">JavaScript inside Storyline — API calls, dynamic branching, live variable injection</span></div>
+    </div>
+    <div class="cv-row reveal-row">
+      <div class="cv-col cv-col-label">ID Methods</div>
+      <div class="cv-col cv-col-generic"><span class="cv-chip dim">"Experienced in ADDIE"</span></div>
+      <div class="cv-col cv-col-real"><span class="cv-chip bright">7 frameworks with 28 storyboards showing which model fits which problem</span></div>
+    </div>
+    <div class="cv-row reveal-row">
+      <div class="cv-col cv-col-label">AI in L&D</div>
+      <div class="cv-col cv-col-generic"><span class="cv-chip dim">"Familiar with AI tools"</span></div>
+      <div class="cv-col cv-col-real"><span class="cv-chip bright">Live AI voice personalisation — LLM + TTS wired to a simulated LMS, in browser now</span></div>
+    </div>
+    <div class="cv-row reveal-row">
+      <div class="cv-col cv-col-label">Efficiency</div>
+      <div class="cv-col cv-col-generic"><span class="cv-chip dim">"Delivered on time"</span></div>
+      <div class="cv-col cv-col-real"><span class="cv-chip bright">FFmpeg pipeline — 8 languages in 90 seconds. Was a full day's manual work per language</span></div>
+    </div>
+    <div class="cv-row reveal-row">
+      <div class="cv-col cv-col-label">Learning Data</div>
+      <div class="cv-col cv-col-generic"><span class="cv-chip dim">"Experience with LMS platforms"</span></div>
+      <div class="cv-col cv-col-real"><span class="cv-chip bright">Custom xAPI schemas, live LRS, real-time learner action streams — the layer most SCORM ignores</span></div>
+    </div>
+    <div class="cv-row reveal-row">
+      <div class="cv-col cv-col-label">Portfolio</div>
+      <div class="cv-col cv-col-generic"><span class="cv-chip dim">"PDF available on request"</span></div>
+      <div class="cv-col cv-col-real"><span class="cv-chip bright">5 live interactive demos. In the browser. Use them, break them, inspect the code.</span></div>
+    </div>
+    <div class="cv-row reveal-row cv-row-kicker">
+      <div class="cv-col cv-col-label">Proof</div>
+      <div class="cv-col cv-col-generic"><span class="cv-chip dim">"References on request"</span></div>
+      <div class="cv-col cv-col-real"><span class="cv-chip bright"><a href="https://abhishektrivedi.com" target="_blank" style="color:inherit;text-decoration:underline;text-underline-offset:3px;">abhishektrivedi.com →</a></span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── AVAILABLE / CTA ── -->
+<section class="ab-cta reveal">
+  <div class="ab-cta-left">
     <h2>Open to the<br><em>right opportunity.</em></h2>
-    <p>
-      I'm based in Pune, India and open to remote-first roles globally. I work best in environments where L&D is seen as a craft — where you're expected to have a point of view and the latitude to act on it.
-    </p>
-    <p>
-      I'm not looking to maintain what already exists. I'm looking to build what doesn't yet.
-    </p>
+    <p>Based in Pune, India. Open to remote-first roles globally. I work best where L&D is seen as a craft — where you're expected to have a point of view and the latitude to act on it.</p>
+    <a href="contact.html" class="btn-primary">Get in touch →</a>
   </div>
-  <div class="currently-right">
-    <div class="availability-card">
-      <div class="availability-status">
-        <span class="avail-dot"></span>
-        Available now
-      </div>
-      <ul class="avail-items">
-        <li class="avail-item">Senior L&D / Learning Experience Designer roles</li>
-        <li class="avail-item">Lead ID positions with technical scope</li>
-        <li class="avail-item">Contract &amp; freelance engagements</li>
-        <li class="avail-item">Remote-first · Open to IST-compatible time zones</li>
-        <li class="avail-item">Full-time preferred, contract considered</li>
-      </ul>
-      <div class="avail-cta">
-        <a href="contact.html">Get in touch →</a>
-        <p class="avail-cta-note">Response within 24h · abhishektrivedi.com</p>
-      </div>
-    </div>
+  <div class="ab-cta-right">
+    <div class="ab-role-item">Senior L&D / Learning Experience Designer</div>
+    <div class="ab-role-item">Lead ID positions with technical scope</div>
+    <div class="ab-role-item">Contract & freelance engagements</div>
+    <div class="ab-role-item">Remote-first · IST-compatible time zones</div>
+    <div class="ab-role-item">Full-time preferred, contract considered</div>
   </div>
-</section>
-
-<!-- CV COMPARISON -->
-<section class="cv-compare reveal">
-  <div class="cv-compare-inner">
-    <div class="cv-compare-header">
-      <div class="section-label">The Honest Comparison</div>
-      <h2 class="cv-compare-title">Most L&D CVs say the <em>same things.</em></h2>
-      <p class="cv-compare-sub">Here's what that usually looks like — and what's actually different here.</p>
-    </div>
-
-    <div class="cv-table">
-
-      <!-- Table header -->
-      <div class="cv-row cv-row-head">
-        <div class="cv-col cv-col-label"></div>
-        <div class="cv-col cv-col-generic">
-          <span class="cv-col-badge generic">Typical L&D CV</span>
-        </div>
-        <div class="cv-col cv-col-real">
-          <span class="cv-col-badge real">Abhishek Trivedi</span>
-        </div>
-      </div>
-
-      <!-- Row 1 -->
-      <div class="cv-row reveal-row">
-        <div class="cv-col cv-col-label">Authoring Tools</div>
-        <div class="cv-col cv-col-generic">
-          <span class="cv-chip dim">"Proficient in Storyline 360"</span>
-        </div>
-        <div class="cv-col cv-col-real">
-          <span class="cv-chip bright">JavaScript inside Storyline — custom triggers, API calls, dynamic branching, live variable injection</span>
-        </div>
-      </div>
-
-      <!-- Row 2 -->
-      <div class="cv-row reveal-row">
-        <div class="cv-col cv-col-label">ID Methodology</div>
-        <div class="cv-col cv-col-generic">
-          <span class="cv-chip dim">"Experienced in ADDIE and instructional design principles"</span>
-        </div>
-        <div class="cv-col cv-col-real">
-          <span class="cv-chip bright">7 frameworks — ADDIE, SAM, Gagne, Bloom, Merrill, Agile ID, Kirkpatrick — with 28 storyboards showing which model fits which problem</span>
-        </div>
-      </div>
-
-      <!-- Row 3 -->
-      <div class="cv-row reveal-row">
-        <div class="cv-col cv-col-label">AI in L&D</div>
-        <div class="cv-col cv-col-generic">
-          <span class="cv-chip dim">"Familiar with AI tools and their applications in learning"</span>
-        </div>
-        <div class="cv-col cv-col-real">
-          <span class="cv-chip bright">Built a live AI voice personalisation system — LLM + TTS pipeline wired to a simulated LMS, deployed in a browser demo you can use right now</span>
-        </div>
-      </div>
-
-      <!-- Row 4 -->
-      <div class="cv-row reveal-row">
-        <div class="cv-col cv-col-label">Efficiency Gains</div>
-        <div class="cv-col cv-col-generic">
-          <span class="cv-chip dim">"Delivered projects on time and within budget"</span>
-        </div>
-        <div class="cv-col cv-col-real">
-          <span class="cv-chip bright">FFmpeg automation pipeline — 8-language video localisation in under 90 seconds. Previously a full day's manual work per language</span>
-        </div>
-      </div>
-
-      <!-- Row 5 -->
-      <div class="cv-row reveal-row">
-        <div class="cv-col cv-col-label">Learning Data</div>
-        <div class="cv-col cv-col-generic">
-          <span class="cv-chip dim">"Experience with LMS platforms and SCORM packaging"</span>
-        </div>
-        <div class="cv-col cv-col-real">
-          <span class="cv-chip bright">Custom xAPI statement schemas, live LRS integration, real-time learner action streams — the data layer most SCORM implementations never touch</span>
-        </div>
-      </div>
-
-      <!-- Row 6 -->
-      <div class="cv-row reveal-row">
-        <div class="cv-col cv-col-label">Portfolio</div>
-        <div class="cv-col cv-col-generic">
-          <span class="cv-chip dim">"Portfolio available on request — PDF with screenshots and case write-ups"</span>
-        </div>
-        <div class="cv-col cv-col-real">
-          <span class="cv-chip bright">5 live interactive demos. In the browser. That you can use, break, and inspect the code of. Right now.</span>
-        </div>
-      </div>
-
-      <!-- Row 7 — the kicker -->
-      <div class="cv-row reveal-row cv-row-kicker">
-        <div class="cv-col cv-col-label">Proof</div>
-        <div class="cv-col cv-col-generic">
-          <span class="cv-chip dim">"References available on request"</span>
-        </div>
-        <div class="cv-col cv-col-real">
-          <span class="cv-chip bright">
-            <a href="https://abhishektrivedi.com" target="_blank" style="color:inherit;text-decoration:underline;text-underline-offset:3px;">abhishektrivedi.com →</a>
-          </span>
-        </div>
-      </div>
-
-    </div><!-- /.cv-table -->
-  </div>
-</section>
-
-<style>
-/* ── Section wrapper ── */
-.cv-compare {
-  padding: 6rem 4rem;
-  background: #0d0e0c;
-  border-top: 1px solid rgba(255,255,255,0.06);
-}
-.cv-compare-inner {
-  max-width: 1060px;
-  margin: 0 auto;
-}
-.cv-compare-header {
-  margin-bottom: 3rem;
-}
-.cv-compare-title {
-  font-family: var(--serif);
-  font-size: clamp(1.8rem, 3.5vw, 2.8rem);
-  color: #fff;
-  line-height: 1.15;
-  margin: 0.6rem 0 0.75rem;
-}
-.cv-compare-title em { font-style: italic; color: #c84b2f; }
-.cv-compare-sub {
-  font-size: 0.92rem;
-  color: rgba(255,255,255,0.4);
-  max-width: 480px;
-  line-height: 1.6;
-}
-
-/* ── Table ── */
-.cv-table {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-  border: 1px solid rgba(255,255,255,0.07);
-  border-radius: 8px;
-  overflow: hidden;
-}
-.cv-row {
-  display: grid;
-  grid-template-columns: 160px 1fr 1fr;
-  border-bottom: 1px solid rgba(255,255,255,0.06);
-  transition: background 0.2s;
-}
-.cv-row:last-child { border-bottom: none; }
-.cv-row:not(.cv-row-head):hover { background: rgba(255,255,255,0.02); }
-
-/* Header row */
-.cv-row-head {
-  background: #161810;
-}
-
-/* Kicker row */
-.cv-row-kicker {
-  background: rgba(200,75,47,0.05);
-}
-.cv-row-kicker:hover { background: rgba(200,75,47,0.09) !important; }
-
-/* Columns */
-.cv-col {
-  padding: 1rem 1.25rem;
-  display: flex;
-  align-items: center;
-}
-.cv-col-label {
-  font-family: var(--mono);
-  font-size: 0.62rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.3);
-  border-right: 1px solid rgba(255,255,255,0.06);
-}
-.cv-col-generic {
-  border-right: 1px solid rgba(255,255,255,0.06);
-}
-.cv-col-real {}
-
-/* Badge pills in header */
-.cv-col-badge {
-  font-family: var(--mono);
-  font-size: 0.6rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  padding: 0.25rem 0.75rem;
-  border-radius: 100px;
-}
-.cv-col-badge.generic {
-  background: rgba(255,255,255,0.06);
-  color: rgba(255,255,255,0.35);
-  border: 1px solid rgba(255,255,255,0.1);
-}
-.cv-col-badge.real {
-  background: rgba(200,75,47,0.12);
-  color: #c84b2f;
-  border: 1px solid rgba(200,75,47,0.3);
-}
-
-/* Content chips */
-.cv-chip {
-  font-size: 0.82rem;
-  line-height: 1.55;
-  display: block;
-}
-.cv-chip.dim {
-  color: rgba(255,255,255,0.55);
-  font-style: italic;
-}
-.cv-chip.bright {
-  color: rgba(255,255,255,0.88);
-}
-
-/* Row reveal animation */
-.reveal-row {
-  opacity: 0;
-  transform: translateY(12px);
-  transition: opacity 0.45s ease, transform 0.45s ease;
-}
-.reveal-row.visible {
-  opacity: 1;
-  transform: none;
-}
-
-/* ── Responsive ── */
-@media (max-width: 760px) {
-  .cv-compare { padding: 4rem 1.5rem; }
-  .cv-row { grid-template-columns: 1fr; }
-  .cv-col-label {
-    border-right: none;
-    border-bottom: 1px solid rgba(255,255,255,0.06);
-    padding-bottom: 0.5rem;
-  }
-  .cv-col-generic { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.06); }
-  .cv-col { padding: 0.75rem 1rem; }
-  .cv-row-head .cv-col-label { display: none; }
-}
-</style>
-
-<script>
-(function(){
-  const rows = document.querySelectorAll('.reveal-row');
-  const obs  = new IntersectionObserver((entries) => {
-    entries.forEach((entry, i) => {
-      if (entry.isIntersecting) {
-        // Stagger each row by 80ms
-        const idx = Array.from(rows).indexOf(entry.target);
-        setTimeout(() => entry.target.classList.add('visible'), idx * 80);
-        obs.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.15 });
-  rows.forEach(r => obs.observe(r));
-})();
-</script>
-
-<!-- CTA STRIP -->
-<section class="cta-strip reveal">
-  <h2>Want to see the work<br>that backs all this up?</h2>
-  <a href="work.html" class="btn-light">See Case Studies →</a>
 </section>
 
 <!-- FOOTER -->
@@ -1029,22 +594,24 @@
     document.body.appendChild(toast);
     setTimeout(function() { if (toast.parentNode) toast.parentNode.removeChild(toast); }, 3000);
   }
-  var styles = ['color:#c84b2f','font-size:18px','font-weight:bold','padding:8px 0','border-bottom:2px solid #c84b2f'].join(';');
-  console.log('%c© Abhishek Trivedi — Learning Experience Technologist', styles);
-  console.log('%chttps://abhishektrivedi.com | All rights reserved.', 'color:#6b6459;font-size:12px;');
 })();
 </script>
 
 <!-- SCROLL REVEAL -->
 <script>
-  const reveals = document.querySelectorAll('.reveal');
+  const reveals = document.querySelectorAll('.reveal, .reveal-row');
   const observer = new IntersectionObserver(entries => {
-    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        const idx = Array.from(reveals).indexOf(e.target);
+        setTimeout(() => e.target.classList.add('visible'), e.target.classList.contains('reveal-row') ? idx * 60 : 0);
+        observer.unobserve(e.target);
+      }
+    });
   }, { threshold: 0.1 });
   reveals.forEach(el => observer.observe(el));
 </script>
 
-<!-- ── xAPI LIVE STATEMENT PANEL ── -->
 <div id="xapiPanel" class="xapi-panel">
   <div class="xapi-panel-header" onclick="toggleXapiCollapse()" style="cursor:pointer;" title="Click to collapse / expand">
     <div class="xapi-header-left">
