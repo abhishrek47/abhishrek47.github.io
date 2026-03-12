@@ -692,39 +692,46 @@
     <li><a href="pages/about.html">About</a></li>
     <li><a href="pages/certifications.html">Certifications</a></li>
     <li><a href="pages/contact.html" class="nav-cta">Let's Talk</a></li>
+    <li>
+      <button class="recruiter-toggle" id="recruiterToggle" onclick="toggleRecruiterMode()" aria-pressed="false" title="Switch to Recruiter View">
+        <span class="rt-icon">👤</span>
+        <span class="rt-label" id="rtLabel">Recruiter View</span>
+        <span class="rt-dot" id="rtDot"></span>
+      </button>
+    </li>
   </ul>
 </nav>
 
 <!-- HERO -->
 <section class="hero">
   <div class="hero-left">
-    <div class="available-badge fade-in">
+    <div class="available-badge fade-in" id="availableBadge">
       <span class="available-dot"></span>
-      Available for new opportunities
+      <span id="availableText">Available for new opportunities</span>
     </div>
     <div class="hero-tag fade-in">Learning Experience Technologist</div>
-    <h1 class="fade-in">I build learning<br>experiences that <em>think.</em></h1>
-    <p class="hero-sub fade-in">15+ years at the intersection of instructional design and engineering. I write JavaScript inside Storyline, connect courses to live APIs, automate workflows that used to take days, and integrate AI where others use static slides.</p>
+    <h1 class="fade-in" id="heroH1">I build learning<br>experiences that <em>think.</em></h1>
+    <p class="hero-sub fade-in" id="heroSub">15+ years at the intersection of instructional design and engineering. I write JavaScript inside Storyline, connect courses to live APIs, automate workflows that used to take days, and integrate AI where others use static slides.</p>
     <div class="hero-actions fade-in">
-      <a href="pages/work.html" class="btn-primary">See My Work →</a>
+      <a href="pages/work.html" class="btn-primary" id="heroCta">See My Work →</a>
       <a href="pages/contact.html" class="btn-secondary">Let's Talk</a>
     </div>
     <div class="hero-proof fade-in">
       <div class="proof-item">
-        <div class="proof-num">15+</div>
-        <div class="proof-label">Years in L&D</div>
+        <div class="proof-num" id="proof1num">15+</div>
+        <div class="proof-label" id="proof1label">Years in L&D</div>
       </div>
       <div class="proof-item">
-        <div class="proof-num">3</div>
-        <div class="proof-label">Disciplines in one —<br>ID, Dev &amp; AI</div>
+        <div class="proof-num" id="proof2num">3</div>
+        <div class="proof-label" id="proof2label">Disciplines in one —<br>ID, Dev &amp; AI</div>
       </div>
       <div class="proof-item">
-        <div class="proof-num">28</div>
-        <div class="proof-label">Storyboards<br>hand-authored</div>
+        <div class="proof-num" id="proof3num">28</div>
+        <div class="proof-label" id="proof3label">Storyboards<br>hand-authored</div>
       </div>
       <div class="proof-item">
-        <div class="proof-num">7</div>
-        <div class="proof-label">ID frameworks<br>applied in practice</div>
+        <div class="proof-num" id="proof4num">7</div>
+        <div class="proof-label" id="proof4label">ID frameworks<br>applied in practice</div>
       </div>
     </div>
   </div>
@@ -781,12 +788,12 @@
 <!-- WHAT I DO -->
 <section class="section reveal" id="services">
   <div class="section-label">What I Do</div>
-  <h2 class="section-heading">Design thinking meets<br>engineering curiosity</h2>
+  <h2 class="section-heading" id="servicesHeading">Design thinking meets<br>engineering curiosity</h2>
   <div class="services-grid">
     <div class="service-card">
       <div class="svc-num">01</div>
-      <div class="svc-title">Learning Experience Design</div>
-      <p class="svc-desc">Branching scenarios, performance-based assessments, and content architecture grounded in instructional theory. I design for behavior change — not just completion rates.</p>
+      <div class="svc-title" id="svc1title">Learning Experience Design</div>
+      <p class="svc-desc" id="svc1desc">Branching scenarios, performance-based assessments, and content architecture grounded in instructional theory. I design for behavior change — not just completion rates.</p>
       <div class="svc-tags">
         <span class="tag">Instructional Design</span>
         <span class="tag">Storyline 360</span>
@@ -796,8 +803,8 @@
     </div>
     <div class="service-card">
       <div class="svc-num">02</div>
-      <div class="svc-title">Learning Technology & Integration</div>
-      <p class="svc-desc">Extending authoring tools beyond their defaults using JavaScript, APIs, and LMS integration. I connect systems and surface data to create smarter learner experiences.</p>
+      <div class="svc-title" id="svc2title">Learning Technology & Integration</div>
+      <p class="svc-desc" id="svc2desc">Extending authoring tools beyond their defaults using JavaScript, APIs, and LMS integration. I connect systems and surface data to create smarter learner experiences.</p>
       <div class="svc-tags">
         <span class="tag">JavaScript</span>
         <span class="tag">REST APIs</span>
@@ -807,8 +814,8 @@
     </div>
     <div class="service-card">
       <div class="svc-num">03</div>
-      <div class="svc-title">AI & Workflow Automation</div>
-      <p class="svc-desc">AI-enhanced workflows — from voice personalization to automated localization pipelines. If a human is doing something repetitive, a script should be doing it instead.</p>
+      <div class="svc-title" id="svc3title">AI & Workflow Automation</div>
+      <p class="svc-desc" id="svc3desc">AI-enhanced workflows — from voice personalization to automated localization pipelines. If a human is doing something repetitive, a script should be doing it instead.</p>
       <div class="svc-tags">
         <span class="tag">Murf AI</span>
         <span class="tag">GPT Workflows</span>
@@ -2145,9 +2152,6 @@ function kbAccToggle(n) {
 
 })();
 </script>
-<!-- ── END PROTECTION ── -->
-
-<!-- ── ACCESSIBILITY DEMO STICKY BUTTON ── -->
 <div id="a11y-fab" class="a11y-fab" onclick="scrollToA11y()" role="button" tabindex="0" aria-label="Try the interactive accessibility simulator" onkeydown="if(event.key==='Enter')scrollToA11y()">
   <div class="a11y-fab-icon">
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -2291,5 +2295,163 @@ window.addEventListener('scroll', function() {
 }, { passive: true });
 </script>
 <!-- ── END A11Y FAB ── -->
+
+<!-- ── RECRUITER MODE ── -->
+<style>
+.recruiter-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(200,75,47,0.08);
+  border: 1px solid rgba(200,75,47,0.28);
+  border-radius: 100px;
+  padding: 0.3rem 0.85rem 0.3rem 0.65rem;
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  cursor: pointer;
+  transition: all 0.25s;
+  white-space: nowrap;
+}
+.recruiter-toggle:hover {
+  background: rgba(200,75,47,0.15);
+  border-color: rgba(200,75,47,0.5);
+}
+.recruiter-toggle.active {
+  background: rgba(46,180,96,0.1);
+  border-color: rgba(46,180,96,0.4);
+  color: #1e8a4a;
+}
+.rt-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  transition: background 0.25s;
+  flex-shrink: 0;
+}
+.recruiter-toggle.active .rt-dot {
+  background: #2eb460;
+  animation: rPulse 2s infinite;
+}
+@keyframes rPulse {
+  0%,100%{opacity:1} 50%{opacity:0.3}
+}
+.recruiter-banner {
+  display: none;
+  position: fixed;
+  top: 64px; left: 0; right: 0;
+  z-index: 900;
+  background: #0f1f12;
+  border-bottom: 1px solid rgba(46,180,96,0.25);
+  padding: 0.55rem 2rem;
+  font-family: var(--mono);
+  font-size: 0.63rem;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: #3dba6e;
+  text-align: center;
+  animation: bannerIn 0.35s ease;
+}
+.recruiter-banner.show { display: block; }
+@keyframes bannerIn {
+  from { transform:translateY(-100%); opacity:0; }
+  to   { transform:translateY(0);     opacity:1; }
+}
+.recruiter-banner a {
+  color: #3dba6e;
+  text-decoration: underline;
+  margin-left: 1.25rem;
+  cursor: pointer;
+}
+.rm-swap { transition: opacity 0.3s ease, transform 0.3s ease; }
+.rm-swap.fading { opacity:0; transform:translateY(6px); }
+</style>
+
+<div class="recruiter-banner" id="recruiterBanner">
+  ● Recruiter View active — content reframed around team impact &amp; hiring fit &nbsp;&nbsp;
+  <a onclick="toggleRecruiterMode();return false;">Switch back to default view →</a>
+</div>
+
+<script>
+(function(){
+  let on = false;
+
+  const C = {
+    def: {
+      availableText: 'Available for new opportunities',
+      heroH1: 'I build learning<br>experiences that <em>think.</em>',
+      heroSub: '15+ years at the intersection of instructional design and engineering. I write JavaScript inside Storyline, connect courses to live APIs, automate workflows that used to take days, and integrate AI where others use static slides.',
+      heroCta: 'See My Work →',
+      p1n:'15+', p1l:'Years in L&D',
+      p2n:'3',   p2l:'Disciplines in one —<br>ID, Dev &amp; AI',
+      p3n:'28',  p3l:'Storyboards<br>hand-authored',
+      p4n:'7',   p4l:'ID frameworks<br>applied in practice',
+      sh: 'Design thinking meets<br>engineering curiosity',
+      s1t:'Learning Experience Design',
+      s1d:'Branching scenarios, performance-based assessments, and content architecture grounded in instructional theory. I design for behavior change — not just completion rates.',
+      s2t:'Learning Technology & Integration',
+      s2d:'Extending authoring tools beyond their defaults using JavaScript, APIs, and LMS integration. I connect systems and surface data to create smarter learner experiences.',
+      s3t:'AI & Workflow Automation',
+      s3d:'AI-enhanced workflows — from voice personalization to automated localization pipelines. If a human is doing something repetitive, a script should be doing it instead.',
+    },
+    rec: {
+      availableText: 'Available to interview now',
+      heroH1: 'Here\'s what I\'d<br>bring to <em>your team.</em>',
+      heroSub: '15+ years building L&D infrastructure that scales — AI integration, automation systems, and technical eLearning that most teams consider out of scope. I close the gap between what your team wants to build and what standard tools allow.',
+      heroCta: 'See What I\'d Build For You →',
+      p1n:'15+', p1l:'Years of L&D<br>team contribution',
+      p2n:'36h', p2l:'Saved per<br>production run',
+      p3n:'3',   p3l:'Developers<br>mentored &amp; led',
+      p4n:'8',   p4l:'Languages<br>automated',
+      sh: 'What your team<br>gains on day one',
+      s1t:'Courses that go beyond the brief',
+      s1d:'Your team gets eLearning built for actual behaviour change — not just completion. Branching scenarios, performance-based assessments, and content that adapts to the learner rather than lecturing at them.',
+      s2t:'Technical depth your team probably doesn\'t have yet',
+      s2d:'JavaScript in Storyline, REST API connections to live systems, LMS integration that surfaces real data. The kind of builds most L&D teams outsource or say can\'t be done in standard tools.',
+      s3t:'Automation that multiplies your team\'s output',
+      s3d:'Repetitive production work — localisation, video processing, template management — turned into one-command workflows. Your team ships more without hiring more.',
+    }
+  };
+
+  function swap(id, html) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.classList.add('rm-swap','fading');
+    setTimeout(()=>{ el.innerHTML = html; el.classList.remove('fading'); }, 300);
+  }
+
+  window.toggleRecruiterMode = function(){
+    on = !on;
+    const d = on ? C.rec : C.def;
+    const btn = document.getElementById('recruiterToggle');
+    const lbl = document.getElementById('rtLabel');
+    const banner = document.getElementById('recruiterBanner');
+
+    btn.classList.toggle('active', on);
+    btn.setAttribute('aria-pressed', on);
+    lbl.textContent = on ? 'Your Story' : 'Recruiter View';
+    banner.classList.toggle('show', on);
+
+    swap('availableText', d.availableText);
+    swap('heroH1',  d.heroH1);
+    swap('heroSub', d.heroSub);
+    const cta = document.getElementById('heroCta');
+    if (cta) cta.textContent = d.heroCta;
+
+    swap('proof1num',   d.p1n); swap('proof1label', d.p1l);
+    swap('proof2num',   d.p2n); swap('proof2label', d.p2l);
+    swap('proof3num',   d.p3n); swap('proof3label', d.p3l);
+    swap('proof4num',   d.p4n); swap('proof4label', d.p4l);
+
+    swap('servicesHeading', d.sh);
+    swap('svc1title', d.s1t); swap('svc1desc', d.s1d);
+    swap('svc2title', d.s2t); swap('svc2desc', d.s2d);
+    swap('svc3title', d.s3t); swap('svc3desc', d.s3d);
+  };
+})();
+</script>
+<!-- ── END RECRUITER MODE ── -->
 
 </html>
