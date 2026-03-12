@@ -2575,128 +2575,381 @@ window.addEventListener('scroll', function() {
   transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1), background 0.35s;
   display: block;
 }
-.vt-switch.on .vt-thumb {
-  transform: translateX(26px);
-  background: #2eb460;
-}
-</style>
-  display: none;
+.rec-overlay {
   position: fixed;
-  top: 64px; left: 0; right: 0;
-  z-index: 900;
-  background: #0f1f12;
-  border-bottom: 1px solid rgba(46,180,96,0.25);
-  padding: 0.55rem 2rem;
+  inset: 0;
+  z-index: 850;
+  background: #f5f0e8;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 2rem 1.5rem 4rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s ease;
+  overflow-y: auto;
+}
+.rec-overlay.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+/* ── Back bar fixed at top ── */
+.rec-back-bar {
+  width: 100%;
+  max-width: 860px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 0 1.75rem;
+  flex-shrink: 0;
+}
+.rec-back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: #1a1a18;
+  color: #f5f0e8;
+  border: none;
+  border-radius: 100px;
+  padding: 0.7rem 1.4rem 0.7rem 1rem;
   font-family: var(--mono);
-  font-size: 0.63rem;
-  letter-spacing: 0.09em;
-  text-transform: uppercase;
-  color: #3dba6e;
-  text-align: center;
-  animation: bannerIn 0.35s ease;
-}
-.recruiter-banner.show { display: block; }
-@keyframes bannerIn {
-  from { transform:translateY(-100%); opacity:0; }
-  to   { transform:translateY(0);     opacity:1; }
-}
-.recruiter-banner a {
-  color: #3dba6e;
-  text-decoration: underline;
-  margin-left: 1.25rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  font-weight: 600;
   cursor: pointer;
+  text-transform: uppercase;
+  transition: background 0.2s, transform 0.15s;
+  text-decoration: none;
 }
-.rm-swap { transition: opacity 0.3s ease, transform 0.3s ease; }
-.rm-swap.fading { opacity:0; transform:translateY(6px); }
+.rec-back-btn:hover { background: #c84b2f; transform: translateX(-3px); }
+.rec-back-btn svg { flex-shrink: 0; transition: transform 0.2s; }
+.rec-back-btn:hover svg { transform: translateX(-3px); }
+.rec-esc-hint {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.08em;
+  color: rgba(0,0,0,0.35);
+  text-transform: uppercase;
+}
+.rec-esc-key {
+  display: inline-block;
+  background: rgba(0,0,0,0.08);
+  border: 1px solid rgba(0,0,0,0.15);
+  border-radius: 4px;
+  padding: 0.1rem 0.4rem;
+  font-size: 0.58rem;
+  margin-right: 0.3rem;
+}
+
+/* ── Main card ── */
+.rec-panel {
+  width: 100%;
+  max-width: 860px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  transform: translateY(16px);
+  transition: transform 0.4s ease;
+}
+.rec-overlay.active .rec-panel { transform: translateY(0); }
+
+/* ── Header ── */
+.rec-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding-bottom: 1.75rem;
+  border-bottom: 1.5px solid rgba(0,0,0,0.1);
+}
+.rec-eyebrow {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c84b2f;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.rec-eyebrow::before {
+  content: '';
+  display: inline-block;
+  width: 18px; height: 1.5px;
+  background: #c84b2f;
+}
+.rec-header h2 {
+  font-family: var(--serif);
+  font-size: clamp(2rem, 4vw, 3rem);
+  color: #1a1a18;
+  line-height: 1.1;
+  font-weight: 400;
+  margin: 0;
+}
+.rec-header h2 em { font-style: italic; color: #c84b2f; }
+.rec-header-sub {
+  font-size: 1rem;
+  color: rgba(0,0,0,0.58);
+  line-height: 1.6;
+  max-width: 580px;
+  margin-top: 0.25rem;
+}
+
+/* ── Keyword chips row ── */
+.rec-keywords {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+}
+.rec-kw-label {
+  font-family: var(--mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(0,0,0,0.4);
+  display: flex;
+  align-items: center;
+  margin-right: 0.25rem;
+  white-space: nowrap;
+}
+.rec-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: #fff;
+  border: 1px solid rgba(0,0,0,0.12);
+  border-radius: 100px;
+  padding: 0.3rem 0.75rem;
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.04em;
+  color: #1a1a18;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+}
+.rec-chip::before {
+  content: '✓';
+  color: #3dba6e;
+  font-weight: 700;
+  font-size: 0.65rem;
+}
+
+/* ── 4 value cards ── */
+.rec-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.75rem;
+}
+.rec-card {
+  background: #fff;
+  border: 1px solid rgba(0,0,0,0.09);
+  border-radius: 8px;
+  padding: 1.25rem 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+.rec-card:hover { box-shadow: 0 6px 20px rgba(0,0,0,0.1); transform: translateY(-2px); }
+.rec-card-icon {
+  font-size: 1.5rem;
+  line-height: 1;
+}
+.rec-card-title {
+  font-family: var(--serif);
+  font-size: 1rem;
+  color: #1a1a18;
+  line-height: 1.25;
+}
+.rec-card-body {
+  font-size: 0.8rem;
+  line-height: 1.6;
+  color: rgba(0,0,0,0.58);
+  flex: 1;
+}
+.rec-card-stat {
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  color: #c84b2f;
+  text-transform: uppercase;
+  font-weight: 600;
+  padding-top: 0.5rem;
+  border-top: 1px solid rgba(0,0,0,0.07);
+}
+
+/* ── Bottom CTA row ── */
+.rec-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-top: 0.5rem;
+  flex-wrap: wrap;
+}
+.rec-available-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(61,186,110,0.1);
+  border: 1px solid rgba(61,186,110,0.3);
+  border-radius: 100px;
+  padding: 0.5rem 1rem;
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #2a9a50;
+}
+.rec-available-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: #3dba6e;
+  flex-shrink: 0;
+  animation: recPulse 2s infinite;
+}
+@keyframes recPulse {
+  0%,100%{ box-shadow: 0 0 0 0 rgba(61,186,110,0.5); }
+  50%    { box-shadow: 0 0 0 6px rgba(61,186,110,0); }
+}
+.rec-cta-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #c84b2f;
+  color: #fff;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 700;
+  padding: 0.8rem 1.5rem;
+  border-radius: 6px;
+  text-decoration: none;
+  transition: background 0.2s, transform 0.15s;
+}
+.rec-cta-primary:hover { background: #a83a22; transform: translateY(-1px); }
+
+/* ── Mobile ── */
+@media (max-width: 640px) {
+  .rec-cards { grid-template-columns: 1fr 1fr; }
+  .rec-back-bar { padding-bottom: 1.25rem; }
+  .rec-overlay { padding-top: 1.25rem; }
+  .rec-bottom { flex-direction: column; align-items: flex-start; }
+}
+@media (max-width: 400px) {
+  .rec-cards { grid-template-columns: 1fr; }
+}
 </style>
 
-<div class="recruiter-banner" id="recruiterBanner">
-  ● Recruiter View active — content reframed around team impact &amp; hiring fit &nbsp;&nbsp;
-  <a onclick="toggleRecruiterMode();return false;">Switch back to default view →</a>
+<!-- ── RECRUITER OVERLAY ── -->
+<div class="rec-overlay" id="recOverlay">
+
+  <!-- Back bar -->
+  <div class="rec-back-bar">
+    <button class="rec-back-btn" onclick="toggleRecruiterMode()">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9 2L4 7L9 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Back to my story
+    </button>
+    <span class="rec-esc-hint"><span class="rec-esc-key">ESC</span> also works</span>
+  </div>
+
+  <div class="rec-panel">
+
+    <!-- Header -->
+    <div class="rec-header">
+      <div class="rec-eyebrow">For Recruiters &amp; Hiring Managers</div>
+      <h2>Senior L&D Professional<br>who actually <em>builds things.</em></h2>
+      <p class="rec-header-sub">15+ years in Learning & Development. Designs training that works. Builds it himself. Doesn't need a developer to execute his ideas.</p>
+    </div>
+
+    <!-- Keyword match row -->
+    <div class="rec-keywords">
+      <span class="rec-kw-label">Keyword match →</span>
+      <span class="rec-chip">Instructional Design</span>
+      <span class="rec-chip">eLearning Development</span>
+      <span class="rec-chip">Articulate Storyline</span>
+      <span class="rec-chip">LMS / SCORM / xAPI</span>
+      <span class="rec-chip">AI in L&D</span>
+      <span class="rec-chip">Learning Strategy</span>
+      <span class="rec-chip">Stakeholder Management</span>
+      <span class="rec-chip">Remote Ready</span>
+    </div>
+
+    <!-- 4 value cards -->
+    <div class="rec-cards">
+
+      <div class="rec-card">
+        <div class="rec-card-icon">🎯</div>
+        <div class="rec-card-title">Designs training that changes behaviour</div>
+        <div class="rec-card-body">Not just courses that get completed. Scenarios, assessments, and content that actually make people do their jobs differently.</div>
+        <div class="rec-card-stat">15+ years · 28 projects</div>
+      </div>
+
+      <div class="rec-card">
+        <div class="rec-card-icon">⚡</div>
+        <div class="rec-card-title">Saves the team weeks of manual work</div>
+        <div class="rec-card-body">Built tools that turn what used to take days into a single button press. Your team produces more without working more hours.</div>
+        <div class="rec-card-stat">36 hours saved per run</div>
+      </div>
+
+      <div class="rec-card">
+        <div class="rec-card-icon">🤖</div>
+        <div class="rec-card-title">Uses AI to make learning feel personal</div>
+        <div class="rec-card-body">Built a course where AI speaks to each learner differently based on their profile. Not a future plan — a demo you can open right now.</div>
+        <div class="rec-card-stat">Live demo available</div>
+      </div>
+
+      <div class="rec-card">
+        <div class="rec-card-icon">🌍</div>
+        <div class="rec-card-title">Launches the same course in 8 languages</div>
+        <div class="rec-card-body">Automated the entire video localisation process. What used to take a week per language now takes 90 seconds for all of them combined.</div>
+        <div class="rec-card-stat">8 languages · 90 seconds</div>
+      </div>
+
+    </div>
+
+    <!-- Bottom row -->
+    <div class="rec-bottom">
+      <div class="rec-available-pill">
+        <span class="rec-available-dot"></span>
+        Available now · Pune, India · Open to remote
+      </div>
+      <a href="pages/contact.html" class="rec-cta-primary">
+        Get in touch →
+      </a>
+    </div>
+
+  </div>
 </div>
 
 <script>
 (function(){
   let on = false;
 
-  const C = {
-    def: {
-      availableText: 'Available for new opportunities',
-      heroH1: 'I build learning<br>experiences that <em>think.</em>',
-      heroSub: '15+ years at the intersection of instructional design and engineering. I write JavaScript inside Storyline, connect courses to live APIs, automate workflows that used to take days, and integrate AI where others use static slides.',
-      heroCta: 'See My Work →',
-      p1n:'15+', p1l:'Years in L&D',
-      p2n:'3',   p2l:'Disciplines in one —<br>ID, Dev &amp; AI',
-      p3n:'28',  p3l:'Storyboards<br>hand-authored',
-      p4n:'7',   p4l:'ID frameworks<br>applied in practice',
-      sh: 'Design thinking meets<br>engineering curiosity',
-      s1t:'Learning Experience Design',
-      s1d:'Branching scenarios, performance-based assessments, and content architecture grounded in instructional theory. I design for behavior change — not just completion rates.',
-      s2t:'Learning Technology & Integration',
-      s2d:'Extending authoring tools beyond their defaults using JavaScript, APIs, and LMS integration. I connect systems and surface data to create smarter learner experiences.',
-      s3t:'AI & Workflow Automation',
-      s3d:'AI-enhanced workflows — from voice personalization to automated localization pipelines. If a human is doing something repetitive, a script should be doing it instead.',
-    },
-    rec: {
-      availableText: 'Available to interview now',
-      heroH1: 'Here\'s what I\'d<br>bring to <em>your team.</em>',
-      heroSub: '15+ years building L&D infrastructure that scales — AI integration, automation systems, and technical eLearning that most teams consider out of scope. I close the gap between what your team wants to build and what standard tools allow.',
-      heroCta: 'See What I\'d Build For You →',
-      p1n:'15+', p1l:'Years of L&D<br>team contribution',
-      p2n:'36h', p2l:'Saved per<br>production run',
-      p3n:'3',   p3l:'Developers<br>mentored &amp; led',
-      p4n:'8',   p4l:'Languages<br>automated',
-      sh: 'What your team<br>gains on day one',
-      s1t:'Courses that go beyond the brief',
-      s1d:'Your team gets eLearning built for actual behaviour change — not just completion. Branching scenarios, performance-based assessments, and content that adapts to the learner rather than lecturing at them.',
-      s2t:'Technical depth your team probably doesn\'t have yet',
-      s2d:'JavaScript in Storyline, REST API connections to live systems, LMS integration that surfaces real data. The kind of builds most L&D teams outsource or say can\'t be done in standard tools.',
-      s3t:'Automation that multiplies your team\'s output',
-      s3d:'Repetitive production work — localisation, video processing, template management — turned into one-command workflows. Your team ships more without hiring more.',
-    }
-  };
-
-  function swap(id, html) {
-    const el = document.getElementById(id);
-    if (!el) return;
-    el.classList.add('rm-swap','fading');
-    setTimeout(()=>{ el.innerHTML = html; el.classList.remove('fading'); }, 300);
-  }
-
   window.toggleRecruiterMode = function(){
     on = !on;
-    const d = on ? C.rec : C.def;
-    const btn = document.getElementById('recruiterToggle');
-    const lbl = document.getElementById('rtLabel');
-    const banner = document.getElementById('recruiterBanner');
+    const overlay = document.getElementById('recOverlay');
+    const btn     = document.getElementById('recruiterToggle');
+    const left    = document.getElementById('vtLabelLeft');
+    const right   = document.getElementById('vtLabelRight');
 
+    overlay.classList.toggle('active', on);
     btn.classList.toggle('on', on);
     btn.setAttribute('aria-pressed', on);
 
-    // Update labels — active side is brighter
-    const leftLabel  = document.getElementById('vtLabelLeft');
-    const rightLabel = document.getElementById('vtLabelRight');
-    if (leftLabel)  leftLabel.classList.toggle('active', !on);
-    if (rightLabel) rightLabel.classList.toggle('active', on);
+    if (left)  left.classList.toggle('active', !on);
+    if (right) right.classList.toggle('active',  on);
 
-    banner.classList.toggle('show', on);
-
-    swap('availableText', d.availableText);
-    swap('heroH1',  d.heroH1);
-    swap('heroSub', d.heroSub);
-    const cta = document.getElementById('heroCta');
-    if (cta) cta.textContent = d.heroCta;
-
-    swap('proof1num',   d.p1n); swap('proof1label', d.p1l);
-    swap('proof2num',   d.p2n); swap('proof2label', d.p2l);
-    swap('proof3num',   d.p3n); swap('proof3label', d.p3l);
-    swap('proof4num',   d.p4n); swap('proof4label', d.p4l);
-
-    swap('servicesHeading', d.sh);
-    swap('svc1title', d.s1t); swap('svc1desc', d.s1d);
-    swap('svc2title', d.s2t); swap('svc2desc', d.s2d);
-    swap('svc3title', d.s3t); swap('svc3desc', d.s3d);
+    document.body.style.overflow = on ? 'hidden' : '';
   };
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && on) toggleRecruiterMode();
+  });
 })();
 </script>
 <!-- ── END RECRUITER MODE ── -->
