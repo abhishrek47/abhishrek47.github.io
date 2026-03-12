@@ -2527,14 +2527,23 @@ window.addEventListener('scroll', function() {
   gap: 0.65rem;
   margin-bottom: 1rem;
   user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+@media (max-width: 600px) {
+  .view-toggle-wrap { gap: 0.5rem; }
+  .vt-label { font-size: 0.7rem; letter-spacing: 0.06em; }
+  .vt-switch { width: 48px; height: 28px; }
+  .vt-thumb { width: 20px; height: 20px; top: 3px; left: 3px; }
+  .vt-switch.on .vt-thumb { transform: translateX(20px); }
 }
 .vt-label {
   font-family: var(--mono);
-  font-size: 0.65rem;
-  letter-spacing: 0.1em;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--mid);
   transition: color 0.3s;
+  white-space: nowrap;
 }
 .vt-label.active {
   color: var(--fg);
@@ -2574,6 +2583,10 @@ window.addEventListener('scroll', function() {
   background: #c84b2f;
   transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1), background 0.35s;
   display: block;
+}
+.vt-switch.on .vt-thumb {
+  transform: translateX(26px);
+  background: #2eb460;
 }
 .rec-overlay {
   position: fixed;
