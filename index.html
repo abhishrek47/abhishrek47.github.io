@@ -2485,7 +2485,24 @@ function kbAccToggle(n) {
   100% { opacity: 0;   inset: -10px; }
 }
 @media(max-width:768px) {
-  .a11y-fab { display: none !important; }
+  .a11y-fab {
+    top: auto !important;
+    bottom: 1.25rem !important;
+    right: 0 !important;
+    transform: none !important;
+    border-radius: 8px 0 0 8px !important;
+    padding: 10px 12px 10px 10px !important;
+    gap: 7px !important;
+    animation: none !important;
+  }
+  .a11y-fab-title { font-size: 0.7rem !important; }
+  .a11y-fab-icon { width: 26px !important; height: 26px !important; }
+  @keyframes fabPeek {
+    from { transform: translateX(100%); }
+    to   { transform: translateX(0); }
+  }
+  .a11y-fab.dismissed { transform: translateX(110%) !important; }
+  .a11y-fab:hover { transform: translateX(-4px) !important; }
 }
 </style>
 
@@ -3152,7 +3169,13 @@ nav, .site-nav, header nav, .nav-wrap, .navbar {
 }
 .nav-links.open a.nav-cta {
   color: var(--accent, #c84b2f) !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
   font-weight: 600 !important;
+  box-shadow: none !important;
 }
 .hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px) !important; }
 .hamburger.open span:nth-child(2) { opacity: 0 !important; transform: scaleX(0) !important; }
