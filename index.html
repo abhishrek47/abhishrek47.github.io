@@ -681,7 +681,229 @@
 </head>
 <body>
 
-<!-- NAV -->
+<!-- ── COURSE LOADER OVERLAY ── -->
+<div id="courseLoader" class="cl-overlay">
+  <div class="cl-screen">
+    <div class="cl-header">
+      <div class="cl-logo">AT<span>.</span></div>
+      <div class="cl-course-title">Learning Experience Portfolio · v2026</div>
+    </div>
+    <div class="cl-body">
+      <div class="cl-status-line">
+        <span class="cl-cursor">▋</span>
+        <span class="cl-status-text" id="clStatusText"></span>
+      </div>
+      <div class="cl-bar-wrap">
+        <div class="cl-bar-track">
+          <div class="cl-bar-fill" id="clBarFill"></div>
+        </div>
+        <span class="cl-bar-pct" id="clBarPct">0%</span>
+      </div>
+      <div class="cl-log" id="clLog"></div>
+    </div>
+    <div class="cl-footer">
+      <span class="cl-scorm">SCORM 2004 · xAPI · LRS Connected</span>
+      <span class="cl-version">Build 2026.03</span>
+    </div>
+  </div>
+</div>
+
+<style>
+/* ── Overlay base ── */
+.cl-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: #0b0d0b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.6s ease, visibility 0.6s ease;
+}
+.cl-overlay.done {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* ── The "LMS window" ── */
+.cl-screen {
+  width: min(560px, 90vw);
+  border: 1px solid rgba(200,75,47,0.25);
+  border-radius: 6px;
+  background: #0f1108;
+  box-shadow: 0 0 60px rgba(200,75,47,0.08), 0 0 0 1px rgba(255,255,255,0.04);
+  overflow: hidden;
+  font-family: 'Courier New', monospace;
+}
+
+/* ── Header bar ── */
+.cl-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.7rem 1.25rem;
+  background: #161810;
+  border-bottom: 1px solid rgba(200,75,47,0.15);
+}
+.cl-logo {
+  font-family: Georgia, serif;
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #fff;
+  letter-spacing: -0.02em;
+}
+.cl-logo span { color: #c84b2f; }
+.cl-course-title {
+  font-size: 0.6rem;
+  color: rgba(255,255,255,0.3);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* ── Body ── */
+.cl-body {
+  padding: 1.5rem 1.5rem 1.25rem;
+}
+.cl-status-line {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  min-height: 1.4rem;
+}
+.cl-cursor {
+  color: #c84b2f;
+  font-size: 0.9rem;
+  animation: clBlink 0.8s step-end infinite;
+}
+@keyframes clBlink { 0%,100%{opacity:1} 50%{opacity:0} }
+.cl-status-text {
+  font-size: 0.78rem;
+  color: #a8c890;
+  letter-spacing: 0.04em;
+}
+
+/* ── Progress bar ── */
+.cl-bar-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+.cl-bar-track {
+  flex: 1;
+  height: 4px;
+  background: rgba(255,255,255,0.07);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.cl-bar-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #c84b2f, #e8784d);
+  border-radius: 2px;
+  transition: width 0.25s ease;
+}
+.cl-bar-pct {
+  font-size: 0.65rem;
+  color: #c84b2f;
+  min-width: 2.5rem;
+  text-align: right;
+}
+
+/* ── Log lines ── */
+.cl-log {
+  min-height: 3.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+.cl-log-line {
+  font-size: 0.62rem;
+  color: rgba(255,255,255,0.2);
+  letter-spacing: 0.03em;
+  animation: clFadeIn 0.2s ease;
+}
+.cl-log-line.ok::before  { content: '✓ '; color: #3dba6e; }
+.cl-log-line.err::before { content: '✗ '; color: #c84b2f; }
+.cl-log-line.info::before{ content: '· '; color: rgba(255,255,255,0.25); }
+@keyframes clFadeIn { from{opacity:0;transform:translateY(3px)} to{opacity:1;transform:none} }
+
+/* ── Footer ── */
+.cl-footer {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.6rem 1.25rem;
+  background: #0b0d0b;
+  border-top: 1px solid rgba(255,255,255,0.05);
+}
+.cl-footer span {
+  font-size: 0.55rem;
+  color: rgba(255,255,255,0.18);
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+/* ── Ready flash ── */
+.cl-screen.ready .cl-bar-fill {
+  background: linear-gradient(90deg, #2eb460, #3dba6e);
+}
+.cl-screen.ready .cl-status-text { color: #3dba6e; }
+</style>
+
+<script>
+(function(){
+  const steps = [
+    { text: 'Initialising learner profile...',    pct: 12,  log: null },
+    { text: 'Fetching personalisation data...',   pct: 28,  log: { type:'ok',  msg:'LRS connection established · statements: active' } },
+    { text: 'Loading interaction templates...',   pct: 46,  log: { type:'ok',  msg:'5 modules detected · SCORM 2004 wrapper ready' } },
+    { text: 'Configuring xAPI statement schema...',pct:63,  log: { type:'info',msg:'verb namespace: adl.net/expapi/verbs' } },
+    { text: 'Applying adaptive branching rules...',pct:79,  log: { type:'ok',  msg:'7 ID frameworks loaded · branch nodes: 42' } },
+    { text: 'Running accessibility checks...',    pct: 91,  log: { type:'ok',  msg:'WCAG 2.1 AA · contrast ratios verified' } },
+    { text: 'Ready.',                             pct: 100, log: { type:'ok',  msg:'All systems go · welcome, learner.' } },
+  ];
+
+  const statusEl = document.getElementById('clStatusText');
+  const barFill  = document.getElementById('clBarFill');
+  const barPct   = document.getElementById('clBarPct');
+  const logEl    = document.getElementById('clLog');
+  const screen   = document.querySelector('.cl-screen');
+  const overlay  = document.getElementById('courseLoader');
+
+  let i = 0;
+  function addLog(entry) {
+    const line = document.createElement('div');
+    line.className = `cl-log-line ${entry.type}`;
+    line.textContent = entry.msg;
+    logEl.appendChild(line);
+    // Keep only last 3 lines
+    while (logEl.children.length > 3) logEl.removeChild(logEl.firstChild);
+  }
+
+  function runStep() {
+    if (i >= steps.length) return;
+    const s = steps[i++];
+    statusEl.textContent = s.text;
+    barFill.style.width  = s.pct + '%';
+    barPct.textContent   = s.pct + '%';
+    if (s.log) addLog(s.log);
+
+    if (s.pct === 100) {
+      screen.classList.add('ready');
+      setTimeout(() => { overlay.classList.add('done'); }, 700);
+    } else {
+      // Vary timing slightly for realism
+      const delay = 260 + Math.random() * 180;
+      setTimeout(runStep, delay);
+    }
+  }
+
+  // Small initial pause then kick off
+  setTimeout(runStep, 300);
+})();
+</script>
+<!-- ── END COURSE LOADER ── -->
 <nav>
   <a href="index.html" class="nav-logo">AT<span>.</span></a>
   <button class="hamburger" aria-label="Menu">
