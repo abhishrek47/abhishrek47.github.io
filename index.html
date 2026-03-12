@@ -2701,4 +2701,111 @@ window.addEventListener('scroll', function() {
 </script>
 <!-- ── END RECRUITER MODE ── -->
 
+<!-- ── CURSOR TRAIL PARTICLES ── -->
+<canvas id="cursorCanvas" style="position:fixed;inset:0;pointer-events:none;z-index:8999;"></canvas>
+<style>
+  #cursorCanvas { opacity: 1; }
+</style>
+<script>
+(function(){
+  const canvas = document.getElementById('cursorCanvas');
+  const ctx    = canvas.getContext('2d');
+  let W, H;
+
+  function resize() {
+    W = canvas.width  = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  // ── Particle pool ──
+  const particles = [];
+
+  const TAGS = [
+    // code / tech
+    '</>', 'xAPI', 'JS', '{}', 'SCORM',
+    // ID language
+    'ILT', 'LMS', 'SAM', 'ADDIE', 'TTS',
+    // symbols
+    '✓', '◆', '→', '▶', '★',
+  ];
+
+  function randomTag() {
+    return TAGS[Math.floor(Math.random() * TAGS.length)];
+  }
+
+  // Palette — reds, ambers, greens matching site accent colours
+  const COLORS = [
+    'rgba(200,75,47,',    // red accent
+    'rgba(61,186,110,',   // green
+    'rgba(201,151,58,',   // amber
+    'rgba(255,255,255,',  // white
+    'rgba(91,106,191,',   // blue
+  ];
+
+  function spawn(x, y) {
+    const angle  = Math.random() * Math.PI * 2;
+    const speed  = 0.5 + Math.random() * 1.8;
+    const color  = COLORS[Math.floor(Math.random() * COLORS.length)];
+    const size   = 9 + Math.random() * 7;
+    particles.push({
+      x, y,
+      vx: Math.cos(angle) * speed,
+      vy: Math.sin(angle) * speed - 0.6,   // slight upward bias
+      alpha: 0.85,
+      decay: 0.022 + Math.random() * 0.018,
+      text: randomTag(),
+      color,
+      size,
+      rotation: (Math.random() - 0.5) * 0.4,
+      rotSpeed: (Math.random() - 0.5) * 0.04,
+    });
+  }
+
+  // Throttle spawning
+  let lastSpawn = 0;
+  let mx = -999, my = -999;
+
+  window.addEventListener('mousemove', (e) => {
+    mx = e.clientX;
+    my = e.clientY;
+    const now = Date.now();
+    if (now - lastSpawn > 60) {   // spawn every 60ms → not too dense
+      spawn(mx, my);
+      lastSpawn = now;
+    }
+  }, { passive: true });
+
+  // ── Render loop ──
+  function tick() {
+    ctx.clearRect(0, 0, W, H);
+
+    for (let i = particles.length - 1; i >= 0; i--) {
+      const p = particles[i];
+      p.x  += p.vx;
+      p.y  += p.vy;
+      p.vy += 0.035;          // gentle gravity
+      p.alpha -= p.decay;
+      p.rotation += p.rotSpeed;
+
+      if (p.alpha <= 0) { particles.splice(i, 1); continue; }
+
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rotation);
+      ctx.globalAlpha = p.alpha;
+      ctx.font = `600 ${p.size}px 'Courier New', monospace`;
+      ctx.fillStyle = p.color + p.alpha + ')';
+      ctx.fillText(p.text, 0, 0);
+      ctx.restore();
+    }
+
+    requestAnimationFrame(tick);
+  }
+  tick();
+})();
+</script>
+<!-- ── END CURSOR TRAIL ── -->
+
 </html>
