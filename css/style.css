@@ -131,21 +131,41 @@ nav {
 
 /* â”€â”€ ID MODEL SELECTOR BUTTON â”€â”€ */
 .btn-tool {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
   background: var(--accent2);
-  color: var(--white);
+  color: var(--white) !important;
   padding: 0.85rem 2rem;
-  font-family: var(--sans);
-  font-size: 0.85rem;
-  font-weight: 600;
-  letter-spacing: 0.04em;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none !important;
   border: none;
-  cursor: pointer;
-  text-decoration: none;
-  display: inline-block;
-  transition: background 0.2s;
   border-radius: 2px;
+  cursor: pointer;
+  transition: background 0.2s;
 }
-.btn-tool:hover { background: var(--ink); }
+.btn-tool:hover {
+  background: var(--ink);
+  color: var(--white) !important;
+  text-decoration: none !important;
+}
+.hero-tool {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1.25rem;
+}
+.hero-tool-label {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--mid);
+}
 
 /* â”€â”€ AVAILABLE BADGE â”€â”€ */
 .available-badge {
