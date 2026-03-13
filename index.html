@@ -1,6 +1,7 @@
 
 
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -260,6 +261,12 @@
       font-weight: 300;
     }
     .hero-actions { display: flex; gap: 1.25rem; align-items: center; flex-wrap: wrap; }
+
+    /* ── ID MODEL SELECTOR ── */
+    .hero-tool { display: flex; align-items: center; gap: 1rem; margin-top: 1.25rem; }
+    .hero-tool-label { font-family: var(--mono); font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--mid); }
+    .btn-tool { display: inline-flex; align-items: center; gap: 0.4rem; background: var(--accent2); color: #ffffff !important; padding: 0.85rem 2rem; font-family: var(--mono); font-size: 0.72rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none !important; border: none; border-radius: 2px; cursor: pointer; transition: background 0.2s; }
+    .btn-tool:hover { background: var(--ink); color: #ffffff !important; }
 
     /* ── PROOF BAR replaces floaty stats ── */
     .hero-proof {
@@ -939,13 +946,11 @@
     <div class="hero-actions fade-in">
       <a href="pages/work.html" class="btn-primary" id="heroCta">See My Work →</a>
       <a href="pages/contact.html" class="btn-secondary">Let's Talk</a>
-</a>
     </div>
-    <!-- add this new row directly after -->
-<div class="hero-tool">
-  <span class="hero-tool-label">Free tool</span>
-  <a href="tools/id-model-selector.html" target="_blank" rel="noopener" class="btn-tool">ID Model Selector ↗</a>
-</div>
+    <div class="hero-tool">
+      <span class="hero-tool-label">Free tool</span>
+      <a href="tools/id-model-selector.html" target="_blank" rel="noopener" class="btn-tool">ID Model Selector ↗</a>
+    </div>
     <!-- ── RECRUITER TOGGLE ── -->
     <div class="view-toggle-wrap fade-in" id="recruiterToggleWrap" style="display:inline-flex!important;opacity:1!important;visibility:visible!important;margin-top:1.25rem;">
       <span class="vt-label" id="vtLabelLeft">My Story</span>
