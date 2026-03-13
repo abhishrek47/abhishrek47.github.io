@@ -267,3 +267,73 @@ footer {
   footer { padding: 2rem 1.5rem; flex-direction: column; align-items: flex-start; }
   .page-hero { padding: 8rem 1.5rem 3rem; }
 }
+
+<!-- ============================================================
+   ID MODEL SELECTOR — Homepage Button Snippet
+   Drop this alongside your existing "See My Work →" and "Let's Talk" buttons
+   Host the tool at: /tools/id-model-selector.html
+   ============================================================ -->
+
+
+<!-- BUTTON HTML -->
+<a href="/tools/id-model-selector.html" target="_blank" rel="noopener" class="btn-tool">
+  ID Model Selector ↗
+</a>
+
+
+<!-- ============================================================
+   CSS — paste into your existing stylesheet
+   
+   Context: your current buttons are:
+     .btn-primary  →  solid black  (#1a1a18), white text  — "See My Work"
+     .btn-ghost    →  text + underline only               — "Let's Talk"
+   
+   This button uses your site's dark navy (#1e2d4a) — same family
+   as your right-panel color, clearly distinct from black,
+   blends as a native site element, stands out without clashing.
+   ============================================================ -->
+<style>
+.btn-tool {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 14px 24px;          /* matches your .btn-primary height */
+  background: #1e2d4a;         /* dark navy — from your right panel */
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;          /* match your site's border-radius */
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 500;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.1s ease;
+}
+
+.btn-tool:hover {
+  background: #162238;         /* slightly darker navy on hover */
+}
+
+.btn-tool:active {
+  transform: scale(0.98);
+}
+</style>
+
+
+<!-- ============================================================
+   PLACEMENT — find your hero CTA row in index.html.
+   It currently looks something like:
+
+   <a href="/pages/work.html" class="btn-primary">See My Work →</a>
+   <a href="/pages/contact.html" class="btn-ghost">Let's Talk</a>
+
+   Add the new button after them:
+
+   <a href="/pages/work.html" class="btn-primary">See My Work →</a>
+   <a href="/pages/contact.html" class="btn-ghost">Let's Talk</a>
+   <a href="/tools/id-model-selector.html" target="_blank" rel="noopener" class="btn-tool">ID Model Selector ↗</a>
+
+   The three buttons will read as a natural set:
+     [Black — primary CTA]  [Text link — soft CTA]  [Navy — tool/resource]
+   ============================================================ -->
