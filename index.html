@@ -1,7 +1,3 @@
-
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -267,7 +263,24 @@
     .hero-tool-label { font-family: var(--mono); font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--mid); }
     .btn-tool { display: inline-flex; align-items: center; gap: 0.4rem; background: var(--accent2); color: #ffffff !important; padding: 0.85rem 2rem; font-family: var(--mono); font-size: 0.72rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none !important; border: none; border-radius: 2px; cursor: pointer; transition: background 0.2s; }
     .btn-tool:hover { background: var(--ink); color: #ffffff !important; }
-    .nav-tool { display: inline-block !important; padding: 0.5rem 1.3rem !important; font-family: var(--sans) !important; font-size: 0.82rem !important; font-weight: 500 !important; letter-spacing: 0.08em !important; text-transform: uppercase !important; border-radius: 2px; line-height: 1; }
+    .nav-tool {
+      display: inline-block !important;
+      background: var(--accent2) !important;
+      color: #ffffff !important;
+      padding: 0.5rem 1.3rem !important;
+      font-family: var(--sans) !important;
+      font-size: 0.82rem !important;
+      font-weight: 500 !important;
+      letter-spacing: 0.08em !important;
+      text-transform: uppercase !important;
+      text-decoration: none !important;
+      border-radius: 2px !important;
+      line-height: normal !important;
+      vertical-align: middle !important;
+      box-sizing: border-box !important;
+      transition: background 0.2s !important;
+    }
+    .nav-tool:hover { background: var(--ink) !important; color: #ffffff !important; }
 
     /* ── PROOF BAR replaces floaty stats ── */
     .hero-proof {
@@ -3976,8 +3989,8 @@ if (document.readyState === 'loading') {
   transform: translateX(5px);
 }
 @media(max-width:768px) {
-  .journey-trigger { bottom: 4.5rem; padding: 0.65rem 0.8rem; }
-  .journey-trigger-text { display: none; }
+  .journey-trigger { bottom: 4.5rem; padding: 0.55rem 0.9rem; }
+  .journey-trigger-text { display: inline; font-size: 0.6rem; letter-spacing: 0.08em; }
 }
 </style>
 
