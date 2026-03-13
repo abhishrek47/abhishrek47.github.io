@@ -2307,6 +2307,11 @@ function kbAccToggle(n) {
           <div class="tl-dots" id="tlDots"></div>
           <button class="tl-nav-btn" id="tlNext" onclick="tlNavigate(1)">Next →</button>
         </div>
+        <div class="tl-swipe-hint" id="tlSwipeHint">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>
+          swipe to navigate
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>
+        </div>
       </div>
     </div>
 
@@ -3645,6 +3650,33 @@ button.hamburger span {
 }
 .tl-nav-btn:hover { color: rgba(26,26,24,0.9); }
 .tl-nav-btn:disabled { opacity: 0.15; cursor: default; }
+
+/* Swipe hint — mobile only */
+.tl-swipe-hint {
+  display: none;
+}
+@media (max-width: 768px) {
+  .tl-swipe-hint {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    margin-top: 0.85rem;
+    font-family: var(--mono, monospace);
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(26,26,24,0.3);
+    animation: swipeHintFade 3s ease 1.5s both;
+  }
+  @keyframes swipeHintFade {
+    0%   { opacity: 0; transform: translateY(4px); }
+    20%  { opacity: 1; transform: translateY(0); }
+    80%  { opacity: 1; }
+    100% { opacity: 0; }
+  }
+  .tl-swipe-hint.hidden { display: none; }
+}
 .tl-dots {
   display: flex;
   gap: 0.45rem;
@@ -3925,11 +3957,47 @@ function tlInitDrag() {
   });
 }
 
+// ── Card swipe (mobile) ──
+function tlInitSwipe() {
+  const card = document.getElementById('tlCard');
+  if (!card) return;
+
+  let startX = 0, startY = 0, dragging = false;
+
+  card.addEventListener('touchstart', function(e) {
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
+    dragging = true;
+  }, { passive: true });
+
+  card.addEventListener('touchmove', function(e) {
+    if (!dragging) return;
+    const dx = e.touches[0].clientX - startX;
+    const dy = e.touches[0].clientY - startY;
+    // Only prevent scroll if clearly horizontal swipe
+    if (Math.abs(dx) > Math.abs(dy) + 8) e.preventDefault();
+  }, { passive: false });
+
+  card.addEventListener('touchend', function(e) {
+    if (!dragging) return;
+    dragging = false;
+    const dx = e.changedTouches[0].clientX - startX;
+    const dy = e.changedTouches[0].clientY - startY;
+    // Must be more horizontal than vertical, and at least 40px
+    if (Math.abs(dx) < 40 || Math.abs(dx) < Math.abs(dy)) return;
+    // Hide the hint once user has swiped
+    const hint = document.getElementById('tlSwipeHint');
+    if (hint) hint.classList.add('hidden');
+    if (dx < 0) tlGoTo(tlCurrentIndex + 1); // swipe left → next
+    else        tlGoTo(tlCurrentIndex - 1); // swipe right → prev
+  }, { passive: true });
+}
+
 // ── Kick off after DOM ready ──
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', tlInit);
+  document.addEventListener('DOMContentLoaded', function() { tlInit(); tlInitSwipe(); });
 } else {
-  tlInit();
+  tlInit(); tlInitSwipe();
 }
 </script>
 <!-- ── END CAREER TIMELINE ── -->
