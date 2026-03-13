@@ -1,0 +1,237 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ID Model Selector — Abhishek Trivedi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+:root{
+  --bg:#f0ece4;
+  --bg2:#e8e3d9;
+  --bg3:#dedad0;
+  --border:rgba(26,26,24,0.12);
+  --border-hover:rgba(26,26,24,0.28);
+  --text:#1a1a18;
+  --muted:#57554e;
+  --hint:#9a9488;
+  --navy:#1e2d4a;
+  --navy-dark:#162238;
+  --navy-dim:rgba(30,45,74,0.07);
+  --orange:#c8390a;
+  --orange-dark:#a32d07;
+  --orange-dim:rgba(200,57,10,0.09);
+  --r:8px;--rl:12px;
+  --font-mono:'DM Mono',monospace;
+  --font-sans:'DM Sans',sans-serif;
+}
+body{background:var(--bg);color:var(--text);font-family:var(--font-sans);font-size:15px;line-height:1.6;min-height:100vh}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:14px 40px;display:flex;align-items:center;justify-content:space-between;background:rgba(240,236,228,0.93);backdrop-filter:blur(10px);border-bottom:1px solid var(--border)}
+.nav-logo{font-family:var(--font-mono);font-size:14px;font-weight:500;color:var(--text);text-decoration:none}
+.nav-logo span{color:var(--orange)}
+.nav-back{font-family:var(--font-mono);font-size:12px;color:var(--muted);text-decoration:none;letter-spacing:.04em;transition:color .2s}
+.nav-back:hover{color:var(--navy)}
+
+.hero{padding:110px 40px 52px;max-width:740px;margin:0 auto}
+.hero-tag{font-family:var(--font-mono);font-size:11px;color:var(--orange);letter-spacing:.1em;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.hero-tag::before{content:'';display:inline-block;width:24px;height:1.5px;background:var(--orange)}
+h1{font-family:var(--font-sans);font-size:clamp(26px,4vw,40px);font-weight:700;line-height:1.15;color:var(--text);margin-bottom:14px;letter-spacing:-.02em}
+h1 em{font-style:italic;color:var(--orange)}
+.hero-sub{font-size:15px;color:var(--muted);max-width:520px;line-height:1.75}
+
+.main{max-width:740px;margin:0 auto;padding:0 40px 80px}
+
+.card{background:#fff;border:1px solid var(--border);border-radius:var(--rl);padding:32px;margin-bottom:28px}
+
+.step-group{margin-bottom:22px}
+.step-label{font-family:var(--font-mono);font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:var(--hint);margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.step-num{width:18px;height:18px;border-radius:50%;background:var(--navy-dim);color:var(--navy);font-size:10px;font-weight:500;display:flex;align-items:center;justify-content:center}
+
+select{width:100%;padding:11px 14px;background:var(--bg);border:1px solid var(--border);border-radius:var(--r);color:var(--text);font-family:var(--font-sans);font-size:14px;cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239a9488' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;transition:border-color .2s,background .15s}
+select:focus{outline:none;border-color:var(--navy);background:#fff}
+select:hover{border-color:var(--border-hover)}
+
+.divider{height:1px;background:var(--border);margin:24px 0}
+
+.btn-recommend{width:100%;padding:13px 24px;background:var(--navy);color:#fff;border:none;border-radius:var(--r);font-family:var(--font-mono);font-size:12px;font-weight:500;letter-spacing:.07em;text-transform:uppercase;cursor:pointer;transition:background .2s,transform .12s,opacity .2s}
+.btn-recommend:hover:not(:disabled){background:var(--navy-dark)}
+.btn-recommend:active:not(:disabled){transform:scale(.99)}
+.btn-recommend:disabled{opacity:.28;cursor:not-allowed}
+
+.result{display:none}
+
+.result-eyebrow{font-family:var(--font-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--orange);margin-bottom:6px}
+.result-header{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:20px}
+.result-name{font-size:26px;font-weight:700;letter-spacing:-.02em;color:var(--text)}
+
+.badge{display:inline-flex;align-items:center;padding:4px 12px;border-radius:100px;font-family:var(--font-mono);font-size:11px;white-space:nowrap}
+.badge-navy{background:var(--navy-dim);color:var(--navy);border:1px solid rgba(30,45,74,.18)}
+.badge-orange{background:var(--orange-dim);color:var(--orange);border:1px solid rgba(200,57,10,.18)}
+
+.why-box{background:var(--navy-dim);border:1px solid rgba(30,45,74,.1);border-radius:var(--r);padding:16px 18px;font-size:14px;color:var(--text);line-height:1.75;margin-bottom:22px}
+
+.phases-label{font-family:var(--font-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--hint);margin-bottom:8px}
+.phases-flow{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-bottom:22px}
+.phase-chip{padding:4px 12px;background:var(--bg2);border:1px solid var(--border);border-radius:100px;font-family:var(--font-mono);font-size:11px;color:var(--muted)}
+.phase-arrow{color:var(--hint);font-size:12px}
+
+.start-box{display:flex;align-items:flex-start;gap:14px;background:var(--bg);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;margin-bottom:22px}
+.start-pill{flex-shrink:0;padding:5px 13px;border-radius:100px;font-family:var(--font-mono);font-size:11px;font-weight:500}
+.pill-sb{background:var(--navy);color:#fff}
+.pill-pt{background:var(--orange);color:#fff}
+.start-why{font-size:13px;color:var(--muted);line-height:1.65}
+
+.pc-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:22px}
+@media(max-width:520px){.pc-grid{grid-template-columns:1fr}}
+.pc-card{background:var(--bg);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px}
+.pc-title{font-family:var(--font-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px}
+.pc-title-pro{color:var(--navy)}
+.pc-title-con{color:var(--orange)}
+.pc-item{font-size:13px;color:var(--muted);line-height:1.6;padding-left:14px;position:relative;margin-bottom:5px}
+.pc-item::before{position:absolute;left:0;font-size:11px}
+.pro::before{content:'+';color:var(--navy);font-weight:500}
+.con::before{content:'−';color:var(--orange)}
+
+.hook-box{border-left:2px solid var(--navy);padding:13px 18px;background:var(--bg);border-radius:0 var(--r) var(--r) 0;margin-bottom:26px}
+.hook-label{font-family:var(--font-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--navy);margin-bottom:6px}
+.hook-text{font-size:13px;color:var(--muted);line-height:1.7;font-style:italic}
+
+.also-label{font-family:var(--font-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--hint);margin-bottom:10px}
+.sec-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px}
+@media(max-width:520px){.sec-grid{grid-template-columns:1fr}}
+.sec-card{background:var(--bg);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;transition:border-color .2s}
+.sec-card:hover{border-color:var(--border-hover)}
+.sec-name{font-size:13px;font-weight:500;color:var(--text);margin-bottom:4px}
+.sec-desc{font-size:12px;color:var(--muted);line-height:1.6}
+
+.btn-reset{background:none;border:1px solid var(--border);border-radius:var(--r);padding:9px 18px;color:var(--muted);font-family:var(--font-mono);font-size:11px;letter-spacing:.06em;cursor:pointer;transition:border-color .2s,color .2s}
+.btn-reset:hover{border-color:var(--border-hover);color:var(--text)}
+
+footer{border-top:1px solid var(--border);padding:24px 40px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.footer-l,.footer-r{font-family:var(--font-mono);font-size:11px;color:var(--hint)}
+.footer-r a{color:var(--navy);text-decoration:none}
+.footer-r a:hover{text-decoration:underline}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="https://abhishektrivedi.com" class="nav-logo"><span>AT</span>.</a>
+  <a href="https://abhishektrivedi.com" class="nav-back">← back to portfolio</a>
+</nav>
+
+<div class="hero">
+  <p class="hero-tag">Interactive tool</p>
+  <h1>Find the right ID model<br>for your <em>next project.</em></h1>
+  <p class="hero-sub">Pick a topic, set your learning goal and constraints — get an instant recommendation across 7 instructional design models, with a clear rationale and interview-ready hook.</p>
+</div>
+
+<div class="main">
+  <div class="card">
+    <div class="step-group">
+      <div class="step-label"><span class="step-num">1</span>Topic category</div>
+      <select id="cat" onchange="filterTopics()">
+        <option value="">— choose a category —</option>
+        <option value="compliance">Compliance &amp; Legal</option>
+        <option value="technical">Technical &amp; IT Skills</option>
+        <option value="leadership">Leadership &amp; Management</option>
+        <option value="sales">Sales &amp; Customer Service</option>
+        <option value="onboarding">Onboarding &amp; Induction</option>
+        <option value="safety">Health, Safety &amp; Wellbeing</option>
+        <option value="soft">Soft Skills &amp; Communication</option>
+        <option value="process">Process &amp; Operations</option>
+        <option value="de">Diversity, Equity &amp; Inclusion</option>
+        <option value="digital">Digital &amp; Data Literacy</option>
+      </select>
+    </div>
+    <div class="step-group">
+      <div class="step-label"><span class="step-num">2</span>Specific topic</div>
+      <select id="topic" onchange="checkReady()">
+        <option value="">— select a category first —</option>
+      </select>
+    </div>
+    <div class="divider"></div>
+    <div class="step-group">
+      <div class="step-label"><span class="step-num">3</span>What should learners be able to do?</div>
+      <select id="goal" onchange="checkReady()">
+        <option value="">— choose a learning goal —</option>
+        <option value="recall">Remember and recall key information</option>
+        <option value="understand">Understand concepts and explain them</option>
+        <option value="apply">Apply a skill or process on the job</option>
+        <option value="judge">Make judgment calls in complex situations</option>
+        <option value="change">Change a behaviour or habit</option>
+        <option value="evaluate">Evaluate performance or prove training ROI</option>
+      </select>
+    </div>
+    <div class="step-group">
+      <div class="step-label"><span class="step-num">4</span>Main project constraint</div>
+      <select id="constraint" onchange="checkReady()">
+        <option value="">— choose your constraint —</option>
+        <option value="tight_timeline">Tight timeline — need it fast</option>
+        <option value="unclear_req">Requirements are unclear or evolving</option>
+        <option value="stakeholder">Stakeholders need sign-off at every stage</option>
+        <option value="scale">Must scale to hundreds of learners</option>
+        <option value="deep">Deep skill transfer is the priority</option>
+        <option value="roi">Must demonstrate measurable business impact</option>
+      </select>
+    </div>
+    <div class="divider"></div>
+    <button class="btn-recommend" id="recBtn" onclick="recommend()" disabled>Recommend a model →</button>
+  </div>
+
+  <div class="result" id="result"></div>
+</div>
+
+<footer>
+  <span class="footer-l">ID Model Selector · abhishektrivedi.com · 2026</span>
+  <span class="footer-r">7 models · 100 topics · <a href="https://abhishektrivedi.com/pages/work.html#case5">see storyboard tool →</a></span>
+</footer>
+
+<script>
+const topics={compliance:["Preventing workplace harassment","Data privacy and GDPR","Anti-bribery and corruption","Code of conduct","Insider trading awareness","Information security basics","Workplace discrimination","Financial compliance","HIPAA awareness","Export control regulations"],technical:["Introduction to Python","Excel for data analysis","Cloud computing fundamentals","Cybersecurity awareness","Using Salesforce CRM","Power BI dashboards","Prompt engineering basics","API integration basics","Agile and Scrum methods","DevOps fundamentals"],leadership:["First-time manager essentials","Giving and receiving feedback","Performance management","Coaching skills","Leading remote teams","Strategic thinking","Change management","Decision making under pressure","Building psychological safety","Managing conflict"],sales:["Consultative selling","Objection handling","Product knowledge fundamentals","Negotiation skills","Customer success basics","Cold outreach and prospecting","Handling difficult customers","CRM data hygiene","Cross-selling and upselling","Sales forecasting"],onboarding:["Company culture and values","Role-specific responsibilities","IT systems orientation","Benefits and HR processes","Team and org structure","90-day success framework","Manager onboarding","Remote employee onboarding","Graduate onboarding","Contractor induction"],safety:["Manual handling and ergonomics","Fire safety and evacuation","Mental health at work","Chemical hazard awareness","Construction site safety","Food hygiene and safety","Lone worker safety","Stress and burnout prevention","PPE usage","Incident reporting"],soft:["Effective written communication","Presentation and public speaking","Active listening","Email etiquette","Cross-cultural communication","Time management","Emotional intelligence","Conflict resolution","Influencing without authority","Storytelling for business"],process:["Invoice processing workflow","Customer complaint handling","Procurement procedures","Quality assurance checklist","Inventory management","Supply chain basics","Contract review process","Project intake workflow","IT helpdesk escalation","Payroll processing steps"],de:["Unconscious bias","Inclusive hiring practices","Allyship in the workplace","Microaggressions awareness","Accessibility and disability inclusion","Gender equity at work","LGBTQ+ inclusion","Cultural competency","Neurodiversity inclusion","Building inclusive teams"],digital:["Data literacy fundamentals","AI tools in the workplace","Spreadsheet fundamentals","Digital collaboration tools","Social media at work","Cybersecurity for non-technical staff","Using Microsoft 365","Understanding analytics dashboards","Digital wellbeing","No-code tool basics"]};
+const models={ADDIE:{name:"ADDIE",badge:"badge-navy",why:"ADDIE works best when the problem is well-defined, content is stable, and stakeholders need clear phase gates to sign off at each stage.",phases:["Analyze","Design","Develop","Implement","Evaluate"],start:"sb",startWhy:"ADDIE is documentation-driven — a detailed storyboard is the natural Design phase output that gets stakeholder and legal sign-off before a single screen is built.",pros:["Predictable milestones and timelines","Easy stakeholder and legal sign-off","Full audit trail — every decision documented"],cons:["Inflexible if content changes mid-project","Delays time-to-value — everything upfront","Nothing reaches learners until full development is done"],hook:"\"I use ADDIE when the problem is crystal clear. I pair it with a quick prototype in the Design phase to catch content gaps before full development starts.\""},SAM:{name:"SAM (Successive Approximation)",badge:"badge-navy",why:"SAM is the right call when requirements are fuzzy or stakeholders can't define what they want until they see something.",phases:["Preparation","Iterative design","Iterative development"],start:"pt",startWhy:"SAM skips the formal storyboard — a rough clickable prototype in week one generates real feedback faster than any written spec.",pros:["Fast to a usable version","Stakeholders shape the course through feedback sprints","Catches structural problems before full build"],cons:["Needs committed SMEs who show up for sessions","Scope can expand each sprint without discipline","Less documentation — harder to audit for compliance"],hook:"\"SAM is my go-to when SMEs struggle to articulate requirements. The savvy start sprint aligns everyone before a single screen is built.\""},"Bloom's":{name:"Bloom's Taxonomy",badge:"badge-orange",why:"Bloom's is a diagnostic lens, not a standalone model. It ensures learning objectives are pitched at the right cognitive level.",phases:["Remember","Understand","Apply","Analyze","Evaluate","Create"],start:"sb",startWhy:"Map each storyboard screen to a Bloom's level. This ensures the course moves learners up the cognitive ladder rather than staying at recall.",pros:["Forces objectives above 'understand'","Works as an overlay on any other model","Easy for stakeholders to understand and review"],cons:["Not a full design model — tells you what level, not how to build","Higher levels are hard to auto-assess in eLearning","Always needs to be combined with another model"],hook:"\"If all objectives use the word 'understand', the course is probably a click-through. I push to Apply and Analyze — that's where behaviour change lives.\""},Gagné:{name:"Gagné's 9 Events",badge:"badge-navy",why:"Gagné provides a proven 9-step instructional sequence that mirrors how the brain actually processes and retains information.",phases:["Attention","State objective","Prior knowledge","Content","Example","Practice","Feedback","Assessment","Transfer"],start:"sb",startWhy:"Each of the 9 events maps directly to a storyboard screen — the model essentially gives you the screen sequence. Document it before building.",pros:["Complete instructional coverage — nothing skipped","Excellent for compliance where soundness must be proven","Naturally produces measurable, assessable outcomes"],cons:["Can feel rigid for informal or adaptive content","9 events can bloat short courses","Experienced learners resent the early recall stages"],hook:"\"Gagné is my checklist for whether a course actually teaches. If I can't find Events 3, 6, and 7, it's probably just a slideshow.\""},Merrill:{name:"Merrill's First Principles",badge:"badge-navy",why:"Merrill puts a real-world problem at the centre of the course — not content. Learners face a situation before they're taught anything.",phases:["Problem","Activation","Demonstration","Application","Integration"],start:"sb",startWhy:"Merrill storyboards are scenario-first — you write the opening problem screen before any content exists. SMEs must validate the scenario before build.",pros:["Learners immediately see why it matters","Builds judgment not just recall","Most likely to produce real behaviour change"],cons:["Heavy scenario-writing effort upfront","Hard to get linear SME or Legal sign-off","Doesn't scale quickly across many topics"],hook:"\"Merrill is my gut-check. If the learner never solves a real problem, it's content delivery — not instruction.\""},"4C/ID":{name:"4C/ID (Four Component ID)",badge:"badge-orange",why:"4C/ID separates routine and non-routine skill elements and designs each differently. It produces the deepest skill transfer — and requires the most effort.",phases:["Learning tasks","Supportive information","Procedural information","Part-task practice"],start:"pt",startWhy:"4C/ID's non-linear structure doesn't translate well to a traditional storyboard. Prototype the simulation environment first, then layer in information scaffolds.",pros:["Deepest long-term skill transfer","Separates memorising from complex thinking","Best for judgment under real-world pressure"],cons:["Enormous design and development effort","Overkill for awareness-level or short content","Requires simulation environment — beyond basic Storyline"],hook:"\"4C/ID forces design for transfer — what does on-the-job performance actually look like, and how do we get there?\""},Kirkpatrick:{name:"Kirkpatrick Model",badge:"badge-orange",why:"Kirkpatrick doesn't help you build the course — it helps you prove it worked. Define business results first, then work backwards to design.",phases:["Reaction","Learning","Behaviour","Results"],start:"sb",startWhy:"Kirkpatrick backwards design means your storyboard starts from the business outcome and works backwards. Every screen must earn its place in that chain.",pros:["Forces business to define success upfront","Gives L&D real impact data beyond completion rates","Stakeholders co-own the training outcome"],cons:["Level 3 and 4 data hard to isolate from other factors","Requires sustained manager participation post-training","Still needs another model to actually build the course"],hook:"\"I design backwards from Level 4 — what business result do we want? That question drives the entire design.\""}};
+const secondary={ADDIE:["Bloom's","Gagné"],SAM:["Merrill","Bloom's"],"Bloom's":["ADDIE","Gagné"],Gagné:["Bloom's","ADDIE"],Merrill:["Bloom's","SAM"],"4C/ID":["Merrill","Bloom's"],Kirkpatrick:["ADDIE","Gagné"]};
+const logic=[{goal:"evaluate",c:"roi",m:"Kirkpatrick"},{goal:"evaluate",c:null,m:"Kirkpatrick"},{goal:"judge",c:"deep",m:"4C/ID"},{goal:"judge",c:"unclear_req",m:"SAM"},{goal:"judge",c:null,m:"Merrill"},{goal:"change",c:"unclear_req",m:"SAM"},{goal:"change",c:null,m:"Merrill"},{goal:"apply",c:"stakeholder",m:"ADDIE"},{goal:"apply",c:"unclear_req",m:"SAM"},{goal:"apply",c:"deep",m:"Gagné"},{goal:"apply",c:null,m:"Gagné"},{goal:"understand",c:"tight_timeline",m:"Bloom's"},{goal:"understand",c:null,m:"Bloom's"},{goal:"recall",c:"stakeholder",m:"ADDIE"},{goal:"recall",c:"scale",m:"ADDIE"},{goal:"recall",c:null,m:"ADDIE"}];
+
+function filterTopics(){
+  const cat=document.getElementById('cat').value,sel=document.getElementById('topic');
+  sel.innerHTML='<option value="">— select a topic —</option>';
+  if(cat&&topics[cat])topics[cat].forEach(t=>{const o=document.createElement('option');o.value=t;o.textContent=t;sel.appendChild(o)});
+  checkReady();
+}
+function checkReady(){
+  const ok=document.getElementById('topic').value&&document.getElementById('goal').value&&document.getElementById('constraint').value;
+  document.getElementById('recBtn').disabled=!ok;
+}
+function recommend(){
+  const goal=document.getElementById('goal').value,constraint=document.getElementById('constraint').value,topic=document.getElementById('topic').value;
+  if(!topic||!goal||!constraint)return;
+  let chosen=null;
+  for(const r of logic){if(r.goal===goal&&(r.c===null||r.c===constraint)){chosen=r.m;break;}}
+  if(!chosen)chosen="ADDIE";
+  const m=models[chosen],secs=secondary[chosen].map(s=>models[s]);
+  const phases=m.phases.map((p,i)=>`<span class="phase-chip">${p}</span>${i<m.phases.length-1?'<span class="phase-arrow">›</span>':''}`).join('');
+  const pros=m.pros.map(p=>`<div class="pc-item pro">${p}</div>`).join('');
+  const cons=m.cons.map(c=>`<div class="pc-item con">${c}</div>`).join('');
+  const secCards=secs.map(s=>`<div class="sec-card"><div class="sec-name">${s.name}</div><div class="sec-desc">${s.why}</div></div>`).join('');
+  const pillClass=m.start==='sb'?'pill-sb':'pill-pt';
+  const pillLabel=m.start==='sb'?'→ Storyboard first':'→ Prototype first';
+  document.getElementById('result').innerHTML=`<div class="card"><div class="result-eyebrow">Recommended for: ${topic}</div><div class="result-header"><div class="result-name">${m.name}</div><span class="badge ${m.badge}">${m.start==='sb'?'Storyboard first':'Prototype first'}</span></div><div class="why-box">${m.why}</div><div class="phases-label">Model phases</div><div class="phases-flow">${phases}</div><div class="start-box"><span class="start-pill ${pillClass}">${pillLabel}</span><span class="start-why">${m.startWhy}</span></div><div class="pc-grid"><div class="pc-card"><div class="pc-title pc-title-pro">Pros</div>${pros}</div><div class="pc-card"><div class="pc-title pc-title-con">Cons</div>${cons}</div></div><div class="hook-box"><div class="hook-label">Interview hook — use this</div><div class="hook-text">${m.hook}</div></div><div class="also-label">Also consider</div><div class="sec-grid">${secCards}</div><button class="btn-reset" onclick="resetTool()">← Start over</button></div>`;
+  document.getElementById('result').style.display='block';
+  document.getElementById('result').scrollIntoView({behavior:'smooth',block:'start'});
+}
+function resetTool(){
+  ['cat','topic','goal','constraint'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('topic').innerHTML='<option value="">— select a category first —</option>';
+  document.getElementById('result').style.display='none';
+  document.getElementById('recBtn').disabled=true;
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+</script>
+</body>
+</html>
