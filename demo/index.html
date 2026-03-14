@@ -1,5 +1,6 @@
 
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -846,7 +847,7 @@ body {
           <span class="tech-pill">Articulate Storyline 360</span>
           <span class="tech-pill">JavaScript</span>
           <span class="tech-pill">REST API</span>
-          <span class="tech-pill">Saba LMS</span>
+          <span class="tech-pill">Enterprise LMS</span>
           <span class="tech-pill">Murf AI</span>
           <span class="tech-pill">xAPI</span>
         </div>
@@ -902,7 +903,7 @@ const content = {
   },
   dev: {
     narration: `Hey <span class="hi">{NAME}</span> — as an eLearning Developer, you've probably hit the ceiling of what Storyline's native triggers can do. The good news: JavaScript changes that completely.<br><br>This module shows how a few lines of JS, an API endpoint, and learner data from your LMS can make your courses feel like they were built for each individual.`,
-    body: `You'll see the actual trigger pattern used to fetch learner data from Saba LMS at course launch — and how that data is passed to Murf AI to generate personalised narration dynamically.`,
+    body: `You'll see the actual trigger pattern used to fetch learner data from the enterprise LMS at course launch — and how that data is passed to Murf AI to generate personalised narration dynamically.`,
     question: `You're building a course in Storyline 360 and want it to greet the learner by name and job title on slide 1. The LMS stores this data. What's the correct technical approach?`,
     options: [
       { text: "Use Storyline's built-in 'Player Name' variable — it already pulls from the LMS.", correct: false },
@@ -1241,7 +1242,7 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeHBT(); 
 
     <div class="hbt-section">
       <div class="hbt-section-label sim">~ What's simulated</div>
-      <div class="hbt-item sim"><span class="hbt-item-icon">🌐</span><span>The Saba LMS API call — no real LMS is connected; learner name and role come from the form input</span></div>
+      <div class="hbt-item sim"><span class="hbt-item-icon">🌐</span><span>The enterprise LMS API call — no real LMS is connected; learner name and role come from the form input</span></div>
       <div class="hbt-item sim"><span class="hbt-item-icon">🎙</span><span>Murf AI voice — the browser speech engine is a placeholder; the production version used Murf AI for natural human-quality narration</span></div>
       <div class="hbt-item sim"><span class="hbt-item-icon">🔑</span><span>Learner ID and prior completions — randomised on each session to illustrate the data structure</span></div>
     </div>
@@ -1250,7 +1251,7 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeHBT(); 
       <div class="hbt-section-label prod">→ Production architecture</div>
       <div class="hbt-arch"><span class="node">Storyline 360</span> <span class="arrow">──OnEnter──▶</span> <span class="node">JS trigger</span>
   <span class="arrow">│</span>
-  <span class="arrow">└──▶</span> <span class="node">fetch()</span> <span class="arrow">──▶</span> <span class="node">Saba LMS REST API</span>
+  <span class="arrow">└──▶</span> <span class="node">fetch()</span> <span class="arrow">──▶</span> <span class="node">Enterprise LMS REST API</span>
          <span class="arrow">│</span>           <span class="note">// returns learnerName, role, dept</span>
          <span class="arrow">└──▶</span> <span class="node">Murf AI API</span> <span class="arrow">──▶</span> <span class="label">audio blob</span>
                     <span class="arrow">│</span>    <span class="note">// POST { text, voiceId, style }</span>
