@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -350,9 +351,22 @@
     .ab-cap-item  { border-right: none; }
     .ab-cap-item:nth-last-child(-n+2) { border-bottom: 1px solid rgba(0,0,0,0.08); }
     .ab-cap-item:last-child { border-bottom: none; }
-    .cv-row       { grid-template-columns: 1fr; }
-    .cv-col-label { border-right: none; border-bottom: 1px solid rgba(0,0,0,0.07); }
-    .cv-col-generic { border-right: none; border-bottom: 1px solid rgba(0,0,0,0.07); }
+
+    /* Comparison table — mobile card layout */
+    .cv-row-head  { display: grid; grid-template-columns: 1fr 1fr; }
+    .cv-row-head .cv-col-label { display: none; }
+    .cv-row       { display: grid; grid-template-columns: 1fr 1fr; align-items: start; }
+    .cv-col       { padding: 0.75rem 0.85rem; }
+    .cv-col-label {
+      grid-column: 1 / -1;
+      border-right: none;
+      border-bottom: 1px solid rgba(0,0,0,0.07);
+      background: rgba(0,0,0,0.02);
+      font-size: 0.62rem;
+    }
+    .cv-col-generic { border-right: 1px solid rgba(0,0,0,0.07); }
+    .cv-chip { font-size: 0.75rem; }
+
     .ab-cta       { grid-template-columns: 1fr; gap: 2rem; }
     .ab-hero, .ab-section, .ab-cv, .ab-cta { padding-left: 1.5rem; padding-right: 1.5rem; }
   }
