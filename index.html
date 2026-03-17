@@ -602,8 +602,37 @@
     <li><a href="pages/about.html">About</a></li>
     <li><a href="pages/certifications.html">Certifications</a></li>
     <li><a href="tools/id-model-selector.html" target="_blank" rel="noopener" class="nav-cta nav-tool">ID Model Selector ↗</a></li>
+    <li><a href="game/index.html" class="nav-game" aria-label="Spot the Accessibility Bug game">
+      <span class="nav-game-dot"></span>Spot the Bug
+    </a></li>
     <li><a href="pages/contact.html" class="nav-cta">Let's Talk</a></li>
   </ul>
+  <style>
+    .nav-game {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.82rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--mid);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-game:hover { color: #2d7a3a; }
+    .nav-game-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: #2d7a3a;
+      flex-shrink: 0;
+      animation: pulse 2s infinite;
+    }
+    @media (max-width: 900px) {
+      .nav-game { font-size: 1rem !important; color: var(--ink) !important; }
+      .nav-game:hover { color: #2d7a3a !important; }
+    }
+  </style>
 </nav>
 
 <!-- HERO -->
