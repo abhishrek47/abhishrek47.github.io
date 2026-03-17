@@ -4,10 +4,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Demo 03 — Localisation Automation · Abhishek Trivedi</title>
+<title>Demo 03 -- Localisation Automation · Abhishek Trivedi</title>
 <style>
 /* ============================================
-   abhishektrivedi.com — Demo Shared Stylesheet
+   abhishektrivedi.com -- Demo Shared Stylesheet
    Matches main site: warm cream · serif display
    terracotta accent · navy dark · editorial feel
    ============================================ */
@@ -237,7 +237,7 @@ code { padding: 1px 5px; }
 .hood-list li { font-size: 0.875rem; color: var(--text-secondary); padding-left: 1.5rem; position: relative; line-height: 1.6; }
 .hood-list li::before { content: attr(data-icon); position: absolute; left: 0; }
 
-/* NEXT CASE — uses navy panel like main site */
+/* NEXT CASE -- uses navy panel like main site */
 .next-case {
   background: var(--bg-dark); border: 1px solid transparent;
   border-radius: var(--radius-xl); padding: 2rem; margin-top: 4rem;
@@ -619,13 +619,13 @@ code { padding: 1px 5px; }
 
   <!-- Screen 1: The Problem -->
   <div class="screen-section active" id="screen-problem">
-    <span class="code-label">// Case Study 03 — Localisation Automation</span>
+    <span class="code-label">// Case Study 03 -- Localisation Automation</span>
     <h1>36 hours of work. <em>Every. Single. Time.</em></h1>
     <p>A global technology org trained employees across 8 language regions. Every course update meant manually re-editing every video for every language.</p>
     <hr>
     <div class="before-after">
       <div class="ba-col">
-        <div class="ba-header bad">✗ Manual — per language</div>
+        <div class="ba-header bad">✗ Manual -- per language</div>
         <ul class="step-list">
           <li><span class="s-num">01</span>Export raw video from Storyline<span class="s-time">~20m</span></li>
           <li><span class="s-num">02</span>Strip original audio track<span class="s-time">~15m</span></li>
@@ -636,13 +636,13 @@ code { padding: 1px 5px; }
         </ul>
       </div>
       <div class="ba-col">
-        <div class="ba-header good">✓ Automated — all languages</div>
+        <div class="ba-header good">✓ Automated -- all languages</div>
         <ul class="step-list">
-          <li><span class="s-num">—</span>Run one command<span class="s-tick">✓</span></li>
-          <li><span class="s-num">—</span>Audio stripped & re-timed automatically<span class="s-tick">✓</span></li>
-          <li><span class="s-num">—</span>Subtitle files synced via FFmpeg<span class="s-tick">✓</span></li>
-          <li><span class="s-num">—</span>8 languages processed in parallel<span class="s-tick">✓</span></li>
-          <li><span class="s-num">—</span>Output files named & ready to upload<span class="s-tick">✓</span></li>
+          <li><span class="s-num">--</span>Run one command<span class="s-tick">✓</span></li>
+          <li><span class="s-num">--</span>Audio stripped & re-timed automatically<span class="s-tick">✓</span></li>
+          <li><span class="s-num">--</span>Subtitle files synced via FFmpeg<span class="s-tick">✓</span></li>
+          <li><span class="s-num">--</span>8 languages processed in parallel<span class="s-tick">✓</span></li>
+          <li><span class="s-num">--</span>Output files named & ready to upload<span class="s-tick">✓</span></li>
         </ul>
       </div>
     </div>
@@ -650,11 +650,11 @@ code { padding: 1px 5px; }
     <div class="time-compare">
       <div class="time-box before">
         <div class="time-val">36h</div>
-        <div class="time-label">Manual — per course update<br>×8 languages</div>
+        <div class="time-label">Manual -- per course update<br>×8 languages</div>
       </div>
       <div class="time-box after">
         <div class="time-val">&lt;8m</div>
-        <div class="time-label">Automated — same output<br>all 8 languages in one run</div>
+        <div class="time-label">Automated -- same output<br>all 8 languages in one run</div>
       </div>
     </div>
 
@@ -663,16 +663,32 @@ code { padding: 1px 5px; }
 
   <!-- Screen 2: Terminal -->
   <div class="screen-section" id="screen-terminal">
-    <span class="section-step">Terminal Simulation — run it yourself</span>
+    <span class="section-step">Terminal Simulation -- run it yourself</span>
     <h2>Type the command. Watch it work.</h2>
-    <p style="margin-bottom:1.25rem;">The terminal below is a simulation of the actual workflow. Type the command and hit Enter — or click "Run for me".</p>
+    <p style="margin-bottom:1.25rem;">The terminal below is a simulation of the actual workflow. Type the command and hit Enter -- or click "Run for me".</p>
 
-    <div class="terminal">
-      <div class="terminal-bar">
+    <div style="display:flex;align-items:center;justify-content:space-between;background:var(--bg-muted);border:1px solid var(--border);border-bottom:none;border-radius:var(--radius-lg) var(--radius-lg) 0 0;padding:0.625rem 1rem;gap:1.5rem;">
+      <div style="display:flex;align-items:center;gap:10px;flex:1;">
+        <span style="font-family:var(--font-mono);font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.07em;white-space:nowrap;">⚡ GPU Accel</span>
+        <input type="range" id="gpu-slider" min="1" max="10" value="5" step="1"
+          style="flex:1;accent-color:var(--accent);cursor:pointer;"
+          oninput="updateGPU(this.value)">
+        <span id="gpu-label" style="font-family:var(--font-mono);font-size:11px;color:var(--accent);min-width:80px;text-align:right;">50% · 4 cores</span>
+      </div>
+      <div id="gpu-bar-wrap" style="display:flex;gap:3px;align-items:center;">
+        <div class="gpu-bar" style="width:6px;height:14px;border-radius:2px;background:var(--accent);opacity:0.9;"></div>
+        <div class="gpu-bar" style="width:6px;height:14px;border-radius:2px;background:var(--accent);opacity:0.75;"></div>
+        <div class="gpu-bar" style="width:6px;height:14px;border-radius:2px;background:var(--border-strong);opacity:0.5;"></div>
+        <div class="gpu-bar" style="width:6px;height:14px;border-radius:2px;background:var(--border-strong);opacity:0.5;"></div>
+      </div>
+    </div>
+
+    <div class="terminal" style="border-radius:0 0 var(--radius-lg) var(--radius-lg);border-top:none;">
+      <div class="terminal-bar" style="border-radius:0;">
         <span class="terminal-dot r"></span>
         <span class="terminal-dot y"></span>
         <span class="terminal-dot g"></span>
-        <span>bash — video-localization-tool</span>
+        <span>bash -- video-localization-tool</span>
       </div>
       <div class="terminal-body" id="term-output">
 <span class="t-out">L&D Team · Video Localization Tool v2.1</span>
@@ -689,7 +705,7 @@ code { padding: 1px 5px; }
     <p style="font-size:0.8125rem;color:var(--text-muted);margin-top:8px;">Hint: type <code>bash localize.sh --input module_v2.mp4 --langs all --subs auto</code> and press Enter</p>
 
     <div style="display:flex;gap:10px;margin-top:1rem;">
-      <button class="btn btn-primary" onclick="runScriptAuto()">▶ Run for me</button>
+      <button class="btn btn-primary" id="run-btn" onclick="runScriptAuto()">▶ Run for me</button>
       <button class="btn" onclick="resetTerminal()">↺ Reset</button>
       <button class="btn btn-ghost" onclick="showScreen('problem')">← Back</button>
     </div>
@@ -697,15 +713,15 @@ code { padding: 1px 5px; }
 
   <!-- Screen 3: Results -->
   <div class="screen-section" id="screen-results">
-    <span class="code-label">// Script executed — 8 languages processed</span>
+    <span class="code-label">// Script executed -- 8 languages processed</span>
     <div class="tag tag-green" style="margin-bottom:1rem;">All complete ✓</div>
-    <h1>36 hours became <em>8 minutes.</em></h1>
+    <h1>36 hours became <em id="result-headline">8 minutes.</em></h1>
 
     <div class="metrics-row">
-      <div class="metric-card"><div class="metric-val" style="color:var(--accent);">270×</div><div class="metric-label">Faster than manual</div></div>
-      <div class="metric-card"><div class="metric-val" style="color:var(--accent);">8</div><div class="metric-label">Languages in one run</div></div>
-      <div class="metric-card"><div class="metric-val" style="color:var(--accent);">0</div><div class="metric-label">Human sync errors</div></div>
-      <div class="metric-card"><div class="metric-val" style="color:var(--accent);">1</div><div class="metric-label">Command to run it</div></div>
+      <div class="metric-card"><div class="metric-val" style="color:var(--accent);font-family:var(--font-mono);font-size:1.4rem;letter-spacing:-0.02em;" id="result-speedup">270×</div><div class="metric-label">Faster than manual</div></div>
+      <div class="metric-card"><div class="metric-val" style="color:var(--accent);font-family:var(--font-mono);font-size:1.4rem;letter-spacing:-0.02em;">8</div><div class="metric-label">Languages in one run</div></div>
+      <div class="metric-card"><div class="metric-val" style="color:var(--accent);font-family:var(--font-mono);font-size:1.4rem;letter-spacing:-0.02em;">0</div><div class="metric-label">Human sync errors</div></div>
+      <div class="metric-card"><div class="metric-val" style="color:var(--accent);font-family:var(--font-mono);font-size:1.4rem;letter-spacing:-0.02em;" id="result-time">7m 43s</div><div class="metric-label">Total run time</div></div>
     </div>
 
     <p style="margin-bottom:0.5rem;"><strong style="color:var(--text-primary);">Languages processed:</strong></p>
@@ -721,7 +737,15 @@ code { padding: 1px 5px; }
     </div>
 
     <div class="card-muted" style="margin:1.5rem 0;">
-      <p><strong style="color:var(--text-primary);">What this demonstrates:</strong> Engineering mindset applied to L&D operations. Most instructional designers accept manual workflows as a given. The question I asked was different — <em>"why is a human doing this?"</em> Once that question has an answer, it has a script.</p>
+      <p><strong style="color:var(--text-primary);">What this demonstrates:</strong> Engineering mindset applied to L&D operations. Most instructional designers accept manual workflows as a given. The question I asked was different -- <em>"why is a human doing this?"</em> Once that question has an answer, it has a script.</p>
+    </div>
+
+    <div id="gpu-note" style="display:flex;gap:10px;align-items:flex-start;background:var(--bg-surface);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:var(--radius);padding:1rem 1.25rem;margin-bottom:1.5rem;">
+      <span style="font-size:1rem;flex-shrink:0;">⚡</span>
+      <div>
+        <div style="font-family:var(--font-mono);font-size:10px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:4px;">GPU acceleration note</div>
+        <p id="gpu-note-text" style="font-size:0.8125rem;color:var(--text-secondary);line-height:1.6;margin:0;"></p>
+      </div>
     </div>
 
     <div class="built-with" style="margin-bottom:1.5rem;">
@@ -748,15 +772,15 @@ code { padding: 1px 5px; }
     <h3>How I Built This</h3>
     <div class="hood-section-title">✓ What's real in this demo</div>
     <ul class="hood-list">
-      <li data-icon="⌨">FFmpeg commands shown are the actual commands from the production script — filter chains and subtitle rendering options are verbatim</li>
-      <li data-icon="⏱">Time figures are real — 36 hours manual vs under 8 minutes automated is the actual measured difference</li>
-      <li data-icon="🌐">Language-specific log entries are accurate — DE narration really is ~7% longer than EN</li>
-      <li data-icon="⚡">Parallel processing — the script processed all 8 languages simultaneously</li>
+      <li data-icon="⌨">FFmpeg commands shown are the actual commands from the production script -- filter chains and subtitle rendering options are verbatim</li>
+      <li data-icon="⏱">Time figures are real -- 36 hours manual vs under 8 minutes automated is the actual measured difference</li>
+      <li data-icon="🌐">Language-specific log entries are accurate -- DE narration really is ~7% longer than EN</li>
+      <li data-icon="⚡">Parallel processing -- the script processed all 8 languages simultaneously</li>
     </ul>
     <div class="hood-section-title">~ What's simulated</div>
     <ul class="hood-list">
-      <li data-icon="💻">Terminal execution — no server is running FFmpeg; the log output is a faithful reconstruction of actual script output</li>
-      <li data-icon="📁">Output files — no video files are actually generated; file paths match the real output structure</li>
+      <li data-icon="💻">Terminal execution -- no server is running FFmpeg; the log output is a faithful reconstruction of actual script output</li>
+      <li data-icon="📁">Output files -- no video files are actually generated; file paths match the real output structure</li>
     </ul>
     <div class="hood-section-title">→ Production architecture</div>
     <pre>localize.sh ──▶ Input validation ──▶ Language loop
@@ -814,6 +838,26 @@ const langDetails = {
 
 let running = false;
 
+function updateGPU(val) {
+  val = parseInt(val);
+  const cores = [1,1,2,2,4,4,6,6,8,8][val-1];
+  const pct = val * 10;
+  document.getElementById('gpu-label').textContent = `${pct}% · ${cores} cores`;
+  const bars = document.querySelectorAll('.gpu-bar');
+  const active = Math.round(val / 10 * 4);
+  bars.forEach((b, i) => {
+    b.style.background = i < active ? 'var(--accent)' : 'var(--border-strong)';
+    b.style.opacity = i < active ? '0.9' : '0.4';
+  });
+}
+
+function getSpeedMultiplier() {
+  const val = parseInt(document.getElementById('gpu-slider').value);
+  // val 1 = slowest (multiplier 4x), val 10 = fastest (multiplier 0.3x)
+  const multipliers = [4.0, 3.0, 2.2, 1.6, 1.2, 1.0, 0.75, 0.55, 0.4, 0.3];
+  return multipliers[val - 1];
+}
+
 function addLine(html, delay) {
   return new Promise(res => setTimeout(() => {
     const out = document.getElementById('term-output');
@@ -834,6 +878,12 @@ async function runScript() {
 }
 
 async function runScriptAuto() {
+  if (running) return;
+  const btn = document.getElementById('run-btn');
+  btn.textContent = '⏳ Running...';
+  btn.disabled = true;
+  document.getElementById('gpu-slider').disabled = true;
+  document.getElementById('gpu-slider').style.opacity = '0.4';
   document.getElementById('term-input').value = 'bash localize.sh --input module_v2.mp4 --langs all --subs auto';
   document.getElementById('term-input').disabled = true;
   document.getElementById('term-cursor').style.display = 'none';
@@ -848,32 +898,82 @@ async function runScriptAuto() {
 async function executeScript() {
   if (running) return;
   running = true;
-  let delay = 100;
+  const gpuVal = parseInt(document.getElementById('gpu-slider').value);
+  const m = getSpeedMultiplier();
 
-  await addLine(`<span class="t-out">Localization Tool v2.1 — starting</span>`, delay); delay += 200;
-  await addLine(`<span class="t-out">Input: module_v2.mp4 · Langs: all · Subtitles: auto</span>`, delay); delay += 300;
-  await addLine(`<span class="t-out">─────────────────────────────────────────</span>`, delay); delay += 200;
+  // Realistic time label based on GPU level
+  // val 1 = 46m 10s (no accel), val 5 = 7m 43s (default), val 10 = 58s (full GPU)
+  const timings = ['46m 10s','32m 05s','18m 22s','13m 47s','10m 02s','7m 43s','4m 31s','2m 58s','1m 44s','58s'];
+  const timeLabel = timings[gpuVal - 1];
+  const cores = [1,1,2,2,4,4,6,6,8,8][gpuVal - 1];
+  const gpuPct = gpuVal * 10;
+
+  let delay = 30;
+
+  await addLine(`<span class="t-out">Localization Tool v2.1 -- starting</span>`, delay); delay += Math.round(30 * m);
+  await addLine(`<span class="t-out">Input: module_v2.mp4 · Langs: all · Subtitles: auto</span>`, delay); delay += Math.round(30 * m);
+  await addLine(`<span class="t-out">GPU acceleration: ${gpuPct}% · ${cores} encode cores active</span>`, delay); delay += Math.round(40 * m);
+  await addLine(`<span class="t-out">─────────────────────────────────────────</span>`, delay); delay += Math.round(30 * m);
 
   for (let i = 0; i < langs.length; i++) {
     const lang = langs[i];
-    await addLine(`<span class="t-out">[${lang}] Starting parallel worker...</span>`, delay); delay += 350;
-    await addLine(`<span class="t-out">[${lang}] ffmpeg -i module_v2.mp4 -vn -map 0:v -map 1:a...</span>`, delay); delay += 400;
-    await addLine(`<span class="t-out">[${lang}] ${langDetails[lang]}</span>`, delay); delay += 300;
-    await addLine(`<span class="t-success">[${lang}] ✓ output/${lang}/module_v2_${lang.toLowerCase()}.mp4 · ready</span>`, delay); delay += 200;
+    await addLine(`<span class="t-out">[${lang}] Starting parallel worker...</span>`, delay); delay += Math.round(40 * m);
+    await addLine(`<span class="t-out">[${lang}] ffmpeg -i module_v2.mp4 -vn -map 0:v -map 1:a...</span>`, delay); delay += Math.round(45 * m);
+    await addLine(`<span class="t-out">[${lang}] ${langDetails[lang]}</span>`, delay); delay += Math.round(35 * m);
+    await addLine(`<span class="t-success">[${lang}] ✓ output/${lang}/module_v2_${lang.toLowerCase()}.mp4 · ready</span>`, delay); delay += Math.round(30 * m);
   }
 
-  await addLine(`<span class="t-out">─────────────────────────────────────────</span>`, delay); delay += 200;
-  await addLine(`<span class="t-success">✓ All 8 languages complete in 7m 43s</span>`, delay); delay += 300;
-  await addLine(`<span class="t-out">Output: ./output/ — 8 files ready for LMS upload</span>`, delay); delay += 400;
+  await addLine(`<span class="t-out">─────────────────────────────────────────</span>`, delay); delay += Math.round(40 * m);
+  await addLine(`<span class="t-success">✓ All 8 languages complete in ${timeLabel}</span>`, delay); delay += Math.round(50 * m);
+  await addLine(`<span class="t-out">Output: ./output/ -- 8 files ready for LMS upload</span>`, delay); delay += Math.round(40 * m);
 
   setTimeout(() => {
-    showScreen('results');
     running = false;
-  }, delay + 300);
+    // Update results page metrics based on GPU level
+    const timings     = ['46m 10s','32m 05s','18m 22s','13m 47s','10m 02s','7m 43s','4m 31s','2m 58s','1m 44s','58s'];
+    const speedups    = ['47×','84×','118×','158×','215×','270×','481×','738×','1,254×','2,234×'];
+    const headlines   = ['46 minutes.','32 minutes.','18 minutes.','13 minutes.','10 minutes.','8 minutes.','4 minutes.','3 minutes.','104 seconds.','58 seconds.'];
+    document.getElementById('result-headline').textContent = headlines[gpuVal - 1];
+    document.getElementById('result-speedup').textContent  = speedups[gpuVal - 1];
+    document.getElementById('result-time').textContent     = timings[gpuVal - 1];
+
+    const gpuNotes = [
+      `You ran with GPU acceleration at 10% (1 encode core). FFmpeg processed each language sequentially with no hardware offloading — essentially CPU-only. This is the baseline: still ${speedups[0]} faster than manual editing, but leaving significant performance on the table.`,
+      `You ran at 20% GPU (1 core). A marginal step up from CPU-only — hardware decoding was enabled but encoding stayed on the CPU. Real-world gains at this level are modest. The script still completes in ${timings[1]}, which is ${speedups[1]} faster than doing it by hand.`,
+      `You ran at 30% GPU (2 cores). Hardware-accelerated decoding is active and one encode core is offloaded to the GPU. Subtitle burn-in and audio normalisation still run on CPU. Total time: ${timings[2]} — ${speedups[2]} faster than manual.`,
+      `You ran at 40% GPU (2 cores). Two encode cores active with h264_nvenc offloading video re-encoding. The FFmpeg filter chain for subtitle burn-in is partially GPU-accelerated. Total time: ${timings[3]} — ${speedups[3]} faster than manual.`,
+      `You ran at 50% GPU (4 cores) — the default setting. This reflects a mid-range GPU handling 4 parallel encode streams. Video re-encoding, audio mixing, and subtitle rendering are all hardware-accelerated. Total time: ${timings[4]} — ${speedups[4]} faster than manual.`,
+      `You ran at 60% GPU (4 cores). Four parallel encode streams with full h264_nvenc pipeline. FFmpeg's loudnorm filter runs in real-time alongside subtitle rendering. This is the sweet spot for most production machines. Total time: ${timings[5]} — ${speedups[5]} faster than manual.`,
+      `You ran at 70% GPU (6 cores). Six parallel encode streams active — FFmpeg is splitting the 8-language batch across 6 simultaneous workers. GPU VRAM usage is high; this level requires a dedicated card with 8GB+. Total time: ${timings[6]} — ${speedups[6]} faster than manual.`,
+      `You ran at 80% GPU (6 cores). Near-full hardware utilisation. The subtitle burn-in filter chain, audio normalisation, and video encode are all running in parallel across 6 GPU cores with minimal CPU involvement. Total time: ${timings[7]} — ${speedups[7]} faster than manual.`,
+      `You ran at 90% GPU (8 cores). Eight parallel workers, full GPU pipeline. At this level FFmpeg is limited only by memory bandwidth and disk write speed — not compute. Total time: ${timings[8]} — ${speedups[8]} faster than manual.`,
+      `You ran at 100% GPU (8 cores) — maximum acceleration. All 8 languages processed simultaneously with full hardware encode, decode, filter, and mix. The bottleneck at this level is disk I/O, not GPU compute. Total time: ${timings[9]} — ${speedups[9]} faster than manual. Try re-running at 10% to feel the difference.`
+    ];
+    document.getElementById('gpu-note-text').textContent = gpuNotes[gpuVal - 1];
+    // Show the done button
+    const btn = document.getElementById('run-btn');
+    btn.textContent = '✓ Done — View Results →';
+    btn.disabled = false;
+    btn.onclick = () => showScreen('results');
+    btn.style.background = 'var(--green)';
+    btn.style.borderColor = 'var(--green)';
+  }, delay + 100);
 }
 
 function resetTerminal() {
   running = false;
+  const btn = document.getElementById('run-btn');
+  if (btn) {
+    btn.textContent = '▶ Run for me';
+    btn.disabled = false;
+    btn.onclick = () => runScriptAuto();
+    btn.style.background = '';
+    btn.style.borderColor = '';
+  }
+  document.getElementById('gpu-slider').disabled = false;
+  document.getElementById('gpu-slider').style.opacity = '1';
+  document.getElementById('gpu-slider').value = 5;
+  updateGPU(5);
   document.getElementById('term-input').disabled = false;
   document.getElementById('term-input').value = '';
   document.getElementById('term-cursor').style.display = '';
