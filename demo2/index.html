@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -943,5 +944,59 @@ function toggleHood(btn) {
   btn.textContent = d.classList.contains('open') ? '✕ Close' : '? How I built this';
 }
 </script>
+
+<!-- ── PORTFOLIO PROTECTION ── -->
+<script>
+(function() {
+  'use strict';
+  document.addEventListener('contextmenu', function(e) { e.preventDefault(); showWarning(); return false; });
+  document.addEventListener('keydown', function(e) {
+    var key = e.key ? e.key.toLowerCase() : '';
+    var ctrl = e.ctrlKey || e.metaKey;
+    if (ctrl && ['u','s','a','p'].indexOf(key) !== -1) { e.preventDefault(); showWarning(); return false; }
+    if (ctrl && e.shiftKey && ['i','j','c','k'].indexOf(key) !== -1) { e.preventDefault(); showWarning(); return false; }
+    if (e.key === 'F12') { e.preventDefault(); showWarning(); return false; }
+    if (ctrl && e.shiftKey && e.key === 'Delete') { e.preventDefault(); return false; }
+  });
+  document.addEventListener('selectstart', function(e) {
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+    e.preventDefault(); return false;
+  });
+  document.addEventListener('dragstart', function(e) {
+    if (e.target.classList && e.target.classList.contains('drag-item')) return;
+    e.preventDefault(); return false;
+  });
+  var devtoolsOpen = false;
+  function checkDevTools() {
+    var w = window.outerWidth  - window.innerWidth  > 160;
+    var h = window.outerHeight - window.innerHeight > 160;
+    if ((w || h) && !devtoolsOpen) { devtoolsOpen = true; showDevToolsWarning(); }
+    else if (!w && !h) devtoolsOpen = false;
+  }
+  setInterval(checkDevTools, 1000);
+  function showWarning() {
+    if (document.getElementById('_pt_toast')) return;
+    var t = document.createElement('div');
+    t.id = '_pt_toast';
+    t.innerHTML = '&#128274; &nbsp;This portfolio is protected. Please respect the author work.';
+    t.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#0f0e0c;color:#f5f2eb;padding:12px 22px;border-radius:8px;font-family:sans-serif;font-size:13px;border:1px solid rgba(200,75,47,0.5);border-left:3px solid #c84b2f;z-index:999999;box-shadow:0 4px 24px rgba(0,0,0,0.4);pointer-events:none;white-space:nowrap';
+    document.body.appendChild(t);
+    setTimeout(function() { if (t.parentNode) t.parentNode.removeChild(t); }, 3000);
+  }
+  function showDevToolsWarning() {
+    if (document.getElementById('_pt_devtools')) return;
+    var b = document.createElement('div');
+    b.id = '_pt_devtools';
+    b.innerHTML = '<strong style="color:#c84b2f">Hey there, developer &#128075;</strong> This portfolio was built by <strong>Abhishek Trivedi</strong>. Curious about how it works? Reach out at <a href="https://abhishektrivedi.com/pages/contact.html" style="color:#c9973a">abhishektrivedi.com</a> &mdash; happy to chat.';
+    b.style.cssText = 'position:fixed;top:0;left:0;right:0;background:#0a1628;color:#f5f2eb;padding:14px 24px;font-family:sans-serif;font-size:13px;line-height:1.6;border-bottom:2px solid #c84b2f;z-index:999999;text-align:center;box-shadow:0 2px 12px rgba(0,0,0,0.5)';
+    document.body.appendChild(b);
+  }
+  var s = 'color:#c84b2f;font-size:18px;font-weight:bold;padding:8px 0;border-bottom:2px solid #c84b2f';
+  console.log('%c© Abhishek Trivedi — Learning Experience Technologist', s);
+  console.log('%chttps://abhishektrivedi.com | All rights reserved.', 'color:#6b6459;font-size:12px;');
+  console.log('%cInspecting to learn? Great. Just reach out instead of copying.', 'color:#c9973a;font-size:12px;font-style:italic;');
+})();
+</script>
+<!-- ── END PROTECTION ── -->
 </body>
 </html>
