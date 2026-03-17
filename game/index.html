@@ -1,0 +1,834 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Spot the Accessibility Bug · Abhishek Trivedi</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#EDEAE3; --surface:#F5F2EB; --muted:#E6E3DB; --subtle:#DDD9D0;
+  --border:#D8D4CB; --border-strong:#BFB9AE;
+  --dark:#1C2B45; --dark2:#243555;
+  --text:#141210; --text2:#5C5750; --text3:#9C9790;
+  --accent:#C84B2F; --asoft:#F5ECE9;
+  --green:#2D7A4F; --gsoft:#EAF5EF;
+  --red:#B83030; --rsoft:#FAF0EF;
+  --amber:#B87020; --amsoft:#FBF4E8;
+  --fd:'Playfair Display',Georgia,serif;
+  --fb:'DM Sans',system-ui,sans-serif;
+  --fm:'Space Mono',monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;-webkit-font-smoothing:antialiased}
+body{font-family:var(--fb);background:var(--bg);color:var(--text);min-height:100vh}
+
+nav{
+  position:sticky;top:0;z-index:100;
+  background:rgba(237,234,227,0.93);backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--border);
+  padding:0 2rem;height:54px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.logo{font-family:var(--fd);font-weight:900;font-size:18px;letter-spacing:-0.03em;text-decoration:none;color:var(--text)}
+.nav-r{display:flex;align-items:center;gap:1rem;font-family:var(--fm);font-size:11px;color:var(--text3)}
+.ntag{background:var(--accent);color:#fff;padding:3px 9px;border-radius:4px;font-size:10px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase}
+.nback{color:var(--text2);text-decoration:none;font-size:11px;font-family:var(--fm);transition:color 0.15s}
+.nback:hover{color:var(--accent)}
+
+.wrap{max-width:820px;margin:0 auto;padding:2.5rem 2rem 5rem}
+
+.btn{
+  display:inline-flex;align-items:center;gap:6px;
+  font-family:var(--fb);font-size:0.875rem;font-weight:500;
+  padding:0.6rem 1.25rem;border-radius:8px;
+  border:1.5px solid var(--border-strong);background:var(--surface);
+  color:var(--text);cursor:pointer;transition:all 0.15s;
+}
+.btn:hover{border-color:var(--accent);color:var(--accent);background:var(--asoft)}
+.btn-primary{background:var(--text);color:var(--surface);border-color:var(--text)}
+.btn-primary:hover{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn-green{background:var(--green);color:#fff;border-color:var(--green)}
+.btn-green:hover{background:#245f3d;border-color:#245f3d}
+.btn-sm{font-size:0.8125rem;padding:0.45rem 0.875rem}
+
+/* ── Intro screen ── */
+#screen-intro{animation:fadeUp 0.4s ease}
+.intro-mono{font-family:var(--fm);font-size:11px;color:var(--text3);letter-spacing:0.07em;text-transform:uppercase;margin-bottom:0.6rem}
+.intro-h1{font-family:var(--fd);font-size:clamp(2rem,5vw,2.8rem);font-weight:900;line-height:1.08;letter-spacing:-0.03em;margin-bottom:0.75rem}
+.intro-h1 em{font-style:italic;color:var(--accent)}
+.intro-p{font-size:0.9375rem;color:var(--text2);line-height:1.7;max-width:580px;margin-bottom:2rem}
+
+.how-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:2rem}
+.how-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.25rem}
+.how-num{font-family:var(--fm);font-size:10px;font-weight:700;color:var(--accent);letter-spacing:0.06em;margin-bottom:8px}
+.how-title{font-size:0.875rem;font-weight:500;color:var(--text);margin-bottom:4px}
+.how-desc{font-size:0.8125rem;color:var(--text2);line-height:1.55}
+
+.caution-box{
+  background:var(--amsoft);border:1px solid #EDD8A8;border-left:3px solid var(--amber);
+  border-radius:8px;padding:0.875rem 1rem;margin-bottom:2rem;
+  font-size:0.8125rem;color:var(--amber);line-height:1.6;
+}
+.caution-box strong{color:#8a5010;font-weight:500}
+
+/* ── HUD ── */
+.hud{
+  background:var(--dark);border-radius:12px;
+  padding:0.875rem 1.25rem;margin-bottom:1.25rem;
+  display:flex;align-items:center;gap:0;
+}
+.hud-item{text-align:center;padding:0 1rem}
+.hud-label{font-family:var(--fm);font-size:9px;color:#9DADC4;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:3px}
+.hud-val{font-family:var(--fm);font-size:1.2rem;font-weight:700;color:#F5F2EB;line-height:1}
+.hud-val.orange{color:#E8845A}
+.hud-div{width:1px;height:32px;background:rgba(255,255,255,0.1);flex-shrink:0}
+.hud-timer{flex:1;padding:0 1rem}
+.timer-track{height:4px;background:rgba(255,255,255,0.12);border-radius:2px;overflow:hidden;margin-top:6px}
+.timer-fill{height:100%;background:#E8845A;border-radius:2px;transition:width 0.1s linear}
+
+/* ── Round label ── */
+.round-row{display:flex;align-items:center;gap:8px;margin-bottom:0.75rem;font-family:var(--fm);font-size:11px;color:var(--text3)}
+.rdot{width:8px;height:8px;border-radius:50%;background:var(--border-strong);flex-shrink:0}
+.rdot.done{background:var(--accent)}
+.rdot.now{background:var(--accent);box-shadow:0 0 0 2px var(--asoft)}
+
+/* ── Slide frame ── */
+.slide-frame{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:12px;overflow:hidden;
+  box-shadow:0 4px 20px rgba(20,18,16,0.08);
+  margin-bottom:1rem;
+}
+.slide-bar{
+  background:var(--muted);border-bottom:1px solid var(--border);
+  padding:0.6rem 1rem;display:flex;align-items:center;justify-content:space-between;
+}
+.slide-bar-l{display:flex;align-items:center;gap:7px}
+.wdot{width:10px;height:10px;border-radius:50%}
+.wr{background:#E8A0A0}.wy{background:#E8D0A0}.wg{background:#A8D0A8}
+.slide-bar-title{font-family:var(--fm);font-size:11px;color:var(--text3)}
+.static-badge{
+  font-family:var(--fm);font-size:9px;font-weight:700;
+  color:var(--amber);background:var(--amsoft);
+  border:1px solid #EDD8A8;border-radius:3px;
+  padding:2px 7px;letter-spacing:0.06em;text-transform:uppercase;
+}
+
+/* ── Inspection zones ── */
+.slide-content{padding:1.5rem;position:relative}
+
+.inspect-zone{
+  position:relative;border-radius:8px;
+  cursor:pointer;transition:all 0.2s;
+  outline:2px dashed transparent;outline-offset:3px;
+}
+.inspect-zone::before{
+  content:'';
+  position:absolute;inset:-3px;border-radius:10px;
+  border:2px dashed var(--border-strong);
+  pointer-events:none;transition:all 0.2s;
+  z-index:1;
+}
+.inspect-zone:hover::before{border-color:var(--accent);background:rgba(200,75,47,0.03)}
+.inspect-zone:hover .zone-hint{opacity:1}
+
+.zone-hint{
+  position:absolute;top:-26px;left:50%;transform:translateX(-50%);
+  font-family:var(--fm);font-size:9px;font-weight:700;
+  color:var(--accent);background:var(--asoft);border:1px solid #E8C4BB;
+  border-radius:4px;padding:2px 8px;letter-spacing:0.05em;text-transform:uppercase;
+  white-space:nowrap;pointer-events:none;z-index:10;
+  opacity:0;transition:opacity 0.15s;
+}
+
+.inspect-zone.found{
+  cursor:default;
+}
+.inspect-zone.found::before{
+  border:2px solid var(--red);border-style:solid;
+  background:rgba(184,48,48,0.06);
+}
+.inspect-zone.found .zone-hint{opacity:0!important}
+.inspect-zone.missed-reveal::before{
+  border:2px solid var(--amber);border-style:solid;
+  background:rgba(184,130,32,0.06);
+}
+
+.bug-label{
+  display:none;
+  margin-top:8px;padding:0.75rem 1rem;
+  background:var(--dark);border-radius:8px;
+  font-size:0.8125rem;color:#C8C4BC;line-height:1.6;
+  animation:fadeUp 0.2s ease;
+  position:relative;z-index:2;
+}
+.bug-label strong{color:#F5F2EB;font-weight:500;display:block;margin-bottom:3px;font-size:0.875rem}
+.bug-label.show{display:block}
+
+.inspect-zone *:not(.zone-hint):not(.found-badge):not(.bug-label):not(.bug-label *){
+  pointer-events:none;
+}
+.found-badge{
+  display:none;position:absolute;top:6px;right:6px;z-index:5;
+  background:var(--red);color:#fff;border-radius:4px;
+  font-family:var(--fm);font-size:9px;font-weight:700;
+  padding:2px 7px;letter-spacing:0.05em;text-transform:uppercase;
+}
+.inspect-zone.found .found-badge{display:block}
+.inspect-zone.missed-reveal .found-badge{display:block;background:var(--amber)}
+
+/* ── Bug tally bar ── */
+.tally-bar{
+  display:flex;gap:8px;align-items:center;
+  background:var(--muted);border:1px solid var(--border);border-radius:8px;
+  padding:0.75rem 1rem;margin-bottom:1rem;
+  font-family:var(--fm);font-size:11px;color:var(--text3);
+}
+.tally-dots{display:flex;gap:5px;margin-left:auto}
+.tally-dot{width:12px;height:12px;border-radius:50%;background:var(--border-strong);transition:all 0.2s}
+.tally-dot.found-dot{background:var(--red)}
+
+/* ── Action row ── */
+.action-row{display:flex;gap:10px;align-items:center;margin-bottom:1.5rem;flex-wrap:wrap}
+.skip-link{font-family:var(--fm);font-size:11px;color:var(--text3);cursor:pointer;margin-left:auto;transition:color 0.15s;background:none;border:none;padding:0}
+.skip-link:hover{color:var(--accent)}
+
+/* ── Result panel ── */
+.result-panel{
+  display:none;background:var(--dark);border-radius:12px;
+  padding:1.75rem;margin-bottom:1.5rem;
+  animation:fadeUp 0.35s ease;
+}
+.result-panel.show{display:block}
+.rp-title{font-family:var(--fd);font-size:clamp(1.4rem,3vw,1.8rem);font-weight:700;color:#F5F2EB;letter-spacing:-0.02em;margin-bottom:0.35rem}
+.rp-title em{font-style:italic;color:#E8845A}
+.rp-sub{font-size:0.8125rem;color:#9DADC4;margin-bottom:1.25rem;font-family:var(--fm)}
+.rp-score-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:1.25rem}
+.rp-sc{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:0.875rem;text-align:center}
+.rp-val{font-family:var(--fm);font-size:1.3rem;font-weight:700;color:#F5F2EB;line-height:1;margin-bottom:3px}
+.rp-val.g{color:#6BC99A}.rp-val.o{color:#E8845A}
+.rp-lbl{font-size:10px;color:#9DADC4;font-family:var(--fm);text-transform:uppercase;letter-spacing:0.06em}
+.rp-verdict{
+  background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);
+  border-left:3px solid #E8845A;border-radius:8px;
+  padding:0.875rem 1rem;font-size:0.875rem;color:#C8C4BC;line-height:1.65;
+  margin-bottom:1.25rem;
+}
+.rp-verdict strong{color:#F5F2EB;font-weight:500}
+.rp-actions{display:flex;gap:8px;flex-wrap:wrap}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+
+.screen{display:none}.screen.active{display:block;animation:fadeUp 0.3s ease}
+#screen-intro.active{display:block}
+
+footer{
+  border-top:1px solid var(--border);padding:1.25rem 2rem;
+  display:flex;justify-content:space-between;align-items:center;
+  font-family:var(--fm);font-size:11px;color:var(--text3);
+  max-width:820px;margin:0 auto;
+}
+footer a{color:var(--accent);text-decoration:none}
+@media(max-width:600px){
+  .how-grid{grid-template-columns:1fr}
+  .rp-score-row{grid-template-columns:repeat(3,1fr)}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="logo" href="https://abhishektrivedi.com">AT.</a>
+  <div class="nav-r">
+    <span class="ntag">Mini Game</span>
+    <span>Accessibility Challenge</span>
+    <a class="nback" href="https://abhishektrivedi.com">← Portfolio</a>
+  </div>
+</nav>
+
+<div class="wrap">
+
+<!-- ══ INTRO SCREEN ══ -->
+<div id="screen-intro" class="screen active">
+  <div class="intro-mono">// Accessibility · Interactive Challenge</div>
+  <h1 class="intro-h1">Spot the <em>bug.</em></h1>
+  <p class="intro-p">Five rounds. Each round shows a fake Storyline slide broken into labelled sections. Find which sections have accessibility violations before the timer runs out.</p>
+
+  <div class="how-grid">
+    <div class="how-card">
+      <div class="how-num">01 — Look</div>
+      <div class="how-title">Read the slide</div>
+      <div class="how-desc">Each slide is divided into dashed sections. Read the content and think: what's wrong here?</div>
+    </div>
+    <div class="how-card">
+      <div class="how-num">02 — Click</div>
+      <div class="how-title">Click a section to inspect it</div>
+      <div class="how-desc">Click any dashed section you think contains an accessibility violation. You'll immediately see if you're right and why.</div>
+    </div>
+    <div class="how-card">
+      <div class="how-num">03 — Learn</div>
+      <div class="how-title">Read the explanation</div>
+      <div class="how-desc">Every bug comes with the exact WCAG criterion it breaks and the specific Storyline fix. Find all bugs to advance.</div>
+    </div>
+  </div>
+
+  <div class="caution-box">
+    <strong>Note:</strong> The slides shown are static mockups — buttons and form elements inside them are decorative and won't respond to clicks. Only the dashed sections are interactive. Hover a section to see the cursor change before clicking.
+  </div>
+
+  <button class="btn btn-primary" style="font-size:1rem;padding:0.75rem 2rem" onclick="startGame()">Start game →</button>
+</div>
+
+<!-- ══ GAME SCREEN ══ -->
+<div id="screen-game" class="screen">
+
+  <div class="round-row" id="round-dots">
+    <span class="rdot now" id="rd0"></span>
+    <span class="rdot" id="rd1"></span>
+    <span class="rdot" id="rd2"></span>
+    <span class="rdot" id="rd3"></span>
+    <span class="rdot" id="rd4"></span>
+    <span id="round-txt" style="margin-left:4px">Round 1 of 5</span>
+  </div>
+
+  <div class="hud">
+    <div class="hud-item"><div class="hud-label">Score</div><div class="hud-val orange" id="h-score">0</div></div>
+    <div class="hud-div"></div>
+    <div class="hud-timer">
+      <div class="hud-label" style="text-align:center">Time remaining</div>
+      <div class="timer-track"><div class="timer-fill" id="timer-fill" style="width:100%"></div></div>
+    </div>
+    <div class="hud-div"></div>
+    <div class="hud-item"><div class="hud-label">Bugs</div><div class="hud-val" id="h-bugs">0/0</div></div>
+    <div class="hud-div"></div>
+    <div class="hud-item"><div class="hud-label">Round</div><div class="hud-val" id="h-round">1/5</div></div>
+  </div>
+
+  <div class="slide-frame">
+    <div class="slide-bar">
+      <div class="slide-bar-l">
+        <span class="wdot wr"></span><span class="wdot wy"></span><span class="wdot wg"></span>
+        <span class="slide-bar-title" id="slide-bar-title">Articulate Storyline 360</span>
+      </div>
+      <span class="static-badge">Static mockup — buttons inside are decorative</span>
+    </div>
+    <div class="slide-content" id="slide-content"></div>
+  </div>
+
+  <div class="tally-bar" id="tally-bar">
+    <span style="font-family:var(--fm);font-size:11px;color:var(--text3)" id="tally-label">Click the sections that have accessibility bugs</span>
+    <div class="tally-dots" id="tally-dots"></div>
+  </div>
+
+  <div class="action-row">
+    <div id="action-area"><button class="btn btn-sm" id="reveal-btn" onclick="revealRound()">Reveal remaining bugs</button></div>
+    <button class="skip-link" onclick="skipRound()">Skip round →</button>
+  </div>
+
+  <div class="result-panel" id="result-panel">
+    <div class="rp-title" id="rp-title">Round complete</div>
+    <div class="rp-sub" id="rp-sub"></div>
+    <div class="rp-score-row">
+      <div class="rp-sc"><div class="rp-val g" id="rp-found">0/0</div><div class="rp-lbl">Bugs found</div></div>
+      <div class="rp-sc"><div class="rp-val o" id="rp-time">0s</div><div class="rp-lbl">Time left</div></div>
+      <div class="rp-sc"><div class="rp-val" id="rp-pts">+0</div><div class="rp-lbl">Points</div></div>
+    </div>
+    <div class="rp-verdict" id="rp-verdict"></div>
+    <div class="rp-actions" id="rp-actions"></div>
+  </div>
+
+</div>
+
+<!-- ══ FINAL SCREEN ══ -->
+<div id="screen-final" class="screen">
+  <div class="intro-mono">// Game complete</div>
+  <h1 class="intro-h1" id="final-title">Final score</h1>
+  <p class="intro-p" id="final-sub"></p>
+  <div style="background:var(--dark);border-radius:12px;padding:1.75rem;margin-bottom:1.5rem">
+    <div class="rp-score-row" style="margin-bottom:1.25rem">
+      <div class="rp-sc"><div class="rp-val orange" id="f-score">0</div><div class="rp-lbl">Total score</div></div>
+      <div class="rp-sc"><div class="rp-val" id="f-found">0</div><div class="rp-lbl">Bugs found</div></div>
+      <div class="rp-sc"><div class="rp-val" id="f-rank">—</div><div class="rp-lbl">Rank</div></div>
+    </div>
+    <div class="rp-verdict" id="f-verdict"></div>
+    <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:1rem;font-size:0.8125rem;color:#9DADC4;line-height:1.7;margin-bottom:1.25rem">
+      The five violation types in this game — contrast, alt text, keyboard access, touch targets, and video captions — account for over 80% of eLearning accessibility failures in production courses.<br><br>
+      <span style="color:#F5F2EB;font-weight:500">The fix is never retrofitting. It's building the template right the first time.</span>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn btn-primary" onclick="location.reload()">Play again</button>
+      <a class="btn" href="https://abhishektrivedi.com/pages/work.html">See case studies →</a>
+    </div>
+  </div>
+</div>
+
+</div><!-- /wrap -->
+
+<footer>
+  <span>Built by <a href="https://abhishektrivedi.com">Abhishek Trivedi</a> · Learning Experience Technologist</span>
+  <span>Accessibility is architectural, not cosmetic.</span>
+</footer>
+
+<script>
+const ROUND_TIME = 30;
+
+const rounds = [
+  {
+    title: 'Compliance Module · Screen 1 of 4',
+    category: 'Colour contrast',
+    verdict: `<strong>Colour contrast (WCAG 1.4.3)</strong> requires a minimum 4.5:1 ratio for normal text. Both failures here are common in Storyline because the default theme colours aren't contrast-checked. The fix: set your palette at the Storyline theme level so every new text element inherits WCAG-compliant colours automatically — not slide by slide.`,
+    zones: [
+      {
+        label: 'Slide heading',
+        html: `<div style="font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700;color:#141210;letter-spacing:-0.02em;line-height:1.2">Understanding Workplace Safety</div>`,
+        isBug: false,
+        bugLabel: null
+      },
+      {
+        label: 'Learning objective cards',
+        html: `<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px">
+          <div style="background:#F5F2EB;border:1px solid #D8D4CB;border-radius:6px;padding:0.875rem">
+            <div style="font-size:0.7rem;color:#D8D4CB;font-weight:700;margin-bottom:4px;font-family:'Space Mono',monospace">OBJECTIVE 1</div>
+            <div style="font-size:0.8rem;color:#141210">Identify hazards in your workspace</div>
+          </div>
+          <div style="background:#F5F2EB;border:1px solid #D8D4CB;border-radius:6px;padding:0.875rem">
+            <div style="font-size:0.7rem;color:#D8D4CB;font-weight:700;margin-bottom:4px;font-family:'Space Mono',monospace">OBJECTIVE 2</div>
+            <div style="font-size:0.8rem;color:#EDEAE3">Report incidents within 24 hours</div>
+          </div>
+          <div style="background:#F5F2EB;border:1px solid #D8D4CB;border-radius:6px;padding:0.875rem">
+            <div style="font-size:0.7rem;color:#D8D4CB;font-weight:700;margin-bottom:4px;font-family:'Space Mono',monospace">OBJECTIVE 3</div>
+            <div style="font-size:0.8rem;color:#141210">Apply the Stop-Think-Act protocol</div>
+          </div>
+        </div>`,
+        isBug: true,
+        bugLabel: 'Contrast failure — 2 violations',
+        bugDesc: 'Card 2 body text (#EDEAE3 on #F5F2EB) has a contrast ratio of ~1.1:1 — almost invisible. All three "OBJECTIVE" labels (#D8D4CB on #F5F2EB) are ~1.5:1. WCAG AA requires 4.5:1 minimum. Both fail.'
+      },
+      {
+        label: 'Navigation button (decorative)',
+        html: `<div style="margin-top:12px"><span style="display:inline-block;background:#141210;color:#F5F2EB;padding:0.55rem 1.25rem;border-radius:6px;font-size:0.8rem;font-family:'DM Sans',sans-serif">Continue →</span><span style="font-family:'Space Mono',monospace;font-size:10px;color:#9C9790;margin-left:10px">[decorative — not interactive]</span></div>`,
+        isBug: false,
+        bugLabel: null
+      }
+    ]
+  },
+  {
+    title: 'Onboarding · Screen 2 · Knowledge check',
+    category: 'Missing alt text',
+    verdict: `<strong>Alt text (WCAG 1.1.1)</strong> has two failure modes: missing (screen reader reads the filename) and empty alt="" on informational images (screen reader skips it entirely). The question is literally about what the diagram shows — a screen reader user hears nothing and can't answer. In Storyline, set alt text per-object in the Accessibility panel. Mark purely decorative images as decorative.`,
+    zones: [
+      {
+        label: 'Question text',
+        html: `<div style="font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;color:#141210;letter-spacing:-0.02em">What does the workflow diagram show?</div>`,
+        isBug: false,
+        bugLabel: null
+      },
+      {
+        label: 'Diagram image',
+        html: `<div style="display:flex;align-items:center;gap:12px;margin-top:8px;background:#E6E3DB;border:1px solid #D8D4CB;border-radius:6px;padding:0.875rem">
+          <div style="font-size:2rem;flex-shrink:0">📊</div>
+          <div>
+            <div style="font-size:0.8rem;color:#5C5750;font-style:italic">workflow-diagram.png</div>
+            <div style="font-family:'Space Mono',monospace;font-size:10px;color:#B83030;margin-top:3px">alt="" ← empty — screen reader skips this entirely</div>
+          </div>
+        </div>`,
+        isBug: true,
+        bugLabel: 'Empty alt text on informational image',
+        bugDesc: 'alt="" tells screen readers this image is decorative — skip it. But this image is the subject of the question. A blind user hears the question then silence, with no way to answer. Correct fix: descriptive alt text explaining what the diagram shows.'
+      },
+      {
+        label: 'Answer choices (decorative)',
+        html: `<div style="display:flex;flex-direction:column;gap:6px;margin-top:8px">
+          ${['The 5-step incident reporting process','The organisational hierarchy','The LMS login flow'].map(t=>`<div style="display:flex;align-items:center;gap:8px;padding:0.6rem 0.875rem;border:1.5px solid #D8D4CB;border-radius:6px;background:#F5F2EB"><span style="width:14px;height:14px;border-radius:50%;border:1.5px solid #BFB9AE;flex-shrink:0;display:inline-block"></span><span style="font-size:0.8rem;color:#141210">${t}</span></div>`).join('')}
+        </div><div style="font-family:'Space Mono',monospace;font-size:10px;color:#9C9790;margin-top:6px">[decorative — not interactive]</div>`,
+        isBug: false,
+        bugLabel: null
+      }
+    ]
+  },
+  {
+    title: 'Leadership Training · Screen 3 · Branching scenario',
+    category: 'Keyboard accessibility',
+    verdict: `<strong>Keyboard access (WCAG 2.1.1)</strong> requires all interactive elements to be reachable and operable by keyboard alone. tabindex="-1" removes elements from the tab order entirely. Even with tabindex="0", no key handler means pressing Enter/Space does nothing. Storyline's default tab order follows object creation sequence — override it explicitly in the Focus Order panel on every master slide.`,
+    zones: [
+      {
+        label: 'Scenario prompt',
+        html: `<div>
+          <div style="font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;color:#141210;letter-spacing:-0.02em;margin-bottom:6px">A team member misses a deadline.</div>
+          <p style="font-size:0.8rem;color:#5C5750;line-height:1.6">Your direct report missed a key deliverable for the third time this month. What do you do?</p>
+        </div>`,
+        isBug: false,
+        bugLabel: null
+      },
+      {
+        label: 'Choice buttons A & B',
+        html: `<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px">
+          <div style="border:1.5px solid #D8D4CB;border-radius:6px;padding:0.875rem;background:#F5F2EB">
+            <div style="font-family:'Space Mono',monospace;font-size:9px;color:#B83030;margin-bottom:4px">tabindex="-1" ← removed from tab order</div>
+            <div style="font-size:0.8rem;color:#141210">Schedule a private 1:1 to understand blockers.</div>
+          </div>
+          <div style="border:1.5px solid #D8D4CB;border-radius:6px;padding:0.875rem;background:#F5F2EB">
+            <div style="font-family:'Space Mono',monospace;font-size:9px;color:#B83030;margin-bottom:4px">tabindex="-1" ← removed from tab order</div>
+            <div style="font-size:0.8rem;color:#141210">Send a written warning to document the pattern.</div>
+          </div>
+        </div>`,
+        isBug: true,
+        bugLabel: 'tabindex="-1" — keyboard users locked out',
+        bugDesc: 'tabindex="-1" removes both buttons from the keyboard tab sequence. A user navigating by keyboard can\'t reach Choice A or B at all. Fix: use tabindex="0" to include them, plus add onkeydown handlers for Enter/Space to fire the click action.'
+      },
+      {
+        label: 'Choice buttons C & D',
+        html: `<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px">
+          <div style="border:1.5px solid #D8D4CB;border-radius:6px;padding:0.875rem;background:#F5F2EB">
+            <div style="font-family:'Space Mono',monospace;font-size:9px;color:#B83030;margin-bottom:4px">no onkeydown handler</div>
+            <div style="font-size:0.8rem;color:#141210">Reassign the work to a more reliable teammate.</div>
+          </div>
+          <div style="border:1.5px solid #D8D4CB;border-radius:6px;padding:0.875rem;background:#F5F2EB">
+            <div style="font-family:'Space Mono',monospace;font-size:9px;color:#B83030;margin-bottom:4px">no onkeydown handler</div>
+            <div style="font-size:0.8rem;color:#141210">Escalate immediately to HR and skip-level.</div>
+          </div>
+        </div>`,
+        isBug: true,
+        bugLabel: 'No keyboard event handler',
+        bugDesc: 'Even if tabindex="0" is set, these elements have no onkeydown or onkeypress listener. Pressing Enter or Space does nothing. Keyboard users need both: focus (tabindex="0") AND a key handler. Mouse and keyboard users must have equivalent experiences.'
+      }
+    ]
+  },
+  {
+    title: 'Sales Training · Screen 4 · Drag and Drop',
+    category: 'Touch targets & ARIA labels',
+    verdict: `<strong>Touch target size (WCAG 2.5.5)</strong> requires a minimum 44×44px clickable area. <strong>ARIA (WCAG 4.1.2)</strong> requires interactive elements to have a name, role, and value. Drag items need role="option" or role="button", aria-grabbed state, and descriptive labels. Storyline handles some ARIA natively — check the Accessibility Properties panel per object and supplement with JavaScript for complex interactions.`,
+    zones: [
+      {
+        label: 'Drag items column',
+        html: `<div>
+          <div style="font-family:'Space Mono',monospace;font-size:10px;color:#9C9790;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px">Drag these →</div>
+          <div style="display:flex;flex-direction:column;gap:5px">
+            ${['Prospecting','Qualifying','Closing'].map(t=>`
+              <div style="padding:3px 8px;font-size:0.75rem;border:1.5px solid #D8D4CB;border-radius:5px;background:#F5F2EB;color:#141210;width:fit-content">
+                ${t}
+                <span style="font-family:'Space Mono',monospace;font-size:9px;color:#B83030;margin-left:6px">↑ ~22px tall — below 44px min</span>
+              </div>`).join('')}
+          </div>
+        </div>`,
+        isBug: true,
+        bugLabel: 'Touch targets below WCAG minimum (44×44px)',
+        bugDesc: 'These drag items are approximately 22px tall — half the WCAG 2.5.5 minimum of 44px. On a touchscreen, users can\'t reliably tap them. Fix: increase padding to at least 12px top/bottom in Storyline\'s object size panel, giving each item sufficient touch area.'
+      },
+      {
+        label: 'Drop zones column',
+        html: `<div>
+          <div style="font-family:'Space Mono',monospace;font-size:10px;color:#9C9790;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px">Drop here ↓</div>
+          <div style="display:flex;flex-direction:column;gap:5px">
+            ${['Research new leads','Assess budget & authority','Ask for the commitment'].map(t=>`
+              <div style="padding:0.6rem 0.875rem;border:1.5px dashed #BFB9AE;border-radius:5px;min-height:44px;font-size:0.8rem;color:#9C9790;position:relative">
+                ${t}
+                <span style="font-family:'Space Mono',monospace;font-size:9px;color:#B83030;display:block;margin-top:2px">no role, no aria-dropeffect</span>
+              </div>`).join('')}
+          </div>
+        </div>`,
+        isBug: true,
+        bugLabel: 'Missing ARIA — no role or aria-dropeffect',
+        bugDesc: 'Drop zones have no role="group" or aria-dropeffect attribute. Screen readers announce them as plain text. A blind user has no way to know these are interactive targets. Fix: add role="listbox" to the container and role="option" + aria-grabbed to each drag item via Storyline\'s Accessibility Properties or JavaScript.'
+      }
+    ]
+  },
+  {
+    title: 'Compliance · Screen 5 · Video module',
+    category: 'Video captions & transcript',
+    verdict: `<strong>Captions (WCAG 1.2.2)</strong> must be ON by default for all pre-recorded audio content — not hidden behind a toggle. <strong>Transcript (WCAG 1.2.3)</strong> is required as an alternative for deaf-blind users and those in noisy environments. In Storyline, attach an SRT caption file in the video properties panel and set captions to display by default. Include a transcript as a text box below the player or as a downloadable resource.`,
+    zones: [
+      {
+        label: 'Video player',
+        html: `<div style="background:#1C2B45;border-radius:8px;overflow:hidden">
+          <div style="padding:1.5rem;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;min-height:120px">
+            <div style="width:40px;height:40px;border-radius:50%;background:rgba(200,75,47,0.85);display:flex;align-items:center;justify-content:center;color:#fff;font-size:1rem">▶</div>
+            <div style="font-family:'Space Mono',monospace;font-size:10px;color:#9DADC4">data-privacy-intro.mp4 · 3:42</div>
+          </div>
+          <div style="background:rgba(0,0,0,0.4);padding:5px 10px;display:flex;justify-content:space-between;align-items:center">
+            <span style="font-size:10px;color:#9DADC4;font-family:'Space Mono',monospace">▶ 0:00 / 3:42</span>
+            <div style="display:flex;align-items:center;gap:6px">
+              <span style="font-family:'Space Mono',monospace;font-size:9px;color:#B83030">CC OFF ← should be ON by default</span>
+              <div style="width:26px;height:13px;background:#5C5750;border-radius:7px;position:relative;flex-shrink:0">
+                <div style="position:absolute;top:1.5px;left:1.5px;width:10px;height:10px;border-radius:50%;background:#9C9790"></div>
+              </div>
+            </div>
+          </div>
+        </div>`,
+        isBug: true,
+        bugLabel: 'Captions disabled by default',
+        bugDesc: 'WCAG 1.2.2 requires captions to be available and on by default for all pre-recorded video with audio. A deaf user opening this module gets no access to the spoken content. Fix: attach an SRT file in Storyline\'s video properties and set it to display by default — not as an opt-in toggle.'
+      },
+      {
+        label: 'Transcript section',
+        html: `<div style="margin-top:10px;background:#E6E3DB;border:1px solid #D8D4CB;border-radius:6px;padding:0.875rem">
+          <div style="font-family:'Space Mono',monospace;font-size:10px;color:#9C9790;margin-bottom:4px">TRANSCRIPT</div>
+          <div style="font-size:0.8rem;color:#B83030;font-style:italic">No transcript provided for this video.</div>
+        </div>`,
+        isBug: true,
+        bugLabel: 'No transcript — WCAG 1.2.3 failure',
+        bugDesc: 'A text transcript is required as a media alternative (WCAG 1.2.3). It\'s the only format accessible to deaf-blind users (via braille display), and it makes content searchable and usable in noisy environments. Include it as a text block below the player or a downloadable resource within the course.'
+      },
+      {
+        label: 'Continue button (decorative)',
+        html: `<div style="margin-top:10px"><span style="display:inline-block;background:#141210;color:#F5F2EB;padding:0.5rem 1.25rem;border-radius:6px;font-size:0.8rem">I've watched the video →</span><span style="font-family:'Space Mono',monospace;font-size:10px;color:#9C9790;margin-left:8px">[decorative]</span></div>`,
+        isBug: false,
+        bugLabel: null
+      }
+    ]
+  }
+];
+
+let round = 0, score = 0, totalFound = 0, totalBugs = 0;
+let timeLeft = ROUND_TIME, timerInterval = null;
+let roundFound = 0, roundBugs = 0;
+let roundPtsEarned = 0;
+let foundInRound = new Set();  // use Set, reset each round, stores zi values
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function startGame() {
+  showScreen('screen-game');
+  loadRound(0);
+}
+
+function loadRound(idx) {
+  clearInterval(timerInterval);
+  timerInterval = null;
+  round = idx;
+  roundFound = 0;
+  roundPtsEarned = 0;
+  foundInRound = new Set();
+  const r = rounds[idx];
+  roundBugs = r.zones.filter(z => z.isBug).length;
+  totalBugs += roundBugs;
+
+  document.getElementById('round-txt').textContent = 'Round ' + (idx+1) + ' of ' + rounds.length;
+  document.getElementById('h-round').textContent = (idx+1) + '/' + rounds.length;
+  document.getElementById('h-bugs').textContent = '0/' + roundBugs;
+  document.getElementById('slide-bar-title').textContent = r.title;
+  document.getElementById('result-panel').classList.remove('show');
+
+  for (let i = 0; i < 5; i++) {
+    const d = document.getElementById('rd' + i);
+    if (d) d.className = 'rdot' + (i < idx ? ' done' : i === idx ? ' now' : '');
+  }
+
+  const content = document.getElementById('slide-content');
+  content.innerHTML = '';
+  r.zones.forEach((z, zi) => {
+    const wrap = document.createElement('div');
+    wrap.style.marginBottom = '10px';
+    wrap.style.position = 'relative';
+
+    const zone = document.createElement('div');
+    zone.className = 'inspect-zone';
+    zone.id = 'zone-' + zi;
+    zone.dataset.idx = zi;
+
+    const hint = document.createElement('div');
+    hint.className = 'zone-hint';
+    hint.textContent = 'Click to inspect';
+    zone.appendChild(hint);
+
+    const badge = document.createElement('div');
+    badge.className = 'found-badge';
+    badge.textContent = z.isBug ? 'Bug found!' : 'Not a bug';
+    zone.appendChild(badge);
+
+    const lbl = document.createElement('div');
+    lbl.style.cssText = 'font-family:"Space Mono",monospace;font-size:10px;color:#9C9790;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px;padding:2px 0';
+    lbl.textContent = z.label;
+    zone.appendChild(lbl);
+
+    const inner = document.createElement('div');
+    inner.innerHTML = z.html;
+    zone.appendChild(inner);
+
+    if (z.isBug) {
+      const bugInfo = document.createElement('div');
+      bugInfo.className = 'bug-label';
+      bugInfo.id = 'bug-info-' + zi;
+      bugInfo.innerHTML = '<strong>' + z.bugLabel + '</strong>' + z.bugDesc;
+      zone.appendChild(bugInfo);
+    }
+
+    zone.onclick = () => inspectZone(zi);
+    wrap.appendChild(zone);
+    content.appendChild(wrap);
+  });
+
+  const dots = document.getElementById('tally-dots');
+  dots.innerHTML = '';
+  for (let i = 0; i < roundBugs; i++) {
+    const d = document.createElement('span');
+    d.className = 'tally-dot';
+    d.id = 'tdot-' + i;
+    dots.appendChild(d);
+  }
+  document.getElementById('tally-label').textContent = 'Click the sections that have accessibility bugs';
+  document.getElementById('action-area').innerHTML = '<button class="btn btn-sm" id="reveal-btn" onclick="revealRound()">Reveal remaining bugs</button>';
+
+  startTimer();
+}
+
+function startTimer() {
+  clearInterval(timerInterval);
+  timeLeft = ROUND_TIME;
+  updateTimer();
+  timerInterval = setInterval(() => {
+    timeLeft = Math.max(0, timeLeft - 0.1);
+    updateTimer();
+    if (timeLeft <= 0) { clearInterval(timerInterval); timeExpired(); }
+  }, 100);
+}
+
+function updateTimer() {
+  const pct = (timeLeft / ROUND_TIME) * 100;
+  const bar = document.getElementById('timer-fill');
+  bar.style.width = pct + '%';
+  bar.style.background = pct > 50 ? '#E8845A' : pct > 25 ? '#E8A050' : '#E24B4A';
+}
+
+function inspectZone(zi) {
+  const r = rounds[round];
+  const z = r.zones[zi];
+  const zone = document.getElementById('zone-' + zi);
+  if (!zone || zone.dataset.clicked) return;
+  zone.dataset.clicked = '1';
+
+  if (z.isBug) {
+    if (foundInRound.has(zi)) return;
+    foundInRound.add(zi);
+    roundFound++;
+    totalFound++;
+    zone.classList.add('found');
+    zone.querySelector('.found-badge').textContent = '✓ Bug found!';
+    const info = document.getElementById('bug-info-' + zi);
+    if (info) info.classList.add('show');
+    const pts = Math.max(20, Math.round(timeLeft * 3));
+    score += pts;
+    roundPtsEarned += pts;
+    document.getElementById('h-score').textContent = score;
+    document.getElementById('h-bugs').textContent = roundFound + '/' + roundBugs;
+
+    const dotIdx = roundFound - 1;
+    const dot = document.getElementById('tdot-' + dotIdx);
+    if (dot) dot.classList.add('found-dot');
+
+    document.getElementById('tally-label').textContent = roundFound + ' of ' + roundBugs + ' bugs found';
+
+    if (roundFound >= roundBugs) {
+      clearInterval(timerInterval);
+      timerInterval = null;
+      setTimeout(() => endRound(true), 600);
+    }
+  } else {
+    zone.dataset.clicked = '';  // allow re-inspection of clean zones if needed
+    zone.style.animation = 'shake 0.3s ease';
+    const badge = zone.querySelector('.found-badge');
+    badge.textContent = 'Clean — no bug here';
+    badge.style.background = '#2D7A4F';
+    badge.style.display = 'block';
+    setTimeout(() => {
+      zone.style.animation = '';
+      badge.style.display = '';
+    }, 1800);
+  }
+}
+
+function timeExpired() {
+  revealRound(true);
+}
+
+function revealRound(auto = false) {
+  clearInterval(timerInterval);
+  const r = rounds[round];
+  r.zones.forEach((z, zi) => {
+    if (z.isBug && !foundInRound.has(zi)) {
+      const zone = document.getElementById('zone-' + zi);
+      if (zone) {
+        zone.classList.add('missed-reveal');
+        zone.dataset.clicked = '1';
+        zone.querySelector('.found-badge').textContent = '✗ Missed this one';
+        const info = document.getElementById('bug-info-' + zi);
+        if (info) info.classList.add('show');
+      }
+    }
+  });
+  setTimeout(() => endRound(false), auto ? 1000 : 200);
+}
+
+function skipRound() {
+  clearInterval(timerInterval);
+  revealRound(false);
+}
+
+function endRound(allFound) {
+  const r = rounds[round];
+  const isLast = round >= rounds.length - 1;
+
+  document.getElementById('action-area').innerHTML = '';
+
+  document.getElementById('rp-found').textContent = roundFound + '/' + roundBugs;
+  document.getElementById('rp-time').textContent = Math.round(timeLeft) + 's';
+  document.getElementById('rp-pts').textContent = '+' + roundPtsEarned;
+
+  if (allFound && timeLeft > 15) {
+    document.getElementById('rp-title').innerHTML = 'Sharp eye. <em>Well spotted.</em>';
+  } else if (allFound) {
+    document.getElementById('rp-title').innerHTML = 'Round <em>complete.</em>';
+  } else {
+    document.getElementById('rp-title').innerHTML = roundFound + ' of ' + roundBugs + ' <em>found.</em>';
+  }
+
+  document.getElementById('rp-sub').textContent = r.category + ' · ' + (allFound ? 'All violations identified.' : 'Missed violations highlighted above in orange.');
+  document.getElementById('rp-verdict').innerHTML = r.verdict;
+
+  document.getElementById('rp-actions').innerHTML = isLast
+    ? '<button class="btn btn-green" onclick="showFinalScore()">See final score →</button>'
+    : '<button class="btn btn-primary" onclick="nextRound()">Next round →</button>';
+
+  const panel = document.getElementById('result-panel');
+  panel.classList.add('show');
+  panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function nextRound() {
+  clearInterval(timerInterval);
+  document.getElementById('result-panel').classList.remove('show');
+  loadRound(round + 1);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function showFinalScore() {
+  clearInterval(timerInterval);
+  const maxPossible = rounds.reduce((a, r) => a + r.zones.filter(z => z.isBug).length * 90, 0);
+  const pct = Math.round((score / maxPossible) * 100);
+  const ranks = [
+    [85, 'Accessibility architect', 'You caught violations that most Storyline developers miss entirely. This is exactly the eye that separates accessible-by-design from accessible-as-afterthought.'],
+    [65, 'Accessibility practitioner', 'Solid. You\'re catching the most common types. The keyboard and ARIA failures are harder to see — but you\'re clearly thinking at the right level.'],
+    [40, 'Accessibility aware', 'You\'re spotting the visible issues. The deeper keyboard, ARIA, and transcript failures take time to internalise — they\'re less visible but equally important.'],
+    [0,  'Accessibility learner', 'Everyone starts somewhere. The fact that you played means you\'re thinking about it — and that\'s the first step every accessible course depends on.']
+  ];
+  const [, rank, rankDesc] = ranks.find(([min]) => pct >= min);
+
+  document.getElementById('final-title').innerHTML = 'Final score: <em>' + score + ' pts</em>';
+  document.getElementById('final-sub').textContent = totalFound + ' bugs found across 5 rounds · ' + pct + '% efficiency';
+  document.getElementById('f-score').textContent = score;
+  document.getElementById('f-found').textContent = totalFound + '/' + totalBugs;
+  document.getElementById('f-rank').textContent = pct + '%';
+  document.getElementById('f-verdict').innerHTML = '<strong>' + rank + '</strong><br>' + rankDesc;
+
+  showScreen('screen-final');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+</body>
+</html>
