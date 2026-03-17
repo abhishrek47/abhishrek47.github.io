@@ -1379,13 +1379,15 @@ if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded'
 
 
 <!-- ═══════════════════════════════════════════════
-     AI GUIDE v3 — Overlay + Highlight + Tooltip
-     Drop-in. No external files. Pure CSS + JS.
-     Matches: --ink, --paper, --accent, --accent2,
-              --mid, --rule, --mono, --serif, --sans
+     AI GUIDE v4 — Overlay + Ring + Tooltip
+     The tooltip is painted via an absolutely-
+     positioned div managed entirely by JS.
+     Sections NEVER get z-index (no stacking ctx).
+     Ring is drawn by a separate fixed <div>.
 ═══════════════════════════════════════════════ -->
 
 <div id="ag-overlay" class="ag-overlay"></div>
+<div id="ag-ring"    class="ag-ring"></div>
 
 <button id="ag-trigger" class="ag-trigger" aria-label="Start AI Guide">
   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -1401,7 +1403,7 @@ if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded'
   <div class="ag-step-track" id="ag-track"></div>
   <div class="ag-eyebrow" id="ag-eyebrow"></div>
   <div class="ag-heading" id="ag-heading"></div>
-  <div class="ag-body" id="ag-body"></div>
+  <div class="ag-body-text" id="ag-body"></div>
   <div class="ag-footer">
     <span class="ag-count" id="ag-count"></span>
     <div class="ag-nav">
@@ -1416,23 +1418,45 @@ if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded'
 </div>
 
 <style>
-/* ── Overlay ─────────────────────────────────── */
+/* ── OVERLAY ─────────────────────────────────── 
+   z-index ladder:
+   9000  overlay (dim)
+   9100  ring (highlight frame around section)
+   9200  tooltip + all its children
+   trigger sits outside the flow at 8900
+──────────────────────────────────────────────── */
 .ag-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(10, 9, 8, 0.82);
+  background: rgba(10,9,8,0.8);
   z-index: 9000;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.35s ease;
-  backdrop-filter: blur(1px);
-  -webkit-backdrop-filter: blur(1px);
 }
 .ag-overlay.on { opacity: 1; pointer-events: all; }
-/* Tooltip must sit above everything including highlighted sections */
-#ag-tooltip { isolation: isolate; }
 
-/* ── Trigger button ──────────────────────────── */
+/* ── RING — purely visual, never blocks clicks ─ */
+.ag-ring {
+  position: fixed;
+  z-index: 9100;
+  border: 2.5px solid var(--accent, #c84b2f);
+  border-radius: 4px;
+  box-shadow:
+    0 0 0 5px rgba(200,75,47,0.18),
+    0 20px 60px rgba(0,0,0,0.4);
+  pointer-events: none;          /* NEVER intercepts clicks */
+  opacity: 0;
+  transition:
+    top    0.32s cubic-bezier(0.16,1,0.3,1),
+    left   0.32s cubic-bezier(0.16,1,0.3,1),
+    width  0.32s cubic-bezier(0.16,1,0.3,1),
+    height 0.32s cubic-bezier(0.16,1,0.3,1),
+    opacity 0.25s ease;
+}
+.ag-ring.on { opacity: 1; }
+
+/* ── TRIGGER ─────────────────────────────────── */
 .ag-trigger {
   position: fixed;
   bottom: 32px;
@@ -1452,54 +1476,26 @@ if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded'
   letter-spacing: 0.12em;
   text-transform: uppercase;
   cursor: pointer;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.28), 0 1px 4px rgba(0,0,0,0.12);
-  transition: transform 0.2s ease, background 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.28);
+  transition: transform 0.2s ease, background 0.2s, box-shadow 0.2s, opacity 0.2s;
 }
-.ag-trigger svg {
-  color: var(--accent, #c84b2f);
-  flex-shrink: 0;
-  animation: ag-spin-idle 8s linear infinite;
-}
-@keyframes ag-spin-idle {
-  0%,80%,100% { transform: rotate(0deg); }
-  85% { transform: rotate(45deg); }
-  95% { transform: rotate(-10deg); }
-}
+.ag-trigger svg { color: var(--accent, #c84b2f); flex-shrink: 0; }
 .ag-trigger:hover {
   background: var(--accent, #c84b2f);
   transform: translateY(-2px);
   box-shadow: 0 8px 32px rgba(200,75,47,0.35);
   border-color: transparent;
 }
-.ag-trigger:hover svg { animation: none; color: #fff; }
-.ag-trigger.hidden { opacity: 0; pointer-events: none; transform: scale(0.85); }
+.ag-trigger:hover svg { color: #fff; }
+.ag-trigger.hidden { opacity: 0; pointer-events: none; transform: scale(0.9); }
 
-/* ── Section highlight ───────────────────────── */
-.ag-hi {
-  position: relative !important;
-  z-index: 9050 !important;
-  border-radius: 4px;
-  box-shadow:
-    0 0 0 3px var(--accent, #c84b2f),
-    0 0 0 6px rgba(200,75,47,0.2),
-    0 24px 80px rgba(0,0,0,0.5) !important;
-  transition: box-shadow 0.3s ease !important;
-}
-/* preserve section backgrounds when lifted above overlay */
-.hero.ag-hi            { background: var(--paper, #f5f2eb) !important; }
-.marquee-wrap.ag-hi    { background: #c84b2f !important; }
-#services.ag-hi        { background: var(--paper, #f5f2eb) !important; }
-#skills.ag-hi          { background: #ffffff !important; }
-.cases-section.ag-hi   { background: #ffffff !important; }
-#accessibility.ag-hi   { background: #0f1f0f !important; }
-.demo-callout.ag-hi    { background: var(--ink, #0f0f0f) !important; }
-#timeline.ag-hi        { background: #f5f0e8 !important; }
-nav.ag-hi              { background: rgba(245,242,235,0.97) !important; }
-
-/* ── Tooltip ─────────────────────────────────── */
+/* ── TOOLTIP ─────────────────────────────────── 
+   No stacking context dependencies.
+   Always a direct child of <body> (moved by JS).
+──────────────────────────────────────────────── */
 .ag-tooltip {
   position: fixed;
-  z-index: 9500 !important;
+  z-index: 9200;
   width: 340px;
   background: var(--paper, #f5f2eb);
   border-radius: 3px;
@@ -1511,33 +1507,28 @@ nav.ag-hi              { background: rgba(245,242,235,0.97) !important; }
   padding: 22px 22px 18px;
   opacity: 0;
   pointer-events: none;
-  transform: translateY(10px);
+  transform: translateY(8px);
   transition: opacity 0.28s ease, transform 0.28s ease;
-  /* position set dynamically by JS */
 }
 .ag-tooltip.on {
   opacity: 1;
-  pointer-events: all !important;
+  pointer-events: auto;
   transform: translateY(0);
 }
+/* Every child of tooltip must be clickable */
+.ag-tooltip * { pointer-events: auto; }
 
-/* Step track (thin progress bar) */
-.ag-step-track {
-  display: flex;
-  gap: 3px;
-  margin-bottom: 16px;
-}
+/* ── Step track ── */
+.ag-step-track { display: flex; gap: 3px; margin-bottom: 16px; }
 .ag-step-pip {
-  height: 2px;
-  flex: 1;
-  border-radius: 1px;
+  height: 2px; flex: 1; border-radius: 1px;
   background: var(--rule, #d4cfc6);
   transition: background 0.3s;
 }
-.ag-step-pip.done { background: var(--accent, #c84b2f); }
+.ag-step-pip.done { background: var(--accent, #c84b2f); opacity: 0.5; }
 .ag-step-pip.here { background: var(--accent, #c84b2f); }
 
-/* Eyebrow */
+/* ── Eyebrow ── */
 .ag-eyebrow {
   font-family: var(--mono, monospace);
   font-size: 0.58rem;
@@ -1545,30 +1536,26 @@ nav.ag-hi              { background: rgba(245,242,235,0.97) !important; }
   text-transform: uppercase;
   color: var(--accent, #c84b2f);
   margin-bottom: 7px;
-  display: flex;
-  align-items: center;
-  gap: 7px;
+  display: flex; align-items: center; gap: 7px;
 }
 .ag-eyebrow::before {
   content: '';
-  display: block;
-  width: 12px; height: 1px;
-  background: var(--accent, #c84b2f);
-  flex-shrink: 0;
+  display: block; width: 12px; height: 1px;
+  background: var(--accent, #c84b2f); flex-shrink: 0;
 }
 
-/* Heading */
+/* ── Heading ── */
 .ag-heading {
   font-family: var(--serif, serif);
-  font-size: 1.1rem;
-  line-height: 1.2;
+  font-size: 1.08rem;
+  line-height: 1.22;
   color: var(--ink, #0f0f0f);
   margin-bottom: 10px;
   font-weight: 400;
 }
 
-/* Body */
-.ag-body {
+/* ── Body ── */
+.ag-body-text {
   font-family: var(--sans, sans-serif);
   font-size: 0.8rem;
   font-weight: 300;
@@ -1577,7 +1564,7 @@ nav.ag-hi              { background: rgba(245,242,235,0.97) !important; }
   margin-bottom: 18px;
 }
 
-/* Footer */
+/* ── Footer ── */
 .ag-footer {
   display: flex;
   align-items: center;
@@ -1591,10 +1578,7 @@ nav.ag-hi              { background: rgba(245,242,235,0.97) !important; }
   letter-spacing: 0.1em;
   color: var(--mid, #6b6459);
 }
-.ag-count strong {
-  color: var(--ink, #0f0f0f);
-  font-weight: 500;
-}
+.ag-count strong { color: var(--ink, #0f0f0f); font-weight: 500; }
 .ag-nav { display: flex; gap: 6px; }
 .ag-nav-btn {
   width: 30px; height: 30px;
@@ -1611,10 +1595,7 @@ nav.ag-hi              { background: rgba(245,242,235,0.97) !important; }
   color: var(--accent, #c84b2f);
   background: rgba(200,75,47,0.04);
 }
-.ag-nav-btn:disabled {
-  opacity: 0.25;
-  cursor: default;
-}
+.ag-nav-btn:disabled { opacity: 0.25; cursor: default; }
 .ag-nav-btn:disabled:hover {
   border-color: var(--rule, #d4cfc6);
   color: var(--mid, #6b6459);
@@ -1632,7 +1613,7 @@ nav.ag-hi              { background: rgba(245,242,235,0.97) !important; }
 }
 .ag-next-btn:disabled { background: var(--ink, #0f0f0f); }
 
-/* Close button */
+/* ── Close ── */
 .ag-close {
   position: absolute;
   top: 10px; right: 10px;
@@ -1647,14 +1628,14 @@ nav.ag-hi              { background: rgba(245,242,235,0.97) !important; }
 }
 .ag-close:hover { background: rgba(200,75,47,0.1); color: var(--accent, #c84b2f); }
 
-/* ── Mobile ──────────────────────────────────── */
+/* ── Mobile ── */
 @media (max-width: 768px) {
-  .ag-trigger { bottom: 20px; right: 20px; padding: 10px 16px 10px 12px; }
+  .ag-trigger { bottom: 20px; right: 20px; }
   .ag-trigger span { display: none; }
   .ag-tooltip {
     width: calc(100vw - 32px) !important;
     left: 16px !important;
-    right: 16px !important;
+    right: auto !important;
     bottom: 16px !important;
     top: auto !important;
   }
@@ -1670,130 +1651,144 @@ nav.ag-hi              { background: rgba(245,242,235,0.97) !important; }
       sel: 'nav',
       eyebrow: 'Navigation',
       heading: 'Work · About · Certifications · Let\'s Talk',
-      body: 'Every page of the portfolio is one click away. The ID Model Selector shortcut opens a live tool — not a page, a working selector that applies 7 instructional design frameworks in real time.'
+      body: 'Every page is one click away. The ID Model Selector opens a live tool — a working selector that applies 7 instructional design frameworks in real time, not just another page.'
     },
     {
       sel: '.hero',
       eyebrow: 'Hero',
       heading: 'I build learning experiences that think.',
-      body: '15+ years across instructional design, JavaScript, and AI integration. The headline is intentional: courses that adapt to the learner, connect to live APIs, and automate what used to take days.'
+      body: '15+ years across instructional design, JavaScript, and AI integration. Courses that adapt to the learner, connect to live APIs, and automate what used to take days.'
     },
     {
       sel: '.marquee-wrap',
       eyebrow: 'Core Stack',
       heading: 'Articulate Storyline · JavaScript · REST APIs · xAPI · AI Voice · FFmpeg · LMS Architecture',
-      body: 'Every skill in this ticker is demonstrated in a live project somewhere on this page. None of these are aspirational — each links to working code you can run in this browser.'
+      body: 'Every skill in this ticker is demonstrated in a live project on this page. None are aspirational — each links to working code you can run in this browser right now.'
     },
     {
       sel: '#services',
       eyebrow: 'What I Do',
       heading: 'Three disciplines. One person.',
-      body: 'Learning Experience Design · Learning Technology & Integration · AI & Workflow Automation. Most L&D practitioners occupy one. The case studies below show all three working together on real projects.'
+      body: 'Learning Experience Design · Learning Technology & Integration · AI & Workflow Automation. Most L&D practitioners occupy one lane. The case studies show all three working together on real projects.'
     },
     {
       sel: '#skills',
       eyebrow: 'Competency Map',
-      heading: 'Five axes mapped without inflation.',
-      body: 'Instructional Design · Technical Development · AI Integration · Automation & Systems · Analytics & Data. Hover each legend item to read exactly what each axis means in practice — and what work sits behind the score.'
+      heading: 'Five axes. Mapped without inflation.',
+      body: 'Instructional Design · Technical Development · AI Integration · Automation & Systems · Analytics & Data. Hover each legend item to read exactly what it means in practice — and what work sits behind the score.'
     },
     {
       sel: '.cases-section',
       eyebrow: 'Selected Work',
       heading: '5 case studies. Every one has a live demo.',
-      body: 'AI-personalised voice narration at LMS scale · Template architecture that multiplied team output · FFmpeg localization across 8 languages in 90 seconds · Live xAPI stream visualiser · AI storyboard generator with 7 ID models. No PDFs. No mockups.'
+      body: 'AI-personalised voice narration at LMS scale · Template architecture that multiplied team output · FFmpeg localization across 8 languages in 90 seconds · Live xAPI stream visualiser · AI storyboard generator applying 7 ID models. No PDFs. No mockups.'
     },
     {
       sel: '#accessibility',
       eyebrow: 'Accessibility Practice',
       heading: 'Four interactive before/after demonstrations.',
-      body: 'Focus Order · Colour Contrast · Alt Text Strategy · Keyboard Navigation. Each built as a working toggle. Toggle any one of them — the point is that accessibility is an architectural decision made at template level, not a checklist item added at the end.'
+      body: 'Focus Order · Colour Contrast · Alt Text Strategy · Keyboard Navigation — each as a working toggle inside a simulated Storyline environment. Accessibility is an architectural decision made at template level, not a checklist at the end.'
     },
     {
       sel: '.demo-callout',
       eyebrow: 'Interactive Demos',
       heading: 'Six demos. All live in this browser, right now.',
-      body: 'AI Personalized Narration · Template System Showroom · FFmpeg Terminal Simulation · The Invisible Student · AI Storyboard Converter · Spot the Accessibility Bug. Click any card to run it — no login, no installation, no waiting.'
+      body: 'AI Personalized Narration · Template System Showroom · FFmpeg Terminal Simulation · The Invisible Student · AI Storyboard Converter · Spot the Accessibility Bug. Click any card to run it — no login, no installation.'
     },
     {
       sel: '#timeline',
       eyebrow: 'Career Timeline',
       heading: '15 years · 9 roles · one direction.',
-      body: 'Started training call centre associates in Ahmedabad in 2010. Every role added a layer — ID, then eLearning dev, then LMS admin, then JavaScript, then AI. Drag the scrubber or click any marker to read the full story of each role.'
+      body: 'Started training call centre associates in Ahmedabad in 2010. Every role added a layer: ID, then eLearning dev, then LMS admin, then JavaScript, then AI. Drag the scrubber or click any marker to read each role in full.'
     }
   ];
 
-  var cur = 0;
+  var cur    = 0;
   var active = false;
-  var prevHi = null;
 
-  var overlay  = document.getElementById('ag-overlay');
-  var trigger  = document.getElementById('ag-trigger');
-  var tooltip  = document.getElementById('ag-tooltip');
-  var eyebrow  = document.getElementById('ag-eyebrow');
-  var heading  = document.getElementById('ag-heading');
-  var body     = document.getElementById('ag-body');
-  var count    = document.getElementById('ag-count');
-  var track    = document.getElementById('ag-track');
-  var prevBtn  = document.getElementById('ag-prev');
-  var nextBtn  = document.getElementById('ag-next');
-  var closeBtn = document.getElementById('ag-close');
+  /* Move tooltip + ring + overlay to <body> last-child immediately —
+     guarantees they are never trapped in a section's stacking context */
+  var overlay = document.getElementById('ag-overlay');
+  var ring    = document.getElementById('ag-ring');
+  var trigger = document.getElementById('ag-trigger');
+  var tooltip = document.getElementById('ag-tooltip');
 
-  /* Ensure tooltip is always the last element in body — 
-     guarantees it paints above any z-index stacking context */
+  document.body.appendChild(overlay);
+  document.body.appendChild(ring);
+  document.body.appendChild(trigger);
   document.body.appendChild(tooltip);
 
-  /* ── Build step track ── */
+  var eyebrow = document.getElementById('ag-eyebrow');
+  var heading = document.getElementById('ag-heading');
+  var bodyEl  = document.getElementById('ag-body');
+  var count   = document.getElementById('ag-count');
+  var track   = document.getElementById('ag-track');
+  var prevBtn = document.getElementById('ag-prev');
+  var nextBtn = document.getElementById('ag-next');
+  var closeBtn= document.getElementById('ag-close');
+
+  /* ── Track pips ── */
   function buildTrack() {
     track.innerHTML = '';
     STEPS.forEach(function (_, i) {
-      var pip = document.createElement('div');
-      pip.className = 'ag-step-pip';
-      pip.id = 'ag-pip-' + i;
-      track.appendChild(pip);
+      var p = document.createElement('div');
+      p.className = 'ag-step-pip';
+      p.id = 'agp' + i;
+      track.appendChild(p);
     });
   }
-
   function refreshTrack() {
     STEPS.forEach(function (_, i) {
-      var pip = document.getElementById('ag-pip-' + i);
-      if (!pip) return;
-      pip.className = 'ag-step-pip' + (i < cur ? ' done' : i === cur ? ' here' : '');
+      var p = document.getElementById('agp' + i);
+      if (p) p.className = 'ag-step-pip' + (i < cur ? ' done' : i === cur ? ' here' : '');
     });
   }
 
-  /* ── Position tooltip smartly ── */
-  function positionTooltip(el) {
+  /* ── Position ring around element ── */
+  function placeRing(el) {
+    var pad = 6;
+    var r   = el.getBoundingClientRect();
+    ring.style.top    = (r.top  - pad) + 'px';
+    ring.style.left   = (r.left - pad) + 'px';
+    ring.style.width  = (r.width  + pad * 2) + 'px';
+    ring.style.height = (r.height + pad * 2) + 'px';
+    ring.classList.add('on');
+  }
+
+  /* ── Position tooltip ── */
+  function placeTooltip(el) {
     var vw  = window.innerWidth;
     var vh  = window.innerHeight;
     var tw  = 340;
-    var th  = 260; // approx
-    var pad = 20;
+    var th  = 270;
+    var gap = 16;
+    var r   = el.getBoundingClientRect();
 
-    var r = el.getBoundingClientRect();
-    var cx = r.left + r.width / 2;
-
-    // Vertical: prefer below section, fall back to above
+    /* Vertical: below section if room, else above, else bottom-anchored */
     var top;
-    if (r.bottom + pad + th < vh) {
-      top = r.bottom + pad;
-    } else if (r.top - pad - th > 0) {
-      top = r.top - pad - th;
+    if (r.bottom + gap + th <= vh - 8) {
+      top = r.bottom + gap;
+    } else if (r.top - gap - th >= 8) {
+      top = r.top - gap - th;
     } else {
-      // overlay the bottom of viewport with margin
-      top = vh - th - pad;
+      top = vh - th - 8;
     }
 
-    // Horizontal: centre on section, clamp to viewport
-    var left = cx - tw / 2;
-    left = Math.max(pad, Math.min(left, vw - tw - pad));
+    /* Horizontal: centred on section, clamped */
+    var left = (r.left + r.width / 2) - tw / 2;
+    left = Math.max(8, Math.min(left, vw - tw - 8));
+    top  = Math.max(8, top);
 
-    top  = Math.max(pad, top);
+    tooltip.style.top   = top  + 'px';
+    tooltip.style.left  = left + 'px';
+    tooltip.style.width = tw + 'px';
+  }
 
-    tooltip.style.top    = top  + 'px';
-    tooltip.style.left   = left + 'px';
-    tooltip.style.bottom = 'auto';
-    tooltip.style.right  = 'auto';
-    tooltip.style.width  = tw + 'px';
+  /* ── Reposition both on scroll/resize ── */
+  function reposition() {
+    if (!active) return;
+    var el = document.querySelector(STEPS[cur].sel);
+    if (el) { placeRing(el); placeTooltip(el); }
   }
 
   /* ── Go to step ── */
@@ -1801,36 +1796,31 @@ nav.ag-hi              { background: rgba(245,242,235,0.97) !important; }
     if (i < 0 || i >= STEPS.length) return;
     cur = i;
 
-    // Clear old highlight
-    if (prevHi) { prevHi.classList.remove('ag-hi'); prevHi = null; }
-
     var step = STEPS[cur];
     var el   = document.querySelector(step.sel);
 
-    // Populate tooltip
     eyebrow.textContent = step.eyebrow;
     heading.textContent = step.heading;
-    body.textContent    = step.body;
-    count.innerHTML     = '<strong>' + (cur + 1) + '</strong> / ' + STEPS.length;
+    bodyEl.textContent  = step.body;
+    count.innerHTML     = '<strong>' + (cur + 1) + '</strong>&thinsp;/&thinsp;' + STEPS.length;
     prevBtn.disabled    = cur === 0;
     nextBtn.innerHTML   = cur === STEPS.length - 1
-      ? '<svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>'
+      ? '<svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>'
       : '<svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3l5 5-5 5"/></svg>';
 
     refreshTrack();
 
     if (el) {
-      // Highlight
-      el.classList.add('ag-hi');
-      prevHi = el;
-
-      // Scroll section into view, centred
-      var r = el.getBoundingClientRect();
+      /* Scroll section to vertical centre */
+      var r   = el.getBoundingClientRect();
       var mid = window.pageYOffset + r.top + r.height / 2 - window.innerHeight / 2;
       window.scrollTo({ top: Math.max(0, mid), behavior: 'smooth' });
 
-      // Position tooltip after scroll settles
-      setTimeout(function () { positionTooltip(el); }, 320);
+      /* Wait for scroll to settle then position */
+      setTimeout(function () {
+        placeRing(el);
+        placeTooltip(el);
+      }, 350);
     }
   }
 
@@ -1841,6 +1831,7 @@ nav.ag-hi              { background: rgba(245,242,235,0.97) !important; }
     overlay.classList.add('on');
     trigger.classList.add('hidden');
     tooltip.classList.add('on');
+    ring.classList.remove('on');
     go(0);
   }
 
@@ -1849,13 +1840,16 @@ nav.ag-hi              { background: rgba(245,242,235,0.97) !important; }
     overlay.classList.remove('on');
     trigger.classList.remove('hidden');
     tooltip.classList.remove('on');
-    if (prevHi) { prevHi.classList.remove('ag-hi'); prevHi = null; }
+    ring.classList.remove('on');
   }
 
   /* ── Events ── */
   trigger.addEventListener('click', start);
   closeBtn.addEventListener('click', end);
-  overlay.addEventListener('click', end);
+  overlay.addEventListener('click', function (e) {
+    /* only close if clicking the dim itself, not bubbled from tooltip */
+    if (e.target === overlay) end();
+  });
 
   nextBtn.addEventListener('click', function () {
     if (cur < STEPS.length - 1) go(cur + 1); else end();
@@ -1871,15 +1865,13 @@ nav.ag-hi              { background: rgba(245,242,235,0.97) !important; }
     if (e.key === 'Escape') end();
   });
 
-  window.addEventListener('resize', function () {
-    if (!active || !prevHi) return;
-    positionTooltip(prevHi);
-  });
+  window.addEventListener('scroll', reposition, { passive: true });
+  window.addEventListener('resize', reposition);
 
 })();
 </script>
 <!-- ═══════════════════════════════════════════════
-     END AI GUIDE v3
+     END AI GUIDE v4
 ═══════════════════════════════════════════════ -->
 </body>
 </html>
