@@ -699,17 +699,58 @@ code { padding: 1px 5px; }
       </div>
       <div class="terminal-input">
         <span class="t-prompt" style="font-family:var(--mono);font-size:0.8125rem;color:var(--text-muted);">$</span>
-        <input type="text" id="term-input" placeholder='bash localize.sh --input module_v2.mp4 --langs all --subs auto' onkeydown="if(event.key==='Enter')runScript()">
+        <input type="text" id="term-input" placeholder='bash localize.sh --input module_v2.mp4 --langs all --subs auto' onkeydown="if(event.key==='Enter')runScript()" style="font-size:0.875rem;letter-spacing:0.01em;">
       </div>
     </div>
 
-    <p style="font-size:0.8125rem;color:var(--text-muted);margin-top:8px;">Hint: type <code>bash localize.sh --input module_v2.mp4 --langs all --subs auto</code> and press Enter</p>
+    <!-- Command hint with copy button -->
+    <div style="margin-top:10px;background:#f0ede6;border:1px solid #d4cfc6;border-radius:6px;padding:10px 14px;display:flex;align-items:center;gap:12px;">
+      <div style="flex:1;">
+        <div style="font-family:var(--font-mono,monospace);font-size:0.7rem;letter-spacing:0.12em;text-transform:uppercase;color:#6b6459;margin-bottom:4px;">Command to type</div>
+        <code id="cmd-hint-text" style="font-family:var(--font-mono,monospace);font-size:0.8125rem;color:#0f0f0f;letter-spacing:0.01em;word-break:break-all;">bash localize.sh --input module_v2.mp4 --langs all --subs auto</code>
+      </div>
+      <button id="copy-cmd-btn" onclick="copyCommand()" title="Copy command" style="flex-shrink:0;display:inline-flex;align-items:center;gap:6px;background:#0f0f0f;color:#f5f2eb;border:none;border-radius:4px;padding:7px 14px;font-family:var(--font-mono,monospace);font-size:0.68rem;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;transition:background 0.15s;white-space:nowrap;">
+        <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="5" width="9" height="9" rx="1"/><path d="M3 11H2a1 1 0 01-1-1V2a1 1 0 011-1h8a1 1 0 011 1v1"/></svg>
+        Copy
+      </button>
+    </div>
+    <p style="font-size:0.75rem;color:#6b6459;margin-top:6px;font-style:italic;">Paste into the terminal above and press Enter — or just click Run for me.</p>
 
     <div style="display:flex;gap:10px;margin-top:1rem;">
       <button class="btn btn-primary" id="run-btn" onclick="runScriptAuto()">▶ Run for me</button>
       <button class="btn" onclick="resetTerminal()">↺ Reset</button>
       <button class="btn btn-ghost" onclick="showScreen('problem')">← Back</button>
     </div>
+
+    <script>
+    function copyCommand() {
+      var cmd = document.getElementById('cmd-hint-text').textContent;
+      var btn = document.getElementById('copy-cmd-btn');
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(cmd).then(function() {
+          btn.innerHTML = '<svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8l4 4 8-8"/></svg> Copied!';
+          btn.style.background = '#2d7a3a';
+          setTimeout(function() {
+            btn.innerHTML = '<svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="5" width="9" height="9" rx="1"/><path d="M3 11H2a1 1 0 01-1-1V2a1 1 0 011-1h8a1 1 0 011 1v1"/></svg> Copy';
+            btn.style.background = '#0f0f0f';
+          }, 2000);
+          /* Auto-paste into terminal input */
+          var inp = document.getElementById('term-input');
+          if (inp) { inp.value = cmd; inp.focus(); }
+        });
+      } else {
+        /* Fallback for older browsers */
+        var inp = document.getElementById('term-input');
+        if (inp) { inp.value = cmd; inp.focus(); inp.select(); }
+        btn.innerHTML = '&#10003; Pasted!';
+        btn.style.background = '#2d7a3a';
+        setTimeout(function() {
+          btn.innerHTML = 'Copy';
+          btn.style.background = '#0f0f0f';
+        }, 2000);
+      }
+    }
+    </script>
   </div>
 
   <!-- Screen 3: Results -->
@@ -1041,7 +1082,7 @@ function toggleHood(btn) {
   var s = 'color:#c84b2f;font-size:18px;font-weight:bold;padding:8px 0;border-bottom:2px solid #c84b2f';
   console.log('%c© Abhishek Trivedi — Learning Experience Technologist', s);
   console.log('%chttps://abhishektrivedi.com | All rights reserved.', 'color:#6b6459;font-size:12px;');
-  console.log('%cInspecting to learn? Great. Just reach out instead of copying.', 'color:#c9973a;font-size:12px;font-style:italic;');
+  console.log('%cInspecting to learn? Great. Reach out instead of copying.', 'color:#c9973a;font-size:12px;font-style:italic;');
 })();
 </script>
 <!-- ── END PROTECTION ── -->
