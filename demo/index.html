@@ -1,1387 +1,472 @@
 
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-LY3GY2LH00"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-LY3GY2LH00');
-</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI-Personalised Learning Demo · Abhishek Trivedi</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<title>Demo 01 — AI Personalised Narration · Abhishek Trivedi</title>
+<link rel="stylesheet" href="../shared.css">
 <style>
-:root {
-  --navy:    #0a1628;
-  --navy-m:  #122040;
-  --navy-l:  #1a3a5c;
-  --accent:  #c84b2f;
-  --accent-l:#e8633e;
-  --gold:    #d4af5f;
-  --white:   #f5f2eb;
-  --dim:     #8ba3be;
-  --code-bg: #061018;
-  --green:   #3dba6e;
-  --radius:  12px;
-}
+.hero-tag { margin-bottom: 2rem; }
+.step-screen { display: none; }
+.step-screen.active { display: block; animation: fadeUp 0.3s ease forwards; }
 
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-body {
-  background: var(--navy);
-  color: var(--white);
-  font-family: 'DM Sans', sans-serif;
-  min-height: 100vh;
-  overflow-x: hidden;
-}
-
-/* ── HEADER ── */
-.header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 18px 40px;
-  border-bottom: 1px solid rgba(255,255,255,0.07);
-  background: rgba(10,22,40,0.95);
-  backdrop-filter: blur(10px);
-  position: sticky; top: 0; z-index: 100;
-}
-.header-logo { font-family: 'DM Serif Display', serif; font-size: 22px; color: var(--white); }
-.header-logo span { color: var(--accent); }
-.header-badge {
-  background: rgba(200,75,47,0.15);
-  border: 1px solid rgba(200,75,47,0.4);
-  color: var(--accent);
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  padding: 5px 12px;
-  border-radius: 20px;
-  text-transform: uppercase;
-}
-.header-by {
-  font-size: 13px;
-  color: var(--dim);
-}
-.header-by a { color: var(--gold); text-decoration: none; }
-.header-by a:hover { text-decoration: underline; }
-
-/* ── LAYOUT ── */
-.shell {
-  display: grid;
-  grid-template-columns: 1fr 340px;
-  gap: 0;
-  max-width: 1200px;
-  margin: 0 auto;
-  min-height: calc(100vh - 62px);
-}
-
-/* ── MAIN STAGE ── */
-.stage {
-  padding: 48px 48px 48px 48px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  border-right: 1px solid rgba(255,255,255,0.06);
-  min-height: calc(100vh - 62px);
-}
-
-/* ── SCREENS ── */
-.screen { display: none; animation: fadeUp 0.5s ease forwards; }
-.screen.active { display: flex; flex-direction: column; gap: 28px; }
-
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(16px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-/* Progress */
-.progress-bar {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 8px;
-}
-.progress-step {
-  height: 3px;
-  flex: 1;
-  background: rgba(255,255,255,0.1);
-  border-radius: 2px;
-  transition: background 0.4s ease;
-}
-.progress-step.done { background: var(--accent); }
-.progress-step.active { background: var(--gold); }
-
-.screen-tag {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
-  color: var(--accent);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
-
-.screen-title {
-  font-family: 'DM Serif Display', serif;
-  font-size: clamp(32px, 4vw, 52px);
-  line-height: 1.1;
-  color: var(--white);
-}
-.screen-title .highlight { color: var(--accent); font-style: italic; }
-.screen-title .name-inject { color: var(--gold); }
-
-.screen-body {
-  font-size: 16px;
-  line-height: 1.7;
-  color: rgba(245,242,235,0.75);
-  max-width: 560px;
-}
-.screen-body .inject {
-  color: var(--gold);
-  font-weight: 600;
-}
-
-/* ── INTAKE FORM ── */
-.form-group { display: flex; flex-direction: column; gap: 8px; }
-.form-label {
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--dim);
-}
-.form-input {
-  background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.12);
-  border-radius: var(--radius);
-  padding: 14px 18px;
-  color: var(--white);
-  font-family: 'DM Sans', sans-serif;
-  font-size: 16px;
-  outline: none;
-  transition: border-color 0.2s, background 0.2s;
-  width: 100%;
-}
-.form-input:focus {
-  border-color: var(--accent);
-  background: rgba(200,75,47,0.06);
-}
-.form-input::placeholder { color: rgba(255,255,255,0.25); }
-
-.role-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
-  margin-top: 4px;
-}
-.role-card {
-  background: rgba(255,255,255,0.04);
-  border: 1.5px solid rgba(255,255,255,0.1);
-  border-radius: var(--radius);
-  padding: 14px 16px;
-  cursor: pointer;
-  transition: all 0.2s;
-  text-align: left;
-}
-.role-card:hover {
-  background: rgba(200,75,47,0.08);
-  border-color: rgba(200,75,47,0.4);
-}
-.role-card.selected {
-  background: rgba(200,75,47,0.15);
-  border-color: var(--accent);
-}
-.role-card-title {
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--white);
-  margin-bottom: 3px;
-}
-.role-card-desc {
-  font-size: 12px;
-  color: var(--dim);
-}
-
-/* ── BUTTONS ── */
-.btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 14px 28px;
-  border-radius: var(--radius);
-  font-family: 'DM Sans', sans-serif;
-  font-size: 15px;
-  font-weight: 600;
-  cursor: pointer;
-  border: none;
-  transition: all 0.2s;
-}
-.btn-primary {
-  background: var(--accent);
-  color: white;
-}
-.btn-primary:hover { background: var(--accent-l); transform: translateY(-1px); }
-.btn-primary:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
-.btn-ghost {
-  background: transparent;
-  color: var(--dim);
-  border: 1px solid rgba(255,255,255,0.12);
-}
-.btn-ghost:hover { color: var(--white); border-color: rgba(255,255,255,0.3); }
-
-.btn-row { display: flex; gap: 12px; align-items: center; }
-
-/* ── NARRATION BLOCK ── */
-.narration {
-  background: linear-gradient(135deg, rgba(26,58,92,0.5), rgba(18,32,64,0.5));
-  border: 1px solid rgba(255,255,255,0.08);
+.narration-box {
+  background: var(--bg-muted);
+  border: 1px solid var(--border);
   border-left: 3px solid var(--accent);
   border-radius: var(--radius);
-  padding: 24px 28px;
-  position: relative;
-  overflow: hidden;
+  padding: 1.25rem 1.5rem;
+  font-size: 1.05rem;
+  color: var(--text-primary);
+  line-height: 1.7;
+  margin: 1.5rem 0;
+  font-style: italic;
 }
-.narration::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at top right, rgba(200,75,47,0.06), transparent 60%);
-}
-.narration-tag {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 10px;
-  color: var(--accent);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  margin-bottom: 10px;
+
+.voice-indicator {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-bottom: 1rem;
 }
-.narration-tag::before {
-  content: '';
-  width: 6px; height: 6px;
-  background: var(--accent);
-  border-radius: 50%;
-  animation: pulse 1.5s infinite;
-}
-@keyframes pulse {
-  0%,100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.5; transform: scale(0.8); }
-}
-.narration-text {
-  font-size: 17px;
-  line-height: 1.7;
-  color: var(--white);
-}
-.narration-text .hi { color: var(--gold); font-weight: 600; }
 
-/* ── SCENARIO ── */
-.scenario-question {
-  font-family: 'DM Serif Display', serif;
-  font-size: 22px;
-  line-height: 1.4;
-  color: var(--white);
-  background: rgba(255,255,255,0.03);
-  border: 1px solid rgba(255,255,255,0.08);
+.scenario-choice {
+  border: 1.5px solid var(--border);
   border-radius: var(--radius);
-  padding: 24px;
-}
-.scenario-options { display: flex; flex-direction: column; gap: 10px; }
-.scenario-option {
-  background: rgba(255,255,255,0.04);
-  border: 1.5px solid rgba(255,255,255,0.1);
-  border-radius: var(--radius);
-  padding: 16px 20px;
+  padding: 1rem 1.25rem;
+  margin-bottom: 10px;
   cursor: pointer;
-  transition: all 0.2s;
+  background: var(--bg-surface);
+  transition: all 0.15s;
   display: flex;
   align-items: flex-start;
-  gap: 14px;
+  gap: 12px;
 }
-.scenario-option:hover {
-  background: rgba(255,255,255,0.07);
-  border-color: rgba(255,255,255,0.25);
-  transform: translateX(4px);
-}
-.scenario-option.correct {
-  background: rgba(61,186,110,0.12);
+.scenario-choice:hover { border-color: var(--accent); background: var(--accent-soft); }
+.scenario-choice.selected-correct {
   border-color: var(--green);
+  background: var(--green-soft);
 }
-.scenario-option.wrong {
-  background: rgba(200,75,47,0.1);
-  border-color: rgba(200,75,47,0.4);
+.scenario-choice.selected-wrong {
+  border-color: var(--red);
+  background: var(--red-soft);
 }
-.option-letter {
-  width: 28px; height: 28px;
-  background: rgba(255,255,255,0.08);
-  border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 12px; font-weight: 700;
-  color: var(--dim);
+.choice-letter {
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-muted);
+  width: 20px;
   flex-shrink: 0;
-  transition: all 0.2s;
+  padding-top: 1px;
 }
-.scenario-option.correct .option-letter { background: var(--green); color: white; }
-.scenario-option.wrong .option-letter { background: var(--accent); color: white; }
-.option-text { font-size: 15px; color: var(--white); line-height: 1.5; padding-top: 4px; }
-.feedback-msg {
-  padding: 14px 18px;
-  border-radius: var(--radius);
-  font-size: 14px;
-  font-weight: 500;
+.choice-text { font-size: 0.9375rem; color: var(--text-primary); line-height: 1.5; }
+.feedback-box {
   display: none;
-}
-.feedback-msg.show { display: block; }
-.feedback-msg.good { background: rgba(61,186,110,0.12); color: var(--green); border: 1px solid rgba(61,186,110,0.3); }
-.feedback-msg.bad  { background: rgba(200,75,47,0.1);  color: #ff8a6a; border: 1px solid rgba(200,75,47,0.3); }
-
-/* ── COMPLETION ── */
-.completion-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  background: rgba(61,186,110,0.12);
-  border: 1px solid rgba(61,186,110,0.3);
-  border-radius: 40px;
-  padding: 10px 20px;
-  color: var(--green);
-  font-weight: 600;
-  font-size: 14px;
-  width: fit-content;
-}
-.stat-row {
-  display: grid;
-  grid-template-columns: repeat(3,1fr);
-  gap: 14px;
-}
-.stat-card {
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.08);
+  margin-top: 1rem;
+  padding: 1rem 1.25rem;
   border-radius: var(--radius);
-  padding: 18px;
+  font-size: 0.9rem;
+}
+.feedback-box.correct {
+  display: block;
+  background: var(--green-soft);
+  border: 1px solid #BBF7D0;
+  color: var(--green);
+}
+.feedback-box.wrong {
+  display: block;
+  background: var(--red-soft);
+  border: 1px solid #FECACA;
+  color: var(--red);
+}
+
+.completion-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin: 1.5rem 0;
+}
+.completion-stat {
+  background: var(--bg-muted);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem;
   text-align: center;
 }
-.stat-val {
-  font-family: 'DM Serif Display', serif;
-  font-size: 32px;
+.completion-stat-val {
+  font-family: var(--mono);
+  font-size: 1.5rem;
+  font-weight: 700;
   color: var(--accent);
-  margin-bottom: 4px;
 }
-.stat-lbl { font-size: 12px; color: var(--dim); }
+.completion-stat-label {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
 
-.tech-stack {
+.demo-notice {
+  background: var(--amber-soft);
+  border: 1px solid #FDE68A;
+  border-radius: var(--radius);
+  padding: 0.875rem 1rem;
+  font-size: 0.8125rem;
+  color: var(--amber);
+  margin: 1rem 0;
   display: flex;
-  flex-wrap: wrap;
   gap: 8px;
-}
-.tech-pill {
-  background: rgba(26,58,92,0.8);
-  border: 1px solid rgba(255,255,255,0.12);
-  border-radius: 6px;
-  padding: 6px 12px;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 12px;
-  color: var(--gold);
-}
-
-.restart-row {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  padding-top: 8px;
-}
-.portfolio-link {
-  font-size: 13px;
-  color: var(--dim);
-}
-.portfolio-link a { color: var(--gold); text-decoration: none; }
-.portfolio-link a:hover { text-decoration: underline; }
-
-/* ── SIDEBAR: TECH PANEL ── */
-.tech-panel {
-  background: var(--code-bg);
-  padding: 28px 24px;
-  overflow-y: auto;
-  border-left: 1px solid rgba(255,255,255,0.06);
-  position: sticky;
-  top: 62px;
-  height: calc(100vh - 62px);
-}
-.panel-title {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
-  letter-spacing: 0.1em;
-  color: var(--accent);
-  text-transform: uppercase;
-  margin-bottom: 20px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.panel-title::after {
-  content: '';
-  flex: 1;
-  height: 1px;
-  background: rgba(255,255,255,0.06);
-}
-
-.log-entry {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  padding: 10px 0;
-  border-bottom: 1px solid rgba(255,255,255,0.04);
-  animation: slideIn 0.3s ease;
-}
-@keyframes slideIn {
-  from { opacity: 0; transform: translateX(-8px); }
-  to   { opacity: 1; transform: translateX(0); }
-}
-.log-time {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 10px;
-  color: rgba(255,255,255,0.2);
-}
-.log-event {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 12px;
-  color: var(--gold);
-}
-.log-detail {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
-  color: var(--dim);
-  padding-left: 12px;
-  border-left: 2px solid rgba(255,255,255,0.08);
-  line-height: 1.6;
-}
-.log-detail .val { color: var(--green); }
-.log-detail .key { color: #7eb8f7; }
-
-.code-block {
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.07);
-  border-radius: 8px;
-  padding: 14px;
-  margin-top: 12px;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
-  color: var(--dim);
-  line-height: 1.7;
-  white-space: pre;
-  overflow-x: auto;
-}
-.code-block .kw  { color: #cc99cd; }
-.code-block .fn  { color: #6fb3d2; }
-.code-block .str { color: #7ec699; }
-.code-block .cmt { color: rgba(255,255,255,0.2); }
-.code-block .var { color: var(--gold); }
-
-.panel-section {
-  margin-top: 20px;
-}
-.panel-section-title {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 10px;
-  color: rgba(255,255,255,0.3);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  margin-bottom: 8px;
-}
-
-/* ── RESPONSIVE ── */
-@media (max-width: 820px) {
-  .shell { grid-template-columns: 1fr; }
-  .tech-panel { display: none; }
-  .stage { padding: 32px 24px; }
-}
-
-
-/* ── HBT LABELED BUTTON ── */
-.hbt-btn-labeled {
-  width: auto !important;
-  height: 32px !important;
-  border-radius: 100px !important;
-  padding: 0 14px 0 10px !important;
-  gap: 6px !important;
-  flex-direction: row !important;
-  font-size: 0 !important;
-  display: inline-flex !important;
-}
-.hbt-btn-icon {
-  font-family: 'DM Serif Display', serif;
-  font-size: 15px;
-  font-weight: 600;
-  color: inherit;
-  line-height: 1;
-  width: 18px;
-  height: 18px;
-  display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0;
-}
-.hbt-btn-text {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.7);
-  white-space: nowrap;
-}
-.hbt-btn-labeled:hover .hbt-btn-text { color: #c84b2f; }
-@media(max-width:480px){
-  .hbt-btn-text { display: none; }
-  .hbt-btn-labeled { padding: 0 !important; width: 32px !important; justify-content: center; }
-}
-
-/* ── HOW I BUILT THIS DRAWER ── */
-.hbt-btn {
-  width: 32px; height: 32px; border-radius: 50%;
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.15);
-  color: rgba(255,255,255,0.6);
-  font-family: 'DM Serif Display', serif;
-  font-size: 15px; font-weight: 600;
-  cursor: pointer; display: flex;
-  align-items: center; justify-content: center;
-  transition: all 0.2s; flex-shrink: 0;
-  margin-left: 12px;
-}
-.hbt-btn:hover {
-  background: rgba(200,75,47,0.2);
-  border-color: rgba(200,75,47,0.5);
-  color: #c84b2f; transform: scale(1.08);
-}
-.hbt-overlay {
-  position: fixed; inset: 0;
-  background: rgba(0,0,0,0.5);
-  z-index: 900; opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.3s;
-  backdrop-filter: blur(3px);
-}
-.hbt-overlay.open { opacity: 1; pointer-events: all; }
-.hbt-drawer {
-  position: fixed; top: 0; right: 0; bottom: 0;
-  width: min(480px, 95vw);
-  background: #0d1520;
-  border-left: 1px solid rgba(255,255,255,0.08);
-  z-index: 901;
-  transform: translateX(100%);
-  transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
-  overflow-y: auto;
-  display: flex; flex-direction: column;
-}
-.hbt-drawer.open { transform: translateX(0); }
-.hbt-drawer-header {
-  padding: 22px 24px 18px;
-  border-bottom: 1px solid rgba(255,255,255,0.07);
-  display: flex; align-items: center; justify-content: space-between;
-  position: sticky; top: 0; background: #0d1520; z-index: 1;
-}
-.hbt-drawer-title {
-  font-family: 'DM Serif Display', serif;
-  font-size: 18px; color: #f0ede6;
-}
-.hbt-close {
-  width: 30px; height: 30px; border-radius: 50%;
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.1);
-  color: rgba(255,255,255,0.5); font-size: 16px;
-  cursor: pointer; display: flex;
-  align-items: center; justify-content: center;
-  transition: all 0.2s;
-}
-.hbt-close:hover { background: rgba(200,75,47,0.2); color: #c84b2f; }
-.hbt-body { padding: 24px; flex: 1; }
-.hbt-section { margin-bottom: 28px; }
-.hbt-section-label {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 10px; letter-spacing: 0.12em;
-  text-transform: uppercase; margin-bottom: 12px;
-  display: flex; align-items: center; gap: 8px;
-}
-.hbt-section-label.real   { color: #3dba6e; }
-.hbt-section-label.sim    { color: #d4af5f; }
-.hbt-section-label.prod   { color: #c84b2f; }
-.hbt-section-label::after { content:''; flex:1; height:1px; background: currentColor; opacity:0.2; }
-.hbt-item {
-  display: flex; gap: 10px; align-items: flex-start;
-  padding: 10px 12px; border-radius: 6px;
-  margin-bottom: 6px; font-size: 13px; line-height: 1.6;
-}
-.hbt-item.real { background: rgba(61,186,110,0.07); color: #a8d8b8; border: 1px solid rgba(61,186,110,0.12); }
-.hbt-item.sim  { background: rgba(212,175,95,0.07);  color: #d4c08a; border: 1px solid rgba(212,175,95,0.12); }
-.hbt-item.prod { background: rgba(200,75,47,0.07);   color: #e8a898; border: 1px solid rgba(200,75,47,0.12); }
-.hbt-item-icon { flex-shrink: 0; font-size: 14px; margin-top: 1px; }
-.hbt-arch {
-  background: #060d18;
-  border: 1px solid rgba(255,255,255,0.07);
-  border-radius: 8px; padding: 16px;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px; color: #8ba3be;
-  line-height: 1.9; margin-top: 8px;
-  white-space: pre;
-}
-.hbt-arch .node  { color: #7eb8f7; }
-.hbt-arch .arrow { color: #4a6280; }
-.hbt-arch .label { color: #3dba6e; }
-.hbt-arch .note  { color: #d4af5f; }
-.hbt-footer {
-  padding: 16px 24px;
-  border-top: 1px solid rgba(255,255,255,0.06);
-  font-size: 12px; color: #4a6280;
-  font-family: 'JetBrains Mono', monospace;
-}
-
-/* ── MOBILE OPTIMISATION ── */
-@media(max-width:600px){
-  .header { padding: 14px 16px; gap: 8px; }
-  .header-logo { font-size: 18px; }
-  .header-badge { font-size: 9px; padding: 4px 8px; letter-spacing: 0.05em; }
-  .header-by { display: none; }
-  .hbt-btn-wrap { margin-left: auto; }
-  .progress-step { height: 3px; border-radius: 2px; }
-  .screen-inner { padding: 24px 16px 40px !important; }
-  .screen-title { font-size: clamp(1.4rem, 5vw, 1.8rem) !important; }
-  .screen-body { font-size: 14px !important; }
-  .btn-primary, .btn-secondary { padding: 12px 20px !important; font-size: 13px !important; }
-  .nav-btns { gap: 8px !important; flex-wrap: wrap; }
-  .stage { padding: 20px 16px !important; }
-  .hbt-drawer { width: 100vw !important; }
-  /* Demo 1 specific */
-  .role-grid { grid-template-columns: 1fr 1fr !important; gap: 10px !important; }
-  .role-card { padding: 14px 12px !important; }
-  .name-input { font-size: 15px !important; }
-  .narration-box { font-size: 13px !important; padding: 14px !important; }
-  /* Demo 2 specific */
-  .tab-list { gap: 4px !important; overflow-x: auto; flex-wrap: nowrap !important; }
-  .tab-btn { padding: 8px 12px !important; font-size: 12px !important; white-space: nowrap; }
-  .dnd-wrapper { grid-template-columns: 1fr !important; }
-  .dnd-items { gap: 6px !important; }
-  .dnd-item { padding: 10px 12px !important; font-size: 13px !important; }
-  /* Demo 3 specific */
-  .terminal { padding: 14px !important; font-size: 11px !important; line-height: 1.5 !important; }
-  .terminal-line { word-break: break-all; }
-  .cmd-row { flex-direction: column; gap: 8px !important; align-items: stretch !important; }
-  .cmd-input { font-size: 12px !important; }
-  .pain-stat-num { font-size: 2rem !important; }
-  .result-stat-num { font-size: 2rem !important; }
+  align-items: flex-start;
 }
 </style>
 </head>
 <body>
 
-<header class="header">
-  <div class="header-logo">AT<span>.</span></div>
-  <div class="header-badge">Live Portfolio Demo</div>
-  <button class="hbt-btn hbt-btn-labeled" onclick="openHBT()" title="How I built this" aria-label="How I built this">
-    <span class="hbt-btn-icon">?</span>
-    <span class="hbt-btn-text">How I built this</span>
-  </button>
-  <div class="header-by">by <a href="https://abhishektrivedi.com" target="_blank">Abhishek Trivedi</a></div>
-</header>
+<nav class="demo-nav">
+  <a class="logo" href="https://abhishektrivedi.com">AT.</a>
+  <div class="nav-meta">
+    <span class="nav-label">Live Demo</span>
+    <span>Demo 01 / 05</span>
+    <a class="nav-back" href="https://abhishektrivedi.com/pages/work.html#case1">← Case Study</a>
+  </div>
+</nav>
 
-<div class="shell">
+<div class="demo-container">
 
-  <!-- ── MAIN STAGE ── -->
-  <main class="stage">
+  <!-- Step 01 — Entry -->
+  <div class="step-screen active" id="step1">
+    <div class="hero-tag">
+      <span class="code-label">// Step 01 — Learner Identification</span>
+      <span class="tag tag-accent">AI · Voice · Personalisation</span>
+    </div>
+    <h1>Before we begin, let's make this <em>yours.</em></h1>
+    <p>This course adapts its content, narration, and scenarios to your specific role. Enter your details below and watch it personalise in real time.</p>
 
-    <!-- SCREEN 1: Intake -->
-    <div class="screen active" id="screen-1">
-      <div class="progress-bar">
-        <div class="progress-step active"></div>
-        <div class="progress-step"></div>
-        <div class="progress-step"></div>
-        <div class="progress-step"></div>
-      </div>
-      <div class="screen-tag">// Step 01 — Learner Identification</div>
-      <h1 class="screen-title">Before we begin,<br>let's make this <span class="highlight">yours.</span></h1>
-      <p class="screen-body">This course adapts its content, narration, and scenarios to your specific role. Enter your details below and watch it personalise in real time.</p>
+    <hr>
 
-      <div class="form-group">
-        <label class="form-label">Your first name</label>
-        <input class="form-input" id="input-name" type="text" placeholder="e.g. Priya" autocomplete="off">
-      </div>
-
-      <div class="form-group">
-        <label class="form-label">Your role</label>
-        <div class="role-grid" id="role-grid">
-          <div class="role-card" data-role="L&D Manager" data-key="ldm" onclick="selectRole(this)">
-            <div class="role-card-title">L&D Manager</div>
-            <div class="role-card-desc">Oversee learning strategy & teams</div>
-          </div>
-          <div class="role-card" data-role="eLearning Developer" data-key="dev" onclick="selectRole(this)">
-            <div class="role-card-title">eLearning Developer</div>
-            <div class="role-card-desc">Build courses & interactive content</div>
-          </div>
-          <div class="role-card" data-role="Sales Professional" data-key="sales" onclick="selectRole(this)">
-            <div class="role-card-title">Sales Professional</div>
-            <div class="role-card-desc">Drive revenue & client relationships</div>
-          </div>
-          <div class="role-card" data-role="New Employee" data-key="new" onclick="selectRole(this)">
-            <div class="role-card-title">New Employee</div>
-            <div class="role-card-desc">Joining or recently onboarded</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="btn-row">
-        <button class="btn btn-primary" id="btn-start" onclick="startCourse()" disabled>
-          🔊 &nbsp;Begin my personalised course →
-        </button>
-      </div>
-
+    <div style="margin-bottom: 1rem;">
+      <label for="learner-name">Your first name</label>
+      <input type="text" id="learner-name" placeholder="e.g. Priya" maxlength="30">
     </div>
 
-    <!-- SCREEN 2: Personalised Intro -->
-    <div class="screen" id="screen-2">
-      <div class="progress-bar">
-        <div class="progress-step done"></div>
-        <div class="progress-step active"></div>
-        <div class="progress-step"></div>
-        <div class="progress-step"></div>
-      </div>
-      <div class="screen-tag">// Step 02 — Personalised Narration</div>
-      <h1 class="screen-title" id="s2-title">Welcome,<br><span class="name-inject" id="s2-name"></span></h1>
-
-      <div class="narration" id="s2-narration">
-        <div class="narration-tag">AI-generated narration · role-adapted</div>
-        <div class="narration-text" id="s2-text"></div>
-      </div>
-
-      <div style="
-        margin-top: 12px;
-        padding: 12px 16px;
-        background: rgba(212,175,95,0.07);
-        border: 1px solid rgba(212,175,95,0.2);
-        border-radius: 8px;
-        display: flex; gap: 12px; align-items: flex-start;
-      ">
-        <span style="font-size: 16px; flex-shrink: 0; margin-top: 1px;">⚠</span>
-        <p style="font-size: 12px; color: #8ba3be; line-height: 1.65; margin: 0;">
-          <strong style="color: #d4af5f; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; display: block; margin-bottom: 4px;">Demo voice — browser only</strong>
-          You're hearing your browser's built-in speech engine — functional, but robotic.
-          The real implementation uses <strong style="color: #f0ede6;">Murf AI</strong>, which generates
-          natural, human-sounding narration indistinguishable from a real voice actor.
-          This demo shows the <em>concept</em>; Murf delivers the experience.
-        </p>
-      </div>
-
-      <p class="screen-body" id="s2-body"></p>
-
-      <div class="btn-row">
-        <button class="btn btn-primary" onclick="goTo(3)">Continue to scenario →</button>
-        <button class="btn btn-ghost" onclick="goTo(1)">← Back</button>
+    <div style="margin-bottom: 1.5rem;">
+      <label>Your role</label>
+      <div class="role-grid">
+        <div class="role-card" data-role="L&D Manager" onclick="selectRole(this)">
+          <div class="role-name">L&D Manager</div>
+          <div class="role-desc">Oversee learning strategy & teams</div>
+        </div>
+        <div class="role-card" data-role="eLearning Developer" onclick="selectRole(this)">
+          <div class="role-name">eLearning Developer</div>
+          <div class="role-desc">Build courses & interactive content</div>
+        </div>
+        <div class="role-card" data-role="Sales Professional" onclick="selectRole(this)">
+          <div class="role-name">Sales Professional</div>
+          <div class="role-desc">Drive revenue & client relationships</div>
+        </div>
+        <div class="role-card" data-role="New Employee" onclick="selectRole(this)">
+          <div class="role-name">New Employee</div>
+          <div class="role-desc">Joining or recently onboarded</div>
+        </div>
       </div>
     </div>
 
-    <!-- SCREEN 3: Branching Scenario -->
-    <div class="screen" id="screen-3">
-      <div class="progress-bar">
-        <div class="progress-step done"></div>
-        <div class="progress-step done"></div>
-        <div class="progress-step active"></div>
-        <div class="progress-step"></div>
+    <button class="btn btn-primary" onclick="startCourse()">
+      🔊 Begin my personalised course →
+    </button>
+    <div id="step1-err" style="color:var(--red);font-size:0.8125rem;margin-top:8px;display:none;">Please enter your name and select a role.</div>
+  </div>
+
+  <!-- Step 02 — Narration -->
+  <div class="step-screen" id="step2">
+    <div class="step-dots">
+      <div class="step-dot done"></div>
+      <div class="step-dot active"></div>
+      <div class="step-dot"></div>
+      <div class="step-dot"></div>
+    </div>
+    <span class="code-label">// Step 02 — Personalised Narration</span>
+    <h2>Welcome, <span id="name-display" style="color:var(--accent)"></span></h2>
+    <div class="voice-indicator">
+      <span class="live-dot"></span>
+      <span>AI-generated narration · role-adapted</span>
+    </div>
+
+    <div class="narration-box" id="narration-text"></div>
+
+    <div class="demo-notice">
+      <span>⚠</span>
+      <span><strong>Demo voice — browser only.</strong> You're hearing your browser's built-in speech engine. The real implementation uses <strong>Murf AI</strong>, which generates natural, human-sounding narration indistinguishable from a real voice actor.</span>
+    </div>
+
+    <div style="display:flex;gap:10px;margin-top:1.5rem;">
+      <button class="btn btn-primary" onclick="speakNarration()">🔊 Play narration</button>
+      <button class="btn" onclick="goStep(3)">Continue to scenario →</button>
+      <button class="btn btn-ghost" onclick="goStep(1)">← Back</button>
+    </div>
+  </div>
+
+  <!-- Step 03 — Scenario -->
+  <div class="step-screen" id="step3">
+    <div class="step-dots">
+      <div class="step-dot done"></div>
+      <div class="step-dot done"></div>
+      <div class="step-dot active"></div>
+      <div class="step-dot"></div>
+    </div>
+    <span class="code-label">// Step 03 — Role-Adapted Scenario</span>
+    <h2 id="scenario-heading">Apply what you know.</h2>
+    <p id="scenario-stem" style="margin:0.75rem 0 1.25rem;"></p>
+
+    <div id="scenario-choices"></div>
+    <div class="feedback-box" id="scenario-feedback"></div>
+
+    <div style="display:flex;gap:10px;margin-top:1.5rem;">
+      <button class="btn btn-primary" id="scenario-next-btn" onclick="goStep(4)" style="display:none;">See my results →</button>
+      <button class="btn btn-ghost" onclick="goStep(2)">← Back</button>
+    </div>
+  </div>
+
+  <!-- Step 04 — Completion -->
+  <div class="step-screen" id="step4">
+    <div class="step-dots">
+      <div class="step-dot done"></div>
+      <div class="step-dot done"></div>
+      <div class="step-dot done"></div>
+      <div class="step-dot active"></div>
+    </div>
+    <span class="code-label">// Step 04 — Completion</span>
+    <div class="tag tag-green" style="margin-bottom:1rem;">Course Complete ✓</div>
+    <h1>Well done, <span id="name-end" style="color:var(--accent)"></span></h1>
+
+    <div class="completion-grid">
+      <div class="completion-stat">
+        <div class="completion-stat-val">100%</div>
+        <div class="completion-stat-label">Personalised</div>
       </div>
-      <div class="screen-tag">// Step 03 — Role-Adapted Scenario</div>
-      <h1 class="screen-title">Apply what<br>you <span class="highlight">know.</span></h1>
-
-      <div class="scenario-question" id="s3-question"></div>
-
-      <div class="scenario-options" id="s3-options"></div>
-
-      <div class="feedback-msg" id="s3-feedback"></div>
-
-      <div class="btn-row">
-        <button class="btn btn-primary" id="btn-next-s3" onclick="goTo(4)" style="display:none">See my results →</button>
-        <button class="btn btn-ghost" onclick="goTo(2)">← Back</button>
+      <div class="completion-stat">
+        <div class="completion-stat-val" id="result-label">—</div>
+        <div class="completion-stat-label">Scenario result</div>
+      </div>
+      <div class="completion-stat">
+        <div class="completion-stat-val">~3m</div>
+        <div class="completion-stat-label">Time to complete</div>
       </div>
     </div>
 
-    <!-- SCREEN 4: Completion -->
-    <div class="screen" id="screen-4">
-      <div class="progress-bar">
-        <div class="progress-step done"></div>
-        <div class="progress-step done"></div>
-        <div class="progress-step done"></div>
-        <div class="progress-step done"></div>
-      </div>
-      <div class="screen-tag">// Step 04 — Completion</div>
-
-      <div class="completion-badge">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-          <circle cx="8" cy="8" r="8" fill="#3dba6e" opacity="0.2"/>
-          <path d="M4 8l3 3 5-5" stroke="#3dba6e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-        Course Complete
-      </div>
-
-      <h1 class="screen-title">Well done,<br><span class="name-inject" id="s4-name"></span></h1>
-
-      <p class="screen-body" id="s4-body"></p>
-
-      <div class="stat-row">
-        <div class="stat-card">
-          <div class="stat-val">100%</div>
-          <div class="stat-lbl">Personalised</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-val" id="s4-score">—</div>
-          <div class="stat-lbl">Scenario result</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-val">~3m</div>
-          <div class="stat-lbl">Time to complete</div>
-        </div>
-      </div>
-
-      <div>
-        <div class="panel-section-title" style="font-family:'JetBrains Mono',monospace;font-size:10px;color:rgba(255,255,255,0.3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px;">Built with</div>
-        <div class="tech-stack">
-          <span class="tech-pill">Articulate Storyline 360</span>
-          <span class="tech-pill">JavaScript</span>
-          <span class="tech-pill">REST API</span>
-          <span class="tech-pill">Enterprise LMS</span>
-          <span class="tech-pill">Murf AI</span>
-          <span class="tech-pill">xAPI</span>
-        </div>
-      </div>
-
-      <div class="restart-row">
-        <button class="btn btn-primary" onclick="restart()">↺ Try a different role</button>
-        <div class="portfolio-link">See the full case study at <a href="https://abhishektrivedi.com/pages/work.html" target="_blank">abhishektrivedi.com</a></div>
-      </div>
+    <p style="margin-bottom:1.25rem;"><strong style="color:var(--text-primary);">Built with</strong></p>
+    <div class="built-with">
+      <span class="tag">Articulate Storyline 360</span>
+      <span class="tag">JavaScript</span>
+      <span class="tag">REST API</span>
+      <span class="tag">Murf AI</span>
+      <span class="tag">Enterprise LMS</span>
+      <span class="tag">xAPI</span>
     </div>
 
-  </main>
-
-  <!-- ── TECH PANEL ── -->
-  <aside class="tech-panel" id="tech-panel">
-    <div class="panel-title">Under the hood</div>
-    <div id="log-container"></div>
-
-    <div class="panel-section" id="code-section" style="display:none">
-      <div class="panel-section-title">Storyline JS trigger</div>
-      <div class="code-block" id="code-display"></div>
+    <div style="display:flex;gap:10px;margin-top:2rem;">
+      <button class="btn btn-primary" onclick="restart()">↺ Try a different role</button>
+      <a class="btn" href="https://abhishektrivedi.com/pages/work.html#case1">See full case study →</a>
     </div>
-  </aside>
+  </div>
+
+  <!-- Under the hood -->
+  <hr style="margin-top:3rem;">
+  <div style="display:flex;align-items:center;justify-content:space-between;">
+    <span class="code-label" style="margin:0;">Under the hood</span>
+    <button class="hood-btn" onclick="toggleHood(this)">? How I built this</button>
+  </div>
+  <div class="hood-drawer" id="hood-drawer">
+    <h3>How I Built This</h3>
+    <div class="hood-section-title">✓ What's real in this demo</div>
+    <ul class="hood-list">
+      <li data-icon="🔊">Voice narration via Web Speech API — your browser speaks your name and role</li>
+      <li data-icon="⚙">Role-adaptive content — narration, scenario question and feedback all change per role</li>
+      <li data-icon="📋">xAPI-style log structure — fires real event names, verbs and data payloads</li>
+      <li data-icon="🔀">Branching logic — correct/incorrect paths with consequence feedback</li>
+    </ul>
+    <div class="hood-section-title">~ What's simulated</div>
+    <ul class="hood-list">
+      <li data-icon="🌐">The enterprise LMS API call — no real LMS connected; data comes from form input</li>
+      <li data-icon="🎙">Murf AI voice — browser speech engine is a placeholder; production used Murf AI</li>
+      <li data-icon="🔑">Learner ID and prior completions — randomised on each session</li>
+    </ul>
+    <div class="hood-section-title">→ Production architecture</div>
+    <pre>Storyline 360 ──OnEnter──▶ JS trigger
+│
+└──▶ fetch() ──▶ Enterprise LMS REST API
+│  // returns learnerName, role, dept
+└──▶ Murf AI API ──▶ audio blob
+│  // POST { text, voiceId, style }
+└──▶ Audio element ──▶ plays in slide
+│
+└──▶ SetVar() ──▶ Storyline adapts content</pre>
+  </div>
 
 </div>
 
+<!-- Next case -->
+<div class="demo-container">
+  <a class="next-case" href="https://abhishektrivedi.com/demo2/index.html">
+    <div>
+      <div class="next-case-label">Next → Case Study 02</div>
+      <div class="next-case-title">Building the Engine, Not Just the Car</div>
+      <div class="next-case-desc">Template system · 4 interaction patterns · live Storyline JS</div>
+      <div class="built-with" style="margin-top:8px;">
+        <span class="tag">Storyline 360</span>
+        <span class="tag">JavaScript</span>
+        <span class="tag">Systems Design</span>
+      </div>
+    </div>
+    <div class="next-case-arrow">→</div>
+  </a>
+</div>
+
+<footer class="demo-footer">
+  <span>Built by <a href="https://abhishektrivedi.com">Abhishek Trivedi</a> · Learning Experience Technologist</span>
+  <span>Pune, India</span>
+</footer>
+
 <script>
-// ── STATE ──
-const state = {
-  name: '',
-  role: '',
-  roleKey: '',
-  answered: false,
-  correct: false,
-  startTime: Date.now()
+let selectedRole = null;
+let scenarioCorrect = false;
+
+const roleNarrations = {
+  'L&D Manager': (name) => `Welcome back, ${name}. As an L&D Manager, you already know that generic training rarely moves the needle. This module is about something different — a Storyline course that fetches live learner data from your enterprise LMS and uses Murf AI to generate personalised narration at scale. No custom platform. No rebuilding infrastructure. Just the tools your team already has.`,
+  'eLearning Developer': (name) => `Hey ${name} — fellow builder here. What you're about to step through is a Storyline course with embedded JavaScript making live API calls to an enterprise LMS. The learner data it returns gets piped into Murf AI, which generates personalised audio in real time. The interesting part isn't the voice — it's the architecture. Let's dig in.`,
+  'Sales Professional': (name) => `${name}, every customer you speak to has a different context, different needs, different way of absorbing information. This module demonstrates a training system that works the same way — it knows who you are before the first slide loads, and speaks to you directly. That's the difference between a course and a conversation.`,
+  'New Employee': (name) => `Welcome to the team, ${name}. Starting somewhere new means a lot of onboarding at once. This module is part of a personalised learning system that adapts to where you are in your journey — your role, your department, your prior completions. You're not getting the same content as everyone else. You're getting yours.`
 };
 
-// ── ROLE CONTENT MAP ──
-const content = {
-  ldm: {
-    narration: `Hi <span class="hi">{NAME}</span> — as an L&D Manager, you know that the hardest part isn't building the course. It's building the right course for the right person, at scale.<br><br>This module focuses on learning infrastructure: the systems that make personalisation possible without multiplying your team's workload.`,
-    body: `You'll explore how connecting your authoring tools to your LMS via API can unlock learner data — and how that data can drive adaptive content decisions automatically.`,
-    question: `You're designing an onboarding programme for 200 new hires across 4 roles. Your current approach is one-size-fits-all. A stakeholder asks: "Can we personalise this without tripling the build time?" As the L&D Manager, what's your recommended approach?`,
-    options: [
-      { text: "Build 4 completely separate courses — one per role.", correct: false },
-      { text: "Use a single course with role-based variables that pull learner data from the LMS via API, adapting narration and scenarios dynamically.", correct: true },
-      { text: "Add a short quiz at the start and redirect to different PDFs.", correct: false },
-      { text: "Personalisation isn't worth the complexity — keep it generic.", correct: false },
+const roleScenarios = {
+  'L&D Manager': {
+    heading: 'Apply what you know.',
+    stem: 'Your CTO asks for a quarterly report on training effectiveness. You have xAPI data from the new personalised course. What's the strongest argument for continuing the programme?',
+    choices: [
+      { letter: 'A', text: 'Completion rates are up 12% from last quarter.', correct: false },
+      { letter: 'B', text: 'xAPI data shows learners in high-risk roles are spending 40% longer on compliance scenarios — demonstrating the personalisation is driving deeper engagement where it matters.', correct: true },
+      { letter: 'C', text: 'Learner satisfaction scores averaged 4.2 out of 5.', correct: false },
     ],
-    feedback_good: "Exactly right. One course, dynamically adapted via LMS data — this is what separates scalable L&D infrastructure from content sprawl.",
-    feedback_bad: "Not quite. The most scalable approach uses a single course with dynamic variables fed from LMS learner data — avoiding content duplication while still personalising the experience.",
-    completion: `You've seen how infrastructure thinking — not more content — is what makes personalised learning possible at scale. As an L&D Manager, this is the shift that changes everything.`,
+    correctFeedback: 'Correct. Behavioural data tied to business-critical roles is the strongest proof point. Completion rates and satisfaction scores are vanity metrics — xAPI data shows what learners actually did.',
+    wrongFeedback: 'Not the strongest answer. Completion rates and satisfaction scores are useful, but they don\'t tell the CTO what learners actually did differently. The xAPI behavioural data makes the case for real impact.'
   },
-  dev: {
-    narration: `Hey <span class="hi">{NAME}</span> — as an eLearning Developer, you've probably hit the ceiling of what Storyline's native triggers can do. The good news: JavaScript changes that completely.<br><br>This module shows how a few lines of JS, an API endpoint, and learner data from your LMS can make your courses feel like they were built for each individual.`,
-    body: `You'll see the actual trigger pattern used to fetch learner data from the enterprise LMS at course launch — and how that data is passed to Murf AI to generate personalised narration dynamically.`,
-    question: `You're building a course in Storyline 360 and want it to greet the learner by name and job title on slide 1. The LMS stores this data. What's the correct technical approach?`,
-    options: [
-      { text: "Use Storyline's built-in 'Player Name' variable — it already pulls from the LMS.", correct: false },
-      { text: "Add a JavaScript trigger on slide 1 that calls GetValue() to retrieve LMS learner data, then passes it into a Storyline variable used in the text layer.", correct: true },
-      { text: "Ask learners to type their name manually on a form slide.", correct: false },
-      { text: "Create a separate version of the course for each learner.", correct: false },
+  'eLearning Developer': {
+    heading: 'Apply what you know.',
+    stem: 'You\'re implementing a Storyline course that fetches learner data from an LMS via JavaScript. The fetch() call is timing out on some enterprise networks. What\'s the most robust solution?',
+    choices: [
+      { letter: 'A', text: 'Add a try/catch and fall back to a default learner name if the API call fails.', correct: true },
+      { letter: 'B', text: 'Increase the timeout to 30 seconds.', correct: false },
+      { letter: 'C', text: 'Block the course from loading until the API responds.', correct: false },
     ],
-    feedback_good: "Correct. GetValue() on the learner_name and job_title SCORM data model elements — piped into Storyline variables — is the clean, scalable pattern.",
-    feedback_bad: "Not quite. Storyline's native player name is unreliable across LMS platforms. The correct approach is a JS trigger using GetValue() on the SCORM data model, piped into a custom Storyline variable.",
-    completion: `You've seen the core JS pattern that makes LMS-driven personalisation work inside Storyline. No custom platform, no external authoring tool — just the tools you already have.`,
+    correctFeedback: 'Exactly right. Graceful degradation is the correct pattern — the course works for every learner, and personalisation is a progressive enhancement. Never make a course dependent on an external API succeeding.',
+    wrongFeedback: 'Close, but not quite. Increasing timeouts or blocking load creates poor UX. The correct pattern is graceful degradation — fall back to defaults if the API fails, and treat personalisation as enhancement, not dependency.'
   },
-  sales: {
-    narration: `Hi <span class="hi">{NAME}</span> — as a Sales Professional, your time is the scarcest resource. Generic training that covers topics you already know isn't just boring — it's expensive.<br><br>This module is about what adaptive learning looks like from the learner's perspective: training that respects what you already know and surfaces only what's relevant to your role and territory.`,
-    body: `You'll experience how a course can use your role data to skip irrelevant sections, surface the right product scenarios, and adapt its feedback to how you actually sell.`,
-    question: `You've just launched into a new territory. Your company has a 90-minute product training course. As a Sales Professional who already knows the product basics, what would you find most valuable?`,
-    options: [
-      { text: "Complete the full 90-minute course from start to finish — consistency matters.", correct: false },
-      { text: "A course that detects your existing knowledge level and routes you directly to territory-specific competitive scenarios and objection handling.", correct: true },
-      { text: "Read the product one-pager instead.", correct: false },
-      { text: "Skip training and learn on the job.", correct: false },
+  'Sales Professional': {
+    heading: 'Apply what you know.',
+    stem: 'A prospective client says: "We already have a great LMS. Why would we need something like this?" How do you respond?',
+    choices: [
+      { letter: 'A', text: '"Our system integrates directly with your existing LMS — we\'re not replacing it, we\'re making it smarter."', correct: true },
+      { letter: 'B', text: '"Most LMS platforms are quite limited. Yours probably is too."', correct: false },
+      { letter: 'C', text: '"You don\'t need to change anything — our tool sits on top of your current setup."', correct: false },
     ],
-    feedback_good: "Right — adaptive routing based on role and prior knowledge is exactly what makes training feel worth your time. That's the promise of personalised eLearning.",
-    feedback_bad: "Think about what would genuinely change your performance fastest. Targeted, role-specific content that skips what you already know is almost always more effective than a linear course.",
-    completion: `You've experienced what personalised learning feels like when it's actually built around you. No wasted time, no irrelevant content — just what matters for your role.`,
+    correctFeedback: 'Strong. Positioning as an enhancement to existing infrastructure, not a replacement, removes the biggest objection. The client keeps their LMS investment and gains new capability.',
+    wrongFeedback: 'That framing either dismisses the client\'s existing investment or undersells the value. The strongest position acknowledges their LMS and shows how this makes it more powerful.'
   },
-  new: {
-    narration: `Welcome, <span class="hi">{NAME}</span> — starting somewhere new can be overwhelming, especially when onboarding content feels like it was written for someone else.<br><br>This module is designed specifically around your experience level. It won't assume you know the jargon, the systems, or the internal processes yet — and it won't rush you through content you need time with.`,
-    body: `As a new employee, your course experience will include more context, clearer definitions, and check-in moments that let you pause and reflect before moving forward.`,
-    question: `It's your second week. You're asked to complete a compliance training module. You encounter a term you don't recognise. What's the ideal course behaviour?`,
-    options: [
-      { text: "The course shows a tooltip or definition inline, without breaking your flow or sending you to a separate glossary PDF.", correct: true },
-      { text: "The course moves on — you can Google it later.", correct: false },
-      { text: "A pop-up interrupts the course and forces you to read a 10-page policy document.", correct: false },
-      { text: "The course fails you for not knowing the term.", correct: false },
+  'New Employee': {
+    heading: 'Apply what you know.',
+    stem: 'You\'ve just completed your first module in the personalised onboarding programme. A colleague asks what made it different from standard training. What\'s the most accurate answer?',
+    choices: [
+      { letter: 'A', text: '"It had better graphics than usual."', correct: false },
+      { letter: 'B', text: '"The course knew my name and role before I started — the content and narration adapted to what was relevant for me specifically."', correct: true },
+      { letter: 'C', text: '"It was shorter than most courses I\'ve done."', correct: false },
     ],
-    feedback_good: "Exactly. Inline contextual support — without breaking flow — is the gold standard for onboarding experiences. It respects the learner while keeping momentum.",
-    feedback_bad: "As a new employee, inline support that doesn't break flow is almost always the best answer. Sending people out of the course or ignoring their confusion both hurt learning outcomes.",
-    completion: `You've seen how a well-designed onboarding experience adapts to where you actually are — not where the course assumes you should be. That's what makes new employees productive faster.`,
+    correctFeedback: 'Exactly. The personalisation is structural — the course fetched your identity from the LMS and adapted at the content and narration level, not just cosmetically.',
+    wrongFeedback: 'That misses the key feature. The course was personalised at a structural level — it knew who you were before you started and adapted the content accordingly, not just the visuals.'
   }
 };
 
-// ── UTILS ──
-function now() {
-  const d = new Date();
-  return d.toTimeString().slice(0,8);
-}
-
-function log(event, details) {
-  const container = document.getElementById('log-container');
-  const entry = document.createElement('div');
-  entry.className = 'log-entry';
-  const detailHTML = details.map(([k,v]) =>
-    `<span class="key">${k}</span>: <span class="val">${v}</span>`
-  ).join('\n');
-  entry.innerHTML = `
-    <div class="log-time">${now()}</div>
-    <div class="log-event">${event}</div>
-    <div class="log-detail">${detailHTML}</div>
-  `;
-  container.prepend(entry);
-}
-
-function showCode(code) {
-  const sec = document.getElementById('code-section');
-  const disp = document.getElementById('code-display');
-  sec.style.display = 'block';
-  disp.innerHTML = code;
-}
-
-// ── ROLE SELECTION ──
 function selectRole(el) {
   document.querySelectorAll('.role-card').forEach(c => c.classList.remove('selected'));
   el.classList.add('selected');
-  state.role = el.dataset.role;
-  state.roleKey = el.dataset.key;
-  checkReady();
-  log('learner.role_selected', [['role', state.role], ['key', state.roleKey]]);
-}
-
-document.getElementById('input-name').addEventListener('input', function() {
-  state.name = this.value.trim();
-  checkReady();
-  if (state.name.length > 1) {
-    log('learner.name_entered', [['name', state.name], ['chars', state.name.length]]);
-  }
-});
-
-function checkReady() {
-  const btn = document.getElementById('btn-start');
-  btn.disabled = !(state.name.length > 0 && state.role);
-}
-
-// ── NAVIGATION ──
-function goTo(n) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById(`screen-${n}`).classList.add('active');
-
-  if (n === 2) buildScreen2();
-  if (n === 3) buildScreen3();
-  if (n === 4) buildScreen4();
-}
-
-// ── VOICE ──
-function speakWelcome(name, role, onDone) {
-  if (!('speechSynthesis' in window)) { onDone && onDone(); return; }
-  window.speechSynthesis.cancel();
-  const msg = new SpeechSynthesisUtterance(
-    `Welcome, ${name}. This course has been personalised for you as a ${role}.`
-  );
-  const trySpeak = () => {
-    const voices = window.speechSynthesis.getVoices();
-    const preferred = voices.find(v =>
-      /samantha|daniel|karen|moira|google us|google uk/i.test(v.name)
-    ) || voices.find(v => v.lang && v.lang.startsWith('en')) || voices[0];
-    if (preferred) msg.voice = preferred;
-    msg.rate   = 0.90;
-    msg.pitch  = 1.0;
-    msg.volume = 1.0;
-    msg.onend  = () => { onDone && onDone(); };
-    msg.onerror = () => { onDone && onDone(); };
-    window.speechSynthesis.speak(msg);
-  };
-  // Voices may not be loaded yet on first call
-  if (window.speechSynthesis.getVoices().length > 0) {
-    trySpeak();
-  } else {
-    window.speechSynthesis.onvoiceschanged = trySpeak;
-  }
+  selectedRole = el.dataset.role;
 }
 
 function startCourse() {
-  const btn = document.getElementById('btn-start');
-  btn.disabled = true;
-  btn.innerHTML = '🔊 &nbsp;Generating your personalised welcome...';
-
-  log('lms.api_call', [
-    ['endpoint', '/api/learner/profile'],
-    ['method', 'GET'],
-    ['learner_id', 'session_' + Math.random().toString(36).slice(2,8)],
-    ['status', '200 OK']
-  ]);
-
-  setTimeout(() => {
-    log('lms.data_received', [
-      ['name', state.name],
-      ['role', state.role],
-      ['department', 'auto-detected'],
-      ['prior_completions', Math.floor(Math.random()*8)]
-    ]);
-    log('voice.generating', [
-      ['engine', 'Web Speech API'],
-      ['text', `Welcome, ${state.name}. Personalised for ${state.role}.`],
-      ['status', 'speaking...']
-    ]);
-    showCode(`<span class="cmt">// Personalised voice narration via Speech API</span>
-<span class="kw">const</span> <span class="var">msg</span> = <span class="kw">new</span> <span class="fn">SpeechSynthesisUtterance</span>(
-  <span class="str">\`Welcome, \${learnerName}. This course has</span>
-  <span class="str">been personalised for you as a \${learnerRole}.\`</span>
-);
-<span class="var">msg</span>.voice = <span class="fn">getBestVoice</span>(<span class="str">'en'</span>);
-<span class="var">msg</span>.rate  = <span class="str">0.90</span>;
-<span class="fn">speechSynthesis</span>.<span class="fn">speak</span>(<span class="var">msg</span>);`);
-
-    speakWelcome(state.name, state.role, () => {
-      log('voice.complete', [
-        ['status', '✓ audio delivered to learner'],
-        ['next', 'loading personalised content']
-      ]);
-      btn.disabled = false;
-      btn.innerHTML = 'Start my personalised course →';
-      goTo(2);
-    });
-  }, 500);
+  const name = document.getElementById('learner-name').value.trim();
+  if (!name || !selectedRole) {
+    document.getElementById('step1-err').style.display = 'block';
+    return;
+  }
+  document.getElementById('step1-err').style.display = 'none';
+  document.getElementById('name-display').textContent = name;
+  document.getElementById('name-end').textContent = name;
+  document.getElementById('narration-text').textContent = roleNarrations[selectedRole](name);
+  buildScenario(selectedRole);
+  goStep(2);
 }
 
-// ── SCREEN 2 ──
-function buildScreen2() {
-  const c = content[state.roleKey];
-  document.getElementById('s2-name').textContent = state.name;
-  document.getElementById('s2-text').innerHTML = c.narration.replace('{NAME}', state.name);
-  document.getElementById('s2-body').innerHTML = c.body;
-
-  log('narration.generated', [
-    ['engine', 'Murf AI'],
-    ['voice', 'en-IN-rohan'],
-    ['adapted_for', state.role],
-    ['tokens', Math.floor(Math.random()*80+120)]
-  ]);
-  showCode(`<span class="cmt">// Murf AI narration generation</span>
-<span class="kw">const</span> <span class="var">narration</span> = <span class="kw">await</span> <span class="fn">fetch</span>(<span class="str">'https://api.murf.ai/v1/speech/generate'</span>, {
-  method: <span class="str">'POST'</span>,
-  body: <span class="fn">JSON.stringify</span>({
-    voiceId: <span class="str">'en-IN-rohan'</span>,
-    text: <span class="fn">buildScript</span>(<span class="var">learnerName</span>, <span class="var">learnerRole</span>),
-    style: <span class="str">'Conversational'</span>
-  })
-});`);
-}
-
-// ── SCREEN 3 ──
-function buildScreen3() {
-  const c = content[state.roleKey];
-  document.getElementById('s3-question').textContent = c.question;
-
-  const container = document.getElementById('s3-options');
+function buildScenario(role) {
+  const s = roleScenarios[role];
+  document.getElementById('scenario-heading').textContent = s.heading;
+  document.getElementById('scenario-stem').textContent = s.stem;
+  const container = document.getElementById('scenario-choices');
   container.innerHTML = '';
-  const letters = ['A','B','C','D'];
-
-  // Shuffle options
-  const opts = [...c.options].map((o,i) => ({...o, orig: i}));
-  opts.sort(() => Math.random() - 0.5);
-
-  opts.forEach((opt, i) => {
-    const el = document.createElement('div');
-    el.className = 'scenario-option';
-    el.innerHTML = `<div class="option-letter">${letters[i]}</div><div class="option-text">${opt.text}</div>`;
-    el.onclick = () => answerQuestion(el, opt.correct, c);
-    container.appendChild(el);
+  s.choices.forEach((c, i) => {
+    const div = document.createElement('div');
+    div.className = 'scenario-choice';
+    div.innerHTML = `<span class="choice-letter">${c.letter}</span><span class="choice-text">${c.text}</span>`;
+    div.onclick = () => selectChoice(c.correct, s, i);
+    container.appendChild(div);
   });
-
-  log('scenario.loaded', [
-    ['role_adapted', state.role],
-    ['question_variant', state.roleKey],
-    ['options_shuffled', 'true']
-  ]);
+  document.getElementById('scenario-feedback').className = 'feedback-box';
+  document.getElementById('scenario-feedback').textContent = '';
+  document.getElementById('scenario-next-btn').style.display = 'none';
+  scenarioCorrect = false;
 }
 
-function answerQuestion(el, correct, c) {
-  if (state.answered) return;
-  state.answered = true;
-  state.correct = correct;
+function selectChoice(correct, s, idx) {
+  const choices = document.querySelectorAll('.scenario-choice');
+  choices.forEach(c => { c.classList.remove('selected-correct','selected-wrong'); c.onclick = null; });
+  choices[idx].classList.add(correct ? 'selected-correct' : 'selected-wrong');
+  const fb = document.getElementById('scenario-feedback');
+  fb.className = 'feedback-box ' + (correct ? 'correct' : 'wrong');
+  fb.textContent = correct ? s.correctFeedback : s.wrongFeedback;
+  scenarioCorrect = correct;
+  document.getElementById('result-label').textContent = correct ? '✓ Correct' : '✗ Incorrect';
+  document.getElementById('scenario-next-btn').style.display = 'inline-flex';
+}
 
-  const allOpts = document.querySelectorAll('.scenario-option');
-  el.classList.add(correct ? 'correct' : 'wrong');
-
-  if (!correct) {
-    allOpts.forEach(o => {
-      if (o.querySelector('.option-text').textContent === c.options.find(x=>x.correct).text) {
-        o.classList.add('correct');
-      }
-    });
+function speakNarration() {
+  if ('speechSynthesis' in window) {
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(document.getElementById('narration-text').textContent);
+    u.rate = 0.95; u.pitch = 1;
+    window.speechSynthesis.speak(u);
   }
-
-  const fb = document.getElementById('s3-feedback');
-  fb.textContent = correct ? c.feedback_good : c.feedback_bad;
-  fb.className = `feedback-msg show ${correct ? 'good' : 'bad'}`;
-
-  document.getElementById('btn-next-s3').style.display = 'inline-flex';
-
-  log('xapi.statement_sent', [
-    ['verb', 'answered'],
-    ['result', correct ? 'correct' : 'incorrect'],
-    ['score', correct ? '100' : '0'],
-    ['completion', 'true']
-  ]);
-  showCode(`<span class="cmt">// xAPI statement — answer recorded</span>
-<span class="fn">ADL.XAPIWrapper.sendStatement</span>({
-  verb: { id: <span class="str">"http://adlnet.gov/expapi/verbs/answered"</span> },
-  object: { id: <span class="str">"scenario_${state.roleKey}_q1"</span> },
-  result: {
-    success: <span class="str">${correct}</span>,
-    score: { scaled: <span class="str">${correct ? 1 : 0}</span> },
-    completion: <span class="str">true</span>
-  }
-});`);
 }
 
-// ── SCREEN 4 ──
-function buildScreen4() {
-  const c = content[state.roleKey];
-  document.getElementById('s4-name').textContent = state.name;
-  document.getElementById('s4-body').textContent = c.completion;
-  document.getElementById('s4-score').textContent = state.correct ? '✓' : '✗';
-
-  log('lms.completion_posted', [
-    ['learner', state.name],
-    ['role', state.role],
-    ['score', state.correct ? '100%' : '0%'],
-    ['status', 'completed'],
-    ['endpoint', '/lms/scorm/complete']
-  ]);
+function goStep(n) {
+  document.querySelectorAll('.step-screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('step' + n).classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// ── RESTART ──
 function restart() {
-  state.name = ''; state.role = ''; state.roleKey = '';
-  state.answered = false; state.correct = false;
-  document.getElementById('input-name').value = '';
+  selectedRole = null;
   document.querySelectorAll('.role-card').forEach(c => c.classList.remove('selected'));
-  document.getElementById('btn-start').disabled = true;
-  document.getElementById('s3-feedback').className = 'feedback-msg';
-  document.getElementById('btn-next-s3').style.display = 'none';
-  document.getElementById('code-section').style.display = 'none';
-  document.getElementById('log-container').innerHTML = '';
-  goTo(1);
-  log('session.restarted', [['at', now()], ['reason', 'user_action']]);
+  document.getElementById('learner-name').value = '';
+  goStep(1);
 }
 
-// Initial log
-log('demo.initialised', [
-  ['version', '1.0'],
-  ['built_by', 'Abhishek Trivedi'],
-  ['stack', 'HTML5 + JS + API simulation'],
-  ['purpose', 'portfolio_demo']
-]);
-
-// ── HOW I BUILT THIS ──
-function openHBT() {
-  document.getElementById('hbt-overlay').classList.add('open');
-  document.getElementById('hbt-drawer').classList.add('open');
-  document.body.style.overflow = 'hidden';
+function toggleHood(btn) {
+  const d = document.getElementById('hood-drawer');
+  d.classList.toggle('open');
+  btn.textContent = d.classList.contains('open') ? '✕ Close' : '? How I built this';
 }
-function closeHBT() {
-  document.getElementById('hbt-overlay').classList.remove('open');
-  document.getElementById('hbt-drawer').classList.remove('open');
-  document.body.style.overflow = '';
-}
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeHBT(); });
 </script>
-
-<div class="hbt-overlay" id="hbt-overlay" onclick="closeHBT()"></div>
-<div class="hbt-drawer" id="hbt-drawer">
-  <div class="hbt-drawer-header">
-    <div class="hbt-drawer-title">How I Built This</div>
-    <button class="hbt-close" onclick="closeHBT()">✕</button>
-  </div>
-  <div class="hbt-body">
-
-    <div class="hbt-section">
-      <div class="hbt-section-label real">✓ What's real in this demo</div>
-      <div class="hbt-item real"><span class="hbt-item-icon">🔊</span><span>Voice narration via <strong>Web Speech API</strong> — your browser speaks your name and role on click</span></div>
-      <div class="hbt-item real"><span class="hbt-item-icon">⚙</span><span>Role-adaptive content — narration, scenario question and feedback all change based on selected role</span></div>
-      <div class="hbt-item real"><span class="hbt-item-icon">📋</span><span>xAPI-style log structure — the sidebar fires real event names, verbs and data payloads matching actual xAPI spec</span></div>
-      <div class="hbt-item real"><span class="hbt-item-icon">🔀</span><span>Branching logic — correct/incorrect paths with consequence feedback, same pattern used in Storyline</span></div>
-    </div>
-
-    <div class="hbt-section">
-      <div class="hbt-section-label sim">~ What's simulated</div>
-      <div class="hbt-item sim"><span class="hbt-item-icon">🌐</span><span>The enterprise LMS API call — no real LMS is connected; learner name and role come from the form input</span></div>
-      <div class="hbt-item sim"><span class="hbt-item-icon">🎙</span><span>Murf AI voice — the browser speech engine is a placeholder; the production version used Murf AI for natural human-quality narration</span></div>
-      <div class="hbt-item sim"><span class="hbt-item-icon">🔑</span><span>Learner ID and prior completions — randomised on each session to illustrate the data structure</span></div>
-    </div>
-
-    <div class="hbt-section">
-      <div class="hbt-section-label prod">→ Production architecture</div>
-      <div class="hbt-arch"><span class="node">Storyline 360</span> <span class="arrow">──OnEnter──▶</span> <span class="node">JS trigger</span>
-  <span class="arrow">│</span>
-  <span class="arrow">└──▶</span> <span class="node">fetch()</span> <span class="arrow">──▶</span> <span class="node">Enterprise LMS REST API</span>
-         <span class="arrow">│</span>           <span class="note">// returns learnerName, role, dept</span>
-         <span class="arrow">└──▶</span> <span class="node">Murf AI API</span> <span class="arrow">──▶</span> <span class="label">audio blob</span>
-                    <span class="arrow">│</span>    <span class="note">// POST { text, voiceId, style }</span>
-                    <span class="arrow">└──▶</span> <span class="node">Audio element</span> <span class="arrow">──▶</span> <span class="label">plays in slide</span>
-  <span class="arrow">│</span>
-  <span class="arrow">└──▶</span> <span class="node">SetVar()</span> <span class="arrow">──▶</span> <span class="label">Storyline adapts content</span></div>
-    </div>
-
-  </div>
-  <div class="hbt-footer">Built by Abhishek Trivedi · abhishektrivedi.com</div>
-</div>
-
-<!-- ── PORTFOLIO PROTECTION ── -->
-<script>
-(function() {
-  'use strict';
-
-  // ── 1. Disable right-click context menu ──
-  document.addEventListener('contextmenu', function(e) {
-    e.preventDefault();
-    showWarning();
-    return false;
-  });
-
-  // ── 2. Block keyboard shortcuts ──
-  document.addEventListener('keydown', function(e) {
-    const key = e.key ? e.key.toLowerCase() : '';
-    const ctrl = e.ctrlKey || e.metaKey;
-
-    // Ctrl+U (view source), Ctrl+S (save), Ctrl+A (select all)
-    // Ctrl+Shift+I/J/C (DevTools), Ctrl+P (print)
-    if (ctrl && ['u','s','a','p'].includes(key)) {
-      e.preventDefault(); showWarning(); return false;
-    }
-    if (ctrl && e.shiftKey && ['i','j','c','k'].includes(key)) {
-      e.preventDefault(); showWarning(); return false;
-    }
-    // F12 (DevTools)
-    if (e.key === 'F12') {
-      e.preventDefault(); showWarning(); return false;
-    }
-    // Ctrl+Shift+Delete (clear history — sometimes used to reset)
-    if (ctrl && e.shiftKey && e.key === 'Delete') {
-      e.preventDefault(); return false;
-    }
-  });
-
-  // ── 3. Disable text selection ──
-  document.addEventListener('selectstart', function(e) {
-    // Allow selection inside input/textarea fields
-    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
-    e.preventDefault();
-    return false;
-  });
-
-  // ── 4. Disable drag (prevents dragging images/text out) ──
-  document.addEventListener('dragstart', function(e) {
-    e.preventDefault();
-    return false;
-  });
-
-  // ── 5. DevTools detection via window size change ──
-  // When DevTools opens docked, window inner dimensions shrink
-  var devtoolsOpen = false;
-  var threshold = 160;
-  function checkDevTools() {
-    var widthDiff  = window.outerWidth  - window.innerWidth  > threshold;
-    var heightDiff = window.outerHeight - window.innerHeight > threshold;
-    if ((widthDiff || heightDiff) && !devtoolsOpen) {
-      devtoolsOpen = true;
-      showDevToolsWarning();
-    } else if (!widthDiff && !heightDiff) {
-      devtoolsOpen = false;
-    }
-  }
-  setInterval(checkDevTools, 1000);
-
-  // ── 6. Warning toast ──
-  function showWarning() {
-    if (document.getElementById('_pt_toast')) return;
-    var toast = document.createElement('div');
-    toast.id = '_pt_toast';
-    toast.innerHTML = '🔒 &nbsp;This portfolio is protected. Please respect the author\'s work.';
-    toast.style.cssText = [
-      'position:fixed', 'bottom:24px', 'left:50%', 'transform:translateX(-50%)',
-      'background:#0f0e0c', 'color:#f5f2eb', 'padding:12px 22px',
-      'border-radius:8px', 'font-family:sans-serif', 'font-size:13px',
-      'border:1px solid rgba(200,75,47,0.5)', 'border-left:3px solid #c84b2f',
-      'z-index:999999', 'box-shadow:0 4px 24px rgba(0,0,0,0.4)',
-      'pointer-events:none', 'white-space:nowrap'
-    ].join(';');
-    document.body.appendChild(toast);
-    setTimeout(function() {
-      if (toast.parentNode) toast.parentNode.removeChild(toast);
-    }, 3000);
-  }
-
-  function showDevToolsWarning() {
-    if (document.getElementById('_pt_devtools')) return;
-    var banner = document.createElement('div');
-    banner.id = '_pt_devtools';
-    banner.innerHTML = [
-      '<strong style="color:#c84b2f">Hey there, developer 👋</strong>',
-      'This portfolio was built by <strong>Abhishek Trivedi</strong>.',
-      'If you\'re curious about how it works, just reach out at',
-      '<a href="https://abhishektrivedi.com/pages/contact.html" ',
-      'style="color:#c9973a">abhishektrivedi.com</a> — happy to chat.'
-    ].join(' ');
-    banner.style.cssText = [
-      'position:fixed', 'top:0', 'left:0', 'right:0',
-      'background:#0a1628', 'color:#f5f2eb', 'padding:14px 24px',
-      'font-family:sans-serif', 'font-size:13px', 'line-height:1.6',
-      'border-bottom:2px solid #c84b2f', 'z-index:999999',
-      'text-align:center', 'box-shadow:0 2px 12px rgba(0,0,0,0.5)'
-    ].join(';');
-    document.body.appendChild(banner);
-  }
-
-  // ── 7. Copyright watermark in console ──
-  var styles = [
-    'color:#c84b2f', 'font-size:18px', 'font-weight:bold',
-    'padding:8px 0', 'border-bottom:2px solid #c84b2f'
-  ].join(';');
-  console.log('%c© Abhishek Trivedi — Learning Experience Technologist', styles);
-  console.log('%chttps://abhishektrivedi.com | All rights reserved.', 'color:#6b6459;font-size:12px;');
-  console.log('%cIf you\'re inspecting this to learn — great! Just don\'t copy. Reach out instead.', 'color:#c9973a;font-size:12px;font-style:italic;');
-
-})();
-</script>
-<!-- ── END PROTECTION ── -->
-
 </body>
 </html>
