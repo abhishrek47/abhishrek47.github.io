@@ -4,10 +4,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Demo 01 — AI Personalised Narration · Abhishek Trivedi</title>
+<title>Demo 01 -- AI Personalised Narration · Abhishek Trivedi</title>
 <style>
 /* ============================================
-   abhishektrivedi.com — Demo Shared Stylesheet
+   abhishektrivedi.com -- Demo Shared Stylesheet
    Matches main site: warm cream · serif display
    terracotta accent · navy dark · editorial feel
    ============================================ */
@@ -237,7 +237,7 @@ code { padding: 1px 5px; }
 .hood-list li { font-size: 0.875rem; color: var(--text-secondary); padding-left: 1.5rem; position: relative; line-height: 1.6; }
 .hood-list li::before { content: attr(data-icon); position: absolute; left: 0; }
 
-/* NEXT CASE — uses navy panel like main site */
+/* NEXT CASE -- uses navy panel like main site */
 .next-case {
   background: var(--bg-dark); border: 1px solid transparent;
   border-radius: var(--radius-xl); padding: 2rem; margin-top: 4rem;
@@ -627,10 +627,10 @@ code { padding: 1px 5px; }
 
 <div class="demo-container">
 
-  <!-- Step 01 — Entry -->
+  <!-- Step 01 -- Entry -->
   <div class="step-screen active" id="step1">
     <div class="hero-tag">
-      <span class="code-label">// Step 01 — Learner Identification</span>
+      <span class="code-label">// Step 01 -- Learner Identification</span>
       <span class="tag tag-accent">AI · Voice · Personalisation</span>
     </div>
     <h1>Before we begin, let's make this <em>yours.</em></h1>
@@ -671,7 +671,7 @@ code { padding: 1px 5px; }
     <div id="step1-err" style="color:var(--red);font-size:0.8125rem;margin-top:8px;display:none;">Please enter your name and select a role.</div>
   </div>
 
-  <!-- Step 02 — Narration -->
+  <!-- Step 02 -- Narration -->
   <div class="step-screen" id="step2">
     <div class="step-dots">
       <div class="step-dot done"></div>
@@ -679,7 +679,7 @@ code { padding: 1px 5px; }
       <div class="step-dot"></div>
       <div class="step-dot"></div>
     </div>
-    <span class="code-label">// Step 02 — Personalised Narration</span>
+    <span class="code-label">// Step 02 -- Personalised Narration</span>
     <h2>Welcome, <span id="name-display" style="color:var(--accent)"></span></h2>
     <div class="voice-indicator">
       <span class="live-dot"></span>
@@ -690,7 +690,7 @@ code { padding: 1px 5px; }
 
     <div class="demo-notice">
       <span>⚠</span>
-      <span><strong>Demo voice — browser only.</strong> You're hearing your browser's built-in speech engine. The real implementation uses <strong>Murf AI</strong>, which generates natural, human-sounding narration indistinguishable from a real voice actor.</span>
+      <span><strong>Demo voice -- browser only.</strong> You're hearing your browser's built-in speech engine. The real implementation uses <strong>Murf AI</strong>, which generates natural, human-sounding narration indistinguishable from a real voice actor.</span>
     </div>
 
     <div style="display:flex;gap:10px;margin-top:1.5rem;">
@@ -700,7 +700,7 @@ code { padding: 1px 5px; }
     </div>
   </div>
 
-  <!-- Step 03 — Scenario -->
+  <!-- Step 03 -- Scenario -->
   <div class="step-screen" id="step3">
     <div class="step-dots">
       <div class="step-dot done"></div>
@@ -708,7 +708,7 @@ code { padding: 1px 5px; }
       <div class="step-dot active"></div>
       <div class="step-dot"></div>
     </div>
-    <span class="code-label">// Step 03 — Role-Adapted Scenario</span>
+    <span class="code-label">// Step 03 -- Role-Adapted Scenario</span>
     <h2 id="scenario-heading">Apply what you know.</h2>
     <p id="scenario-stem" style="margin:0.75rem 0 1.25rem;"></p>
 
@@ -721,7 +721,7 @@ code { padding: 1px 5px; }
     </div>
   </div>
 
-  <!-- Step 04 — Completion -->
+  <!-- Step 04 -- Completion -->
   <div class="step-screen" id="step4">
     <div class="step-dots">
       <div class="step-dot done"></div>
@@ -729,7 +729,7 @@ code { padding: 1px 5px; }
       <div class="step-dot done"></div>
       <div class="step-dot active"></div>
     </div>
-    <span class="code-label">// Step 04 — Completion</span>
+    <span class="code-label">// Step 04 -- Completion</span>
     <div class="tag tag-green" style="margin-bottom:1rem;">Course Complete ✓</div>
     <h1>Well done, <span id="name-end" style="color:var(--accent)"></span></h1>
 
@@ -739,7 +739,7 @@ code { padding: 1px 5px; }
         <div class="completion-stat-label">Personalised</div>
       </div>
       <div class="completion-stat">
-        <div class="completion-stat-val" id="result-label">—</div>
+        <div class="completion-stat-val" id="result-label">--</div>
         <div class="completion-stat-label">Scenario result</div>
       </div>
       <div class="completion-stat">
@@ -774,16 +774,16 @@ code { padding: 1px 5px; }
     <h3>How I Built This</h3>
     <div class="hood-section-title">✓ What's real in this demo</div>
     <ul class="hood-list">
-      <li data-icon="🔊">Voice narration via Web Speech API — your browser speaks your name and role</li>
-      <li data-icon="⚙">Role-adaptive content — narration, scenario question and feedback all change per role</li>
-      <li data-icon="📋">xAPI-style log structure — fires real event names, verbs and data payloads</li>
-      <li data-icon="🔀">Branching logic — correct/incorrect paths with consequence feedback</li>
+      <li data-icon="🔊">Voice narration via Web Speech API -- your browser speaks your name and role</li>
+      <li data-icon="⚙">Role-adaptive content -- narration, scenario question and feedback all change per role</li>
+      <li data-icon="📋">xAPI-style log structure -- fires real event names, verbs and data payloads</li>
+      <li data-icon="🔀">Branching logic -- correct/incorrect paths with consequence feedback</li>
     </ul>
     <div class="hood-section-title">~ What's simulated</div>
     <ul class="hood-list">
-      <li data-icon="🌐">The enterprise LMS API call — no real LMS connected; data comes from form input</li>
-      <li data-icon="🎙">Murf AI voice — browser speech engine is a placeholder; production used Murf AI</li>
-      <li data-icon="🔑">Learner ID and prior completions — randomised on each session</li>
+      <li data-icon="🌐">The enterprise LMS API call -- no real LMS connected; data comes from form input</li>
+      <li data-icon="🎙">Murf AI voice -- browser speech engine is a placeholder; production used Murf AI</li>
+      <li data-icon="🔑">Learner ID and prior completions -- randomised on each session</li>
     </ul>
     <div class="hood-section-title">→ Production architecture</div>
     <pre>Storyline 360 ──OnEnter──▶ JS trigger
@@ -822,6 +822,7 @@ code { padding: 1px 5px; }
 </footer>
 
 <script>
+
 let selectedRole = null;
 let scenarioCorrect = false;
 
@@ -834,48 +835,48 @@ const roleNarrations = {
 
 const roleScenarios = {
   'L&D Manager': {
-    heading: 'Apply what you know.',
-    stem: 'Your CTO asks for a quarterly report on training effectiveness. You have xAPI data from the new personalised course. What's the strongest argument for continuing the programme?',
+    heading: `Apply what you know.`,
+    stem: `Your CTO asks for a quarterly report on training effectiveness. You have xAPI data from the new personalised course. What's the strongest argument for continuing the programme?`,
     choices: [
-      { letter: 'A', text: 'Completion rates are up 12% from last quarter.', correct: false },
-      { letter: 'B', text: 'xAPI data shows learners in high-risk roles are spending 40% longer on compliance scenarios — demonstrating the personalisation is driving deeper engagement where it matters.', correct: true },
-      { letter: 'C', text: 'Learner satisfaction scores averaged 4.2 out of 5.', correct: false },
+      { letter: 'A', text: `Completion rates are up 12% from last quarter.`, correct: false },
+      { letter: 'B', text: `xAPI data shows learners in high-risk roles are spending 40% longer on compliance scenarios — demonstrating the personalisation is driving deeper engagement where it matters.`, correct: true },
+      { letter: 'C', text: `Learner satisfaction scores averaged 4.2 out of 5.`, correct: false },
     ],
-    correctFeedback: 'Correct. Behavioural data tied to business-critical roles is the strongest proof point. Completion rates and satisfaction scores are vanity metrics — xAPI data shows what learners actually did.',
-    wrongFeedback: 'Not the strongest answer. Completion rates and satisfaction scores are useful, but they don\'t tell the CTO what learners actually did differently. The xAPI behavioural data makes the case for real impact.'
+    correctFeedback: `Correct. Behavioural data tied to business-critical roles is the strongest proof point. Completion rates and satisfaction scores are vanity metrics — xAPI data shows what learners actually did.`,
+    wrongFeedback: `Not the strongest answer. Completion rates and satisfaction scores are useful, but they don't tell the CTO what learners actually did differently. The xAPI behavioural data makes the case for real impact.`
   },
   'eLearning Developer': {
-    heading: 'Apply what you know.',
-    stem: 'You\'re implementing a Storyline course that fetches learner data from an LMS via JavaScript. The fetch() call is timing out on some enterprise networks. What\'s the most robust solution?',
+    heading: `Apply what you know.`,
+    stem: `You're implementing a Storyline course that fetches learner data from an LMS via JavaScript. The fetch() call is timing out on some enterprise networks. What's the most robust solution?`,
     choices: [
-      { letter: 'A', text: 'Add a try/catch and fall back to a default learner name if the API call fails.', correct: true },
-      { letter: 'B', text: 'Increase the timeout to 30 seconds.', correct: false },
-      { letter: 'C', text: 'Block the course from loading until the API responds.', correct: false },
+      { letter: 'A', text: `Add a try/catch and fall back to a default learner name if the API call fails.`, correct: true },
+      { letter: 'B', text: `Increase the timeout to 30 seconds.`, correct: false },
+      { letter: 'C', text: `Block the course from loading until the API responds.`, correct: false },
     ],
-    correctFeedback: 'Exactly right. Graceful degradation is the correct pattern — the course works for every learner, and personalisation is a progressive enhancement. Never make a course dependent on an external API succeeding.',
-    wrongFeedback: 'Close, but not quite. Increasing timeouts or blocking load creates poor UX. The correct pattern is graceful degradation — fall back to defaults if the API fails, and treat personalisation as enhancement, not dependency.'
+    correctFeedback: `Exactly right. Graceful degradation is the correct pattern — the course works for every learner, and personalisation is a progressive enhancement. Never make a course dependent on an external API succeeding.`,
+    wrongFeedback: `Close, but not quite. Increasing timeouts or blocking load creates poor UX. The correct pattern is graceful degradation — fall back to defaults if the API fails, and treat personalisation as enhancement, not dependency.`
   },
   'Sales Professional': {
-    heading: 'Apply what you know.',
-    stem: 'A prospective client says: "We already have a great LMS. Why would we need something like this?" How do you respond?',
+    heading: `Apply what you know.`,
+    stem: `A prospective client says: "We already have a great LMS. Why would we need something like this?" How do you respond?`,
     choices: [
-      { letter: 'A', text: '"Our system integrates directly with your existing LMS — we\'re not replacing it, we\'re making it smarter."', correct: true },
-      { letter: 'B', text: '"Most LMS platforms are quite limited. Yours probably is too."', correct: false },
-      { letter: 'C', text: '"You don\'t need to change anything — our tool sits on top of your current setup."', correct: false },
+      { letter: 'A', text: `"Our system integrates directly with your existing LMS — we're not replacing it, we're making it smarter."`, correct: true },
+      { letter: 'B', text: `"Most LMS platforms are quite limited. Yours probably is too."`, correct: false },
+      { letter: 'C', text: `"You don't need to change anything — our tool sits on top of your current setup."`, correct: false },
     ],
-    correctFeedback: 'Strong. Positioning as an enhancement to existing infrastructure, not a replacement, removes the biggest objection. The client keeps their LMS investment and gains new capability.',
-    wrongFeedback: 'That framing either dismisses the client\'s existing investment or undersells the value. The strongest position acknowledges their LMS and shows how this makes it more powerful.'
+    correctFeedback: `Strong. Positioning as an enhancement to existing infrastructure, not a replacement, removes the biggest objection. The client keeps their LMS investment and gains new capability.`,
+    wrongFeedback: `That framing either dismisses the client's existing investment or undersells the value. The strongest position acknowledges their LMS and shows how this makes it more powerful.`
   },
   'New Employee': {
-    heading: 'Apply what you know.',
-    stem: 'You\'ve just completed your first module in the personalised onboarding programme. A colleague asks what made it different from standard training. What\'s the most accurate answer?',
+    heading: `Apply what you know.`,
+    stem: `You've just completed your first module in the personalised onboarding programme. A colleague asks what made it different from standard training. What's the most accurate answer?`,
     choices: [
-      { letter: 'A', text: '"It had better graphics than usual."', correct: false },
-      { letter: 'B', text: '"The course knew my name and role before I started — the content and narration adapted to what was relevant for me specifically."', correct: true },
-      { letter: 'C', text: '"It was shorter than most courses I\'ve done."', correct: false },
+      { letter: 'A', text: `"It had better graphics than usual."`, correct: false },
+      { letter: 'B', text: `"The course knew my name and role before I started — the content and narration adapted to what was relevant for me specifically."`, correct: true },
+      { letter: 'C', text: `"It was shorter than most courses I've done."`, correct: false },
     ],
-    correctFeedback: 'Exactly. The personalisation is structural — the course fetched your identity from the LMS and adapted at the content and narration level, not just cosmetically.',
-    wrongFeedback: 'That misses the key feature. The course was personalised at a structural level — it knew who you were before you started and adapted the content accordingly, not just the visuals.'
+    correctFeedback: `Exactly. The personalisation is structural — the course fetched your identity from the LMS and adapted at the content and narration level, not just cosmetically.`,
+    wrongFeedback: `That misses the key feature. The course was personalised at a structural level — it knew who you were before you started and adapted the content accordingly, not just the visuals.`
   }
 };
 
@@ -957,6 +958,8 @@ function toggleHood(btn) {
   d.classList.toggle('open');
   btn.textContent = d.classList.contains('open') ? '✕ Close' : '? How I built this';
 }
+
+
 </script>
 </body>
 </html>
