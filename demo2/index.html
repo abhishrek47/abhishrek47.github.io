@@ -4,10 +4,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Demo 02 — Template System · Abhishek Trivedi</title>
+<title>Demo 02 -- Template System · Abhishek Trivedi</title>
 <style>
 /* ============================================
-   abhishektrivedi.com — Demo Shared Stylesheet
+   abhishektrivedi.com -- Demo Shared Stylesheet
    Matches main site: warm cream · serif display
    terracotta accent · navy dark · editorial feel
    ============================================ */
@@ -237,7 +237,7 @@ code { padding: 1px 5px; }
 .hood-list li { font-size: 0.875rem; color: var(--text-secondary); padding-left: 1.5rem; position: relative; line-height: 1.6; }
 .hood-list li::before { content: attr(data-icon); position: absolute; left: 0; }
 
-/* NEXT CASE — uses navy panel like main site */
+/* NEXT CASE -- uses navy panel like main site */
 .next-case {
   background: var(--bg-dark); border: 1px solid transparent;
   border-radius: var(--radius-xl); padding: 2rem; margin-top: 4rem;
@@ -596,9 +596,9 @@ code { padding: 1px 5px; }
 
   <!-- Overview -->
   <div class="screen-section active" id="screen-overview">
-    <span class="code-label">// Case Study 02 — Template System</span>
+    <span class="code-label">// Case Study 02 -- Template System</span>
     <h1>Most teams build courses. I built <em>the engine.</em></h1>
-    <p>A Storyline template system isn't just a time-saver — it's infrastructure. Every interaction pattern below is live and working. Click, tap, match, and choose right here.</p>
+    <p>A Storyline template system isn't just a time-saver -- it's infrastructure. Every interaction pattern below is live and working. Click, tap, match, and choose right here.</p>
     <hr>
     <div class="overview-grid">
       <div class="overview-card" onclick="showScreen('tabs')">
@@ -630,7 +630,7 @@ code { padding: 1px 5px; }
 
   <!-- Tabs -->
   <div class="screen-section" id="screen-tabs">
-    <span class="section-step">Interaction 01 — Tabs</span>
+    <span class="section-step">Interaction 01 -- Tabs</span>
     <h2>Click a tab. Content adapts.</h2>
     <p style="margin-bottom:1.25rem;"><span class="tag">TABS TEMPLATE · STORYLINE 360</span></p>
     <div class="tabs-nav">
@@ -642,28 +642,28 @@ code { padding: 1px 5px; }
     <div class="tab-panel active" id="tab-design">
       <div class="card">
         <h3>Design Phase</h3>
-        <p>Every template started in PowerPoint — visual design language and interaction blueprint reviewed and approved by stakeholders before a single Storyline slide was built. This eliminated late-stage revision cycles.</p>
+        <p>Every template started in PowerPoint -- visual design language and interaction blueprint reviewed and approved by stakeholders before a single Storyline slide was built. This eliminated late-stage revision cycles.</p>
         <div class="built-with" style="margin-top:1rem;"><span class="tag">PowerPoint</span><span class="tag">Wireframing</span><span class="tag">Stakeholder Review</span></div>
       </div>
     </div>
     <div class="tab-panel" id="tab-build">
       <div class="card">
         <h3>Build Phase</h3>
-        <p>Approved designs converted into Storyline master slides with JavaScript-enhanced interactions — dynamic state management, conditional branching, API calls that Storyline's native triggers couldn't handle.</p>
+        <p>Approved designs converted into Storyline master slides with JavaScript-enhanced interactions -- dynamic state management, conditional branching, API calls that Storyline's native triggers couldn't handle.</p>
         <div class="built-with" style="margin-top:1rem;"><span class="tag">Storyline 360</span><span class="tag">JavaScript</span><span class="tag">Master Slides</span></div>
       </div>
     </div>
     <div class="tab-panel" id="tab-test">
       <div class="card">
         <h3>Test Phase</h3>
-        <p>Each component QA-tested across LMS environments — SCORM 1.2, SCORM 2004, and xAPI — to ensure reliable variable passing, completion tracking, and consistent rendering across browsers.</p>
+        <p>Each component QA-tested across LMS environments -- SCORM 1.2, SCORM 2004, and xAPI -- to ensure reliable variable passing, completion tracking, and consistent rendering across browsers.</p>
         <div class="built-with" style="margin-top:1rem;"><span class="tag">SCORM 2004</span><span class="tag">xAPI</span><span class="tag">Cross-browser QA</span></div>
       </div>
     </div>
     <div class="tab-panel" id="tab-deploy">
       <div class="card">
         <h3>Deploy Phase</h3>
-        <p>Templates published as Storyline packages with full documentation — usage guides, variable dictionaries, and customisation instructions — so any developer on the team could use them independently.</p>
+        <p>Templates published as Storyline packages with full documentation -- usage guides, variable dictionaries, and customisation instructions -- so any developer on the team could use them independently.</p>
         <div class="built-with" style="margin-top:1rem;"><span class="tag">Documentation</span><span class="tag">Enterprise LMS</span><span class="tag">Team Handoff</span></div>
       </div>
     </div>
@@ -675,7 +675,7 @@ code { padding: 1px 5px; }
 
   <!-- Accordion -->
   <div class="screen-section" id="screen-accordion">
-    <span class="section-step">Interaction 02 — Accordion</span>
+    <span class="section-step">Interaction 02 -- Accordion</span>
     <h2>Expand what you need to know.</h2>
     <p style="margin-bottom:1.25rem;"><span class="tag">ACCORDION TEMPLATE · STORYLINE 360</span></p>
     <div style="border-top:1px solid var(--border);">
@@ -684,14 +684,14 @@ code { padding: 1px 5px; }
           Why build templates instead of individual courses?
           <span class="accordion-icon">+</span>
         </button>
-        <div class="accordion-body">Every course built from scratch means rebuilding the same interactions, restyling the same layouts, and re-solving the same technical problems. A template system eliminates that overhead — the infrastructure is built once, and every subsequent course starts from a working foundation rather than a blank slide.</div>
+        <div class="accordion-body">Every course built from scratch means rebuilding the same interactions, restyling the same layouts, and re-solving the same technical problems. A template system eliminates that overhead -- the infrastructure is built once, and every subsequent course starts from a working foundation rather than a blank slide.</div>
       </div>
       <div class="accordion-item">
         <button class="accordion-trigger" onclick="toggleAccordion(this)">
           How does JavaScript extend what Storyline can do natively?
           <span class="accordion-icon">+</span>
         </button>
-        <div class="accordion-body">Storyline's native triggers are powerful but limited — they can't make API calls, dynamically generate content, or handle complex conditional logic. JavaScript embedded in Storyline's Execute JavaScript trigger removes those limits. It can read and write Storyline variables, interact with external systems, and perform calculations impossible with clicks and states alone.</div>
+        <div class="accordion-body">Storyline's native triggers are powerful but limited -- they can't make API calls, dynamically generate content, or handle complex conditional logic. JavaScript embedded in Storyline's Execute JavaScript trigger removes those limits. It can read and write Storyline variables, interact with external systems, and perform calculations impossible with clicks and states alone.</div>
       </div>
       <div class="accordion-item">
         <button class="accordion-trigger" onclick="toggleAccordion(this)">
@@ -705,7 +705,7 @@ code { padding: 1px 5px; }
           How does this connect to the broader L&D infrastructure argument?
           <span class="accordion-icon">+</span>
         </button>
-        <div class="accordion-body">Most L&D teams measure output in courses. This system changed the measurement — the template infrastructure itself is the output. The value compounds over time: every new course built on the system delivers the same quality faster, and the team's capability ceiling rises without headcount growing.</div>
+        <div class="accordion-body">Most L&D teams measure output in courses. This system changed the measurement -- the template infrastructure itself is the output. The value compounds over time: every new course built on the system delivers the same quality faster, and the team's capability ceiling rises without headcount growing.</div>
       </div>
     </div>
     <div style="display:flex;gap:10px;margin-top:1.5rem;">
@@ -716,7 +716,7 @@ code { padding: 1px 5px; }
 
   <!-- Drag & Drop -->
   <div class="screen-section" id="screen-dnd">
-    <span class="section-step">Interaction 03 — Drag & Drop</span>
+    <span class="section-step">Interaction 03 -- Drag & Drop</span>
     <h2>Match the tool to the purpose.</h2>
     <p style="margin-bottom:1.25rem;"><span class="tag">DRAG & DROP TEMPLATE · STORYLINE 360</span></p>
 
@@ -762,7 +762,7 @@ code { padding: 1px 5px; }
 
   <!-- Branching -->
   <div class="screen-section" id="screen-branch">
-    <span class="section-step">Interaction 04 — Branching Scenario</span>
+    <span class="section-step">Interaction 04 -- Branching Scenario</span>
     <h2>Every choice has a consequence.</h2>
     <p style="margin-bottom:1.25rem;"><span class="tag">BRANCHING TEMPLATE · STORYLINE 360</span></p>
     <div class="card-muted" style="margin-bottom:1.25rem;">
@@ -772,7 +772,7 @@ code { padding: 1px 5px; }
     <div id="branch-choices">
       <div class="branch-option" onclick="chooseBranch(this,'wrong')">
         <span class="branch-letter">A</span>
-        <span>Agree and add the 15 slides — the stakeholder knows their content best.</span>
+        <span>Agree and add the 15 slides -- the stakeholder knows their content best.</span>
       </div>
       <div class="branch-option" onclick="chooseBranch(this,'right')">
         <span class="branch-letter">B</span>
@@ -802,7 +802,7 @@ code { padding: 1px 5px; }
       <div class="metric-card"><div class="metric-val">0</div><div class="metric-label">Rebuilds from scratch</div></div>
     </div>
     <div class="card-muted" style="margin-bottom:1.5rem;">
-      <p><strong style="color:var(--text-primary);">What this demonstrates:</strong> Systems thinking applied to L&D — building infrastructure that multiplies team capacity. The difference between a developer who builds courses and an architect who builds systems.</p>
+      <p><strong style="color:var(--text-primary);">What this demonstrates:</strong> Systems thinking applied to L&D -- building infrastructure that multiplies team capacity. The difference between a developer who builds courses and an architect who builds systems.</p>
     </div>
     <div class="built-with" style="margin-bottom:1.5rem;">
       <span class="tag">Articulate Storyline 360</span>
@@ -829,14 +829,14 @@ code { padding: 1px 5px; }
     <div class="hood-section-title">✓ What's real in this demo</div>
     <ul class="hood-list">
       <li data-icon="📑">All 4 interaction patterns are the exact patterns built into the Storyline template system, rebuilt faithfully in HTML/JS</li>
-      <li data-icon="🔀">Accordion one-at-a-time logic — matches Storyline's variable-controlled state management</li>
-      <li data-icon="🎯">Drag-and-drop validation — correct/incorrect feedback per item, same scoring logic as SCORM templates</li>
-      <li data-icon="⚡">Branching consequence reveal — mirrors production branching behaviour</li>
+      <li data-icon="🔀">Accordion one-at-a-time logic -- matches Storyline's variable-controlled state management</li>
+      <li data-icon="🎯">Drag-and-drop validation -- correct/incorrect feedback per item, same scoring logic as SCORM templates</li>
+      <li data-icon="⚡">Branching consequence reveal -- mirrors production branching behaviour</li>
     </ul>
     <div class="hood-section-title">~ What's simulated</div>
     <ul class="hood-list">
-      <li data-icon="🎬">Storyline environment — GetPlayer() and SetVar() calls are real Storyline JS API calls, but run here in a browser sandbox</li>
-      <li data-icon="📊">SCORM variable passing — the xAPI log entries reflect the real event structure but no LMS is receiving them</li>
+      <li data-icon="🎬">Storyline environment -- GetPlayer() and SetVar() calls are real Storyline JS API calls, but run here in a browser sandbox</li>
+      <li data-icon="📊">SCORM variable passing -- the xAPI log entries reflect the real event structure but no LMS is receiving them</li>
     </ul>
     <div class="hood-section-title">→ Production architecture</div>
     <pre>PowerPoint ──approved──▶ Storyline Master Slides
@@ -857,7 +857,7 @@ code { padding: 1px 5px; }
   <a class="next-case" href="https://abhishektrivedi.com/demo3/index.html">
     <div>
       <div class="next-case-label">Next → Case Study 03</div>
-      <div class="next-case-title">From Manual to Automated — Rethinking Localisation</div>
+      <div class="next-case-title">From Manual to Automated -- Rethinking Localisation</div>
       <div class="next-case-desc">36 hours → 8 minutes · FFmpeg terminal simulation · 8 languages</div>
       <div class="built-with" style="margin-top:8px;">
         <span class="tag">FFmpeg</span><span class="tag">Bash Scripting</span><span class="tag">Automation</span>
@@ -930,9 +930,9 @@ function chooseBranch(el, result) {
   const fb = document.getElementById('branch-feedback');
   fb.style.display = 'block';
   if (result === 'right') {
-    fb.innerHTML = '<div class="card" style="border-color:#BBF7D0;"><p style="color:var(--green);">✓ <strong>Strong choice.</strong> Using the accordion template lets you surface the depth stakeholders want without overloading learners. This is exactly the kind of design decision a template system enables — the infrastructure exists, so you can offer better solutions, not just comply with requests.</p></div>';
+    fb.innerHTML = '<div class="card" style="border-color:#BBF7D0;"><p style="color:var(--green);">✓ <strong>Strong choice.</strong> Using the accordion template lets you surface the depth stakeholders want without overloading learners. This is exactly the kind of design decision a template system enables -- the infrastructure exists, so you can offer better solutions, not just comply with requests.</p></div>';
   } else {
-    fb.innerHTML = '<div class="card" style="border-color:#FECACA;"><p style="color:var(--red);">✗ This creates problems downstream. 15 dense policy slides will tank completion rates. The template system exists precisely to give you better options — use the accordion or tabs template to handle depth without padding the course length.</p></div>';
+    fb.innerHTML = '<div class="card" style="border-color:#FECACA;"><p style="color:var(--red);">✗ This creates problems downstream. 15 dense policy slides will tank completion rates. The template system exists precisely to give you better options -- use the accordion or tabs template to handle depth without padding the course length.</p></div>';
   }
   document.getElementById('branch-complete-btn').style.display = 'inline-flex';
 }
