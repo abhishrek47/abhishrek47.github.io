@@ -1,501 +1,320 @@
 /**
- * AI Guide — abhishektrivedi.com
- * Drop-in feature: floating tooltip tour for the homepage.
- *
- * Usage: add these two lines just before </body> in index.html
- *   <link rel="stylesheet" href="ai-guide.css">
- *   <script src="ai-guide.js" defer></script>
+ * AI Guide — abhishektrivedi.com  v2
+ * Drop-in: add  <script src="ai-guide.js" defer></script>  before </body>
  */
-
 (function () {
-  /* ── 1. IDs of existing sections on the page ── */
-  const STOPS = [
+  'use strict';
+
+  /* ── STOP DEFINITIONS ─────────────────────────────────────────────────
+   * selectors : tried in order; first match wins
+   * textMatch : fallback — finds the nearest block-level ancestor
+   *             whose text CONTAINS this string
+   * dotSide   : where the numbered dot sits on the element
+   *             'tl' top-left | 'tr' top-right | 'bl' | 'br'
+   * ------------------------------------------------------------------- */
+  var STOPS = [
     {
-      targetSelector: 'nav',
-      position: 'bottom-right',
+      selectors: ['nav', 'header', 'body > nav', '.nav'],
+      textMatch: null,
+      dotSide: 'br',
       eyebrow: 'Navigation',
       title: 'Sparse nav, strong hierarchy',
-      body: 'Just 4 links. The monospaced "AT." logo doubles as a home button and a personal brand mark. The terracotta CTA is the only coloured element here — drawing the eye exactly where it needs to go.',
+      body: 'Four links. The monospaced "AT." logo is both home button and personal brand mark. The terracotta CTA is the only coloured element — guiding the eye exactly where it needs to go.'
     },
     {
-      targetSelector: '.hero, #hero, section:first-of-type',
-      position: 'bottom-left',
+      selectors: ['#hero', '.hero', '.hero-section', 'main > section:first-child'],
+      textMatch: 'I build learning',
+      dotSide: 'tl',
       eyebrow: 'Hero',
       title: 'The 3-second value pitch',
-      body: 'DM Serif Display italic in terracotta on "think." does the heavy lifting — one word in the brand accent signals what makes this portfolio different from every other L&D CV.',
+      body: 'DM Serif Display italic in terracotta on "think." does the heavy lifting — one brand-accent word signals what makes this portfolio different from every other L&D résumé.'
     },
     {
-      targetSelector: '.marquee-wrap, .marquee',
-      position: 'top-left',
+      selectors: ['.marquee-wrap', '.marquee', '.ticker', '[class*="marquee"]'],
+      textMatch: 'Articulate Storyline',
+      dotSide: 'tl',
       eyebrow: 'Skills Ticker',
       title: 'Full-bleed ink as a divider',
-      body: 'The ink-black strip creates a hard visual break between sections. JetBrains Mono reads like a terminal readout — reinforcing the developer-hybrid identity without saying a word.',
+      body: 'The near-black strip creates a hard visual break. JetBrains Mono reads like terminal output — reinforcing the developer-hybrid identity without ever saying so.'
     },
     {
-      targetSelector: '#what, .what-section, .disciplines',
-      position: 'top-right',
-      eyebrow: 'Disciplines',
+      selectors: ['#what', '.what-section', '[class*="what"]', '[id*="what"]'],
+      textMatch: 'Design thinking meets',
+      dotSide: 'tr',
+      eyebrow: 'What I Do',
       title: '3 columns, 3 identities in one',
-      body: 'Each card positions Abhishek as a triple-threat: designer, developer, and AI integrator. The 1 px rule-coloured grid gap creates column dividers without drawing a border.',
+      body: 'Each card positions Abhishek as a triple-threat: designer, developer, and AI integrator. The 1 px rule-coloured gap creates column dividers without a visible border.'
     },
     {
-      targetSelector: '#work, .work-section, .case-studies',
-      position: 'top-right',
+      selectors: ['#competency', '.competency', '[class*="competency"]', '[id*="competency"]'],
+      textMatch: 'L&D spectrum',
+      dotSide: 'tr',
+      eyebrow: 'Competency Map',
+      title: 'Honesty as a design strategy',
+      body: 'Saying "most L&D professionals are strong in one dimension" reframes the section — it is not a skills list, it is context that makes the radar chart meaningful.'
+    },
+    {
+      selectors: ['#work', '.work-section', '[id*="work"]', '[class*="work"]'],
+      textMatch: 'Case studies',
+      dotSide: 'tr',
       eyebrow: 'Selected Work',
       title: 'Titles that carry the concept',
-      body: '"When the Course Knows Your Name" tells a story before you click. DM Serif gives the titles editorial weight while mono category tags maintain the technical register.',
+      body: '"When the Course Knows Your Name" tells a full story before you click. DM Serif Display gives the titles editorial weight while mono category tags keep the technical register.'
     },
     {
-      targetSelector: '#accessibility, .accessibility-section',
-      position: 'top-left',
+      selectors: ['#accessibility', '[id*="access"]', '[class*="access"]'],
+      textMatch: 'architectural decision',
+      dotSide: 'tl',
       eyebrow: 'Accessibility Practice',
-      title: 'Show don\'t tell — interactive proof',
-      body: 'Toggle interactions let visitors feel the difference between accessible and inaccessible Storyline builds. This turns a résumé claim into lived experience.',
+      title: 'Show, do not tell — live proof',
+      body: 'Toggle interactions let visitors feel the gap between accessible and inaccessible Storyline builds. A résumé claim becomes a lived experience the visitor actually remembers.'
     },
     {
-      targetSelector: '#demos, .demos-section, .interactive-demos',
-      position: 'top-left',
+      selectors: ['#demos', '.demos', '[id*="demo"]', '[class*="demo"]'],
+      textMatch: "Don't just read",
+      dotSide: 'tl',
       eyebrow: 'Interactive Demos',
       title: 'No PDFs. No screenshots.',
-      body: 'Every demo is live in the browser. This is the differentiator — most L&D portfolios show slide decks; this one lets you actually run the work.',
-    },
-    {
-      targetSelector: '.cta-strip, #contact-cta',
-      position: 'top-right',
-      eyebrow: 'CTA Strip',
-      title: 'Ink section = intentional contrast',
-      body: 'The dark full-width block mirrors the skills marquee and creates a visual bookend. The single call-to-action reduces decision fatigue — there\'s only one thing to do here.',
-    },
+      body: 'Every demo runs live in the browser. Most L&D portfolios show slide decks — this one lets you operate the work. That gap is impossible to fake and very hard to ignore.'
+    }
   ];
 
-  /* ── 2. Inject CSS ── */
-  const style = document.createElement('style');
-  style.textContent = `
-    /* === AI GUIDE === */
-    #ag-btn {
-      position: fixed;
-      bottom: 28px;
-      right: 28px;
-      z-index: 9998;
-      display: flex;
-      align-items: center;
-      gap: 0.55rem;
-      padding: 0.65rem 1.2rem 0.65rem 0.9rem;
-      background: var(--ink, #0f0f0f);
-      color: var(--paper, #f5f2eb);
-      border: none;
-      cursor: pointer;
-      font-family: var(--mono, 'JetBrains Mono', monospace);
-      font-size: 0.68rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      border-radius: 2px;
-      box-shadow: 0 4px 24px rgba(15,15,15,0.18);
-      transition: background 0.2s;
+  /* ── FIND ELEMENT ───────────────────────────────────────────────────── */
+  function findEl(stop) {
+    for (var i = 0; i < stop.selectors.length; i++) {
+      try {
+        var el = document.querySelector(stop.selectors[i]);
+        if (el) return el;
+      } catch (e) {}
     }
-    #ag-btn:hover { background: var(--accent, #c84b2f); }
-    #ag-btn .ag-dot {
-      width: 7px; height: 7px;
-      border-radius: 50%;
-      background: var(--accent, #c84b2f);
-      animation: ag-pulse 2s infinite;
-      flex-shrink: 0;
+    if (!stop.textMatch) return null;
+    // walk block containers smallest-first (reverse querySelectorAll order)
+    var all = document.querySelectorAll('section, article, div, header');
+    var best = null;
+    for (var j = 0; j < all.length; j++) {
+      var c = all[j];
+      if (c.innerText && c.innerText.indexOf(stop.textMatch) !== -1) {
+        if (!best || c.offsetHeight < best.offsetHeight) best = c;
+      }
     }
-    @keyframes ag-pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+    return best;
+  }
 
-    #ag-bar {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 9999;
-      display: none;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0.65rem 2rem;
-      background: var(--ink, #0f0f0f);
-      border-bottom: 2px solid var(--accent, #c84b2f);
-    }
-    #ag-bar.ag-on { display: flex; }
-    .ag-bar-left {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      font-family: var(--mono, 'JetBrains Mono', monospace);
-      font-size: 0.65rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: rgba(245,242,235,0.6);
-    }
-    .ag-bar-title { color: var(--paper, #f5f2eb); font-weight: 500; }
-    .ag-pips { display: flex; gap: 4px; align-items: center; }
-    .ag-pip {
-      height: 3px; width: 16px;
-      background: rgba(255,255,255,0.15);
-      border-radius: 2px;
-      transition: all 0.25s;
-    }
-    .ag-pip.ag-done  { background: rgba(200,75,47,0.55); }
-    .ag-pip.ag-now   { background: var(--accent, #c84b2f); width: 26px; }
-    #ag-close {
-      font-family: var(--mono, 'JetBrains Mono', monospace);
-      font-size: 0.62rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: rgba(245,242,235,0.45);
-      background: none;
-      border: 1px solid rgba(245,242,235,0.15);
-      padding: 0.28rem 0.75rem;
-      cursor: pointer;
-      border-radius: 2px;
-      transition: color 0.15s, border-color 0.15s;
-    }
-    #ag-close:hover { color: var(--paper, #f5f2eb); border-color: rgba(245,242,235,0.4); }
+  /* ── STYLES ─────────────────────────────────────────────────────────── */
+  var style = document.createElement('style');
+  style.textContent = [
+    '#ag-btn{position:fixed;bottom:24px;right:24px;z-index:99990;display:inline-flex;align-items:center;gap:8px;padding:10px 18px 10px 13px;background:#0f0f0f;color:#f5f2eb;border:none;cursor:pointer;font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;border-radius:2px;box-shadow:0 4px 20px rgba(0,0,0,.25);transition:background .2s;}',
+    '#ag-btn:hover{background:#c84b2f;}',
+    '#ag-btn .ag-d{width:7px;height:7px;border-radius:50%;background:#c84b2f;flex-shrink:0;animation:ag-bl 2s infinite;}',
+    '@keyframes ag-bl{0%,100%{opacity:1}50%{opacity:.2}}',
 
-    .ag-hs {
-      position: fixed;
-      z-index: 9997;
-      width: 30px; height: 30px;
-      transform: translate(-50%, -50%);
-      cursor: pointer;
-      display: none;
-    }
-    .ag-hs.ag-visible { display: block; }
-    .ag-hs-ring {
-      width: 30px; height: 30px;
-      border-radius: 50%;
-      background: var(--accent, #c84b2f);
-      border: 2.5px solid var(--paper, #f5f2eb);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: var(--mono, 'JetBrains Mono', monospace);
-      font-size: 0.6rem;
-      font-weight: 500;
-      color: #fff;
-      box-shadow: 0 0 0 0 rgba(200,75,47,0.5);
-      animation: ag-ring 2.4s ease-out infinite;
-      transition: transform 0.15s;
-    }
-    .ag-hs:hover .ag-hs-ring,
-    .ag-hs.ag-active .ag-hs-ring { transform: scale(1.2); animation-play-state: paused; }
-    @keyframes ag-ring {
-      0%  { box-shadow: 0 0 0 0   rgba(200,75,47,0.55); }
-      70% { box-shadow: 0 0 0 12px rgba(200,75,47,0);   }
-      100%{ box-shadow: 0 0 0 0   rgba(200,75,47,0);    }
-    }
+    '#ag-bar{position:fixed;top:0;left:0;right:0;z-index:99995;display:none;align-items:center;justify-content:space-between;padding:9px 24px;background:#0f0f0f;border-bottom:2px solid #c84b2f;}',
+    '#ag-bar.on{display:flex;}',
+    '.ag-bl{display:flex;align-items:center;gap:14px;font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:rgba(245,242,235,.55);}',
+    '.ag-bt{color:#f5f2eb;}',
+    '.ag-ps{display:flex;gap:3px;align-items:center;}',
+    '.ag-p{height:3px;width:14px;border-radius:2px;background:rgba(255,255,255,.14);transition:all .25s;}',
+    '.ag-p.dn{background:rgba(200,75,47,.45);}',
+    '.ag-p.nw{background:#c84b2f;width:22px;}',
+    '#ag-x{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:rgba(245,242,235,.4);background:none;border:1px solid rgba(245,242,235,.15);padding:4px 10px;cursor:pointer;border-radius:2px;transition:color .15s,border-color .15s;}',
+    '#ag-x:hover{color:#f5f2eb;border-color:rgba(245,242,235,.4);}',
 
-    .ag-tooltip {
-      position: fixed;
-      z-index: 10000;
-      width: 260px;
-      background: var(--paper, #f5f2eb);
-      border: 1px solid var(--rule, #d4cfc6);
-      border-top: 3px solid var(--accent, #c84b2f);
-      padding: 1.1rem 1.2rem 0.9rem;
-      box-shadow: 0 8px 32px rgba(15,15,15,0.13);
-      display: none;
-      pointer-events: none;
-    }
-    .ag-tooltip::before {
-      content: '';
-      position: absolute;
-      width: 9px; height: 9px;
-      background: var(--paper, #f5f2eb);
-      border: 1px solid var(--rule, #d4cfc6);
-      transform: rotate(45deg);
-    }
-    .ag-tooltip.ag-arr-left::before   { top: 12px; left: -5px; border-top: none; border-left: none; }
-    .ag-tooltip.ag-arr-right::before  { top: 12px; right: -5px; border-bottom: none; border-right: none; }
-    .ag-tooltip.ag-arr-top::before    { top: -5px; left: 18px; border-bottom: none; border-right: none; border-top: 1px solid var(--accent,#c84b2f); border-left: 1px solid var(--accent,#c84b2f); }
-    .ag-tooltip.ag-arr-bottom::before { bottom: -5px; left: 18px; border-top: none; border-left: none; }
-    .ag-hs.ag-active .ag-tooltip { display: block; pointer-events: auto; }
+    '.ag-hi{outline:2px solid #c84b2f !important;outline-offset:3px;position:relative;}',
 
-    .ag-eyebrow {
-      font-family: var(--mono, 'JetBrains Mono', monospace);
-      font-size: 0.6rem;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: var(--accent, #c84b2f);
-      margin-bottom: 0.4rem;
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-    }
-    .ag-eyebrow::before {
-      content: '';
-      display: block;
-      width: 0.8rem;
-      height: 1px;
-      background: var(--accent, #c84b2f);
-      flex-shrink: 0;
-    }
-    .ag-title {
-      font-family: var(--serif, 'DM Serif Display', serif);
-      font-size: 1.05rem;
-      line-height: 1.22;
-      color: var(--ink, #0f0f0f);
-      margin-bottom: 0.5rem;
-    }
-    .ag-body {
-      font-family: var(--sans, 'DM Sans', sans-serif);
-      font-size: 0.76rem;
-      font-weight: 300;
-      color: var(--mid, #6b6459);
-      line-height: 1.6;
-      margin-bottom: 0.85rem;
-      padding-bottom: 0.8rem;
-      border-bottom: 1px solid var(--rule, #d4cfc6);
-    }
-    .ag-foot {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .ag-count {
-      font-family: var(--mono, 'JetBrains Mono', monospace);
-      font-size: 0.6rem;
-      letter-spacing: 0.08em;
-      color: var(--mid, #6b6459);
-    }
-    .ag-navrow { display: flex; gap: 5px; }
-    .ag-nav-btn {
-      width: 26px; height: 26px;
-      border-radius: 2px;
-      border: 1px solid var(--rule, #d4cfc6);
-      background: var(--paper, #f5f2eb);
-      color: var(--mid, #6b6459);
-      font-family: var(--mono, 'JetBrains Mono', monospace);
-      font-size: 0.75rem;
-      cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      transition: border-color 0.15s, color 0.15s, background 0.15s;
-    }
-    .ag-nav-btn:hover {
-      border-color: var(--accent, #c84b2f);
-      color: var(--accent, #c84b2f);
-      background: #fdf0ed;
-    }
-  `;
+    '.ag-hs{position:fixed;z-index:99992;width:28px;height:28px;display:none;cursor:pointer;}',
+    '.ag-hs.vis{display:block;}',
+    '.ag-rg{width:28px;height:28px;border-radius:50%;background:#c84b2f;border:2.5px solid #f5f2eb;display:flex;align-items:center;justify-content:center;font-family:"JetBrains Mono",monospace;font-size:10px;font-weight:500;color:#fff;box-shadow:0 0 0 0 rgba(200,75,47,.6);animation:ag-rg 2.4s ease-out infinite;transition:transform .15s;}',
+    '.ag-hs:hover .ag-rg,.ag-hs.active .ag-rg{transform:scale(1.18);}',
+    '@keyframes ag-rg{0%{box-shadow:0 0 0 0 rgba(200,75,47,.55)}70%{box-shadow:0 0 0 11px rgba(200,75,47,0)}100%{box-shadow:0 0 0 0 rgba(200,75,47,0)}}',
+
+    '.ag-tt{position:fixed;z-index:99996;width:264px;background:#f5f2eb;border:1px solid #d4cfc6;border-top:3px solid #c84b2f;padding:14px 16px 12px;box-shadow:0 8px 32px rgba(15,15,15,.14);display:none;}',
+    '.ag-tt.show{display:block;}',
+    '.ag-tt::before{content:"";position:absolute;width:9px;height:9px;background:#f5f2eb;border:1px solid #d4cfc6;transform:rotate(45deg);}',
+    '.ag-tt.al::before{top:12px;left:-5px;border-top:none;border-left:none;}',
+    '.ag-tt.ar::before{top:12px;right:-5px;border-bottom:none;border-right:none;}',
+    '.ag-tt.at::before{top:-6px;left:18px;border-bottom:none;border-right:none;border-top:1px solid #c84b2f;border-left:1px solid #c84b2f;}',
+    '.ag-tt.ab::before{bottom:-5px;left:18px;border-top:none;border-left:none;}',
+    '.ag-eb{font-family:"JetBrains Mono",monospace;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:#c84b2f;margin-bottom:5px;display:flex;align-items:center;gap:6px;}',
+    '.ag-eb::before{content:"";display:block;width:12px;height:1px;background:#c84b2f;flex-shrink:0;}',
+    '.ag-ti{font-family:"DM Serif Display",serif;font-size:1.02rem;line-height:1.22;color:#0f0f0f;margin-bottom:6px;}',
+    '.ag-bo{font-family:"DM Sans",sans-serif;font-size:12px;font-weight:300;color:#6b6459;line-height:1.6;margin-bottom:11px;padding-bottom:10px;border-bottom:1px solid #d4cfc6;}',
+    '.ag-ft{display:flex;align-items:center;justify-content:space-between;}',
+    '.ag-ct{font-family:"JetBrains Mono",monospace;font-size:9px;letter-spacing:.08em;color:#6b6459;}',
+    '.ag-nr{display:flex;gap:4px;}',
+    '.ag-nb{width:26px;height:26px;border-radius:2px;border:1px solid #d4cfc6;background:#f5f2eb;color:#6b6459;font-family:"JetBrains Mono",monospace;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:border-color .15s,color .15s,background .15s;}',
+    '.ag-nb:hover{border-color:#c84b2f;color:#c84b2f;background:#fdf0ed;}'
+  ].join('');
   document.head.appendChild(style);
 
-  /* ── 3. Build DOM ── */
-
-  // Launch button
-  const btn = document.createElement('button');
+  /* ── BUILD DOM ──────────────────────────────────────────────────────── */
+  var btn = document.createElement('button');
   btn.id = 'ag-btn';
-  btn.setAttribute('aria-label', 'Start AI Guide tour');
-  btn.innerHTML = '<span class="ag-dot"></span>AI Guide — Tour this page';
+  btn.innerHTML = '<span class="ag-d"></span>AI Guide \u2014 Tour this page';
   document.body.appendChild(btn);
 
-  // Guide bar
-  const bar = document.createElement('div');
+  var bar = document.createElement('div');
   bar.id = 'ag-bar';
-  bar.innerHTML = `
-    <div class="ag-bar-left">
-      <span class="ag-bar-title">AI Guide</span>
-      <span>·</span>
-      <div class="ag-pips" id="ag-pips"></div>
-    </div>
-    <button id="ag-close">Exit ✕</button>
-  `;
+  bar.innerHTML =
+    '<div class="ag-bl"><span class="ag-bt">AI Guide</span><span>\u00b7</span><div class="ag-ps" id="ag-ps"></div></div>' +
+    '<button id="ag-x">Exit \u2715</button>';
   document.body.appendChild(bar);
 
-  // Hotspots + tooltips
-  const hsEls = [];
+  var hsEls = [], ttEls = [];
 
-  STOPS.forEach((stop, i) => {
-    const hs = document.createElement('div');
+  STOPS.forEach(function (s, i) {
+    var hs = document.createElement('div');
     hs.className = 'ag-hs';
-    hs.id = `ag-hs-${i}`;
-    hs.setAttribute('aria-label', `Guide stop ${i + 1}: ${stop.eyebrow}`);
-    hs.innerHTML = `
-      <div class="ag-hs-ring">${i + 1}</div>
-      <div class="ag-tooltip" id="ag-tt-${i}">
-        <div class="ag-eyebrow">${stop.eyebrow}</div>
-        <div class="ag-title">${stop.title}</div>
-        <div class="ag-body">${stop.body}</div>
-        <div class="ag-foot">
-          <span class="ag-count">${String(i + 1).padStart(2,'0')} / ${String(STOPS.length).padStart(2,'0')}</span>
-          <div class="ag-navrow">
-            <button class="ag-nav-btn ag-prev-btn" aria-label="Previous">←</button>
-            <button class="ag-nav-btn ag-next-btn" aria-label="Next">${i === STOPS.length - 1 ? '✕' : '→'}</button>
-          </div>
-        </div>
-      </div>
-    `;
+    hs.innerHTML = '<div class="ag-rg">' + (i + 1) + '</div>';
     document.body.appendChild(hs);
     hsEls.push(hs);
+
+    var tt = document.createElement('div');
+    tt.className = 'ag-tt';
+    tt.innerHTML =
+      '<div class="ag-eb">' + s.eyebrow + '</div>' +
+      '<div class="ag-ti">' + s.title + '</div>' +
+      '<div class="ag-bo">' + s.body + '</div>' +
+      '<div class="ag-ft">' +
+        '<span class="ag-ct">' + p2(i + 1) + ' / ' + p2(STOPS.length) + '</span>' +
+        '<div class="ag-nr">' +
+          '<button class="ag-nb" data-p="' + i + '">\u2190</button>' +
+          '<button class="ag-nb" data-n="' + i + '">' + (i === STOPS.length - 1 ? '\u2715' : '\u2192') + '</button>' +
+        '</div>' +
+      '</div>';
+    document.body.appendChild(tt);
+    ttEls.push(tt);
   });
 
-  /* ── 4. State ── */
-  let cur = 0;
-  let running = false;
+  function p2(n) { return n < 10 ? '0' + n : '' + n; }
 
-  /* ── 5. Helpers ── */
-  function resolveTarget(selector) {
-    const parts = selector.split(',').map(s => s.trim());
-    for (const s of parts) {
-      const el = document.querySelector(s);
-      if (el) return el;
-    }
-    return null;
-  }
+  /* ── LAYOUT ─────────────────────────────────────────────────────────── */
+  var D = 28, GAP = 8, TW = 264, TH = 215;
 
-  function positionHotspot(hsEl, target, position) {
-    const rect = target.getBoundingClientRect();
-    const scrollY = window.scrollY || window.pageYOffset;
+  function place(i) {
+    var el = resolved[i];
+    var hs = hsEls[i];
+    var tt = ttEls[i];
+    if (!el) { hs.style.left = '-999px'; tt.style.left = '-999px'; return; }
 
-    // anchor point on the target element
-    let anchorX, anchorY;
-    switch (position) {
-      case 'top-left':
-        anchorX = rect.left + 32;
-        anchorY = rect.top + scrollY + 32;
-        break;
-      case 'top-right':
-        anchorX = rect.right - 32;
-        anchorY = rect.top + scrollY + 32;
-        break;
-      case 'bottom-left':
-        anchorX = rect.left + 32;
-        anchorY = rect.bottom + scrollY - 32;
-        break;
-      case 'bottom-right':
-      default:
-        anchorX = rect.right - 32;
-        anchorY = rect.bottom + scrollY - 32;
-        break;
-    }
+    var r = el.getBoundingClientRect();
+    var vw = window.innerWidth;
+    var vh = window.innerHeight;
+    var sd = STOPS[i].dotSide;
 
-    hsEl.style.left = anchorX + 'px';
-    hsEl.style.top  = anchorY + 'px';
+    // ── dot ──
+    var dx = sd === 'tl' || sd === 'bl' ? r.left + 16 : r.right - D - 16;
+    var dy = sd === 'tl' || sd === 'tr' ? r.top  + 16 : r.bottom - D - 16;
+    dx = Math.max(4, Math.min(dx, vw - D - 4));
+    dy = Math.max(54, Math.min(dy, vh - D - 4)); // 54 = clear the guide bar
+    hs.style.left = dx + 'px';
+    hs.style.top  = dy + 'px';
 
-    // tooltip placement
-    const tt = hsEl.querySelector('.ag-tooltip');
-    tt.classList.remove('ag-arr-left','ag-arr-right','ag-arr-top','ag-arr-bottom');
+    // ── tooltip ──
+    var cx = dx + D / 2, cy = dy + D / 2;
+    tt.classList.remove('al','ar','at','ab');
+    var tx, ty;
 
-    const vw = window.innerWidth;
-    const vh = window.innerHeight;
-    const ttW = 260, ttH = 200;
-    const hsFixed = { x: anchorX, y: anchorY - scrollY };
-
-    if (hsFixed.x + 20 + ttW < vw) {
-      // place to the right
-      tt.style.left = '20px';
-      tt.style.right = 'auto';
-      tt.style.top = '-6px';
-      tt.style.bottom = 'auto';
-      tt.classList.add('ag-arr-left');
+    if (cx + D / 2 + GAP + TW < vw - 6) {
+      tx = cx + D / 2 + GAP; ty = cy - 14; tt.classList.add('al');
+    } else if (cx - D / 2 - GAP - TW > 6) {
+      tx = cx - D / 2 - GAP - TW; ty = cy - 14; tt.classList.add('ar');
+    } else if (cy + D / 2 + GAP + TH < vh - 6) {
+      tx = Math.min(cx - 20, vw - TW - 8); ty = cy + D / 2 + GAP; tt.classList.add('at');
     } else {
-      // place to the left
-      tt.style.right = '20px';
-      tt.style.left = 'auto';
-      tt.style.top = '-6px';
-      tt.style.bottom = 'auto';
-      tt.classList.add('ag-arr-right');
+      tx = Math.min(cx - 20, vw - TW - 8); ty = cy - D / 2 - GAP - TH; tt.classList.add('ab');
     }
 
-    // flip vertically if too close to bottom
-    if (hsFixed.y + ttH > vh - 40) {
-      tt.style.top = 'auto';
-      tt.style.bottom = '20px';
-    }
+    tx = Math.max(6, Math.min(tx, vw - TW - 6));
+    ty = Math.max(54, Math.min(ty, vh - TH - 6));
+    tt.style.left = tx + 'px';
+    tt.style.top  = ty + 'px';
   }
 
-  function placeAll() {
-    STOPS.forEach((stop, i) => {
-      const target = resolveTarget(stop.targetSelector);
-      if (target) positionHotspot(hsEls[i], target, stop.position);
-    });
-  }
+  function placeAll() { for (var i = 0; i < STOPS.length; i++) place(i); }
 
+  /* ── PIPS ───────────────────────────────────────────────────────────── */
   function buildPips() {
-    const container = document.getElementById('ag-pips');
-    if (!container) return;
-    container.innerHTML = STOPS.map((_, i) =>
-      `<div class="ag-pip" id="ag-pip-${i}"></div>`
-    ).join('');
+    var c = document.getElementById('ag-ps');
+    if (!c) return;
+    c.innerHTML = STOPS.map(function (_, i) { return '<div class="ag-p" id="agp' + i + '"></div>'; }).join('');
   }
-
   function updatePips() {
-    STOPS.forEach((_, i) => {
-      const pip = document.getElementById(`ag-pip-${i}`);
-      if (!pip) return;
-      pip.className = 'ag-pip' +
-        (i < cur ? ' ag-done' : i === cur ? ' ag-now' : '');
+    STOPS.forEach(function (_, i) {
+      var p = document.getElementById('agp' + i);
+      if (p) p.className = 'ag-p' + (i < cur ? ' dn' : i === cur ? ' nw' : '');
     });
   }
+
+  /* ── STEP ───────────────────────────────────────────────────────────── */
+  var cur = 0, running = false, resolved = [], prevHi = null;
 
   function setStep(i) {
     if (i < 0 || i >= STOPS.length) return;
-    hsEls.forEach((hs, idx) => hs.classList.toggle('ag-active', idx === i));
     cur = i;
-    updatePips();
 
-    // scroll target into view
-    const target = resolveTarget(STOPS[i].targetSelector);
-    if (target) {
-      const rect = target.getBoundingClientRect();
-      const scrollY = window.scrollY || window.pageYOffset;
-      const offset = rect.top + scrollY - 100;
-      window.scrollTo({ top: offset, behavior: 'smooth' });
+    if (prevHi) { prevHi.classList.remove('ag-hi'); prevHi = null; }
+
+    hsEls.forEach(function (h, idx) { h.classList.toggle('active', idx === cur); });
+    ttEls.forEach(function (t, idx) { t.classList.toggle('show',   idx === cur); });
+
+    var el = resolved[cur];
+    if (el) {
+      el.classList.add('ag-hi');
+      prevHi = el;
+      var r = el.getBoundingClientRect();
+      if (r.top < 60 || r.bottom > window.innerHeight - 40) {
+        window.scrollTo({ top: Math.max(0, window.pageYOffset + r.top - 90), behavior: 'smooth' });
+      }
     }
+
+    setTimeout(placeAll, 350);
+    updatePips();
   }
 
-  function startGuide() {
-    running = true;
+  /* ── START / END ────────────────────────────────────────────────────── */
+  function start() {
+    resolved = STOPS.map(findEl);
+    running  = true;
     placeAll();
     buildPips();
-    hsEls.forEach(hs => hs.classList.add('ag-visible'));
-    bar.classList.add('ag-on');
+    hsEls.forEach(function (h) { h.classList.add('vis'); });
+    bar.classList.add('on');
     btn.style.display = 'none';
     setStep(0);
   }
 
-  function endGuide() {
+  function end() {
     running = false;
-    hsEls.forEach(hs => {
-      hs.classList.remove('ag-visible', 'ag-active');
-    });
-    bar.classList.remove('ag-on');
+    if (prevHi) { prevHi.classList.remove('ag-hi'); prevHi = null; }
+    hsEls.forEach(function (h) { h.classList.remove('vis','active'); });
+    ttEls.forEach(function (t) { t.classList.remove('show'); });
+    bar.classList.remove('on');
     btn.style.display = '';
   }
 
-  /* ── 6. Events ── */
-  btn.addEventListener('click', startGuide);
-  document.getElementById('ag-close').addEventListener('click', endGuide);
+  /* ── EVENTS ─────────────────────────────────────────────────────────── */
+  btn.addEventListener('click', start);
+  document.getElementById('ag-x').addEventListener('click', end);
 
-  // Hotspot clicks
-  hsEls.forEach((hs, i) => {
-    hs.addEventListener('click', () => setStep(i));
+  hsEls.forEach(function (h, i) {
+    h.addEventListener('click', function (e) { e.stopPropagation(); setStep(i); });
   });
 
-  // Tooltip nav buttons (prev / next)
   document.addEventListener('click', function (e) {
-    if (e.target.classList.contains('ag-prev-btn')) {
-      e.stopPropagation();
-      if (cur > 0) setStep(cur - 1);
-    }
-    if (e.target.classList.contains('ag-next-btn')) {
-      e.stopPropagation();
-      if (cur < STOPS.length - 1) setStep(cur + 1);
-      else endGuide();
-    }
+    var p = e.target.getAttribute('data-p');
+    var n = e.target.getAttribute('data-n');
+    if (p !== null) { e.stopPropagation(); if (cur > 0) setStep(cur - 1); }
+    if (n !== null) { e.stopPropagation(); if (cur < STOPS.length - 1) setStep(cur + 1); else end(); }
   });
 
-  // Keyboard support
   document.addEventListener('keydown', function (e) {
     if (!running) return;
-    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
-      if (cur < STOPS.length - 1) setStep(cur + 1); else endGuide();
-    }
-    if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-      if (cur > 0) setStep(cur - 1);
-    }
-    if (e.key === 'Escape') endGuide();
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { if (cur < STOPS.length - 1) setStep(cur + 1); else end(); }
+    if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   { if (cur > 0) setStep(cur - 1); }
+    if (e.key === 'Escape') end();
   });
 
-  // Reposition on resize / scroll
-  window.addEventListener('resize', () => { if (running) placeAll(); });
-  window.addEventListener('scroll', () => { if (running) placeAll(); }, { passive: true });
+  window.addEventListener('scroll', function () { if (running) placeAll(); }, { passive: true });
+  window.addEventListener('resize', function () { if (running) placeAll(); });
 
 })();
