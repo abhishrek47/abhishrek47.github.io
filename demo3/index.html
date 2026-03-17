@@ -1,1125 +1,404 @@
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-LY3GY2LH00"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-LY3GY2LH00');
-</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Localization Automation Demo · Abhishek Trivedi</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<title>Demo 03 — Localisation Automation · Abhishek Trivedi</title>
+<link rel="stylesheet" href="../css/shared.css">
 <style>
-:root {
-  --bg:      #0a0e14;
-  --bg2:     #0f1520;
-  --bg3:     #141d2e;
-  --navy:    #1a3a5c;
-  --accent:  #c84b2f;
-  --accent-l:#e05a3a;
-  --green:   #3dba6e;
-  --green-d: #2a8a4e;
-  --gold:    #d4af5f;
-  --amber:   #e09030;
-  --white:   #f0ede6;
-  --dim:     #8ba3be;
-  --dimmer:  #4a6280;
-  --rule:    rgba(255,255,255,0.07);
-  --red:     #e05555;
-  --radius:  8px;
+.before-after {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin: 1.5rem 0;
 }
-
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-body {
-  background: var(--bg);
-  color: var(--white);
-  font-family: 'DM Sans', sans-serif;
-  min-height: 100vh;
-  overflow-x: hidden;
+.ba-col { }
+.ba-header {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
-
-/* ── HEADER ── */
-.header {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 16px 40px;
-  background: rgba(10,14,20,0.95);
-  border-bottom: 1px solid var(--rule);
-  position: sticky; top: 0; z-index: 100;
-  backdrop-filter: blur(10px);
+.ba-header.bad { color: var(--red); }
+.ba-header.good { color: var(--green); }
+.step-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
-.header-logo { font-family: 'DM Serif Display', serif; font-size: 22px; color: var(--white); }
-.header-logo span { color: var(--accent); }
-.header-badge {
-  background: rgba(200,75,47,0.15); border: 1px solid rgba(200,75,47,0.4);
-  color: var(--accent); font-size: 11px; font-weight: 600;
-  letter-spacing: 0.08em; padding: 5px 12px; border-radius: 20px; text-transform: uppercase;
+.step-list li {
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
 }
-.header-by { font-size: 13px; color: var(--dimmer); }
-.header-by a { color: var(--gold); text-decoration: none; }
-.header-by a:hover { text-decoration: underline; }
-
-/* ── SCREENS ── */
-.screen { display: none; }
-.screen.active { display: block; animation: fadeUp 0.5s ease forwards; }
-@keyframes fadeUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
-
-/* ── PROGRESS ── */
-.progress-wrap { padding: 24px 48px 0; }
-.progress-bar { display: flex; gap: 6px; max-width: 600px; }
-.progress-step { height: 3px; flex: 1; background: rgba(255,255,255,0.08); border-radius: 2px; transition: background 0.4s; }
-.progress-step.done   { background: var(--accent); }
-.progress-step.active { background: var(--gold); }
-
-/* ── SCREEN CONTAINERS ── */
-.screen-inner {
-  max-width: 1100px; margin: 0 auto;
-  padding: 40px 48px 60px;
+.step-list li .s-num {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--text-muted);
+  min-width: 18px;
+  padding-top: 2px;
 }
-
-.screen-tag {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px; color: var(--accent);
-  letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 12px;
+.step-list li .s-time {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--red);
+  margin-left: auto;
 }
-.screen-title {
-  font-family: 'DM Serif Display', serif;
-  font-size: clamp(32px, 4vw, 52px); line-height: 1.1;
-  margin-bottom: 14px;
+.step-list li .s-tick {
+  color: var(--green);
+  font-size: 13px;
+  margin-left: auto;
 }
-.screen-title .hl  { color: var(--accent); font-style: italic; }
-.screen-title .hlg { color: var(--green); }
-.screen-body { font-size: 16px; line-height: 1.75; color: var(--dim); max-width: 580px; margin-bottom: 32px; }
-
-/* ── BUTTONS ── */
-.btn {
-  display: inline-flex; align-items: center; gap: 8px;
-  padding: 13px 26px; border-radius: var(--radius);
-  font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600;
-  cursor: pointer; border: none; transition: all 0.2s;
-}
-.btn-primary { background: var(--accent); color: white; }
-.btn-primary:hover { background: var(--accent-l); transform: translateY(-1px); }
-.btn-primary:disabled { opacity: 0.35; cursor: not-allowed; transform: none; }
-.btn-ghost { background: transparent; color: var(--dim); border: 1px solid rgba(255,255,255,0.12); }
-.btn-ghost:hover { color: var(--white); border-color: rgba(255,255,255,0.3); }
-.btn-green { background: var(--green); color: white; }
-.btn-green:hover { background: var(--green-d); transform: translateY(-1px); }
-.btn-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-top: 28px; }
-
-/* ════════════════════════════════
-   SCREEN 1 — THE PROBLEM
-════════════════════════════════ */
-.pain-grid {
-  display: grid; grid-template-columns: 1fr 1fr;
-  gap: 20px; margin-bottom: 32px;
-}
-.pain-card {
-  background: var(--bg2); border: 1px solid var(--rule);
-  border-radius: var(--radius); padding: 22px;
-  position: relative; overflow: hidden;
-}
-.pain-card::before {
-  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
-}
-.pain-card.red::before   { background: var(--red); }
-.pain-card.amber::before { background: var(--amber); }
-.pain-card-num {
-  font-family: 'DM Serif Display', serif;
-  font-size: 48px; line-height: 1; margin-bottom: 6px;
-}
-.pain-card.red   .pain-card-num { color: var(--red); }
-.pain-card.amber .pain-card-num { color: var(--amber); }
-.pain-card-label { font-size: 13px; color: var(--dim); line-height: 1.5; }
-
-.manual-steps { display: flex; flex-direction: column; gap: 0; }
-.manual-step {
-  display: flex; align-items: center; gap: 14px;
-  padding: 12px 18px;
-  background: var(--bg2); border: 1px solid var(--rule);
-  border-bottom: none; position: relative;
-  opacity: 0; transform: translateX(-12px);
-  transition: opacity 0.4s, transform 0.4s;
-}
-.manual-step:first-child { border-radius: var(--radius) var(--radius) 0 0; }
-.manual-step:last-child  { border-bottom: 1px solid var(--rule); border-radius: 0 0 var(--radius) var(--radius); }
-.manual-step.show { opacity: 1; transform: translateX(0); }
-.step-num {
-  width: 26px; height: 26px; border-radius: 50%;
-  background: rgba(200,75,47,0.15); border: 1px solid rgba(200,75,47,0.3);
-  display: flex; align-items: center; justify-content: center;
-  font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--accent);
-  flex-shrink: 0;
-}
-.step-text { font-size: 13px; color: var(--white); flex: 1; }
-.step-time {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px; color: var(--red);
-  background: rgba(224,85,85,0.1); padding: 3px 8px; border-radius: 4px;
-  flex-shrink: 0;
-}
-.total-bar {
-  margin-top: 12px; background: var(--bg2);
-  border: 1px solid rgba(224,85,85,0.3);
-  border-radius: var(--radius); padding: 16px 20px;
-  display: flex; align-items: center; justify-content: space-between;
-  opacity: 0; transition: opacity 0.5s;
-}
-.total-bar.show { opacity: 1; }
-.total-label { font-size: 13px; color: var(--dim); }
-.total-val {
-  font-family: 'DM Serif Display', serif;
-  font-size: 28px; color: var(--red);
-}
-.total-val span { font-size: 14px; color: var(--dimmer); margin-left: 6px; }
-
-/* ════════════════════════════════
-   SCREEN 2 — CONTRAST
-════════════════════════════════ */
-.contrast-grid {
-  display: grid; grid-template-columns: 1fr auto 1fr;
-  gap: 0; align-items: start;
-}
-.contrast-col {
-  background: var(--bg2); border: 1px solid var(--rule);
-  border-radius: var(--radius); overflow: hidden;
-}
-.contrast-header {
-  padding: 14px 20px; font-size: 12px; font-weight: 700;
-  letter-spacing: 0.08em; text-transform: uppercase;
-  display: flex; align-items: center; gap: 8px;
-}
-.contrast-col.bad  .contrast-header { background: rgba(224,85,85,0.1);  color: var(--red); border-bottom: 1px solid rgba(224,85,85,0.2); }
-.contrast-col.good .contrast-header { background: rgba(61,186,110,0.1); color: var(--green); border-bottom: 1px solid rgba(61,186,110,0.2); }
-.contrast-body { padding: 18px 20px; }
-
-.bad-steps { display: flex; flex-direction: column; gap: 6px; }
-.bad-step {
-  font-size: 12px; color: var(--dim);
-  padding: 8px 12px; background: rgba(255,255,255,0.03);
-  border-radius: 4px; display: flex; align-items: center; gap: 8px;
-}
-.bad-step::before { content: '✗'; color: var(--red); font-size: 11px; }
-
-.vs-arrow {
-  display: flex; align-items: center; justify-content: center;
-  padding: 0 20px; font-size: 24px; color: var(--dimmer);
-  align-self: center;
-}
-
-.command-showcase {
-  background: var(--bg); border: 1px solid rgba(61,186,110,0.2);
-  border-radius: var(--radius); padding: 18px;
-  font-family: 'JetBrains Mono', monospace;
-  margin-bottom: 14px;
-}
-.cmd-prompt { font-size: 11px; color: var(--dimmer); margin-bottom: 8px; }
-.cmd-line { font-size: 13px; color: var(--green); line-height: 1.8; word-break: break-all; }
-.cmd-line .cmd-name { color: var(--amber); }
-.cmd-line .cmd-flag { color: #7eb8f7; }
-.cmd-line .cmd-val  { color: var(--green); }
-
-.good-outcomes { display: flex; flex-direction: column; gap: 6px; margin-top: 12px; }
-.good-outcome {
-  font-size: 12px; color: var(--dim);
-  padding: 8px 12px; background: rgba(61,186,110,0.05);
-  border-radius: 4px; display: flex; align-items: center; gap: 8px;
-}
-.good-outcome::before { content: '✓'; color: var(--green); font-size: 11px; }
 
 .time-compare {
-  display: grid; grid-template-columns: 1fr 1fr;
-  gap: 12px; margin-top: 20px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin: 1.5rem 0;
 }
-.time-card {
-  background: var(--bg2); border: 1px solid var(--rule);
-  border-radius: var(--radius); padding: 16px; text-align: center;
+.time-box {
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  text-align: center;
 }
-.time-card.before { border-color: rgba(224,85,85,0.3); }
-.time-card.after  { border-color: rgba(61,186,110,0.3); }
+.time-box.before {
+  background: var(--red-soft);
+  border: 1px solid #FECACA;
+}
+.time-box.after {
+  background: var(--green-soft);
+  border: 1px solid #BBF7D0;
+}
 .time-val {
-  font-family: 'DM Serif Display', serif; font-size: 36px; line-height: 1;
+  font-family: var(--mono);
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1;
   margin-bottom: 4px;
 }
-.time-card.before .time-val { color: var(--red); }
-.time-card.after  .time-val { color: var(--green); }
-.time-lbl { font-size: 12px; color: var(--dimmer); }
+.time-box.before .time-val { color: var(--red); }
+.time-box.after .time-val { color: var(--green); }
+.time-label { font-size: 0.8125rem; color: var(--text-secondary); }
 
-/* ════════════════════════════════
-   SCREEN 3 — TERMINAL
-════════════════════════════════ */
-.terminal-wrap {
-  background: #0d1117; border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 10px; overflow: hidden;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
-  max-width: 780px;
+.lang-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 1rem 0;
 }
-.terminal-bar {
-  background: #1c2128; padding: 12px 16px;
-  display: flex; align-items: center; gap: 8px;
-  border-bottom: 1px solid rgba(255,255,255,0.06);
-}
-.t-dot { width: 12px; height: 12px; border-radius: 50%; }
-.t-dot.red    { background: #ff5f57; }
-.t-dot.amber  { background: #ffbd2e; }
-.t-dot.green  { background: #28c840; }
-.t-title {
-  flex: 1; text-align: center;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 12px; color: rgba(255,255,255,0.3);
-}
-.terminal-body {
-  padding: 20px 24px; min-height: 360px;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 13px; line-height: 1.8;
-}
-.t-line { display: flex; gap: 8px; margin-bottom: 2px; }
-.t-prompt { color: var(--green); flex-shrink: 0; }
-.t-cmd    { color: var(--white); }
-.t-output { color: var(--dim); padding-left: 16px; }
-.t-success{ color: var(--green); padding-left: 16px; }
-.t-warn   { color: var(--amber); padding-left: 16px; }
-.t-file   { color: #7eb8f7; padding-left: 16px; }
-.t-cursor {
-  display: inline-block; width: 8px; height: 14px;
-  background: var(--green); vertical-align: middle;
-  animation: blink 1s infinite;
-}
-@keyframes blink { 0%,49%{opacity:1} 50%,100%{opacity:0} }
-
-.progress-line {
-  padding-left: 16px; color: var(--dim);
-}
-.progress-bar-term {
-  display: inline-block; height: 8px;
-  background: var(--green); border-radius: 2px;
-  transition: width 0.1s;
-}
-.progress-bg {
-  display: inline-block; height: 8px; width: 200px;
-  background: rgba(255,255,255,0.08); border-radius: 2px;
-  vertical-align: middle; overflow: hidden;
-}
-
-.input-row {
-  display: flex; align-items: center; gap: 10px;
-  margin-top: 16px;
-}
-.input-prompt { font-family:'JetBrains Mono',monospace; font-size:13px; color:var(--green); flex-shrink:0; }
-.t-input {
-  flex: 1; background: transparent;
-  border: none; outline: none;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 13px; color: var(--white);
-  caret-color: var(--green);
-}
-
-/* ════════════════════════════════
-   SCREEN 4 — COMPLETION
-════════════════════════════════ */
-.result-hero {
-  background: linear-gradient(135deg, var(--bg2), var(--bg3));
-  border: 1px solid rgba(61,186,110,0.2);
-  border-radius: var(--radius); padding: 32px;
-  margin-bottom: 24px; position: relative; overflow: hidden;
-}
-.result-hero::before {
-  content: ''; position: absolute;
-  top: -60px; right: -60px; width: 200px; height: 200px;
-  background: radial-gradient(circle, rgba(61,186,110,0.08), transparent 70%);
-}
-.result-stat-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; margin-bottom: 24px; }
-.result-stat {
-  background: var(--bg2); border: 1px solid var(--rule);
-  border-radius: var(--radius); padding: 18px; text-align: center;
-}
-.result-stat-val {
-  font-family: 'DM Serif Display', serif;
-  font-size: 32px; color: var(--accent); line-height: 1; margin-bottom: 4px;
-}
-.result-stat-lbl { font-size: 11px; color: var(--dimmer); }
-
-.insight-dark {
-  background: rgba(26,58,92,0.4); border: 1px solid rgba(255,255,255,0.08);
-  border-left: 3px solid var(--accent);
-  border-radius: var(--radius); padding: 20px 24px; margin-bottom: 20px;
-  font-size: 14px; line-height: 1.7; color: var(--dim);
-}
-.insight-dark strong { color: var(--white); }
-
-.tech-pills { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
-.tech-pill {
-  background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 6px; padding: 6px 14px;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px; color: var(--gold);
-}
-
-.completion-badge {
-  display: inline-flex; align-items: center; gap: 8px;
-  background: rgba(61,186,110,0.1); border: 1px solid rgba(61,186,110,0.3);
-  color: var(--green); font-weight: 600; font-size: 13px;
-  padding: 8px 18px; border-radius: 30px; margin-bottom: 16px;
-}
-.port-link { font-size: 13px; color: var(--dimmer); }
-.port-link a { color: var(--gold); text-decoration: none; }
-.port-link a:hover { text-decoration: underline; }
-
-@media(max-width:820px){
-  .screen-inner { padding: 28px 20px 48px; }
-  .pain-grid { grid-template-columns: 1fr; }
-  .contrast-grid { grid-template-columns: 1fr; }
-  .vs-arrow { display: none; }
-  .result-stat-row { grid-template-columns: 1fr 1fr; }
-}
-
-
-/* ── HBT LABELED BUTTON ── */
-.hbt-btn-labeled {
-  width: auto !important;
-  height: 32px !important;
-  border-radius: 100px !important;
-  padding: 0 14px 0 10px !important;
-  gap: 6px !important;
-  flex-direction: row !important;
-  font-size: 0 !important;
-  display: inline-flex !important;
-}
-.hbt-btn-icon {
-  font-family: 'DM Serif Display', serif;
-  font-size: 15px;
-  font-weight: 600;
-  color: inherit;
-  line-height: 1;
-  width: 18px;
-  height: 18px;
-  display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0;
-}
-.hbt-btn-text {
-  font-family: 'JetBrains Mono', monospace;
+.lang-badge {
+  font-family: var(--mono);
   font-size: 11px;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.7);
-  white-space: nowrap;
+  padding: 3px 8px;
+  border-radius: 4px;
+  background: var(--bg-muted);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
 }
-.hbt-btn-labeled:hover .hbt-btn-text { color: #c84b2f; }
-@media(max-width:480px){
-  .hbt-btn-text { display: none; }
-  .hbt-btn-labeled { padding: 0 !important; width: 32px !important; justify-content: center; }
-}
-
-/* ── HOW I BUILT THIS DRAWER ── */
-.hbt-btn {
-  width: 32px; height: 32px; border-radius: 50%;
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.15);
-  color: rgba(255,255,255,0.6);
-  font-family: 'DM Serif Display', serif;
-  font-size: 15px; font-weight: 600;
-  cursor: pointer; display: flex;
-  align-items: center; justify-content: center;
-  transition: all 0.2s; flex-shrink: 0;
-  margin-left: 12px;
-}
-.hbt-btn:hover {
-  background: rgba(200,75,47,0.2);
-  border-color: rgba(200,75,47,0.5);
-  color: #c84b2f; transform: scale(1.08);
-}
-.hbt-overlay {
-  position: fixed; inset: 0;
-  background: rgba(0,0,0,0.5);
-  z-index: 900; opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.3s;
-  backdrop-filter: blur(3px);
-}
-.hbt-overlay.open { opacity: 1; pointer-events: all; }
-.hbt-drawer {
-  position: fixed; top: 0; right: 0; bottom: 0;
-  width: min(480px, 95vw);
-  background: #0d1520;
-  border-left: 1px solid rgba(255,255,255,0.08);
-  z-index: 901;
-  transform: translateX(100%);
-  transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
-  overflow-y: auto;
-  display: flex; flex-direction: column;
-}
-.hbt-drawer.open { transform: translateX(0); }
-.hbt-drawer-header {
-  padding: 22px 24px 18px;
-  border-bottom: 1px solid rgba(255,255,255,0.07);
-  display: flex; align-items: center; justify-content: space-between;
-  position: sticky; top: 0; background: #0d1520; z-index: 1;
-}
-.hbt-drawer-title {
-  font-family: 'DM Serif Display', serif;
-  font-size: 18px; color: #f0ede6;
-}
-.hbt-close {
-  width: 30px; height: 30px; border-radius: 50%;
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.1);
-  color: rgba(255,255,255,0.5); font-size: 16px;
-  cursor: pointer; display: flex;
-  align-items: center; justify-content: center;
-  transition: all 0.2s;
-}
-.hbt-close:hover { background: rgba(200,75,47,0.2); color: #c84b2f; }
-.hbt-body { padding: 24px; flex: 1; }
-.hbt-section { margin-bottom: 28px; }
-.hbt-section-label {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 10px; letter-spacing: 0.12em;
-  text-transform: uppercase; margin-bottom: 12px;
-  display: flex; align-items: center; gap: 8px;
-}
-.hbt-section-label.real   { color: #3dba6e; }
-.hbt-section-label.sim    { color: #d4af5f; }
-.hbt-section-label.prod   { color: #c84b2f; }
-.hbt-section-label::after { content:''; flex:1; height:1px; background: currentColor; opacity:0.2; }
-.hbt-item {
-  display: flex; gap: 10px; align-items: flex-start;
-  padding: 10px 12px; border-radius: 6px;
-  margin-bottom: 6px; font-size: 13px; line-height: 1.6;
-}
-.hbt-item.real { background: rgba(61,186,110,0.07); color: #a8d8b8; border: 1px solid rgba(61,186,110,0.12); }
-.hbt-item.sim  { background: rgba(212,175,95,0.07);  color: #d4c08a; border: 1px solid rgba(212,175,95,0.12); }
-.hbt-item.prod { background: rgba(200,75,47,0.07);   color: #e8a898; border: 1px solid rgba(200,75,47,0.12); }
-.hbt-item-icon { flex-shrink: 0; font-size: 14px; margin-top: 1px; }
-.hbt-arch {
-  background: #060d18;
-  border: 1px solid rgba(255,255,255,0.07);
-  border-radius: 8px; padding: 16px;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px; color: #8ba3be;
-  line-height: 1.9; margin-top: 8px;
-  white-space: pre;
-}
-.hbt-arch .node  { color: #7eb8f7; }
-.hbt-arch .arrow { color: #4a6280; }
-.hbt-arch .label { color: #3dba6e; }
-.hbt-arch .note  { color: #d4af5f; }
-.hbt-footer {
-  padding: 16px 24px;
-  border-top: 1px solid rgba(255,255,255,0.06);
-  font-size: 12px; color: #4a6280;
-  font-family: 'JetBrains Mono', monospace;
+.lang-badge.done {
+  background: var(--green-soft);
+  border-color: #BBF7D0;
+  color: var(--green);
 }
 
-/* ── MOBILE OPTIMISATION ── */
-@media(max-width:600px){
-  .header { padding: 14px 16px; gap: 8px; }
-  .header-logo { font-size: 18px; }
-  .header-badge { font-size: 9px; padding: 4px 8px; letter-spacing: 0.05em; }
-  .header-by { display: none; }
-  .hbt-btn-wrap { margin-left: auto; }
-  .progress-step { height: 3px; border-radius: 2px; }
-  .screen-inner { padding: 24px 16px 40px !important; }
-  .screen-title { font-size: clamp(1.4rem, 5vw, 1.8rem) !important; }
-  .screen-body { font-size: 14px !important; }
-  .btn-primary, .btn-secondary { padding: 12px 20px !important; font-size: 13px !important; }
-  .nav-btns { gap: 8px !important; flex-wrap: wrap; }
-  .stage { padding: 20px 16px !important; }
-  .hbt-drawer { width: 100vw !important; }
-  /* Demo 1 specific */
-  .role-grid { grid-template-columns: 1fr 1fr !important; gap: 10px !important; }
-  .role-card { padding: 14px 12px !important; }
-  .name-input { font-size: 15px !important; }
-  .narration-box { font-size: 13px !important; padding: 14px !important; }
-  /* Demo 2 specific */
-  .tab-list { gap: 4px !important; overflow-x: auto; flex-wrap: nowrap !important; }
-  .tab-btn { padding: 8px 12px !important; font-size: 12px !important; white-space: nowrap; }
-  .dnd-wrapper { grid-template-columns: 1fr !important; }
-  .dnd-items { gap: 6px !important; }
-  .dnd-item { padding: 10px 12px !important; font-size: 13px !important; }
-  /* Demo 3 specific */
-  .terminal { padding: 14px !important; font-size: 11px !important; line-height: 1.5 !important; }
-  .terminal-line { word-break: break-all; }
-  .cmd-row { flex-direction: column; gap: 8px !important; align-items: stretch !important; }
-  .cmd-input { font-size: 12px !important; }
-  .input-row { gap: 6px; }
-  .t-input { font-size: 12px; }
-  .terminal-body { padding: 14px 14px; min-height: 260px; font-size: 11.5px; line-height: 1.6; }
-  .result-stat-row { grid-template-columns: 1fr 1fr !important; }
-  .pain-stat-num { font-size: 2rem !important; }
-  .result-stat-num { font-size: 2rem !important; }
-}
+.screen-section { display: none; }
+.screen-section.active { display: block; animation: fadeUp 0.3s ease forwards; }
 </style>
 </head>
 <body>
 
-<header class="header">
-  <div class="header-logo">AT<span>.</span></div>
-  <div class="header-badge">Live Portfolio Demo</div>
-  <button class="hbt-btn hbt-btn-labeled" onclick="openHBT()" title="How I built this" aria-label="How I built this">
-    <span class="hbt-btn-icon">?</span>
-    <span class="hbt-btn-text">How I built this</span>
-  </button>
-  <div class="header-by">by <a href="https://abhishektrivedi.com" target="_blank">Abhishek Trivedi</a></div>
-</header>
-
-<!-- ══════════════════════════════
-     SCREEN 1 — THE PROBLEM
-══════════════════════════════ -->
-<div class="screen active" id="screen-1">
-  <div class="progress-wrap">
-    <div class="progress-bar">
-      <div class="progress-step active"></div>
-      <div class="progress-step"></div>
-      <div class="progress-step"></div>
-      <div class="progress-step"></div>
-    </div>
+<nav class="demo-nav">
+  <a class="logo" href="https://abhishektrivedi.com">AT.</a>
+  <div class="nav-meta">
+    <span class="nav-label">Live Demo</span>
+    <span>Demo 03 / 05</span>
+    <a class="nav-back" href="https://abhishektrivedi.com/pages/work.html#case3">← Case Study</a>
   </div>
-  <div class="screen-inner">
-    <div class="screen-tag">// Case Study 03 — Localization Automation</div>
-    <h1 class="screen-title">36 hours of work.<br>Every. <span class="hl">Single.</span> Time.</h1>
-    <p class="screen-body">A global technology org trained employees across 8 language regions. Every course update meant manually re-editing every video for every language. Watch how the time added up.</p>
+</nav>
 
-    <div class="pain-grid">
-      <div class="pain-card red">
-        <div class="pain-card-num">4.5h</div>
-        <div class="pain-card-label">Per language, per course update — manual video re-editing, re-timing, re-syncing</div>
+<div class="demo-container">
+
+  <!-- Screen 1: The Problem -->
+  <div class="screen-section active" id="screen-problem">
+    <span class="code-label">// Case Study 03 — Localisation Automation</span>
+    <h1>36 hours of work. <em>Every. Single. Time.</em></h1>
+    <p>A global technology org trained employees across 8 language regions. Every course update meant manually re-editing every video for every language.</p>
+    <hr>
+    <div class="before-after">
+      <div class="ba-col">
+        <div class="ba-header bad">✗ Manual — per language</div>
+        <ul class="step-list">
+          <li><span class="s-num">01</span>Export raw video from Storyline<span class="s-time">~20m</span></li>
+          <li><span class="s-num">02</span>Strip original audio track<span class="s-time">~15m</span></li>
+          <li><span class="s-num">03</span>Import localised audio, re-time<span class="s-time">~90m</span></li>
+          <li><span class="s-num">04</span>Re-sync subtitle file<span class="s-time">~60m</span></li>
+          <li><span class="s-num">05</span>Burn subtitles, export final<span class="s-time">~30m</span></li>
+          <li><span class="s-num">06</span>QA review, fix errors, re-export<span class="s-time">~45m</span></li>
+        </ul>
       </div>
-      <div class="pain-card amber">
-        <div class="pain-card-num">×8</div>
-        <div class="pain-card-label">Language regions requiring separate video versions: EN, DE, FR, ES, ZH, JA, PT, AR</div>
-      </div>
-    </div>
-
-    <div class="manual-steps" id="manual-steps">
-      <div class="manual-step"><div class="step-num">1</div><div class="step-text">Export raw video from Storyline published output</div><div class="step-time">~20 min</div></div>
-      <div class="manual-step"><div class="step-num">2</div><div class="step-text">Strip original audio track in video editor</div><div class="step-time">~15 min</div></div>
-      <div class="manual-step"><div class="step-num">3</div><div class="step-text">Import localised audio, manually re-time to video</div><div class="step-time">~90 min</div></div>
-      <div class="manual-step"><div class="step-num">4</div><div class="step-text">Re-sync subtitle file, fix timing offsets per sentence</div><div class="step-time">~60 min</div></div>
-      <div class="manual-step"><div class="step-num">5</div><div class="step-text">Burn subtitles and mix audio, export final video</div><div class="step-time">~30 min</div></div>
-      <div class="manual-step"><div class="step-num">6</div><div class="step-text">QA review, fix errors, re-export if needed</div><div class="step-time">~45 min</div></div>
-    </div>
-
-    <div class="total-bar" id="total-bar">
-      <div class="total-label">Total per language × 8 languages × every course update</div>
-      <div class="total-val">36h <span>of manual work</span></div>
-    </div>
-
-    <div class="btn-row">
-      <button class="btn btn-primary" onclick="goTo(2)">See the fix →</button>
-    </div>
-  </div>
-</div>
-
-<!-- ══════════════════════════════
-     SCREEN 2 — CONTRAST
-══════════════════════════════ -->
-<div class="screen" id="screen-2">
-  <div class="progress-wrap">
-    <div class="progress-bar">
-      <div class="progress-step done"></div>
-      <div class="progress-step active"></div>
-      <div class="progress-step"></div>
-      <div class="progress-step"></div>
-    </div>
-  </div>
-  <div class="screen-inner">
-    <div class="screen-tag">// The Solution — Before vs After</div>
-    <h1 class="screen-title">Same output.<br><span class="hlg">One command.</span></h1>
-    <p class="screen-body">Everything in the manual workflow still happens — extract, strip, re-time, sync, burn, export. The script just does it without a human in the loop.</p>
-
-    <div class="contrast-grid">
-      <div class="contrast-col bad">
-        <div class="contrast-header">
-          <span>✗</span> Before — Manual (per language)
-        </div>
-        <div class="contrast-body">
-          <div class="bad-steps">
-            <div class="bad-step">Export video from Storyline</div>
-            <div class="bad-step">Strip audio in Premiere / DaVinci</div>
-            <div class="bad-step">Import localised audio track</div>
-            <div class="bad-step">Manually re-time narration to video</div>
-            <div class="bad-step">Fix subtitle timing offsets</div>
-            <div class="bad-step">Burn subtitles, mix audio, re-export</div>
-            <div class="bad-step">QA, fix errors, repeat</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="vs-arrow">→</div>
-
-      <div class="contrast-col good">
-        <div class="contrast-header">
-          <span>✓</span> After — Automated (all languages)
-        </div>
-        <div class="contrast-body">
-          <div class="command-showcase">
-            <div class="cmd-prompt">dev@ld-tools:~/localization$</div>
-            <div class="cmd-line">
-              <span class="cmd-name">bash</span> <span class="cmd-val">localize.sh</span> <span class="cmd-flag">--input</span> <span class="cmd-val">module_v2.mp4</span> <span class="cmd-flag">--langs</span> <span class="cmd-val">all</span> <span class="cmd-flag">--subs</span> <span class="cmd-val">auto</span>
-            </div>
-          </div>
-          <div class="good-outcomes">
-            <div class="good-outcome">All 8 language versions processed in parallel</div>
-            <div class="good-outcome">Audio stripped, re-timed and mixed automatically</div>
-            <div class="good-outcome">Subtitle files synced via FFmpeg filter chain</div>
-            <div class="good-outcome">Output files named, formatted and ready to upload</div>
-          </div>
-        </div>
+      <div class="ba-col">
+        <div class="ba-header good">✓ Automated — all languages</div>
+        <ul class="step-list">
+          <li><span class="s-num">—</span>Run one command<span class="s-tick">✓</span></li>
+          <li><span class="s-num">—</span>Audio stripped & re-timed automatically<span class="s-tick">✓</span></li>
+          <li><span class="s-num">—</span>Subtitle files synced via FFmpeg<span class="s-tick">✓</span></li>
+          <li><span class="s-num">—</span>8 languages processed in parallel<span class="s-tick">✓</span></li>
+          <li><span class="s-num">—</span>Output files named & ready to upload<span class="s-tick">✓</span></li>
+        </ul>
       </div>
     </div>
 
     <div class="time-compare">
-      <div class="time-card before">
+      <div class="time-box before">
         <div class="time-val">36h</div>
-        <div class="time-lbl">Manual — per course update</div>
+        <div class="time-label">Manual — per course update<br>×8 languages</div>
       </div>
-      <div class="time-card after">
+      <div class="time-box after">
         <div class="time-val">&lt;8m</div>
-        <div class="time-lbl">Automated — same output</div>
+        <div class="time-label">Automated — same output<br>all 8 languages in one run</div>
       </div>
     </div>
 
-    <div class="btn-row">
-      <button class="btn btn-green" onclick="goTo(3)">Run the script yourself →</button>
-      <button class="btn btn-ghost" onclick="goTo(1)">← Back</button>
-    </div>
+    <button class="btn btn-primary" onclick="showScreen('terminal')">Run the script yourself →</button>
   </div>
-</div>
 
-<!-- ══════════════════════════════
-     SCREEN 3 — TERMINAL
-══════════════════════════════ -->
-<div class="screen" id="screen-3">
-  <div class="progress-wrap">
-    <div class="progress-bar">
-      <div class="progress-step done"></div>
-      <div class="progress-step done"></div>
-      <div class="progress-step active"></div>
-      <div class="progress-step"></div>
-    </div>
-  </div>
-  <div class="screen-inner">
-    <div class="screen-tag">// Terminal Simulation — Run it yourself</div>
-    <h1 class="screen-title">Type the command.<br><span class="hlg">Watch it work.</span></h1>
-    <p class="screen-body" style="margin-bottom:24px;">The terminal below is a simulation of the actual workflow. Type the command and hit Enter — or click "Run for me" if you'd rather just watch.</p>
+  <!-- Screen 2: Terminal -->
+  <div class="screen-section" id="screen-terminal">
+    <span class="section-step">Terminal Simulation — run it yourself</span>
+    <h2>Type the command. Watch it work.</h2>
+    <p style="margin-bottom:1.25rem;">The terminal below is a simulation of the actual workflow. Type the command and hit Enter — or click "Run for me".</p>
 
-    <div class="terminal-wrap">
+    <div class="terminal">
       <div class="terminal-bar">
-        <div class="t-dot red"></div>
-        <div class="t-dot amber"></div>
-        <div class="t-dot green"></div>
-        <div class="t-title">bash — video-localization-tool</div>
+        <span class="terminal-dot r"></span>
+        <span class="terminal-dot y"></span>
+        <span class="terminal-dot g"></span>
+        <span>bash — video-localization-tool</span>
       </div>
-      <div class="terminal-body" id="terminal-body">
-        <div class="t-line"><span class="t-output">L&D Team · Video Localization Tool v2.1</span></div>
-        <div class="t-line"><span class="t-output">Type the command below or click "Run for me"</span></div>
-        <div class="t-line"><span class="t-output" style="color:rgba(255,255,255,0.15)">─────────────────────────────────────────</span></div>
-        <div class="t-line" style="margin-top:8px">
-          <span class="t-prompt">dev@ld-tools:~/localization$&nbsp;</span>
-          <input class="t-input" id="t-input" type="text" autocomplete="off" spellcheck="false"
-            placeholder="bash localize.sh --input module_v2.mp4 --langs all --subs auto"
-            onkeydown="handleKey(event)">
-        </div>
+      <div class="terminal-body" id="term-output">
+<span class="t-out">L&D Team · Video Localization Tool v2.1</span>
+<span class="t-out">Type the command below or click "Run for me"</span>
+<span class="t-out">─────────────────────────────────────────</span>
+<span class="t-prompt">dev@ld-tools:~/localization$ </span><span id="term-cursor">▋</span>
+      </div>
+      <div class="terminal-input">
+        <span class="t-prompt" style="font-family:var(--mono);font-size:0.8125rem;color:var(--text-muted);">$</span>
+        <input type="text" id="term-input" placeholder='bash localize.sh --input module_v2.mp4 --langs all --subs auto' onkeydown="if(event.key==='Enter')runScript()">
       </div>
     </div>
 
-    <div class="btn-row">
-      <button class="btn btn-green" id="btn-run" onclick="runScript()">▶ Run for me</button>
-      <button class="btn btn-ghost" onclick="resetTerminal()">↺ Reset</button>
-      <button class="btn btn-ghost" onclick="goTo(2)">← Back</button>
+    <p style="font-size:0.8125rem;color:var(--text-muted);margin-top:8px;">Hint: type <code>bash localize.sh --input module_v2.mp4 --langs all --subs auto</code> and press Enter</p>
+
+    <div style="display:flex;gap:10px;margin-top:1rem;">
+      <button class="btn btn-primary" onclick="runScriptAuto()">▶ Run for me</button>
+      <button class="btn" onclick="resetTerminal()">↺ Reset</button>
+      <button class="btn btn-ghost" onclick="showScreen('problem')">← Back</button>
     </div>
-    <p style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--dimmer);margin-top:12px;">
-      Hint: type <span style="color:var(--green)">bash localize.sh --input module_v2.mp4 --langs all --subs auto</span> and press Enter
-    </p>
   </div>
+
+  <!-- Screen 3: Results -->
+  <div class="screen-section" id="screen-results">
+    <span class="code-label">// Script executed — 8 languages processed</span>
+    <div class="tag tag-green" style="margin-bottom:1rem;">All complete ✓</div>
+    <h1>36 hours became <em>8 minutes.</em></h1>
+
+    <div class="metrics-row">
+      <div class="metric-card"><div class="metric-val" style="color:var(--accent);">270×</div><div class="metric-label">Faster than manual</div></div>
+      <div class="metric-card"><div class="metric-val" style="color:var(--accent);">8</div><div class="metric-label">Languages in one run</div></div>
+      <div class="metric-card"><div class="metric-val" style="color:var(--accent);">0</div><div class="metric-label">Human sync errors</div></div>
+      <div class="metric-card"><div class="metric-val" style="color:var(--accent);">1</div><div class="metric-label">Command to run it</div></div>
+    </div>
+
+    <p style="margin-bottom:0.5rem;"><strong style="color:var(--text-primary);">Languages processed:</strong></p>
+    <div class="lang-badges" id="lang-badges">
+      <span class="lang-badge done">EN ✓</span>
+      <span class="lang-badge done">DE ✓</span>
+      <span class="lang-badge done">FR ✓</span>
+      <span class="lang-badge done">ES ✓</span>
+      <span class="lang-badge done">ZH ✓</span>
+      <span class="lang-badge done">JA ✓</span>
+      <span class="lang-badge done">PT ✓</span>
+      <span class="lang-badge done">AR ✓</span>
+    </div>
+
+    <div class="card-muted" style="margin:1.5rem 0;">
+      <p><strong style="color:var(--text-primary);">What this demonstrates:</strong> Engineering mindset applied to L&D operations. Most instructional designers accept manual workflows as a given. The question I asked was different — <em>"why is a human doing this?"</em> Once that question has an answer, it has a script.</p>
+    </div>
+
+    <div class="built-with" style="margin-bottom:1.5rem;">
+      <span class="tag">FFmpeg</span>
+      <span class="tag">Bash Shell Scripting</span>
+      <span class="tag">Articulate Storyline</span>
+      <span class="tag">Subtitle Tools (SRT)</span>
+      <span class="tag">Parallel Processing</span>
+    </div>
+
+    <div style="display:flex;gap:10px;">
+      <button class="btn btn-primary" onclick="showScreen('terminal');resetTerminal()">↺ Run it again</button>
+      <a class="btn" href="https://abhishektrivedi.com/pages/work.html#case3">Full case study →</a>
+    </div>
+  </div>
+
+  <!-- Under the hood -->
+  <hr style="margin-top:3rem;">
+  <div style="display:flex;align-items:center;justify-content:space-between;">
+    <span class="code-label" style="margin:0;">Under the hood</span>
+    <button class="hood-btn" onclick="toggleHood(this)">? How I built this</button>
+  </div>
+  <div class="hood-drawer" id="hood-drawer">
+    <h3>How I Built This</h3>
+    <div class="hood-section-title">✓ What's real in this demo</div>
+    <ul class="hood-list">
+      <li data-icon="⌨">FFmpeg commands shown are the actual commands from the production script — filter chains and subtitle rendering options are verbatim</li>
+      <li data-icon="⏱">Time figures are real — 36 hours manual vs under 8 minutes automated is the actual measured difference</li>
+      <li data-icon="🌐">Language-specific log entries are accurate — DE narration really is ~7% longer than EN</li>
+      <li data-icon="⚡">Parallel processing — the script processed all 8 languages simultaneously</li>
+    </ul>
+    <div class="hood-section-title">~ What's simulated</div>
+    <ul class="hood-list">
+      <li data-icon="💻">Terminal execution — no server is running FFmpeg; the log output is a faithful reconstruction of actual script output</li>
+      <li data-icon="📁">Output files — no video files are actually generated; file paths match the real output structure</li>
+    </ul>
+    <div class="hood-section-title">→ Production architecture</div>
+    <pre>localize.sh ──▶ Input validation ──▶ Language loop
+│
+└──▶ FFmpeg // per language, parallel
+    ├──▶ Extract video stream -vn flag
+    ├──▶ Strip + replace audio -map 0:v -map 1:a
+    ├──▶ Normalise levels loudnorm filter
+    ├──▶ Burn SRT subtitles subtitles filter
+    └──▶ Export final .mp4 -c:v copy
+│
+└──▶ ./output/{LANG}/ ──▶ LMS upload ready</pre>
+  </div>
+
 </div>
 
-<!-- ══════════════════════════════
-     SCREEN 4 — RESULTS
-══════════════════════════════ -->
-<div class="screen" id="screen-4">
-  <div class="progress-wrap">
-    <div class="progress-bar">
-      <div class="progress-step done"></div>
-      <div class="progress-step done"></div>
-      <div class="progress-step done"></div>
-      <div class="progress-step active"></div>
-    </div>
-  </div>
-  <div class="screen-inner">
-    <div class="screen-tag">// Results</div>
-    <div class="completion-badge">
-      <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-        <circle cx="7" cy="7" r="7" fill="#3dba6e" opacity="0.2"/>
-        <path d="M3.5 7l2.5 2.5 4.5-4.5" stroke="#3dba6e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-      Script executed — 8 languages processed
-    </div>
-    <h1 class="screen-title">36 hours became<br><span class="hlg">8 minutes.</span></h1>
-
-    <div class="result-stat-row">
-      <div class="result-stat">
-        <div class="result-stat-val">270×</div>
-        <div class="result-stat-lbl">Faster than manual</div>
-      </div>
-      <div class="result-stat">
-        <div class="result-stat-val">8</div>
-        <div class="result-stat-lbl">Languages in one run</div>
-      </div>
-      <div class="result-stat">
-        <div class="result-stat-val">0</div>
-        <div class="result-stat-lbl">Human errors in sync</div>
-      </div>
-      <div class="result-stat">
-        <div class="result-stat-val">1</div>
-        <div class="result-stat-lbl">Command to run it</div>
-      </div>
-    </div>
-
-    <div class="insight-dark">
-      <strong>What this demonstrates:</strong> Engineering mindset applied to L&D operations. Most instructional designers accept manual workflows as a given. The question I asked was different — <strong>"why is a human doing this?"</strong> Once that question has an answer, it has a script.
-    </div>
-
+<!-- Next case -->
+<div class="demo-container">
+  <a class="next-case" href="https://abhishektrivedi.com/demo4/index.html">
     <div>
-      <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--dimmer);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px;">Built with</div>
-      <div class="tech-pills">
-        <span class="tech-pill">FFmpeg</span>
-        <span class="tech-pill">Bash Shell Scripting</span>
-        <span class="tech-pill">Articulate Storyline</span>
-        <span class="tech-pill">Subtitle Tools (SRT)</span>
-        <span class="tech-pill">Audio Processing</span>
-        <span class="tech-pill">Parallel Processing</span>
+      <div class="next-case-label">Next → Case Study 04</div>
+      <div class="next-case-title">The Invisible Student</div>
+      <div class="next-case-desc">Step through a course and watch every action become a live xAPI statement</div>
+      <div class="built-with" style="margin-top:8px;">
+        <span class="tag">xAPI / Tin Can</span><span class="tag">LRS</span><span class="tag">Live JSON</span>
       </div>
     </div>
-
-    <div class="btn-row">
-      <button class="btn btn-primary" onclick="restart()">↺ Run it again</button>
-      <div class="port-link">Full case study at <a href="https://abhishektrivedi.com/pages/work.html#case3" target="_blank">abhishektrivedi.com</a></div>
-    </div>
-
-    <div style="margin-top:32px;border-top:1px solid rgba(255,255,255,0.07);padding-top:28px;">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:rgba(255,255,255,0.25);text-transform:uppercase;letter-spacing:.12em;margin-bottom:16px;">// Next Case Study</div>
-      <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:24px 28px;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;">
-        <div>
-          <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:rgba(200,75,47,0.9);letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px;">Case Study 04 · xAPI</div>
-          <div style="font-family:'DM Serif Display',serif;font-size:22px;color:#f5f2eb;line-height:1.2;margin-bottom:8px;">The Invisible Student</div>
-          <div style="font-size:13px;color:rgba(139,163,190,0.85);line-height:1.65;max-width:380px;">Step through a 4-screen course and watch every learner action become a live xAPI statement — exactly as it appears in a real LRS. Most L&D professionals have never seen this layer of their own data.</div>
-          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:12px;">
-            <span style="font-family:'JetBrains Mono',monospace;font-size:10px;padding:3px 9px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:4px;color:rgba(212,175,95,0.8);">xAPI / Tin Can</span>
-            <span style="font-family:'JetBrains Mono',monospace;font-size:10px;padding:3px 9px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:4px;color:rgba(212,175,95,0.8);">LRS</span>
-            <span style="font-family:'JetBrains Mono',monospace;font-size:10px;padding:3px 9px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:4px;color:rgba(212,175,95,0.8);">Learning Analytics</span>
-            <span style="font-family:'JetBrains Mono',monospace;font-size:10px;padding:3px 9px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:4px;color:rgba(212,175,95,0.8);">Live JSON</span>
-          </div>
-        </div>
-        <a href="demo04.html" target="_blank" style="display:inline-flex;align-items:center;gap:8px;padding:13px 22px;background:#c84b2f;color:white;border-radius:12px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;text-decoration:none;white-space:nowrap;flex-shrink:0;transition:background 0.2s;" onmouseover="this.style.background='#e05a3a'" onmouseout="this.style.background='#c84b2f'">Open Case Study 04 →</a>
-      </div>
-    </div>
-
-  </div>
+    <div class="next-case-arrow">→</div>
+  </a>
 </div>
+
+<footer class="demo-footer">
+  <span>Built by <a href="https://abhishektrivedi.com">Abhishek Trivedi</a> · Learning Experience Technologist</span>
+  <span>Pune, India</span>
+</footer>
 
 <script>
-// ── NAVIGATION ──
-function goTo(n) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById(`screen-${n}`).classList.add('active');
-  window.scrollTo(0,0);
-  if (n === 1) animateSteps();
-  if (n === 3) { resetTerminal(); setTimeout(() => document.getElementById('t-input').focus(), 300); }
+function showScreen(id) {
+  document.querySelectorAll('.screen-section').forEach(s => s.classList.remove('active'));
+  document.getElementById('screen-' + id).classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// ── SCREEN 1: Animate steps ──
-function animateSteps() {
-  const steps = document.querySelectorAll('.manual-step');
-  const total = document.getElementById('total-bar');
-  steps.forEach(s => { s.classList.remove('show'); });
-  total.classList.remove('show');
-  steps.forEach((s, i) => {
-    setTimeout(() => { s.classList.add('show'); }, 300 + i * 280);
-  });
-  setTimeout(() => { total.classList.add('show'); }, 300 + steps.length * 280 + 200);
+const langs = ['EN','DE','FR','ES','ZH','JA','PT','AR'];
+const langDetails = {
+  EN: 'Baseline · source language',
+  DE: 'Audio +7% longer · subtitle timing adjusted',
+  FR: 'Audio +4% longer · subtitle timing adjusted',
+  ES: 'Audio +3% longer · subtitle timing adjusted',
+  ZH: 'CJK font loaded · audio -8% shorter',
+  JA: 'CJK font loaded · audio -10% shorter',
+  PT: 'Audio +5% longer · subtitle timing adjusted',
+  AR: 'RTL subtitle rendering enabled'
+};
+
+let running = false;
+
+function addLine(html, delay) {
+  return new Promise(res => setTimeout(() => {
+    const out = document.getElementById('term-output');
+    const span = document.createElement('div');
+    span.innerHTML = html;
+    out.appendChild(span);
+    out.scrollTop = out.scrollHeight;
+    res();
+  }, delay));
 }
-// Auto-animate on load
-setTimeout(animateSteps, 400);
 
-// ── TERMINAL ──
-const CORRECT_CMD = 'bash localize.sh --input module_v2.mp4 --langs all --subs auto';
+async function runScript() {
+  const input = document.getElementById('term-input').value.trim();
+  if (!input.includes('localize.sh')) return;
+  document.getElementById('term-input').disabled = true;
+  document.getElementById('term-cursor').style.display = 'none';
+  await executeScript();
+}
 
-function handleKey(e) {
-  if (e.key === 'Enter') {
-    const val = e.target.value.trim();
-    if (val === CORRECT_CMD || val === CORRECT_CMD.replace('bash ', '')) {
-      runScript();
-    } else if (val.length > 0) {
-      addLine(`<span class="t-output" style="color:var(--red)">bash: ${val.split(' ')[0]}: command hint — try: bash localize.sh --input module_v2.mp4 --langs all --subs auto</span>`);
-      e.target.value = '';
-    }
+async function runScriptAuto() {
+  document.getElementById('term-input').value = 'bash localize.sh --input module_v2.mp4 --langs all --subs auto';
+  document.getElementById('term-input').disabled = true;
+  document.getElementById('term-cursor').style.display = 'none';
+  const out = document.getElementById('term-output');
+  const line = document.createElement('div');
+  line.innerHTML = `<span class="t-prompt">dev@ld-tools:~/localization$ </span><span class="t-cmd">bash localize.sh --input module_v2.mp4 --langs all --subs auto</span>`;
+  out.appendChild(line);
+  out.scrollTop = out.scrollHeight;
+  await executeScript();
+}
+
+async function executeScript() {
+  if (running) return;
+  running = true;
+  let delay = 100;
+
+  await addLine(`<span class="t-out">Localization Tool v2.1 — starting</span>`, delay); delay += 200;
+  await addLine(`<span class="t-out">Input: module_v2.mp4 · Langs: all · Subtitles: auto</span>`, delay); delay += 300;
+  await addLine(`<span class="t-out">─────────────────────────────────────────</span>`, delay); delay += 200;
+
+  for (let i = 0; i < langs.length; i++) {
+    const lang = langs[i];
+    await addLine(`<span class="t-out">[${lang}] Starting parallel worker...</span>`, delay); delay += 350;
+    await addLine(`<span class="t-out">[${lang}] ffmpeg -i module_v2.mp4 -vn -map 0:v -map 1:a...</span>`, delay); delay += 400;
+    await addLine(`<span class="t-out">[${lang}] ${langDetails[lang]}</span>`, delay); delay += 300;
+    await addLine(`<span class="t-success">[${lang}] ✓ output/${lang}/module_v2_${lang.toLowerCase()}.mp4 · ready</span>`, delay); delay += 200;
   }
-}
 
-function addLine(html) {
-  const body = document.getElementById('terminal-body');
-  const inputRow = body.querySelector('.t-line:last-child');
-  const div = document.createElement('div');
-  div.className = 't-line';
-  div.innerHTML = html;
-  body.insertBefore(div, inputRow);
-  body.scrollTop = body.scrollHeight;
-}
-
-let scriptRunning = false;
-function runScript() {
-  if (scriptRunning) return;
-  scriptRunning = true;
-  const input = document.getElementById('t-input');
-  const btn = document.getElementById('btn-run');
-  btn.disabled = true;
-  input.disabled = true;
-
-  // Echo the command
-  const cmdVal = input.value.trim() || CORRECT_CMD;
-  addLine(`<span class="t-cmd">${cmdVal}</span>`);
-  input.value = '';
-
-  const lines = [
-    { delay: 300,  html: `<span class="t-output">[localize.sh] Starting localization pipeline...</span>` },
-    { delay: 700,  html: `<span class="t-output">[localize.sh] Input: <span style="color:#7eb8f7">module_v2.mp4</span> · Languages: <span style="color:var(--gold)">EN DE FR ES ZH JA PT AR</span></span>` },
-    { delay: 1100, html: `<span class="t-output">[ffmpeg] Extracting video stream → <span style="color:#7eb8f7">module_v2_video.mp4</span></span>` },
-    { delay: 1500, html: `<span class="t-output">[ffmpeg] Stripping original audio track...</span>` },
-    { delay: 1900, html: `<span class="t-success">[ffmpeg] ✓ Video extracted (00:04:32 · 1080p)</span>` },
-    { delay: 2300, html: `<span class="t-output">[pipeline] Processing 8 languages in parallel...</span>` },
-    { delay: 2700, html: `<span class="t-warn">[EN] Mixing audio → normalising levels → -14 LUFS target</span>` },
-    { delay: 3000, html: `<span class="t-warn">[DE] Mixing audio → adjusting for 7% longer narration duration</span>` },
-    { delay: 3300, html: `<span class="t-warn">[FR] Mixing audio → subtitle sync offset: +0.3s</span>` },
-    { delay: 3600, html: `<span class="t-warn">[ES] Mixing audio → subtitle sync offset: -0.1s</span>` },
-    { delay: 3900, html: `<span class="t-warn">[ZH] Mixing audio → character subtitle rendering: CJK font loaded</span>` },
-    { delay: 4200, html: `<span class="t-warn">[JA] Mixing audio → vertical subtitle mode: enabled</span>` },
-    { delay: 4500, html: `<span class="t-warn">[PT] Mixing audio → normalising levels → -14 LUFS target</span>` },
-    { delay: 4800, html: `<span class="t-warn">[AR] Mixing audio → RTL subtitle rendering: enabled</span>` },
-    { delay: 5300, html: `<span class="t-output">[subtitle] Burning SRT overlays via FFmpeg drawtext filter...</span>` },
-    { delay: 5800, html: `<span class="t-success">[EN] ✓ module_v2_EN.mp4 → output/EN/</span>` },
-    { delay: 6000, html: `<span class="t-success">[DE] ✓ module_v2_DE.mp4 → output/DE/</span>` },
-    { delay: 6200, html: `<span class="t-success">[FR] ✓ module_v2_FR.mp4 → output/FR/</span>` },
-    { delay: 6400, html: `<span class="t-success">[ES] ✓ module_v2_ES.mp4 → output/ES/</span>` },
-    { delay: 6600, html: `<span class="t-success">[ZH] ✓ module_v2_ZH.mp4 → output/ZH/</span>` },
-    { delay: 6800, html: `<span class="t-success">[JA] ✓ module_v2_JA.mp4 → output/JA/</span>` },
-    { delay: 7000, html: `<span class="t-success">[PT] ✓ module_v2_PT.mp4 → output/PT/</span>` },
-    { delay: 7200, html: `<span class="t-success">[AR] ✓ module_v2_AR.mp4 → output/AR/</span>` },
-    { delay: 7700, html: `<span class="t-output" style="color:rgba(255,255,255,0.15)">─────────────────────────────────────────</span>` },
-    { delay: 8000, html: `<span class="t-success">✓ All 8 languages complete · Total time: 7m 43s · 0 errors</span>` },
-    { delay: 8200, html: `<span class="t-output">Output ready in <span style="color:#7eb8f7">./output/</span> — 8 files, LMS-ready</span>` },
-  ];
-
-  lines.forEach(({ delay, html }) => {
-    setTimeout(() => addLine(html), delay);
-  });
+  await addLine(`<span class="t-out">─────────────────────────────────────────</span>`, delay); delay += 200;
+  await addLine(`<span class="t-success">✓ All 8 languages complete in 7m 43s</span>`, delay); delay += 300;
+  await addLine(`<span class="t-out">Output: ./output/ — 8 files ready for LMS upload</span>`, delay); delay += 400;
 
   setTimeout(() => {
-    scriptRunning = false;
-    setTimeout(() => goTo(4), 800);
-  }, 9200);
+    showScreen('results');
+    running = false;
+  }, delay + 300);
 }
 
 function resetTerminal() {
-  scriptRunning = false;
-  const body = document.getElementById('terminal-body');
-  body.innerHTML = `
-    <div class="t-line"><span class="t-output">L&D Team · Video Localization Tool v2.1</span></div>
-    <div class="t-line"><span class="t-output">Type the command below or click "Run for me"</span></div>
-    <div class="t-line"><span class="t-output" style="color:rgba(255,255,255,0.15)">─────────────────────────────────────────</span></div>
-    <div class="t-line" style="margin-top:8px">
-      <span class="t-prompt">dev@ld-tools:~/localization$&nbsp;</span>
-      <input class="t-input" id="t-input" type="text" autocomplete="off" spellcheck="false"
-        placeholder="bash localize.sh --input module_v2.mp4 --langs all --subs auto"
-        onkeydown="handleKey(event)">
-    </div>`;
-  document.getElementById('btn-run').disabled = false;
+  running = false;
+  document.getElementById('term-input').disabled = false;
+  document.getElementById('term-input').value = '';
+  document.getElementById('term-cursor').style.display = '';
+  document.getElementById('term-output').innerHTML = `
+<span class="t-out">L&D Team · Video Localization Tool v2.1</span>
+<span class="t-out">Type the command below or click "Run for me"</span>
+<span class="t-out">─────────────────────────────────────────</span>
+<span class="t-prompt">dev@ld-tools:~/localization$ </span><span id="term-cursor">▋</span>`;
 }
 
-function restart() {
-  resetTerminal();
-  goTo(1);
+function toggleHood(btn) {
+  const d = document.getElementById('hood-drawer');
+  d.classList.toggle('open');
+  btn.textContent = d.classList.contains('open') ? '✕ Close' : '? How I built this';
 }
-
-// ── HOW I BUILT THIS ──
-function openHBT() {
-  document.getElementById('hbt-overlay').classList.add('open');
-  document.getElementById('hbt-drawer').classList.add('open');
-  document.body.style.overflow = 'hidden';
-}
-function closeHBT() {
-  document.getElementById('hbt-overlay').classList.remove('open');
-  document.getElementById('hbt-drawer').classList.remove('open');
-  document.body.style.overflow = '';
-}
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeHBT(); });
 </script>
-
-<div class="hbt-overlay" id="hbt-overlay" onclick="closeHBT()"></div>
-<div class="hbt-drawer" id="hbt-drawer">
-  <div class="hbt-drawer-header">
-    <div class="hbt-drawer-title">How I Built This</div>
-    <button class="hbt-close" onclick="closeHBT()">✕</button>
-  </div>
-  <div class="hbt-body">
-
-    <div class="hbt-section">
-      <div class="hbt-section-label real">✓ What's real in this demo</div>
-      <div class="hbt-item real"><span class="hbt-item-icon">⌨</span><span>FFmpeg commands shown are the <strong>actual commands</strong> from the production script — filter chains, audio normalisation flags and subtitle rendering options are verbatim</span></div>
-      <div class="hbt-item real"><span class="hbt-item-icon">⏱</span><span>Time figures are real — 36 hours manual vs under 8 minutes automated is the actual measured difference from the production workflow</span></div>
-      <div class="hbt-item real"><span class="hbt-item-icon">🌐</span><span>Language-specific log entries are accurate — DE narration really is ~7% longer than EN, AR really does require RTL rendering, ZH/JA require CJK font loading</span></div>
-      <div class="hbt-item real"><span class="hbt-item-icon">⚡</span><span>Parallel processing — the script processed all 8 languages simultaneously, not sequentially, which is why total time was under 8 minutes not 8 × n</span></div>
-    </div>
-
-    <div class="hbt-section">
-      <div class="hbt-section-label sim">~ What's simulated</div>
-      <div class="hbt-item sim"><span class="hbt-item-icon">💻</span><span>Terminal execution — no server is running FFmpeg; the log output is a faithful reconstruction of actual script output, but rendered in JS</span></div>
-      <div class="hbt-item sim"><span class="hbt-item-icon">📁</span><span>Output files — no video files are actually generated; the file paths and naming convention match the real output structure</span></div>
-    </div>
-
-    <div class="hbt-section">
-      <div class="hbt-section-label prod">→ Production architecture</div>
-      <div class="hbt-arch"><span class="node">localize.sh</span> <span class="arrow">──▶</span> <span class="node">Input validation</span> <span class="arrow">──▶</span> <span class="node">Language loop</span>
-  <span class="arrow">│</span>
-  <span class="arrow">└──▶</span> <span class="node">FFmpeg</span> <span class="note">// per language, parallel</span>
-       <span class="arrow">├──▶</span> <span class="label">Extract video stream</span>    <span class="note">-vn flag</span>
-       <span class="arrow">├──▶</span> <span class="label">Strip + replace audio</span>   <span class="note">-map 0:v -map 1:a</span>
-       <span class="arrow">├──▶</span> <span class="label">Normalise levels</span>        <span class="note">loudnorm filter</span>
-       <span class="arrow">├──▶</span> <span class="label">Burn SRT subtitles</span>      <span class="note">subtitles filter</span>
-       <span class="arrow">└──▶</span> <span class="label">Export final .mp4</span>       <span class="note">-c:v copy</span>
-  <span class="arrow">│</span>
-  <span class="arrow">└──▶</span> <span class="node">./output/{LANG}/</span> <span class="arrow">──▶</span> <span class="label">LMS upload ready</span></div>
-    </div>
-
-  </div>
-  <div class="hbt-footer">Built by Abhishek Trivedi · abhishektrivedi.com</div>
-</div>
-
-<!-- ── PORTFOLIO PROTECTION ── -->
-<script>
-(function() {
-  'use strict';
-
-  // ── 1. Disable right-click context menu ──
-  document.addEventListener('contextmenu', function(e) {
-    e.preventDefault();
-    showWarning();
-    return false;
-  });
-
-  // ── 2. Block keyboard shortcuts ──
-  document.addEventListener('keydown', function(e) {
-    const key = e.key ? e.key.toLowerCase() : '';
-    const ctrl = e.ctrlKey || e.metaKey;
-
-    // Ctrl+U (view source), Ctrl+S (save), Ctrl+A (select all)
-    // Ctrl+Shift+I/J/C (DevTools), Ctrl+P (print)
-    if (ctrl && ['u','s','a','p'].includes(key)) {
-      e.preventDefault(); showWarning(); return false;
-    }
-    if (ctrl && e.shiftKey && ['i','j','c','k'].includes(key)) {
-      e.preventDefault(); showWarning(); return false;
-    }
-    // F12 (DevTools)
-    if (e.key === 'F12') {
-      e.preventDefault(); showWarning(); return false;
-    }
-    // Ctrl+Shift+Delete (clear history — sometimes used to reset)
-    if (ctrl && e.shiftKey && e.key === 'Delete') {
-      e.preventDefault(); return false;
-    }
-  });
-
-  // ── 3. Disable text selection ──
-  document.addEventListener('selectstart', function(e) {
-    // Allow selection inside input/textarea fields
-    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
-    e.preventDefault();
-    return false;
-  });
-
-  // ── 4. Disable drag (prevents dragging images/text out) ──
-  document.addEventListener('dragstart', function(e) {
-    e.preventDefault();
-    return false;
-  });
-
-  // ── 5. DevTools detection via window size change ──
-  // When DevTools opens docked, window inner dimensions shrink
-  var devtoolsOpen = false;
-  var threshold = 160;
-  function checkDevTools() {
-    var widthDiff  = window.outerWidth  - window.innerWidth  > threshold;
-    var heightDiff = window.outerHeight - window.innerHeight > threshold;
-    if ((widthDiff || heightDiff) && !devtoolsOpen) {
-      devtoolsOpen = true;
-      showDevToolsWarning();
-    } else if (!widthDiff && !heightDiff) {
-      devtoolsOpen = false;
-    }
-  }
-  setInterval(checkDevTools, 1000);
-
-  // ── 6. Warning toast ──
-  function showWarning() {
-    if (document.getElementById('_pt_toast')) return;
-    var toast = document.createElement('div');
-    toast.id = '_pt_toast';
-    toast.innerHTML = '🔒 &nbsp;This portfolio is protected. Please respect the author\'s work.';
-    toast.style.cssText = [
-      'position:fixed', 'bottom:24px', 'left:50%', 'transform:translateX(-50%)',
-      'background:#0f0e0c', 'color:#f5f2eb', 'padding:12px 22px',
-      'border-radius:8px', 'font-family:sans-serif', 'font-size:13px',
-      'border:1px solid rgba(200,75,47,0.5)', 'border-left:3px solid #c84b2f',
-      'z-index:999999', 'box-shadow:0 4px 24px rgba(0,0,0,0.4)',
-      'pointer-events:none', 'white-space:nowrap'
-    ].join(';');
-    document.body.appendChild(toast);
-    setTimeout(function() {
-      if (toast.parentNode) toast.parentNode.removeChild(toast);
-    }, 3000);
-  }
-
-  function showDevToolsWarning() {
-    if (document.getElementById('_pt_devtools')) return;
-    var banner = document.createElement('div');
-    banner.id = '_pt_devtools';
-    banner.innerHTML = [
-      '<strong style="color:#c84b2f">Hey there, developer 👋</strong>',
-      'This portfolio was built by <strong>Abhishek Trivedi</strong>.',
-      'If you\'re curious about how it works, just reach out at',
-      '<a href="https://abhishektrivedi.com/pages/contact.html" ',
-      'style="color:#c9973a">abhishektrivedi.com</a> — happy to chat.'
-    ].join(' ');
-    banner.style.cssText = [
-      'position:fixed', 'top:0', 'left:0', 'right:0',
-      'background:#0a1628', 'color:#f5f2eb', 'padding:14px 24px',
-      'font-family:sans-serif', 'font-size:13px', 'line-height:1.6',
-      'border-bottom:2px solid #c84b2f', 'z-index:999999',
-      'text-align:center', 'box-shadow:0 2px 12px rgba(0,0,0,0.5)'
-    ].join(';');
-    document.body.appendChild(banner);
-  }
-
-  // ── 7. Copyright watermark in console ──
-  var styles = [
-    'color:#c84b2f', 'font-size:18px', 'font-weight:bold',
-    'padding:8px 0', 'border-bottom:2px solid #c84b2f'
-  ].join(';');
-  console.log('%c© Abhishek Trivedi — Learning Experience Technologist', styles);
-  console.log('%chttps://abhishektrivedi.com | All rights reserved.', 'color:#6b6459;font-size:12px;');
-  console.log('%cIf you\'re inspecting this to learn — great! Just don\'t copy. Reach out instead.', 'color:#c9973a;font-size:12px;font-style:italic;');
-
-})();
-</script>
-<!-- ── END PROTECTION ── -->
-
 </body>
 </html>
