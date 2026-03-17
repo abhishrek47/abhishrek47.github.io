@@ -19,7 +19,7 @@
       dotSide: 'br',
       eyebrow: 'Navigation',
       title: 'Sparse nav, strong hierarchy',
-      body: 'Four links. The monospaced "AT." logo is both home button and personal brand mark. The terracotta CTA is the only coloured element — guiding the eye exactly where it needs to go.'
+      body: 'Quick links to Work, About, Certifications, and a live ID Model Selector tool — plus a direct Let\'s Talk CTA. Everything a recruiter or collaborator needs, one click away.'
     },
     {
       selectors: ['#hero', '.hero', '.hero-section', 'main > section:first-child'],
@@ -27,7 +27,7 @@
       dotSide: 'tl',
       eyebrow: 'Hero',
       title: 'The 3-second value pitch',
-      body: 'DM Serif Display italic in terracotta on "think." does the heavy lifting — one brand-accent word signals what makes this portfolio different from every other L&D résumé.'
+      body: '15+ years at the intersection of instructional design and engineering — writing JavaScript inside Storyline, connecting courses to live APIs, automating workflows, and integrating AI where others use static slides.'
     },
     {
       selectors: ['.marquee-wrap', '.marquee', '.ticker', '[class*="marquee"]'],
@@ -35,7 +35,7 @@
       dotSide: 'tl',
       eyebrow: 'Skills Ticker',
       title: 'Full-bleed ink as a divider',
-      body: 'The near-black strip creates a hard visual break. JetBrains Mono reads like terminal output — reinforcing the developer-hybrid identity without ever saying so.'
+      body: 'A live ticker of core skills: Articulate Storyline 360, JavaScript Integration, REST API Connections, xAPI & SCORM, AI Voice Personalization, FFmpeg Automation, LMS Architecture, and more.'
     },
     {
       selectors: ['#what', '.what-section', '[class*="what"]', '[id*="what"]'],
@@ -43,7 +43,7 @@
       dotSide: 'tr',
       eyebrow: 'What I Do',
       title: '3 columns, 3 identities in one',
-      body: 'Each card positions Abhishek as a triple-threat: designer, developer, and AI integrator. The 1 px rule-coloured gap creates column dividers without a visible border.'
+      body: 'Three disciplines in one: Learning Experience Design (branching scenarios, assessments), Learning Technology & Integration (JavaScript, APIs, LMS), and AI & Workflow Automation (Murf AI, GPT, FFmpeg).'
     },
     {
       selectors: ['#competency', '.competency', '[class*="competency"]', '[id*="competency"]'],
@@ -51,7 +51,7 @@
       dotSide: 'tr',
       eyebrow: 'Competency Map',
       title: 'Honesty as a design strategy',
-      body: 'Saying "most L&D professionals are strong in one dimension" reframes the section — it is not a skills list, it is context that makes the radar chart meaningful.'
+      body: 'An honest radar across five axes: Instructional Design, Technical Development, AI Integration, Automation & Systems, and Analytics & Data. Hover each axis to see what it means in practice.'
     },
     {
       selectors: ['#work', '.work-section', '[id*="work"]', '[class*="work"]'],
@@ -59,7 +59,7 @@
       dotSide: 'tr',
       eyebrow: 'Selected Work',
       title: 'Titles that carry the concept',
-      body: '"When the Course Knows Your Name" tells a full story before you click. DM Serif Display gives the titles editorial weight while mono category tags keep the technical register.'
+      body: '5 case studies: AI-personalized narration, template architecture, FFmpeg localization automation, live xAPI stream visualizer, and an AI storyboard converter applying 7 real ID models.'
     },
     {
       selectors: ['#accessibility', '[id*="access"]', '[class*="access"]'],
@@ -67,7 +67,7 @@
       dotSide: 'tl',
       eyebrow: 'Accessibility Practice',
       title: 'Show, do not tell — live proof',
-      body: 'Toggle interactions let visitors feel the gap between accessible and inaccessible Storyline builds. A résumé claim becomes a lived experience the visitor actually remembers.'
+      body: 'Four live toggles — Focus Order, Colour Contrast, Alt Text Strategy, and Keyboard Navigation — showing exactly what accessibility means inside Storyline, built in from the start, not retrofitted.'
     },
     {
       selectors: ['#demos', '.demos', '[id*="demo"]', '[class*="demo"]'],
@@ -75,7 +75,7 @@
       dotSide: 'tl',
       eyebrow: 'Interactive Demos',
       title: 'No PDFs. No screenshots.',
-      body: 'Every demo runs live in the browser. Most L&D portfolios show slide decks — this one lets you operate the work. That gap is impossible to fake and very hard to ignore.'
+      body: '6 live demos: AI Personalized Narration, Template System Showroom, FFmpeg Terminal Simulation, The Invisible Student (live xAPI), AI Storyboard Converter, and a mini accessibility bug game.'
     }
   ];
 
