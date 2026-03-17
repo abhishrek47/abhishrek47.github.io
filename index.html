@@ -1374,197 +1374,620 @@ function tlInitSwipe(){
 if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',function(){tlInit();tlInitSwipe();});}else{tlInit();tlInitSwipe();}
 </script>
 
-<!-- ══════════════════════════════════════════════════════════
-     AI GUIDE — embedded directly, no external file needed
-     ══════════════════════════════════════════════════════════ -->
+
+
+<!-- AG_GUIDE_START -->
 <style>
-#ag-launch{position:fixed;bottom:28px;right:28px;z-index:9800;display:inline-flex;align-items:center;gap:10px;padding:11px 20px 11px 14px;background:var(--ink);color:var(--paper);border:1px solid rgba(245,242,235,0.12);border-radius:2px;cursor:pointer;font-family:var(--mono);font-size:0.68rem;letter-spacing:0.12em;text-transform:uppercase;box-shadow:0 8px 32px rgba(15,15,15,0.35);transition:background 0.2s,border-color 0.2s;}
-#ag-launch:hover{background:var(--accent);border-color:var(--accent);}
-#ag-launch .ag-live{display:flex;align-items:center;gap:5px;padding:3px 8px;background:rgba(200,75,47,0.15);border:1px solid rgba(200,75,47,0.35);border-radius:2px;}
-#ag-launch .ag-live-dot{width:5px;height:5px;border-radius:50%;background:var(--accent);animation:ag-blink 2s ease infinite;}
-@keyframes ag-blink{0%,100%{opacity:1}50%{opacity:.2}}
-#ag-bar{position:fixed;top:0;left:0;right:0;z-index:9900;display:none;align-items:center;justify-content:space-between;padding:0 2.5rem;height:48px;background:var(--ink);border-bottom:1px solid rgba(200,75,47,0.4);}
-#ag-bar.on{display:flex;}
-.ag-bar-left{display:flex;align-items:center;gap:20px;font-family:var(--mono);font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;color:rgba(245,242,235,0.45);}
-.ag-bar-title{color:var(--paper);display:flex;align-items:center;gap:8px;}
-.ag-bar-title::before{content:'';display:inline-block;width:14px;height:1px;background:var(--accent);}
-.ag-pips{display:flex;gap:4px;align-items:center;}
-.ag-pip{height:2px;width:16px;background:rgba(245,242,235,0.12);border-radius:1px;transition:all 0.3s;}
-.ag-pip.past{background:rgba(200,75,47,0.4);}
-.ag-pip.here{background:var(--accent);width:28px;}
-#ag-exit{font-family:var(--mono);font-size:0.6rem;letter-spacing:0.1em;text-transform:uppercase;color:rgba(245,242,235,0.35);background:none;border:1px solid rgba(245,242,235,0.12);padding:5px 12px;cursor:pointer;border-radius:2px;transition:color 0.15s,border-color 0.15s;}
-#ag-exit:hover{color:var(--paper);border-color:rgba(245,242,235,0.35);}
-.ag-section-hi{outline:1.5px solid var(--accent)!important;outline-offset:0px!important;}
-.ag-dot{position:fixed;z-index:9850;width:26px;height:26px;display:none;cursor:pointer;pointer-events:none;}
-.ag-dot.vis{display:block;pointer-events:auto;}
-.ag-dot-inner{width:26px;height:26px;border-radius:50%;background:var(--accent);border:2px solid var(--paper);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:0.6rem;font-weight:500;color:#fff;box-shadow:0 0 0 0 rgba(200,75,47,0.55);animation:ag-ring 2.2s ease-out infinite;transition:transform 0.12s;}
-.ag-dot:hover .ag-dot-inner,.ag-dot.on .ag-dot-inner{transform:scale(1.15);animation-play-state:paused;}
-@keyframes ag-ring{0%{box-shadow:0 0 0 0 rgba(200,75,47,0.55);}65%{box-shadow:0 0 0 10px rgba(200,75,47,0);}100%{box-shadow:0 0 0 0 rgba(200,75,47,0);}}
-.ag-tip{position:fixed;z-index:9950;width:280px;background:var(--paper);border-top:2px solid var(--accent);border-left:1px solid var(--rule);border-right:1px solid var(--rule);border-bottom:1px solid var(--rule);padding:18px 20px 15px;box-shadow:0 12px 40px rgba(15,15,15,0.16),0 2px 8px rgba(15,15,15,0.08);display:none;pointer-events:none;}
-.ag-tip.vis{display:block;pointer-events:auto;}
-.ag-tip::after{content:'';position:absolute;width:10px;height:10px;background:var(--paper);transform:rotate(45deg);}
-.ag-tip.arr-l::after{top:14px;left:-6px;border-top:none;border-left:none;border-bottom:1px solid var(--rule);border-right:1px solid var(--rule);}
-.ag-tip.arr-r::after{top:14px;right:-6px;border-bottom:none;border-right:none;border-top:1px solid var(--rule);border-left:1px solid var(--rule);}
-.ag-tip.arr-t::after{top:-6px;left:20px;border-bottom:none;border-right:none;border-top:2px solid var(--accent);border-left:1px solid var(--rule);}
-.ag-tip.arr-b::after{bottom:-6px;left:20px;border-top:none;border-left:none;border-bottom:1px solid var(--rule);border-right:1px solid var(--rule);}
-.ag-tip-section{font-family:var(--mono);font-size:0.6rem;letter-spacing:0.16em;text-transform:uppercase;color:var(--accent);margin-bottom:6px;display:flex;align-items:center;gap:8px;}
-.ag-tip-section::before{content:'';display:block;width:14px;height:1px;background:var(--accent);flex-shrink:0;}
-.ag-tip-heading{font-family:var(--serif);font-size:1.05rem;line-height:1.25;color:var(--ink);margin-bottom:8px;}
-.ag-tip-body{font-family:var(--sans);font-size:0.78rem;font-weight:300;color:var(--mid);line-height:1.65;margin-bottom:14px;padding-bottom:13px;border-bottom:1px solid var(--rule);}
-.ag-tip-foot{display:flex;align-items:center;justify-content:space-between;}
-.ag-tip-count{font-family:var(--mono);font-size:0.6rem;letter-spacing:0.08em;color:var(--mid);}
-.ag-tip-nav{display:flex;gap:5px;}
-.ag-tip-btn{width:28px;height:28px;border-radius:1px;border:1px solid var(--rule);background:var(--paper);color:var(--mid);font-family:var(--mono);font-size:0.75rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:border-color 0.15s,color 0.15s,background 0.15s;}
-.ag-tip-btn:hover{border-color:var(--accent);color:var(--accent);background:rgba(200,75,47,0.05);}
+/* ═══════════════════════════════════════════════
+   PAGE GUIDE — Sidebar Edition
+   Uses: --ink, --paper, --accent, --accent2,
+         --mid, --rule, --mono, --serif, --sans
+   All from style.css. Zero conflicts.
+═══════════════════════════════════════════════ */
+
+/* ── Launch Tab ─────────────────────────────── */
+#pgt-tab {
+  position: fixed;
+  bottom: 40px;
+  right: 0;
+  z-index: 9200;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 18px 12px 14px;
+  background: var(--ink);
+  color: var(--paper);
+  border: none;
+  border-radius: 6px 0 0 6px;
+  cursor: pointer;
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  box-shadow: -4px 0 24px rgba(15,15,15,0.2);
+  transform: translateX(0);
+  transition: transform 0.25s ease, background 0.2s;
+}
+#pgt-tab:hover { background: var(--accent); }
+#pgt-tab.hidden { transform: translateX(110%); pointer-events: none; }
+.pgt-tab-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  flex-shrink: 0;
+  animation: pgt-pulse 2s ease infinite;
+}
+@keyframes pgt-pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.3;transform:scale(.7)} }
+
+/* ── Sidebar Panel ──────────────────────────── */
+#pgt-panel {
+  position: fixed;
+  top: 0; right: 0; bottom: 0;
+  width: 340px;
+  z-index: 9300;
+  background: var(--ink);
+  display: flex;
+  flex-direction: column;
+  transform: translateX(100%);
+  transition: transform 0.4s cubic-bezier(0.16,1,0.3,1);
+  box-shadow: -8px 0 48px rgba(15,15,15,0.35);
+}
+#pgt-panel.open { transform: translateX(0); }
+
+/* Panel header */
+.pgt-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px 16px;
+  border-bottom: 1px solid rgba(245,242,235,0.08);
+  flex-shrink: 0;
+}
+.pgt-header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.pgt-header-label {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(245,242,235,0.4);
+}
+.pgt-header-title {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--paper);
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.pgt-header-title::before {
+  content: '';
+  display: inline-block;
+  width: 14px; height: 1.5px;
+  background: var(--accent);
+}
+.pgt-close {
+  background: none;
+  border: 1px solid rgba(245,242,235,0.1);
+  color: rgba(245,242,235,0.4);
+  border-radius: 2px;
+  width: 28px; height: 28px;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex; align-items: center; justify-content: center;
+  transition: border-color 0.15s, color 0.15s, background 0.15s;
+  font-family: var(--mono);
+}
+.pgt-close:hover { border-color: rgba(245,242,235,0.3); color: var(--paper); background: rgba(245,242,235,0.05); }
+
+/* Nav list */
+.pgt-nav {
+  flex-shrink: 0;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(245,242,235,0.08);
+  display: flex;
+  flex-direction: column;
+}
+.pgt-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 9px 24px;
+  cursor: pointer;
+  transition: background 0.15s;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+}
+.pgt-nav-item:hover { background: rgba(245,242,235,0.04); }
+.pgt-nav-item.active { background: rgba(200,75,47,0.08); }
+.pgt-nav-num {
+  font-family: var(--mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.1em;
+  color: rgba(245,242,235,0.25);
+  min-width: 18px;
+  transition: color 0.15s;
+}
+.pgt-nav-item.active .pgt-nav-num { color: var(--accent); }
+.pgt-nav-text {
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(245,242,235,0.45);
+  transition: color 0.15s;
+  flex: 1;
+}
+.pgt-nav-item.active .pgt-nav-text { color: var(--paper); }
+.pgt-nav-bar {
+  width: 0; height: 1.5px;
+  background: var(--accent);
+  transition: width 0.3s ease;
+  flex-shrink: 0;
+}
+.pgt-nav-item.active .pgt-nav-bar { width: 20px; }
+
+/* Content card */
+.pgt-content {
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+}
+.pgt-card {
+  position: absolute;
+  inset: 0;
+  padding: 28px 24px 24px;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.pgt-card.visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+.pgt-card-section {
+  font-family: var(--mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.pgt-card-section::before {
+  content: '';
+  display: block;
+  width: 16px; height: 1px;
+  background: var(--accent);
+  flex-shrink: 0;
+}
+.pgt-card-heading {
+  font-family: var(--serif);
+  font-size: 1.25rem;
+  line-height: 1.2;
+  color: var(--paper);
+  margin-bottom: 16px;
+  font-weight: 400;
+}
+.pgt-card-body {
+  font-family: var(--sans);
+  font-size: 0.8rem;
+  font-weight: 300;
+  line-height: 1.75;
+  color: rgba(245,242,235,0.55);
+  flex: 1;
+}
+.pgt-card-scroll {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(245,242,235,0.08);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  background: none;
+  border-left: none;
+  border-right: none;
+  border-bottom: none;
+  width: 100%;
+  text-align: left;
+  transition: gap 0.2s;
+}
+.pgt-card-scroll:hover { gap: 12px; }
+.pgt-scroll-label {
+  font-family: var(--mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(245,242,235,0.3);
+  transition: color 0.15s;
+}
+.pgt-card-scroll:hover .pgt-scroll-label { color: var(--accent); }
+.pgt-scroll-arrow {
+  font-size: 10px;
+  color: rgba(245,242,235,0.2);
+  transition: color 0.15s;
+}
+.pgt-card-scroll:hover .pgt-scroll-arrow { color: var(--accent); }
+
+/* Footer nav */
+.pgt-footer {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 24px;
+  border-top: 1px solid rgba(245,242,235,0.08);
+}
+.pgt-progress {
+  font-family: var(--mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.08em;
+  color: rgba(245,242,235,0.25);
+}
+.pgt-progress strong {
+  color: var(--paper);
+  font-weight: 500;
+}
+.pgt-arrows { display: flex; gap: 6px; }
+.pgt-arr {
+  width: 32px; height: 32px;
+  border-radius: 2px;
+  border: 1px solid rgba(245,242,235,0.1);
+  background: none;
+  color: rgba(245,242,235,0.4);
+  font-family: var(--mono);
+  font-size: 13px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: border-color 0.15s, color 0.15s, background 0.15s;
+}
+.pgt-arr:hover { border-color: var(--accent); color: var(--accent); background: rgba(200,75,47,0.06); }
+.pgt-arr:disabled { opacity: 0.2; cursor: default; }
+.pgt-arr:disabled:hover { border-color: rgba(245,242,235,0.1); color: rgba(245,242,235,0.4); background: none; }
+
+/* ── Section highlight on page ──────────────── */
+.pgt-hi {
+  outline: none !important;
+  position: relative;
+}
+.pgt-hi::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 1.5px solid rgba(200,75,47,0.5);
+  pointer-events: none;
+  z-index: 100;
+  animation: pgt-hi-in 0.3s ease forwards;
+}
+@keyframes pgt-hi-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* ── Page dim (subtle) ──────────────────────── */
+#pgt-dim {
+  position: fixed;
+  inset: 0;
+  background: rgba(15,15,15,0.35);
+  z-index: 9100;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+#pgt-dim.on { opacity: 1; pointer-events: auto; }
+
+/* ── Pill counter on page ───────────────────── */
+#pgt-pill {
+  position: fixed;
+  z-index: 9400;
+  background: var(--accent);
+  color: #fff;
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  padding: 4px 10px 4px 8px;
+  border-radius: 2px;
+  display: none;
+  align-items: center;
+  gap: 6px;
+  pointer-events: none;
+  box-shadow: 0 4px 16px rgba(200,75,47,0.4);
+  white-space: nowrap;
+}
+#pgt-pill.show { display: flex; }
+#pgt-pill::before {
+  content: '';
+  display: block;
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.6);
+  flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+  #pgt-panel { width: 100%; }
+  #pgt-tab { bottom: 80px; }
+}
 </style>
 
-<button id="ag-launch" onclick="agStart()">
-  <div class="ag-live"><span class="ag-live-dot"></span></div>
-  Guide this page
+<!-- Dim overlay -->
+<div id="pgt-dim" onclick="pgtClose()"></div>
+
+<!-- Launch tab -->
+<button id="pgt-tab" onclick="pgtOpen()" aria-label="Open page guide">
+  <span class="pgt-tab-dot"></span>
+  Page Guide
 </button>
 
-<div id="ag-bar">
-  <div class="ag-bar-left">
-    <span class="ag-bar-title">Page Guide</span>
-    <div class="ag-pips" id="ag-pips"></div>
+<!-- Sidebar panel -->
+<div id="pgt-panel" role="complementary" aria-label="Page guide">
+
+  <div class="pgt-header">
+    <div class="pgt-header-left">
+      <div>
+        <div class="pgt-header-label">Portfolio · v2026</div>
+        <div class="pgt-header-title">Page Guide</div>
+      </div>
+    </div>
+    <button class="pgt-close" onclick="pgtClose()" aria-label="Close guide">✕</button>
   </div>
-  <button id="ag-exit" onclick="agEnd()">Close guide</button>
+
+  <!-- Section nav -->
+  <nav class="pgt-nav" id="pgt-nav" aria-label="Page sections"></nav>
+
+  <!-- Content area -->
+  <div class="pgt-content" id="pgt-content"></div>
+
+  <!-- Footer -->
+  <div class="pgt-footer">
+    <div class="pgt-progress" id="pgt-prog"></div>
+    <div class="pgt-arrows">
+      <button class="pgt-arr" id="pgt-prev" onclick="pgtStep(-1)" aria-label="Previous">←</button>
+      <button class="pgt-arr" id="pgt-next" onclick="pgtStep(1)"  aria-label="Next">→</button>
+    </div>
+  </div>
+
 </div>
 
+<!-- Section label pill (appears near section on page) -->
+<div id="pgt-pill"></div>
+
 <script>
-(function(){
-  var STOPS=[
-    {sel:'nav',anchor:'tr',section:'Navigation',heading:'Work · About · Certifications · Let\'s Talk',body:'Five links including a direct shortcut to the live ID Model Selector tool. The Let\'s Talk CTA is always one click away from any section on the page.'},
-    {sel:'.hero',anchor:'tl',section:'Hero',heading:'I build learning experiences that think.',body:'15+ years across instructional design, JavaScript development, and AI integration. Courses that adapt, connect to live data, and do more than display slides.'},
-    {sel:'.marquee-wrap',anchor:'tl',section:'Core Stack',heading:'Articulate Storyline · JavaScript · REST APIs · xAPI · AI Voice · FFmpeg · LMS Architecture',body:'The full working toolkit. Every skill in this ticker is backed by a live demo or case study you can click into from this page.'},
-    {sel:'#services',anchor:'tr',section:'What I Do',heading:'Three disciplines. One person.',body:'Learning Experience Design, Learning Technology & Integration, and AI & Workflow Automation. Most L&D professionals occupy one. This portfolio covers all three.'},
-    {sel:'#skills',anchor:'tr',section:'Competency Map',heading:'Five axes. Mapped honestly.',body:'Instructional Design · Technical Development · AI Integration · Automation & Systems · Analytics & Data. Hover each axis label to see what it means in practice.'},
-    {sel:'.cases-section',anchor:'tl',section:'Selected Work',heading:'5 case studies — each with a working live demo.',body:'AI-personalised voice narration, template architecture that scales teams, FFmpeg localization, a live xAPI stream visualiser, and an AI storyboard generator applying 7 real ID models.'},
-    {sel:'#accessibility',anchor:'tl',section:'Accessibility Practice',heading:'Four live toggles. Feel the difference yourself.',body:'Focus Order, Colour Contrast, Alt Text Strategy, and Keyboard Navigation — each as an interactive before/after inside a simulated Storyline slide. Built in from the start, not retrofitted.'},
-    {sel:'.demo-callout',anchor:'tl',section:'Interactive Demos',heading:'Six demos. All live in the browser.',body:'AI Personalized Narration · Template System Showroom · FFmpeg Terminal Simulation · The Invisible Student · AI Storyboard Converter · Spot the Accessibility Bug. Click any card to run it now.'},
-    {sel:'#timeline',anchor:'tl',section:'Career Timeline',heading:'15 years · 9 roles · one direction.',body:'From training call centre associates in Ahmedabad in 2010 to leading AI-integrated eLearning at Siemens in 2024. Drag the scrubber or click any marker to read each role.'},
+(function () {
+  'use strict';
+
+  var STOPS = [
+    {
+      sel: 'nav',
+      section: 'Navigation',
+      heading: 'Work · About · Certifications · Let\'s Talk',
+      body: 'Five links — including a direct shortcut to the live ID Model Selector tool. The Let\'s Talk CTA sits in the primary action position and follows the visitor through every section.'
+    },
+    {
+      sel: '.hero',
+      section: 'Hero',
+      heading: 'I build learning experiences that think.',
+      body: '15+ years at the intersection of instructional design and engineering. The headline does the work: JavaScript inside Storyline, courses connected to live APIs, workflows automated, AI integrated where others use static slides.'
+    },
+    {
+      sel: '.marquee-wrap',
+      section: 'Core Stack',
+      heading: 'The full toolkit — every skill backed by a live demo.',
+      body: 'Articulate Storyline 360 · JavaScript Integration · REST API Connections · xAPI & SCORM · AI Voice Personalization · FFmpeg Automation · LMS Architecture · Multilingual eLearning. None of these are aspirational — each links to working code.'
+    },
+    {
+      sel: '#services',
+      section: 'What I Do',
+      heading: 'Three disciplines. One person.',
+      body: 'Learning Experience Design (branching scenarios, assessments grounded in instructional theory) · Learning Technology & Integration (JavaScript, APIs, LMS) · AI & Workflow Automation (Murf AI, GPT, FFmpeg). Most L&D practitioners occupy one lane.'
+    },
+    {
+      sel: '#skills',
+      section: 'Competency Map',
+      heading: 'Five axes. Mapped without inflation.',
+      body: 'Instructional Design · Technical Development · AI Integration · Automation & Systems · Analytics & Data. Hover each axis label on the radar to read what it actually means in practice — not just what sounds good on paper.'
+    },
+    {
+      sel: '.cases-section',
+      section: 'Selected Work',
+      heading: '5 case studies. Every single one has a live demo.',
+      body: 'AI-personalised voice narration at LMS scale · Template architecture that multiplied team output · FFmpeg localization across 8 languages in 90 seconds · Live xAPI stream visualiser · AI storyboard generator applying 7 ID models. No PDFs. No mockups.'
+    },
+    {
+      sel: '#accessibility',
+      section: 'Accessibility Practice',
+      heading: 'Four interactive before/after demonstrations.',
+      body: 'Focus Order · Colour Contrast · Alt Text Strategy · Keyboard Navigation. Each built as a toggle inside a simulated Storyline environment. The point: accessibility is an architectural decision made at the template level, not a checklist item added at the end.'
+    },
+    {
+      sel: '.demo-callout',
+      section: 'Interactive Demos',
+      heading: 'Six demos. All running live in this browser.',
+      body: 'AI Personalized Narration · Template System Showroom · FFmpeg Terminal Simulation · The Invisible Student (live xAPI) · AI Storyboard Converter · Spot the Accessibility Bug. Click any card on the page to run it right now — no login, no installation.'
+    },
+    {
+      sel: '#timeline',
+      section: 'Career Timeline',
+      heading: 'Every role that built this skillset, from 2010 to now.',
+      body: 'Started as a call centre floor trainer in Ahmedabad. Added instructional design, then eLearning dev, then LMS administration, then JavaScript, then AI. Drag the scrubber or click any marker on the timeline to read each role in full.'
+    }
   ];
 
-  var cur=0,active=false,dots=[],tips=[],prevHi=null;
+  var cur = 0;
+  var isOpen = false;
+  var prevHi = null;
+  var pillTimer = null;
 
-  STOPS.forEach(function(s,i){
-    var d=document.createElement('div');
-    d.className='ag-dot';
-    d.innerHTML='<div class="ag-dot-inner">'+(i+1)+'</div>';
-    d.addEventListener('click',function(){agStep(i);});
-    document.body.appendChild(d);
-    dots.push(d);
+  /* ── BUILD PANEL ────────────────────────────────── */
+  function build() {
+    var nav = document.getElementById('pgt-nav');
+    var content = document.getElementById('pgt-content');
+    nav.innerHTML = '';
+    content.innerHTML = '';
 
-    var t=document.createElement('div');
-    t.className='ag-tip';
-    t.innerHTML=
-      '<div class="ag-tip-section">'+s.section+'</div>'+
-      '<div class="ag-tip-heading">'+s.heading+'</div>'+
-      '<div class="ag-tip-body">'+s.body+'</div>'+
-      '<div class="ag-tip-foot">'+
-        '<span class="ag-tip-count">'+pad(i+1)+' — '+pad(STOPS.length)+'</span>'+
-        '<div class="ag-tip-nav">'+
-          '<button class="ag-tip-btn" data-p="'+i+'">←</button>'+
-          '<button class="ag-tip-btn" data-n="'+i+'">'+(i===STOPS.length-1?'✕':'→')+'</button>'+
-        '</div>'+
-      '</div>';
-    document.body.appendChild(t);
-    tips.push(t);
-  });
+    STOPS.forEach(function (s, i) {
+      /* nav row */
+      var btn = document.createElement('button');
+      btn.className = 'pgt-nav-item' + (i === 0 ? ' active' : '');
+      btn.setAttribute('aria-label', 'Go to ' + s.section);
+      btn.innerHTML =
+        '<span class="pgt-nav-num">' + pad(i + 1) + '</span>' +
+        '<span class="pgt-nav-text">' + s.section + '</span>' +
+        '<span class="pgt-nav-bar"></span>';
+      btn.addEventListener('click', function () { goTo(i); });
+      nav.appendChild(btn);
 
-  document.addEventListener('click',function(e){
-    var p=e.target.getAttribute('data-p');
-    var n=e.target.getAttribute('data-n');
-    if(p!==null){e.stopPropagation();if(cur>0)agStep(cur-1);}
-    if(n!==null){e.stopPropagation();if(cur<STOPS.length-1)agStep(cur+1);else agEnd();}
-  });
+      /* content card */
+      var card = document.createElement('div');
+      card.className = 'pgt-card' + (i === 0 ? ' visible' : '');
+      card.id = 'pgt-card-' + i;
+      card.innerHTML =
+        '<div class="pgt-card-section">' + s.section + '</div>' +
+        '<div class="pgt-card-heading">' + s.heading + '</div>' +
+        '<div class="pgt-card-body">' + s.body + '</div>' +
+        '<button class="pgt-card-scroll" onclick="pgtScrollTo(' + i + ')">' +
+          '<span class="pgt-scroll-label">Scroll to section</span>' +
+          '<span class="pgt-scroll-arrow">↓</span>' +
+        '</button>';
+      content.appendChild(card);
+    });
 
-  function pad(n){return n<10?'0'+n:''+n;}
-
-  function buildPips(){
-    var c=document.getElementById('ag-pips');if(!c)return;
-    c.innerHTML=STOPS.map(function(_,i){return'<div class="ag-pip" id="agp'+i+'"></div>';}).join('');
-  }
-  function refreshPips(){
-    STOPS.forEach(function(_,i){var p=document.getElementById('agp'+i);if(!p)return;p.className='ag-pip'+(i<cur?' past':i===cur?' here':'');});
+    updateFooter();
   }
 
-  var D=26,GAP=10,TW=280,TH=220;
+  function pad(n) { return n < 10 ? '0' + n : '' + n; }
 
-  function place(i){
-    var el=document.querySelector(STOPS[i].sel);
-    var d=dots[i],t=tips[i];
-    if(!el){d.style.left='-999px';t.style.left='-999px';return;}
-    var r=el.getBoundingClientRect();
-    var vw=window.innerWidth,vh=window.innerHeight;
-    var an=STOPS[i].anchor;
-    var dx=(an==='tl'||an==='bl')?r.left+14:r.right-D-14;
-    var dy=(an==='tl'||an==='tr')?r.top+14:r.bottom-D-14;
-    dx=Math.max(6,Math.min(dx,vw-D-6));
-    dy=Math.max(56,Math.min(dy,vh-D-6));
-    d.style.left=dx+'px';d.style.top=dy+'px';
-    var cx=dx+D/2,cy=dy+D/2;
-    t.classList.remove('arr-l','arr-r','arr-t','arr-b');
-    var tx,ty;
-    if(cx+D/2+GAP+TW<vw-8){tx=cx+D/2+GAP;ty=cy-14;t.classList.add('arr-l');}
-    else if(cx-D/2-GAP-TW>8){tx=cx-D/2-GAP-TW;ty=cy-14;t.classList.add('arr-r');}
-    else if(cy+D/2+GAP+TH<vh-8){tx=Math.min(cx-22,vw-TW-8);ty=cy+D/2+GAP;t.classList.add('arr-t');}
-    else{tx=Math.min(cx-22,vw-TW-8);ty=cy-D/2-GAP-TH;t.classList.add('arr-b');}
-    tx=Math.max(8,Math.min(tx,vw-TW-8));
-    ty=Math.max(56,Math.min(ty,vh-TH-8));
-    t.style.left=tx+'px';t.style.top=ty+'px';
+  /* ── NAVIGATION ─────────────────────────────────── */
+  function goTo(i) {
+    if (i < 0 || i >= STOPS.length) return;
+
+    /* deactivate old */
+    var oldNav = document.querySelectorAll('.pgt-nav-item');
+    var oldCard = document.getElementById('pgt-card-' + cur);
+    if (oldNav[cur]) oldNav[cur].classList.remove('active');
+    if (oldCard) oldCard.classList.remove('visible');
+
+    cur = i;
+
+    /* activate new */
+    if (oldNav[cur]) oldNav[cur].classList.add('active');
+    var newCard = document.getElementById('pgt-card-' + cur);
+    if (newCard) newCard.classList.add('visible');
+
+    /* highlight section on page */
+    highlightSection(cur);
+    updateFooter();
   }
 
-  function placeAll(){STOPS.forEach(function(_,i){place(i);});}
-
-  function agStep(i){
-    if(i<0||i>=STOPS.length)return;
-    cur=i;
-    if(prevHi){prevHi.classList.remove('ag-section-hi');prevHi=null;}
-    dots.forEach(function(d,idx){d.classList.toggle('on',idx===cur);});
-    tips.forEach(function(t,idx){t.classList.toggle('vis',idx===cur);});
-    var el=document.querySelector(STOPS[cur].sel);
-    if(el){
-      el.classList.add('ag-section-hi');prevHi=el;
-      var r=el.getBoundingClientRect();
-      var mid=window.pageYOffset+r.top+r.height/2-window.innerHeight/2;
-      window.scrollTo({top:Math.max(0,mid),behavior:'smooth'});
+  function highlightSection(i) {
+    /* remove old highlight */
+    if (prevHi) {
+      prevHi.classList.remove('pgt-hi');
+      prevHi = null;
     }
-    setTimeout(placeAll,360);
-    refreshPips();
+
+    var el = document.querySelector(STOPS[i].sel);
+    if (!el) return;
+
+    el.classList.add('pgt-hi');
+    prevHi = el;
+
+    /* show pill label near section top */
+    showPill(el, STOPS[i].section);
   }
 
-  window.agStart=function(){
-    active=true;buildPips();placeAll();
-    dots.forEach(function(d){d.classList.add('vis');});
-    document.getElementById('ag-bar').classList.add('on');
-    document.getElementById('ag-launch').style.display='none';
-    agStep(0);
+  function showPill(el, label) {
+    var pill = document.getElementById('pgt-pill');
+    if (!pill) return;
+    if (pillTimer) clearTimeout(pillTimer);
+
+    var r = el.getBoundingClientRect();
+    var y = r.top + window.pageYOffset - 32;
+    var x = Math.min(r.left + 16, window.innerWidth - 180);
+
+    pill.style.top = Math.max(60, y) + 'px';
+    pill.style.left = Math.max(8, x) + 'px';
+    pill.textContent = label;
+    /* re-add ::before via class trick */
+    pill.classList.add('show');
+
+    pillTimer = setTimeout(function () {
+      pill.classList.remove('show');
+    }, 2200);
+  }
+
+  /* ── SCROLL TO SECTION ──────────────────────────── */
+  window.pgtScrollTo = function (i) {
+    var el = document.querySelector(STOPS[i].sel);
+    if (!el) return;
+    var y = el.getBoundingClientRect().top + window.pageYOffset - 80;
+    window.scrollTo({ top: Math.max(0, y), behavior: 'smooth' });
   };
 
-  window.agEnd=function(){
-    active=false;
-    if(prevHi){prevHi.classList.remove('ag-section-hi');prevHi=null;}
-    dots.forEach(function(d){d.classList.remove('vis','on');});
-    tips.forEach(function(t){t.classList.remove('vis');});
-    document.getElementById('ag-bar').classList.remove('on');
-    document.getElementById('ag-launch').style.display='';
+  /* ── FOOTER ─────────────────────────────────────── */
+  function updateFooter() {
+    var prog = document.getElementById('pgt-prog');
+    var prev = document.getElementById('pgt-prev');
+    var next = document.getElementById('pgt-next');
+    if (prog) prog.innerHTML = '<strong>' + pad(cur + 1) + '</strong> / ' + pad(STOPS.length);
+    if (prev) prev.disabled = cur === 0;
+    if (next) next.disabled = cur === STOPS.length - 1;
+  }
+
+  window.pgtStep = function (dir) { goTo(cur + dir); };
+
+  /* ── OPEN / CLOSE ───────────────────────────────── */
+  window.pgtOpen = function () {
+    isOpen = true;
+    document.getElementById('pgt-panel').classList.add('open');
+    document.getElementById('pgt-dim').classList.add('on');
+    document.getElementById('pgt-tab').classList.add('hidden');
+    goTo(0);
   };
 
-  document.addEventListener('keydown',function(e){
-    if(!active)return;
-    if(e.key==='ArrowRight'||e.key==='ArrowDown'){if(cur<STOPS.length-1)agStep(cur+1);else agEnd();}
-    if(e.key==='ArrowLeft'||e.key==='ArrowUp'){if(cur>0)agStep(cur-1);}
-    if(e.key==='Escape')agEnd();
+  window.pgtClose = function () {
+    isOpen = false;
+    document.getElementById('pgt-panel').classList.remove('open');
+    document.getElementById('pgt-dim').classList.remove('on');
+    document.getElementById('pgt-tab').classList.remove('hidden');
+    document.getElementById('pgt-pill').classList.remove('show');
+    if (prevHi) { prevHi.classList.remove('pgt-hi'); prevHi = null; }
+  };
+
+  /* ── KEYBOARD ───────────────────────────────────── */
+  document.addEventListener('keydown', function (e) {
+    if (!isOpen) return;
+    if (e.key === 'Escape') { pgtClose(); return; }
+    if (e.key === 'ArrowDown' || e.key === 'ArrowRight') { if (cur < STOPS.length - 1) goTo(cur + 1); }
+    if (e.key === 'ArrowUp'   || e.key === 'ArrowLeft')  { if (cur > 0) goTo(cur - 1); }
   });
 
-  window.addEventListener('scroll',function(){if(active)placeAll();},{passive:true});
-  window.addEventListener('resize',function(){if(active)placeAll();});
+  /* ── INIT ───────────────────────────────────────── */
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', build);
+  } else {
+    build();
+  }
 })();
 </script>
-<!-- ══════════════════════════════════════════════════════════
-     END AI GUIDE
-     ══════════════════════════════════════════════════════════ -->
+<!-- AG_GUIDE_END -->
 
 </body>
 </html>
