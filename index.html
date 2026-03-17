@@ -1429,6 +1429,8 @@ if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded'
   -webkit-backdrop-filter: blur(1px);
 }
 .ag-overlay.on { opacity: 1; pointer-events: all; }
+/* Tooltip must sit above everything including highlighted sections */
+#ag-tooltip { isolation: isolate; }
 
 /* ── Trigger button ──────────────────────────── */
 .ag-trigger {
@@ -1475,8 +1477,7 @@ if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded'
 /* ── Section highlight ───────────────────────── */
 .ag-hi {
   position: relative !important;
-  z-index: 9001 !important;
-  pointer-events: none !important;
+  z-index: 9050 !important;
   border-radius: 4px;
   box-shadow:
     0 0 0 3px var(--accent, #c84b2f),
@@ -1498,7 +1499,7 @@ nav.ag-hi              { background: rgba(245,242,235,0.97) !important; }
 /* ── Tooltip ─────────────────────────────────── */
 .ag-tooltip {
   position: fixed;
-  z-index: 9100;
+  z-index: 9500 !important;
   width: 340px;
   background: var(--paper, #f5f2eb);
   border-radius: 3px;
@@ -1516,7 +1517,7 @@ nav.ag-hi              { background: rgba(245,242,235,0.97) !important; }
 }
 .ag-tooltip.on {
   opacity: 1;
-  pointer-events: all;
+  pointer-events: all !important;
   transform: translateY(0);
 }
 
@@ -1736,6 +1737,10 @@ nav.ag-hi              { background: rgba(245,242,235,0.97) !important; }
   var prevBtn  = document.getElementById('ag-prev');
   var nextBtn  = document.getElementById('ag-next');
   var closeBtn = document.getElementById('ag-close');
+
+  /* Ensure tooltip is always the last element in body — 
+     guarantees it paints above any z-index stacking context */
+  document.body.appendChild(tooltip);
 
   /* ── Build step track ── */
   function buildTrack() {
