@@ -4,10 +4,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Demo 04 — The Invisible Student · Abhishek Trivedi</title>
+<title>Demo 04 -- The Invisible Student · Abhishek Trivedi</title>
 <style>
 /* ============================================
-   abhishektrivedi.com — Demo Shared Stylesheet
+   abhishektrivedi.com -- Demo Shared Stylesheet
    Matches main site: warm cream · serif display
    terracotta accent · navy dark · editorial feel
    ============================================ */
@@ -237,7 +237,7 @@ code { padding: 1px 5px; }
 .hood-list li { font-size: 0.875rem; color: var(--text-secondary); padding-left: 1.5rem; position: relative; line-height: 1.6; }
 .hood-list li::before { content: attr(data-icon); position: absolute; left: 0; }
 
-/* NEXT CASE — uses navy panel like main site */
+/* NEXT CASE -- uses navy panel like main site */
 .next-case {
   background: var(--bg-dark); border: 1px solid transparent;
   border-radius: var(--radius-xl); padding: 2rem; margin-top: 4rem;
@@ -764,9 +764,9 @@ code { padding: 1px 5px; }
 
 <div class="demo-container wide">
   <div style="margin-bottom:1.5rem;">
-    <span class="code-label">// Case Study 04 — The Invisible Student · xAPI</span>
+    <span class="code-label">// Case Study 04 -- The Invisible Student · xAPI</span>
     <h1>Watch your learning become <em>data</em> in real time.</h1>
-    <p>Step through a 4-screen course. On the right: every xAPI statement your actions generate — exactly as they'd appear in a real LRS. Most L&D professionals have never seen this layer.</p>
+    <p>Step through a 4-screen course. On the right: every xAPI statement your actions generate -- exactly as they'd appear in a real LRS. Most L&D professionals have never seen this layer.</p>
   </div>
 
   <div class="course-layout">
@@ -774,7 +774,7 @@ code { padding: 1px 5px; }
     <!-- Course panel -->
     <div class="course-panel">
       <div class="course-header">
-        <h4>Workplace Wellbeing Foundations — Module 1</h4>
+        <h4>Workplace Wellbeing Foundations -- Module 1</h4>
         <div class="course-progress-labels">
           <span class="cp-step active" id="step-pill-1">1 Intro Video</span>
           <span class="cp-step" id="step-pill-2">2 Knowledge Check</span>
@@ -789,9 +789,9 @@ code { padding: 1px 5px; }
 
         <!-- Screen 1: Video -->
         <div class="course-screen active" id="cs-1">
-          <span class="section-step">Screen 01 of 04 — Video Content</span>
+          <span class="section-step">Screen 01 of 04 -- Video Content</span>
           <h2>Understanding Psychological Safety</h2>
-          <p style="margin-bottom:1rem;">Watch the introduction to psychological safety in the workplace — the foundation for high-performing teams.</p>
+          <p style="margin-bottom:1rem;">Watch the introduction to psychological safety in the workplace -- the foundation for high-performing teams.</p>
           <div class="video-placeholder" id="video-box" onclick="playVideo()">
             <div class="video-play-btn" id="play-btn">▶</div>
             <div style="font-size:0.8125rem;color:var(--text-muted);" id="video-status">Click Play to begin</div>
@@ -807,7 +807,7 @@ code { padding: 1px 5px; }
 
         <!-- Screen 2: Quiz -->
         <div class="course-screen" id="cs-2">
-          <span class="section-step">Screen 02 of 04 — Knowledge Check</span>
+          <span class="section-step">Screen 02 of 04 -- Knowledge Check</span>
           <h2>Quick Check</h2>
           <p style="margin-bottom:1rem;">Psychological safety was first researched extensively by:</p>
           <div class="quiz-option" onclick="answerQuiz(this,false)"><span class="quiz-letter">A</span>Peter Senge, MIT Sloan</div>
@@ -822,7 +822,7 @@ code { padding: 1px 5px; }
 
         <!-- Screen 3: Sort -->
         <div class="course-screen" id="cs-3">
-          <span class="section-step">Screen 03 of 04 — Sort Activity</span>
+          <span class="section-step">Screen 03 of 04 -- Sort Activity</span>
           <h2>Sort the Behaviours</h2>
           <p style="margin-bottom:1rem;">Click each behaviour to tag it as building or undermining psychological safety.</p>
           <div id="sort-items">
@@ -839,9 +839,9 @@ code { padding: 1px 5px; }
 
         <!-- Screen 4: Reflection -->
         <div class="course-screen" id="cs-4">
-          <span class="section-step">Screen 04 of 04 — Reflection</span>
+          <span class="section-step">Screen 04 of 04 -- Reflection</span>
           <h2>Your Learning Moment</h2>
-          <p style="margin-bottom:1rem;">Where have you seen psychological safety — or its absence — affect team performance?</p>
+          <p style="margin-bottom:1rem;">Where have you seen psychological safety -- or its absence -- affect team performance?</p>
           <textarea id="reflection-text" rows="4" placeholder="Type your reflection here..." oninput="updateRefCount(this)"></textarea>
           <div style="font-family:var(--mono);font-size:11px;color:var(--text-muted);margin:4px 0 1rem;"><span id="ref-count">0</span>/500 characters</div>
           <div style="display:flex;gap:10px;">
@@ -854,18 +854,18 @@ code { padding: 1px 5px; }
         <div class="course-screen" id="cs-results">
           <span class="code-label" style="margin-bottom:0.75rem;">// Session complete</span>
           <h2>Your session generated <span id="total-stmt-count">0</span> xAPI statements.</h2>
-          <p style="margin-bottom:1.25rem;">Here's what they tell a learning designer about your engagement — the invisible layer behind every course.</p>
+          <p style="margin-bottom:1.25rem;">Here's what they tell a learning designer about your engagement -- the invisible layer behind every course.</p>
 
           <div class="metrics-row">
             <div class="metric-card"><div class="metric-val" id="r-total">0</div><div class="metric-label">Total statements</div></div>
             <div class="metric-card"><div class="metric-val" id="r-verbs">0</div><div class="metric-label">Unique verbs</div></div>
-            <div class="metric-card"><div class="metric-val" id="r-score">—</div><div class="metric-label">Quiz result</div></div>
+            <div class="metric-card"><div class="metric-val" id="r-score">--</div><div class="metric-label">Quiz result</div></div>
             <div class="metric-card"><div class="metric-val" id="r-reflect">0</div><div class="metric-label">Reflection chars</div></div>
           </div>
 
-          <div class="insight-card"><span class="insight-icon">⏱</span><div><div class="insight-title">Time-on-task patterns</div><div class="insight-desc">Timestamps reveal where learners pause, skip, or rush — surfacing confusing content.</div></div></div>
-          <div class="insight-card"><span class="insight-icon">🎯</span><div><div class="insight-title">Interaction depth</div><div class="insight-desc">The verb mix shows if learners watched, answered, reflected — or just clicked through.</div></div></div>
-          <div class="insight-card"><span class="insight-icon">📊</span><div><div class="insight-title">Granular assessment data</div><div class="insight-desc">Not just pass/fail — which answer chosen, how many attempts, first-try success.</div></div></div>
+          <div class="insight-card"><span class="insight-icon">⏱</span><div><div class="insight-title">Time-on-task patterns</div><div class="insight-desc">Timestamps reveal where learners pause, skip, or rush -- surfacing confusing content.</div></div></div>
+          <div class="insight-card"><span class="insight-icon">🎯</span><div><div class="insight-title">Interaction depth</div><div class="insight-desc">The verb mix shows if learners watched, answered, reflected -- or just clicked through.</div></div></div>
+          <div class="insight-card"><span class="insight-icon">📊</span><div><div class="insight-title">Granular assessment data</div><div class="insight-desc">Not just pass/fail -- which answer chosen, how many attempts, first-try success.</div></div></div>
 
           <button class="btn btn-primary" style="margin-top:1rem;" onclick="restartDemo()">↩ Restart Demo</button>
         </div>
@@ -898,14 +898,14 @@ code { padding: 1px 5px; }
     <h3>How I Built This</h3>
     <div class="hood-section-title">✓ What's real in this demo</div>
     <ul class="hood-list">
-      <li data-icon="📡">Every xAPI statement is built to the full xAPI 1.0.3 specification — real actor IRI, real verb IRI from the ADL registry</li>
+      <li data-icon="📡">Every xAPI statement is built to the full xAPI 1.0.3 specification -- real actor IRI, real verb IRI from the ADL registry</li>
       <li data-icon="🧩">The 4-screen course structure mirrors an actual LMS-delivered module</li>
       <li data-icon="📊">Analytics section reflects real statement data generated by your specific interactions</li>
     </ul>
     <div class="hood-section-title">~ What's simulated</div>
     <ul class="hood-list">
-      <li data-icon="🌐">No real LRS connected — statements generated in-memory in JavaScript</li>
-      <li data-icon="🎬">Video player is a styled simulation — progress fires on a timer</li>
+      <li data-icon="🌐">No real LRS connected -- statements generated in-memory in JavaScript</li>
+      <li data-icon="🎬">Video player is a styled simulation -- progress fires on a timer</li>
       <li data-icon="👤">Learner identity (Alex Chen) is a fixed simulation</li>
     </ul>
   </div>
@@ -936,7 +936,7 @@ code { padding: 1px 5px; }
 <div class="json-modal" id="json-modal" onclick="closeModal(event)">
   <div class="json-box">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
-      <h3>Full xAPI Statement — JSON</h3>
+      <h3>Full xAPI Statement -- JSON</h3>
       <button class="btn btn-ghost" onclick="document.getElementById('json-modal').classList.remove('open')">✕</button>
     </div>
     <pre id="json-content" style="font-size:0.75rem;"></pre>
@@ -1004,9 +1004,9 @@ function goCS(n) {
   setStepPill(n);
   updateProgress((n - 1) * 25);
 
-  if (n === 1) fireStatement('launched', 'Video — Psychological Safety Intro');
-  if (n === 2) fireStatement('launched', 'Knowledge Check — Psych Safety Research');
-  if (n === 3) fireStatement('launched', 'Sort Activity — Behaviours');
+  if (n === 1) fireStatement('launched', 'Video -- Psychological Safety Intro');
+  if (n === 2) fireStatement('launched', 'Knowledge Check -- Psych Safety Research');
+  if (n === 3) fireStatement('launched', 'Sort Activity -- Behaviours');
   if (n === 4) fireStatement('launched', 'Reflection Prompt');
 }
 
@@ -1015,12 +1015,12 @@ function playVideo() {
   videoPlaying = true;
   document.getElementById('play-btn').textContent = '⏸';
   document.getElementById('video-status').textContent = 'Playing...';
-  fireStatement('played', 'Video — Psychological Safety Intro');
+  fireStatement('played', 'Video -- Psychological Safety Intro');
   videoInterval = setInterval(() => {
     videoProgress += 2;
     document.getElementById('video-fill').style.width = videoProgress + '%';
     if (videoProgress >= 50 && videoProgress < 52) {
-      fireStatement('interacted', 'Video — 50% milestone reached');
+      fireStatement('interacted', 'Video -- 50% milestone reached');
     }
     if (videoProgress >= 100) {
       clearInterval(videoInterval);
@@ -1028,7 +1028,7 @@ function playVideo() {
       document.getElementById('play-btn').textContent = '✓';
       document.getElementById('video-status').textContent = 'Complete';
       document.getElementById('next-btn-1').style.display = 'inline-flex';
-      fireStatement('completed', 'Video — Psychological Safety Intro', { completion: true, duration: 'PT2M30S' });
+      fireStatement('completed', 'Video -- Psychological Safety Intro', { completion: true, duration: 'PT2M30S' });
     }
   }, 80);
 }
@@ -1041,7 +1041,7 @@ function skipVideo() {
   document.getElementById('video-status').textContent = 'Skipped';
   videoPlaying = false;
   document.getElementById('next-btn-1').style.display = 'inline-flex';
-  fireStatement('skipped', 'Video — Psychological Safety Intro');
+  fireStatement('skipped', 'Video -- Psychological Safety Intro');
 }
 
 function answerQuiz(el, correct) {
@@ -1049,7 +1049,7 @@ function answerQuiz(el, correct) {
   document.querySelectorAll('.quiz-option').forEach(o => o.onclick = null);
   el.classList.add(correct ? 'correct' : 'wrong');
   quizScore = correct ? 1 : 0;
-  fireStatement('answered', 'Knowledge Check — Psych Safety Research', {
+  fireStatement('answered', 'Knowledge Check -- Psych Safety Research', {
     success: correct,
     score: { scaled: correct ? 1.0 : 0.0, raw: correct ? 1 : 0, max: 1 }
   });
@@ -1061,14 +1061,14 @@ function tagItem(el, tag) {
   el.classList.remove('tagged-safe','tagged-unsafe');
   el.classList.add('tagged-' + tag);
   el.onclick = null;
-  fireStatement('interacted', 'Sort Activity — ' + el.textContent.trim(), {
+  fireStatement('interacted', 'Sort Activity -- ' + el.textContent.trim(), {
     response: tag,
     success: tag === correct
   });
   sortedCount++;
   if (sortedCount >= 4) {
     setTimeout(() => {
-      fireStatement('completed', 'Sort Activity — Behaviours', { completion: true });
+      fireStatement('completed', 'Sort Activity -- Behaviours', { completion: true });
       document.getElementById('next-btn-3').style.display = 'inline-flex';
     }, 400);
   }
@@ -1089,7 +1089,7 @@ function completeModule() {
   if (refLen > 0) {
     fireStatement('completed', 'Reflection Prompt', { completion: true, extensions: { charCount: refLen } });
   }
-  fireStatement('completed', 'Workplace Wellbeing Foundations — Module 1', {
+  fireStatement('completed', 'Workplace Wellbeing Foundations -- Module 1', {
     completion: true,
     success: quizScore === 1,
     score: { scaled: quizScore !== null ? quizScore : 0 }
@@ -1103,7 +1103,7 @@ function completeModule() {
   document.getElementById('r-total').textContent = statements.length;
   const verbs = new Set(statements.map(s => s.verb.display)).size;
   document.getElementById('r-verbs').textContent = verbs;
-  document.getElementById('r-score').textContent = quizScore === 1 ? '✓ Pass' : quizScore === 0 ? '✗ Fail' : '—';
+  document.getElementById('r-score').textContent = quizScore === 1 ? '✓ Pass' : quizScore === 0 ? '✗ Fail' : '--';
   document.getElementById('r-reflect').textContent = refLen;
 }
 
@@ -1165,7 +1165,7 @@ function toggleHood(btn) {
 
 // fire initial launched event
 window.addEventListener('load', () => {
-  setTimeout(() => fireStatement('launched', 'Video — Psychological Safety Intro'), 500);
+  setTimeout(() => fireStatement('launched', 'Video -- Psychological Safety Intro'), 500);
 });
 </script>
 </body>
