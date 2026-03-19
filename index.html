@@ -1180,7 +1180,7 @@ if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', foInitPills);
 } else {
   foInitPills();
-}}
+}
 function applyContrast(on){const slide=document.getElementById('contrast-slide');const ratio=document.getElementById('contrast-ratio');const wcag=document.getElementById('contrast-wcag');if(on){slide.classList.replace('contrast-fail','contrast-pass');ratio.className='contrast-ratio-badge pass';ratio.textContent='Ratio: 7.2:1 ✓ PASS';wcag.className='contrast-wcag-badge pass';wcag.textContent='Exceeds WCAG AA';}else{slide.classList.replace('contrast-pass','contrast-fail');ratio.className='contrast-ratio-badge fail';ratio.textContent='Ratio: 2.1:1 ✗ FAIL';wcag.className='contrast-wcag-badge fail';wcag.textContent='Below WCAG AA';}}
 function applyAlt(on){const srText=document.getElementById('alt-sr-text');const tagType=document.getElementById('alt-tag-type');const tagCode=document.getElementById('alt-tag-code');const decorItem=document.getElementById('alt-decorative-item');if(on){srText.textContent='"Bar chart showing three-step compliance workflow: Identify, Apply, Verify."';srText.style.color='#3dba6e';tagType.textContent='Informational image';tagCode.textContent='alt="[descriptive text]"';decorItem.style.opacity='1';decorItem.querySelector('.alt-tag-code').textContent='role="presentation"';}else{srText.textContent='"image"';srText.style.color='#f0ede6';tagType.textContent='Missing alt text';tagCode.textContent='alt=""';decorItem.style.opacity='0.35';decorItem.querySelector('.alt-tag-code').textContent='marked decorative';}}
 let kbOpen=null;
