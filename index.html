@@ -854,8 +854,41 @@
   </div>
   <div class="a11y-grid">
     <div class="a11y-card" id="a11y-focus">
-      <div class="a11y-card-header"><div class="a11y-card-num">01</div><div><div class="a11y-card-title">Focus Order</div><div class="a11y-card-sub">Tab through the buttons below</div></div><div class="a11y-toggle-wrap"><span class="a11y-toggle-label">OFF</span><button class="a11y-toggle" id="toggle-focus" onclick="toggleScenario('focus')" aria-pressed="false"><span class="a11y-toggle-knob"></span></button><span class="a11y-toggle-label">ON</span></div></div>
-      <div class="a11y-card-body"><div class="a11y-demo-area"><p class="a11y-demo-hint" id="focus-hint">Tab key moves focus in Storyline's broken default order — unpredictable, confusing for keyboard users.</p><div class="focus-buttons" id="focus-buttons"><button class="focus-btn" tabindex="3" data-label="Next →">Next →</button><button class="focus-btn" tabindex="1" data-label="Start Course">Start Course</button><button class="focus-btn" tabindex="5" data-label="Resources">Resources</button><button class="focus-btn" tabindex="2" data-label="Menu">Menu</button><button class="focus-btn" tabindex="4" data-label="Back ←">Back ←</button></div><div class="a11y-tab-indicator"><span class="tab-order-label">Tab order:</span><div class="tab-order-pills" id="focus-order-pills"><span class="tab-pill active-pill">Next →</span><span class="tab-pill">Start Course</span><span class="tab-pill">Resources</span><span class="tab-pill">Menu</span><span class="tab-pill">Back ←</span></div></div></div><div class="a11y-fix-note" id="focus-fix-note"><span class="fix-badge">✓ Fixed</span> Focus order now follows logical reading flow: Start Course → Menu → Back → Next → Resources.</div></div>
+      <div class="a11y-card-header">
+        <div class="a11y-card-num">01</div>
+        <div>
+          <div class="a11y-card-title">Focus Order</div>
+          <div class="a11y-card-sub">Tab through the buttons below</div>
+        </div>
+        <div class="a11y-toggle-wrap">
+          <span class="a11y-toggle-label">OFF</span>
+          <button class="a11y-toggle" id="toggle-focus" onclick="toggleScenario('focus')" aria-pressed="false">
+            <span class="a11y-toggle-knob"></span>
+          </button>
+          <span class="a11y-toggle-label">ON</span>
+        </div>
+      </div>
+      <div class="a11y-card-body">
+        <div class="a11y-demo-area">
+          <p class="a11y-demo-hint" id="focus-hint">Tab key moves focus in Storyline's broken default order — unpredictable, confusing for keyboard users.</p>
+          <div class="focus-buttons" id="focus-buttons">
+            <button class="focus-btn" tabindex="3" data-label="Next →">Next →</button>
+            <button class="focus-btn" tabindex="1" data-label="Start Course">Start Course</button>
+            <button class="focus-btn" tabindex="5" data-label="Resources">Resources</button>
+            <button class="focus-btn" tabindex="2" data-label="Menu">Menu</button>
+            <button class="focus-btn" tabindex="4" data-label="Back ←">Back ←</button>
+          </div>
+          <div class="a11y-tab-indicator">
+            <span class="tab-order-label">Tab order:</span>
+            <div class="tab-order-pills fo-animated-pills" id="focus-order-pills" role="list">
+              <!-- Pills injected by foInitPills() -->
+            </div>
+          </div>
+        </div>
+        <div class="a11y-fix-note" id="focus-fix-note">
+          <span class="fix-badge">✓ Fixed</span> Focus order now follows logical reading flow: Start Course → Menu → Back → Next → Resources.
+        </div>
+      </div>
     </div>
     <div class="a11y-card" id="a11y-contrast">
       <div class="a11y-card-header"><div class="a11y-card-num">02</div><div><div class="a11y-card-title">Colour Contrast</div><div class="a11y-card-sub">WCAG 2.1 AA requires 4.5:1 ratio</div></div><div class="a11y-toggle-wrap"><span class="a11y-toggle-label">OFF</span><button class="a11y-toggle" id="toggle-contrast" onclick="toggleScenario('contrast')" aria-pressed="false"><span class="a11y-toggle-knob"></span></button><span class="a11y-toggle-label">ON</span></div></div>
@@ -878,11 +911,6 @@
     <div class="a11y-standard-item"><div class="a11y-standard-label">Alt text strategy</div><div class="a11y-standard-val">Informational + Decorative</div></div>
   </div>
 </section>
-
-<!-- All original a11y styles, radar styles, demo callout, timeline, CTA, footer, 
-     recruiter mode, cursor trail, hamburger, journey trigger, and career timeline 
-     scripts are preserved exactly from the original — not repeated here for brevity,
-     but MUST be included in the final file. See note below. -->
 
 <!-- DEMO CALLOUT -->
 <section class="demo-callout reveal">
@@ -938,12 +966,6 @@
 </footer>
 
 <script src="js/main.js"></script>
-
-<!-- ══════════════════════════════════════════════════════════
-     PORTFOLIO PROTECTION, CURSOR TRAIL, HAMBURGER, 
-     RECRUITER MODE, A11Y FAB, JOURNEY TRIGGER,
-     CAREER TIMELINE — all original scripts preserved exactly
-     ══════════════════════════════════════════════════════════ -->
 
 <!-- A11Y STYLES + SCRIPTS (originals) -->
 <style>
@@ -1033,11 +1055,132 @@
 .a11y-standard-label{font-family:var(--mono);font-size:0.6rem;letter-spacing:0.08em;text-transform:uppercase;color:rgba(240,237,230,0.3);margin-bottom:0.35rem;}
 .a11y-standard-val{font-size:0.82rem;font-weight:600;color:#3dba6e;}
 @media(max-width:700px){.a11y-section{padding:3rem 1.5rem;}.a11y-standard-strip{flex-direction:column;}.a11y-standard-item{border-right:none;border-bottom:1px solid rgba(61,186,110,0.1);}}
+/* ── Focus Order animated pills ── */
+.fo-animated-pills { position: relative; }
+.fo-pill {
+  will-change: transform;
+  display: inline-block;
+  /* inherit all existing .tab-pill styles */
+}
+/* keep active-pill glow from existing styles */
+.tab-pill.active-pill { background: rgba(61,186,110,0.2); color: #3dba6e; }
+
+/* mobile: wrap gracefully, allow pills to stack */
+@media (max-width: 480px) {
+  .fo-animated-pills { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+  .fo-pill { font-size: 0.58rem !important; padding: 3px 7px !important; }
+}
+
 </style>
 <script>
 const states={focus:false,contrast:false,alt:false,keyboard:false};
 function toggleScenario(id){states[id]=!states[id];const btn=document.getElementById('toggle-'+id);btn.classList.toggle('on',states[id]);btn.setAttribute('aria-pressed',states[id]);document.getElementById('a11y-'+id).classList.toggle('fixed',states[id]);document.getElementById(id+'-fix-note').classList.toggle('show',states[id]);if(id==='focus')applyFocus(states[id]);if(id==='contrast')applyContrast(states[id]);if(id==='alt')applyAlt(states[id]);if(id==='keyboard')applyKeyboard(states[id]);}
-function applyFocus(on){const hint=document.getElementById('focus-hint');const btns=document.querySelectorAll('.focus-btn');const pills=document.querySelectorAll('.tab-pill');if(on){const order=['Start Course','Menu','Back ←','Next →','Resources'];btns.forEach(b=>{const idx=order.indexOf(b.dataset.label);b.tabIndex=idx+1;});pills.forEach((p,i)=>{p.textContent=order[i];p.classList.toggle('active-pill',i===0);});hint.textContent='Focus now follows logical reading flow. Tab through to feel the difference.';}else{const broken=['Next →','Start Course','Resources','Menu','Back ←'];btns.forEach(b=>{const idx=broken.indexOf(b.dataset.label);b.tabIndex=idx+1;});pills.forEach((p,i)=>{p.textContent=broken[i];p.classList.toggle('active-pill',i===0);});hint.textContent="Tab key moves focus in Storyline's broken default order — unpredictable, confusing for keyboard users.";}}
+/* ── Focus Order FLIP animation ── */
+const FO_BROKEN = ['Next →','Start Course','Resources','Menu','Back ←'];
+const FO_FIXED  = ['Start Course','Menu','Back ←','Next →','Resources'];
+let foWalkTimer = null, foActiveIdx = 0;
+
+function foInitPills() {
+  const container = document.getElementById('focus-order-pills');
+  if (!container) return;
+  container.innerHTML = '';
+  FO_BROKEN.forEach((label, i) => {
+    const pill = document.createElement('span');
+    pill.className = 'tab-pill fo-pill' + (i === 0 ? ' active-pill' : '');
+    pill.textContent = label;
+    pill.dataset.label = label;
+    pill.setAttribute('role', 'listitem');
+    container.appendChild(pill);
+  });
+  foStartWalk();
+}
+
+function foStartWalk() {
+  foStopWalk();
+  foActiveIdx = 0;
+  foHighlight();
+  foWalkTimer = setInterval(() => {
+    foActiveIdx = (foActiveIdx + 1) % document.querySelectorAll('#focus-order-pills .fo-pill').length;
+    foHighlight();
+  }, 950);
+}
+
+function foStopWalk() {
+  clearInterval(foWalkTimer);
+  foWalkTimer = null;
+}
+
+function foHighlight() {
+  document.querySelectorAll('#focus-order-pills .fo-pill').forEach((p, i) => {
+    p.classList.toggle('active-pill', i === foActiveIdx);
+  });
+}
+
+function foFlipReorder(newOrder) {
+  const container = document.getElementById('focus-order-pills');
+  const pills = [...container.querySelectorAll('.fo-pill')];
+  /* FIRST */
+  const firstRects = {};
+  pills.forEach(p => { firstRects[p.dataset.label] = p.getBoundingClientRect(); });
+  /* LAST — reorder DOM */
+  newOrder.forEach(label => {
+    const p = pills.find(x => x.dataset.label === label);
+    if (p) container.appendChild(p);
+  });
+  /* INVERT */
+  newOrder.forEach(label => {
+    const p = container.querySelector('[data-label="' + label + '"]');
+    if (!p) return;
+    const first = firstRects[label];
+    const last  = p.getBoundingClientRect();
+    const dx = first.left - last.left;
+    const dy = first.top  - last.top;
+    if (Math.abs(dx) > 0.5 || Math.abs(dy) > 0.5) {
+      p.style.transform = 'translate(' + dx + 'px,' + dy + 'px)';
+      p.style.transition = 'none';
+    }
+  });
+  /* PLAY */
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      [...container.querySelectorAll('.fo-pill')].forEach((p, i) => {
+        p.style.transition = 'transform 0.52s cubic-bezier(0.25,0.46,0.45,0.94)';
+        p.style.transitionDelay = (i * 0.045) + 's';
+        p.style.transform = '';
+      });
+    });
+  });
+}
+
+function applyFocus(on) {
+  const hint = document.getElementById('focus-hint');
+  const btns = document.querySelectorAll('.focus-btn');
+  foStopWalk();
+  /* update tabindex on real buttons */
+  const order = on ? FO_FIXED : FO_BROKEN;
+  btns.forEach(b => { const idx = order.indexOf(b.dataset.label); b.tabIndex = idx + 1; });
+  /* fade description */
+  hint.style.transition = 'opacity 0.22s';
+  hint.style.opacity = '0';
+  setTimeout(() => {
+    hint.textContent = on
+      ? 'Focus now follows logical reading flow — keyboard users move through controls in a meaningful sequence.'
+      : "Tab key moves focus in Storyline's broken default order — unpredictable, confusing for keyboard users.";
+    hint.style.opacity = '1';
+  }, 220);
+  /* animate pill reorder after short delay for drama */
+  setTimeout(() => {
+    foFlipReorder(on ? FO_FIXED : FO_BROKEN);
+    setTimeout(foStartWalk, 680);
+  }, 180);
+}
+
+/* boot pills when DOM is ready */
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', foInitPills);
+} else {
+  foInitPills();
+}}
 function applyContrast(on){const slide=document.getElementById('contrast-slide');const ratio=document.getElementById('contrast-ratio');const wcag=document.getElementById('contrast-wcag');if(on){slide.classList.replace('contrast-fail','contrast-pass');ratio.className='contrast-ratio-badge pass';ratio.textContent='Ratio: 7.2:1 ✓ PASS';wcag.className='contrast-wcag-badge pass';wcag.textContent='Exceeds WCAG AA';}else{slide.classList.replace('contrast-pass','contrast-fail');ratio.className='contrast-ratio-badge fail';ratio.textContent='Ratio: 2.1:1 ✗ FAIL';wcag.className='contrast-wcag-badge fail';wcag.textContent='Below WCAG AA';}}
 function applyAlt(on){const srText=document.getElementById('alt-sr-text');const tagType=document.getElementById('alt-tag-type');const tagCode=document.getElementById('alt-tag-code');const decorItem=document.getElementById('alt-decorative-item');if(on){srText.textContent='"Bar chart showing three-step compliance workflow: Identify, Apply, Verify."';srText.style.color='#3dba6e';tagType.textContent='Informational image';tagCode.textContent='alt="[descriptive text]"';decorItem.style.opacity='1';decorItem.querySelector('.alt-tag-code').textContent='role="presentation"';}else{srText.textContent='"image"';srText.style.color='#f0ede6';tagType.textContent='Missing alt text';tagCode.textContent='alt=""';decorItem.style.opacity='0.35';decorItem.querySelector('.alt-tag-code').textContent='marked decorative';}}
 let kbOpen=null;
@@ -1382,17 +1525,6 @@ function tlInitSwipe(){
 if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',function(){tlInit();tlInitSwipe();});}else{tlInit();tlInitSwipe();}
 </script>
 
-
-
-
-
-<!-- ═══════════════════════════════════════════
-     FEATURES BLOCK
-     1. Start Here modal
-     2. Mobile desktop disclaimer  
-     3. Back to top button
-═══════════════════════════════════════════ -->
-
 <!-- ── 3. BACK TO TOP ────────────────────────── -->
 <button id="btt-btn" aria-label="Back to top" onclick="window.scrollTo({top:0,behavior:'smooth'})">
   <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 12V4M4 7l4-4 4 4"/></svg>
@@ -1423,12 +1555,9 @@ if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded'
     pointer-events: auto;
   }
   #btt-btn:hover { background: var(--accent); }
-
-  /* On desktop: nudge left so it doesn't overlap other fixed elements */
   @media (min-width: 769px) {
     #btt-btn { bottom: 32px; right: 32px; }
   }
-  /* On mobile: sits above the disclaimer banner when visible */
   @media (max-width: 768px) {
     #btt-btn { bottom: 120px; right: 20px; width: 36px; height: 36px; }
   }
@@ -1439,7 +1568,6 @@ if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded'
   var btn = document.getElementById('btt-btn');
   var threshold = window.innerHeight * 0.6;
   var ticking = false;
-
   window.addEventListener('scroll', function(){
     if(ticking) return;
     ticking = true;
@@ -1451,9 +1579,5 @@ if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded'
   }, {passive: true});
 })();
 </script>
-
-<!-- ═══════════════════════════════════════════
-     END FEATURES BLOCK
-═══════════════════════════════════════════ -->
 </body>
 </html>
