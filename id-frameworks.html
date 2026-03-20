@@ -1,782 +1,858 @@
+
 <!DOCTYPE html>
-<!-- saved from url=(0047)file:///Users/at/Downloads/id-cheatsheet_3.html -->
 <html lang="en">
-  <head>
-     <script type="text/javascript">
+<head>
+  <script type="text/javascript">
     (function(c,l,a,r,i,t,y){
         c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
         t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
         y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
     })(window, document, "clarity", "script", "vxtwcbqoas");
-</script>
-    <meta charset="UTF-8">
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-LY3GY2LH00"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-LY3GY2LH00');
-</script>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  </script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-LY3GY2LH00"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-LY3GY2LH00');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ID Models &amp; Frameworks — Cheat Sheet</title>
+  <link href="./id-frameworks_files/css2" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f0ebe0;
+      --surface: #faf7f2;
+      --surface2: #e8e2d6;
+      --border: #d6cfc2;
+      --text: #1a1814;
+      --muted: #7a7060;
+      --model-color: #c94a2a;
+      --framework-color: #1f3d5c;
+      --accent: #c94a2a;
+      --green: #2a6644;
+      --navy: #1f3d5c;
+      --tag-model-bg: rgba(201,74,42,0.08);
+      --tag-fw-bg: rgba(31,61,92,0.08);
+    }
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ID Models &amp; Frameworks — Cheat Sheet</title>
-<link href="./id-frameworks_files/css2" rel="stylesheet">
-<style>
-  :root {
-    --bg: #f0ebe0;
-    --surface: #faf7f2;
-    --surface2: #e8e2d6;
-    --border: #d6cfc2;
-    --text: #1a1814;
-    --muted: #7a7060;
-    --model-color: #c94a2a;
-    --framework-color: #1f3d5c;
-    --accent: #c94a2a;
-    --green: #2a6644;
-    --navy: #1f3d5c;
-    --tag-model-bg: rgba(201,74,42,0.08);
-    --tag-fw-bg: rgba(31,61,92,0.08);
-  }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      min-height: 100vh;
+    }
 
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'DM Sans', sans-serif;
-    min-height: 100vh;
-    padding: 56px 24px;
-  }
+    /* ── NAV ── */
+    .site-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.25rem 2.5rem;
+      background: var(--bg);
+    }
 
-  .page { max-width: 980px; margin: 0 auto; }
+    .site-nav .nav-logo {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--text);
+      text-decoration: none;
+      letter-spacing: -0.02em;
+    }
 
-  .header {
-    margin-bottom: 52px;
-    display: grid;
-    grid-template-columns: 1fr auto;
-    gap: 24px;
-    align-items: end;
-    border-bottom: 2px solid var(--text);
-    padding-bottom: 28px;
-  }
+    .site-nav ul {
+      list-style: none;
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+    }
 
-  .header-label {
-    font-family: 'DM Mono', monospace;
-    font-size: 10px;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--accent);
-    margin-bottom: 10px;
-  }
+    .site-nav ul li a {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text);
+      text-decoration: none;
+    }
 
-  .header h1 {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(32px, 5vw, 52px);
-    font-weight: 900;
-    line-height: 1.05;
-    color: var(--text);
-  }
+    .site-nav ul li a:hover { color: var(--accent); }
+    .site-nav ul li a.active { color: var(--accent); }
 
-  .header h1 em { font-style: italic; color: var(--accent); }
+    .site-nav ul li a.nav-cta {
+      background: var(--accent);
+      color: #fff;
+      padding: 0.55rem 1.2rem;
+      border-radius: 3px;
+      font-weight: 600;
+    }
 
-  .header p {
-    margin-top: 14px;
-    color: var(--muted);
-    font-size: 13px;
-    line-height: 1.75;
-    max-width: 480px;
-  }
+    .site-nav ul li a.nav-cta:hover { background: #b03d22; color: #fff; }
 
-  .header-badge {
-    background: var(--navy);
-    color: #fff;
-    font-family: 'DM Mono', monospace;
-    font-size: 10px;
-    padding: 10px 16px;
-    letter-spacing: 0.05em;
-    text-align: center;
-    line-height: 1.6;
-    white-space: nowrap;
-  }
+    @media (max-width: 768px) {
+      .site-nav { padding: 1rem 1.25rem; }
+      .site-nav ul { display: none; }
+    }
 
-  .header-badge strong { display: block; font-size: 20px; letter-spacing: 0; }
+    /* ── PAGE CONTENT ── */
+    .page {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 48px 24px 56px;
+    }
 
-  .legend { display: flex; gap: 24px; margin-bottom: 36px; flex-wrap: wrap; }
+    .header {
+      margin-bottom: 52px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 24px;
+      align-items: end;
+      border-bottom: 2px solid var(--text);
+      padding-bottom: 28px;
+    }
 
-  .legend-item {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 12px;
-    color: var(--muted);
-    font-family: 'DM Mono', monospace;
-  }
+    .header-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 10px;
+    }
 
-  .legend-dot { width: 10px; height: 10px; border-radius: 2px; }
+    .header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(32px, 5vw, 52px);
+      font-weight: 900;
+      line-height: 1.05;
+      color: var(--text);
+    }
 
-  .section-title {
-    font-family: 'DM Mono', monospace;
-    font-size: 10px;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 12px;
-    margin-top: 44px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
+    .header h1 em { font-style: italic; color: var(--accent); }
 
-  .section-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+    .header p {
+      margin-top: 14px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.75;
+      max-width: 480px;
+    }
 
-  .grid { display: grid; gap: 2px; }
-  .grid-3 { grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); }
-  .grid-4 { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+    .header-badge {
+      background: var(--navy);
+      color: #fff;
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      padding: 10px 16px;
+      letter-spacing: 0.05em;
+      text-align: center;
+      line-height: 1.6;
+      white-space: nowrap;
+    }
 
-  .card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    padding: 24px;
-    transition: box-shadow 0.2s;
-  }
+    .header-badge strong { display: block; font-size: 20px; letter-spacing: 0; }
 
-  .card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.07); }
+    .legend { display: flex; gap: 24px; margin-bottom: 36px; flex-wrap: wrap; }
 
-  .card-type {
-    font-family: 'DM Mono', monospace;
-    font-size: 9px;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    margin-bottom: 8px;
-  }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--muted);
+      font-family: 'DM Mono', monospace;
+    }
 
-  .card-type.model { color: var(--model-color); }
-  .card-type.framework { color: var(--framework-color); }
+    .legend-dot { width: 10px; height: 10px; border-radius: 2px; }
 
-  .card-name {
-    font-family: 'Playfair Display', serif;
-    font-size: 22px;
-    font-weight: 800;
-    margin-bottom: 4px;
-  }
+    .section-title {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 12px;
+      margin-top: 44px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
 
-  .card-name.model { color: var(--model-color); }
-  .card-name.framework { color: var(--framework-color); }
+    .section-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
 
-  .card-what { font-size: 12px; color: var(--muted); margin-bottom: 14px; font-style: italic; }
+    .grid { display: grid; gap: 2px; }
+    .grid-3 { grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); }
+    .grid-4 { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
 
-  .card-phases { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 14px; }
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 24px;
+      transition: box-shadow 0.2s;
+    }
 
-  .phase {
-    font-family: 'DM Mono', monospace;
-    font-size: 9px;
-    padding: 3px 7px;
-    border-radius: 2px;
-    letter-spacing: 0.04em;
-  }
+    .card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.07); }
 
-  .phase.model { background: var(--tag-model-bg); color: var(--model-color); border: 1px solid rgba(201,74,42,0.2); }
-  .phase.framework { background: var(--tag-fw-bg); color: var(--framework-color); border: 1px solid rgba(31,61,92,0.2); }
+    .card-type {
+      font-family: 'DM Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
 
-  .card-use {
-    font-size: 12.5px;
-    color: var(--text);
-    line-height: 1.65;
-    border-top: 1px solid var(--border);
-    padding-top: 12px;
-  }
+    .card-type.model { color: var(--model-color); }
+    .card-type.framework { color: var(--framework-color); }
 
-  .card-when { margin-top: 10px; font-size: 11px; color: var(--green); font-family: 'DM Mono', monospace; }
-  .card-when span { color: var(--muted); }
+    .card-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
 
-  .example-header { background: var(--navy); color: #fff; padding: 20px 24px; }
+    .card-name.model { color: var(--model-color); }
+    .card-name.framework { color: var(--framework-color); }
 
-  .example-topic { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 800; color: #fff; }
-  .example-topic span { color: #f0c090; font-style: italic; }
+    .card-what { font-size: 12px; color: var(--muted); margin-bottom: 14px; font-style: italic; }
 
-  .example-topic-sub {
-    font-size: 12px;
-    color: rgba(255,255,255,0.5);
-    margin-top: 4px;
-    font-family: 'DM Mono', monospace;
-  }
+    .card-phases { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 14px; }
 
-  .example-grid { display: grid; gap: 2px; }
+    .phase {
+      font-family: 'DM Mono', monospace;
+      font-size: 9px;
+      padding: 3px 7px;
+      border-radius: 2px;
+      letter-spacing: 0.04em;
+    }
 
-  .example-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    padding: 20px 24px;
-    display: grid;
-    grid-template-columns: 160px 1fr;
-    gap: 24px;
-    align-items: start;
-  }
+    .phase.model { background: var(--tag-model-bg); color: var(--model-color); border: 1px solid rgba(201,74,42,0.2); }
+    .phase.framework { background: var(--tag-fw-bg); color: var(--framework-color); border: 1px solid rgba(31,61,92,0.2); }
 
-  @media (max-width: 580px) { .example-card { grid-template-columns: 1fr; } }
+    .card-use {
+      font-size: 12.5px;
+      color: var(--text);
+      line-height: 1.65;
+      border-top: 1px solid var(--border);
+      padding-top: 12px;
+    }
 
-  .example-label { font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 800; }
-  .example-label.model { color: var(--model-color); }
-  .example-label.framework { color: var(--framework-color); }
+    .card-when { margin-top: 10px; font-size: 11px; color: var(--green); font-family: 'DM Mono', monospace; }
+    .card-when span { color: var(--muted); }
 
-  .example-type-tag {
-    font-family: 'DM Mono', monospace;
-    font-size: 9px;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    margin-top: 3px;
-  }
+    .example-header { background: var(--navy); color: #fff; padding: 20px 24px; }
+    .example-topic { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 800; color: #fff; }
+    .example-topic span { color: #f0c090; font-style: italic; }
+    .example-topic-sub {
+      font-size: 12px;
+      color: rgba(255,255,255,0.5);
+      margin-top: 4px;
+      font-family: 'DM Mono', monospace;
+    }
 
-  .example-type-tag.model { color: rgba(201,74,42,0.5); }
-  .example-type-tag.framework { color: rgba(31,61,92,0.4); }
+    .example-grid { display: grid; gap: 2px; }
 
-  .example-output { font-size: 12.5px; line-height: 1.75; color: var(--text); }
+    .example-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 20px 24px;
+      display: grid;
+      grid-template-columns: 160px 1fr;
+      gap: 24px;
+      align-items: start;
+    }
 
-  .example-output strong {
-    font-family: 'DM Mono', monospace;
-    color: var(--muted);
-    font-weight: 400;
-    font-size: 9px;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    display: block;
-    margin-bottom: 6px;
-  }
+    @media (max-width: 580px) { .example-card { grid-template-columns: 1fr; } }
 
-  /* MEMORY HOOKS */
-  .hooks-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 2px; }
+    .example-label { font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 800; }
+    .example-label.model { color: var(--model-color); }
+    .example-label.framework { color: var(--framework-color); }
 
-  .hook-card { background: var(--surface); border: 1px solid var(--border); padding: 22px 24px; }
+    .example-type-tag {
+      font-family: 'DM Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-top: 3px;
+    }
 
-  .hook-name { font-family: 'Playfair Display', serif; font-size: 17px; font-weight: 800; margin-bottom: 6px; }
-  .hook-name.model { color: var(--model-color); }
-  .hook-name.framework { color: var(--framework-color); }
+    .example-type-tag.model { color: rgba(201,74,42,0.5); }
+    .example-type-tag.framework { color: rgba(31,61,92,0.4); }
 
-  .hook-mantra { font-size: 13px; font-style: italic; font-weight: 500; color: var(--text); margin-bottom: 8px; line-height: 1.4; }
+    .example-output { font-size: 12.5px; line-height: 1.75; color: var(--text); }
 
-  .hook-why { font-size: 12px; color: var(--muted); line-height: 1.65; margin-bottom: 12px; }
+    .example-output strong {
+      font-family: 'DM Mono', monospace;
+      color: var(--muted);
+      font-weight: 400;
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      display: block;
+      margin-bottom: 6px;
+    }
 
-  .hook-example {
-    background: var(--surface2);
-    border-left: 3px solid var(--border);
-    padding: 10px 12px;
-    font-size: 11.5px;
-    line-height: 1.65;
-    color: var(--text);
-  }
+    .hooks-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 2px; }
 
-  .hook-example-label {
-    font-family: 'DM Mono', monospace;
-    font-size: 9px;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--accent);
-    margin-bottom: 5px;
-  }
+    .hook-card { background: var(--surface); border: 1px solid var(--border); padding: 22px 24px; }
 
-  /* TRIGGER QUESTIONS */
-  .trigger-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2px; }
+    .hook-name { font-family: 'Playfair Display', serif; font-size: 17px; font-weight: 800; margin-bottom: 6px; }
+    .hook-name.model { color: var(--model-color); }
+    .hook-name.framework { color: var(--framework-color); }
 
-  .trigger-card { background: var(--surface); border: 1px solid var(--border); padding: 20px 22px; }
+    .hook-mantra { font-size: 13px; font-style: italic; font-weight: 500; color: var(--text); margin-bottom: 8px; line-height: 1.4; }
+    .hook-why { font-size: 12px; color: var(--muted); line-height: 1.65; margin-bottom: 12px; }
 
-  .trigger-q { font-size: 12.5px; color: var(--navy); margin-bottom: 6px; line-height: 1.5; font-weight: 500; font-style: italic; }
+    .hook-example {
+      background: var(--surface2);
+      border-left: 3px solid var(--border);
+      padding: 10px 12px;
+      font-size: 11.5px;
+      line-height: 1.65;
+      color: var(--text);
+    }
 
-  .trigger-a { font-size: 12px; color: var(--muted); margin-bottom: 12px; }
-  .trigger-a strong { color: var(--accent); font-family: 'Playfair Display', serif; font-size: 13px; }
+    .hook-example-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 5px;
+    }
 
-  .trigger-example {
-    background: var(--surface2);
-    padding: 10px 12px;
-    font-size: 11.5px;
-    line-height: 1.65;
-    color: var(--text);
-    border-left: 3px solid var(--border);
-  }
+    .trigger-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2px; }
 
-  .trigger-example-label {
-    font-family: 'DM Mono', monospace;
-    font-size: 9px;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--accent);
-    margin-bottom: 4px;
-  }
+    .trigger-card { background: var(--surface); border: 1px solid var(--border); padding: 20px 22px; }
 
-  .footer {
-    margin-top: 56px;
-    padding-top: 20px;
-    border-top: 2px solid var(--text);
-    font-family: 'DM Mono', monospace;
-    font-size: 11px;
-    color: var(--muted);
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 8px;
-  }
+    .trigger-q { font-size: 12.5px; color: var(--navy); margin-bottom: 6px; line-height: 1.5; font-weight: 500; font-style: italic; }
+    .trigger-a { font-size: 12px; color: var(--muted); margin-bottom: 12px; }
+    .trigger-a strong { color: var(--accent); font-family: 'Playfair Display', serif; font-size: 13px; }
 
-  .footer a { color: var(--navy); text-decoration: none; font-weight: 500; }
-  .footer a:hover { color: var(--accent); }
-</style>
+    .trigger-example {
+      background: var(--surface2);
+      padding: 10px 12px;
+      font-size: 11.5px;
+      line-height: 1.65;
+      color: var(--text);
+      border-left: 3px solid var(--border);
+    }
+
+    .trigger-example-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 4px;
+    }
+
+    /* ── FOOTER ── */
+    .site-footer {
+      border-top: 1px solid var(--border);
+      padding: 1.5rem 2.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.78rem;
+      color: var(--muted);
+      background: var(--bg);
+    }
+
+    .site-footer ul {
+      list-style: none;
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    .site-footer ul li a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.78rem;
+    }
+
+    .site-footer ul li a:hover { color: var(--accent); }
+  </style>
 </head>
 <body>
- <nav style="
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 1.25rem 2.5rem;
-  background: transparent;
-  font-family: 'Inter', sans-serif;
-">
-  <a href="/index.html" style="
-    font-size: 1.1rem;
-    font-weight: 700;
-    color: #1a1a1a;
-    text-decoration: none;
-    letter-spacing: -0.02em;
-  ">AT.</a>
 
-  <ul style="
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    align-items: center;
-    gap: 2rem;
-  ">
-    <li><a href="/pages/work.html" style="color: #1a1a1a; text-decoration: none; font-size: 0.8rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase;">Work</a></li>
-    <li><a href="/pages/about.html" style="color: #1a1a1a; text-decoration: none; font-size: 0.8rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase;">About</a></li>
-    <li><a href="/pages/certifications.html" style="color: #1a1a1a; text-decoration: none; font-size: 0.8rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase;">Certifications</a></li>
-    <li><a href="/id-frameworks.html" style="color: #1a1a1a; text-decoration: none; font-size: 0.8rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase;">ID Cheat Sheet</a></li>
-    <li><a href="/game/index.html" style="color: #1a1a1a; text-decoration: none; font-size: 0.8rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase;">Spot the Bug</a></li>
-    <li>
-      <a href="/tools/id-model-selector.html" style="
-        background: #c0392b;
-        color: #ffffff;
-        text-decoration: none;
-        font-size: 0.8rem;
-        font-weight: 600;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-        padding: 0.6rem 1.25rem;
-        border-radius: 4px;
-      ">ID Model Selector ↗</a>
-    </li>
-    <li>
-      <a href="/pages/contact.html" style="
-        background: #c0392b;
-        color: #ffffff;
-        text-decoration: none;
-        font-size: 0.8rem;
-        font-weight: 600;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-        padding: 0.6rem 1.25rem;
-        border-radius: 4px;
-      ">Let's Talk</a>
-    </li>
-  </ul>
-</nav>
-<div class="page">
+  <!-- NAV -->
+  <nav class="site-nav">
+    <a href="index.html" class="nav-logo">AT.</a>
+    <ul>
+      <li><a href="pages/work.html">Work</a></li>
+      <li><a href="pages/about.html">About</a></li>
+      <li><a href="pages/certifications.html">Certifications</a></li>
+      <li><a href="id-frameworks.html" class="active">ID Cheat Sheet</a></li>
+      <li><a href="game/index.html">Spot the Bug</a></li>
+      <li><a href="tools/id-model-selector.html" target="_blank" rel="noopener" class="nav-cta">ID Model Selector ↗</a></li>
+      <li><a href="pages/contact.html" class="nav-cta">Let's Talk</a></li>
+    </ul>
+  </nav>
 
-  <div class="header">
-    <div>
-      <div class="header-label">Cheat Sheet · Instructional Design</div>
-      <h1>ID Models &amp;<br><em>Frameworks</em></h1>
-      <p>3 are true design models — they give you a process. 4 are frameworks, taxonomies, or principles. Both matter, but they operate at different levels of the design process.</p>
-    </div>
-    <div class="header-badge">
-      <strong>7</strong>
-      tools.<br>3 models.<br>4 frameworks.
-    </div>
-  </div>
+  <div class="page">
 
-  <div class="legend">
-    <div class="legend-item">
-      <div class="legend-dot" style="background:var(--model-color)"></div>
-      <span>ID Model — gives you a design process</span>
-    </div>
-    <div class="legend-item">
-      <div class="legend-dot" style="background:var(--framework-color)"></div>
-      <span>Framework / Taxonomy / Principles — shapes your thinking</span>
-    </div>
-  </div>
-
-  <div class="section-title">The 3 True ID Models</div>
-  <div class="grid grid-3">
-
-    <div class="card">
-      <div class="card-type model">ID Model · Process</div>
-      <div class="card-name model">ADDIE</div>
-      <div class="card-what">The classic sequential design process</div>
-      <div class="card-phases">
-        <span class="phase model">Analyze</span>
-        <span class="phase model">Design</span>
-        <span class="phase model">Develop</span>
-        <span class="phase model">Implement</span>
-        <span class="phase model">Evaluate</span>
-      </div>
-      <div class="card-use">A linear scaffold. You don't have to follow it strictly, but the Analysis phase alone is worth the whole framework — it forces you to define the problem before building the solution.</div>
-      <div class="card-when"><span>Use when: </span>Clear scope, waterfall delivery, defined stakeholder handoffs.</div>
-    </div>
-
-    <div class="card">
-      <div class="card-type model">ID Model · Process</div>
-      <div class="card-name model">SAM</div>
-      <div class="card-what">Successive Approximation Model — agile ID</div>
-      <div class="card-phases">
-        <span class="phase model">Preparation</span>
-        <span class="phase model">Iterative Design</span>
-        <span class="phase model">Iterative Dev</span>
-      </div>
-      <div class="card-use">Built for iteration. Design → prototype → review → repeat. SMEs give feedback on real prototypes, not abstract storyboards. Less useful when you need a clear deliverable timeline upfront.</div>
-      <div class="card-when"><span>Use when: </span>SMEs available for iterative feedback rounds.</div>
-    </div>
-
-    <div class="card">
-      <div class="card-type model">ID Model · Process</div>
-      <div class="card-name model">4C/ID</div>
-      <div class="card-what">Four-Component Instructional Design — complex skills</div>
-      <div class="card-phases">
-        <span class="phase model">Learning Tasks</span>
-        <span class="phase model">Supportive Info</span>
-        <span class="phase model">Procedural Info</span>
-        <span class="phase model">Part-task Practice</span>
-      </div>
-      <div class="card-use">The most demanding of the three. Designed for genuinely complex skills where part-task practice alone isn't enough. Overkill for most corporate eLearning. Essential when the skill demands it.</div>
-      <div class="card-when"><span>Use when: </span>Complex whole-task performance (clinical, technical, managerial).</div>
-    </div>
-
-  </div>
-
-  <div class="section-title">The 4 Frameworks, Taxonomies &amp; Principles</div>
-  <div class="grid grid-4">
-
-    <div class="card">
-      <div class="card-type framework">Taxonomy · Cognitive Levels</div>
-      <div class="card-name framework">Bloom's</div>
-      <div class="card-what">6-level classification of learning</div>
-      <div class="card-phases">
-        <span class="phase framework">Remember</span>
-        <span class="phase framework">Understand</span>
-        <span class="phase framework">Apply</span>
-        <span class="phase framework">Analyze</span>
-        <span class="phase framework">Evaluate</span>
-        <span class="phase framework">Create</span>
-      </div>
-      <div class="card-use">Not a design process. A reference for writing objectives at the right cognitive level. If you're not using Bloom's to write objectives, you're probably measuring the wrong thing.</div>
-      <div class="card-when"><span>Use for: </span>Writing measurable learning objectives.</div>
-    </div>
-
-    <div class="card">
-      <div class="card-type framework">Principles · Instruction</div>
-      <div class="card-name framework">Gagné's 9</div>
-      <div class="card-what">9 events that define effective instruction</div>
-      <div class="card-phases">
-        <span class="phase framework">Gain Attention</span>
-        <span class="phase framework">Inform Objectives</span>
-        <span class="phase framework">Recall Prior</span>
-        <span class="phase framework">Present Content</span>
-        <span class="phase framework">Guide Learning</span>
-        <span class="phase framework">Elicit Performance</span>
-        <span class="phase framework">Provide Feedback</span>
-        <span class="phase framework">Assess</span>
-        <span class="phase framework">Transfer</span>
-      </div>
-      <div class="card-use">Chronically underrated. Most IDs know the name but haven't sequenced against all 9. When you do, gaps appear — especially the missing Elicit Performance step before feedback.</div>
-      <div class="card-when"><span>Use for: </span>Sequencing and pacing a course correctly.</div>
-    </div>
-
-    <div class="card">
-      <div class="card-type framework">Principles · Instruction</div>
-      <div class="card-name framework">Merrill's</div>
-      <div class="card-what">First Principles of Instruction</div>
-      <div class="card-phases">
-        <span class="phase framework">Problem-centred</span>
-        <span class="phase framework">Activation</span>
-        <span class="phase framework">Demonstration</span>
-        <span class="phase framework">Application</span>
-        <span class="phase framework">Integration</span>
-      </div>
-      <div class="card-use">Demanding to apply properly, but courses built on it feel noticeably different. Learners do more, discuss more, apply more. It's not a process — it's a set of conditions for effective learning.</div>
-      <div class="card-when"><span>Use for: </span>Designing applied, problem-centred learning experiences.</div>
-    </div>
-
-    <div class="card">
-      <div class="card-type framework">Framework · Evaluation</div>
-      <div class="card-name framework">Kirkpatrick</div>
-      <div class="card-what">4-level training evaluation framework</div>
-      <div class="card-phases">
-        <span class="phase framework">L1 Reaction</span>
-        <span class="phase framework">L2 Learning</span>
-        <span class="phase framework">L3 Behavior</span>
-        <span class="phase framework">L4 Results</span>
-      </div>
-      <div class="card-use">Not a design model at all — it's an evaluation framework. Everyone cites it. Very few orgs measure beyond Level 1 (smile sheets). The model is sound. The implementation gap is the real problem.</div>
-      <div class="card-when"><span>Use for: </span>Measuring training effectiveness after delivery.</div>
-    </div>
-
-  </div>
-
-  <div class="section-title">Same Topic · 7 Lenses</div>
-  <div class="example-header">
-    <div class="example-topic">Topic: <span>"How to handle an angry customer"</span></div>
-    <div class="example-topic-sub">A classic corporate soft-skill scenario — see how each model/framework shapes the output differently.</div>
-  </div>
-  <div class="example-grid">
-
-    <div class="example-card">
+    <div class="header">
       <div>
-        <div class="example-label model">ADDIE</div>
-        <div class="example-type-tag model">ID Model</div>
+        <div class="header-label">Cheat Sheet · Instructional Design</div>
+        <h1>ID Models &amp;<br><em>Frameworks</em></h1>
+        <p>3 are true design models — they give you a process. 4 are frameworks, taxonomies, or principles. Both matter, but they operate at different levels of the design process.</p>
       </div>
-      <div class="example-output">
-        <strong>How it shapes the design</strong>
-        Analyze: Survey frontline staff to identify top 5 angry-customer scenarios. Define gap between current and desired behavior.<br>
-        Design: Map learning objectives (Apply de-escalation steps), choose branching scenario format.<br>
-        Develop: Build Storyline module with 3 branching paths.<br>
-        Implement: Deploy to LMS, notify managers.<br>
-        Evaluate: Run post-training observation checks at 30 days.
+      <div class="header-badge">
+        <strong>7</strong>
+        tools.<br>3 models.<br>4 frameworks.
       </div>
     </div>
 
-    <div class="example-card">
-      <div>
-        <div class="example-label model">SAM</div>
-        <div class="example-type-tag model">ID Model</div>
+    <div class="legend">
+      <div class="legend-item">
+        <div class="legend-dot" style="background:var(--model-color)"></div>
+        <span>ID Model — gives you a design process</span>
       </div>
-      <div class="example-output">
-        <strong>How it shapes the design</strong>
-        Week 1: Rapid prototype — a rough 3-slide branching scenario. Share with 2 SMEs (team lead + customer service manager).<br>
-        Week 2: Revise based on feedback. "The escalation path felt too easy." Add a harder consequence branch.<br>
-        Week 3: Second prototype. SME signs off. Begin full development.<br>
-        Result: The module reflects real edge cases because you iterated with real feedback, not assumptions.
+      <div class="legend-item">
+        <div class="legend-dot" style="background:var(--framework-color)"></div>
+        <span>Framework / Taxonomy / Principles — shapes your thinking</span>
       </div>
     </div>
 
-    <div class="example-card">
-      <div>
-        <div class="example-label model">4C/ID</div>
-        <div class="example-type-tag model">ID Model</div>
+    <div class="section-title">The 3 True ID Models</div>
+    <div class="grid grid-3">
+
+      <div class="card">
+        <div class="card-type model">ID Model · Process</div>
+        <div class="card-name model">ADDIE</div>
+        <div class="card-what">The classic sequential design process</div>
+        <div class="card-phases">
+          <span class="phase model">Analyze</span>
+          <span class="phase model">Design</span>
+          <span class="phase model">Develop</span>
+          <span class="phase model">Implement</span>
+          <span class="phase model">Evaluate</span>
+        </div>
+        <div class="card-use">A linear scaffold. You don't have to follow it strictly, but the Analysis phase alone is worth the whole framework — it forces you to define the problem before building the solution.</div>
+        <div class="card-when"><span>Use when: </span>Clear scope, waterfall delivery, defined stakeholder handoffs.</div>
       </div>
-      <div class="example-output">
-        <strong>How it shapes the design</strong>
-        Learning Tasks: Full simulated calls — learner handles the whole interaction, not just one step.<br>
-        Supportive Info: Psychology of anger, company policy, empathy frameworks — available on demand.<br>
-        Procedural Info: Step-by-step de-escalation script shown just-in-time during early tasks.<br>
-        Part-task Practice: Isolated drills on specific steps (e.g., tone of voice only) before whole-task attempts.
+
+      <div class="card">
+        <div class="card-type model">ID Model · Process</div>
+        <div class="card-name model">SAM</div>
+        <div class="card-what">Successive Approximation Model — agile ID</div>
+        <div class="card-phases">
+          <span class="phase model">Preparation</span>
+          <span class="phase model">Iterative Design</span>
+          <span class="phase model">Iterative Dev</span>
+        </div>
+        <div class="card-use">Built for iteration. Design → prototype → review → repeat. SMEs give feedback on real prototypes, not abstract storyboards. Less useful when you need a clear deliverable timeline upfront.</div>
+        <div class="card-when"><span>Use when: </span>SMEs available for iterative feedback rounds.</div>
       </div>
+
+      <div class="card">
+        <div class="card-type model">ID Model · Process</div>
+        <div class="card-name model">4C/ID</div>
+        <div class="card-what">Four-Component Instructional Design — complex skills</div>
+        <div class="card-phases">
+          <span class="phase model">Learning Tasks</span>
+          <span class="phase model">Supportive Info</span>
+          <span class="phase model">Procedural Info</span>
+          <span class="phase model">Part-task Practice</span>
+        </div>
+        <div class="card-use">The most demanding of the three. Designed for genuinely complex skills where part-task practice alone isn't enough. Overkill for most corporate eLearning. Essential when the skill demands it.</div>
+        <div class="card-when"><span>Use when: </span>Complex whole-task performance (clinical, technical, managerial).</div>
+      </div>
+
     </div>
 
-    <div class="example-card">
-      <div>
-        <div class="example-label framework">Bloom's</div>
-        <div class="example-type-tag framework">Taxonomy</div>
+    <div class="section-title">The 4 Frameworks, Taxonomies &amp; Principles</div>
+    <div class="grid grid-4">
+
+      <div class="card">
+        <div class="card-type framework">Taxonomy · Cognitive Levels</div>
+        <div class="card-name framework">Bloom's</div>
+        <div class="card-what">6-level classification of learning</div>
+        <div class="card-phases">
+          <span class="phase framework">Remember</span>
+          <span class="phase framework">Understand</span>
+          <span class="phase framework">Apply</span>
+          <span class="phase framework">Analyze</span>
+          <span class="phase framework">Evaluate</span>
+          <span class="phase framework">Create</span>
+        </div>
+        <div class="card-use">Not a design process. A reference for writing objectives at the right cognitive level. If you're not using Bloom's to write objectives, you're probably measuring the wrong thing.</div>
+        <div class="card-when"><span>Use for: </span>Writing measurable learning objectives.</div>
       </div>
-      <div class="example-output">
-        <strong>How it shapes objectives</strong>
-        ✗ Vague: "Understand how to handle angry customers."<br><br>
-        ✓ Apply level: "Demonstrate de-escalation techniques during a simulated customer call."<br>
-        ✓ Analyze level: "Identify the emotional trigger in a customer complaint and select the appropriate response strategy."<br><br>
-        Bloom's doesn't tell you how to design. It tells you what level of thinking your assessment must actually measure.
+
+      <div class="card">
+        <div class="card-type framework">Principles · Instruction</div>
+        <div class="card-name framework">Gagné's 9</div>
+        <div class="card-what">9 events that define effective instruction</div>
+        <div class="card-phases">
+          <span class="phase framework">Gain Attention</span>
+          <span class="phase framework">Inform Objectives</span>
+          <span class="phase framework">Recall Prior</span>
+          <span class="phase framework">Present Content</span>
+          <span class="phase framework">Guide Learning</span>
+          <span class="phase framework">Elicit Performance</span>
+          <span class="phase framework">Provide Feedback</span>
+          <span class="phase framework">Assess</span>
+          <span class="phase framework">Transfer</span>
+        </div>
+        <div class="card-use">Chronically underrated. Most IDs know the name but haven't sequenced against all 9. When you do, gaps appear — especially the missing Elicit Performance step before feedback.</div>
+        <div class="card-when"><span>Use for: </span>Sequencing and pacing a course correctly.</div>
       </div>
+
+      <div class="card">
+        <div class="card-type framework">Principles · Instruction</div>
+        <div class="card-name framework">Merrill's</div>
+        <div class="card-what">First Principles of Instruction</div>
+        <div class="card-phases">
+          <span class="phase framework">Problem-centred</span>
+          <span class="phase framework">Activation</span>
+          <span class="phase framework">Demonstration</span>
+          <span class="phase framework">Application</span>
+          <span class="phase framework">Integration</span>
+        </div>
+        <div class="card-use">Demanding to apply properly, but courses built on it feel noticeably different. Learners do more, discuss more, apply more. It's not a process — it's a set of conditions for effective learning.</div>
+        <div class="card-when"><span>Use for: </span>Designing applied, problem-centred learning experiences.</div>
+      </div>
+
+      <div class="card">
+        <div class="card-type framework">Framework · Evaluation</div>
+        <div class="card-name framework">Kirkpatrick</div>
+        <div class="card-what">4-level training evaluation framework</div>
+        <div class="card-phases">
+          <span class="phase framework">L1 Reaction</span>
+          <span class="phase framework">L2 Learning</span>
+          <span class="phase framework">L3 Behavior</span>
+          <span class="phase framework">L4 Results</span>
+        </div>
+        <div class="card-use">Not a design model at all — it's an evaluation framework. Everyone cites it. Very few orgs measure beyond Level 1 (smile sheets). The model is sound. The implementation gap is the real problem.</div>
+        <div class="card-when"><span>Use for: </span>Measuring training effectiveness after delivery.</div>
+      </div>
+
     </div>
 
-    <div class="example-card">
-      <div>
-        <div class="example-label framework">Gagné's 9</div>
-        <div class="example-type-tag framework">Principles</div>
+    <div class="section-title">Same Topic · 7 Lenses</div>
+    <div class="example-header">
+      <div class="example-topic">Topic: <span>"How to handle an angry customer"</span></div>
+      <div class="example-topic-sub">A classic corporate soft-skill scenario — see how each model/framework shapes the output differently.</div>
+    </div>
+    <div class="example-grid">
+
+      <div class="example-card">
+        <div>
+          <div class="example-label model">ADDIE</div>
+          <div class="example-type-tag model">ID Model</div>
+        </div>
+        <div class="example-output">
+          <strong>How it shapes the design</strong>
+          Analyze: Survey frontline staff to identify top 5 angry-customer scenarios. Define gap between current and desired behavior.<br>
+          Design: Map learning objectives (Apply de-escalation steps), choose branching scenario format.<br>
+          Develop: Build Storyline module with 3 branching paths.<br>
+          Implement: Deploy to LMS, notify managers.<br>
+          Evaluate: Run post-training observation checks at 30 days.
+        </div>
       </div>
-      <div class="example-output">
-        <strong>How it sequences the course</strong>
-        1. Gain Attention: Video of a customer walkout — "This happened last Tuesday."<br>
-        2. Inform Objectives: "By the end, you'll de-escalate using 3 techniques."<br>
-        3. Recall Prior: "Think of a time you calmed someone down. What worked?"<br>
-        4. Present Content: The LEAPS model explained.<br>
-        5. Guide Learning: Annotated example call with coaching callouts.<br>
-        6. Elicit Performance: ← This is what most courses skip. Learner practices a full scenario BEFORE feedback.<br>
-        7. Provide Feedback: Branching consequence + expert debrief.<br>
-        8. Assess: Scored simulation.<br>
-        9. Transfer: Manager follow-up checklist for real calls.
+
+      <div class="example-card">
+        <div>
+          <div class="example-label model">SAM</div>
+          <div class="example-type-tag model">ID Model</div>
+        </div>
+        <div class="example-output">
+          <strong>How it shapes the design</strong>
+          Week 1: Rapid prototype — a rough 3-slide branching scenario. Share with 2 SMEs (team lead + customer service manager).<br>
+          Week 2: Revise based on feedback. "The escalation path felt too easy." Add a harder consequence branch.<br>
+          Week 3: Second prototype. SME signs off. Begin full development.<br>
+          Result: The module reflects real edge cases because you iterated with real feedback, not assumptions.
+        </div>
       </div>
+
+      <div class="example-card">
+        <div>
+          <div class="example-label model">4C/ID</div>
+          <div class="example-type-tag model">ID Model</div>
+        </div>
+        <div class="example-output">
+          <strong>How it shapes the design</strong>
+          Learning Tasks: Full simulated calls — learner handles the whole interaction, not just one step.<br>
+          Supportive Info: Psychology of anger, company policy, empathy frameworks — available on demand.<br>
+          Procedural Info: Step-by-step de-escalation script shown just-in-time during early tasks.<br>
+          Part-task Practice: Isolated drills on specific steps (e.g., tone of voice only) before whole-task attempts.
+        </div>
+      </div>
+
+      <div class="example-card">
+        <div>
+          <div class="example-label framework">Bloom's</div>
+          <div class="example-type-tag framework">Taxonomy</div>
+        </div>
+        <div class="example-output">
+          <strong>How it shapes objectives</strong>
+          ✗ Vague: "Understand how to handle angry customers."<br><br>
+          ✓ Apply level: "Demonstrate de-escalation techniques during a simulated customer call."<br>
+          ✓ Analyze level: "Identify the emotional trigger in a customer complaint and select the appropriate response strategy."<br><br>
+          Bloom's doesn't tell you how to design. It tells you what level of thinking your assessment must actually measure.
+        </div>
+      </div>
+
+      <div class="example-card">
+        <div>
+          <div class="example-label framework">Gagné's 9</div>
+          <div class="example-type-tag framework">Principles</div>
+        </div>
+        <div class="example-output">
+          <strong>How it sequences the course</strong>
+          1. Gain Attention: Video of a customer walkout — "This happened last Tuesday."<br>
+          2. Inform Objectives: "By the end, you'll de-escalate using 3 techniques."<br>
+          3. Recall Prior: "Think of a time you calmed someone down. What worked?"<br>
+          4. Present Content: The LEAPS model explained.<br>
+          5. Guide Learning: Annotated example call with coaching callouts.<br>
+          6. Elicit Performance: ← This is what most courses skip. Learner practices a full scenario BEFORE feedback.<br>
+          7. Provide Feedback: Branching consequence + expert debrief.<br>
+          8. Assess: Scored simulation.<br>
+          9. Transfer: Manager follow-up checklist for real calls.
+        </div>
+      </div>
+
+      <div class="example-card">
+        <div>
+          <div class="example-label framework">Merrill's</div>
+          <div class="example-type-tag framework">Principles</div>
+        </div>
+        <div class="example-output">
+          <strong>How it shapes the experience</strong>
+          Problem-centred: Open with the real problem — "Customer churn increased 12% last quarter. This is why."<br>
+          Activation: "Recall a difficult conversation you navigated. What did you do?"<br>
+          Demonstration: Show a full expert call — not a highlight reel, the whole messy thing.<br>
+          Application: Learner handles their own version of the call with coaching available.<br>
+          Integration: Learner reflects and shares one technique they'll apply tomorrow.
+        </div>
+      </div>
+
+      <div class="example-card">
+        <div>
+          <div class="example-label framework">Kirkpatrick</div>
+          <div class="example-type-tag framework">Evaluation</div>
+        </div>
+        <div class="example-output">
+          <strong>How it shapes measurement</strong>
+          L1 Reaction: Post-course survey — "Was this relevant to your job?" (most orgs stop here)<br>
+          L2 Learning: Scenario score — did the learner demonstrate the right technique?<br>
+          L3 Behavior: Manager observation at 30 days — are reps actually using it on calls?<br>
+          L4 Results: Did complaint escalation rates drop? Did repeat contacts decrease?<br><br>
+          Kirkpatrick doesn't change how you design. It changes what you agree to measure before you build.
+        </div>
+      </div>
+
     </div>
 
-    <div class="example-card">
-      <div>
-        <div class="example-label framework">Merrill's</div>
-        <div class="example-type-tag framework">Principles</div>
+    <!-- MEMORY HOOKS -->
+    <div class="section-title">Memory Hooks</div>
+    <div class="hooks-grid">
+
+      <div class="hook-card">
+        <div class="hook-name model">ADDIE</div>
+        <div class="hook-mantra">"A blueprint before you build."</div>
+        <div class="hook-why">Think architect, not developer. The value is in the plan. Without Analysis, you're building a solution to an undefined problem.</div>
+        <div class="hook-example">
+          <div class="hook-example-label">↳ Angry customer — in practice</div>
+          You talk to the actual reps before building anything. Turns out they already know how to stay calm — they just aren't allowed to offer refunds without a manager's approval. No amount of training fixes a process problem. You just saved 3 weeks building the wrong course.
+        </div>
       </div>
-      <div class="example-output">
-        <strong>How it shapes the experience</strong>
-        Problem-centred: Open with the real problem — "Customer churn increased 12% last quarter. This is why."<br>
-        Activation: "Recall a difficult conversation you navigated. What did you do?"<br>
-        Demonstration: Show a full expert call — not a highlight reel, the whole messy thing.<br>
-        Application: Learner handles their own version of the call with coaching available.<br>
-        Integration: Learner reflects and shares one technique they'll apply tomorrow.
+
+      <div class="hook-card">
+        <div class="hook-name model">SAM</div>
+        <div class="hook-mantra">"Show, don't tell — then show again."</div>
+        <div class="hook-why">Get something in front of stakeholders fast. Feedback on a rough prototype beats feedback on a 10-page storyboard document nobody reads properly.</div>
+        <div class="hook-example">
+          <div class="hook-example-label">↳ Angry customer — in practice</div>
+          You throw together a rough 3-screen demo in one day and show it to the manager. She says: "This customer sounds too nice — ours actually swear at us." You fix it on day two. If you'd spent a month building first, that feedback would have cost weeks. Show early, fix cheap.
+        </div>
       </div>
+
+      <div class="hook-card">
+        <div class="hook-name model">4C/ID</div>
+        <div class="hook-mantra">"Whole tasks, not just parts."</div>
+        <div class="hook-why">If the job requires doing the whole thing under pressure, you have to train the whole thing under pressure — not individual steps in isolation.</div>
+        <div class="hook-example">
+          <div class="hook-example-label">↳ Angry customer — in practice</div>
+          You don't teach "Step 1: Listen. Step 2: Apologise. Step 3: Solve." in separate lessons. You throw the learner straight into a full angry customer call and let them figure it out — just like real life. The steps are still there, but as support, not the main event.
+        </div>
+      </div>
+
+      <div class="hook-card">
+        <div class="hook-name framework">Bloom's</div>
+        <div class="hook-mantra">"What will they DO with this knowledge?"</div>
+        <div class="hook-why">If the verb in your objective is "understand," rewrite it. Bloom's forces you to be specific about what cognitive level you're actually targeting — and assessing.</div>
+        <div class="hook-example">
+          <div class="hook-example-label">↳ Angry customer — in practice</div>
+          ✗ "Understand how to handle angry customers." Nobody can test that.<br><br>
+          ✓ "Handle a live angry customer call and resolve it without escalating." Now you know exactly what practice looks like, what the test looks like, and what good looks like.
+        </div>
+      </div>
+
+      <div class="hook-card">
+        <div class="hook-name framework">Gagné's 9</div>
+        <div class="hook-mantra">"Did they actually practice before you told them how they did?"</div>
+        <div class="hook-why">Most courses skip the practice step entirely. They show content, then immediately give feedback on a quiz. That's not training — that's testing knowledge they haven't used yet.</div>
+        <div class="hook-example">
+          <div class="hook-example-label">↳ Angry customer — in practice</div>
+          Most courses: watch a video of someone handling an angry customer → take a quiz. Gagné says: handle a simulated angry customer yourself first → then watch the expert version and see where you went wrong. You learn more from failing the attempt than from watching the answer.
+        </div>
+      </div>
+
+      <div class="hook-card">
+        <div class="hook-name framework">Merrill's</div>
+        <div class="hook-mantra">"Start with a real problem, end with real application."</div>
+        <div class="hook-why">If the learner never does anything with the content, it's not instruction — it's a presentation. Merrill's keeps you honest about whether the design actually demands performance.</div>
+        <div class="hook-example">
+          <div class="hook-example-label">↳ Angry customer — in practice</div>
+          Don't open with a slide that says "Module 3: De-escalation Techniques." Open with a recording of a real call that went badly — then ask: "What would you have done?" Now the learner has a reason to care about everything that comes next.
+        </div>
+      </div>
+
+      <div class="hook-card">
+        <div class="hook-name framework">Kirkpatrick</div>
+        <div class="hook-mantra">"Agree on what success looks like before you build."</div>
+        <div class="hook-why">Work backwards from the real-world result. If you can't say what will be different in people's behaviour after training, you probably don't need training — you need a process fix.</div>
+        <div class="hook-example">
+          <div class="hook-example-label">↳ Angry customer — in practice</div>
+          Ask the business: "How will we know it worked in 3 months?" If they say "fewer calls escalating to a manager" — great, that's your finish line. Now build backwards toward it. If they say "we'll check course completions" — that tells you nothing about whether anyone actually got better at handling angry customers.
+        </div>
+      </div>
+
     </div>
 
-    <div class="example-card">
-      <div>
-        <div class="example-label framework">Kirkpatrick</div>
-        <div class="example-type-tag framework">Evaluation</div>
+    <!-- TRIGGER QUESTIONS -->
+    <div class="section-title">Which one do I reach for?</div>
+    <div class="trigger-grid">
+
+      <div class="trigger-card">
+        <div class="trigger-q">"What's my design process for this project?"</div>
+        <div class="trigger-a">→ <strong>ADDIE</strong> (waterfall) or <strong>SAM</strong> (iterative)</div>
+        <div class="trigger-example">
+          <div class="trigger-example-label">↳ Angry customer</div>
+          Got a fixed deadline and a manager who needs to approve every stage? → ADDIE. Manager happy to look at rough drafts every week and give notes? → SAM.
+        </div>
       </div>
-      <div class="example-output">
-        <strong>How it shapes measurement</strong>
-        L1 Reaction: Post-course survey — "Was this relevant to your job?" (most orgs stop here)<br>
-        L2 Learning: Scenario score — did the learner demonstrate the right technique?<br>
-        L3 Behavior: Manager observation at 30 days — are reps actually using it on calls?<br>
-        L4 Results: Did complaint escalation rates drop? Did repeat contacts decrease?<br><br>
-        Kirkpatrick doesn't change how you design. It changes what you agree to measure before you build.
+
+      <div class="trigger-card">
+        <div class="trigger-q">"How complex is the skill I'm designing for?"</div>
+        <div class="trigger-a">→ If genuinely complex whole-task: <strong>4C/ID</strong></div>
+        <div class="trigger-example">
+          <div class="trigger-example-label">↳ Angry customer</div>
+          Rep who handles angry customers all day, every day → the skill is complex enough to need full simulation. A cashier who gets one rude customer a month → a short scenario is plenty. Don't use a sledgehammer on a nail.
+        </div>
       </div>
+
+      <div class="trigger-card">
+        <div class="trigger-q">"Are my learning objectives measurable?"</div>
+        <div class="trigger-a">→ Check against <strong>Bloom's</strong> — fix the verb</div>
+        <div class="trigger-example">
+          <div class="trigger-example-label">↳ Angry customer</div>
+          "Understand angry customers" tells you nothing about how to test it. Rewrite it as "Handle a difficult customer call without escalating it." Now you know exactly what the practice and the test look like.
+        </div>
+      </div>
+
+      <div class="trigger-card">
+        <div class="trigger-q">"Does my course sequence feel thin or rushed?"</div>
+        <div class="trigger-a">→ Map against <strong>Gagné's 9 Events</strong> — find the gap</div>
+        <div class="trigger-example">
+          <div class="trigger-example-label">↳ Angry customer</div>
+          Go through your slides one by one. Did you ever ask the learner to actually try handling an angry customer before telling them if they got it right? If not — that's the missing step. Add it before the feedback, not after.
+        </div>
+      </div>
+
+      <div class="trigger-card">
+        <div class="trigger-q">"Are learners doing enough in this course?"</div>
+        <div class="trigger-a">→ Apply <strong>Merrill's Principles</strong> — add real problems</div>
+        <div class="trigger-example">
+          <div class="trigger-example-label">↳ Angry customer</div>
+          If your course is mostly slides with a quiz at the end, learners are watching — not doing. Flip it: put the angry customer scenario at the start, let them try to handle it, then teach the technique. They'll remember it because they felt the problem first.
+        </div>
+      </div>
+
+      <div class="trigger-card">
+        <div class="trigger-q">"How will I prove this training worked?"</div>
+        <div class="trigger-a">→ Define <strong>Kirkpatrick</strong> levels before you build</div>
+        <div class="trigger-example">
+          <div class="trigger-example-label">↳ Angry customer</div>
+          Ask your stakeholder before you build: "In 3 months, what will be different if this training works?" If they say "fewer escalations to supervisors" — great, build toward that. If they say "everyone will have completed it" — that just means people clicked through. It says nothing about whether anything actually changed.
+        </div>
+      </div>
+
     </div>
 
-  </div>
+  </div><!-- /.page -->
 
-  <!-- MEMORY HOOKS -->
-  <div class="section-title">Memory Hooks</div>
-  <div class="hooks-grid">
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <span>© 2026 Abhishek Trivedi · Learning Experience Technologist</span>
+    <ul>
+      <li><a href="https://www.linkedin.com/in/trivedi-abhishek/" target="_blank">LinkedIn</a></li>
+      <li><a href="pages/contact.html">Contact</a></li>
+      <li><a href="index.html">Home</a></li>
+    </ul>
+  </footer>
 
-    <div class="hook-card">
-      <div class="hook-name model">ADDIE</div>
-      <div class="hook-mantra">"A blueprint before you build."</div>
-      <div class="hook-why">Think architect, not developer. The value is in the plan. Without Analysis, you're building a solution to an undefined problem.</div>
-      <div class="hook-example">
-        <div class="hook-example-label">↳ Angry customer — in practice</div>
-        You talk to the actual reps before building anything. Turns out they already know how to stay calm — they just aren't allowed to offer refunds without a manager's approval. No amount of training fixes a process problem. You just saved 3 weeks building the wrong course.
-      </div>
-    </div>
+  <!-- PORTFOLIO PROTECTION -->
+  <script>
+  (function() {
+    'use strict';
+    document.addEventListener('contextmenu', function(e) { e.preventDefault(); showWarning(); return false; });
+    document.addEventListener('keydown', function(e) {
+      const key = e.key ? e.key.toLowerCase() : '';
+      const ctrl = e.ctrlKey || e.metaKey;
+      if (ctrl && ['u','s','a','p'].includes(key)) { e.preventDefault(); showWarning(); return false; }
+      if (ctrl && e.shiftKey && ['i','j','c','k'].includes(key)) { e.preventDefault(); showWarning(); return false; }
+      if (e.key === 'F12') { e.preventDefault(); showWarning(); return false; }
+      if (ctrl && e.shiftKey && e.key === 'Delete') { e.preventDefault(); return false; }
+    });
+    document.addEventListener('selectstart', function(e) {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      e.preventDefault(); return false;
+    });
+    document.addEventListener('dragstart', function(e) {
+      if (e.target.classList && e.target.classList.contains('drag-item')) return;
+      e.preventDefault(); return false;
+    });
+    var devtoolsOpen = false;
+    function checkDevTools() {
+      var widthDiff  = window.outerWidth  - window.innerWidth  > 160;
+      var heightDiff = window.outerHeight - window.innerHeight > 160;
+      if ((widthDiff || heightDiff) && !devtoolsOpen) { devtoolsOpen = true; showDevToolsWarning(); }
+      else if (!widthDiff && !heightDiff) { devtoolsOpen = false; }
+    }
+    setInterval(checkDevTools, 1000);
+    function showWarning() {
+      if (document.getElementById('_pt_toast')) return;
+      var toast = document.createElement('div');
+      toast.id = '_pt_toast';
+      toast.innerHTML = '🔒 &nbsp;This portfolio is protected. Please respect the author\'s work.';
+      toast.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#0f0e0c;color:#f5f2eb;padding:12px 22px;border-radius:8px;font-family:sans-serif;font-size:13px;border:1px solid rgba(200,75,47,0.5);border-left:3px solid #c84b2f;z-index:999999;box-shadow:0 4px 24px rgba(0,0,0,0.4);pointer-events:none;white-space:nowrap';
+      document.body.appendChild(toast);
+      setTimeout(function() { if (toast.parentNode) toast.parentNode.removeChild(toast); }, 3000);
+    }
+    function showDevToolsWarning() {
+      if (document.getElementById('_pt_devtools')) return;
+      var banner = document.createElement('div');
+      banner.id = '_pt_devtools';
+      banner.innerHTML = '<strong style="color:#c84b2f">Hey there, developer 👋</strong> This portfolio was built by <strong>Abhishek Trivedi</strong>. If you\'re curious about how it works, just reach out at <a href="https://abhishektrivedi.com/pages/contact.html" style="color:#c9973a">abhishektrivedi.com</a> — happy to chat.';
+      banner.style.cssText = 'position:fixed;top:0;left:0;right:0;background:#0a1628;color:#f5f2eb;padding:14px 24px;font-family:sans-serif;font-size:13px;line-height:1.6;border-bottom:2px solid #c84b2f;z-index:999999;text-align:center;box-shadow:0 2px 12px rgba(0,0,0,0.5)';
+      document.body.appendChild(banner);
+    }
+    var styles = 'color:#c84b2f;font-size:18px;font-weight:bold;padding:8px 0;border-bottom:2px solid #c84b2f';
+    console.log('%c© Abhishek Trivedi — Learning Experience Technologist', styles);
+    console.log('%chttps://abhishektrivedi.com | All rights reserved.', 'color:#6b6459;font-size:12px;');
+    console.log('%cIf you\'re inspecting this to learn — great! Just don\'t copy. Reach out instead.', 'color:#c9973a;font-size:12px;font-style:italic;');
+  })();
+  </script>
 
-    <div class="hook-card">
-      <div class="hook-name model">SAM</div>
-      <div class="hook-mantra">"Show, don't tell — then show again."</div>
-      <div class="hook-why">Get something in front of stakeholders fast. Feedback on a rough prototype beats feedback on a 10-page storyboard document nobody reads properly.</div>
-      <div class="hook-example">
-        <div class="hook-example-label">↳ Angry customer — in practice</div>
-        You throw together a rough 3-screen demo in one day and show it to the manager. She says: "This customer sounds too nice — ours actually swear at us." You fix it on day two. If you'd spent a month building first, that feedback would have cost weeks. Show early, fix cheap.
-      </div>
-    </div>
-
-    <div class="hook-card">
-      <div class="hook-name model">4C/ID</div>
-      <div class="hook-mantra">"Whole tasks, not just parts."</div>
-      <div class="hook-why">If the job requires doing the whole thing under pressure, you have to train the whole thing under pressure — not individual steps in isolation.</div>
-      <div class="hook-example">
-        <div class="hook-example-label">↳ Angry customer — in practice</div>
-        You don't teach "Step 1: Listen. Step 2: Apologise. Step 3: Solve." in separate lessons. You throw the learner straight into a full angry customer call and let them figure it out — just like real life. The steps are still there, but as support, not the main event.
-      </div>
-    </div>
-
-    <div class="hook-card">
-      <div class="hook-name framework">Bloom's</div>
-      <div class="hook-mantra">"What will they DO with this knowledge?"</div>
-      <div class="hook-why">If the verb in your objective is "understand," rewrite it. Bloom's forces you to be specific about what cognitive level you're actually targeting — and assessing.</div>
-      <div class="hook-example">
-        <div class="hook-example-label">↳ Angry customer — in practice</div>
-        ✗ "Understand how to handle angry customers." Nobody can test that.<br><br>
-        ✓ "Handle a live angry customer call and resolve it without escalating." Now you know exactly what practice looks like, what the test looks like, and what good looks like.
-      </div>
-    </div>
-
-    <div class="hook-card">
-      <div class="hook-name framework">Gagné's 9</div>
-      <div class="hook-mantra">"Did they actually practice before you told them how they did?"</div>
-      <div class="hook-why">Most courses skip the practice step entirely. They show content, then immediately give feedback on a quiz. That's not training — that's testing knowledge they haven't used yet.</div>
-      <div class="hook-example">
-        <div class="hook-example-label">↳ Angry customer — in practice</div>
-        Most courses: watch a video of someone handling an angry customer → take a quiz. Gagné says: handle a simulated angry customer yourself first → then watch the expert version and see where you went wrong. You learn more from failing the attempt than from watching the answer.
-      </div>
-    </div>
-
-    <div class="hook-card">
-      <div class="hook-name framework">Merrill's</div>
-      <div class="hook-mantra">"Start with a real problem, end with real application."</div>
-      <div class="hook-why">If the learner never does anything with the content, it's not instruction — it's a presentation. Merrill's keeps you honest about whether the design actually demands performance.</div>
-      <div class="hook-example">
-        <div class="hook-example-label">↳ Angry customer — in practice</div>
-        Don't open with a slide that says "Module 3: De-escalation Techniques." Open with a recording of a real call that went badly — then ask: "What would you have done?" Now the learner has a reason to care about everything that comes next.
-      </div>
-    </div>
-
-    <div class="hook-card">
-      <div class="hook-name framework">Kirkpatrick</div>
-      <div class="hook-mantra">"Agree on what success looks like before you build."</div>
-      <div class="hook-why">Work backwards from the real-world result. If you can't say what will be different in people's behaviour after training, you probably don't need training — you need a process fix.</div>
-      <div class="hook-example">
-        <div class="hook-example-label">↳ Angry customer — in practice</div>
-        Ask the business: "How will we know it worked in 3 months?" If they say "fewer calls escalating to a manager" — great, that's your finish line. Now build backwards toward it. If they say "we'll check course completions" — that tells you nothing about whether anyone actually got better at handling angry customers.
-      </div>
-    </div>
-
-  </div>
-
-  <!-- TRIGGER QUESTIONS -->
-  <div class="section-title">Which one do I reach for?</div>
-  <div class="trigger-grid">
-
-    <div class="trigger-card">
-      <div class="trigger-q">"What's my design process for this project?"</div>
-      <div class="trigger-a">→ <strong>ADDIE</strong> (waterfall) or <strong>SAM</strong> (iterative)</div>
-      <div class="trigger-example">
-        <div class="trigger-example-label">↳ Angry customer</div>
-        Got a fixed deadline and a manager who needs to approve every stage? → ADDIE. Manager happy to look at rough drafts every week and give notes? → SAM.
-      </div>
-    </div>
-
-    <div class="trigger-card">
-      <div class="trigger-q">"How complex is the skill I'm designing for?"</div>
-      <div class="trigger-a">→ If genuinely complex whole-task: <strong>4C/ID</strong></div>
-      <div class="trigger-example">
-        <div class="trigger-example-label">↳ Angry customer</div>
-        Rep who handles angry customers all day, every day → the skill is complex enough to need full simulation. A cashier who gets one rude customer a month → a short scenario is plenty. Don't use a sledgehammer on a nail.
-      </div>
-    </div>
-
-    <div class="trigger-card">
-      <div class="trigger-q">"Are my learning objectives measurable?"</div>
-      <div class="trigger-a">→ Check against <strong>Bloom's</strong> — fix the verb</div>
-      <div class="trigger-example">
-        <div class="trigger-example-label">↳ Angry customer</div>
-        "Understand angry customers" tells you nothing about how to test it. Rewrite it as "Handle a difficult customer call without escalating it." Now you know exactly what the practice and the test look like.
-      </div>
-    </div>
-
-    <div class="trigger-card">
-      <div class="trigger-q">"Does my course sequence feel thin or rushed?"</div>
-      <div class="trigger-a">→ Map against <strong>Gagné's 9 Events</strong> — find the gap</div>
-      <div class="trigger-example">
-        <div class="trigger-example-label">↳ Angry customer</div>
-        Go through your slides one by one. Did you ever ask the learner to actually try handling an angry customer before telling them if they got it right? If not — that's the missing step. Add it before the feedback, not after.
-      </div>
-    </div>
-
-    <div class="trigger-card">
-      <div class="trigger-q">"Are learners doing enough in this course?"</div>
-      <div class="trigger-a">→ Apply <strong>Merrill's Principles</strong> — add real problems</div>
-      <div class="trigger-example">
-        <div class="trigger-example-label">↳ Angry customer</div>
-        If your course is mostly slides with a quiz at the end, learners are watching — not doing. Flip it: put the angry customer scenario at the start, let them try to handle it, then teach the technique. They'll remember it because they felt the problem first.
-      </div>
-    </div>
-
-    <div class="trigger-card">
-      <div class="trigger-q">"How will I prove this training worked?"</div>
-      <div class="trigger-a">→ Define <strong>Kirkpatrick</strong> levels before you build</div>
-      <div class="trigger-example">
-        <div class="trigger-example-label">↳ Angry customer</div>
-        Ask your stakeholder before you build: "In 3 months, what will be different if this training works?" If they say "fewer escalations to supervisors" — great, build toward that. If they say "everyone will have completed it" — that just means people clicked through. It says nothing about whether anything actually changed.
-      </div>
-    </div>
-
-  </div>
-
-  <div class="footer">
-    <span>Abhishek Trivedi · Learning Experience Technologist · Pune, India</span>
-    <a href="https://abhishektrivedi.com/">abhishektrivedi.com → Demo 05 ↗</a>
-  </div>
-
-</div>
-
-
-</body></html>
+</body>
+</html>
