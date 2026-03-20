@@ -611,6 +611,7 @@
     <li><a href="/id-frameworks.html">ID Cheat Sheet</a></li>
     <li><a href="game/index.html">Spot the Bug</a></li>
     <li><a href="tools/id-model-selector.html" target="_blank" rel="noopener" class="nav-cta nav-tool">ID Model Selector ↗</a></li>
+    <li><a href="lms/index.html" class="nav-cta nav-tool">LMS Demo ↗</a></li>
     <li><a href="pages/contact.html" class="nav-cta">Let's Talk</a></li>
   </ul>
 </nav>
@@ -925,6 +926,7 @@
     <a class="demo-card" href="demo4/index.html"><span class="demo-card-pulse"></span><div class="demo-card-num">Demo 04</div><div class="demo-card-title">The Invisible Student</div><div class="demo-card-desc">Step through a course and watch every action become a live xAPI statement — the data layer most never see.</div><div class="demo-card-cta">Try it now →</div></a>
     <a class="demo-card" href="demo5/index.html"><span class="demo-card-pulse"></span><div class="demo-card-num">Demo 05</div><div class="demo-card-title">AI Storyboard Converter</div><div class="demo-card-desc">Pick a topic and an ID model. Get a complete storyboard — narration, visuals, interactions, and design rationale.</div><div class="demo-card-cta">Try it now →</div></a>
     <a class="demo-card" href="game/index.html" style="border-color:rgba(200,75,47,0.35);"><span class="demo-card-pulse"></span><div class="demo-card-num" style="display:flex;align-items:center;gap:0.5rem;">Mini Game <span style="background:var(--accent);color:#fff;font-size:0.55rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:2px 6px;border-radius:3px;">New</span></div><div class="demo-card-title">Spot the Accessibility Bug</div><div class="demo-card-desc">5 rounds. Real Storyline violations hidden in fake slides. Find every accessibility bug before the timer runs out.</div><div class="demo-card-cta">Play now →</div></a>
+    <a class="demo-card" href="lms/index.html" style="border-color:rgba(30,58,95,0.45);"><span class="demo-card-pulse"></span><div class="demo-card-num" style="display:flex;align-items:center;gap:0.5rem;">Meta Demo <span style="background:#1e3a5f;color:#fff;font-size:0.55rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:2px 6px;border-radius:3px;">New</span></div><div class="demo-card-title">The LMS</div><div class="demo-card-desc">A fully functional course player — boot screen, live xAPI stream, knowledge check, certificate — delivering one course: this portfolio.</div><div class="demo-card-cta">Launch course →</div></a>
   </div>
 </section>
 
@@ -1061,26 +1063,19 @@
 .fo-pill {
   will-change: transform;
   display: inline-block;
-  /* inherit all existing .tab-pill styles */
 }
-/* keep active-pill glow from existing styles */
 .tab-pill.active-pill { background: rgba(61,186,110,0.2); color: #3dba6e; }
-
-/* mobile: wrap gracefully, allow pills to stack */
 @media (max-width: 480px) {
   .fo-animated-pills { display: flex; flex-wrap: wrap; gap: 0.35rem; }
   .fo-pill { font-size: 0.58rem !important; padding: 3px 7px !important; }
 }
-
 </style>
 <script>
 const states={focus:false,contrast:false,alt:false,keyboard:false};
 function toggleScenario(id){states[id]=!states[id];const btn=document.getElementById('toggle-'+id);btn.classList.toggle('on',states[id]);btn.setAttribute('aria-pressed',states[id]);document.getElementById('a11y-'+id).classList.toggle('fixed',states[id]);document.getElementById(id+'-fix-note').classList.toggle('show',states[id]);if(id==='focus')applyFocus(states[id]);if(id==='contrast')applyContrast(states[id]);if(id==='alt')applyAlt(states[id]);if(id==='keyboard')applyKeyboard(states[id]);}
-/* ── Focus Order FLIP animation ── */
 const FO_BROKEN = ['Next →','Start Course','Resources','Menu','Back ←'];
 const FO_FIXED  = ['Start Course','Menu','Back ←','Next →','Resources'];
 let foWalkTimer = null, foActiveIdx = 0;
-
 function foInitPills() {
   const container = document.getElementById('focus-order-pills');
   if (!container) return;
@@ -1095,7 +1090,6 @@ function foInitPills() {
   });
   foStartWalk();
 }
-
 function foStartWalk() {
   foStopWalk();
   foActiveIdx = 0;
@@ -1105,30 +1099,21 @@ function foStartWalk() {
     foHighlight();
   }, 950);
 }
-
-function foStopWalk() {
-  clearInterval(foWalkTimer);
-  foWalkTimer = null;
-}
-
+function foStopWalk() { clearInterval(foWalkTimer); foWalkTimer = null; }
 function foHighlight() {
   document.querySelectorAll('#focus-order-pills .fo-pill').forEach((p, i) => {
     p.classList.toggle('active-pill', i === foActiveIdx);
   });
 }
-
 function foFlipReorder(newOrder) {
   const container = document.getElementById('focus-order-pills');
   const pills = [...container.querySelectorAll('.fo-pill')];
-  /* FIRST */
   const firstRects = {};
   pills.forEach(p => { firstRects[p.dataset.label] = p.getBoundingClientRect(); });
-  /* LAST — reorder DOM */
   newOrder.forEach(label => {
     const p = pills.find(x => x.dataset.label === label);
     if (p) container.appendChild(p);
   });
-  /* INVERT */
   newOrder.forEach(label => {
     const p = container.querySelector('[data-label="' + label + '"]');
     if (!p) return;
@@ -1141,7 +1126,6 @@ function foFlipReorder(newOrder) {
       p.style.transition = 'none';
     }
   });
-  /* PLAY */
   requestAnimationFrame(() => {
     requestAnimationFrame(() => {
       [...container.querySelectorAll('.fo-pill')].forEach((p, i) => {
@@ -1152,15 +1136,12 @@ function foFlipReorder(newOrder) {
     });
   });
 }
-
 function applyFocus(on) {
   const hint = document.getElementById('focus-hint');
   const btns = document.querySelectorAll('.focus-btn');
   foStopWalk();
-  /* update tabindex on real buttons */
   const order = on ? FO_FIXED : FO_BROKEN;
   btns.forEach(b => { const idx = order.indexOf(b.dataset.label); b.tabIndex = idx + 1; });
-  /* fade description */
   hint.style.transition = 'opacity 0.22s';
   hint.style.opacity = '0';
   setTimeout(() => {
@@ -1169,14 +1150,11 @@ function applyFocus(on) {
       : "Tab key moves focus in Storyline's broken default order — unpredictable, confusing for keyboard users.";
     hint.style.opacity = '1';
   }, 220);
-  /* animate pill reorder after short delay for drama */
   setTimeout(() => {
     foFlipReorder(on ? FO_FIXED : FO_BROKEN);
     setTimeout(foStartWalk, 680);
   }, 180);
 }
-
-/* boot pills when DOM is ready */
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', foInitPills);
 } else {
@@ -1419,11 +1397,7 @@ window.addEventListener('scroll',function(){const sec=document.getElementById('a
   document.addEventListener('keydown',function(e){const key=e.key?e.key.toLowerCase():'';const ctrl=e.ctrlKey||e.metaKey;if(ctrl&&['u','s','a','p'].includes(key)){e.preventDefault();showWarning();return false;}if(ctrl&&e.shiftKey&&['i','j','c','k'].includes(key)){e.preventDefault();showWarning();return false;}if(e.key==='F12'){e.preventDefault();showWarning();return false;}if(ctrl&&e.shiftKey&&e.key==='Delete'){e.preventDefault();return false;}});
   document.addEventListener('selectstart',function(e){if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA')return;e.preventDefault();return false;});
   document.addEventListener('dragstart',function(e){e.preventDefault();return false;});
-  var devtoolsOpen=false,threshold=160;
-  function checkDevTools(){var widthDiff=window.outerWidth-window.innerWidth>threshold;var heightDiff=window.outerHeight-window.innerHeight>threshold;if((widthDiff||heightDiff)&&!devtoolsOpen){devtoolsOpen=true;showDevToolsWarning();}else if(!widthDiff&&!heightDiff)devtoolsOpen=false;}
-  setInterval(checkDevTools,1000);
   function showWarning(){if(document.getElementById('_pt_toast'))return;var toast=document.createElement('div');toast.id='_pt_toast';toast.innerHTML='🔒 &nbsp;This portfolio is protected. Please respect the author\'s work.';toast.style.cssText=['position:fixed','bottom:24px','left:50%','transform:translateX(-50%)','background:#0f0e0c','color:#f5f2eb','padding:12px 22px','border-radius:8px','font-family:sans-serif','font-size:13px','border:1px solid rgba(200,75,47,0.5)','border-left:3px solid #c84b2f','z-index:999999','box-shadow:0 4px 24px rgba(0,0,0,0.4)','pointer-events:none','white-space:nowrap'].join(';');document.body.appendChild(toast);setTimeout(function(){if(toast.parentNode)toast.parentNode.removeChild(toast);},3000);}
-  function showDevToolsWarning(){if(document.getElementById('_pt_devtools'))return;var banner=document.createElement('div');banner.id='_pt_devtools';banner.innerHTML='<strong style="color:#c84b2f">Hey there, developer 👋</strong> This portfolio was built by <strong>Abhishek Trivedi</strong>. If you\'re curious about how it works, just reach out at <a href="https://abhishektrivedi.com/pages/contact.html" style="color:#c9973a">abhishektrivedi.com</a> — happy to chat.';banner.style.cssText=['position:fixed','top:0','left:0','right:0','background:#0a1628','color:#f5f2eb','padding:14px 24px','font-family:sans-serif','font-size:13px','line-height:1.6','border-bottom:2px solid #c84b2f','z-index:999999','text-align:center','box-shadow:0 2px 12px rgba(0,0,0,0.5)'].join(';');document.body.appendChild(banner);}
   var styles=['color:#c84b2f','font-size:18px','font-weight:bold','padding:8px 0','border-bottom:2px solid #c84b2f'].join(';');
   console.log('%c© Abhishek Trivedi — Learning Experience Technologist',styles);
   console.log('%chttps://abhishektrivedi.com | All rights reserved.','color:#6b6459;font-size:12px;');
@@ -1526,7 +1500,7 @@ function tlInitSwipe(){
 if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',function(){tlInit();tlInitSwipe();});}else{tlInit();tlInitSwipe();}
 </script>
 
-<!-- ── 3. BACK TO TOP ────────────────────────── -->
+<!-- ── BACK TO TOP ── -->
 <button id="btt-btn" aria-label="Back to top" onclick="window.scrollTo({top:0,behavior:'smooth'})">
   <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 12V4M4 7l4-4 4 4"/></svg>
 </button>
