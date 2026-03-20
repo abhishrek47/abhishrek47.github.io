@@ -2,26 +2,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <script type="text/javascript">
-    (function(c,l,a,r,i,t,y){
-        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-    })(window, document, "clarity", "script", "vxtwcbqoas");
-</script>
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-LY3GY2LH00"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-LY3GY2LH00');
-  </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AT Learning Suite — Course Player</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -1018,6 +1004,18 @@ function buildCert() {
     d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
   document.getElementById('certScormId').textContent =
     'Tracking ID: ' + sessionId + ' · xAPI statements: ' + xapiCount + ' · LRS: AT-LRS-v2026';
+
+  // ── Notify on course completion ──
+  if (typeof emailjs !== 'undefined') {
+    emailjs.send('service_7f0oy0j', 'template_wots65r', {
+      visitor_name:  learnerName,
+      dwell_time:    'Course completed',
+      scroll_depth:  '100%',
+      timestamp:     d.toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }),
+      page_url:      window.location.href,
+      trigger:       'LMS course completed · certificate issued · session: ' + sessionId,
+    }, 'MODruKIN9wiNDF2-x').catch(() => {});
+  }
 }
 
 // ── Console easter egg (bonus) ──
