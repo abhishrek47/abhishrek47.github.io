@@ -149,6 +149,8 @@ body { font-family: var(--sans); background: var(--bg); color: var(--ink); min-h
   border-left: 3px solid transparent;
 }
 .sidebar-item:hover { background: rgba(0,0,0,0.04); color: var(--ink); }
+.sidebar-item.locked { opacity: 0.4; cursor: not-allowed; pointer-events: none; }
+.sidebar-item:not(.locked) { cursor: pointer; }
 .sidebar-item.active {
   background: rgba(192,57,43,0.07); color: var(--accent);
   border-left-color: var(--accent); font-weight: 500;
@@ -613,35 +615,35 @@ body { font-family: var(--sans); background: var(--bg); color: var(--ink); min-h
       <nav class="sidebar-nav">
         <div class="sidebar-module">
           <div class="sidebar-module-label">Enrolment</div>
-          <div class="sidebar-item active" data-screen="enroll" id="nav-enroll">
+          <div class="sidebar-item active" data-screen="enroll" id="nav-enroll" onclick="navClick('enroll')">
             <div class="si-icon"><span class="si-num">0</span></div>
             <span>Start Here</span>
           </div>
         </div>
         <div class="sidebar-module">
           <div class="sidebar-module-label">Module 1</div>
-          <div class="sidebar-item locked" data-screen="m1" id="nav-m1">
+          <div class="sidebar-item locked" data-screen="m1" id="nav-m1" onclick="navClick('m1')">
             <div class="si-icon"><span class="si-num">1</span></div>
             <span>Who Is Abhishek?</span>
           </div>
         </div>
         <div class="sidebar-module">
           <div class="sidebar-module-label">Module 2</div>
-          <div class="sidebar-item locked" data-screen="m2" id="nav-m2">
+          <div class="sidebar-item locked" data-screen="m2" id="nav-m2" onclick="navClick('m2')">
             <div class="si-icon"><span class="si-num">2</span></div>
             <span>What He Builds</span>
           </div>
         </div>
         <div class="sidebar-module">
           <div class="sidebar-module-label">Module 3</div>
-          <div class="sidebar-item locked" data-screen="m3" id="nav-m3">
+          <div class="sidebar-item locked" data-screen="m3" id="nav-m3" onclick="navClick('m3')">
             <div class="si-icon"><span class="si-num">3</span></div>
             <span>Knowledge Check</span>
           </div>
         </div>
         <div class="sidebar-module">
           <div class="sidebar-module-label">Completion</div>
-          <div class="sidebar-item locked" data-screen="cert" id="nav-cert">
+          <div class="sidebar-item locked" data-screen="cert" id="nav-cert" onclick="navClick('cert')">
             <div class="si-icon"><span class="si-num">✦</span></div>
             <span>Your Certificate</span>
           </div>
@@ -782,7 +784,7 @@ body { font-family: var(--sans); background: var(--bg); color: var(--ink); min-h
             The demos are live. In the browser. You can use them, break them, and inspect the code. That's a deliberate choice — the work should speak without a PDF intermediary.
           </p>
 
-          <button class="next-btn" onclick="goTo('m3', 'm2', 50)">
+          <button class="next-btn" onclick="goTo('m3', 'm2', 75)">
             Next: Knowledge Check <span class="next-btn-arrow">→</span>
           </button>
         </div>
@@ -920,6 +922,17 @@ let sessionId = '';
 let answeredCount = 0;
 let xapiCount = 0;
 const totalQuestions = 3;
+
+// Progress map — tracks highest progress reached per screen
+const screenProgress = { enroll: 0, m1: 0, m2: 25, m3: 75, cert: 100 };
+
+// ── Sidebar nav click ──
+function navClick(id) {
+  const el = document.getElementById('nav-' + id);
+  if (!el || el.classList.contains('locked')) return;
+  showScreen(id);
+  setProgress(screenProgress[id]);
+}
 
 // ── Boot sequence ──
 const bootMessages = [
