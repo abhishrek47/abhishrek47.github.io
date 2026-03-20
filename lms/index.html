@@ -740,7 +740,7 @@ body { font-family: var(--sans); background: var(--bg); color: var(--ink); min-h
             </ul>
           </div>
 
-          <button class="next-btn" onclick="goTo('m2', 'm1', 25)">
+          <button class="next-btn" onclick="goTo('m2', 'm1', 50)">
             Next: What He Builds <span class="next-btn-arrow">→</span>
           </button>
         </div>
@@ -924,7 +924,7 @@ let xapiCount = 0;
 const totalQuestions = 3;
 
 // Progress map — tracks highest progress reached per screen
-const screenProgress = { enroll: 0, m1: 0, m2: 25, m3: 75, cert: 100 };
+const screenProgress = { enroll: 0, m1: 25, m2: 50, m3: 75, cert: 100 };
 
 // ── Sidebar nav click ──
 function navClick(id) {
@@ -1023,7 +1023,7 @@ function enroll() {
 
   unlockNav('m1');
   showScreen('m1');
-  setProgress(0);
+  setProgress(25);
   document.getElementById('nav-enroll').classList.add('done');
 }
 
