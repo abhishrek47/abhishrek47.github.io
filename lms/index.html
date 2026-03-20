@@ -1,0 +1,1016 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AT Learning Suite — Course Player</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:       #f5f0eb;
+  --surface:  #ede8e1;
+  --navy:     #1e3a5f;
+  --navy-d:   #162d4a;
+  --ink:      #1a1a1a;
+  --mid:      #666;
+  --muted:    #999;
+  --rule:     #ddd8d0;
+  --accent:   #c0392b;
+  --accent-h: #e74c3c;
+  --green:    #2d7a2d;
+  --green-bg: #f0f8f0;
+  --amber:    #b87020;
+  --amber-bg: #fdf4e7;
+  --serif:    'Playfair Display', Georgia, serif;
+  --sans:     'DM Sans', system-ui, sans-serif;
+  --mono:     'JetBrains Mono', monospace;
+  --shadow:   0 2px 12px rgba(0,0,0,0.08);
+  --shadow-lg:0 8px 32px rgba(0,0,0,0.12);
+}
+
+html { font-size: 16px; -webkit-font-smoothing: antialiased; }
+body { font-family: var(--sans); background: var(--bg); color: var(--ink); min-height: 100vh; overflow-x: hidden; }
+
+/* ── BOOT SCREEN ── */
+#boot {
+  position: fixed; inset: 0; background: var(--navy-d);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  z-index: 9999; transition: opacity 0.6s ease;
+}
+#boot.fade-out { opacity: 0; pointer-events: none; }
+.boot-logo {
+  font-family: var(--mono); font-size: 0.75rem; color: rgba(255,255,255,0.35);
+  letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 2.5rem;
+}
+.boot-logo span { color: var(--accent); }
+.boot-title {
+  font-family: var(--serif); font-size: 1.5rem; color: white;
+  text-align: center; margin-bottom: 0.5rem;
+}
+.boot-sub {
+  font-family: var(--mono); font-size: 0.7rem; color: rgba(255,255,255,0.4);
+  letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 3rem; text-align: center;
+}
+.boot-bar-wrap {
+  width: 260px; height: 2px; background: rgba(255,255,255,0.1); border-radius: 2px; overflow: hidden;
+}
+.boot-bar {
+  height: 100%; width: 0%; background: var(--accent);
+  animation: bootLoad 2.2s ease forwards;
+}
+@keyframes bootLoad { 0%{width:0%} 60%{width:70%} 85%{width:88%} 100%{width:100%} }
+.boot-status {
+  font-family: var(--mono); font-size: 0.65rem; color: rgba(255,255,255,0.3);
+  margin-top: 1rem; letter-spacing: 0.08em; text-align: center;
+}
+.boot-status span { color: rgba(255,255,255,0.55); }
+
+/* ── LMS SHELL ── */
+#lms { display: none; flex-direction: column; min-height: 100vh; }
+#lms.visible { display: flex; }
+
+/* Top Bar */
+.lms-topbar {
+  background: var(--navy); height: 52px;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 1.5rem; flex-shrink: 0; position: sticky; top: 0; z-index: 100;
+  box-shadow: 0 1px 0 rgba(255,255,255,0.07);
+}
+.lms-topbar-left { display: flex; align-items: center; gap: 1.5rem; }
+.lms-brand {
+  font-family: var(--mono); font-size: 0.8rem; font-weight: 700;
+  color: white; letter-spacing: 0.12em; text-transform: uppercase;
+}
+.lms-brand em { color: var(--accent); font-style: normal; }
+.lms-course-name {
+  font-size: 0.78rem; color: rgba(255,255,255,0.5);
+  border-left: 1px solid rgba(255,255,255,0.15); padding-left: 1.5rem;
+  font-weight: 400; max-width: 300px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.lms-topbar-right { display: flex; align-items: center; gap: 1rem; }
+.lms-learner-badge {
+  font-family: var(--mono); font-size: 0.65rem; color: rgba(255,255,255,0.45);
+  letter-spacing: 0.08em; text-transform: uppercase;
+}
+.lms-learner-badge span { color: rgba(255,255,255,0.75); font-weight: 500; }
+.scorm-badge {
+  font-family: var(--mono); font-size: 0.6rem; background: rgba(192,57,43,0.25);
+  color: #ff8a7a; border: 1px solid rgba(192,57,43,0.4);
+  padding: 2px 8px; border-radius: 3px; letter-spacing: 0.08em; text-transform: uppercase;
+}
+
+/* Main Layout */
+.lms-body { display: flex; flex: 1; overflow: hidden; }
+
+/* Sidebar */
+.lms-sidebar {
+  width: 260px; background: var(--surface); border-right: 1px solid var(--rule);
+  display: flex; flex-direction: column; flex-shrink: 0; overflow-y: auto;
+}
+.sidebar-progress-header {
+  padding: 1.25rem 1.25rem 1rem;
+  border-bottom: 1px solid var(--rule);
+}
+.sidebar-progress-label {
+  font-family: var(--mono); font-size: 0.62rem; color: var(--muted);
+  letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.6rem;
+}
+.sidebar-progress-bar-wrap {
+  height: 4px; background: var(--rule); border-radius: 4px; overflow: hidden; margin-bottom: 0.5rem;
+}
+.sidebar-progress-bar {
+  height: 100%; background: var(--accent); border-radius: 4px;
+  transition: width 0.5s ease; width: 0%;
+}
+.sidebar-progress-pct {
+  font-family: var(--mono); font-size: 0.65rem; color: var(--muted);
+}
+.sidebar-progress-pct span { color: var(--accent); font-weight: 700; }
+
+.sidebar-nav { padding: 0.75rem 0; flex: 1; }
+.sidebar-module {
+  padding: 0.3rem 0;
+}
+.sidebar-module-label {
+  font-family: var(--mono); font-size: 0.6rem; color: var(--muted);
+  letter-spacing: 0.1em; text-transform: uppercase;
+  padding: 0.4rem 1.25rem 0.25rem; display: flex; align-items: center; gap: 0.5rem;
+}
+.sidebar-module-label::after { content: ''; flex: 1; height: 1px; background: var(--rule); }
+.sidebar-item {
+  display: flex; align-items: center; gap: 0.75rem;
+  padding: 0.6rem 1.25rem; cursor: pointer;
+  transition: background 0.15s; font-size: 0.82rem; color: var(--mid);
+  border-left: 3px solid transparent;
+}
+.sidebar-item:hover { background: rgba(0,0,0,0.04); color: var(--ink); }
+.sidebar-item.active {
+  background: rgba(192,57,43,0.07); color: var(--accent);
+  border-left-color: var(--accent); font-weight: 500;
+}
+.sidebar-item.done { color: var(--green); }
+.sidebar-item.done .si-icon::after { content: '✓'; }
+.si-icon {
+  width: 18px; height: 18px; border-radius: 50%;
+  border: 1.5px solid var(--rule); font-size: 0.65rem; font-family: var(--mono);
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  color: var(--muted); transition: all 0.2s;
+}
+.sidebar-item.active .si-icon { border-color: var(--accent); color: var(--accent); background: rgba(192,57,43,0.1); }
+.sidebar-item.done .si-icon { border-color: var(--green); background: var(--green-bg); color: var(--green); }
+.si-num { font-size: 0.7rem; }
+
+/* xAPI Panel */
+.xapi-panel {
+  border-top: 1px solid var(--rule); padding: 1rem 1.25rem;
+}
+.xapi-panel-title {
+  font-family: var(--mono); font-size: 0.6rem; color: var(--accent);
+  letter-spacing: 0.1em; text-transform: uppercase;
+  display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem;
+}
+.xapi-live-dot {
+  width: 6px; height: 6px; border-radius: 50%; background: var(--green);
+  animation: pulse 2s infinite;
+}
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+.xapi-stream {
+  max-height: 180px; overflow-y: auto; display: flex; flex-direction: column; gap: 5px;
+}
+.xapi-stmt {
+  background: white; border: 1px solid var(--rule);
+  border-radius: 4px; padding: 6px 8px;
+  font-family: var(--mono); font-size: 0.6rem; line-height: 1.5;
+  animation: slideIn 0.3s ease forwards;
+}
+@keyframes slideIn { from{opacity:0;transform:translateY(-4px)} to{opacity:1;transform:translateY(0)} }
+.xapi-verb { font-weight: 700; text-transform: uppercase; font-size: 0.58rem; letter-spacing: 0.06em; }
+.xapi-verb.launched { color: var(--navy); }
+.xapi-verb.experienced { color: var(--amber); }
+.xapi-verb.completed { color: var(--green); }
+.xapi-verb.passed { color: var(--accent); }
+.xapi-obj { color: var(--muted); font-size: 0.58rem; }
+.xapi-ts { color: #bbb; font-size: 0.56rem; float: right; }
+.xapi-empty { font-family: var(--mono); font-size: 0.62rem; color: #ccc; text-align: center; padding: 0.5rem; }
+
+/* Content Area */
+.lms-content { flex: 1; overflow-y: auto; position: relative; }
+
+/* Screens */
+.screen { display: none; }
+.screen.active { display: block; animation: fadeUp 0.4s ease forwards; }
+@keyframes fadeUp { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+
+/* ── ENROLMENT SCREEN ── */
+.enroll-outer {
+  min-height: calc(100vh - 52px);
+  padding: 3rem 2rem;
+  display: flex; align-items: center; justify-content: center;
+}
+.enroll-card {
+  background: white; border: 1px solid var(--rule); border-radius: 16px;
+  padding: 3rem; max-width: 480px; width: 100%; box-shadow: var(--shadow-lg);
+  text-align: center;
+}
+.enroll-scorm-label {
+  font-family: var(--mono); font-size: 0.62rem; color: var(--accent);
+  letter-spacing: 0.12em; text-transform: uppercase;
+  display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+.enroll-scorm-label::before, .enroll-scorm-label::after {
+  content: ''; flex: 1; max-width: 40px; height: 1px; background: var(--accent);
+}
+.enroll-card h1 {
+  font-family: var(--serif); font-size: 1.9rem; font-weight: 900;
+  line-height: 1.15; margin-bottom: 0.5rem; letter-spacing: -0.02em;
+}
+.enroll-card h1 em { font-style: italic; color: var(--accent); }
+.enroll-card p {
+  font-size: 0.875rem; color: var(--mid); margin-bottom: 2rem; line-height: 1.6;
+}
+.enroll-meta {
+  display: grid; grid-template-columns: repeat(3,1fr); gap: 0.75rem; margin-bottom: 2rem;
+}
+.enroll-meta-item {
+  background: var(--bg); border: 1px solid var(--rule); border-radius: 8px;
+  padding: 0.75rem 0.5rem; text-align: center;
+}
+.enroll-meta-val {
+  font-family: var(--serif); font-size: 1.3rem; font-weight: 700; color: var(--ink);
+  line-height: 1;
+}
+.enroll-meta-lbl {
+  font-family: var(--mono); font-size: 0.58rem; color: var(--muted);
+  text-transform: uppercase; letter-spacing: 0.08em; margin-top: 3px;
+}
+.enroll-name-label {
+  font-size: 0.78rem; font-weight: 500; color: var(--mid);
+  text-align: left; margin-bottom: 0.4rem; display: block;
+}
+.enroll-name-input {
+  width: 100%; font-family: var(--sans); font-size: 1rem; font-weight: 500;
+  padding: 0.75rem 1rem; border: 1.5px solid var(--rule); border-radius: 8px;
+  background: var(--bg); color: var(--ink); outline: none;
+  transition: border-color 0.15s; margin-bottom: 1.25rem;
+}
+.enroll-name-input:focus { border-color: var(--accent); }
+.enroll-btn {
+  width: 100%; background: var(--ink); color: white;
+  border: none; border-radius: 8px; padding: 0.9rem;
+  font-family: var(--sans); font-size: 0.9rem; font-weight: 600;
+  cursor: pointer; transition: background 0.2s; letter-spacing: 0.01em;
+}
+.enroll-btn:hover { background: var(--accent); }
+.enroll-disclaimer {
+  font-family: var(--mono); font-size: 0.6rem; color: #bbb;
+  margin-top: 1rem; letter-spacing: 0.05em;
+}
+
+/* ── COURSE CONTENT SCREENS ── */
+.course-screen { padding: 2.5rem 3rem; max-width: 780px; }
+
+.course-eyebrow {
+  font-family: var(--mono); font-size: 0.65rem; color: var(--accent);
+  letter-spacing: 0.12em; text-transform: uppercase;
+  display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;
+}
+.course-eyebrow::before { content: ''; width: 1.5rem; height: 1px; background: var(--accent); }
+.course-heading {
+  font-family: var(--serif); font-size: clamp(1.8rem, 3vw, 2.5rem); font-weight: 900;
+  line-height: 1.1; letter-spacing: -0.025em; margin-bottom: 1.25rem; color: var(--ink);
+}
+.course-heading em { font-style: italic; color: var(--accent); }
+.course-body { font-size: 0.9375rem; color: var(--mid); line-height: 1.75; max-width: 62ch; }
+.course-body strong { color: var(--ink); font-weight: 600; }
+
+.course-divider { border: none; border-top: 1px solid var(--rule); margin: 2rem 0; }
+
+/* Stat shelf */
+.stat-shelf {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin: 2rem 0;
+}
+.stat-box {
+  background: white; border: 1px solid var(--rule); border-radius: 10px;
+  padding: 1.25rem 1rem; text-align: center;
+}
+.stat-val {
+  font-family: var(--serif); font-size: 2rem; font-weight: 900; color: var(--ink);
+  line-height: 1; margin-bottom: 4px; letter-spacing: -0.03em;
+}
+.stat-lbl { font-size: 0.72rem; color: var(--muted); font-family: var(--mono); text-transform: uppercase; letter-spacing: 0.08em; }
+
+/* Navy panel */
+.navy-panel {
+  background: var(--navy); border-radius: 12px; padding: 2rem;
+  margin: 2rem 0; color: white;
+}
+.navy-panel h3 {
+  font-family: var(--serif); font-size: 1.3rem; font-weight: 700;
+  margin-bottom: 1rem; color: white;
+}
+.navy-panel p { color: rgba(255,255,255,0.7); font-size: 0.875rem; line-height: 1.7; }
+.navy-panel ul { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; margin-top: 1rem; }
+.navy-panel ul li {
+  font-size: 0.875rem; color: rgba(255,255,255,0.75);
+  display: flex; align-items: flex-start; gap: 0.75rem; line-height: 1.5;
+}
+.navy-panel ul li::before { content: '→'; color: var(--accent); flex-shrink: 0; font-weight: 700; }
+
+/* Tag row */
+.tag-row { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 1.5rem 0; }
+.tag {
+  font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.06em; text-transform: uppercase;
+  padding: 0.3rem 0.7rem; background: var(--surface); border: 1px solid var(--rule);
+  border-radius: 4px; color: var(--mid);
+}
+
+/* Knowledge check */
+.kc-box {
+  background: white; border: 1px solid var(--rule); border-radius: 12px;
+  padding: 1.75rem; margin: 2rem 0;
+}
+.kc-label {
+  font-family: var(--mono); font-size: 0.6rem; color: var(--accent);
+  letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 1rem;
+  display: flex; align-items: center; gap: 0.5rem;
+}
+.kc-q { font-size: 0.95rem; font-weight: 500; color: var(--ink); margin-bottom: 1.25rem; line-height: 1.5; }
+.kc-options { display: flex; flex-direction: column; gap: 0.6rem; }
+.kc-opt {
+  display: flex; align-items: flex-start; gap: 0.75rem;
+  padding: 0.75rem 1rem; border: 1.5px solid var(--rule); border-radius: 8px;
+  cursor: pointer; background: var(--bg); transition: all 0.15s; font-size: 0.875rem; color: var(--ink);
+}
+.kc-opt:hover { border-color: var(--accent); background: #fdf0ee; }
+.kc-opt.correct { border-color: var(--green); background: var(--green-bg); color: var(--green); cursor: default; }
+.kc-opt.wrong { border-color: var(--accent); background: #fdf0ee; color: var(--accent); cursor: default; }
+.kc-letter {
+  font-family: var(--mono); font-size: 0.68rem; font-weight: 700;
+  color: var(--muted); flex-shrink: 0; padding-top: 1px;
+}
+.kc-opt.correct .kc-letter { color: var(--green); }
+.kc-opt.wrong .kc-letter { color: var(--accent); }
+.kc-feedback {
+  display: none; margin-top: 1rem; padding: 0.875rem 1rem;
+  border-radius: 8px; font-size: 0.875rem; line-height: 1.5;
+}
+.kc-feedback.show { display: block; }
+.kc-feedback.good { background: var(--green-bg); color: var(--green); border: 1px solid #b8d8b8; }
+.kc-feedback.bad { background: #fdf0ee; color: var(--accent); border: 1px solid #e8b8b0; }
+
+/* Next button */
+.next-btn {
+  display: inline-flex; align-items: center; gap: 0.6rem;
+  background: var(--ink); color: white;
+  border: none; border-radius: 8px; padding: 0.8rem 1.75rem;
+  font-family: var(--sans); font-size: 0.875rem; font-weight: 600;
+  cursor: pointer; transition: background 0.2s; margin-top: 2rem;
+}
+.next-btn:hover { background: var(--accent); }
+.next-btn:disabled { opacity: 0.35; cursor: not-allowed; background: var(--ink); }
+.next-btn-arrow { font-size: 1rem; transition: transform 0.2s; }
+.next-btn:hover .next-btn-arrow { transform: translateX(3px); }
+
+/* ── CERTIFICATE SCREEN ── */
+.cert-outer { padding: 3rem 2rem; display: flex; flex-direction: column; align-items: center; }
+
+.cert-wrap {
+  background: white; border: 1px solid var(--rule); border-radius: 16px;
+  padding: 3.5rem 3rem; max-width: 640px; width: 100%;
+  box-shadow: var(--shadow-lg); text-align: center; position: relative; overflow: hidden;
+}
+.cert-wrap::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 5px;
+  background: linear-gradient(90deg, var(--navy), var(--accent));
+}
+.cert-seal {
+  width: 72px; height: 72px; border-radius: 50%;
+  background: var(--navy); border: 3px solid var(--navy-d);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 1.5rem;
+  font-family: var(--mono); font-size: 1.1rem; font-weight: 700; color: white;
+}
+.cert-label {
+  font-family: var(--mono); font-size: 0.62rem; color: var(--muted);
+  letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 0.75rem;
+}
+.cert-title {
+  font-family: var(--serif); font-size: 1.5rem; font-weight: 900;
+  color: var(--ink); margin-bottom: 0.35rem; letter-spacing: -0.02em;
+}
+.cert-course-name {
+  font-family: var(--serif); font-size: 2rem; font-weight: 900;
+  color: var(--navy); margin: 0.5rem 0 0.35rem; letter-spacing: -0.025em; line-height: 1.15;
+}
+.cert-course-name em { color: var(--accent); font-style: italic; }
+.cert-learner {
+  font-size: 0.875rem; color: var(--mid); margin-bottom: 2rem;
+}
+.cert-learner strong { color: var(--ink); font-weight: 600; font-size: 1.1rem; }
+.cert-divider {
+  border: none; border-top: 1px solid var(--rule); margin: 1.5rem 0;
+}
+.cert-meta-grid {
+  display: grid; grid-template-columns: repeat(3,1fr); gap: 1rem; margin-bottom: 2rem;
+}
+.cert-meta-item { text-align: center; }
+.cert-meta-val {
+  font-family: var(--serif); font-size: 1.3rem; font-weight: 700; color: var(--ink); line-height: 1;
+}
+.cert-meta-lbl {
+  font-family: var(--mono); font-size: 0.58rem; color: var(--muted);
+  text-transform: uppercase; letter-spacing: 0.08em; margin-top: 3px;
+}
+.cert-sig-row {
+  display: flex; justify-content: space-between; align-items: flex-end;
+  font-size: 0.78rem; color: var(--muted);
+}
+.cert-sig-name {
+  font-family: var(--serif); font-size: 1.1rem; font-style: italic;
+  color: var(--ink); display: block; margin-bottom: 2px;
+}
+.cert-scorm-id {
+  font-family: var(--mono); font-size: 0.58rem; color: #ccc; margin-top: 1.5rem;
+}
+
+.cert-actions { display: flex; gap: 1rem; margin-top: 2rem; flex-wrap: wrap; justify-content: center; }
+.cert-btn {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  padding: 0.75rem 1.5rem; border-radius: 8px;
+  font-family: var(--sans); font-size: 0.875rem; font-weight: 600;
+  cursor: pointer; transition: all 0.2s; text-decoration: none;
+}
+.cert-btn-primary { background: var(--ink); color: white; border: none; }
+.cert-btn-primary:hover { background: var(--accent); }
+.cert-btn-ghost { background: transparent; color: var(--mid); border: 1.5px solid var(--rule); }
+.cert-btn-ghost:hover { border-color: var(--ink); color: var(--ink); }
+
+.completion-banner {
+  background: var(--green-bg); border: 1px solid #b8d8b8;
+  border-radius: 10px; padding: 1rem 1.5rem;
+  display: flex; align-items: center; gap: 0.75rem;
+  font-size: 0.875rem; color: var(--green); font-weight: 500;
+  margin-bottom: 2rem; max-width: 640px; width: 100%;
+}
+
+/* ── STATUS BAR ── */
+.lms-statusbar {
+  background: var(--navy-d); padding: 0.4rem 1.5rem;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-shrink: 0;
+}
+.statusbar-left {
+  font-family: var(--mono); font-size: 0.6rem; color: rgba(255,255,255,0.3);
+  letter-spacing: 0.08em; display: flex; align-items: center; gap: 1rem;
+}
+.statusbar-left .s-green { color: #6dbf6d; }
+.statusbar-right {
+  font-family: var(--mono); font-size: 0.6rem; color: rgba(255,255,255,0.25);
+  letter-spacing: 0.06em;
+}
+</style>
+</head>
+<body>
+
+<!-- ── BOOT SCREEN ── -->
+<div id="boot">
+  <div class="boot-logo"><span>AT.</span> Learning Suite</div>
+  <div class="boot-title">Initialising Course Player…</div>
+  <div class="boot-sub">SCORM 2004 · xAPI · LRS Connected</div>
+  <div class="boot-bar-wrap"><div class="boot-bar"></div></div>
+  <div class="boot-status" id="bootStatus"><span>Connecting to LRS…</span></div>
+</div>
+
+<!-- ── LMS SHELL ── -->
+<div id="lms">
+
+  <!-- Top Bar -->
+  <div class="lms-topbar">
+    <div class="lms-topbar-left">
+      <div class="lms-brand"><em>AT.</em> LMS</div>
+      <div class="lms-course-name" id="topCourseName">Meet Abhishek Trivedi — A Learning Experience</div>
+    </div>
+    <div class="lms-topbar-right">
+      <div class="lms-learner-badge">Learner: <span id="topLearnerName">—</span></div>
+      <div class="scorm-badge">SCORM 2004</div>
+    </div>
+  </div>
+
+  <!-- Body -->
+  <div class="lms-body">
+
+    <!-- Sidebar -->
+    <aside class="lms-sidebar">
+      <div class="sidebar-progress-header">
+        <div class="sidebar-progress-label">Course Progress</div>
+        <div class="sidebar-progress-bar-wrap">
+          <div class="sidebar-progress-bar" id="progressBar"></div>
+        </div>
+        <div class="sidebar-progress-pct">Completion: <span id="progressPct">0%</span></div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="sidebar-module">
+          <div class="sidebar-module-label">Enrolment</div>
+          <div class="sidebar-item active" data-screen="enroll" id="nav-enroll">
+            <div class="si-icon"><span class="si-num">0</span></div>
+            <span>Start Here</span>
+          </div>
+        </div>
+        <div class="sidebar-module">
+          <div class="sidebar-module-label">Module 1</div>
+          <div class="sidebar-item locked" data-screen="m1" id="nav-m1">
+            <div class="si-icon"><span class="si-num">1</span></div>
+            <span>Who Is Abhishek?</span>
+          </div>
+        </div>
+        <div class="sidebar-module">
+          <div class="sidebar-module-label">Module 2</div>
+          <div class="sidebar-item locked" data-screen="m2" id="nav-m2">
+            <div class="si-icon"><span class="si-num">2</span></div>
+            <span>What He Builds</span>
+          </div>
+        </div>
+        <div class="sidebar-module">
+          <div class="sidebar-module-label">Module 3</div>
+          <div class="sidebar-item locked" data-screen="m3" id="nav-m3">
+            <div class="si-icon"><span class="si-num">3</span></div>
+            <span>Knowledge Check</span>
+          </div>
+        </div>
+        <div class="sidebar-module">
+          <div class="sidebar-module-label">Completion</div>
+          <div class="sidebar-item locked" data-screen="cert" id="nav-cert">
+            <div class="si-icon"><span class="si-num">✦</span></div>
+            <span>Your Certificate</span>
+          </div>
+        </div>
+      </nav>
+
+      <!-- xAPI Stream -->
+      <div class="xapi-panel">
+        <div class="xapi-panel-title">
+          <div class="xapi-live-dot"></div>
+          xAPI Stream
+        </div>
+        <div class="xapi-stream" id="xapiStream">
+          <div class="xapi-empty">No statements yet</div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Content -->
+    <main class="lms-content">
+
+      <!-- Enrolment -->
+      <div class="screen active" id="screen-enroll">
+        <div class="enroll-outer">
+          <div class="enroll-card">
+            <div class="enroll-scorm-label">Course Preview</div>
+            <h1>Meet Abhishek<br>Trivedi — A Learning <em>Experience.</em></h1>
+            <p>A fully functional LMS-delivered course about the person who built the LMS that's delivering it. You are the learner. This is the portfolio. The meta-joke is intentional.</p>
+            <div class="enroll-meta">
+              <div class="enroll-meta-item">
+                <div class="enroll-meta-val">4</div>
+                <div class="enroll-meta-lbl">Modules</div>
+              </div>
+              <div class="enroll-meta-item">
+                <div class="enroll-meta-val">~5</div>
+                <div class="enroll-meta-lbl">Minutes</div>
+              </div>
+              <div class="enroll-meta-item">
+                <div class="enroll-meta-val">xAPI</div>
+                <div class="enroll-meta-lbl">Tracked</div>
+              </div>
+            </div>
+            <label class="enroll-name-label" for="learnerName">Your name (for the certificate)</label>
+            <input class="enroll-name-input" type="text" id="learnerName" placeholder="Enter your name…" autocomplete="off">
+            <button class="enroll-btn" onclick="enroll()">Enrol & Begin Course →</button>
+            <div class="enroll-disclaimer">completion_status: incomplete · score: pending · session: initialising</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Module 1 -->
+      <div class="screen" id="screen-m1">
+        <div class="course-screen">
+          <div class="course-eyebrow">Module 1 of 3</div>
+          <h1 class="course-heading">Who Is Abhishek <em>Trivedi?</em></h1>
+          <p class="course-body">
+            Abhishek Trivedi is a <strong>Learning Experience Technologist</strong> based in Pune, India with 15+ years across instructional design, technical development, and AI integration.<br><br>
+            That's not a LinkedIn summary — it's a descriptor. Most people in L&D can do one of those three things. He does all three, and the work at this intersection is what's genuinely hard to find.
+          </p>
+
+          <div class="stat-shelf">
+            <div class="stat-box">
+              <div class="stat-val">15+</div>
+              <div class="stat-lbl">Years in L&amp;D</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-val">9</div>
+              <div class="stat-lbl">Roles</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-val">3</div>
+              <div class="stat-lbl">Disciplines</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-val">7</div>
+              <div class="stat-lbl">ID Frameworks</div>
+            </div>
+          </div>
+
+          <p class="course-body">
+            The career started in <strong>classroom facilitation</strong> — AMA-certified trainer, public speaker. It moved through instructional design, then into the technical layer: JavaScript inside Storyline, REST API calls from eLearning modules, custom xAPI schemas, FFmpeg pipelines, LLM integrations. Not because the job description asked for it. Because the problem required it.
+          </p>
+
+          <hr class="course-divider">
+
+          <div class="navy-panel">
+            <h3>The thing that sets this apart</h3>
+            <p>Most L&D professionals build courses. Abhishek builds systems that produce courses — and then instruments them so you can see exactly what the learner did.</p>
+            <ul>
+              <li>28 storyboards hand-authored across 7 ID frameworks</li>
+              <li>Live AI voice personalisation — LLM + TTS wired to a simulated LMS</li>
+              <li>FFmpeg localisation pipeline: 8 languages in 90 seconds</li>
+              <li>Custom xAPI schemas with real-time LRS (you're looking at it)</li>
+            </ul>
+          </div>
+
+          <button class="next-btn" onclick="goTo('m2', 'm1', 25)">
+            Next: What He Builds <span class="next-btn-arrow">→</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Module 2 -->
+      <div class="screen" id="screen-m2">
+        <div class="course-screen">
+          <div class="course-eyebrow">Module 2 of 3</div>
+          <h1 class="course-heading">What He <em>Builds.</em></h1>
+          <p class="course-body">
+            Five case studies. Each one demonstrates a different dimension of what technical instructional design actually looks like when the designer can write the code themselves.
+          </p>
+
+          <div class="tag-row">
+            <span class="tag">Storyline 360</span>
+            <span class="tag">JavaScript</span>
+            <span class="tag">REST APIs</span>
+            <span class="tag">Murf AI</span>
+            <span class="tag">FFmpeg</span>
+            <span class="tag">xAPI · SCORM</span>
+            <span class="tag">Shell Scripting</span>
+            <span class="tag">GPT Workflows</span>
+            <span class="tag">Synthesia</span>
+          </div>
+
+          <hr class="course-divider">
+
+          <div class="navy-panel">
+            <h3>Selected Work — 5 Projects</h3>
+            <ul>
+              <li><strong style="color:white">When the Course Knows Your Name</strong> — AI voice personalisation via LMS data. LLM + TTS + SCORM wired together.</li>
+              <li><strong style="color:white">Building the Engine, Not Just the Car</strong> — A template system that produced 40+ modules from a single master. One source of truth.</li>
+              <li><strong style="color:white">From Manual to Automated</strong> — FFmpeg pipeline that replaced a full day of per-language manual work with a 90-second batch script.</li>
+              <li><strong style="color:white">Designing for the Machine</strong> — xAPI schema design. Structured learner data for analytics, not just completion flags.</li>
+              <li><strong style="color:white">Accessibility as Architecture</strong> — WCAG 2.1 built in from slide 1. Not retrofitted. Keyboard-navigable, screen-reader-tested.</li>
+            </ul>
+          </div>
+
+          <p class="course-body" style="margin-top: 1.5rem;">
+            The demos are live. In the browser. You can use them, break them, and inspect the code. That's a deliberate choice — the work should speak without a PDF intermediary.
+          </p>
+
+          <button class="next-btn" onclick="goTo('m3', 'm2', 50)">
+            Next: Knowledge Check <span class="next-btn-arrow">→</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Module 3 — Knowledge Check -->
+      <div class="screen" id="screen-m3">
+        <div class="course-screen">
+          <div class="course-eyebrow">Module 3 of 3 · Knowledge Check</div>
+          <h1 class="course-heading">Let's see if you were <em>paying attention.</em></h1>
+          <p class="course-body" style="margin-bottom: 2rem;">
+            Three questions. No timer. Yes, this is a real xAPI-tracked assessment. Yes, your score is being written to a fake LRS. Yes, that's the joke.
+          </p>
+
+          <!-- Q1 -->
+          <div class="kc-box" id="kc1">
+            <div class="kc-label">✦ Question 1 of 3</div>
+            <div class="kc-q">How long did the FFmpeg localisation pipeline take to process 8 languages — a task that previously took a full working day?</div>
+            <div class="kc-options">
+              <div class="kc-opt" onclick="answer(this, 'kc1', false)"><span class="kc-letter">A</span> About 15 minutes</div>
+              <div class="kc-opt" onclick="answer(this, 'kc1', true)"><span class="kc-letter">B</span> 90 seconds</div>
+              <div class="kc-opt" onclick="answer(this, 'kc1', false)"><span class="kc-letter">C</span> 4 hours</div>
+            </div>
+            <div class="kc-feedback" id="kc1-fb"></div>
+          </div>
+
+          <!-- Q2 -->
+          <div class="kc-box" id="kc2">
+            <div class="kc-label">✦ Question 2 of 3</div>
+            <div class="kc-q">Which of the following best describes Abhishek's approach to instructional design methodology?</div>
+            <div class="kc-options">
+              <div class="kc-opt" onclick="answer(this, 'kc2', false)"><span class="kc-letter">A</span> Exclusively ADDIE for all projects</div>
+              <div class="kc-opt" onclick="answer(this, 'kc2', false)"><span class="kc-letter">B</span> No formal methodology — goes by instinct</div>
+              <div class="kc-opt" onclick="answer(this, 'kc2', true)"><span class="kc-letter">C</span> 7 frameworks applied in practice, matched to the problem</div>
+            </div>
+            <div class="kc-feedback" id="kc2-fb"></div>
+          </div>
+
+          <!-- Q3 -->
+          <div class="kc-box" id="kc3">
+            <div class="kc-label">✦ Question 3 of 3</div>
+            <div class="kc-q">What is the most accurate description of this LMS you are currently using?</div>
+            <div class="kc-options">
+              <div class="kc-opt" onclick="answer(this, 'kc3', false)"><span class="kc-letter">A</span> A real enterprise LMS platform</div>
+              <div class="kc-opt" onclick="answer(this, 'kc3', false)"><span class="kc-letter">B</span> A third-party SaaS tool</div>
+              <div class="kc-opt" onclick="answer(this, 'kc3', true)"><span class="kc-letter">C</span> A hand-built portfolio feature designed to prove a point</div>
+            </div>
+            <div class="kc-feedback" id="kc3-fb"></div>
+          </div>
+
+          <button class="next-btn" id="certBtn" disabled onclick="goTo('cert', 'm3', 100)">
+            View Your Certificate <span class="next-btn-arrow">→</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Certificate -->
+      <div class="screen" id="screen-cert">
+        <div class="cert-outer">
+        <div class="completion-banner">
+          <span>✓</span>
+          <span>Course completed. xAPI completion statement fired. LRS updated. You did it.</span>
+        </div>
+        <div class="cert-wrap">
+          <div class="cert-seal">AT.</div>
+          <div class="cert-label">Certificate of Completion</div>
+          <div class="cert-title">This certifies that</div>
+          <div class="cert-learner"><strong id="certName">—</strong></div>
+          <div class="cert-title" style="font-size:0.9rem; color: var(--mid)">has successfully completed</div>
+          <div class="cert-course-name">Meet Abhishek Trivedi —<br>A Learning <em>Experience.</em></div>
+
+          <hr class="cert-divider">
+
+          <div class="cert-meta-grid">
+            <div class="cert-meta-item">
+              <div class="cert-meta-val">3/3</div>
+              <div class="cert-meta-lbl">Score</div>
+            </div>
+            <div class="cert-meta-item">
+              <div class="cert-meta-val" id="certDate">—</div>
+              <div class="cert-meta-lbl">Completed</div>
+            </div>
+            <div class="cert-meta-item">
+              <div class="cert-meta-val">Passed</div>
+              <div class="cert-meta-lbl">Status</div>
+            </div>
+          </div>
+
+          <div class="cert-sig-row">
+            <div>
+              <span class="cert-sig-name">Abhishek Trivedi</span>
+              <span>Learning Experience Technologist</span>
+            </div>
+            <div style="text-align:right;">
+              <span style="display:block; font-family: var(--mono); font-size:0.62rem; color: #aaa;">AT. LMS · v2026</span>
+              <span style="font-family: var(--mono); font-size:0.62rem; color: #aaa;">Pune, India · IST</span>
+            </div>
+          </div>
+          <div class="cert-scorm-id" id="certScormId">
+            Tracking ID: —
+          </div>
+        </div>
+
+        <div class="cert-actions">
+          <a href="../index.html" class="cert-btn cert-btn-primary">See the real portfolio →</a>
+          <a href="../pages/work.html" class="cert-btn cert-btn-ghost">View case studies</a>
+          <a href="mailto:work.abhishektrivedi@gmail.com" class="cert-btn cert-btn-ghost">Let's talk</a>
+        </div>
+        <div style="font-family: var(--mono); font-size: 0.65rem; color: #bbb; margin-top: 1.5rem; letter-spacing: 0.04em;">
+          // No LRS was harmed in the making of this certificate.
+        </div>
+        </div><!-- /cert-outer -->
+      </div>
+
+    </main>
+  </div><!-- /lms-body -->
+
+  <!-- Status Bar -->
+  <div class="lms-statusbar">
+    <div class="statusbar-left">
+      <span class="s-green">● LRS Connected</span>
+      <span>xAPI 1.0.3</span>
+      <span>SCORM 2004 4th Ed.</span>
+      <span id="statusSessionId">session: —</span>
+    </div>
+    <div class="statusbar-right" id="statusRight">completion_status: incomplete</div>
+  </div>
+
+</div><!-- /lms -->
+
+<script>
+// ── State ──
+let learnerName = '';
+let sessionId = '';
+let answeredCount = 0;
+let xapiCount = 0;
+const totalQuestions = 3;
+
+// ── Boot sequence ──
+const bootMessages = [
+  'Connecting to LRS…',
+  'Authenticating learner token…',
+  'Loading course manifest…',
+  'Initialising xAPI runtime…',
+  'Establishing SCORM 2004 session…',
+  'Ready.'
+];
+let bootIdx = 0;
+const bootStatus = document.getElementById('bootStatus');
+const bootInterval = setInterval(() => {
+  bootIdx++;
+  if (bootIdx < bootMessages.length) {
+    bootStatus.innerHTML = `<span>${bootMessages[bootIdx]}</span>`;
+  } else {
+    clearInterval(bootInterval);
+  }
+}, 380);
+
+setTimeout(() => {
+  document.getElementById('boot').classList.add('fade-out');
+  setTimeout(() => {
+    document.getElementById('boot').style.display = 'none';
+    document.getElementById('lms').classList.add('visible');
+  }, 650);
+}, 2600);
+
+// ── Helpers ──
+function genSession() {
+  return 'AT-' + Math.random().toString(36).substr(2,4).toUpperCase() + '-' + Date.now().toString(36).toUpperCase().slice(-4);
+}
+
+function now() {
+  return new Date().toLocaleTimeString('en-IN', { hour:'2-digit', minute:'2-digit', second:'2-digit' });
+}
+
+function fireXAPI(verb, obj, verbClass) {
+  xapiCount++;
+  const stream = document.getElementById('xapiStream');
+  const empty = stream.querySelector('.xapi-empty');
+  if (empty) empty.remove();
+
+  const stmt = document.createElement('div');
+  stmt.className = 'xapi-stmt';
+  stmt.innerHTML = `
+    <span class="xapi-ts">${now()}</span>
+    <span class="xapi-verb ${verbClass}">${verb}</span>
+    <div class="xapi-obj">${obj}</div>
+  `;
+  stream.insertBefore(stmt, stream.firstChild);
+  if (stream.children.length > 8) stream.removeChild(stream.lastChild);
+}
+
+function setProgress(pct) {
+  document.getElementById('progressBar').style.width = pct + '%';
+  document.getElementById('progressPct').textContent = pct + '%';
+  document.getElementById('statusRight').textContent =
+    pct < 100 ? `completion_status: incomplete · progress: ${pct}%` : 'completion_status: COMPLETED ✓';
+}
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('screen-' + id).classList.add('active');
+
+  document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+  const navEl = document.getElementById('nav-' + id);
+  if (navEl) navEl.classList.add('active');
+}
+
+function unlockNav(id) {
+  const el = document.getElementById('nav-' + id);
+  if (el) el.classList.remove('locked');
+}
+
+// ── Enrolment ──
+function enroll() {
+  const input = document.getElementById('learnerName').value.trim();
+  learnerName = input || 'Anonymous Learner';
+  sessionId = genSession();
+
+  document.getElementById('topLearnerName').textContent = learnerName;
+  document.getElementById('statusSessionId').textContent = 'session: ' + sessionId;
+
+  fireXAPI('LAUNCHED', `"Meet Abhishek Trivedi" · ${learnerName}`, 'launched');
+  setTimeout(() => fireXAPI('EXPERIENCED', `Enrolment · ${learnerName} enrolled`, 'experienced'), 400);
+
+  unlockNav('m1');
+  showScreen('m1');
+  setProgress(0);
+  document.getElementById('nav-enroll').classList.add('done');
+}
+
+// ── Module navigation ──
+function goTo(next, current, pct) {
+  document.getElementById('nav-' + current).classList.add('done');
+  document.getElementById('nav-' + current).classList.remove('active');
+  unlockNav(next);
+  showScreen(next);
+  setProgress(pct);
+
+  const labels = {
+    m2: 'Module 2: What He Builds',
+    m3: 'Module 3: Knowledge Check',
+    cert: 'Completion · Course Passed'
+  };
+  const verbs = { m2: 'experienced', m3: 'experienced', cert: 'completed' };
+
+  if (next === 'cert') {
+    fireXAPI('COMPLETED', `Course · ${learnerName} · Passed 3/3`, 'completed');
+    setTimeout(() => fireXAPI('PASSED', `Assessment · score: 100% · status: passed`, 'passed'), 500);
+    buildCert();
+    document.getElementById('nav-cert').classList.add('done');
+  } else {
+    fireXAPI('EXPERIENCED', labels[next] || next, verbs[next] || 'experienced');
+  }
+}
+
+// ── Knowledge check ──
+function answer(el, kcId, correct) {
+  const box = document.getElementById(kcId);
+  if (box.dataset.answered) return;
+  box.dataset.answered = 'true';
+
+  const opts = box.querySelectorAll('.kc-opt');
+  opts.forEach(o => {
+    o.style.pointerEvents = 'none';
+    if (o === el) o.classList.add(correct ? 'correct' : 'wrong');
+    if (!correct && o.onclick && o.getAttribute('onclick').includes('true')) {
+      o.classList.add('correct');
+    }
+  });
+
+  const fb = document.getElementById(kcId + '-fb');
+  if (correct) {
+    fb.textContent = '✓ Correct. ' + getFeedback(kcId, true);
+    fb.className = 'kc-feedback good show';
+    answeredCount++;
+    fireXAPI('ANSWERED', `${kcId} · correct · score +1`, 'completed');
+  } else {
+    fb.textContent = '✗ Not quite. ' + getFeedback(kcId, false);
+    fb.className = 'kc-feedback bad show';
+    answeredCount++;
+    fireXAPI('ANSWERED', `${kcId} · incorrect`, 'experienced');
+  }
+
+  if (answeredCount >= totalQuestions) {
+    document.getElementById('certBtn').disabled = false;
+    fireXAPI('SCORED', `Assessment · ${answeredCount}/${totalQuestions} answered`, 'completed');
+  }
+}
+
+function getFeedback(id, correct) {
+  const map = {
+    kc1: {
+      true: '90 seconds. The FFmpeg pipeline replaced what used to be a full day of per-language manual work.',
+      false: '90 seconds is the correct answer — 8 languages, one batch script, 90 seconds.'
+    },
+    kc2: {
+      true: '7 frameworks — ADDIE, SAM, Bloom\'s, Gagné, Kirkpatrick, 4C/ID, Merrill\'s — applied to 28 storyboards.',
+      false: 'The correct answer is 7 frameworks applied in practice. One model doesn\'t fit every problem.'
+    },
+    kc3: {
+      true: 'Correct. This is a portfolio piece pretending to be an LMS. The meta-joke is the whole point.',
+      false: 'This LMS was hand-built as part of a portfolio. It\'s not a product — it\'s a proof of concept.'
+    }
+  };
+  return (map[id] && map[id][correct]) || '';
+}
+
+// ── Certificate ──
+function buildCert() {
+  document.getElementById('certName').textContent = learnerName;
+  const d = new Date();
+  document.getElementById('certDate').textContent =
+    d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+  document.getElementById('certScormId').textContent =
+    'Tracking ID: ' + sessionId + ' · xAPI statements: ' + xapiCount + ' · LRS: AT-LRS-v2026';
+}
+
+// ── Console easter egg (bonus) ──
+console.log('%c', 'font-size:1px');
+console.log(
+  '%cYou opened the console.\nGood instinct.\n\nMost people don\'t.\nThis entire LMS — boot screen, xAPI stream,\ncertificate — is ~600 lines of vanilla HTML/CSS/JS.\n\nIf you want to build learning experiences\nthat actually think, let\'s talk.\n\nwork.abhishektrivedi@gmail.com',
+  'font-family: monospace; font-size: 13px; color: #c0392b; line-height: 1.8;'
+);
+</script>
+</body>
+</html>
