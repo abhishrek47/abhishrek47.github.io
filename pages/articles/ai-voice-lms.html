@@ -1,0 +1,404 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AI Voice Personalisation in an Enterprise LMS · Abhishek Trivedi</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #f5f0eb;
+      --navy: #1e3a5f;
+      --navy-dark: #162d4a;
+      --text: #1a1a1a;
+      --muted: #888888;
+      --accent: #c0392b;
+      --accent-hover: #e74c3c;
+      --border: #e0d8d0;
+      --serif: 'Playfair Display', Georgia, serif;
+      --sans: 'Inter', sans-serif;
+      --mono: 'JetBrains Mono', monospace;
+    }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); line-height: 1.7; }
+
+    /* NAV */
+    nav {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.25rem 2.5rem; background: var(--bg); border-bottom: 1px solid var(--border);
+      position: sticky; top: 0; z-index: 100;
+    }
+    .nav-logo { font-family: var(--mono); font-weight: 500; font-size: 1.1rem; color: var(--text); text-decoration: none; }
+    .nav-links { display: flex; align-items: center; gap: 1.75rem; list-style: none; }
+    .nav-links a { font-size: 0.85rem; color: var(--text); text-decoration: none; font-weight: 500; transition: color 0.2s; }
+    .nav-links a:hover, .nav-links a.active { color: var(--accent); }
+    .nav-cta { background: var(--accent) !important; color: #fff !important; padding: 0.4rem 1rem; border-radius: 4px; font-size: 0.8rem !important; }
+
+    /* HERO */
+    .article-hero {
+      background: var(--navy);
+      padding: 4rem 2.5rem 3rem;
+    }
+    .article-hero-inner { max-width: 760px; margin: 0 auto; }
+    .back-link {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      font-family: var(--mono); font-size: 0.78rem; color: rgba(255,255,255,0.45);
+      text-decoration: none; margin-bottom: 2rem; transition: color 0.2s;
+    }
+    .back-link:hover { color: rgba(255,255,255,0.8); }
+    .article-meta { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.5rem; }
+    .article-tag {
+      font-family: var(--mono); font-size: 0.7rem; font-weight: 500; letter-spacing: 0.08em;
+      text-transform: uppercase; color: var(--accent); background: rgba(192,57,43,0.2);
+      padding: 0.2rem 0.6rem; border-radius: 3px;
+    }
+    .article-date { font-size: 0.78rem; color: rgba(255,255,255,0.35); font-family: var(--mono); }
+    .article-hero h1 {
+      font-family: var(--serif); font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 700;
+      line-height: 1.2; color: #fff; margin-bottom: 1.25rem;
+    }
+    .article-hero p.lead {
+      font-size: 1.05rem; color: rgba(255,255,255,0.6); max-width: 620px; line-height: 1.75;
+    }
+
+    /* HERO IMAGE */
+    .hero-image-block {
+      background: var(--navy-dark);
+      border-bottom: 3px solid var(--accent);
+    }
+    .hero-image-block svg { display: block; }
+
+    /* ARTICLE BODY */
+    .article-body { max-width: 680px; margin: 0 auto; padding: 3.5rem 2.5rem 6rem; }
+
+    .article-body h2 {
+      font-family: var(--serif); font-size: 1.6rem; font-weight: 700;
+      color: var(--text); margin: 3rem 0 1rem; line-height: 1.3;
+    }
+    .article-body h3 {
+      font-family: var(--sans); font-size: 1rem; font-weight: 600; letter-spacing: 0.04em;
+      text-transform: uppercase; color: var(--accent); margin: 2.5rem 0 0.75rem;
+    }
+    .article-body p { margin-bottom: 1.25rem; font-size: 1rem; line-height: 1.8; color: var(--text); }
+    .article-body strong { font-weight: 600; }
+
+    .article-body pre {
+      background: var(--navy-dark); border-radius: 8px; padding: 1.5rem;
+      margin: 1.5rem 0; overflow-x: auto; border-left: 3px solid var(--accent);
+    }
+    .article-body code {
+      font-family: var(--mono); font-size: 0.82rem; color: #f5f0eb; line-height: 1.7;
+    }
+    .article-body p code {
+      background: rgba(30,58,95,0.12); padding: 0.1em 0.4em; border-radius: 3px;
+      font-size: 0.85em; color: var(--navy);
+    }
+
+    .callout {
+      background: rgba(30,58,95,0.07); border-left: 3px solid var(--navy);
+      padding: 1.25rem 1.5rem; border-radius: 0 6px 6px 0; margin: 1.5rem 0;
+    }
+    .callout-accent {
+      background: rgba(192,57,43,0.07); border-left: 3px solid var(--accent);
+    }
+    .callout p { margin: 0; font-size: 0.95rem; }
+    .callout strong { color: var(--accent); }
+
+    .article-divider { border: none; border-top: 1px solid var(--border); margin: 3rem 0; }
+
+    /* FOOTER */
+    footer {
+      background: var(--bg); border-top: 1px solid var(--border);
+      padding: 1.5rem 2.5rem; display: flex; align-items: center;
+      justify-content: space-between; font-size: 0.8rem; color: var(--muted);
+    }
+    footer a { color: var(--muted); text-decoration: none; }
+    footer a:hover { color: var(--accent); }
+    .footer-links { display: flex; gap: 1.5rem; }
+
+    @media (max-width: 680px) {
+      nav { padding: 1rem 1.25rem; }
+      .article-hero { padding: 2.5rem 1.25rem 2rem; }
+      .article-body { padding: 2rem 1.25rem 4rem; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="../../index.html" class="nav-logo">AT.</a>
+  <ul class="nav-links">
+    <li><a href="../work.html">Work</a></li>
+    <li><a href="../about.html">About</a></li>
+    <li style="position:relative;">
+      <a href="../articles.html" class="active">Articles</a>
+      <span style="position:absolute;top:-8px;right:-4px;font-family:var(--mono);font-size:0.55rem;font-weight:600;letter-spacing:0.06em;background:var(--accent);color:#fff;padding:1px 5px;border-radius:2px;line-height:1.4;">NEW</span>
+    </li>
+    <li><a href="../../tools/id-model-selector.html">ID Model Selector ↗</a></li>
+    <li><a href="../../lms/index.html">LMS Demo ↗</a></li>
+    <li><a href="../../index.html#contact" class="nav-cta">Let's Talk</a></li>
+  </ul>
+</nav>
+
+<div class="article-hero">
+  <div class="article-hero-inner">
+    <a href="../articles.html" class="back-link">← Back to Articles</a>
+    <div class="article-meta">
+      <span class="article-tag">AI Integration</span>
+      <span class="article-tag">Storyline 360</span>
+      <span class="article-date">March 2026</span>
+    </div>
+    <h1>I made an enterprise LMS speak my learner's name using a live AI voice API. Here's every wall I hit to get there.</h1>
+    <p class="lead">CORS for a week, a name that came back reversed, an API key sitting in plain JavaScript — what it actually took to ship real-time AI personalisation inside a SCORM course.</p>
+  </div>
+</div>
+
+<!-- HERO IMAGE -->
+<div class="hero-image-block">
+  <svg width="100%" viewBox="0 0 900 260" xmlns="http://www.w3.org/2000/svg">
+    <rect width="900" height="260" fill="#162d4a"/>
+    <g opacity="0.06" stroke="#f5f0eb" stroke-width="0.5">
+      <line x1="0" y1="40" x2="900" y2="40"/><line x1="0" y1="80" x2="900" y2="80"/>
+      <line x1="0" y1="120" x2="900" y2="120"/><line x1="0" y1="160" x2="900" y2="160"/>
+      <line x1="0" y1="200" x2="900" y2="200"/><line x1="0" y1="240" x2="900" y2="240"/>
+      <line x1="80" y1="0" x2="80" y2="260"/><line x1="180" y1="0" x2="180" y2="260"/>
+      <line x1="280" y1="0" x2="280" y2="260"/><line x1="380" y1="0" x2="380" y2="260"/>
+      <line x1="450" y1="0" x2="450" y2="260"/><line x1="520" y1="0" x2="520" y2="260"/>
+      <line x1="620" y1="0" x2="620" y2="260"/><line x1="720" y1="0" x2="720" y2="260"/>
+      <line x1="820" y1="0" x2="820" y2="260"/>
+    </g>
+    <!-- LMS -->
+    <rect x="60" y="90" width="140" height="60" rx="4" fill="#1e3a5f" stroke="#4a7aaa" stroke-width="0.75"/>
+    <text x="130" y="116" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" fill="#f5f0eb">ENTERPRISE LMS</text>
+    <text x="130" y="132" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#4a7aaa">cmi.core.student_name</text>
+    <circle cx="200" cy="120" r="4" fill="#c0392b"/>
+    <!-- wire lms → js -->
+    <line x1="200" y1="120" x2="320" y2="120" stroke="#c0392b" stroke-width="1.5" fill="none"/>
+    <polygon points="316,116 324,120 316,124" fill="#c0392b"/>
+    <text x="260" y="112" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="rgba(245,240,235,0.4)">name</text>
+    <!-- JS -->
+    <rect x="320" y="70" width="160" height="100" rx="4" fill="#1e3a5f" stroke="#c0392b" stroke-width="1"/>
+    <text x="400" y="96" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" fill="#f5f0eb">JS TRIGGER</text>
+    <text x="400" y="111" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="rgba(245,240,235,0.35)">Storyline 360</text>
+    <rect x="335" y="118" width="50" height="5" rx="1" fill="#c0392b" opacity="0.5"/>
+    <rect x="335" y="128" width="80" height="5" rx="1" fill="#4a7aaa" opacity="0.5"/>
+    <rect x="335" y="138" width="65" height="5" rx="1" fill="#4a7aaa" opacity="0.5"/>
+    <rect x="335" y="148" width="40" height="5" rx="1" fill="#c0392b" opacity="0.35"/>
+    <circle cx="480" cy="120" r="4" fill="#c0392b"/>
+    <!-- wire js → api -->
+    <line x1="480" y1="120" x2="600" y2="120" stroke="#c0392b" stroke-width="1.5" fill="none"/>
+    <polygon points="596,116 604,120 596,124" fill="#c0392b"/>
+    <text x="540" y="112" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="rgba(245,240,235,0.4)">fetch()</text>
+    <!-- API -->
+    <rect x="600" y="90" width="140" height="60" rx="4" fill="#1e3a5f" stroke="#4a7aaa" stroke-width="0.75"/>
+    <text x="670" y="116" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" fill="#f5f0eb">AI VOICE API</text>
+    <text x="670" y="132" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#4a7aaa">→ audioFile URL</text>
+    <!-- return wire -->
+    <path d="M670 150 L670 200 L400 200 L400 170" stroke="#f5f0eb" stroke-width="0.75" stroke-dasharray="5 3" fill="none"/>
+    <polygon points="396,174 400,166 404,174" fill="#f5f0eb" opacity="0.5"/>
+    <!-- wave -->
+    <polyline points="300,230 310,216 320,244 330,224 340,236 350,218 360,230 370,230" stroke="#c0392b" stroke-width="2" fill="none"/>
+    <text x="390" y="234" font-family="JetBrains Mono,monospace" font-size="10" fill="rgba(245,240,235,0.55)">Hello, [First Name] — spoken at launch</text>
+    <!-- CORS annotation -->
+    <rect x="60" y="30" width="120" height="34" rx="3" fill="rgba(192,57,43,0.12)" stroke="#c0392b" stroke-width="0.75"/>
+    <text x="120" y="47" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="#c0392b">CORS wall — 1 week</text>
+    <text x="120" y="58" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="rgba(245,240,235,0.35)">API-side whitelist fix</text>
+    <line x1="120" y1="64" x2="140" y2="90" stroke="#c0392b" stroke-width="0.75" stroke-dasharray="3 2" opacity="0.5"/>
+    <!-- name format annotation -->
+    <rect x="310" y="20" width="170" height="34" rx="3" fill="#1e3a5f" stroke="#4a7aaa" stroke-width="0.75"/>
+    <text x="395" y="37" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="rgba(245,240,235,0.6)">"Last, First" → reversed</text>
+    <text x="395" y="48" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="#4a7aaa">.split(', ').reverse()[0]</text>
+    <line x1="395" y1="54" x2="390" y2="70" stroke="#4a7aaa" stroke-width="0.75" stroke-dasharray="3 2" opacity="0.5"/>
+  </svg>
+</div>
+
+<!-- BODY -->
+<article class="article-body">
+
+  <p>Most L&D professionals treat the LMS as a container. You push content in, learners pull it out, completion gets tracked, done. I wanted to test something different: could a course running inside an enterprise LMS fetch the learner's identity at runtime, send it to an external AI voice API, and play back a personalised audio greeting — all without any backend, any server-side code, or any IT middleware?</p>
+  <p>The answer is yes. But the path to yes looked nothing like I expected.</p>
+
+  <h2>What I was trying to build</h2>
+  <p>The goal was straightforward on paper: when the course launches, greet the learner by their first name — spoken aloud by an AI voice, generated in real time. No pre-recorded audio. No manually authored variations. The name is pulled from the LMS, sent to the voice API, and played back within seconds of the course opening.</p>
+  <p>The entire mechanism had to live inside a JavaScript trigger in Storyline 360. No server. No middleware. One script, firing on slide load.</p>
+
+  <h2>The architecture</h2>
+  <p>Three moving parts:</p>
+  <ul style="padding-left:1.5rem;margin-bottom:1.25rem;line-height:2;">
+    <li>The <strong>enterprise LMS</strong> — which stores the learner's name as part of its SCORM data model</li>
+    <li>A <strong>Storyline 360 JavaScript trigger</strong> — which runs on course launch, reads the SCORM API, and orchestrates everything</li>
+    <li>An <strong>AI voice generation API</strong> — which accepts text, converts it to speech in real time, and returns an audio URL</li>
+  </ul>
+  <p>Here's the core logic:</p>
+
+  <pre><code>var userName = "Learner"; // Default fallback
+
+function getSCORMLearnerName() {
+  var api = null;
+  function findAPI(win) {
+    if (win.API) return win.API;              // SCORM 1.2
+    if (win.API_1484_11) return win.API_1484_11; // SCORM 2004
+    if (win.parent && win.parent !== win) return findAPI(win.parent);
+    return null;
+  }
+  api = findAPI(window);
+  if (api) {
+    var name = (api.LMSGetValue)
+      ? api.LMSGetValue("cmi.core.student_name")
+      : api.GetValue("cmi.learner_name");
+    if (name) {
+      console.log("Raw SCORM Name: " + name);
+      return name.split(", ").reverse()[0]; // Extract first name
+    }
+  }
+  console.warn("SCORM API not found. Using default.");
+  return "Learner";
+}
+
+userName = getSCORMLearnerName();
+var message = "Hello " + userName + ", welcome to this eLearning course!";
+
+function fetchSpeech() {
+  fetch("https://[voice-api-endpoint]/v1/speech/generate", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "api-key": "YOUR_API_KEY_HERE"
+    },
+    body: JSON.stringify({
+      voiceId: "en-UK-[voice]",
+      style: "Conversational",
+      text: message,
+      format: "MP3"
+    })
+  })
+  .then(r => r.json())
+  .then(data => {
+    if (data && data.audioFile) {
+      new Audio(data.audioFile).play();
+    }
+  })
+  .catch(err => console.error("API Error:", err));
+}
+
+fetchSpeech();</code></pre>
+
+  <hr class="article-divider"/>
+
+  <h2>The walls I hit</h2>
+
+  <h3>1. CORS — and a week of looking in the wrong place</h3>
+  <p>The first time I ran this in a real LMS environment, the fetch call failed silently. Browser console showed a CORS error: the AI voice API was blocking requests from the LMS domain.</p>
+  <p>My first assumption: something in our network configuration was blocking the outbound call. I spent almost a week checking proxy settings, testing from different environments, and ruling out internal firewall rules. None of it was the problem.</p>
+
+  <div class="callout callout-accent">
+    <p><strong>The actual fix lived on the API provider's side.</strong> Their endpoint needed to explicitly whitelist the LMS domain — the specific URL from which the course was being served. One configuration change on their end, after a week of looking on ours.</p>
+  </div>
+
+  <p>In enterprise environments, CORS errors are almost always a cross-team problem. The course developer can diagnose them but rarely resolve them alone. You need the API provider and potentially your IT/network team in the same conversation.</p>
+
+  <h3>2. The name came back as Last, First</h3>
+  <p>Once the API call started working, the greeting sounded wrong. The LMS was returning the learner's name in <code>Lastname, Firstname</code> format — a legacy data structure common in enterprise SCORM implementations.</p>
+  <p>The fix is one line of JavaScript, but only once you know what to look for:</p>
+
+  <pre><code>name.split(", ").reverse()[0]</code></pre>
+
+  <p>Split on the comma-space, reverse the array, take the first element. This only surfaced with a real learner account in the actual LMS — local previews and SCORM Cloud don't replicate how an enterprise LMS structures that field.</p>
+
+  <h3>3. The API key sitting in plain JavaScript</h3>
+  <p>There's no clean solution to this one in a purely client-side architecture. The API key lives in the JavaScript, which means anyone who opens DevTools during course runtime can read it.</p>
+
+  <div class="callout">
+    <p>The risk calculus depends on context. For a course deployed to internal employees behind SSO, the exposure surface is limited. For external audiences or public-facing deployments, it's a genuine vulnerability that would need a backend proxy to solve properly. In this deployment, the internal nature of the audience made it an acceptable tradeoff — but it's worth being explicit about that decision rather than ignoring it.</p>
+  </div>
+
+  <h3>4. Names the AI can't pronounce</h3>
+  <p>AI voice models are trained primarily on common Western names. Unusual names, non-Latin-script names transliterated into English, or names with unexpected stress patterns will be mispronounced. The workaround: most voice APIs support phonetic input — you pass a pronunciation hint alongside the name. For a global deployment, this requires a lookup table or override mechanism, which adds complexity.</p>
+
+  <hr class="article-divider"/>
+
+  <h2>What the learner actually experienced</h2>
+  <p>On course launch, before any content appeared, the course played: <em>"Hello [First Name], welcome to this eLearning course"</em> — spoken in a natural AI voice, using the actual name pulled from the LMS in real time. No pre-recording. The audio was generated fresh on every launch, for every learner.</p>
+
+  <h2>What this took that most tutorials won't tell you</h2>
+  <ul style="padding-left:1.5rem;line-height:2.2;margin-bottom:1.25rem;">
+    <li>Access to a real enterprise LMS environment to test against — SCORM Cloud doesn't replicate enterprise LMS behaviour accurately</li>
+    <li>A conversation with the API provider's technical team to resolve CORS at their end</li>
+    <li>Multiple iterations of the JavaScript to handle different LMS API versions, name formats, and failure states</li>
+    <li>A clear-eyed view of the API key security tradeoff and why it was acceptable in this specific context</li>
+  </ul>
+
+  <p>The code itself is not the hard part. The environment is the hard part. That's true of almost all AI integration work in L&D — the gap between "this works in a demo" and "this works in your LMS, on your network, for your learners" is where the real engineering lives.</p>
+
+  <hr class="article-divider"/>
+  <p style="color:var(--muted);font-style:italic;font-size:0.9rem;">If you're working on something similar — or running into the same walls — <a href="https://linkedin.com/in/trivedi-abhishek" style="color:var(--accent);">connect on LinkedIn</a>. This is the kind of problem worth talking about.</p>
+
+</article>
+
+<footer>
+  <span>© 2026 Abhishek Trivedi · Learning Experience Technologist</span>
+  <div class="footer-links">
+    <a href="https://linkedin.com/in/trivedi-abhishek" target="_blank">LinkedIn</a>
+    <a href="../../index.html#contact">Contact</a>
+    <a href="../articles.html">Articles</a>
+  </div>
+</footer>
+
+<!-- ── PORTFOLIO PROTECTION ── -->
+<script>
+(function() {
+  'use strict';
+  document.addEventListener('contextmenu', function(e) { e.preventDefault(); showWarning(); return false; });
+  document.addEventListener('keydown', function(e) {
+    const key = e.key ? e.key.toLowerCase() : '';
+    const ctrl = e.ctrlKey || e.metaKey;
+    if (ctrl && ['u','s','a','p'].includes(key)) { e.preventDefault(); showWarning(); return false; }
+    if (ctrl && e.shiftKey && ['i','j','c','k'].includes(key)) { e.preventDefault(); showWarning(); return false; }
+    if (e.key === 'F12') { e.preventDefault(); showWarning(); return false; }
+    if (ctrl && e.shiftKey && e.key === 'Delete') { e.preventDefault(); return false; }
+  });
+  document.addEventListener('selectstart', function(e) {
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+    e.preventDefault(); return false;
+  });
+  document.addEventListener('dragstart', function(e) {
+    if (e.target.classList && e.target.classList.contains('drag-item')) return;
+    e.preventDefault(); return false;
+  });
+  var devtoolsOpen = false;
+  function checkDevTools() {
+    var w = window.outerWidth  - window.innerWidth  > 160;
+    var h = window.outerHeight - window.innerHeight > 160;
+    if ((w || h) && !devtoolsOpen) { devtoolsOpen = true; showDevToolsWarning(); }
+    else if (!w && !h) devtoolsOpen = false;
+  }
+  setInterval(checkDevTools, 1000);
+  function showWarning() {
+    if (document.getElementById('_pt_toast')) return;
+    var t = document.createElement('div');
+    t.id = '_pt_toast';
+    t.innerHTML = '\uD83D\uDD12 &nbsp;This portfolio is protected. Please respect the author\'s work.';
+    t.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#0f0e0c;color:#f5f2eb;padding:12px 22px;border-radius:8px;font-family:sans-serif;font-size:13px;border:1px solid rgba(200,75,47,0.5);border-left:3px solid #c84b2f;z-index:999999;box-shadow:0 4px 24px rgba(0,0,0,0.4);pointer-events:none;white-space:nowrap';
+    document.body.appendChild(t);
+    setTimeout(function() { if (t.parentNode) t.parentNode.removeChild(t); }, 3000);
+  }
+  function showDevToolsWarning() {
+    if (document.getElementById('_pt_devtools')) return;
+    var b = document.createElement('div');
+    b.id = '_pt_devtools';
+    b.innerHTML = '<strong style="color:#c84b2f">Hey there, developer \uD83D\uDC4B</strong> This portfolio was built by <strong>Abhishek Trivedi</strong>. If you\'re curious about how it works, just reach out at <a href="https://abhishektrivedi.com/pages/contact.html" style="color:#c9973a">abhishektrivedi.com</a> — happy to chat.';
+    b.style.cssText = 'position:fixed;top:0;left:0;right:0;background:#0a1628;color:#f5f2eb;padding:14px 24px;font-family:sans-serif;font-size:13px;line-height:1.6;border-bottom:2px solid #c84b2f;z-index:999999;text-align:center;box-shadow:0 2px 12px rgba(0,0,0,0.5)';
+    document.body.appendChild(b);
+  }
+  var s = 'color:#c84b2f;font-size:18px;font-weight:bold;padding:8px 0;border-bottom:2px solid #c84b2f';
+  console.log('%c\u00A9 Abhishek Trivedi \u2014 Learning Experience Technologist', s);
+  console.log('%chttps://abhishektrivedi.com | All rights reserved.', 'color:#6b6459;font-size:12px;');
+  console.log('%cIf you\'re inspecting this to learn \u2014 great! Just don\'t copy. Reach out instead.', 'color:#c9973a;font-size:12px;font-style:italic;');
+})();
+</script>
+<!-- ── END PROTECTION ── -->
+
+</body>
+</html>
