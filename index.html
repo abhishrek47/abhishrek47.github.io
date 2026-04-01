@@ -1385,6 +1385,20 @@ body.view-3d-active #td-nav { display: flex; }
     <h2 class="a11y-heading">Accessibility isn't a checklist.<br>It's an <em>architectural decision.</em></h2>
     <p class="a11y-sub">Most eLearning developers add alt text at the end and call it done. The four scenarios below show what accessibility actually means inside Storyline — built into the template from the start, not retrofitted after the fact. Toggle each one to feel the difference.</p>
   </div>
+<!-- WCAG PATTERN INTERRUPT -->
+  <div class="a11y-interrupt">
+    <div class="a11y-interrupt-left">
+      <div class="a11y-interrupt-eyebrow">
+        <span class="a11y-interrupt-dot"></span> New resource
+      </div>
+      <div class="a11y-interrupt-headline">Built a full WCAG guide for Storyline developers.<br>Checklists, contrast tables, focus order fixes — all of it.</div>
+      <div class="a11y-interrupt-sub">Everything the demos below reference, documented in one place. Bookmark it before you leave.</div>
+    </div>
+    <div class="a11y-interrupt-right">
+      <a href="pages/accessibility-guides.html" class="a11y-interrupt-btn">Read the guide →</a>
+    </div>
+  </div>
+  
   <div class="a11y-grid">
     <div class="a11y-card" id="a11y-focus">
       <div class="a11y-card-header">
@@ -1692,8 +1706,20 @@ body.view-3d-active #td-nav { display: flex; }
 .a11y-heading{font-family:var(--serif);font-size:clamp(1.8rem,2.8vw,2.6rem);color:#f0ede6;line-height:1.2;margin-bottom:1rem;}
 .a11y-heading em{font-style:italic;color:#3dba6e;}
 .a11y-sub{font-size:.95rem;color:rgba(240,237,230,.55);line-height:1.75;}
+.a11y-interrupt{background:#f5f0eb;border-radius:6px;padding:1.4rem 1.6rem;margin-bottom:2rem;display:flex;align-items:center;justify-content:space-between;gap:1.5rem;position:relative;overflow:hidden;flex-wrap:wrap;}
+.a11y-interrupt::before{content:'';position:absolute;top:0;left:0;bottom:0;width:4px;background:#c0392b;}
+.a11y-interrupt-left{display:flex;flex-direction:column;gap:.5rem;flex:1;padding-left:.5rem;}
+.a11y-interrupt-eyebrow{font-family:var(--mono);font-size:.58rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#c0392b;display:flex;align-items:center;gap:.5rem;}
+.a11y-interrupt-dot{width:6px;height:6px;border-radius:50%;background:#c0392b;display:inline-block;flex-shrink:0;animation:interruptPulse 1.8s ease infinite;}
+@keyframes interruptPulse{0%,100%{opacity:1}50%{opacity:.3}}
+.a11y-interrupt-headline{font-family:var(--serif);font-size:1.05rem;font-weight:700;color:#1a1a18;line-height:1.3;}
+.a11y-interrupt-sub{font-size:.78rem;color:#666;line-height:1.55;font-family:var(--sans);max-width:44ch;}
+.a11y-interrupt-right{flex-shrink:0;}
+.a11y-interrupt-btn{display:inline-flex;align-items:center;gap:.6rem;background:#c0392b;color:#fff;font-family:var(--mono);font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:.8rem 1.5rem;border-radius:3px;text-decoration:none;white-space:nowrap;transition:background .2s,gap .2s;}
+.a11y-interrupt-btn:hover{background:#a83a22;gap:.85rem;}
+@media(max-width:700px){.a11y-interrupt{flex-direction:column;align-items:flex-start;}.a11y-interrupt-btn{width:100%;justify-content:center;}}
 .a11y-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:2.5rem;}
-@media(max-width:900px){.a11y-grid{grid-template-columns:1fr;}}
+  @media(max-width:900px){.a11y-grid{grid-template-columns:1fr;}}
 .a11y-card{background:rgba(255,255,255,.04);border:1px solid rgba(61,186,110,.15);border-radius:8px;overflow:hidden;transition:border-color .3s;}
 .a11y-card.fixed{border-color:rgba(61,186,110,.45);}
 .a11y-card-header{display:flex;align-items:center;gap:1rem;padding:1.1rem 1.4rem;border-bottom:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.03);}
