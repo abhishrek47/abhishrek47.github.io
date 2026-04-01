@@ -1,0 +1,345 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "vxtwcbqoas");
+  </script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-LY3GY2LH00"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-LY3GY2LH00');
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WCAG Guides for Storyline Developers | Abhishek Trivedi</title>
+  <meta name="description" content="Practical WCAG 2.1 AA accessibility guides built for Storyline developers. Focus order, contrast, alt text, keyboard navigation — ready to use in your next project." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css" />
+
+  <style>
+  body { background: var(--paper); color: var(--ink); }
+
+  /* ── PAGE LAYOUT ── */
+  .ag-page {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 6rem 2rem 4rem;
+  }
+
+  /* ── HERO ── */
+  .ag-eyebrow {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--accent);
+    margin-bottom: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+  }
+  .ag-eyebrow::before {
+    content: '';
+    display: block;
+    width: 1.5rem;
+    height: 1px;
+    background: var(--accent);
+  }
+  .ag-page h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.2rem, 5vw, 3.2rem);
+    font-weight: 800;
+    line-height: 1.15;
+    margin: 0 0 1.5rem;
+  }
+  .ag-page h1 em {
+    font-style: italic;
+    color: var(--accent);
+  }
+  .ag-intro {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: #333;
+    margin-bottom: 2.5rem;
+    max-width: 640px;
+  }
+
+  /* ── WHAT'S INSIDE ── */
+  .ag-section-label {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #888;
+    margin-bottom: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+  .ag-section-label::before {
+    content: '';
+    display: block;
+    width: 1rem;
+    height: 1px;
+    background: var(--accent);
+  }
+  .ag-section-heading {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin: 0 0 1.8rem;
+    line-height: 1.2;
+  }
+
+  /* ── GUIDE CARDS ── */
+  .ag-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.2rem;
+    margin-bottom: 3rem;
+  }
+  .ag-card {
+    background: #fff;
+    border: 1px solid var(--border, #e0d8d0);
+    border-radius: 8px;
+    padding: 1.5rem;
+    transition: border-color 0.2s;
+  }
+  .ag-card:hover {
+    border-color: var(--accent);
+  }
+  .ag-card-num {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    color: #aaa;
+    margin-bottom: 0.5rem;
+  }
+  .ag-card-title {
+    font-family: var(--sans);
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--ink);
+  }
+  .ag-card-desc {
+    font-size: 0.88rem;
+    line-height: 1.55;
+    color: #555;
+  }
+
+  /* ── WHO IT'S FOR ── */
+  .ag-audience {
+    background: var(--accent2, #1a3a5c);
+    color: #fff;
+    border-radius: 10px;
+    padding: 2.5rem;
+    margin-bottom: 3rem;
+  }
+  .ag-audience h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin: 0 0 1rem;
+  }
+  .ag-audience p {
+    font-size: 0.92rem;
+    line-height: 1.65;
+    color: rgba(255,255,255,0.85);
+    margin: 0;
+  }
+  .ag-audience-list {
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.6rem;
+  }
+  .ag-audience-list li {
+    font-size: 0.88rem;
+    color: rgba(255,255,255,0.9);
+    padding-left: 1.2rem;
+    position: relative;
+  }
+  .ag-audience-list li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+  }
+
+  /* ── CTA SECTION ── */
+  .ag-cta-section {
+    text-align: center;
+    padding: 2rem 0 3rem;
+    border-top: 1px solid var(--border, #e0d8d0);
+  }
+  .ag-cta-section p {
+    font-size: 0.92rem;
+    color: #666;
+    margin-bottom: 1.5rem;
+  }
+  .ag-btn-primary {
+    display: inline-block;
+    background: var(--accent, #c84b2f);
+    color: #fff;
+    padding: 0.9rem 2.4rem;
+    font-family: var(--sans);
+    font-size: 0.88rem;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: 3px;
+    letter-spacing: 0.02em;
+    transition: background 0.2s;
+  }
+  .ag-btn-primary:hover {
+    background: var(--ink);
+  }
+  .ag-btn-secondary {
+    display: inline-block;
+    color: var(--ink);
+    font-size: 0.85rem;
+    font-weight: 500;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    margin-left: 1.5rem;
+    transition: color 0.2s;
+  }
+  .ag-btn-secondary:hover {
+    color: var(--accent);
+  }
+
+  /* ── BACK LINK ── */
+  .ag-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: #888;
+    text-decoration: none;
+    margin-bottom: 2rem;
+    transition: color 0.2s;
+  }
+  .ag-back:hover { color: var(--accent); }
+
+  @media (max-width: 900px) {
+    .ag-cards { grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .ag-audience { padding: 2rem; }
+  }
+  @media (max-width: 600px) {
+    .ag-page { padding: 5rem 1.2rem 3rem; }
+    .ag-page h1 { font-size: 2rem; }
+    .ag-intro { font-size: 0.95rem; }
+    .ag-cards { grid-template-columns: 1fr; gap: 0.8rem; }
+    .ag-card { padding: 1.2rem; }
+    .ag-audience { padding: 1.5rem; border-radius: 8px; }
+    .ag-audience h3 { font-size: 1.2rem; }
+    .ag-audience-list { grid-template-columns: 1fr; gap: 0.5rem; }
+    .ag-cta-section { padding: 1.5rem 0 2rem; }
+    .ag-btn-primary { display: block; width: 100%; text-align: center; padding: 0.85rem 1.5rem; }
+    .ag-btn-secondary { display: block; margin: 1rem auto 0; text-align: center; }
+    .ag-section-heading { font-size: 1.4rem; }
+  }
+  @media (max-width: 380px) {
+    .ag-page { padding: 4.5rem 1rem 2.5rem; }
+    .ag-page h1 { font-size: 1.75rem; }
+  }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="../index.html" class="nav-logo">AT<span>.</span></a>
+  <button class="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+  <ul class="nav-links">
+    <li><a href="work.html">Work</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="certifications.html">Certifications</a></li>
+    <li><a href="../id-frameworks.html">ID Cheat Sheet</a></li>
+    <li><a href="../game/index.html">Spot the Bug</a></li>
+    <li><a href="articles.html">Articles</a></li>
+    <li><a href="../tools/id-model-selector.html" target="_blank" rel="noopener">ID Model Selector ↗</a></li>
+    <li><a href="../lms/index.html">LMS Demo ↗</a></li>
+    <li><a href="contact.html" class="nav-cta">Let's Talk</a></li>
+  </ul>
+</nav>
+
+<div class="ag-page">
+
+  <a href="../index.html" class="ag-back">← Back to home</a>
+
+  <div class="ag-eyebrow">Now Available</div>
+  <h1>WCAG Guides for<br>Storyline <em>Developers.</em></h1>
+  <p class="ag-intro">Four practical guides covering the accessibility problems Storyline doesn't solve out of the box — focus order, colour contrast, alt text strategy, and keyboard navigation. Not theory. Not checklists. Working solutions you can drop into your next project.</p>
+
+  <!-- WHAT'S INSIDE -->
+  <div class="ag-section-label">What's inside</div>
+  <h2 class="ag-section-heading">Four guides. Four real problems.</h2>
+
+  <div class="ag-cards">
+    <div class="ag-card">
+      <div class="ag-card-num">01</div>
+      <div class="ag-card-title">Focus Order</div>
+      <div class="ag-card-desc">Storyline sets tab order by object creation sequence — not reading order. This guide shows how to override it and build predictable, logical focus flows.</div>
+    </div>
+    <div class="ag-card">
+      <div class="ag-card-num">02</div>
+      <div class="ag-card-title">Colour Contrast</div>
+      <div class="ag-card-desc">WCAG 2.1 AA requires 4.5:1. Most Storyline templates fail. Practical fixes for text, buttons, and interactive elements — with ratios you can verify.</div>
+    </div>
+    <div class="ag-card">
+      <div class="ag-card-num">03</div>
+      <div class="ag-card-title">Alt Text Strategy</div>
+      <div class="ag-card-desc">Not every image needs alt text — and "image of chart" helps nobody. A framework for deciding what's informational, what's decorative, and what screen readers should actually announce.</div>
+    </div>
+    <div class="ag-card">
+      <div class="ag-card-num">04</div>
+      <div class="ag-card-title">Keyboard Navigation</div>
+      <div class="ag-card-desc">Custom interactions in Storyline are mouse-only by default. How to add Enter, Space, and arrow key support so keyboard users aren't locked out.</div>
+    </div>
+  </div>
+
+  <!-- WHO IT'S FOR -->
+  <div class="ag-audience">
+    <h3>Built for people who build in Storyline.</h3>
+    <p>These guides assume you already know Storyline. They skip the basics and go straight to the accessibility gaps that matter — the ones QA catches, the ones learners feel, and the ones most developers don't know exist.</p>
+    <ul class="ag-audience-list">
+      <li>Instructional designers using Storyline 360</li>
+      <li>eLearning developers building custom interactions</li>
+      <li>L&D teams working toward WCAG 2.1 AA compliance</li>
+      <li>QA reviewers checking accessibility standards</li>
+    </ul>
+  </div>
+
+  <!-- CTA -->
+  <div class="ag-cta-section">
+    <p>Available now on Gumroad.</p>
+    <a href="https://abhishektrivedi.gumroad.com/" target="_blank" rel="noopener" class="ag-btn-primary">Get the Guides →</a>
+    <a href="../index.html#accessibility" class="ag-btn-secondary">Try the live demos first</a>
+  </div>
+
+</div>
+
+<footer>
+  <div class="footer-name">&copy; 2026 Abhishek Trivedi &middot; Learning Experience Technologist</div>
+  <ul class="footer-links">
+    <li><a href="https://www.linkedin.com/in/trivedi-abhishek/" target="_blank">LinkedIn</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <li><a href="../index.html">Home</a></li>
+  </ul>
+</footer>
+
+<script src="../js/main.js"></script>
+</body>
+</html>
