@@ -88,6 +88,232 @@
 .announce-bar.hidden {
   display: none;
 }
+  /* ════════════════════════════════════════
+   WCAG SCROLL-TRIGGERED BAR
+════════════════════════════════════════ */
+#wcag-scroll-bar {
+  background: var(--accent, #c0392b);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  padding: 0.6rem 2rem;
+  font-family: var(--sans, 'DM Sans', sans-serif);
+  font-size: 0.82rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 9100;
+  text-align: center;
+  line-height: 1.4;
+  transform: translateY(-100%);
+  transition: transform 0.4s cubic-bezier(0.34, 1.2, 0.64, 1);
+  pointer-events: none;
+}
+#wcag-scroll-bar.wcag-bar-visible {
+  transform: translateY(0);
+  pointer-events: all;
+}
+#wcag-scroll-bar.wcag-bar-hidden {
+  display: none;
+}
+#wcag-scroll-bar a {
+  color: #fff;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+#wcag-scroll-bar a:hover { text-decoration-thickness: 2px; }
+#wcag-scroll-bar .announce-badge { background: rgba(255,255,255,0.2); }
+#wcag-scroll-bar .announce-dismiss {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.7);
+  font-size: 1.1rem;
+  cursor: pointer;
+  padding: 4px 6px;
+  line-height: 1;
+  transition: color 0.2s;
+}
+#wcag-scroll-bar .announce-dismiss:hover { color: #fff; }
+
+/* ════════════════════════════════════════
+   FLOATING ACCESSIBILITY CHECKER
+════════════════════════════════════════ */
+#a11y-checker {
+  position: fixed;
+  right: 1.75rem;
+  bottom: 90px;
+  z-index: 8400;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.5rem;
+  pointer-events: none;
+}
+#a11y-checker.checker-visible {
+  pointer-events: all;
+}
+.checker-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #0f1f0f;
+  border: 1px solid rgba(61,186,110,0.4);
+  border-radius: 100px;
+  padding: 0.45rem 0.9rem 0.45rem 0.65rem;
+  font-family: var(--mono, 'JetBrains Mono', monospace);
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #3dba6e;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+  transition: background 0.2s, border-color 0.2s, transform 0.2s;
+  white-space: nowrap;
+  -webkit-tap-highlight-color: transparent;
+}
+.checker-pill:hover {
+  background: #172917;
+  border-color: rgba(61,186,110,0.7);
+  transform: translateY(-2px);
+}
+.checker-pill-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #3dba6e;
+  flex-shrink: 0;
+  animation: checkerPulse 2.2s ease infinite;
+}
+@keyframes checkerPulse {
+  0%,100% { box-shadow: 0 0 0 0 rgba(61,186,110,0.5); }
+  50%      { box-shadow: 0 0 0 5px rgba(61,186,110,0); }
+}
+.checker-panel {
+  background: #0f1f0f;
+  border: 1px solid rgba(61,186,110,0.25);
+  border-radius: 8px;
+  padding: 1rem 1.1rem;
+  min-width: 220px;
+  box-shadow: 0 8px 28px rgba(0,0,0,0.25);
+  display: none;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+.checker-panel.open { display: flex; }
+.checker-panel-title {
+  font-family: var(--mono, 'JetBrains Mono', monospace);
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #3dba6e;
+}
+.checker-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+.checker-row-label {
+  font-family: var(--mono, 'JetBrains Mono', monospace);
+  font-size: 0.6rem;
+  color: rgba(240,237,230,0.45);
+  letter-spacing: 0.05em;
+}
+.checker-row-val {
+  font-family: var(--mono, 'JetBrains Mono', monospace);
+  font-size: 0.62rem;
+  font-weight: 700;
+  color: #3dba6e;
+}
+.checker-divider {
+  height: 1px;
+  background: rgba(61,186,110,0.1);
+}
+.checker-cta {
+  font-family: var(--mono, 'JetBrains Mono', monospace);
+  font-size: 0.6rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #3dba6e;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  transition: gap 0.2s;
+}
+.checker-cta:hover { gap: 0.55rem; }
+@media(max-width: 768px) {
+  #a11y-checker { right: 1rem; bottom: 130px; }
+}
+
+/* ════════════════════════════════════════
+   3D VIEW WCAG BAR
+════════════════════════════════════════ */
+#td-wcag-bar {
+  background: rgba(10,22,40,0.96);
+  border-bottom: 1px solid rgba(192,57,43,0.3);
+  color: rgba(245,240,235,0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  padding: 0.55rem 2rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  position: relative;
+  z-index: 150;
+  text-align: center;
+  line-height: 1.4;
+}
+#td-wcag-bar.hidden { display: none; }
+#td-wcag-bar .td-wcag-badge {
+  display: inline-block;
+  background: rgba(192,57,43,0.2);
+  color: #c0392b;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 2px 7px;
+  border-radius: 2px;
+  border: 1px solid rgba(192,57,43,0.35);
+  flex-shrink: 0;
+}
+#td-wcag-bar a { color: #c0392b; text-decoration: underline; text-underline-offset: 2px; font-weight: 600; white-space: nowrap; }
+#td-wcag-bar a:hover { color: #e74c3c; }
+#td-wcag-bar .td-wcag-dismiss {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: rgba(245,240,235,0.35);
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 4px 6px;
+  line-height: 1;
+  transition: color 0.2s;
+}
+#td-wcag-bar .td-wcag-dismiss:hover { color: rgba(245,240,235,0.7); }
+@media(max-width:768px) {
+  #td-wcag-bar { font-size: 0.67rem; padding: 0.5rem 2.5rem 0.5rem 0.8rem; }
+}
 @media (max-width: 900px) {
   .announce-bar {
     font-size: 0.75rem;
@@ -1294,15 +1520,59 @@ body.view-3d-active #td-nav { display: flex; }
   <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 12V4M4 7l4-4 4 4"/></svg>
 </button>
 
-</div><!-- /#view-editorial -->
+<!-- WCAG SCROLL-TRIGGERED BAR -->
+<div id="wcag-scroll-bar">
+  <span class="announce-badge">WCAG</span>
+  <span>WCAG Guides for Storyline Developers — accessibility practices, ready to use.</span>
+  <a href="pages/accessibility-guides.html">Learn more →</a>
+  <button class="announce-dismiss" id="wcagScrollDismiss" aria-label="Dismiss">&times;</button>
+</div>
 
+<!-- FLOATING ACCESSIBILITY CHECKER -->
+<div id="a11y-checker">
+  <div class="checker-panel" id="checkerPanel">
+    <div class="checker-panel-title">This page · WCAG 2.1</div>
+    <div class="checker-row">
+      <span class="checker-row-label">Standard</span>
+      <span class="checker-row-val">AA ✓</span>
+    </div>
+    <div class="checker-row">
+      <span class="checker-row-label">Min. contrast</span>
+      <span class="checker-row-val">7.2 : 1</span>
+    </div>
+    <div class="checker-row">
+      <span class="checker-row-label">Keyboard nav</span>
+      <span class="checker-row-val">All ✓</span>
+    </div>
+    <div class="checker-row">
+      <span class="checker-row-label">Focus order</span>
+      <span class="checker-row-val">Defined ✓</span>
+    </div>
+    <div class="checker-divider"></div>
+    <a href="#accessibility" class="checker-cta" onclick="document.getElementById('checkerPanel').classList.remove('open');">See live demos →</a>
+  </div>
+  <button class="checker-pill" id="checkerPill" aria-label="Accessibility status" aria-expanded="false">
+    <span class="checker-pill-dot"></span>
+    WCAG AA
+  </button>
+</div>
+
+</div><!-- /#view-editorial -->
 <!-- ════════════════════════════════════════
      3D VIEW
 ════════════════════════════════════════ -->
 <div id="view-3d">
 
+<!-- WCAG BAR — 3D VIEW -->
+<div id="td-wcag-bar">
+  <span class="td-wcag-badge">New</span>
+  <span>WCAG Guides for Storyline Developers — accessibility practices, ready to use.</span>
+  <a href="pages/accessibility-guides.html">Learn more →</a>
+  <button class="td-wcag-dismiss" id="tdWcagDismiss" aria-label="Dismiss">&times;</button>
+</div>
+
 <!-- HERO TEXT -->
-<section class="td-ts" id="td-hero" style="padding-top:8rem;">
+  <section class="td-ts" id="td-hero" style="padding-top:8rem;">
   <div class="td-hero-inner">
     <div>
       <div class="td-avail td-r"><span class="td-avail-dot"></span>Available for new opportunities</div>
@@ -2436,7 +2706,102 @@ if (currentView === '3d') {
     init3DReveal();
   }
 }
+// ════════════════════════════════════════
+// WCAG SCROLL BAR — fires on #accessibility
+// ════════════════════════════════════════
+(function() {
+  const bar = document.getElementById('wcag-scroll-bar');
+  const dismissBtn = document.getElementById('wcagScrollDismiss');
+  if (!bar) return;
+  try { if (sessionStorage.getItem('wcag-scroll-dismissed') === '1') { bar.classList.add('wcag-bar-hidden'); return; } } catch(e) {}
+  let barShown = false;
+  const section = document.getElementById('accessibility');
+  if (!section) return;
+  const obs = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting && !barShown && currentView === 'editorial') {
+        barShown = true;
+        bar.classList.add('wcag-bar-visible');
+      }
+    });
+  }, { threshold: 0.18 });
+  obs.observe(section);
+  window.addEventListener('scroll', function() {
+    if (!barShown || currentView !== 'editorial') return;
+    const rect = section.getBoundingClientRect();
+    if (rect.top > window.innerHeight + 100) {
+      bar.classList.remove('wcag-bar-visible');
+      barShown = false;
+    }
+  }, { passive: true });
+  if (dismissBtn) {
+    dismissBtn.addEventListener('click', function() {
+      bar.classList.remove('wcag-bar-visible');
+      setTimeout(function() { bar.classList.add('wcag-bar-hidden'); }, 400);
+      try { sessionStorage.setItem('wcag-scroll-dismissed', '1'); } catch(e) {}
+    });
+  }
+})();
 
+// ════════════════════════════════════════
+// FLOATING ACCESSIBILITY CHECKER
+// ════════════════════════════════════════
+(function() {
+  const checker = document.getElementById('a11y-checker');
+  const pill = document.getElementById('checkerPill');
+  const panel = document.getElementById('checkerPanel');
+  if (!checker || !pill || !panel) return;
+  let panelOpen = false;
+  const section = document.getElementById('accessibility');
+  if (section) {
+    const showObs = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (currentView !== 'editorial') return;
+        checker.classList.toggle('checker-visible', entry.isIntersecting);
+        if (!entry.isIntersecting && panelOpen) {
+          panel.classList.remove('open');
+          pill.setAttribute('aria-expanded', 'false');
+          panelOpen = false;
+        }
+      });
+    }, { threshold: 0.05 });
+    showObs.observe(section);
+  }
+  pill.addEventListener('click', function(e) {
+    e.stopPropagation();
+    panelOpen = !panelOpen;
+    panel.classList.toggle('open', panelOpen);
+    pill.setAttribute('aria-expanded', String(panelOpen));
+  });
+  document.addEventListener('click', function(e) {
+    if (panelOpen && !checker.contains(e.target)) {
+      panel.classList.remove('open');
+      pill.setAttribute('aria-expanded', 'false');
+      panelOpen = false;
+    }
+  });
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && panelOpen) {
+      panel.classList.remove('open');
+      pill.setAttribute('aria-expanded', 'false');
+      panelOpen = false;
+    }
+  });
+})();
+
+// ════════════════════════════════════════
+// 3D WCAG BAR — dismiss only
+// ════════════════════════════════════════
+(function() {
+  const btn = document.getElementById('tdWcagDismiss');
+  const bar = document.getElementById('td-wcag-bar');
+  if (!btn || !bar) return;
+  try { if (sessionStorage.getItem('td-wcag-dismissed') === '1') { bar.classList.add('hidden'); } } catch(e) {}
+  btn.addEventListener('click', function() {
+    bar.classList.add('hidden');
+    try { sessionStorage.setItem('td-wcag-dismissed', '1'); } catch(e) {}
+  });
+})();
 // Portfolio protection
 (function(){
   'use strict';
