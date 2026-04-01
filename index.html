@@ -1962,11 +1962,6 @@ window.addEventListener('popstate', (e) => {
 // ════════════════════════════════════════
 (function() {
   const overlay = document.getElementById('courseLoader');
-  // If already seen this session, skip immediately
-  if (sessionStorage.getItem('at_portfolio_loaded')) {
-    overlay.classList.add('skip');
-    return;
-  }
 
   const steps = [
     {text:'Initialising learner profile...',pct:12,log:null},
@@ -2004,7 +1999,6 @@ window.addEventListener('popstate', (e) => {
       screen.classList.add('ready');
       setTimeout(() => {
         overlay.classList.add('done');
-        sessionStorage.setItem('at_portfolio_loaded', '1');
       }, 700);
     } else {
       setTimeout(runStep, 260 + Math.random() * 180);
@@ -2016,7 +2010,6 @@ window.addEventListener('popstate', (e) => {
   setTimeout(() => {
     if (!overlay.classList.contains('done')) {
       overlay.classList.add('done');
-      sessionStorage.setItem('at_portfolio_loaded', '1');
     }
   }, 6000);
 })();
