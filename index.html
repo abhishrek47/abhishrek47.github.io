@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -165,7 +166,23 @@
 #a11y-tab.tab-visible {
   pointer-events: all;
   opacity: 1;
+  /* Strip is visible but panel is hidden until expanded */
   transform: translateX(0);
+}
+/* Panel hidden until expanded */
+#a11y-tab.tab-visible:not(.tab-expanded) .a11y-tab-panel {
+  display: none;
+}
+/* Strip tooltip label when collapsed */
+#a11y-tab.tab-visible:not(.tab-expanded) .a11y-tab-strip::after {
+  content: ' · click to expand';
+  font-size: 0.5rem;
+  opacity: 0.6;
+  letter-spacing: 0.08em;
+}
+#a11y-tab.tab-expanded .a11y-tab-panel {
+  display: flex;
+  flex-direction: column;
 }
 #a11y-tab.tab-dismissed {
   opacity: 0;
@@ -402,6 +419,86 @@
     font-size: 0.55rem;
     padding: 1px 6px;
   }
+}
+
+/* ════════════════════════════════════════
+   RESOURCES NAV DROPDOWN
+════════════════════════════════════════ */
+.nav-dropdown-wrap {
+  position: relative;
+}
+.nav-dropdown-btn {
+  background: none;
+  border: none;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  letter-spacing: inherit;
+  color: inherit;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  text-transform: uppercase;
+}
+.nav-dropdown-caret {
+  font-size: 0.6em;
+  transition: transform 0.2s;
+}
+.nav-dropdown-wrap[data-open="true"] .nav-dropdown-caret {
+  transform: rotate(180deg);
+}
+.nav-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 0.75rem);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--paper, #f5f0eb);
+  border: 1px solid var(--rule, #e0d8d0);
+  border-radius: 6px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+  min-width: 180px;
+  list-style: none;
+  padding: 0.4rem 0;
+  z-index: 9999;
+  display: none;
+}
+.nav-dropdown-wrap[data-open="true"] .nav-dropdown-menu {
+  display: block;
+}
+.nav-dropdown-menu li a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.55rem 1rem;
+  font-size: 0.78rem;
+  font-family: var(--sans, 'DM Sans', sans-serif);
+  color: var(--ink, #1a1a1a);
+  text-decoration: none;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  transition: background 0.15s, color 0.15s;
+}
+.nav-dropdown-menu li a:hover {
+  background: rgba(192,57,43,0.06);
+  color: var(--accent, #c0392b);
+}
+.nav-dropdown-new {
+  font-family: var(--mono, 'JetBrains Mono', monospace);
+  font-size: 0.52rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  background: var(--accent, #c0392b);
+  color: #fff;
+  padding: 1px 5px;
+  border-radius: 2px;
+  line-height: 1.4;
+  margin-left: 0.5rem;
+}
+/* Dropdown divider before first item */
+.nav-dropdown-menu li:not(:last-child) a {
+  border-bottom: 1px solid var(--rule, #e0d8d0);
 }
 
 /* ════════════════════════════════════════
@@ -1239,9 +1336,9 @@ body.view-3d-active #td-nav { display: flex; }
   <span class="announce-badge">New</span>
   <span>WCAG Guides for Storyline Developers — accessibility practices, ready to use.</span>
   <a href="pages/accessibility-guides.html">Learn more →</a>
-  <button class="announce-dismiss" onclick="document.getElementById('announceBar').classList.add('hidden');try{sessionStorage.setItem('announce-dismissed','1')}catch(e){}" aria-label="Dismiss">&times;</button>
+  <button class="announce-dismiss" onclick="document.getElementById('announceBar').classList.add('hidden');try{localStorage.setItem('announce-dismissed','1')}catch(e){}" aria-label="Dismiss announcement">&times;</button>
 </div>
-<script>try{if(sessionStorage.getItem('announce-dismissed')==='1'){document.getElementById('announceBar').classList.add('hidden')}}catch(e){}</script>
+<script>try{if(localStorage.getItem('announce-dismissed')==='1'){document.getElementById('announceBar').classList.add('hidden')}}catch(e){}</script>
 
 <nav>
   <a href="index.html" class="nav-logo">AT<span>.</span></a>
@@ -1250,11 +1347,13 @@ body.view-3d-active #td-nav { display: flex; }
     <li><a href="pages/work.html">Work</a></li>
     <li><a href="pages/about.html">About</a></li>
     <li><a href="pages/certifications.html">Certifications</a></li>
-    <li><a href="id-frameworks.html">ID Cheat Sheet</a></li>
-    <li><a href="game/index.html">Spot the Bug</a></li>
-    <li style="position:relative;">
-      <a href="pages/articles.html">Articles</a>
-      <span style="position:absolute;top:-8px;right:-4px;font-family:var(--mono);font-size:0.55rem;font-weight:600;letter-spacing:0.06em;background:#c0392b;color:#fff;padding:1px 5px;border-radius:2px;line-height:1.4;">NEW</span>
+    <li class="nav-dropdown-wrap">
+      <button class="nav-dropdown-btn" aria-expanded="false" aria-haspopup="true">Resources <span class="nav-dropdown-caret">▾</span></button>
+      <ul class="nav-dropdown-menu" role="menu">
+        <li role="none"><a href="pages/articles.html" role="menuitem">Articles <span class="nav-dropdown-new">NEW</span></a></li>
+        <li role="none"><a href="id-frameworks.html" role="menuitem">ID Cheat Sheet</a></li>
+        <li role="none"><a href="game/index.html" role="menuitem">Spot the Bug</a></li>
+      </ul>
     </li>
     <li><a href="tools/id-model-selector.html" target="_blank" rel="noopener">ID Model Selector ↗</a></li>
     <li><a href="lms/index.html">LMS Demo ↗</a></li>
@@ -1272,16 +1371,16 @@ body.view-3d-active #td-nav { display: flex; }
     <div class="hero-tag fade-in">Learning Experience Technologist</div>
     <h1 class="fade-in" id="heroH1">I build learning<br>experiences that <em>think.</em></h1>
     <p class="hero-sub fade-in" id="heroSub">15+ years at the intersection of instructional design and engineering. I write JavaScript inside Storyline, connect courses to live APIs, automate workflows that used to take days, and integrate AI where others use static slides.</p>
-    <div class="hero-actions fade-in">
-      <a href="pages/work.html" class="btn-primary" id="heroCta">See My Work →</a>
-      <a href="pages/contact.html" class="btn-secondary">Let's Talk</a>
-    </div>
-    <div class="view-toggle-wrap fade-in" id="recruiterToggleWrap" style="display:inline-flex!important;opacity:1!important;visibility:visible!important;margin-top:1.25rem;">
+    <div class="view-toggle-wrap fade-in" id="recruiterToggleWrap" style="display:inline-flex!important;opacity:1!important;visibility:visible!important;margin-bottom:1rem;">
       <span class="vt-label" id="vtLabelLeft">My Story</span>
       <button class="vt-switch" id="recruiterToggle" onclick="toggleRecruiterMode()" aria-pressed="false" role="switch" aria-label="Toggle recruiter view">
         <span class="vt-thumb" id="vtThumb"></span>
       </button>
       <span class="vt-label" id="vtLabelRight">Recruiter View</span>
+    </div>
+    <div class="hero-actions fade-in">
+      <a href="pages/work.html" class="btn-primary" id="heroCta">See My Work →</a>
+      <a href="pages/contact.html" class="btn-secondary">Let's Talk</a>
     </div>
     <div class="hero-proof fade-in">
       <div class="proof-item"><div class="proof-num" id="proof1num">15+</div><div class="proof-label" id="proof1label">Years in L&D</div></div>
@@ -1970,8 +2069,8 @@ body.view-3d-active #td-nav { display: flex; }
 @media(min-width:769px){#btt-btn{bottom:32px;right:32px;}}
 @media(max-width: 768px){#btt-btn{bottom:28px;right:20px;width:36px;height:36px;}}
 /* Journey trigger */
-.journey-trigger{position:fixed;left:0;bottom:5.5rem;z-index:8500;display:inline-flex;align-items:center;gap:.55rem;background:#f5f0e8;color:#1a1a18;border:1.5px solid rgba(26,26,24,.18);border-left:none;border-radius:0 8px 8px 0;padding:.65rem 1rem .65rem .85rem;font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:600;letter-spacing:.07em;text-transform:uppercase;cursor:pointer;transform:translateX(-100%);animation:journeyPeek .55s cubic-bezier(.34,1.2,.64,1) 4.2s both;transition:background .2s,transform .2s,border-color .2s,color .2s;box-shadow:2px 2px 12px rgba(0,0,0,.1);}
-@keyframes journeyPeek{0%{transform:translateX(-100%);}100%{transform:translateX(0px);}}
+.journey-trigger{position:fixed;left:0;bottom:5.5rem;z-index:8500;display:inline-flex;align-items:center;gap:.55rem;background:#f5f0e8;color:#1a1a18;border:1.5px solid rgba(26,26,24,.18);border-left:none;border-radius:0 8px 8px 0;padding:.65rem 1rem .65rem .85rem;font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:600;letter-spacing:.07em;text-transform:uppercase;cursor:pointer;transform:translateX(-100%);transition:background .2s,transform .3s cubic-bezier(.34,1.2,.64,1),border-color .2s,color .2s;box-shadow:2px 2px 12px rgba(0,0,0,.1);}
+.journey-trigger.journey-visible{transform:translateX(0);}
 .journey-trigger:hover{background:#1a1a18;color:#f5f0e8;border-color:#1a1a18;transform:translateX(5px);}
 @media(max-width:768px){.journey-trigger{bottom:4.5rem;padding:.55rem .9rem;}}
 </style>
@@ -2472,7 +2571,20 @@ function tlInitSwipe(){
 }
 if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',function(){tlInit();tlInitSwipe();});}else{tlInit();tlInitSwipe();}
 
-// Journey trigger
+// Resources dropdown
+(function() {
+  const wrap = document.querySelector('.nav-dropdown-wrap');
+  const btn  = wrap ? wrap.querySelector('.nav-dropdown-btn') : null;
+  if (!wrap || !btn) return;
+  function open()  { wrap.setAttribute('data-open', 'true'); btn.setAttribute('aria-expanded', 'true'); }
+  function close() { wrap.setAttribute('data-open', 'false'); btn.setAttribute('aria-expanded', 'false'); }
+  function toggle(){ wrap.getAttribute('data-open') === 'true' ? close() : open(); }
+  btn.addEventListener('click', function(e){ e.stopPropagation(); toggle(); });
+  document.addEventListener('click', function(){ close(); });
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape') close(); });
+})();
+
+// Journey trigger — shows only after scrolling past the hero fold
 (function(){
   const btn = document.createElement('button');
   btn.className = 'journey-trigger'; btn.id = 'journeyTrigger';
@@ -2480,6 +2592,19 @@ if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded'
   btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" stroke="currentColor" stroke-width="1.6"/><path d="M9 5v4l2.5 2.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg><span class="journey-trigger-text">My Journey</span>';
   btn.addEventListener('click', () => document.getElementById('timeline').scrollIntoView({ behavior: 'smooth', block: 'start' }));
   document.body.appendChild(btn);
+  // Reveal only after hero is scrolled past — avoids overlapping primary CTA
+  let journeyShown = false;
+  window.addEventListener('scroll', function() {
+    if (currentView !== 'editorial') return;
+    const heroH = document.querySelector('.hero') ? document.querySelector('.hero').offsetHeight : window.innerHeight;
+    if (!journeyShown && window.pageYOffset > heroH * 0.6) {
+      journeyShown = true;
+      btn.classList.add('journey-visible');
+    } else if (journeyShown && window.pageYOffset <= heroH * 0.3) {
+      journeyShown = false;
+      btn.classList.remove('journey-visible');
+    }
+  }, { passive: true });
 })();
 
 // Cursor trail (editorial)
@@ -2847,7 +2972,16 @@ if (currentView === '3d') {
 
   function dismiss() {
     dismissed = true;
+    tab.classList.remove('tab-expanded');
     tab.classList.add('tab-dismissed');
+  }
+
+  function toggleExpand() {
+    if (tab.classList.contains('tab-expanded')) {
+      tab.classList.remove('tab-expanded');
+    } else {
+      tab.classList.add('tab-expanded');
+    }
   }
 
   function scrollToSection() {
@@ -2857,9 +2991,10 @@ if (currentView === '3d') {
 
   window.addEventListener('scroll', function() {
     if (dismissed || currentView !== 'editorial') return;
-    if (!shown && window.pageYOffset > window.innerHeight * 0.4) {
+    if (!shown && window.pageYOffset > window.innerHeight * 0.6) {
       shown = true;
       tab.classList.add('tab-visible');
+      // Start collapsed — strip only
     }
     if (shown && !dismissed && section.getBoundingClientRect().top < window.innerHeight * 0.5) {
       dismiss();
@@ -2868,9 +3003,10 @@ if (currentView === '3d') {
 
   closeBtn.addEventListener('click', dismiss);
   ctaBtn.addEventListener('click', scrollToSection);
-  strip.addEventListener('click', scrollToSection);
+  // Strip click now toggles expand/collapse
+  strip.addEventListener('click', toggleExpand);
   strip.addEventListener('keydown', function(e) {
-    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); scrollToSection(); }
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleExpand(); }
   });
 })();
   
