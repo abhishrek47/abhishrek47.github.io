@@ -430,17 +430,29 @@
 .nav-dropdown-btn {
   background: none;
   border: none;
-  font-family: inherit;
-  font-size: inherit;
-  font-weight: inherit;
-  letter-spacing: inherit;
-  color: inherit;
+  outline: none;
+  font-family: var(--sans, 'DM Sans', sans-serif);
+  font-size: 0.82rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--mid, #6b6459);
   cursor: pointer;
   padding: 0;
   display: flex;
   align-items: center;
   gap: 0.25rem;
-  text-transform: uppercase;
+  transition: color 0.2s;
+  line-height: inherit;
+}
+.nav-dropdown-btn:hover,
+.nav-dropdown-wrap[data-open="true"] .nav-dropdown-btn {
+  color: var(--accent, #c84b2f);
+}
+.nav-dropdown-btn:focus-visible {
+  outline: 2px solid var(--accent, #c84b2f);
+  outline-offset: 3px;
+  border-radius: 2px;
 }
 .nav-dropdown-caret {
   font-size: 0.6em;
