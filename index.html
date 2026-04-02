@@ -537,18 +537,42 @@
   right: 2rem;
   z-index: 8800;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 0.5rem; /* Reduced from 0.6rem */
+  gap: 0.3rem;
   background: rgba(245,240,235,0.95);
-  border: 1.5px solid #c84b2f; /* Reduced from 2px */
-  border-radius: 8px; /* Reduced from 12px */
-  padding: 0.4rem 0.8rem; /* Reduced from 0.6rem 1rem */
-  box-shadow: 
+  border: 1.5px solid #c84b2f;
+  border-radius: 8px;
+  padding: 0.45rem 0.8rem 0.4rem;
+  box-shadow:
     0 6px 24px rgba(192,57,43,0.25),
     0 2px 6px rgba(0,0,0,0.1),
     inset 0 1px 0 rgba(255,255,255,0.3);
   backdrop-filter: blur(8px);
-  min-width: 120px; /* Reduced from 140px */
+  min-width: 120px;
+}
+/* Context label — tells a first-time visitor what this switches */
+.vsw-context {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.52rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(200,75,47,0.6);
+  white-space: nowrap;
+  line-height: 1;
+  padding-bottom: 0.1rem;
+  border-bottom: 1px solid rgba(200,75,47,0.15);
+  width: 100%;
+  text-align: center;
+}
+/* Inner pill row */
+.vsw-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  justify-content: center;
 }
 
 /* Enhanced label */
@@ -1299,9 +1323,12 @@ body.view-3d-active #td-nav { display: flex; }
      VIEW SWITCHER (always visible)
 ════════════════════════════════════════ -->
 <div id="view-switcher">
-  <span class="vsw-label">View</span>
-  <button class="vsw-btn" id="btn-editorial" onclick="switchView('editorial')">Editorial</button>
-  <button class="vsw-btn" id="btn-3d" onclick="switchView('3d')">3D</button>
+  <span class="vsw-context">Portfolio view</span>
+  <div class="vsw-row">
+    <span class="vsw-label">View</span>
+    <button class="vsw-btn" id="btn-editorial" onclick="switchView('editorial')" title="Editorial — standard portfolio layout">Editorial</button>
+    <button class="vsw-btn" id="btn-3d" onclick="switchView('3d')" title="3D — immersive interactive experience">3D</button>
+  </div>
 </div>
 
 <!-- ════════════════════════════════════════
