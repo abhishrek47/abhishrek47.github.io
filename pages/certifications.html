@@ -1,6 +1,4 @@
 
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,7 +12,7 @@
   <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-LY3GY2LH00"></script>
 <script>
-  window.dataLayer = window.dataLayer || [];<li><a href="certifications.html" class="active">Certifications</a></li>
+  window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
   gtag('config', 'G-LY3GY2LH00');
@@ -23,390 +21,177 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Certifications | Abhishek Trivedi</title>
   <meta name="description" content="Professional certifications held by Abhishek Trivedi — TechSmith Camtasia Explorer, Articulate Storyline, LinkedIn Learning, and more." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Figtree:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../css/style.css" />
   <style>
+    /* ── VIEW SYSTEM ── */
+    #view-editorial, #view-visual { display: none; }
+    #view-editorial.view-active, #view-visual.view-active { display: block; }
 
-    /* ══════════════════════════════
-       PAGE HERO
-    ══════════════════════════════ */
-    .certs-hero-note {
-      font-family: var(--mono);
-      font-size: 0.72rem;
-      color: var(--mid);
+    /* ── VIEW SWITCHER ── */
+    #view-switcher {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      z-index: 900;
+      display: flex;
+      background: #0f0f0f;
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 100px;
+      padding: 4px;
+      gap: 3px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    }
+    .vsw-btn {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 500;
       letter-spacing: 0.06em;
-      margin-top: 1rem;
-      opacity: 0.7;
-    }
-
-    /* ══════════════════════════════
-       CERT CARDS SECTION
-    ══════════════════════════════ */
-    .certs-section {
-      padding: 4rem 4rem 5rem;
-      background: var(--paper);
-    }
-    .certs-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 1.5rem;
-      margin-top: 2.5rem;
-    }
-
-    /* The card outer — handles perspective for flip */
-    .cert-card-wrap {
-      perspective: 1000px;
-      height: 340px;
-    }
-    .cert-card-inner {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      transform-style: preserve-3d;
-      transition: transform 0.65s cubic-bezier(0.4,0.2,0.2,1);
-      cursor: pointer;
-    }
-    .cert-card-wrap:hover .cert-card-inner,
-    .cert-card-wrap.flipped .cert-card-inner {
-      transform: rotateY(180deg);
-    }
-
-    /* Front & back shared */
-    .cert-front, .cert-back {
-      position: absolute;
-      inset: 0;
-      backface-visibility: hidden;
-      -webkit-backface-visibility: hidden;
-      border-radius: 8px;
-      overflow: hidden;
-    }
-
-    /* FRONT */
-    .cert-front {
-      background: var(--ink);
-      display: flex;
-      flex-direction: column;
-      padding: 2.25rem;
-      gap: 0;
-    }
-    /* Subtle grid texture */
-    .cert-front::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background-image:
-        linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
-      background-size: 28px 28px;
-      pointer-events: none;
-    }
-    /* Diagonal ribbon */
-    .cert-front::after {
-      content: 'CERTIFIED';
-      position: absolute;
-      top: 28px; right: -30px;
-      background: var(--accent);
-      color: white;
-      font-family: var(--mono);
-      font-size: 0.52rem;
-      letter-spacing: 0.18em;
-      padding: 4px 42px;
-      transform: rotate(45deg);
-      transform-origin: center;
-      font-weight: 700;
-    }
-    .cert-issuer-row {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      margin-bottom: auto;
-    }
-    .cert-logo-box {
-      width: 42px; height: 42px;
-      border-radius: 6px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.3rem;
-      flex-shrink: 0;
-    }
-    .cert-issuer-name {
-      font-family: var(--mono);
-      font-size: 0.6rem;
-      letter-spacing: 0.14em;
       text-transform: uppercase;
       color: rgba(255,255,255,0.4);
+      background: none;
+      border: none;
+      border-radius: 100px;
+      padding: 0.45rem 1rem;
+      cursor: pointer;
+      transition: all 0.2s;
     }
-    .cert-front-title {
-      font-family: var(--serif);
-      font-size: 1.55rem;
-      line-height: 1.2;
-      color: white;
-      margin-bottom: 0.75rem;
-      position: relative;
-      z-index: 1;
-    }
-    .cert-front-title em {
-      font-style: italic;
-      color: var(--accent);
-    }
-    .cert-front-bottom {
-      display: flex;
+    .vsw-btn.vsw-active { background: #fff; color: #0f0f0f; font-weight: 600; }
+    .vsw-btn:hover:not(.vsw-active) { color: rgba(255,255,255,0.75); }
+
+    /* ── YELLOW NAV ── */
+    #td-nav {
+      position: sticky; top: 0; z-index: 200;
+      background: #fbbf0e;
+      border-bottom: 1.5px solid #151515;
+      display: none;
       align-items: center;
       justify-content: space-between;
-      margin-top: auto;
-      position: relative;
-      z-index: 1;
-    }
-    .cert-verified-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      background: rgba(46,180,96,0.15);
-      border: 1px solid rgba(46,180,96,0.3);
-      border-radius: 100px;
-      padding: 0.25rem 0.75rem;
-      font-family: var(--mono);
-      font-size: 0.58rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: #3dba6e;
-    }
-    .cert-verified-dot {
-      width: 5px; height: 5px;
-      border-radius: 50%;
-      background: #3dba6e;
-      animation: certPulse 2s infinite;
-    }
-    @keyframes certPulse {
-      0%,100% { opacity:1; } 50% { opacity:0.3; }
-    }
-    .cert-flip-hint {
-      font-family: var(--mono);
-      font-size: 0.58rem;
-      color: rgba(255,255,255,0.25);
-      letter-spacing: 0.06em;
-    }
-
-    /* BACK */
-    .cert-back {
-      background: white;
-      transform: rotateY(180deg);
-      display: flex;
-      flex-direction: column;
-      padding: 2rem 2.25rem;
-      border: 1px solid var(--rule);
-    }
-    .cert-back-label {
-      font-family: var(--mono);
-      font-size: 0.6rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 0.75rem;
-    }
-    .cert-back-title {
-      font-family: var(--serif);
-      font-size: 1.1rem;
-      color: var(--ink);
-      margin-bottom: 0.75rem;
-      line-height: 1.25;
-    }
-    .cert-back-desc {
-      font-size: 0.82rem;
-      color: var(--mid);
-      line-height: 1.7;
-      flex: 1;
-    }
-    .cert-skills-covered {
-      margin-top: 1rem;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.35rem;
-    }
-    .cert-skill-tag {
-      font-family: var(--mono);
-      font-size: 0.58rem;
-      letter-spacing: 0.06em;
-      padding: 3px 8px;
-      border-radius: 2px;
-      background: var(--paper);
-      color: var(--mid);
-      border: 1px solid var(--rule);
-    }
-    .cert-back-close {
-      margin-top: 1rem;
-      font-family: var(--mono);
-      font-size: 0.6rem;
-      color: rgba(107,100,89,0.4);
-      letter-spacing: 0.06em;
-      align-self: flex-end;
-    }
-
-    /* Wide card spans full width */
-    .cert-card-wide {
-      grid-column: 1 / -1;
-      height: auto;
-      perspective: none;
-    }
-    .cert-card-wide .cert-card-inner {
-      transform-style: flat;
-      transition: none;
-      height: auto;
-    }
-    .cert-card-wide:hover .cert-card-inner {
-      transform: none;
-    }
-    .cert-card-wide .cert-front {
-      position: relative;
-      backface-visibility: visible;
-      -webkit-backface-visibility: visible;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0;
-      height: auto;
-      border-radius: 8px;
-      padding: 0;
-      cursor: default;
-    }
-    .cert-card-wide .cert-front::after { display: none; }
-    .cert-wide-half {
-      padding: 2.25rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
-      position: relative;
-    }
-    .cert-wide-half + .cert-wide-half {
-      border-left: 1px solid rgba(255,255,255,0.06);
-    }
-    .cert-wide-half::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background-image:
-        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
-      background-size: 28px 28px;
-      pointer-events: none;
-    }
-    .cert-wide-ribbon {
-      position: absolute;
-      top: 18px; right: -28px;
-      background: var(--accent);
-      color: white;
-      font-family: var(--mono);
-      font-size: 0.48rem;
-      letter-spacing: 0.15em;
-      padding: 3px 38px;
-      transform: rotate(45deg);
-      font-weight: 700;
-      overflow: hidden;
-    }
-    .cert-wide-half-title {
-      font-family: var(--serif);
-      font-size: 1.25rem;
-      color: white;
-      line-height: 1.2;
-    }
-    .cert-wide-half-title em { font-style:italic; color: var(--accent); }
-    .cert-wide-half-desc {
-      font-size: 0.78rem;
-      color: rgba(255,255,255,0.45);
-      line-height: 1.65;
-      flex: 1;
-    }
-
-    /* ══════════════════════════════
-       SKILLS SECTION
-    ══════════════════════════════ */
-    .skills-section {
-      padding: 5rem 4rem;
-      background: white;
-      border-top: 1px solid var(--rule);
-    }
-    .skills-categories {
-      margin-top: 2.5rem;
-      display: flex;
-      flex-direction: column;
-      gap: 2.5rem;
-    }
-    .skill-category {
-      display: grid;
-      grid-template-columns: 200px 1fr;
+      padding: 0 2.5rem;
+      height: 58px;
       gap: 2rem;
-      align-items: start;
-      padding-bottom: 2.5rem;
-      border-bottom: 1px solid var(--rule);
     }
-    .skill-category:last-child { border-bottom: none; padding-bottom: 0; }
-    .skill-cat-label {
-      font-family: var(--mono);
-      font-size: 0.65rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--accent);
-      padding-top: 4px;
-      display: flex;
-      flex-direction: column;
-      gap: 0.4rem;
+    #td-nav .n-logo {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1rem; font-weight: 700;
+      color: #151515; text-decoration: none;
+      letter-spacing: -0.02em; line-height: 1.15;
     }
-    .skill-cat-count {
-      font-size: 2rem;
-      font-family: var(--serif);
-      color: var(--ink);
-      line-height: 1;
-      letter-spacing: -0.02em;
+    #td-nav .n-logo span { display: block; }
+    #td-nav .n-links {
+      display: flex; gap: 0.35rem; list-style: none;
+      align-items: center; padding: 0; margin: 0;
     }
-    .skill-pills-group {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-      align-items: flex-start;
+    #td-nav .n-links a {
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.9rem; font-weight: 400;
+      color: #151515; text-decoration: none;
+      padding: 0.5rem 0.85rem;
+      border: 1.5px solid #151515; border-radius: 8px;
+      background: #ffffff;
+      box-shadow: rgba(0,0,0,0.15) 3px 3px 0 0;
+      transition: box-shadow 0.12s, transform 0.12s;
+      white-space: nowrap;
     }
-    .skill-pill {
-      font-family: var(--mono);
-      font-size: 0.68rem;
-      letter-spacing: 0.06em;
-      padding: 0.4rem 0.9rem;
-      border-radius: 3px;
-      border: 1px solid var(--rule);
-      color: var(--mid);
-      background: var(--paper);
-      transition: all 0.2s;
-      cursor: default;
+    #td-nav .n-links a:hover { box-shadow: rgba(0,0,0,0.18) 2px 2px 0 0; transform: translate(1px,1px); }
+    #td-nav .n-links a.kw-active { background: #151515; color: #fbbf0e; box-shadow: none; }
+    #td-nav .n-cta { background: #151515 !important; color: #fbbf0e !important; font-weight: 600 !important; }
+    #td-nav .n-cta:hover { background: #2a2a2a !important; }
+    #td-nav .n-ham {
+      display: none; flex-direction: column; gap: 5px;
+      background: none; border: none; cursor: pointer; padding: 4px;
     }
-    .skill-pill:hover,
-    .skill-pill.lit {
-      border-color: var(--accent);
-      color: var(--accent);
-      background: rgba(200,75,47,0.04);
+    #td-nav .n-ham span {
+      display: block; width: 22px; height: 2px;
+      background: #151515; border-radius: 2px; transition: all 0.3s;
     }
-    .skill-pill.core {
-      font-size: 0.78rem;
-      padding: 0.5rem 1.1rem;
-      background: var(--ink);
-      border-color: var(--ink);
-      color: white;
-      font-weight: 500;
+    #td-nav .n-ham.open span:nth-child(1) { transform: rotate(45deg) translate(5px,5px); }
+    #td-nav .n-ham.open span:nth-child(2) { opacity: 0; }
+    #td-nav .n-ham.open span:nth-child(3) { transform: rotate(-45deg) translate(5px,-5px); }
+    #td-drawer {
+      display: none; position: fixed; top: 58px; left: 0; right: 0;
+      background: #fbbf0e; border-bottom: 1.5px solid #151515;
+      padding: 1rem 1.5rem; flex-direction: column; gap: 0.5rem;
+      list-style: none; z-index: 199; margin: 0;
     }
-    .skill-pill.core:hover {
-      background: var(--accent);
-      border-color: var(--accent);
-      color: white;
+    #td-drawer.open { display: flex; }
+    #td-drawer a {
+      font-family: 'Figtree', sans-serif; font-size: 0.9rem; font-weight: 500;
+      color: #151515; text-decoration: none;
+      padding: 0.55rem 0; border-bottom: 1px solid rgba(21,21,21,0.15);
+    }
+    #td-drawer a:last-child { border-bottom: none; }
+
+    /* ── KW PAGE SHELL ── */
+    #view-visual { background: linear-gradient(to bottom, #f3e8ff 0%, #ffffff 60%); min-height: 100vh; }
+    .kw-page {
+      max-width: 1140px; margin: 0 auto;
+      padding: 2.5rem 2rem; display: flex; flex-direction: column; gap: 1.75rem;
     }
 
-    @media(max-width:900px){
-      .certs-section { padding: 3rem 1.5rem; }
-      .certs-grid { grid-template-columns: 1fr; }
-      .cert-card-wrap { height: 300px; }
-      .cert-card-wide .cert-front { grid-template-columns: 1fr; }
-      .cert-wide-half + .cert-wide-half { border-left: none; border-top: 1px solid rgba(255,255,255,0.06); }
-      .skills-section { padding: 3rem 1.5rem; }
-      .skill-category { grid-template-columns: 1fr; gap: 1rem; }
-    }
+    /* ── SHARED COMPONENTS ── */
+    .kw-page-hero { padding: 2.5rem; background: #ffffff; border: 1.5px solid #151515; border-radius: 16px; }
+    .kw-page-eyebrow { font-family: 'Figtree',sans-serif; font-size: 0.7rem; font-weight: 600; color: #888; text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.4rem; }
+    .kw-page-title { font-family: 'Outfit',sans-serif; font-size: clamp(2rem,4vw,3rem); font-weight: 700; color: #151515; margin: 0 0 1rem; letter-spacing: -0.025em; line-height: 1.15; }
+    .kw-page-sub { font-family: 'Figtree',sans-serif; font-size: 0.97rem; line-height: 1.7; color: #444; margin: 0; max-width: 640px; }
+    .kw-footer { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; padding: 1.5rem 0 2.5rem; border-top: 1.5px solid rgba(21,21,21,0.2); margin-top: 0.5rem; }
+    .kw-footer-copy { font-family: 'Figtree',sans-serif; font-size: 0.78rem; color: #888; }
+    .kw-footer-links { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    .kw-footer-link { font-family: 'Figtree',sans-serif; font-size: 0.78rem; font-weight: 500; color: #151515; text-decoration: none; padding: 0.35rem 1rem; border: 1.5px solid #151515; border-radius: 100px; transition: background 0.15s; white-space: nowrap; }
+    .kw-footer-link:hover { background: #fbbf0e; }
+    .kw-footer-credit { font-family: 'Figtree',sans-serif; font-size: 0.72rem; color: #aaa; }
+    .kw-footer-credit-link { color: #888; text-decoration: underline; text-underline-offset: 2px; text-decoration-color: rgba(21,21,21,0.25); transition: color 0.15s; }
+    .kw-footer-credit-link:hover { color: #151515; }
+
+    /* ── CERT PAGE SPECIFIC ── */
+    .kw-certs-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+    .kw-cert-card { background: #fff; border: 1.5px solid #151515; border-radius: 16px; padding: 1.5rem; display: flex; flex-direction: column; gap: 0.75rem; }
+    .kw-cert-header { display: flex; align-items: center; gap: 0.75rem; }
+    .kw-cert-icon { width: 44px; height: 44px; border: 1.5px solid #151515; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; flex-shrink: 0; }
+    .kw-cert-issuer { font-family: 'Figtree',sans-serif; font-size: 0.72rem; font-weight: 600; color: #888; text-transform: uppercase; letter-spacing: 0.06em; }
+    .kw-cert-name { font-family: 'Outfit',sans-serif; font-size: 0.95rem; font-weight: 700; color: #151515; margin: 0; letter-spacing: -0.01em; }
+    .kw-cert-desc { font-family: 'Figtree',sans-serif; font-size: 0.8rem; color: #666; line-height: 1.55; flex: 1; }
+    .kw-cert-skills { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+    .kw-cert-skill { display: inline-flex; align-items: center; font-family: 'Figtree',sans-serif; font-size: 0.7rem; font-weight: 600; padding: 0.25rem 0.65rem; border: 1px solid #151515; border-radius: 4px; line-height: 1; white-space: nowrap; }
+    @media(max-width:900px) { .kw-certs-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media(max-width:600px) { .kw-certs-grid { grid-template-columns: 1fr; } .kw-page { padding: 1.25rem 1rem; gap: 1.25rem; } .kw-page-hero { padding: 1.5rem; } }
   </style>
 </head>
 <body>
+
+<div id="view-switcher">
+  <button class="vsw-btn vsw-active" id="btn-editorial">Editorial</button>
+  <button class="vsw-btn" id="btn-visual">Visual</button>
+</div>
+
+<nav id="td-nav">
+  <a href="../index.html" class="n-logo">AT<span>.</span></a>
+  <ul class="n-links">
+    <li><a href="work.html?view=visual">Work</a></li>
+    <li><a href="about.html?view=visual">About</a></li>
+    <li><a href="certifications.html?view=visual" class="kw-active">Certifications</a></li>
+    <li><a href="../id-frameworks.html?view=visual">ID Cheat Sheet</a></li>
+    <li><a href="articles.html?view=visual">Articles</a></li>
+    <li><a href="../tools/id-model-selector.html" target="_blank" rel="noopener" class="n-cta">ID Model Selector ↗</a></li>
+    <li><a href="contact.html?view=visual" class="n-cta">Let's Talk</a></li>
+  </ul>
+  <button class="n-ham" id="td-ham" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<ul id="td-drawer">
+  <li><a href="work.html?view=visual">Work</a></li>
+  <li><a href="about.html?view=visual">About</a></li>
+  <li><a href="certifications.html?view=visual">Certifications</a></li>
+  <li><a href="../id-frameworks.html?view=visual">ID Cheat Sheet</a></li>
+  <li><a href="articles.html?view=visual">Articles</a></li>
+  <li><a href="../tools/id-model-selector.html" target="_blank" rel="noopener">ID Model Selector ↗</a></li>
+  <li><a href="contact.html?view=visual">Let's Talk</a></li>
+</ul>
+
+<div id="view-editorial" class="view-active">
 
 <nav>
   <a href="../index.html" class="nav-logo">AT<span>.</span></a>
@@ -414,269 +199,18 @@
   <ul class="nav-links">
     <li><a href="work.html">Work</a></li>
     <li><a href="about.html">About</a></li>
-<li><a href="certifications.html" class="active">Certifications</a></li>
-<li><a href="../game/index.html">Spot the Bug</a></li>
-<li><a href="../tools/id-model-selector.html" target="_blank" rel="noopener" class="nav-cta nav-tool">ID Model Selector ↗</a></li>    <li><a href="contact.html" class="nav-cta">Let's Talk</a></li>
+    <li><a href="certifications.html" class="active">Certifications</a></li>
+    <li><a href="../game/index.html">Spot the Bug</a></li>
+    <li><a href="../tools/id-model-selector.html" target="_blank" rel="noopener" class="nav-cta nav-tool">ID Model Selector ↗</a></li>
+    <li><a href="contact.html" class="nav-cta">Let's Talk</a></li>
   </ul>
 </nav>
 
 <div class="page-hero">
-  <div class="section-label">Credentials</div>
-  <h1>Certifications &<br>Expertise</h1>
-  <p>Formally verified skills backed by 15+ years of hands-on practice in learning design and technology.</p>
-  <p class="certs-hero-note">Hover each card to see the skills covered →</p>
-</div>
-
-<!-- CERTIFICATIONS -->
-<section class="certs-section reveal">
   <div class="section-label">Certifications</div>
-
-  <div class="certs-grid">
-
-    <!-- CARD 1: TechSmith Camtasia -->
-    <div class="cert-card-wrap reveal" onclick="this.classList.toggle('flipped')" tabindex="0" onkeydown="if(event.key==='Enter')this.classList.toggle('flipped')" aria-label="TechSmith Camtasia Explorer Certified — click to see details">
-      <div class="cert-card-inner">
-        <div class="cert-front">
-          <div class="cert-issuer-row">
-            <div class="cert-logo-box" style="background:rgba(0,168,189,0.15);">🎬</div>
-            <div class="cert-issuer-name">TechSmith</div>
-          </div>
-          <div class="cert-front-title">Camtasia Explorer<br><em>Certified</em></div>
-          <div class="cert-front-bottom">
-            <span class="cert-verified-pill">
-              <span class="cert-verified-dot"></span>
-              Verified
-            </span>
-            <span class="cert-flip-hint">Hover for details →</span>
-          </div>
-        </div>
-        <div class="cert-back">
-          <div class="cert-back-label">TechSmith · Camtasia</div>
-          <div class="cert-back-title">Camtasia Explorer Certified</div>
-          <p class="cert-back-desc">Formal certification covering Camtasia's full production workflow — screen recording, multi-track timeline editing, interactive elements, annotations, captions, and export pipelines for eLearning and training video contexts.</p>
-          <div class="cert-skills-covered">
-            <span class="cert-skill-tag">Screen Recording</span>
-            <span class="cert-skill-tag">Multi-track Editing</span>
-            <span class="cert-skill-tag">Captions & Subtitles</span>
-            <span class="cert-skill-tag">Interactive Elements</span>
-            <span class="cert-skill-tag">eLearning Export</span>
-            <span class="cert-skill-tag">Video Production</span>
-          </div>
-          <span class="cert-back-close">↩ Hover to flip back</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- CARD 2: Articulate Storyline -->
-    <div class="cert-card-wrap reveal" onclick="this.classList.toggle('flipped')" tabindex="0" onkeydown="if(event.key==='Enter')this.classList.toggle('flipped')" aria-label="Articulate Storyline Certified — click to see details">
-      <div class="cert-card-inner">
-        <div class="cert-front">
-          <div class="cert-issuer-row">
-            <div class="cert-logo-box" style="background:rgba(228,77,38,0.15);">⚡</div>
-            <div class="cert-issuer-name">Articulate</div>
-          </div>
-          <div class="cert-front-title">Articulate Storyline<br><em>Certified</em></div>
-          <div class="cert-front-bottom">
-            <span class="cert-verified-pill">
-              <span class="cert-verified-dot"></span>
-              Verified
-            </span>
-            <span class="cert-flip-hint">Hover for details →</span>
-          </div>
-        </div>
-        <div class="cert-back">
-          <div class="cert-back-label">Articulate · Storyline 360</div>
-          <div class="cert-back-title">Articulate Storyline Certified</div>
-          <p class="cert-back-desc">Certified in Storyline 360 — the industry standard authoring tool. Advanced use extends well beyond the certification: JavaScript integration, REST API connections, custom focus order, xAPI statement design, and reusable template architecture.</p>
-          <div class="cert-skills-covered">
-            <span class="cert-skill-tag">Storyline 360</span>
-            <span class="cert-skill-tag">JavaScript Integration</span>
-            <span class="cert-skill-tag">Custom Interactions</span>
-            <span class="cert-skill-tag">Branching Logic</span>
-            <span class="cert-skill-tag">xAPI / SCORM</span>
-            <span class="cert-skill-tag">Accessibility</span>
-          </div>
-          <span class="cert-back-close">↩ Hover to flip back</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- WIDE CARD: LinkedIn Learning (2 certs) -->
-    <div class="cert-card-wrap cert-card-wide reveal">
-      <div class="cert-card-inner">
-        <div class="cert-front">
-          <div class="cert-wide-half" style="overflow:hidden;">
-            <div style="position:relative;z-index:1;">
-              <div class="cert-issuer-row" style="margin-bottom:0.75rem;">
-                <div class="cert-logo-box" style="background:rgba(0,119,181,0.15);">🎓</div>
-                <div class="cert-issuer-name">LinkedIn Learning</div>
-              </div>
-              <div class="cert-wide-half-title">Certified<br><em>L&D Professional</em></div>
-              <p class="cert-wide-half-desc">Learning & Development strategy, needs analysis, training design, programme evaluation, and stakeholder management across enterprise L&D functions.</p>
-              <span class="cert-verified-pill" style="margin-top:0.5rem;">
-                <span class="cert-verified-dot"></span>
-                Verified
-              </span>
-            </div>
-            <div class="cert-wide-ribbon">CERTIFIED</div>
-          </div>
-          <div class="cert-wide-half" style="overflow:hidden;">
-            <div style="position:relative;z-index:1;">
-              <div class="cert-issuer-row" style="margin-bottom:0.75rem;">
-                <div class="cert-logo-box" style="background:rgba(0,119,181,0.15);">📐</div>
-                <div class="cert-issuer-name">LinkedIn Learning</div>
-              </div>
-              <div class="cert-wide-half-title">Certified Instructional<br><em>Developer</em></div>
-              <p class="cert-wide-half-desc">Instructional design principles, adult learning theory, content sequencing, assessment design, and multimedia development for diverse learning contexts.</p>
-              <span class="cert-verified-pill" style="margin-top:0.5rem;">
-                <span class="cert-verified-dot"></span>
-                Verified
-              </span>
-            </div>
-            <div class="cert-wide-ribbon">CERTIFIED</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- WIDE CARD: AMA certs -->
-    <div class="cert-card-wrap cert-card-wide reveal">
-      <div class="cert-card-inner">
-        <div class="cert-front">
-          <div class="cert-wide-half" style="overflow:hidden;">
-            <div style="position:relative;z-index:1;">
-              <div class="cert-issuer-row" style="margin-bottom:0.75rem;">
-                <div class="cert-logo-box" style="background:rgba(200,75,47,0.15);">🎤</div>
-                <div class="cert-issuer-name">AMA · Ahmedabad</div>
-              </div>
-              <div class="cert-wide-half-title">Certified<br><em>Train The Trainer</em></div>
-              <p class="cert-wide-half-desc">Facilitation techniques, learner engagement, classroom management, and designing training delivery for varied audiences and contexts.</p>
-              <span class="cert-verified-pill" style="margin-top:0.5rem;">
-                <span class="cert-verified-dot"></span>
-                Verified
-              </span>
-            </div>
-            <div class="cert-wide-ribbon">CERTIFIED</div>
-          </div>
-          <div class="cert-wide-half" style="overflow:hidden;">
-            <div style="position:relative;z-index:1;">
-              <div class="cert-issuer-row" style="margin-bottom:0.75rem;">
-                <div class="cert-logo-box" style="background:rgba(200,75,47,0.15);">🗣️</div>
-                <div class="cert-issuer-name">AMA · Ahmedabad</div>
-              </div>
-              <div class="cert-wide-half-title">Effective<br><em>Public Speaker</em></div>
-              <p class="cert-wide-half-desc">Structured delivery, vocal presence, audience reading, and confidence under pressure — applied directly in Community of Practice facilitation and stakeholder presentations.</p>
-              <span class="cert-verified-pill" style="margin-top:0.5rem;">
-                <span class="cert-verified-dot"></span>
-                Verified
-              </span>
-            </div>
-            <div class="cert-wide-ribbon">CERTIFIED</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-  </div>
-</section>
-
-<!-- SKILLS -->
-<section class="skills-section reveal">
-  <div class="section-label">Full Skills Profile</div>
-  <h2 class="section-heading" style="margin-bottom:0.5rem;">Tools & Technologies</h2>
-  <p style="font-size:0.9rem;color:var(--mid);max-width:52ch;line-height:1.7;">Organised by practice area. Core tools shown in dark — these are daily-use, deep-expertise skills.</p>
-
-  <div class="skills-categories">
-
-    <div class="skill-category reveal">
-      <div class="skill-cat-label">
-        <span class="skill-cat-count">01</span>
-        Authoring &<br>Production
-      </div>
-      <div class="skill-pills-group" data-cat="authoring">
-        <span class="skill-pill core">Articulate Storyline 360</span>
-        <span class="skill-pill core">Articulate Rise 360</span>
-        <span class="skill-pill core">Camtasia</span>
-        <span class="skill-pill">Adobe Captivate</span>
-        <span class="skill-pill">PowerPoint</span>
-        <span class="skill-pill">Multimedia Production</span>
-        <span class="skill-pill">Storyboarding</span>
-      </div>
-    </div>
-
-    <div class="skill-category reveal">
-      <div class="skill-cat-label">
-        <span class="skill-cat-count">02</span>
-        Development &<br>Integration
-      </div>
-      <div class="skill-pills-group" data-cat="dev">
-        <span class="skill-pill core">JavaScript</span>
-        <span class="skill-pill core">REST API Integration</span>
-        <span class="skill-pill core">xAPI / Tin Can</span>
-        <span class="skill-pill core">SCORM</span>
-        <span class="skill-pill">HTML5</span>
-        <span class="skill-pill">Shell Scripting</span>
-        <span class="skill-pill">FFmpeg</span>
-        <span class="skill-pill">Template Architecture</span>
-      </div>
-    </div>
-
-    <div class="skill-category reveal">
-      <div class="skill-cat-label">
-        <span class="skill-cat-count">03</span>
-        AI &<br>Automation
-      </div>
-      <div class="skill-pills-group" data-cat="ai">
-        <span class="skill-pill core">Murf AI</span>
-        <span class="skill-pill core">GPT Workflows</span>
-        <span class="skill-pill">Synthesia</span>
-        <span class="skill-pill">HeyGen</span>
-        <span class="skill-pill">Custom GPT Bots</span>
-        <span class="skill-pill">Video Localization</span>
-        <span class="skill-pill">Workflow Automation</span>
-      </div>
-    </div>
-
-    <div class="skill-category reveal">
-      <div class="skill-cat-label">
-        <span class="skill-cat-count">04</span>
-        LMS &<br>Analytics
-      </div>
-      <div class="skill-pills-group" data-cat="lms">
-        <span class="skill-pill core">Enterprise LMS</span>
-        <span class="skill-pill core">LMS Administration</span>
-        <span class="skill-pill">Zing HR LMS</span>
-        <span class="skill-pill">ABARA LMS</span>
-        <span class="skill-pill">Learning Analytics</span>
-        <span class="skill-pill">xAPI LRS</span>
-      </div>
-    </div>
-
-    <div class="skill-category reveal">
-      <div class="skill-cat-label">
-        <span class="skill-cat-count">05</span>
-        Instructional<br>Design
-      </div>
-      <div class="skill-pills-group" data-cat="id">
-        <span class="skill-pill core">Instructional Design</span>
-        <span class="skill-pill core">Accessibility (WCAG 2.1)</span>
-        <span class="skill-pill">ADDIE · SAM</span>
-        <span class="skill-pill">Bloom's Taxonomy</span>
-        <span class="skill-pill">Gagné's 9 Events</span>
-        <span class="skill-pill">Kirkpatrick Model</span>
-        <span class="skill-pill">4C/ID · Merrill</span>
-        <span class="skill-pill">Subtitling & Captions</span>
-        <span class="skill-pill">Project Coordination</span>
-      </div>
-    </div>
-
-  </div>
-</section>
-
-<section class="cta-strip reveal">
-  <h2>Want to see these skills <em>in action?</em></h2>
-  <a href="work.html" class="btn-light">View Case Studies →</a>
-</section>
+  <h1>Certifications &amp; Expertise</h1>
+  <p>Formally verified skills backed by 15+ years of hands-on practice in learning design and technology.</p>
+</div>
 
 <footer>
   <div class="footer-name">© 2026 Abhishek Trivedi · Learning Experience Technologist</div>
@@ -688,73 +222,166 @@
 </footer>
 
 <script src="../js/main.js"></script>
-<script>
-// Skill pill hover — light up whole category on hover
-document.querySelectorAll('.skill-pill').forEach(pill => {
-  pill.addEventListener('mouseenter', () => {
-    const group = pill.closest('.skill-pills-group');
-    group.querySelectorAll('.skill-pill').forEach(p => p.classList.add('lit'));
-  });
-  pill.addEventListener('mouseleave', () => {
-    const group = pill.closest('.skill-pills-group');
-    group.querySelectorAll('.skill-pill').forEach(p => p.classList.remove('lit'));
-  });
-});
-</script>
 
-<!-- ── PORTFOLIO PROTECTION ── -->
+</div>
+
+<div id="view-visual">
+  <div class="kw-page">
+    <div class="kw-page-hero">
+      <div class="kw-page-eyebrow">Certifications</div>
+      <h1 class="kw-page-title">Certifications & Expertise</h1>
+      <p class="kw-page-sub">Formally verified skills backed by 15+ years of hands-on practice in learning design and technology.</p>
+    </div>
+
+    <div class="kw-certs-grid">
+      <div class="kw-cert-card" style="border-top: 4px solid #17a697;">
+        <div class="kw-cert-header">
+          <div class="kw-cert-icon" style="background: #e8f5f2;">🎬</div>
+          <div>
+            <div class="kw-cert-issuer">TechSmith</div>
+            <p class="kw-cert-name">Camtasia Explorer</p>
+          </div>
+        </div>
+        <p class="kw-cert-desc">Professional video editor with expertise in screen recording, multi-track editing, captions, and interactive overlays.</p>
+        <div class="kw-cert-skills">
+          <span class="kw-cert-skill">Screen Recording</span>
+          <span class="kw-cert-skill">Video Editing</span>
+          <span class="kw-cert-skill">Captions</span>
+        </div>
+      </div>
+
+      <div class="kw-cert-card" style="border-top: 4px solid #ff9500;">
+        <div class="kw-cert-header">
+          <div class="kw-cert-icon" style="background: #fff3e0;">⚡</div>
+          <div>
+            <div class="kw-cert-issuer">Articulate</div>
+            <p class="kw-cert-name">Storyline Certified</p>
+          </div>
+        </div>
+        <p class="kw-cert-desc">Expert in Storyline 360 with advanced JavaScript integration, xAPI/SCORM implementation, and complex branching logic.</p>
+        <div class="kw-cert-skills">
+          <span class="kw-cert-skill">Storyline 360</span>
+          <span class="kw-cert-skill">JavaScript</span>
+          <span class="kw-cert-skill">xAPI</span>
+        </div>
+      </div>
+
+      <div class="kw-cert-card" style="border-top: 4px solid #1e88e5;">
+        <div class="kw-cert-header">
+          <div class="kw-cert-icon" style="background: #e3f2fd;">📚</div>
+          <div>
+            <div class="kw-cert-issuer">LinkedIn Learning</div>
+            <p class="kw-cert-name">eLearning Authoring</p>
+          </div>
+        </div>
+        <p class="kw-cert-desc">Comprehensive knowledge of eLearning authoring best practices, course design, and learning technology fundamentals.</p>
+        <div class="kw-cert-skills">
+          <span class="kw-cert-skill">Course Design</span>
+          <span class="kw-cert-skill">Authoring</span>
+          <span class="kw-cert-skill">LMS</span>
+        </div>
+      </div>
+
+      <div class="kw-cert-card" style="border-top: 4px solid #1e88e5;">
+        <div class="kw-cert-header">
+          <div class="kw-cert-icon" style="background: #e3f2fd;">📊</div>
+          <div>
+            <div class="kw-cert-issuer">LinkedIn Learning</div>
+            <p class="kw-cert-name">ID Foundations</p>
+          </div>
+        </div>
+        <p class="kw-cert-desc">Core competencies in instructional design principles, learning theory, and systematic ID processes.</p>
+        <div class="kw-cert-skills">
+          <span class="kw-cert-skill">ADDIE</span>
+          <span class="kw-cert-skill">Learning Theory</span>
+          <span class="kw-cert-skill">ID Models</span>
+        </div>
+      </div>
+
+      <div class="kw-cert-card" style="border-top: 4px solid #fbbf0e;">
+        <div class="kw-cert-header">
+          <div class="kw-cert-icon" style="background: #fff9e6;">🎓</div>
+          <div>
+            <div class="kw-cert-issuer">AMA Ahmedabad</div>
+            <p class="kw-cert-name">Management & Leadership</p>
+          </div>
+        </div>
+        <p class="kw-cert-desc">Professional competencies in organizational management, team leadership, strategic planning, and business acumen.</p>
+        <div class="kw-cert-skills">
+          <span class="kw-cert-skill">Leadership</span>
+          <span class="kw-cert-skill">Strategy</span>
+          <span class="kw-cert-skill">Management</span>
+        </div>
+      </div>
+
+      <div class="kw-cert-card" style="border-top: 4px solid #fbbf0e;">
+        <div class="kw-cert-header">
+          <div class="kw-cert-icon" style="background: #fff9e6;">🎯</div>
+          <div>
+            <div class="kw-cert-issuer">AMA Ahmedabad</div>
+            <p class="kw-cert-name">Business Communication</p>
+          </div>
+        </div>
+        <p class="kw-cert-desc">Advanced communication skills for professional contexts including presentations, writing, and stakeholder engagement.</p>
+        <div class="kw-cert-skills">
+          <span class="kw-cert-skill">Communication</span>
+          <span class="kw-cert-skill">Presentations</span>
+          <span class="kw-cert-skill">Writing</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="kw-footer">
+      <div class="kw-footer-copy">© 2026 Abhishek Trivedi · Learning Experience Technologist</div>
+      <span class="kw-footer-credit">Visual design inspired by <a href="https://kawe.ski" target="_blank" rel="noopener" class="kw-footer-credit-link">kawe.ski ↗</a></span>
+      <div class="kw-footer-links">
+        <a href="https://www.linkedin.com/in/trivedi-abhishek/" target="_blank" class="kw-footer-link">LinkedIn</a>
+        <a href="contact.html?view=visual" class="kw-footer-link">Contact</a>
+        <a href="../index.html" class="kw-footer-link">Home</a>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
+// ── VIEW SWITCH ──
+let currentView = 'editorial';
+function switchView(view) {
+  if (view === currentView) return;
+  currentView = view;
+  document.getElementById('view-editorial').classList.toggle('view-active', view === 'editorial');
+  document.getElementById('view-visual').classList.toggle('view-active', view === 'visual');
+  document.getElementById('td-nav').style.display = view === 'visual' ? 'flex' : 'none';
+  document.getElementById('btn-editorial').classList.toggle('vsw-active', view === 'editorial');
+  document.getElementById('btn-visual').classList.toggle('vsw-active', view === 'visual');
+  const url = view === 'visual' ? '?view=visual' : window.location.pathname;
+  history.pushState({ view }, '', url);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
 (function() {
-  'use strict';
-  document.addEventListener('contextmenu', function(e) { e.preventDefault(); showWarning(); return false; });
-  document.addEventListener('keydown', function(e) {
-    const key = e.key ? e.key.toLowerCase() : '';
-    const ctrl = e.ctrlKey || e.metaKey;
-    if (ctrl && ['u','s','a','p'].includes(key)) { e.preventDefault(); showWarning(); return false; }
-    if (ctrl && e.shiftKey && ['i','j','c','k'].includes(key)) { e.preventDefault(); showWarning(); return false; }
-    if (e.key === 'F12') { e.preventDefault(); showWarning(); return false; }
-    if (ctrl && e.shiftKey && e.key === 'Delete') { e.preventDefault(); return false; }
-  });
-  document.addEventListener('selectstart', function(e) {
-    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
-    e.preventDefault(); return false;
-  });
-  document.addEventListener('dragstart', function(e) {
-    if (e.target.classList && e.target.classList.contains('drag-item')) return;
-    e.preventDefault(); return false;
-  });
-  var devtoolsOpen = false;
-  function checkDevTools() {
-    var w = window.outerWidth  - window.innerWidth  > 160;
-    var h = window.outerHeight - window.innerHeight > 160;
-    if ((w || h) && !devtoolsOpen) { devtoolsOpen = true; showDevToolsWarning(); }
-    else if (!w && !h) devtoolsOpen = false;
-  }
-  setInterval(checkDevTools, 1000);
-  function showWarning() {
-    if (document.getElementById('_pt_toast')) return;
-    var t = document.createElement('div');
-    t.id = '_pt_toast';
-    t.innerHTML = '\uD83D\uDD12 &nbsp;This portfolio is protected. Please respect the author\'s work.';
-    t.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#0f0e0c;color:#f5f2eb;padding:12px 22px;border-radius:8px;font-family:sans-serif;font-size:13px;border:1px solid rgba(200,75,47,0.5);border-left:3px solid #c84b2f;z-index:999999;box-shadow:0 4px 24px rgba(0,0,0,0.4);pointer-events:none;white-space:nowrap';
-    document.body.appendChild(t);
-    setTimeout(function() { if (t.parentNode) t.parentNode.removeChild(t); }, 3000);
-  }
-  function showDevToolsWarning() {
-    if (document.getElementById('_pt_devtools')) return;
-    var b = document.createElement('div');
-    b.id = '_pt_devtools';
-    b.innerHTML = '<strong style="color:#c84b2f">Hey there, developer \uD83D\uDC4B</strong> This portfolio was built by <strong>Abhishek Trivedi</strong>. If you\'re curious about how it works, just reach out at <a href="https://abhishektrivedi.com/pages/contact.html" style="color:#c9973a">abhishektrivedi.com</a> — happy to chat.';
-    b.style.cssText = 'position:fixed;top:0;left:0;right:0;background:#0a1628;color:#f5f2eb;padding:14px 24px;font-family:sans-serif;font-size:13px;line-height:1.6;border-bottom:2px solid #c84b2f;z-index:999999;text-align:center;box-shadow:0 2px 12px rgba(0,0,0,0.5)';
-    document.body.appendChild(b);
-  }
-  var s = 'color:#c84b2f;font-size:18px;font-weight:bold;padding:8px 0;border-bottom:2px solid #c84b2f';
-  console.log('%c\u00A9 Abhishek Trivedi \u2014 Learning Experience Technologist', s);
-  console.log('%chttps://abhishektrivedi.com | All rights reserved.', 'color:#6b6459;font-size:12px;');
-  console.log('%cIf you\'re inspecting this to learn \u2014 great! Just don\'t copy. Reach out instead.', 'color:#c9973a;font-size:12px;font-style:italic;');
+  const params = new URLSearchParams(window.location.search);
+  const initView = params.get('view') === 'visual' ? 'visual' : 'editorial';
+  document.getElementById('view-' + initView).classList.add('view-active');
+  currentView = initView;
+  document.getElementById('btn-' + initView).classList.add('vsw-active');
+  if (initView === 'visual') document.getElementById('td-nav').style.display = 'flex';
 })();
+window.addEventListener('popstate', (e) => {
+  switchView((e.state && e.state.view) || 'editorial');
+});
+// ── MOBILE NAV HAMBURGER ──
+const ham = document.getElementById('td-ham');
+const drawer = document.getElementById('td-drawer');
+if (ham && drawer) {
+  ham.addEventListener('click', () => {
+    ham.classList.toggle('open');
+    drawer.classList.toggle('open');
+  });
+}
+// ── VIEW SWITCHER BUTTONS ──
+document.getElementById('btn-editorial').addEventListener('click', () => switchView('editorial'));
+document.getElementById('btn-visual').addEventListener('click', () => switchView('visual'));
 </script>
-<!-- ── END PROTECTION ── -->
 
 </body>
 </html>
