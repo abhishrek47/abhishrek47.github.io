@@ -57,7 +57,8 @@ nav {
   text-decoration: none;
   transition: color 0.2s;
 }
-.nav-links a:hover, .nav-links a.active { color: var(--accent); }
+.nav-links a:hover { color: var(--accent); }
+.nav-links a.active { background: #1a1a18; color: #f5f0e8 !important; padding: 0.2em 0.7em; border-radius: 4px; }
 .nav-cta {
   background: var(--accent) !important;
   color: white !important;
