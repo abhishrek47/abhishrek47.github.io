@@ -26,6 +26,363 @@
   <link rel="stylesheet" href="../css/style.css" />
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <style>
+    /* ── EDITORIAL SOURCE CSS ── */
+
+  /* ── RESET & BASE ── */
+  body { background: var(--paper); color: var(--ink); }
+
+  /* ── NAV override for dark bg ── */
+  
+
+  /* ── HERO ── */
+  .ab-hero {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 7rem 2.5rem 5rem;
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+  }
+  .ab-eyebrow {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .ab-eyebrow::before {
+    content: '';
+    display: inline-block;
+    width: 24px; height: 1px;
+    background: var(--accent);
+  }
+  .ab-hero h1 {
+    font-family: var(--serif);
+    font-size: clamp(2.8rem, 6vw, 4.8rem);
+    line-height: 1.1;
+    font-weight: 400;
+    color: var(--ink);
+    margin: 0 0 1.75rem;
+    letter-spacing: -0.02em;
+  }
+  .ab-hero h1 em { font-style: italic; color: var(--accent); }
+  .ab-hero-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: start;
+  }
+  .ab-intro {
+    font-size: 1.02rem;
+    line-height: 1.75;
+    color: #3d3d3a;
+  }
+  .ab-intro strong { color: var(--ink); font-weight: 600; }
+  .ab-intro p + p { margin-top: 1rem; }
+  .ab-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  .ab-location {
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    color: #595955;
+    text-transform: uppercase;
+  }
+  .ab-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    border-left: 2px solid rgba(200,75,47,0.4);
+    padding-left: 1.25rem;
+  }
+  .ab-stat-item { display: flex; flex-direction: column; gap: 0.15rem; }
+  .ab-stat-num {
+    font-family: var(--serif);
+    font-size: 1.9rem;
+    color: var(--ink);
+    line-height: 1;
+    font-style: italic;
+  }
+  .ab-stat-label {
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #595955;
+  }
+  .ab-available {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(61,186,110,0.08);
+    border: 1px solid rgba(61,186,110,0.25);
+    border-radius: 100px;
+    padding: 0.4rem 0.9rem;
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #3dba6e;
+    width: fit-content;
+  }
+  .ab-available-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: #3dba6e;
+    animation: abPulse 2s infinite;
+  }
+  @keyframes abPulse {
+    0%,100%{ box-shadow: 0 0 0 0 rgba(61,186,110,0.4); }
+    50%    { box-shadow: 0 0 0 5px rgba(61,186,110,0); }
+  }
+
+  /* ── CAPABILITIES ── */
+  .ab-section {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 4.5rem 2.5rem;
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+  }
+  .ab-section-label {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #595955;
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .ab-section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: rgba(0,0,0,0.08);
+  }
+  .ab-cap-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    border: 1px solid rgba(0,0,0,0.08);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .ab-cap-item {
+    padding: 1.5rem 1.75rem;
+    border-right: 1px solid rgba(0,0,0,0.08);
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+    transition: background 0.2s;
+  }
+  .ab-cap-item:hover { background: rgba(0,0,0,0.02); }
+  .ab-cap-item:nth-child(2n) { border-right: none; }
+  .ab-cap-item:nth-last-child(-n+2) { border-bottom: none; }
+  .ab-cap-num {
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    margin-bottom: 0.5rem;
+  }
+  .ab-cap-title {
+    font-family: var(--serif);
+    font-size: 1.05rem;
+    color: var(--ink, #1a1a18);
+    margin-bottom: 0.5rem;
+    line-height: 1.2;
+  }
+  .ab-cap-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+    margin-top: 0.65rem;
+  }
+  .ab-cap-tag {
+    font-family: var(--mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.04em;
+    color: #4a4a46;
+    background: rgba(0,0,0,0.05);
+    border: 1px solid rgba(0,0,0,0.09);
+    border-radius: 3px;
+    padding: 0.15rem 0.45rem;
+  }
+
+  /* ── NARRATIVE (journey + approach merged) ── */
+  .ab-narrative {
+    font-size: 1rem;
+    line-height: 1.82;
+    color: #3d3d3a;
+    max-width: 640px;
+  }
+  .ab-narrative strong { color: var(--ink, #1a1a18); font-weight: 600; }
+  .ab-narrative p + p { margin-top: 1.25rem; }
+  .ab-pull {
+    font-family: var(--serif);
+    font-size: 1.55rem;
+    font-style: italic;
+    color: var(--ink);
+    line-height: 1.4;
+    border-left: 3px solid var(--accent);
+    padding-left: 1.5rem;
+    margin: 2.5rem 0;
+    max-width: 560px;
+  }
+
+  /* ── CV COMPARISON ── */
+  .ab-cv {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 4.5rem 2.5rem;
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+  }
+  .cv-table {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid rgba(0,0,0,0.08);
+    border-radius: 6px;
+    overflow: hidden;
+    margin-top: 2rem;
+  }
+  .cv-row {
+    display: grid;
+    grid-template-columns: 140px 1fr 1fr;
+    border-bottom: 1px solid rgba(0,0,0,0.07);
+    transition: background 0.2s;
+  }
+  .cv-row:last-child { border-bottom: none; }
+  .cv-row:not(.cv-row-head):hover { background: rgba(0,0,0,0.02); }
+  .cv-row-head { background: #161410; }
+  .cv-row-kicker { background: rgba(200,75,47,0.04); }
+  .cv-row-kicker:hover { background: rgba(200,75,47,0.08) !important; }
+  .cv-col { padding: 0.9rem 1.1rem; display: flex; align-items: center; }
+  .cv-col-label {
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #595955;
+    border-right: 1px solid rgba(0,0,0,0.07);
+  }
+  .cv-col-generic { border-right: 1px solid rgba(0,0,0,0.07); }
+  .cv-col-badge {
+    font-family: var(--mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.2rem 0.65rem;
+    border-radius: 100px;
+  }
+  .cv-col-badge.generic {
+    background: rgba(255,255,255,0.1);
+    color: rgba(255,255,255,0.65);
+    border: 1px solid rgba(255,255,255,0.2);
+  }
+  .cv-col-badge.real {
+    background: rgba(255,255,255,0.12);
+    color: #ff9070;
+    border: 1px solid rgba(255,150,120,0.4);
+    font-weight: 700;
+  }
+  .cv-chip { font-size: 0.8rem; line-height: 1.5; display: block; }
+  .cv-chip.dim  { color: #595955; font-style: italic; }
+  .cv-chip.bright { color: rgba(0,0,0,0.85); }
+  .reveal-row {
+    opacity: 0; transform: translateY(10px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+  }
+  .reveal-row.visible { opacity: 1; transform: none; }
+
+  /* ── AVAILABLE / CTA ── */
+  .ab-cta {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 4.5rem 2.5rem 6rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: start;
+  }
+  .ab-cta-left h2 {
+    font-family: var(--serif);
+    font-size: clamp(1.8rem, 3vw, 2.4rem);
+    line-height: 1.15;
+    color: var(--ink);
+    margin-bottom: 1rem;
+  }
+  .ab-cta-left h2 em { font-style: italic; color: var(--accent); }
+  .ab-cta-left p {
+    font-size: 0.92rem;
+    line-height: 1.7;
+    color: #4a4a46;
+    margin-bottom: 1.75rem;
+  }
+  .ab-cta-right {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    padding-top: 0.5rem;
+  }
+  .ab-role-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.88rem;
+    color: #3d3d3a;
+    padding: 0.65rem 0;
+    border-bottom: 1px solid rgba(0,0,0,0.07);
+  }
+  .ab-role-item:last-child { border-bottom: none; }
+  .ab-role-item::before {
+    content: '→';
+    color: var(--accent);
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    flex-shrink: 0;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--rule, rgba(0,0,0,0.08));
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 720px) {
+    .ab-hero-body { grid-template-columns: 1fr; gap: 2rem; }
+    .ab-cap-grid  { grid-template-columns: 1fr; }
+    .ab-cap-item  { border-right: none; }
+    .ab-cap-item:nth-last-child(-n+2) { border-bottom: 1px solid rgba(0,0,0,0.08); }
+    .ab-cap-item:last-child { border-bottom: none; }
+
+    /* Comparison table — mobile card layout */
+    .cv-row-head  { display: grid; grid-template-columns: 1fr 1fr; }
+    .cv-row-head .cv-col-label { display: none; }
+    .cv-row       { display: grid; grid-template-columns: 1fr 1fr; align-items: start; }
+    .cv-col       { padding: 0.75rem 0.85rem; }
+    .cv-col-label {
+      grid-column: 1 / -1;
+      border-right: none;
+      border-bottom: 1px solid rgba(0,0,0,0.07);
+      background: rgba(0,0,0,0.02);
+      font-size: 0.62rem;
+    }
+    .cv-col-generic { border-right: 1px solid rgba(0,0,0,0.07); }
+    .cv-chip { font-size: 0.75rem; }
+
+    .ab-cta       { grid-template-columns: 1fr; gap: 2rem; }
+    .ab-hero, .ab-section, .ab-cv, .ab-cta { padding-left: 1.5rem; padding-right: 1.5rem; }
+  }
+
+  /* Reveal animation */
+  .reveal { opacity:0; transform:translateY(14px); transition: opacity 0.5s ease, transform 0.5s ease; }
+  .reveal.visible { opacity:1; transform:none; }
+  
+
     /* ── VIEW SYSTEM ── */
     #view-editorial, #view-visual { display: none; }
     #view-editorial.view-active, #view-visual.view-active { display: block; }
@@ -217,39 +574,681 @@
 
 <div id="view-editorial" class="view-active">
 
+<!-- NAV -->
 <nav>
   <a href="../index.html" class="nav-logo">AT<span>.</span></a>
   <button class="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
   <ul class="nav-links">
     <li><a href="work.html">Work</a></li>
-    <li><a href="about.html" class="active">About</a></li>
-    <li><a href="certifications.html">Certifications</a></li>
-    <li><a href="../game/index.html">Spot the Bug</a></li>
-    <li><a href="../tools/id-model-selector.html" target="_blank" rel="noopener" class="nav-cta nav-tool">ID Model Selector ↗</a></li>
-    <li><a href="contact.html" class="nav-cta">Let's Talk</a></li>
+    <li><a href="about.html">About</a></li>
+<li><a href="certifications.html">Certifications</a></li>
+<li><a href="../game/index.html">Spot the Bug</a></li>
+<li><a href="../tools/id-model-selector.html" target="_blank" rel="noopener" class="nav-cta nav-tool">ID Model Selector ↗</a></li>    <li><a href="contact.html" class="nav-cta">Let's Talk</a></li>
   </ul>
 </nav>
 
-<div class="ab-hero">
-  <div class="ab-eyebrow">About</div>
-  <h1>The person behind the work.</h1>
+<!-- ── HERO ── -->
+<section class="ab-hero">
+  <div class="ab-eyebrow">Learning Experience Technologist</div>
+  <h1>The person behind<br>the <em>work.</em></h1>
+
   <div class="ab-hero-body">
     <div class="ab-intro">
-      <p>I started in L&D the way most people do. I kept running into the same ceiling: the tools stopped where the problems didn't. So I learned to close that gap.</p>
+      <p>I started in L&D the way most people do — building slides, recording voiceovers, packaging SCORM files. But I kept running into the same ceiling: <strong>the tools stopped where the problems didn't.</strong></p>
+      <p>So I learned to write JavaScript inside Storyline. Then to connect courses to live APIs. Then to automate workflows that used to eat entire project weeks. Not because I wanted to be a developer — but because <strong>the learner experience I wanted to create required it.</strong></p>
+      <p>Today I sit at a specific intersection: I think like an instructional designer and build like an engineer. That combination is rare, and it's where I do my best work.</p>
+    </div>
+
+    <div class="ab-meta">
+      <div class="ab-available">
+        <span class="ab-available-dot"></span>
+        Available for new opportunities
+      </div>
+      <div class="ab-location">Pune, India &nbsp;·&nbsp; Open to remote &nbsp;·&nbsp; IST</div>
+      <div class="ab-stats">
+        <div class="ab-stat-item">
+          <span class="ab-stat-num">15+</span>
+          <span class="ab-stat-label">Years in L&D</span>
+        </div>
+        <div class="ab-stat-item">
+          <span class="ab-stat-num">28</span>
+          <span class="ab-stat-label">Storyboards hand-authored</span>
+        </div>
+        <div class="ab-stat-item">
+          <span class="ab-stat-num">7</span>
+          <span class="ab-stat-label">ID frameworks applied</span>
+        </div>
+        <div class="ab-stat-item">
+          <span class="ab-stat-num">36h</span>
+          <span class="ab-stat-label">Saved per production run</span>
+        </div>
+      </div>
     </div>
   </div>
-</div>
+</section>
 
+<!-- ── CAPABILITIES ── -->
+<section class="ab-section reveal">
+  <div class="ab-section-label">What I do</div>
+  <div class="ab-cap-grid">
+
+    <div class="ab-cap-item">
+      <div class="ab-cap-num">01</div>
+      <div class="ab-cap-title">Advanced eLearning Development</div>
+      <div class="ab-cap-tags">
+        <span class="ab-cap-tag">Storyline 360</span>
+        <span class="ab-cap-tag">JavaScript</span>
+        <span class="ab-cap-tag">SCORM / xAPI</span>
+        <span class="ab-cap-tag">API-connected</span>
+      </div>
+    </div>
+
+    <div class="ab-cap-item">
+      <div class="ab-cap-num">02</div>
+      <div class="ab-cap-title">AI Integration & Tooling</div>
+      <div class="ab-cap-tags">
+        <span class="ab-cap-tag">Claude API</span>
+        <span class="ab-cap-tag">Murf AI</span>
+        <span class="ab-cap-tag">Cloudflare Workers</span>
+        <span class="ab-cap-tag">Synthesia</span>
+      </div>
+    </div>
+
+    <div class="ab-cap-item">
+      <div class="ab-cap-num">03</div>
+      <div class="ab-cap-title">Automation & Workflow Design</div>
+      <div class="ab-cap-tags">
+        <span class="ab-cap-tag">FFmpeg</span>
+        <span class="ab-cap-tag">Shell Scripting</span>
+        <span class="ab-cap-tag">Batch Processing</span>
+      </div>
+    </div>
+
+    <div class="ab-cap-item">
+      <div class="ab-cap-num">04</div>
+      <div class="ab-cap-title">Learning Data & xAPI</div>
+      <div class="ab-cap-tags">
+        <span class="ab-cap-tag">xAPI / Tin Can</span>
+        <span class="ab-cap-tag">LRS</span>
+        <span class="ab-cap-tag">Learning Analytics</span>
+      </div>
+    </div>
+
+    <div class="ab-cap-item">
+      <div class="ab-cap-num">05</div>
+      <div class="ab-cap-title">Instructional Design & Strategy</div>
+      <div class="ab-cap-tags">
+        <span class="ab-cap-tag">ADDIE</span>
+        <span class="ab-cap-tag">Bloom's</span>
+        <span class="ab-cap-tag">Gagne</span>
+        <span class="ab-cap-tag">SAM</span>
+        <span class="ab-cap-tag">Storyboarding</span>
+      </div>
+    </div>
+
+    <div class="ab-cap-item">
+      <div class="ab-cap-num">06</div>
+      <div class="ab-cap-title">Scalable Systems Thinking</div>
+      <div class="ab-cap-tags">
+        <span class="ab-cap-tag">Template Systems</span>
+        <span class="ab-cap-tag">Component Design</span>
+        <span class="ab-cap-tag">Documentation</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── NARRATIVE ── -->
+<section class="ab-section reveal">
+  <div class="ab-section-label">How I got here</div>
+  <div class="ab-narrative">
+    <p>I started with the fundamentals — storyboarding, scripting, building in early-era authoring tools. The gap between "what I want to build" and "what the tools allow" was the most interesting problem in the field, so I learned to close it.</p>
+    <p>That meant writing JavaScript inside Storyline. Then wiring courses to live APIs. Then building FFmpeg pipelines that reduced per-language video localisation from a full day's work to under 90 seconds across 8 languages.</p>
+
+    <div class="ab-pull">"I build things I'd want to use myself. If I'm bored building it, the learner will be bored using it."</div>
+
+    <p>Most L&D professionals start with content. I start with behaviour — what the learner needs to do differently, and what's currently stopping them. The technical work always follows from that question, never the other way around.</p>
+    <p>I use complex tech when it solves a real problem, and simple tech when that's what the problem needs. xAPI isn't impressive for its own sake — it's impressive when the data changes what you do next. I build once and document well enough that someone else can maintain it. And if something is being done manually and repeatedly, there's almost certainly a systems fix waiting to be written.</p>
+  </div>
+</section>
+
+<!-- ── CV COMPARISON ── -->
+<section class="ab-cv reveal">
+  <div class="ab-section-label">The honest comparison</div>
+
+  <div class="cv-table">
+    <div class="cv-row cv-row-head">
+      <div class="cv-col cv-col-label"></div>
+      <div class="cv-col cv-col-generic"><span class="cv-col-badge generic">Typical L&D CV</span></div>
+      <div class="cv-col cv-col-real"><span class="cv-col-badge real">Abhishek Trivedi</span></div>
+    </div>
+    <div class="cv-row reveal-row">
+      <div class="cv-col cv-col-label">Authoring</div>
+      <div class="cv-col cv-col-generic"><span class="cv-chip dim">"Proficient in Storyline 360"</span></div>
+      <div class="cv-col cv-col-real"><span class="cv-chip bright">JavaScript inside Storyline — API calls, dynamic branching, live variable injection</span></div>
+    </div>
+    <div class="cv-row reveal-row">
+      <div class="cv-col cv-col-label">ID Methods</div>
+      <div class="cv-col cv-col-generic"><span class="cv-chip dim">"Experienced in ADDIE"</span></div>
+      <div class="cv-col cv-col-real"><span class="cv-chip bright">7 frameworks with 28 storyboards showing which model fits which problem</span></div>
+    </div>
+    <div class="cv-row reveal-row">
+      <div class="cv-col cv-col-label">AI in L&D</div>
+      <div class="cv-col cv-col-generic"><span class="cv-chip dim">"Familiar with AI tools"</span></div>
+      <div class="cv-col cv-col-real"><span class="cv-chip bright">Live AI voice personalisation — LLM + TTS wired to a simulated LMS, in browser now</span></div>
+    </div>
+    <div class="cv-row reveal-row">
+      <div class="cv-col cv-col-label">Efficiency</div>
+      <div class="cv-col cv-col-generic"><span class="cv-chip dim">"Delivered on time"</span></div>
+      <div class="cv-col cv-col-real"><span class="cv-chip bright">FFmpeg pipeline — 8 languages in 90 seconds. Was a full day's manual work per language</span></div>
+    </div>
+    <div class="cv-row reveal-row">
+      <div class="cv-col cv-col-label">Learning Data</div>
+      <div class="cv-col cv-col-generic"><span class="cv-chip dim">"Experience with LMS platforms"</span></div>
+      <div class="cv-col cv-col-real"><span class="cv-chip bright">Custom xAPI schemas, live LRS, real-time learner action streams — the layer most SCORM ignores</span></div>
+    </div>
+    <div class="cv-row reveal-row">
+      <div class="cv-col cv-col-label">Portfolio</div>
+      <div class="cv-col cv-col-generic"><span class="cv-chip dim">"PDF available on request"</span></div>
+      <div class="cv-col cv-col-real"><span class="cv-chip bright">5 live interactive demos. In the browser. Use them, break them, inspect the code.</span></div>
+    </div>
+    <div class="cv-row reveal-row cv-row-kicker">
+      <div class="cv-col cv-col-label">Proof</div>
+      <div class="cv-col cv-col-generic"><span class="cv-chip dim">"References on request"</span></div>
+      <div class="cv-col cv-col-real"><span class="cv-chip bright"><a href="https://abhishektrivedi.com" target="_blank" style="color:inherit;text-decoration:underline;text-underline-offset:3px;">abhishektrivedi.com →</a></span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── AVAILABLE / CTA ── -->
+<section class="ab-cta reveal">
+  <div class="ab-cta-left">
+    <h2>Open to the<br><em>right opportunity.</em></h2>
+    <p>Based in Pune, India. Open to remote-first roles globally. I work best where L&D is seen as a craft — where you're expected to have a point of view and the latitude to act on it.</p>
+    <a href="contact.html" class="btn-primary">Get in touch →</a>
+  </div>
+  <div class="ab-cta-right">
+    <div class="ab-role-item">Senior L&D / Learning Experience Designer</div>
+    <div class="ab-role-item">Lead ID positions with technical scope</div>
+    <div class="ab-role-item">Contract & freelance engagements</div>
+    <div class="ab-role-item">Remote-first · IST-compatible time zones</div>
+    <div class="ab-role-item">Full-time preferred, contract considered</div>
+  </div>
+</section>
+
+<!-- FOOTER -->
 <footer>
   <div class="footer-name">© 2026 Abhishek Trivedi · Learning Experience Technologist</div>
   <ul class="footer-links">
     <li><a href="https://www.linkedin.com/in/trivedi-abhishek/" target="_blank">LinkedIn</a></li>
     <li><a href="contact.html">Contact</a></li>
-    <li><a href="../index.html">Home</a></li>
   </ul>
 </footer>
 
-<script src="../js/main.js"></script>
+<!-- PROTECTION SCRIPT -->
+<script>
+(function() {
+  'use strict';
+  document.addEventListener('contextmenu', function(e) { e.preventDefault(); showWarning(); return false; });
+  document.addEventListener('keydown', function(e) {
+    const key = e.key ? e.key.toLowerCase() : '';
+    const ctrl = e.ctrlKey || e.metaKey;
+    if (ctrl && ['u','s','a','p'].includes(key)) { e.preventDefault(); showWarning(); return false; }
+    if (ctrl && e.shiftKey && ['i','j','c','k'].includes(key)) { e.preventDefault(); showWarning(); return false; }
+    if (e.key === 'F12') { e.preventDefault(); showWarning(); return false; }
+  });
+  document.addEventListener('selectstart', function(e) {
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+    e.preventDefault(); return false;
+  });
+  document.addEventListener('dragstart', function(e) { e.preventDefault(); return false; });
+  function showWarning() {
+    if (document.getElementById('_pt_toast')) return;
+    var toast = document.createElement('div');
+    toast.id = '_pt_toast';
+    toast.innerHTML = '🔒 &nbsp;This portfolio is protected. Please respect the author\'s work.';
+    toast.style.cssText = ['position:fixed','bottom:24px','left:50%','transform:translateX(-50%)','background:#0f0e0c','color:#f5f2eb','padding:12px 22px','border-radius:8px','font-family:sans-serif','font-size:13px','border:1px solid rgba(200,75,47,0.5)','border-left:3px solid #c84b2f','z-index:999999','box-shadow:0 4px 24px rgba(0,0,0,0.4)','pointer-events:none','white-space:nowrap'].join(';');
+    document.body.appendChild(toast);
+    setTimeout(function() { if (toast.parentNode) toast.parentNode.removeChild(toast); }, 3000);
+  }
+})();
+</script>
+
+<!-- SCROLL REVEAL -->
+<script>
+  const reveals = document.querySelectorAll('.reveal, .reveal-row');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        const idx = Array.from(reveals).indexOf(e.target);
+        setTimeout(() => e.target.classList.add('visible'), e.target.classList.contains('reveal-row') ? idx * 60 : 0);
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => observer.observe(el));
+</script>
+
+<div id="xapiPanel" class="xapi-panel">
+  <div class="xapi-panel-header" onclick="toggleXapiCollapse()" style="cursor:pointer;" title="Click to collapse / expand">
+    <div class="xapi-header-left">
+      <span class="xapi-dot"></span>
+      <span class="xapi-label">xAPI · Live Statement</span>
+    </div>
+    <div class="xapi-header-right">
+      <span class="xapi-mini-dwell">⏱ <span id="xDwellMini">0</span>s</span>
+      <button class="xapi-chevron" id="xapiChevron" aria-label="Collapse">▾</button>
+      <button class="xapi-close" onclick="event.stopPropagation();document.getElementById('xapiPanel').classList.add('xapi-hidden')" aria-label="Close">✕</button>
+    </div>
+  </div>
+
+  <!-- STEP 1: Name input screen -->
+  <div class="xapi-onboard" id="xapiOnboard">
+    <div class="xapi-onboard-label">INITIALISE LEARNER PROFILE</div>
+    <p class="xapi-onboard-sub">Enter your name to generate a live xAPI statement for this session.</p>
+    <div class="xapi-input-row">
+      <input type="text" id="xapiNameInput" class="xapi-name-input" placeholder="Your name..." maxlength="40" autocomplete="off" />
+      <button class="xapi-name-btn" id="xapiNameBtn" onclick="initLearner()">→</button>
+    </div>
+    <div class="xapi-onboard-hint">Initialises actor · fires statement · tracks dwell</div>
+  </div>
+
+  <!-- STEP 2: Boot sequence (shown briefly) -->
+  <div class="xapi-boot" id="xapiBoot" style="display:none;">
+    <div class="xapi-boot-line" id="xapiBootLine1"></div>
+    <div class="xapi-boot-line" id="xapiBootLine2"></div>
+    <div class="xapi-boot-line" id="xapiBootLine3"></div>
+  </div>
+
+  <!-- STEP 3: Live statement body -->
+  <div class="xapi-body" id="xapiBody" style="display:none;">
+    <div class="xapi-block">
+      <div class="xapi-block-label">ACTOR</div>
+      <div class="xapi-kv"><span class="xk">name</span><span class="xv xv-str" id="xActorName">"—"</span></div>
+      <div class="xapi-kv"><span class="xk">mbox</span><span class="xv xv-dim">"visitor@session"</span></div>
+    </div>
+    <div class="xapi-block">
+      <div class="xapi-block-label">VERB</div>
+      <div class="xapi-kv"><span class="xk">display</span><span class="xv xv-verb">"experienced"</span></div>
+    </div>
+    <div class="xapi-block">
+      <div class="xapi-block-label">OBJECT</div>
+      <div class="xapi-kv"><span class="xk">name</span><span class="xv xv-str">"About Page"</span></div>
+      <div class="xapi-kv"><span class="xk">id</span><span class="xv xv-dim">"abhishektrivedi.com/pages/about"</span></div>
+    </div>
+    <div class="xapi-block xapi-block-live">
+      <div class="xapi-block-label">RESULT <span class="xapi-live-badge">LIVE</span></div>
+      <div class="xapi-kv"><span class="xk">duration</span><span class="xv xv-num" id="xDuration">"PT0S"</span></div>
+      <div class="xapi-kv"><span class="xk">dwell_seconds</span><span class="xv xv-num" id="xDwell">0</span></div>
+      <div class="xapi-kv"><span class="xk">scroll_depth</span><span class="xv xv-num" id="xScroll">0</span><span class="xv xv-dim">%</span></div>
+    </div>
+    <div class="xapi-block">
+      <div class="xapi-block-label">TIMESTAMP</div>
+      <div class="xapi-kv"><span class="xv xv-dim" id="xTimestamp">—</span></div>
+    </div>
+  </div>
+
+  <div class="xapi-footer">
+    <span class="xapi-status" id="xapiStatus"><span class="xapi-dot-sm"></span> Awaiting profile</span>
+    <span class="xapi-stmt-count">stmt #<span id="xStmtCount">0</span></span>
+  </div>
+</div>
+
+<style>
+.xapi-panel {
+  position: fixed; bottom: 1.5rem; right: 1.5rem;
+  width: 300px;
+  background: #0e110e;
+  border: 1px solid rgba(61,186,110,0.3);
+  border-radius: 10px;
+  box-shadow: 0 12px 48px rgba(0,0,0,0.7);
+  font-family: 'Courier New', monospace;
+  z-index: 800;
+  transform: translateY(20px); opacity: 0;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  overflow: hidden;
+}
+.xapi-panel.xapi-visible  { opacity:1; transform:translateY(0); }
+.xapi-panel.xapi-hidden   { opacity:0; transform:translateY(20px); pointer-events:none; }
+.xapi-panel.xapi-collapsed .xapi-body,
+.xapi-panel.xapi-collapsed .xapi-onboard,
+.xapi-panel.xapi-collapsed .xapi-boot,
+.xapi-panel.xapi-collapsed .xapi-footer { display:none !important; }
+.xapi-panel.xapi-collapsed .xapi-chevron { transform: rotate(-90deg); }
+
+/* Header */
+.xapi-panel-header {
+  display:flex; align-items:center; justify-content:space-between;
+  padding: 0.65rem 0.85rem;
+  background: #111810;
+  border-bottom: 1px solid rgba(61,186,110,0.15);
+  user-select: none;
+}
+.xapi-header-left  { display:flex; align-items:center; gap:0.5rem; }
+.xapi-header-right { display:flex; align-items:center; gap:0.4rem; }
+.xapi-dot {
+  width:8px; height:8px; border-radius:50%; background:#3dba6e; flex-shrink:0;
+  animation: xPulse 2s infinite;
+}
+.xapi-dot-sm {
+  width:5px; height:5px; border-radius:50%; background:#3dba6e;
+  flex-shrink:0; display:inline-block; animation: xPulse 2s infinite;
+}
+@keyframes xPulse {
+  0%,100%{ box-shadow:0 0 0 0 rgba(61,186,110,0.5); }
+  50%    { box-shadow:0 0 0 5px rgba(61,186,110,0); }
+}
+.xapi-label { font-size:0.65rem; letter-spacing:0.1em; text-transform:uppercase; color:#3dba6e; font-weight:600; }
+.xapi-mini-dwell { font-size:0.6rem; color:rgba(255,255,255,0.85); letter-spacing:0.04em; }
+.xapi-chevron {
+  background:none; border:none; color:rgba(255,255,255,0.8);
+  font-size:0.8rem; cursor:pointer; padding:0 0.2rem;
+  transition: transform 0.25s, color 0.2s; line-height:1;
+}
+.xapi-chevron:hover { color:#fff; }
+.xapi-close {
+  background:none; border:none; color:rgba(255,255,255,0.75);
+  font-size:0.65rem; cursor:pointer; padding:0.1rem 0.25rem;
+  border-radius:3px; transition:color 0.2s;
+}
+.xapi-close:hover { color:#fff; }
+
+/* ── Onboard screen ── */
+.xapi-onboard {
+  padding: 1rem 0.85rem 0.85rem;
+}
+.xapi-onboard-label {
+  font-size:0.62rem; letter-spacing:0.14em; text-transform:uppercase;
+  color:#5de89a; margin-bottom:0.5rem; font-weight:700;
+}
+.xapi-onboard-sub {
+  font-size:0.82rem; color:#ffffff;
+  line-height:1.6; margin:0 0 0.85rem;
+}
+.xapi-input-row {
+  display:flex; gap:0.4rem; margin-bottom:0.5rem;
+}
+.xapi-name-input {
+  flex:1; background:#0b0d0b;
+  border:1px solid rgba(61,186,110,0.35);
+  border-radius:5px; padding:0.45rem 0.65rem;
+  font-family:'Courier New', monospace;
+  font-size:0.75rem; color:#fff;
+  outline:none; transition:border-color 0.2s;
+}
+.xapi-name-input::placeholder { color:rgba(255,255,255,0.75); }
+.xapi-name-input:focus { border-color:rgba(61,186,110,0.7); }
+.xapi-name-btn {
+  background:#3dba6e; border:none; border-radius:5px;
+  color:#0b0d0b; font-size:0.85rem; font-weight:700;
+  padding:0 0.75rem; cursor:pointer;
+  transition:background 0.2s, transform 0.1s;
+}
+.xapi-name-btn:hover  { background:#4dd47e; }
+.xapi-name-btn:active { transform:scale(0.95); }
+.xapi-onboard-hint {
+  font-size:0.62rem; color:#c8f0d8;
+  letter-spacing:0.05em;
+}
+
+/* ── Boot sequence ── */
+.xapi-boot {
+  padding: 0.85rem;
+  min-height: 80px;
+  display:flex; flex-direction:column; gap:0.35rem; justify-content:center;
+}
+.xapi-boot-line {
+  font-size:0.68rem; color:#3dba6e;
+  letter-spacing:0.03em; min-height:1.2rem;
+}
+.xapi-boot-line::before { content:'▋ '; animation:xBlink 0.6s step-end infinite; }
+@keyframes xBlink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+/* ── Statement body ── */
+.xapi-body { padding:0.75rem 0.85rem; display:flex; flex-direction:column; gap:0.55rem; }
+.xapi-block {
+  background:rgba(255,255,255,0.03);
+  border:1px solid rgba(0,0,0,0.08);
+  border-radius:5px; padding:0.5rem 0.7rem;
+}
+.xapi-block-live {
+  border-color:rgba(61,186,110,0.25);
+  background:rgba(61,186,110,0.05);
+}
+.xapi-block-label {
+  font-size:0.55rem; letter-spacing:0.12em; text-transform:uppercase;
+  color:#b0ccd6; margin-bottom:0.35rem;
+  display:flex; align-items:center; gap:0.4rem;
+}
+.xapi-live-badge {
+  background:rgba(61,186,110,0.15); color:#3dba6e;
+  border:1px solid rgba(61,186,110,0.3); border-radius:3px;
+  padding:0 0.3rem; font-size:0.5rem; letter-spacing:0.1em;
+}
+.xapi-kv { display:flex; align-items:baseline; gap:0.5rem; line-height:1.9; }
+.xk      { font-size:0.72rem; color:#7ec8e3; flex-shrink:0; }
+.xv      { font-size:0.75rem; }
+.xv-str  { color:#f0a878; }
+.xv-verb { color:#c084fc; font-weight:700; }
+.xv-num  { color:#7dd3a8; font-weight:700; }
+.xv-dim  { color:#c8c4be; font-size:0.68rem; }
+@keyframes xFlash {
+  0%  { background:rgba(61,186,110,0.3); border-radius:3px; }
+  100%{ background:transparent; }
+}
+.xapi-flash { animation: xFlash 0.6s ease; }
+
+/* ── Footer ── */
+.xapi-footer {
+  display:flex; justify-content:space-between; align-items:center;
+  padding:0.45rem 0.85rem;
+  background:#0b0d0b; border-top:1px solid rgba(61,186,110,0.08);
+}
+.xapi-status  { display:flex; align-items:center; gap:0.4rem; font-size:0.65rem; letter-spacing:0.07em; color:#5de89a; text-transform:uppercase; font-weight:600; }
+.xapi-stmt-count { font-size:0.65rem; color:#ffffff; letter-spacing:0.05em; }
+
+@media(max-width:480px){ .xapi-panel{ width:calc(100vw - 2rem); right:1rem; bottom:1rem; } }
+</style>
+
+<script>
+(function(){
+  const panel      = document.getElementById('xapiPanel');
+  const onboard    = document.getElementById('xapiOnboard');
+  const boot       = document.getElementById('xapiBoot');
+  const body       = document.getElementById('xapiBody');
+  const nameInput  = document.getElementById('xapiNameInput');
+  const xActorName = document.getElementById('xActorName');
+  const xDwell     = document.getElementById('xDwell');
+  const xDwellM    = document.getElementById('xDwellMini');
+  const xDur       = document.getElementById('xDuration');
+  const xScroll    = document.getElementById('xScroll');
+  const xTs        = document.getElementById('xTimestamp');
+  const xCount     = document.getElementById('xStmtCount');
+  const xStatus    = document.getElementById('xapiStatus');
+
+  let dwell = 0, stmtN = 0, ticker = null;
+  let visitorName = '';
+  let fiveMinFired = false;
+
+  // ── EmailJS config ──
+  const EJS = {
+    serviceId:  'service_7f0oy0j',
+    templateId: 'template_wots65r',
+    publicKey:  'MODruKIN9wiNDF2-x',
+  };
+
+  function sendEmail(triggerReason) {
+    if (typeof emailjs === 'undefined') return;
+    emailjs.send(EJS.serviceId, EJS.templateId, {
+      visitor_name:  visitorName || 'Anonymous Learner',
+      dwell_time:    dwell + ' seconds (' + Math.floor(dwell/60) + 'm ' + (dwell%60) + 's)',
+      scroll_depth:  depth() + '%',
+      timestamp:     new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }),
+      page_url:      window.location.href,
+      trigger:       triggerReason,
+    }, EJS.publicKey).catch(() => {});
+  }
+
+  // Show panel after 2.5s
+  setTimeout(() => panel.classList.add('xapi-visible'), 2500);
+
+  // Allow Enter key to submit
+  nameInput.addEventListener('keydown', e => { if(e.key === 'Enter') initLearner(); });
+
+  window.toggleXapiCollapse = function(){
+    panel.classList.toggle('xapi-collapsed');
+  };
+
+  window.initLearner = function(){
+    const raw  = nameInput.value.trim();
+    visitorName = raw || 'Anonymous Learner';
+
+    // Hide onboard, show boot
+    onboard.style.display = 'none';
+    boot.style.display    = 'flex';
+
+    const lines = [
+      `Initialising profile for ${visitorName}...`,
+      'Connecting to LRS endpoint...',
+      `Statement ready. Welcome, ${visitorName}.`
+    ];
+
+    const b1 = document.getElementById('xapiBootLine1');
+    const b2 = document.getElementById('xapiBootLine2');
+    const b3 = document.getElementById('xapiBootLine3');
+
+    setTimeout(() => { b1.textContent = lines[0]; }, 0);
+    setTimeout(() => { b2.textContent = lines[1]; }, 600);
+    setTimeout(() => { b3.textContent = lines[2]; b3.style.color = '#fff'; }, 1200);
+
+    // Transition to live statement
+    setTimeout(() => {
+      boot.style.display = 'none';
+      xActorName.textContent = `"${visitorName}"`;
+      body.style.display = 'flex';
+      xStatus.innerHTML  = '<span class="xapi-dot-sm"></span> Streaming to LRS';
+      startTicker();
+
+      // Fire email immediately on name submit
+      sendEmail('Name entered in xAPI panel');
+    }, 2000);
+  };
+
+  function flash(el){ el.classList.remove('xapi-flash'); void el.offsetWidth; el.classList.add('xapi-flash'); }
+  function isoDur(s){ const m=Math.floor(s/60),r=s%60; return m>0?`"PT${m}M${r}S"`:`"PT${r}S"`; }
+  function depth(){ const d=document.documentElement; const p=Math.round(window.scrollY/(d.scrollHeight-d.clientHeight)*100); return isNaN(p)?0:Math.min(p,100); }
+
+  function startTicker(){
+    ticker = setInterval(()=>{
+      dwell++; stmtN++;
+      const sd=depth(), dur=isoDur(dwell);
+      if(xDur.textContent!==dur)              { xDur.textContent=dur;   flash(xDur); }
+      if(xDwell.textContent!==String(dwell))  { xDwell.textContent=dwell; flash(xDwell); }
+      if(xScroll.textContent!==String(sd))    { xScroll.textContent=sd;   flash(xScroll); }
+      xDwellM.textContent = dwell;
+      xTs.textContent     = '"'+new Date().toISOString()+'"';
+      xCount.textContent  = stmtN;
+      if(dwell%8===0){
+        xStatus.innerHTML='<span class="xapi-dot-sm"></span> Sending statement…';
+        setTimeout(()=>{ xStatus.innerHTML='<span class="xapi-dot-sm"></span> Streaming to LRS'; },900);
+      }
+
+      // Fire 5-min email (300s) — once only
+      if(dwell === 300 && !fiveMinFired){
+        fiveMinFired = true;
+        sendEmail('5 minutes dwell on About page');
+      }
+    },1000);
+  }
+
+  // 5-min timer fires even without name entry
+  setTimeout(() => {
+    if (!fiveMinFired) {
+      fiveMinFired = true;
+      sendEmail('5 minutes dwell on About page (no name entered)');
+    }
+  }, 300000);
+
+  window.addEventListener('scroll',()=>{
+    const sd=depth();
+    if(xScroll.textContent!==String(sd)){ xScroll.textContent=sd; flash(xScroll); }
+  },{passive:true});
+})();
+</script>
+<!-- ── END xAPI PANEL ── -->
+
+
+<style>
+/* ── Hamburger open state (inline fallback) ── */
+.nav-links.open {
+  display: flex !important;
+  flex-direction: column !important;
+  position: absolute !important;
+  top: 100% !important;
+  left: 0 !important;
+  right: 0 !important;
+  background: var(--paper, #f5f0e8) !important;
+  border-top: 1px solid rgba(0,0,0,0.08);
+  border-bottom: 1px solid rgba(0,0,0,0.12);
+  padding: 0.75rem 1.5rem 1rem !important;
+  gap: 0 !important;
+  z-index: 9999 !important;
+  box-shadow: 0 12px 32px rgba(0,0,0,0.12) !important;
+  list-style: none !important;
+  margin: 0 !important;
+}
+.nav-links.open li {
+  border-bottom: 1px solid rgba(0,0,0,0.06) !important;
+  padding: 0.75rem 0 !important;
+  margin: 0 !important;
+}
+.nav-links.open li:last-child { border-bottom: none !important; }
+.nav-links.open a {
+  font-size: 1rem !important;
+  display: block !important;
+  width: 100% !important;
+  padding: 0 !important;
+  color: var(--ink, #1a1a18) !important;
+  text-decoration: none !important;
+}
+.nav-links.open a.nav-cta {
+  color: var(--accent, #c84b2f) !important;
+  font-weight: 600 !important;
+}
+.hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px) !important; }
+.hamburger.open span:nth-child(2) { opacity: 0 !important; transform: scaleX(0) !important; }
+.hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px) !important; }
+</style>
+
+<!-- ── HAMBURGER NAV (inline fallback) ── -->
+<script>
+(function(){
+  var btn = document.querySelector('.hamburger');
+  var nav = document.querySelector('.nav-links');
+  if (!btn || !nav) return;
+  btn.addEventListener('click', function(e){
+    e.stopPropagation();
+    var open = nav.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.setAttribute('aria-expanded', open);
+  });
+  document.addEventListener('click', function(e){
+    if (!btn.contains(e.target) && !nav.contains(e.target)){
+      nav.classList.remove('open');
+      btn.classList.remove('open');
+      btn.setAttribute('aria-expanded', false);
+    }
+  });
+  nav.querySelectorAll('a').forEach(function(a){
+    a.addEventListener('click', function(){
+      nav.classList.remove('open');
+      btn.classList.remove('open');
+    });
+  });
+})();
+</script>
+<!-- ── END HAMBURGER NAV ── -->
 
 </div>
 
