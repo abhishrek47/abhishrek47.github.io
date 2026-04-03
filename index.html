@@ -1586,17 +1586,12 @@ html[data-style-chosen] #view-switcher  { display: none !important; }
 .ss-brand-logo span { color: #c84b2f; }
 .ss-brand-tagline {
   font-size: 0.6rem; letter-spacing: 0.12em;
-  text-transform: uppercase; color: rgba(255,255,255,0.38);
+  text-transform: uppercase; color: rgba(255,255,255,0.82);
 }
 
-/* Headline — full-width dark strip below the brand bar */
+/* Headline — removed, hidden */
 #ss-headline-wrap {
-  position: relative; flex-shrink: 0; z-index: 25;
-  text-align: center;
-  padding: 0.7rem 2rem 0.65rem;
-  background: rgba(8, 4, 20, 0.88);
-  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
-  border-bottom: 1px solid rgba(255,255,255,0.05);
+  display: none !important;
 }
 #ss-headline-wrap h1 {
   font-family: 'DM Serif Display', Georgia, serif;
@@ -1624,6 +1619,7 @@ html[data-style-chosen] #view-switcher  { display: none !important; }
   display: flex; flex-direction: column;
   align-items: center; gap: 0.9rem;
   padding: 2rem 1.5rem; pointer-events: none;
+  margin-top: -2.5rem;
 }
 
 /* Big faded background numbers */
@@ -1751,7 +1747,7 @@ html[data-style-chosen] #view-switcher  { display: none !important; }
 
 /* Center divider AT. logo — centered in the panels area (below 68px header) */
 #ss-divider-logo {
-  position: absolute; left: 50%; top: calc(50% + 57px);
+  position: absolute; left: 50%; top: 50%;
   transform: translate(-50%, -50%); z-index: 30;
   width: 52px; height: 52px; border-radius: 50%;
   background: #0f0820;
@@ -1770,8 +1766,6 @@ html[data-style-chosen] #view-switcher  { display: none !important; }
   .ss-panel, .ss-panel:hover, .ss-panel:focus-visible { flex: 1; min-height: 50svh; min-height: 50vh; }
   #ss-divider-logo { display: none; }
   #ss-brand { padding: 0 1.25rem; height: 56px; }
-  #ss-headline-wrap { padding: 0.55rem 1.25rem 0.5rem; }
-  #ss-headline-wrap h1 { font-size: clamp(0.82rem, 4vw, 1rem); }
   .ss-brand-tagline { display: none; }
   .ss-bg-num { font-size: clamp(5rem, 20vw, 9rem); }
   .sse-word, .ssv-word { font-size: clamp(1.5rem, 7vw, 2.5rem); }
