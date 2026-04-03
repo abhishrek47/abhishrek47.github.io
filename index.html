@@ -541,12 +541,12 @@
   right: 2rem;
   z-index: 900;
   display: flex;
-  background: #0f0f0f;
-  border: 1px solid rgba(255,255,255,0.12);
+  background: #1a1016;
+  border: 1px solid rgba(255,255,255,0.1);
   border-radius: 100px;
   padding: 4px;
   gap: 3px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+  box-shadow: 0 4px 24px rgba(0,0,0,0.5);
 }
 .vsw-btn {
   font-family: 'DM Sans', sans-serif;
@@ -554,16 +554,28 @@
   font-weight: 500;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: rgba(255,255,255,0.65);
+  color: rgba(255,255,255,0.55);
   background: none;
   border: none;
   border-radius: 100px;
   padding: 0.45rem 1rem;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: background 0.25s, color 0.25s;
+  will-change: transform;
 }
-.vsw-btn.vsw-active { background: #fff; color: #0f0f0f; font-weight: 600; }
-.vsw-btn:hover:not(.vsw-active) { color: rgba(255,255,255,0.75); }
+/* Editorial active — warm terracotta/cream brand */
+#btn-editorial.vsw-active {
+  background: #c84b2f;
+  color: #ffffff;
+  font-weight: 700;
+}
+/* Visual active — vibrant purple brand */
+#btn-visual.vsw-active {
+  background: #7c3aed;
+  color: #ffffff;
+  font-weight: 700;
+}
+.vsw-btn:hover:not(.vsw-active) { color: rgba(255,255,255,0.8); }
 
 @media(max-width: 768px) {
   #view-switcher { display: none !important; }
@@ -1585,6 +1597,7 @@
     #ub-visual .ub-icon { font-size: 0.85rem; }
     #ub-visual .ub-close { color: #151515; }
   </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
 </head>
 <body>
 
@@ -2518,6 +2531,14 @@ let threeJsInitialised = false;
 function switchView(view) {
   if (view === currentView) return;
   currentView = view;
+
+  // GSAP button animation on the activated button
+  var _btn = view === 'visual' ? document.getElementById('btn-visual') : document.getElementById('btn-editorial');
+  if (typeof gsap !== 'undefined' && _btn) {
+    gsap.timeline()
+      .to(_btn, { scale: 1.18, duration: 0.1, ease: 'power2.out' })
+      .to(_btn, { scale: 1, duration: 0.55, ease: 'elastic.out(1, 0.45)' });
+  }
 
   // Toggle view divs
   document.getElementById('view-editorial').classList.toggle('view-active', view === 'editorial');
