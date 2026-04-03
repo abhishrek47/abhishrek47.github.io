@@ -533,153 +533,40 @@
 }
 
 /* ════════════════════════════════════════
-   ENHANCED VIEW SWITCHER (Updated)
-   Smaller buttons, hidden on mobile
+   VIEW SWITCHER PILL
 ════════════════════════════════════════ */
 #view-switcher {
   position: fixed;
   bottom: 2rem;
   right: 2rem;
-  z-index: 8800;
+  z-index: 900;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.3rem;
-  background: rgba(245,240,235,0.95);
-  border: 1.5px solid #c84b2f;
-  border-radius: 8px;
-  padding: 0.45rem 0.8rem 0.4rem;
-  box-shadow:
-    0 6px 24px rgba(192,57,43,0.25),
-    0 2px 6px rgba(0,0,0,0.1),
-    inset 0 1px 0 rgba(255,255,255,0.3);
-  backdrop-filter: blur(8px);
-  min-width: 120px;
+  background: #0f0f0f;
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 100px;
+  padding: 4px;
+  gap: 3px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.4);
 }
-/* Context label — tells a first-time visitor what this switches */
-.vsw-context {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.52rem;
-  font-weight: 500;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: rgba(200,75,47,0.6);
-  white-space: nowrap;
-  line-height: 1;
-  padding-bottom: 0.1rem;
-  border-bottom: 1px solid rgba(200,75,47,0.15);
-  width: 100%;
-  text-align: center;
-}
-/* Inner pill row */
-.vsw-row {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  width: 100%;
-  justify-content: center;
-}
-
-/* Enhanced label */
-.vsw-label {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.6rem; /* Reduced from 0.7rem */
-  font-weight: 600;
-  letter-spacing: 0.1em; /* Reduced from 0.12em */
-  text-transform: uppercase;
-  color: #c84b2f;
-  margin-right: 0.2rem; /* Reduced from 0.25rem */
-}
-
-/* Enhanced buttons */
 .vsw-btn {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.65rem; /* Reduced from 0.75rem */
-  font-weight: 600;
-  letter-spacing: 0.08em; /* Reduced from 0.1em */
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
-  padding: 0.35rem 0.7rem; /* Reduced from 0.5rem 0.9rem */
-  border-radius: 6px; /* Reduced from 8px */
-  border: 1.5px solid transparent; /* Reduced from 2px */
-  background: transparent;
-  color: rgba(26,26,24,0.7);
+  color: rgba(255,255,255,0.4);
+  background: none;
+  border: none;
+  border-radius: 100px;
+  padding: 0.45rem 1rem;
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  text-decoration: none;
-  position: relative;
-  overflow: hidden;
+  transition: all 0.2s;
 }
+.vsw-btn.vsw-active { background: #fff; color: #0f0f0f; font-weight: 600; }
+.vsw-btn:hover:not(.vsw-active) { color: rgba(255,255,255,0.75); }
 
-.vsw-btn::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(200,75,47,0.1), transparent);
-  transition: left 0.5s;
-}
-
-.vsw-btn:hover::before {
-  left: 100%;
-}
-
-/* Active state - Editorial view */
-.vsw-btn#btn-editorial.vsw-active {
-  background: linear-gradient(135deg, #c84b2f, #e8784d);
-  border-color: #c84b2f;
-  color: white;
-  box-shadow: 
-    0 3px 12px rgba(200,75,47,0.4),
-    inset 0 1px 0 rgba(255,255,255,0.2);
-  transform: translateY(-1px);
-}
-
-/* Active state - Visual view */
-.vsw-btn#btn-visual.vsw-active {
-  background: linear-gradient(135deg, #c84b2f, #e8784d);
-  border-color: #c84b2f;
-  color: white;
-  box-shadow: 
-    0 3px 12px rgba(200,75,47,0.4),
-    inset 0 1px 0 rgba(255,255,255,0.2);
-  transform: translateY(-1px);
-}
-
-/* Hover states */
-.vsw-btn:hover:not(.vsw-active) {
-  background: rgba(200,75,47,0.08);
-  border-color: rgba(200,75,47,0.3);
-  color: #c84b2f;
-  transform: translateY(-1px);
-  box-shadow: 0 3px 10px rgba(200,75,47,0.2);
-}
-
-/* Focus states for accessibility */
-.vsw-btn:focus-visible {
-  outline: 2px solid #c84b2f;
-  outline-offset: 2px;
-}
-
-/* Enhanced mobile responsiveness */
 @media(max-width: 768px) {
-  #view-switcher {
-    display: none !important; /* Hide completely on mobile */
-  }
-}
-
-@media(max-width: 480px) {
-  #view-switcher {
-    display: none !important; /* Ensure hidden on small screens */
-  }
-}
-
-/* Prevent overlap with back-to-top button */
-@media(min-width: 769px) {
-  #view-switcher {
-    bottom: calc(2rem + 50px); /* Account for back-to-top button height + spacing */
-  }
+  #view-switcher { display: none !important; }
 }
 
 
@@ -1061,8 +948,8 @@
   white-space: nowrap;
 }
 #td-nav .n-links a:hover { box-shadow: rgba(0,0,0,0.18) 2px 2px 0 0; transform: translate(1px,1px); }
-#td-nav .n-cta { background: #151515 !important; color: #fbbf0e !important; font-weight: 600 !important; }
-#td-nav .n-cta:hover { background: #2a2a2a !important; }
+#td-nav .n-cta { background: transparent; color: #151515; border: 1.5px solid #151515; border-radius: 6px; padding: 0.3rem 0.7rem; font-weight: 600; }
+#td-nav .n-cta:hover, #td-nav .n-cta.kw-active { background: #151515 !important; color: #fbbf0e !important; border-color: #151515 !important; }
 #td-nav .n-ham {
   display: none;
   flex-direction: column;
@@ -1748,12 +1635,8 @@
      VIEW SWITCHER (always visible)
 ════════════════════════════════════════ -->
 <div id="view-switcher">
-  <span class="vsw-context">Portfolio view</span>
-  <div class="vsw-row">
-    <span class="vsw-label">View</span>
-    <button class="vsw-btn" id="btn-editorial" onclick="switchView('editorial')" title="Editorial — standard portfolio layout">Editorial</button>
-    <button class="vsw-btn" id="btn-visual" onclick="switchView('visual')" title="Visual — warm card layout">Visual</button>
-  </div>
+  <button class="vsw-btn vsw-active" id="btn-editorial" onclick="switchView('editorial')">Editorial</button>
+  <button class="vsw-btn" id="btn-visual" onclick="switchView('visual')">Visual</button>
 </div>
 
 <!-- ════════════════════════════════════════
@@ -1812,7 +1695,7 @@
     <li style="position:relative;"><a href="pages/articles.html">Articles</a><span style="position:absolute;top:-8px;right:-4px;font-family:var(--mono);font-size:0.55rem;font-weight:600;letter-spacing:0.06em;background:#c84b2f;color:#fff;padding:1px 5px;border-radius:2px;line-height:1.4;">NEW</span></li>
     <li><a href="id-frameworks.html">ID Cheat Sheet</a></li>
     <li><a href="game/index.html">Spot the Bug &#8599;</a></li>
-    <li><a href="tools/id-model-selector.html" target="_blank" rel="noopener">ID Model Selector &#8599;</a></li>
+    <li><a href="tools/id-model-selector.html?view=visual">ID Model Selector &#8599;</a></li>
     <li><a href="lms/index.html" target="_blank" rel="noopener">LMS Demo &#8599;</a></li>
     <li><a href="pages/contact.html" class="nav-cta">Let's Talk</a></li>
   </ul>

@@ -172,8 +172,8 @@
     }
     #td-nav .n-links a:hover { box-shadow: rgba(0,0,0,0.18) 2px 2px 0 0; transform: translate(1px,1px); }
     #td-nav .n-links a.kw-active { background: #151515; color: #fbbf0e; box-shadow: none; }
-    #td-nav .n-cta { background: #151515 !important; color: #fbbf0e !important; font-weight: 600 !important; }
-    #td-nav .n-cta:hover { background: #2a2a2a !important; }
+    #td-nav .n-cta { background: transparent; color: #151515; border: 1.5px solid #151515; border-radius: 6px; padding: 0.3rem 0.7rem; font-weight: 600; }
+    #td-nav .n-cta:hover, #td-nav .n-cta.kw-active { background: #151515 !important; color: #fbbf0e !important; border-color: #151515 !important; }
     #td-nav .n-ham {
       display: none; flex-direction: column; gap: 5px;
       background: none; border: none; cursor: pointer; padding: 4px;
@@ -312,7 +312,7 @@
     <li><a href="certifications.html?view=visual">Certifications</a></li>
     <li><a href="../id-frameworks.html?view=visual">ID Cheat Sheet</a></li>
     <li><a href="articles.html?view=visual">Articles</a></li>
-    <li><a href="../tools/id-model-selector.html" target="_blank" rel="noopener" class="n-cta">ID Model Selector ↗</a></li>
+    <li><a href="../tools/id-model-selector.html?view=visual">ID Model Selector ↗</a></li>
     <li><a href="contact.html?view=visual" class="n-cta kw-active">Let's Talk</a></li>
   </ul>
   <button class="n-ham" id="td-ham" aria-label="Menu">
@@ -326,7 +326,7 @@
   <li><a href="certifications.html?view=visual">Certifications</a></li>
   <li><a href="../id-frameworks.html?view=visual">ID Cheat Sheet</a></li>
   <li><a href="articles.html?view=visual">Articles</a></li>
-  <li><a href="../tools/id-model-selector.html" target="_blank" rel="noopener">ID Model Selector ↗</a></li>
+  <li><a href="../tools/id-model-selector.html?view=visual">ID Model Selector ↗</a></li>
   <li><a href="contact.html?view=visual">Let's Talk</a></li>
 </ul>
 
@@ -342,7 +342,7 @@
     <li style="position:relative;"><a href="articles.html">Articles</a><span style="position:absolute;top:-8px;right:-4px;font-family:var(--mono);font-size:0.55rem;font-weight:600;letter-spacing:0.06em;background:#c84b2f;color:#fff;padding:1px 5px;border-radius:2px;line-height:1.4;">NEW</span></li>
     <li><a href="../id-frameworks.html">ID Cheat Sheet</a></li>
     <li><a href="../game/index.html">Spot the Bug ↗</a></li>
-    <li><a href="../tools/id-model-selector.html" target="_blank" rel="noopener">ID Model Selector ↗</a></li>
+    <li><a href="../tools/id-model-selector.html?view=visual">ID Model Selector ↗</a></li>
     <li><a href="../lms/index.html" target="_blank" rel="noopener">LMS Demo ↗</a></li>
     <li><a href="contact.html" class="nav-cta active">Let's Talk</a></li>
   </ul>

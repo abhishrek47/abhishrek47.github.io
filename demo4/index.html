@@ -892,8 +892,8 @@ code { padding: 1px 5px; }
     }
     #td-nav .n-links a:hover { box-shadow: rgba(0,0,0,0.18) 2px 2px 0 0; transform: translate(1px,1px); }
     #td-nav .n-links a.kw-active { background: #151515; color: #fbbf0e; box-shadow: none; }
-    #td-nav .n-cta { background: #151515 !important; color: #fbbf0e !important; font-weight: 600 !important; }
-    #td-nav .n-cta:hover { background: #2a2a2a !important; }
+    #td-nav .n-cta { background: transparent; color: #151515; border: 1.5px solid #151515; border-radius: 6px; padding: 0.3rem 0.7rem; font-weight: 600; }
+    #td-nav .n-cta:hover, #td-nav .n-cta.kw-active { background: #151515 !important; color: #fbbf0e !important; border-color: #151515 !important; }
     #td-nav .n-ham { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; padding: 4px; }
     #td-nav .n-ham span { display: block; width: 22px; height: 2px; background: #151515; border-radius: 2px; transition: all 0.3s; }
     #td-nav .n-ham.open span:nth-child(1) { transform: rotate(45deg) translate(5px,5px); }
