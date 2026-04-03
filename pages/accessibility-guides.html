@@ -21,319 +21,198 @@
   <title>WCAG Guides for Storyline Developers | Abhishek Trivedi</title>
   <meta name="description" content="Practical WCAG 2.1 AA accessibility guides built for Storyline developers. Focus order, contrast, alt text, keyboard navigation — ready to use in your next project." />
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Figtree:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../css/style.css" />
-
   <style>
-  body { background: var(--paper); color: var(--ink); }
+    body { background: var(--paper); color: var(--ink); }
 
-  /* ── PAGE LAYOUT ── */
-  .ag-page {
-    max-width: 780px;
-    margin: 0 auto;
-    padding: 6rem 2rem 4rem;
-  }
+    /* ── VIEW SYSTEM ── */
+    #view-editorial, #view-visual { display: none; }
+    #view-editorial.view-active, #view-visual.view-active { display: block; }
 
-  /* ── HERO ── */
-  .ag-eyebrow {
-    font-family: var(--mono);
-    font-size: 0.72rem;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    color: var(--accent);
-    margin-bottom: 1.2rem;
-    display: flex;
-    align-items: center;
-    gap: 0.8rem;
-  }
-  .ag-eyebrow::before {
-    content: '';
-    display: block;
-    width: 1.5rem;
-    height: 1px;
-    background: var(--accent);
-  }
-  .ag-page h1 {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(2.2rem, 5vw, 3.2rem);
-    font-weight: 800;
-    line-height: 1.15;
-    margin: 0 0 1.5rem;
-  }
-  .ag-page h1 em {
-    font-style: italic;
-    color: var(--accent);
-  }
-  .ag-intro {
-    font-size: 1.05rem;
-    line-height: 1.7;
-    color: #333;
-    margin-bottom: 2.5rem;
-    max-width: 640px;
-  }
-/* ── ABOVE THE FOLD CTA ── */
-  .ag-hero-cta {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 2rem;
-    background: #fff;
-    border: 1px solid var(--border, #e0d8d0);
-    border-left: 4px solid var(--accent, #c0392b);
-    border-radius: 0 8px 8px 0;
-    padding: 1.5rem 1.75rem;
-    margin-bottom: 3rem;
-    flex-wrap: wrap;
-  }
-  .ag-hero-cta-left {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  }
-  .ag-price-block {
-    display: flex;
-    align-items: baseline;
-    gap: 0.75rem;
-  }
-  .ag-price {
-    font-family: 'Playfair Display', serif;
-    font-size: 2.2rem;
-    font-weight: 800;
-    color: var(--ink);
-    line-height: 1;
-  }
-  .ag-price-meta {
-    font-family: var(--mono);
-    font-size: 0.68rem;
-    letter-spacing: 0.08em;
-    color: #888;
-    text-transform: uppercase;
-  }
-  .ag-hero-btns {
-    display: flex;
-    align-items: center;
-    gap: 1.25rem;
-    flex-wrap: wrap;
-  }
-  .ag-hero-cta-right {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    flex-shrink: 0;
-  }
-  .ag-trust-item {
-    font-size: 0.85rem;
-    color: #444;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-  .ag-trust-check {
-    color: #2e8b57;
-    font-weight: 700;
-    font-size: 0.9rem;
-    flex-shrink: 0;
-  }
-  @media (max-width: 600px) {
-    .ag-hero-cta {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 1.25rem;
-      padding: 1.25rem;
+    /* ── VIEW SWITCHER ── */
+    #view-switcher {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      z-index: 900;
+      display: flex;
+      background: #0f0f0f;
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 100px;
+      padding: 4px;
+      gap: 3px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
     }
-    .ag-hero-cta-right {
-      border-top: 1px solid var(--border, #e0d8d0);
-      padding-top: 1rem;
-      width: 100%;
+    .vsw-btn {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.4);
+      background: none;
+      border: none;
+      border-radius: 100px;
+      padding: 0.45rem 1rem;
+      cursor: pointer;
+      transition: all 0.2s;
     }
-    .ag-price { font-size: 1.8rem; }
-  }
-  /* ── WHAT'S INSIDE ── */
-  .ag-section-label {
-    font-family: var(--mono);
-    font-size: 0.7rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: #888;
-    margin-bottom: 0.8rem;
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-  }
-  .ag-section-label::before {
-    content: '';
-    display: block;
-    width: 1rem;
-    height: 1px;
-    background: var(--accent);
-  }
-  .ag-section-heading {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.8rem;
-    font-weight: 700;
-    margin: 0 0 1.8rem;
-    line-height: 1.2;
-  }
+    .vsw-btn.vsw-active { background: #fff; color: #0f0f0f; font-weight: 600; }
+    .vsw-btn:hover:not(.vsw-active) { color: rgba(255,255,255,0.75); }
 
-  /* ── GUIDE CARDS ── */
-  .ag-cards {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1.2rem;
-    margin-bottom: 3rem;
-  }
-  .ag-card {
-    background: #fff;
-    border: 1px solid var(--border, #e0d8d0);
-    border-radius: 8px;
-    padding: 1.5rem;
-    transition: border-color 0.2s;
-  }
-  .ag-card:hover {
-    border-color: var(--accent);
-  }
-  .ag-card-num {
-    font-family: var(--mono);
-    font-size: 0.65rem;
-    color: #aaa;
-    margin-bottom: 0.5rem;
-  }
-  .ag-card-title {
-    font-family: var(--sans);
-    font-size: 1rem;
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-    color: var(--ink);
-  }
-  .ag-card-desc {
-    font-size: 0.88rem;
-    line-height: 1.55;
-    color: #555;
-  }
+    /* ── YELLOW NAV ── */
+    #td-nav {
+      position: sticky; top: 0; z-index: 200;
+      background: #fbbf0e;
+      border-bottom: 1.5px solid #151515;
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2.5rem;
+      height: 58px;
+      gap: 2rem;
+    }
+    #td-nav .n-logo {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1rem; font-weight: 700;
+      color: #151515; text-decoration: none;
+      letter-spacing: -0.02em; line-height: 1.15;
+    }
+    #td-nav .n-logo span { display: block; }
+    #td-nav .n-links {
+      display: flex; gap: 0.35rem; list-style: none;
+      align-items: center; padding: 0; margin: 0;
+    }
+    #td-nav .n-links a {
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.9rem; font-weight: 400;
+      color: #151515; text-decoration: none;
+      padding: 0.5rem 0.85rem;
+      border: 1.5px solid #151515; border-radius: 8px;
+      background: #ffffff;
+      box-shadow: rgba(0,0,0,0.15) 3px 3px 0 0;
+      transition: box-shadow 0.12s, transform 0.12s;
+      white-space: nowrap;
+    }
+    #td-nav .n-links a:hover { box-shadow: rgba(0,0,0,0.18) 2px 2px 0 0; transform: translate(1px,1px); }
+    #td-nav .n-links a.kw-active { background: #151515; color: #fbbf0e; box-shadow: none; }
+    #td-nav .n-cta { background: #151515 !important; color: #fbbf0e !important; font-weight: 600 !important; }
+    #td-nav .n-cta:hover { background: #2a2a2a !important; }
+    #td-nav .n-ham {
+      display: none; flex-direction: column; gap: 5px;
+      background: none; border: none; cursor: pointer; padding: 4px;
+    }
+    #td-nav .n-ham span {
+      display: block; width: 22px; height: 2px;
+      background: #151515; border-radius: 2px; transition: all 0.3s;
+    }
+    #td-nav .n-ham.open span:nth-child(1) { transform: rotate(45deg) translate(5px,5px); }
+    #td-nav .n-ham.open span:nth-child(2) { opacity: 0; }
+    #td-nav .n-ham.open span:nth-child(3) { transform: rotate(-45deg) translate(5px,-5px); }
+    #td-drawer {
+      display: none; position: fixed; top: 58px; left: 0; right: 0;
+      background: #fbbf0e; border-bottom: 1.5px solid #151515;
+      padding: 1rem 1.5rem; flex-direction: column; gap: 0.5rem;
+      list-style: none; z-index: 199; margin: 0;
+    }
+    #td-drawer.open { display: flex; }
+    #td-drawer a {
+      font-family: 'Figtree', sans-serif; font-size: 0.9rem; font-weight: 500;
+      color: #151515; text-decoration: none;
+      padding: 0.55rem 0; border-bottom: 1px solid rgba(21,21,21,0.15);
+    }
+    #td-drawer a:last-child { border-bottom: none; }
 
-  /* ── WHO IT'S FOR ── */
-  .ag-audience {
-    background: var(--accent2, #1a3a5c);
-    color: #fff;
-    border-radius: 10px;
-    padding: 2.5rem;
-    margin-bottom: 3rem;
-  }
-  .ag-audience h3 {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.4rem;
-    font-weight: 700;
-    margin: 0 0 1rem;
-  }
-  .ag-audience p {
-    font-size: 0.92rem;
-    line-height: 1.65;
-    color: rgba(255,255,255,0.85);
-    margin: 0;
-  }
-  .ag-audience-list {
-    list-style: none;
-    padding: 0;
-    margin: 1rem 0 0;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0.6rem;
-  }
-  .ag-audience-list li {
-    font-size: 0.88rem;
-    color: rgba(255,255,255,0.9);
-    padding-left: 1.2rem;
-    position: relative;
-  }
-  .ag-audience-list li::before {
-    content: '→';
-    position: absolute;
-    left: 0;
-    color: var(--accent);
-  }
+    /* ── KW PAGE SHELL ── */
+    #view-visual { background: linear-gradient(to bottom, #f3e8ff 0%, #ffffff 60%); min-height: 100vh; }
+    .kw-page {
+      max-width: 1140px; margin: 0 auto;
+      padding: 2.5rem 2rem; display: flex; flex-direction: column; gap: 1.75rem;
+    }
 
-  /* ── CTA SECTION ── */
-  .ag-cta-section {
-    text-align: center;
-    padding: 2rem 0 3rem;
-    border-top: 1px solid var(--border, #e0d8d0);
-  }
-  .ag-cta-section p {
-    font-size: 0.92rem;
-    color: #666;
-    margin-bottom: 1.5rem;
-  }
-  .ag-btn-primary {
-    display: inline-block;
-    background: var(--accent, #c84b2f);
-    color: #fff;
-    padding: 0.9rem 2.4rem;
-    font-family: var(--sans);
-    font-size: 0.88rem;
-    font-weight: 600;
-    text-decoration: none;
-    border-radius: 3px;
-    letter-spacing: 0.02em;
-    transition: background 0.2s;
-  }
-  .ag-btn-primary:hover {
-    background: var(--ink);
-  }
-  .ag-btn-secondary {
-    display: inline-block;
-    color: var(--ink);
-    font-size: 0.85rem;
-    font-weight: 500;
-    text-decoration: underline;
-    text-underline-offset: 3px;
-    margin-left: 1.5rem;
-    transition: color 0.2s;
-  }
-  .ag-btn-secondary:hover {
-    color: var(--accent);
-  }
+    /* ── SHARED COMPONENTS ── */
+    .kw-page-hero { padding: 2.5rem; background: #ffffff; border: 1.5px solid #151515; border-radius: 16px; }
+    .kw-page-eyebrow { font-family: 'Figtree',sans-serif; font-size: 0.7rem; font-weight: 600; color: #888; text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.4rem; }
+    .kw-page-title { font-family: 'Outfit',sans-serif; font-size: clamp(2rem,4vw,3rem); font-weight: 700; color: #151515; margin: 0 0 1rem; letter-spacing: -0.025em; line-height: 1.15; }
+    .kw-page-sub { font-family: 'Figtree',sans-serif; font-size: 0.97rem; line-height: 1.7; color: #444; margin: 0; max-width: 640px; }
+    .kw-footer { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; padding: 1.5rem 0 2.5rem; border-top: 1.5px solid rgba(21,21,21,0.2); margin-top: 0.5rem; }
+    .kw-footer-copy { font-family: 'Figtree',sans-serif; font-size: 0.78rem; color: #888; }
+    .kw-footer-links { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    .kw-footer-link { font-family: 'Figtree',sans-serif; font-size: 0.78rem; font-weight: 500; color: #151515; text-decoration: none; padding: 0.35rem 1rem; border: 1.5px solid #151515; border-radius: 100px; transition: background 0.15s; white-space: nowrap; }
+    .kw-footer-link:hover { background: #fbbf0e; }
+    .kw-footer-credit { font-family: 'Figtree',sans-serif; font-size: 0.72rem; color: #aaa; }
+    .kw-footer-credit-link { color: #888; text-decoration: underline; text-underline-offset: 2px; text-decoration-color: rgba(21,21,21,0.25); transition: color 0.15s; }
+    .kw-footer-credit-link:hover { color: #151515; }
 
-  /* ── BACK LINK ── */
-  .ag-back {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    font-size: 0.82rem;
-    font-weight: 500;
-    color: #888;
-    text-decoration: none;
-    margin-bottom: 2rem;
-    transition: color 0.2s;
-  }
-  .ag-back:hover { color: var(--accent); }
+    /* ── GUIDES PAGE SPECIFIC ── */
+    .kw-guides-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+    .kw-guide-card { background: #fff; border: 1.5px solid #151515; border-radius: 16px; padding: 1.5rem; display: flex; flex-direction: column; gap: 0.75rem; transition: transform 0.18s, box-shadow 0.18s; }
+    .kw-guide-card:hover { transform: translateY(-3px); box-shadow: 4px 4px 0 #151515; }
+    .kw-guide-icon { width: 44px; height: 44px; border: 1.5px solid #151515; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; margin-bottom: 0.5rem; }
+    .kw-guide-title { font-family: 'Outfit',sans-serif; font-size: 1.05rem; font-weight: 700; color: #151515; margin: 0 0 0.5rem; letter-spacing: -0.01em; }
+    .kw-guide-desc { font-family: 'Figtree',sans-serif; font-size: 0.85rem; color: #666; line-height: 1.6; flex: 1; margin: 0 0 1rem; }
+    .kw-guide-link { font-family: 'Figtree',sans-serif; font-size: 0.8rem; font-weight: 600; color: #151515; text-decoration: none; display: inline-flex; align-items: center; gap: 0.3rem; }
+    .kw-guide-link:hover { opacity: 0.65; }
+    @media(max-width:900px) { .kw-guides-grid { grid-template-columns: 1fr; } }
+    @media(max-width:600px) { .kw-page { padding: 1.25rem 1rem; gap: 1.25rem; } .kw-page-hero { padding: 1.5rem; } }
 
-  @media (max-width: 900px) {
-    .ag-cards { grid-template-columns: 1fr 1fr; gap: 1rem; }
-    .ag-audience { padding: 2rem; }
-  }
-  @media (max-width: 600px) {
-    .ag-page { padding: 5rem 1.2rem 3rem; }
-    .ag-page h1 { font-size: 2rem; }
-    .ag-intro { font-size: 0.95rem; }
-    .ag-cards { grid-template-columns: 1fr; gap: 0.8rem; }
-    .ag-card { padding: 1.2rem; }
-    .ag-audience { padding: 1.5rem; border-radius: 8px; }
-    .ag-audience h3 { font-size: 1.2rem; }
-    .ag-audience-list { grid-template-columns: 1fr; gap: 0.5rem; }
-    .ag-cta-section { padding: 1.5rem 0 2rem; }
-    .ag-btn-primary { display: block; width: 100%; text-align: center; padding: 0.85rem 1.5rem; }
-    .ag-btn-secondary { display: block; margin: 1rem auto 0; text-align: center; }
-    .ag-section-heading { font-size: 1.4rem; }
-  }
-  @media (max-width: 380px) {
-    .ag-page { padding: 4.5rem 1rem 2.5rem; }
-    .ag-page h1 { font-size: 1.75rem; }
-  }
+    /* ── NAV (editorial) ── */
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; padding: 1.2rem 4rem; background: rgba(245,242,235,0.97); backdrop-filter: blur(8px); border-bottom: 1px solid #d4cfc6; }
+    .nav-logo { font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; font-weight: 500; letter-spacing: 0.05em; color: #0f0f0f; text-decoration: none; }
+    .nav-logo span { color: #c84b2f; }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; align-items: center; }
+    .nav-links a { font-size: 0.82rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: #6b6459; text-decoration: none; transition: color 0.2s; }
+    .nav-links a:hover { color: #c84b2f; }
+    .nav-cta { background: #c84b2f !important; color: white !important; padding: 0.5rem 1.3rem; border-radius: 2px; }
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 4px; }
+    .hamburger span { display: block; width: 22px; height: 2px; background: #0f0f0f; }
+    .page-hero { padding: 5rem 4rem; }
+    .section-label { font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: #c84b2f; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.75rem; }
+    .section-label::before { content: ''; display: block; width: 24px; height: 1px; background: #c84b2f; }
+    .page-hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(2.8rem, 6vw, 4.8rem); line-height: 1.1; font-weight: 400; color: #0f0f0f; margin: 0 0 1.75rem; letter-spacing: -0.02em; }
+    .page-hero p { font-size: 1.02rem; line-height: 1.75; color: #3d3d3a; max-width: 600px; }
+    footer { padding: 2.5rem 4rem; border-top: 1px solid #d4cfc6; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+    .footer-name { font-family: 'JetBrains Mono', monospace; font-size: 0.73rem; color: #6b6459; }
+    .footer-links { display: flex; gap: 2rem; list-style: none; }
+    .footer-links a { font-size: 0.78rem; color: #6b6459; text-decoration: none; }
+    .footer-links a:hover { color: #c84b2f; }
   </style>
 </head>
 <body>
+
+<div id="view-switcher">
+  <button class="vsw-btn vsw-active" id="btn-editorial">Editorial</button>
+  <button class="vsw-btn" id="btn-visual">Visual</button>
+</div>
+
+<nav id="td-nav">
+  <a href="../index.html" class="n-logo">AT<span>.</span></a>
+  <ul class="n-links">
+    <li><a href="work.html?view=visual">Work</a></li>
+    <li><a href="about.html?view=visual">About</a></li>
+    <li><a href="certifications.html?view=visual">Certifications</a></li>
+    <li><a href="../id-frameworks.html?view=visual">ID Cheat Sheet</a></li>
+    <li><a href="articles.html?view=visual">Articles</a></li>
+    <li><a href="../tools/id-model-selector.html" target="_blank" rel="noopener" class="n-cta">ID Model Selector ↗</a></li>
+    <li><a href="contact.html?view=visual" class="n-cta">Let's Talk</a></li>
+  </ul>
+  <button class="n-ham" id="td-ham" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<ul id="td-drawer">
+  <li><a href="work.html?view=visual">Work</a></li>
+  <li><a href="about.html?view=visual">About</a></li>
+  <li><a href="certifications.html?view=visual">Certifications</a></li>
+  <li><a href="../id-frameworks.html?view=visual">ID Cheat Sheet</a></li>
+  <li><a href="articles.html?view=visual">Articles</a></li>
+  <li><a href="../tools/id-model-selector.html" target="_blank" rel="noopener">ID Model Selector ↗</a></li>
+  <li><a href="contact.html?view=visual">Let's Talk</a></li>
+</ul>
+
+<div id="view-editorial" class="view-active">
 
 <nav>
   <a href="../index.html" class="nav-logo">AT<span>.</span></a>
@@ -342,92 +221,20 @@
     <li><a href="work.html">Work</a></li>
     <li><a href="about.html">About</a></li>
     <li><a href="certifications.html">Certifications</a></li>
-    <li><a href="../id-frameworks.html">ID Cheat Sheet</a></li>
     <li><a href="../game/index.html">Spot the Bug</a></li>
-    <li><a href="articles.html">Articles</a></li>
-    <li><a href="../tools/id-model-selector.html" target="_blank" rel="noopener">ID Model Selector ↗</a></li>
-    <li><a href="../lms/index.html">LMS Demo ↗</a></li>
+    <li><a href="../tools/id-model-selector.html" target="_blank" rel="noopener" class="nav-cta nav-tool">ID Model Selector ↗</a></li>
     <li><a href="contact.html" class="nav-cta">Let's Talk</a></li>
   </ul>
 </nav>
 
-<div class="ag-page">
-
-  <a href="../index.html" class="ag-back">← Back to home</a>
-
-  <div class="ag-eyebrow">Now Available</div>
-  <h1>WCAG Guides for<br>Storyline <em>Developers.</em></h1>
-<p class="ag-intro">Four practical guides covering the accessibility problems Storyline doesn't solve out of the box — focus order, colour contrast, alt text strategy, and keyboard navigation. Not theory. Not checklists. Working solutions you can drop into your next project.</p>
-
-  <!-- ABOVE THE FOLD CTA -->
-  <div class="ag-hero-cta">
-    <div class="ag-hero-cta-left">
-     <div class="ag-price-block">
-    <span class="ag-price-meta">PDF · Individual guides + bundles · Instant download</span>
-  </div>
-      <div class="ag-hero-btns">
-        <a href="https://abhishektrivedi.gumroad.com/" target="_blank" rel="noopener" class="ag-btn-primary">Get the Guides →</a>
-        <a href="../index.html#accessibility" class="ag-btn-secondary">Try the live demos first</a>
-      </div>
-    </div>
-    <div class="ag-hero-cta-right">
-      <div class="ag-trust-item"><span class="ag-trust-check">✓</span> WCAG 2.1 AA standard</div>
-      <div class="ag-trust-item"><span class="ag-trust-check">✓</span> Storyline-specific fixes</div>
-      <div class="ag-trust-item"><span class="ag-trust-check">✓</span> No basics, no filler</div>
-    </div>
-  </div>
-
-  <!-- WHAT'S INSIDE -->
-  <!-- WHAT'S INSIDE -->
-  <div class="ag-section-label">What's inside</div>
-  <h2 class="ag-section-heading">Four guides. Four real problems.</h2>
-
-  <div class="ag-cards">
-    <div class="ag-card">
-      <div class="ag-card-num">01</div>
-      <div class="ag-card-title">Focus Order</div>
-      <div class="ag-card-desc">Storyline sets tab order by object creation sequence — not reading order. This guide shows how to override it and build predictable, logical focus flows.</div>
-    </div>
-    <div class="ag-card">
-      <div class="ag-card-num">02</div>
-      <div class="ag-card-title">Colour Contrast</div>
-      <div class="ag-card-desc">WCAG 2.1 AA requires 4.5:1. Most Storyline templates fail. Practical fixes for text, buttons, and interactive elements — with ratios you can verify.</div>
-    </div>
-    <div class="ag-card">
-      <div class="ag-card-num">03</div>
-      <div class="ag-card-title">Alt Text Strategy</div>
-      <div class="ag-card-desc">Not every image needs alt text — and "image of chart" helps nobody. A framework for deciding what's informational, what's decorative, and what screen readers should actually announce.</div>
-    </div>
-    <div class="ag-card">
-      <div class="ag-card-num">04</div>
-      <div class="ag-card-title">Keyboard Navigation</div>
-      <div class="ag-card-desc">Custom interactions in Storyline are mouse-only by default. How to add Enter, Space, and arrow key support so keyboard users aren't locked out.</div>
-    </div>
-  </div>
-
-  <!-- WHO IT'S FOR -->
-  <div class="ag-audience">
-    <h3>Built for people who build in Storyline.</h3>
-    <p>These guides assume you already know Storyline. They skip the basics and go straight to the accessibility gaps that matter — the ones QA catches, the ones learners feel, and the ones most developers don't know exist.</p>
-    <ul class="ag-audience-list">
-      <li>Instructional designers using Storyline 360</li>
-      <li>eLearning developers building custom interactions</li>
-      <li>L&D teams working toward WCAG 2.1 AA compliance</li>
-      <li>QA reviewers checking accessibility standards</li>
-    </ul>
-  </div>
-
-  <!-- CTA -->
-  <div class="ag-cta-section">
-    <p>Available now on Gumroad.</p>
-    <a href="https://abhishektrivedi.gumroad.com/" target="_blank" rel="noopener" class="ag-btn-primary">Get the Guides →</a>
-    <a href="../index.html#accessibility" class="ag-btn-secondary">Try the live demos first</a>
-  </div>
-
+<div class="page-hero">
+  <div class="section-label">Accessibility</div>
+  <h1>WCAG guides for Storyline developers</h1>
+  <p>Practical, implementation-focused guides for WCAG 2.1 AA compliance. Focus order, color contrast, alt text, keyboard navigation — everything Storyline developers need.</p>
 </div>
 
 <footer>
-  <div class="footer-name">&copy; 2026 Abhishek Trivedi &middot; Learning Experience Technologist</div>
+  <div class="footer-name">© 2026 Abhishek Trivedi · Learning Experience Technologist</div>
   <ul class="footer-links">
     <li><a href="https://www.linkedin.com/in/trivedi-abhishek/" target="_blank">LinkedIn</a></li>
     <li><a href="contact.html">Contact</a></li>
@@ -435,6 +242,111 @@
   </ul>
 </footer>
 
-<script src="../js/main.js"></script>
+</div>
+
+<div id="view-visual">
+  <div class="kw-page">
+    <div class="kw-page-hero">
+      <div class="kw-page-eyebrow">Accessibility</div>
+      <h1 class="kw-page-title">WCAG guides for Storyline developers</h1>
+      <p class="kw-page-sub">Practical, implementation-focused guides for WCAG 2.1 AA compliance. Focus order, color contrast, alt text, keyboard navigation — everything Storyline developers need.</p>
+    </div>
+
+    <div class="kw-guides-grid">
+      <div class="kw-guide-card">
+        <div class="kw-guide-icon">🎯</div>
+        <h3 class="kw-guide-title">Focus Order & Keyboard Navigation</h3>
+        <p class="kw-guide-desc">How to manage tab order, avoid keyboard traps, and ensure all interactive elements are keyboard accessible in Storyline.</p>
+        <a href="#" class="kw-guide-link">Read guide →</a>
+      </div>
+
+      <div class="kw-guide-card">
+        <div class="kw-guide-icon">🎨</div>
+        <h3 class="kw-guide-title">Color Contrast & Visual Design</h3>
+        <p class="kw-guide-desc">Meeting WCAG AA contrast ratios (4.5:1), avoiding color-only information, and designing for color blindness.</p>
+        <a href="#" class="kw-guide-link">Read guide →</a>
+      </div>
+
+      <div class="kw-guide-card">
+        <div class="kw-guide-icon">🖼️</div>
+        <h3 class="kw-guide-title">Alt Text & Image Descriptions</h3>
+        <p class="kw-guide-desc">Writing effective alt text, handling decorative images, and providing context for complex graphics in courses.</p>
+        <a href="#" class="kw-guide-link">Read guide →</a>
+      </div>
+
+      <div class="kw-guide-card">
+        <div class="kw-guide-icon">🔊</div>
+        <h3 class="kw-guide-title">Audio & Captions</h3>
+        <p class="kw-guide-desc">Providing accurate captions and transcripts for all audio content. Tools and workflows for Storyline video.</p>
+        <a href="#" class="kw-guide-link">Read guide →</a>
+      </div>
+
+      <div class="kw-guide-card">
+        <div class="kw-guide-icon">📱</div>
+        <h3 class="kw-guide-title">Responsive & Mobile Accessibility</h3>
+        <p class="kw-guide-desc">Ensuring courses remain accessible on mobile devices. Touch targets, zoom levels, and responsive layouts.</p>
+        <a href="#" class="kw-guide-link">Read guide →</a>
+      </div>
+
+      <div class="kw-guide-card">
+        <div class="kw-guide-icon">⚙️</div>
+        <h3 class="kw-guide-title">Testing & Validation</h3>
+        <p class="kw-guide-desc">Tools and techniques for testing accessibility. Screen readers, automated testing, and manual QA checklists.</p>
+        <a href="#" class="kw-guide-link">Read guide →</a>
+      </div>
+    </div>
+
+    <div class="kw-footer">
+      <div class="kw-footer-copy">© 2026 Abhishek Trivedi · Learning Experience Technologist</div>
+      <span class="kw-footer-credit">Visual design inspired by <a href="https://kawe.ski" target="_blank" rel="noopener" class="kw-footer-credit-link">kawe.ski ↗</a></span>
+      <div class="kw-footer-links">
+        <a href="https://www.linkedin.com/in/trivedi-abhishek/" target="_blank" class="kw-footer-link">LinkedIn</a>
+        <a href="contact.html?view=visual" class="kw-footer-link">Contact</a>
+        <a href="../index.html" class="kw-footer-link">Home</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── VIEW SWITCH ──
+let currentView = 'editorial';
+function switchView(view) {
+  if (view === currentView) return;
+  currentView = view;
+  document.getElementById('view-editorial').classList.toggle('view-active', view === 'editorial');
+  document.getElementById('view-visual').classList.toggle('view-active', view === 'visual');
+  document.getElementById('td-nav').style.display = view === 'visual' ? 'flex' : 'none';
+  document.getElementById('btn-editorial').classList.toggle('vsw-active', view === 'editorial');
+  document.getElementById('btn-visual').classList.toggle('vsw-active', view === 'visual');
+  const url = view === 'visual' ? '?view=visual' : window.location.pathname;
+  history.pushState({ view }, '', url);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+(function() {
+  const params = new URLSearchParams(window.location.search);
+  const initView = params.get('view') === 'visual' ? 'visual' : 'editorial';
+  document.getElementById('view-' + initView).classList.add('view-active');
+  currentView = initView;
+  document.getElementById('btn-' + initView).classList.add('vsw-active');
+  if (initView === 'visual') document.getElementById('td-nav').style.display = 'flex';
+})();
+window.addEventListener('popstate', (e) => {
+  switchView((e.state && e.state.view) || 'editorial');
+});
+// ── MOBILE NAV HAMBURGER ──
+const ham = document.getElementById('td-ham');
+const drawer = document.getElementById('td-drawer');
+if (ham && drawer) {
+  ham.addEventListener('click', () => {
+    ham.classList.toggle('open');
+    drawer.classList.toggle('open');
+  });
+}
+// ── VIEW SWITCHER BUTTONS ──
+document.getElementById('btn-editorial').addEventListener('click', () => switchView('editorial'));
+document.getElementById('btn-visual').addEventListener('click', () => switchView('visual'));
+</script>
+
 </body>
 </html>
