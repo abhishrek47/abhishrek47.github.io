@@ -606,7 +606,9 @@
 
   /* ── Style persistence — hide switcher when style already chosen ── */
   html[data-at-style] #view-switcher { display: none !important; }
-  html.at-visual-preload #view-editorial { opacity: 0 !important; pointer-events: none !important; }
+  /* Synchronously show correct view on return visits — prevents blank page flash */
+  html[data-at-style="visual"] #view-editorial { display: none !important; }
+  html[data-at-style="visual"] #view-visual   { display: block !important; }
 
 </style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
