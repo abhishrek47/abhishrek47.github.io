@@ -3240,6 +3240,14 @@ const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
     if (right) right.classList.toggle('active', on);
     if (journey) journey.style.display = on ? 'none' : '';
     document.body.style.overflow = on ? 'hidden' : '';
+    // Clear fixed announcement bar overlap — measure its height if visible
+    if (on) {
+      var wcagBar = document.getElementById('wcag-scroll-bar');
+      var barH = (wcagBar && wcagBar.classList.contains('wcag-bar-visible')) ? wcagBar.offsetHeight : 0;
+      overlay.style.paddingTop = (barH + 32) + 'px';
+    } else {
+      overlay.style.paddingTop = '';
+    }
   };
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && on) toggleRecruiterMode(); });
   document.getElementById('recOverlay').addEventListener('click', function(e) {
