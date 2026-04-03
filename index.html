@@ -4624,21 +4624,6 @@ function initThreeJS() {
   console.log('%chttps://abhishektrivedi.com | All rights reserved.','color:#6b6459;font-size:12px;');
 })();
 
-// __ EDITORIAL NAV HAMBURGER __
-(function() {
-  var ham = document.getElementById('ed-ham');
-  var links = document.getElementById('ed-nav-links');
-  if (ham && links) {
-    ham.addEventListener('click', function() {
-      links.classList.toggle('open');
-    });
-    document.addEventListener('click', function(e) {
-      if (!ham.contains(e.target) && !links.contains(e.target)) {
-        links.classList.remove('open');
-      }
-    });
-  }
-})();
 </script>
 
 <!-- Cursor canvas (editorial) -->

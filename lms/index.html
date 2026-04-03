@@ -1674,7 +1674,7 @@ function switchView(view) {
     // Remove flash-prevention opacity
     document.documentElement.classList.remove('at-visual-preload');
   }
-  var initView = _savedStyle || (params.get(\'view\') === \'visual\' ? \'visual\' : \'editorial\');
+  var initView = _savedStyle || (params.get('view') === 'visual' ? 'visual' : 'editorial');
   document.getElementById('view-editorial').classList.toggle('view-active', initView === 'editorial');
   document.getElementById('view-visual').classList.toggle('view-active', initView === 'visual');
   currentView = initView;

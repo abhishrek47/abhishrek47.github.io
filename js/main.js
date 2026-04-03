@@ -1,11 +1,6 @@
-// Nav hamburger
-document.addEventListener('DOMContentLoaded', () => {
-  const ham = document.querySelector('.hamburger');
-  const links = document.querySelector('.nav-links');
-  if (ham && links) {
-    ham.addEventListener('click', () => links.classList.toggle('open'));
-  }
+// Nav hamburger handled by per-page inline script (removed from main.js to avoid double-listener)
 
+document.addEventListener('DOMContentLoaded', () => {
   // Set active nav link
   const path = window.location.pathname.split('/').pop() || 'index.html';
   document.querySelectorAll('.nav-links a').forEach(a => {
