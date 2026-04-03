@@ -46,8 +46,9 @@
   font-size: 0.82rem;
   font-weight: 500;
   letter-spacing: 0.01em;
-  position: relative;
-  z-index: 9000;
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 9100;
   text-align: center;
   line-height: 1.4;
 }
@@ -2170,9 +2171,23 @@ html[data-style-chosen] #view-switcher  { display: none !important; }
   <span class="announce-badge">New</span>
   <span>WCAG Guides for Storyline Developers — accessibility practices, ready to use.</span>
   <a href="pages/accessibility-guides.html">Learn more →</a>
-  <button class="announce-dismiss" onclick="document.getElementById('announceBar').classList.add('hidden');try{localStorage.setItem('announce-dismissed','1')}catch(e){}" aria-label="Dismiss announcement">&times;</button>
+  <button class="announce-dismiss" onclick="document.getElementById('announceBar').classList.add('hidden');try{localStorage.setItem('announce-dismissed','1')}catch(e){}window._syncNavTop();" aria-label="Dismiss announcement">&times;</button>
 </div>
-<script>try{if(localStorage.getItem('announce-dismissed')==='1'){document.getElementById('announceBar').classList.add('hidden')}}catch(e){}</script>
+<script>
+try{if(localStorage.getItem('announce-dismissed')==='1'){document.getElementById('announceBar').classList.add('hidden')}}catch(e){}
+window._syncNavTop = function() {
+  var bar = document.getElementById('announceBar');
+  var nav = document.querySelector('#view-editorial nav');
+  if (!nav) return;
+  var barH = (bar && !bar.classList.contains('hidden')) ? bar.offsetHeight : 0;
+  nav.style.top = barH + 'px';
+  // Push hero content below both fixed bars
+  var hero = document.querySelector('#view-editorial .hero');
+  if (hero) hero.style.marginTop = (barH + nav.offsetHeight) + 'px';
+};
+document.addEventListener('DOMContentLoaded', window._syncNavTop);
+window.addEventListener('resize', window._syncNavTop);
+</script>
 
 <nav>
   <a href="index.html" class="nav-logo">AT<span>.</span></a>
