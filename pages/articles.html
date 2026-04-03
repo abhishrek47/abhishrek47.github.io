@@ -1,7 +1,12 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- ================================================================
+       SITE UPDATE BANNER
+       Set SHOW_UPDATE_BANNER = false  to hide the banner on this page.
+       Set SHOW_UPDATE_BANNER = true   to show it.
+       ================================================================ -->
+  <script>var SHOW_UPDATE_BANNER = false;</script>
   <script type="text/javascript">
     (function(c,l,a,r,i,t,y){
         c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
@@ -115,6 +120,42 @@
       text-decoration: none;
     }
     .footer-links a:hover { color: var(--accent); }
+
+
+    /* ── EDITORIAL PAGE HEADER ── */
+    .page-header { padding: 5rem 2.5rem 3rem; max-width: 900px; margin: 0 auto; }
+    .section-label { display: flex; align-items: center; gap: 0.75rem; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 1.25rem; }
+    .section-label::before { content: ''; display: block; width: 24px; height: 2px; background: var(--accent); }
+    .page-header h1 { font-family: 'Playfair Display', Georgia, serif; font-size: clamp(2.2rem, 5vw, 3.5rem); font-weight: 700; line-height: 1.15; color: var(--text); margin-bottom: 1rem; }
+    .page-header h1 em { font-style: italic; color: var(--accent); }
+    .page-header p { font-size: 1.05rem; color: var(--muted); max-width: 560px; line-height: 1.7; }
+    .articles-section { max-width: 900px; margin: 0 auto; padding: 0 2.5rem 6rem; }
+    .article-featured { display: grid; grid-template-columns: 1fr 1fr; gap: 0; background: #1e3a5f; border-radius: 12px; overflow: hidden; margin-bottom: 3rem; text-decoration: none; transition: transform 0.2s; }
+    .article-featured:hover { transform: translateY(-3px); }
+    .article-featured-image { background: #162d4a; min-height: 280px; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+    .circuit-art { width: 100%; height: 100%; position: absolute; top: 0; left: 0; }
+    .article-featured-content { padding: 2.5rem; display: flex; flex-direction: column; justify-content: space-between; }
+    .article-meta { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.25rem; }
+    .article-tag { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: #c0392b; background: rgba(192,57,43,0.15); padding: 0.2rem 0.6rem; border-radius: 3px; }
+    .article-date { font-size: 0.78rem; color: rgba(255,255,255,0.4); font-family: 'JetBrains Mono', monospace; }
+    .article-featured-content h2 { font-family: 'Playfair Display', Georgia, serif; font-size: 1.6rem; font-weight: 700; line-height: 1.3; color: #fff; margin-bottom: 1rem; }
+    .article-featured-content p { font-size: 0.9rem; color: rgba(255,255,255,0.6); line-height: 1.7; margin-bottom: 1.5rem; }
+    .article-cta { font-size: 0.85rem; font-weight: 600; color: #c0392b; display: flex; align-items: center; gap: 0.4rem; }
+    .article-cta::after { content: '→'; transition: transform 0.2s; }
+    .article-featured:hover .article-cta::after { transform: translateX(4px); }
+    .articles-list { display: flex; flex-direction: column; gap: 0; }
+    .coming-soon { padding: 2.5rem 0; display: flex; align-items: center; gap: 1rem; color: var(--muted); font-size: 0.85rem; border-bottom: 1px solid var(--border); }
+    .coming-soon-line { flex: 1; height: 1px; background: var(--border); }
+    .newsletter-section { background: #1e3a5f; padding: 4rem 2.5rem; text-align: center; }
+    .newsletter-inner { max-width: 520px; margin: 0 auto; }
+    .newsletter-inner .section-label { justify-content: center; color: rgba(255,255,255,0.5); }
+    .newsletter-inner .section-label::before { background: rgba(255,255,255,0.3); }
+    .newsletter-inner h2 { font-family: 'Playfair Display', Georgia, serif; font-size: 2rem; color: #fff; margin-bottom: 0.75rem; line-height: 1.3; }
+    .newsletter-inner h2 em { font-style: italic; color: #c0392b; }
+    .newsletter-inner p { font-size: 0.9rem; color: rgba(255,255,255,0.55); margin-bottom: 1.75rem; line-height: 1.7; }
+    .newsletter-btn { display: inline-block; background: #c0392b; color: #fff; padding: 0.75rem 2rem; border-radius: 4px; font-weight: 600; font-size: 0.85rem; text-decoration: none; letter-spacing: 0.03em; transition: background 0.2s; }
+    .newsletter-btn:hover { background: #e74c3c; }
+    @media(max-width:680px) { .article-featured{grid-template-columns:1fr} .article-featured-image{min-height:180px} .articles-section{padding:0 1.25rem 4rem} }
 
     /* ── VIEW SYSTEM ── */
     #view-editorial, #view-visual { display: none; }
@@ -247,9 +288,65 @@
     .kw-article-link { font-family: 'Figtree',sans-serif; font-size: 0.8rem; font-weight: 600; color: #151515; text-decoration: none; display: inline-flex; align-items: center; gap: 0.3rem; margin-top: auto; }
     .kw-article-link:hover { opacity: 0.65; }
     @media(max-width:600px) { .kw-page { padding: 1.25rem 1rem; gap: 1.25rem; } .kw-page-hero { padding: 1.5rem; } }
+    @media(max-width:900px) {
+      #td-nav .n-links { display: none !important; }
+      #td-nav .n-ham { display: flex !important; }
+      #td-drawer { position: fixed; top: 58px; left: 0; right: 0; }
+    }
+  
+    /* ── UPDATE BANNER ── */
+    .update-banner {
+      display: none;
+      position: fixed; bottom: 0; left: 0; right: 0;
+      z-index: 99999;
+      align-items: center; justify-content: center; gap: 0.75rem;
+      padding: 0.6rem 1.5rem;
+      font-size: 0.78rem; font-weight: 500;
+      line-height: 1.4;
+    }
+    .update-banner .ub-text { flex: 1; text-align: center; }
+    .update-banner .ub-close {
+      background: none; border: none; cursor: pointer;
+      font-size: 1rem; line-height: 1; padding: 0 0.25rem;
+      opacity: 0.6; transition: opacity 0.15s; flex-shrink: 0;
+    }
+    .update-banner .ub-close:hover { opacity: 1; }
+
+    /* Editorial banner — navy strip */
+    #ub-editorial {
+      background: #1e3a5f;
+      color: rgba(255,255,255,0.85);
+      border-top: 1px solid rgba(255,255,255,0.1);
+      font-family: 'JetBrains Mono', 'DM Mono', monospace;
+    }
+    #ub-editorial .ub-icon { font-size: 0.85rem; }
+    #ub-editorial .ub-close { color: #fff; }
+
+    /* Visual banner — kawe.ski yellow strip */
+    #ub-visual {
+      background: #fbbf0e;
+      color: #151515;
+      border-top: 1.5px solid #151515;
+      font-family: 'Figtree', 'DM Sans', sans-serif;
+      font-weight: 600;
+    }
+    #ub-visual .ub-icon { font-size: 0.85rem; }
+    #ub-visual .ub-close { color: #151515; }
   </style>
 </head>
 <body>
+
+<!-- ── UPDATE BANNERS (controlled by SHOW_UPDATE_BANNER flag above) ── -->
+<div id="ub-editorial" class="update-banner" role="status" aria-live="polite">
+  <span class="ub-icon">🔧</span>
+  <span class="ub-text">This page is being updated — some sections may look incomplete. Check back soon.</span>
+  <button class="ub-close" onclick="dismissBanner()" aria-label="Dismiss">✕</button>
+</div>
+<div id="ub-visual" class="update-banner" role="status" aria-live="polite">
+  <span class="ub-icon">✦</span>
+  <span class="ub-text">Site update in progress · some pages may look incomplete · check back soon</span>
+  <button class="ub-close" onclick="dismissBanner()" aria-label="Dismiss">✕</button>
+</div>
 
 <div id="view-switcher">
   <button class="vsw-btn vsw-active" id="btn-editorial">Editorial</button>
@@ -286,29 +383,104 @@
 
 <nav>
   <a href="../index.html" class="nav-logo">AT<span>.</span></a>
-  <ul class="nav-links">
+  <button class="hamburger" id="ed-ham" aria-label="Menu"><span></span><span></span><span></span></button>
+  <ul class="nav-links" id="ed-nav-links">
     <li><a href="work.html">Work</a></li>
     <li><a href="about.html">About</a></li>
     <li><a href="certifications.html">Certifications</a></li>
-    <li><a href="../game/index.html">Spot the Bug</a></li>
-    <li><a href="../tools/id-model-selector.html" target="_blank" rel="noopener" class="nav-cta">ID Model Selector ↗</a></li>
+    <li style="position:relative;"><a href="articles.html" class="active">Articles</a></li>
+    <li><a href="../id-frameworks.html">ID Cheat Sheet</a></li>
+    <li><a href="../game/index.html">Spot the Bug ↗</a></li>
+    <li><a href="../tools/id-model-selector.html" target="_blank" rel="noopener">ID Model Selector ↗</a></li>
+    <li><a href="../lms/index.html" target="_blank" rel="noopener">LMS Demo ↗</a></li>
     <li><a href="contact.html" class="nav-cta">Let's Talk</a></li>
   </ul>
 </nav>
 
-<div class="page-header">
-  <div class="section-label">Articles</div>
-  <h1>Writing on L&D craft and <em>technology</em></h1>
-  <p>Long-form thinking on instructional design, learning technology, and the intersection of both.</p>
-</div>
+<header class="page-header">
+  <div class="section-label">Writing</div>
+  <h1>A mix of <em>things.</em></h1>
+  <p>Technical breakdowns, half-formed thoughts, things I learned the hard way. Updated when something feels worth writing down.</p>
+</header>
+
+<main class="articles-section">
+
+  <a href="articles/ai-voice-lms.html" class="article-featured">
+    <div class="article-featured-image">
+      <svg class="circuit-art" viewBox="0 0 400 280" xmlns="http://www.w3.org/2000/svg">
+        <rect width="400" height="280" fill="#162d4a"/>
+        <g opacity="0.07" stroke="#f5f0eb" stroke-width="0.5">
+          <line x1="0" y1="40" x2="400" y2="40"/><line x1="0" y1="80" x2="400" y2="80"/>
+          <line x1="0" y1="120" x2="400" y2="120"/><line x1="0" y1="160" x2="400" y2="160"/>
+          <line x1="0" y1="200" x2="400" y2="200"/><line x1="0" y1="240" x2="400" y2="240"/>
+          <line x1="40" y1="0" x2="40" y2="280"/><line x1="80" y1="0" x2="80" y2="280"/>
+          <line x1="120" y1="0" x2="120" y2="280"/><line x1="160" y1="0" x2="160" y2="280"/>
+          <line x1="200" y1="0" x2="200" y2="280"/><line x1="240" y1="0" x2="240" y2="280"/>
+          <line x1="280" y1="0" x2="280" y2="280"/><line x1="320" y1="0" x2="320" y2="280"/>
+          <line x1="360" y1="0" x2="360" y2="280"/>
+        </g>
+        <rect x="20" y="90" width="90" height="50" rx="3" fill="#1e3a5f" stroke="#4a7aaa" stroke-width="0.75"/>
+        <text x="65" y="111" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="#f5f0eb">ENTERPRISE</text>
+        <text x="65" y="123" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="#4a7aaa">LMS</text>
+        <circle cx="110" cy="115" r="3" fill="#c0392b"/>
+        <rect x="155" y="75" width="90" height="80" rx="3" fill="#1e3a5f" stroke="#c0392b" stroke-width="1"/>
+        <text x="200" y="97" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="#f5f0eb">JS TRIGGER</text>
+        <rect x="165" y="105" width="40" height="4" rx="1" fill="#c0392b" opacity="0.5"/>
+        <rect x="165" y="114" width="60" height="4" rx="1" fill="#4a7aaa" opacity="0.5"/>
+        <rect x="165" y="123" width="50" height="4" rx="1" fill="#4a7aaa" opacity="0.5"/>
+        <rect x="165" y="132" width="35" height="4" rx="1" fill="#c0392b" opacity="0.4"/>
+        <circle cx="155" cy="115" r="3" fill="#c0392b"/>
+        <circle cx="245" cy="115" r="3" fill="#c0392b"/>
+        <rect x="290" y="90" width="90" height="50" rx="3" fill="#1e3a5f" stroke="#4a7aaa" stroke-width="0.75"/>
+        <text x="335" y="111" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="#f5f0eb">AI VOICE</text>
+        <text x="335" y="123" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="#4a7aaa">API</text>
+        <circle cx="290" cy="115" r="3" fill="#c0392b"/>
+        <line x1="110" y1="115" x2="155" y2="115" stroke="#c0392b" stroke-width="1.5" fill="none"/>
+        <line x1="245" y1="115" x2="290" y2="115" stroke="#c0392b" stroke-width="1.5" fill="none"/>
+        <path d="M335 140 L335 200 L200 200 L200 155" stroke="#f5f0eb" stroke-width="0.75" stroke-dasharray="4 3" fill="none"/>
+        <polyline points="160,220 168,208 176,232 184,216 192,228 200,214 208,224 216,220" stroke="#c0392b" stroke-width="1.5" fill="none"/>
+        <text x="240" y="224" font-family="JetBrains Mono,monospace" font-size="8" fill="rgba(245,240,235,0.6)">Hello, Abhishek</text>
+      </svg>
+    </div>
+    <div class="article-featured-content">
+      <div>
+        <div class="article-meta">
+          <span class="article-tag">AI Integration</span>
+          <span class="article-date">Mar 2026</span>
+        </div>
+        <h2>I made an enterprise LMS speak my learner's name using a live AI voice API</h2>
+        <p>CORS for a week, a name that came back reversed, an API key sitting in plain JavaScript — what it actually took to ship real-time AI personalisation inside a SCORM course.</p>
+      </div>
+      <span class="article-cta">Read the full breakdown</span>
+    </div>
+  </a>
+
+  <div class="articles-list">
+    <div class="coming-soon">
+      <span class="coming-soon-line"></span>
+      <span style="white-space:nowrap; font-family: 'JetBrains Mono', monospace; font-size:0.72rem;">More articles coming</span>
+      <span class="coming-soon-line"></span>
+    </div>
+  </div>
+
+</main>
+
+<section class="newsletter-section">
+  <div class="newsletter-inner">
+    <div class="section-label">Newsletter</div>
+    <h2>These go deeper on <em>LinkedIn.</em></h2>
+    <p>Every article here is also published as a LinkedIn newsletter — with more context, reactions, and discussion. Follow along there if you want the full conversation.</p>
+    <a href="https://linkedin.com/in/trivedi-abhishek" class="newsletter-btn" target="_blank">Follow on LinkedIn ↗</a>
+  </div>
+</section>
 
 <footer>
-  <div class="footer-name">© 2026 Abhishek Trivedi · Learning Experience Technologist</div>
-  <ul class="footer-links">
-    <li><a href="https://www.linkedin.com/in/trivedi-abhishek/" target="_blank">LinkedIn</a></li>
-    <li><a href="contact.html">Contact</a></li>
-    <li><a href="../index.html">Home</a></li>
-  </ul>
+  <span>© 2026 Abhishek Trivedi · Learning Experience Technologist</span>
+  <div class="footer-links">
+    <a href="https://linkedin.com/in/trivedi-abhishek" target="_blank">LinkedIn</a>
+    <a href="contact.html">Contact</a>
+    <a href="work.html">Work</a>
+  </div>
 </footer>
 
 </div>
@@ -318,59 +490,29 @@
     <div class="kw-page-hero">
       <div class="kw-page-eyebrow">Articles</div>
       <h1 class="kw-page-title">Writing on L&D craft and technology</h1>
-      <p class="kw-page-sub">Long-form thinking on instructional design, learning technology, and the intersection of both.</p>
+      <p class="kw-page-sub">Long-form thinking on instructional design, learning technology, and the intersection of both. More articles are in progress — follow on LinkedIn to get them first.</p>
     </div>
 
     <div class="kw-articles-list">
-      <a href="#" class="kw-article-card">
+      <a href="articles/ai-voice-lms.html?view=visual" class="kw-article-card">
         <div class="kw-article-meta">
-          <div class="kw-article-date">March 2024</div>
-          <span class="kw-article-tag">Instructional Design</span>
+          <div class="kw-article-date">March 2026</div>
+          <span class="kw-article-tag">AI Integration</span>
+          <span class="kw-article-tag" style="background:#7f9bc8;">Storyline 360</span>
         </div>
-        <h3 class="kw-article-title">Beyond ADDIE: Why ID Models Matter More Than You Think</h3>
-        <p class="kw-article-desc">An exploration of how ID frameworks like Bloom, Gagné, and 4C/ID lead to fundamentally different course structures — and why that matters for learning outcomes.</p>
+        <h3 class="kw-article-title">I made an enterprise LMS speak my learner's name using a live AI voice API. Here's every wall I hit to get there.</h3>
+        <p class="kw-article-desc">CORS for a week, a name that came back reversed, an API key sitting in plain JavaScript — what it actually took to ship real-time AI personalisation inside a SCORM course running in an enterprise LMS.</p>
         <div class="kw-article-link">Read article →</div>
       </a>
 
-      <a href="#" class="kw-article-card">
+      <div class="kw-article-card" style="background:#fafafa;border-style:dashed;cursor:default;">
         <div class="kw-article-meta">
-          <div class="kw-article-date">February 2024</div>
-          <span class="kw-article-tag">Learning Technology</span>
+          <span class="kw-article-tag" style="background:#e5e5e5;color:#888;border-color:#ccc;">Coming soon</span>
         </div>
-        <h3 class="kw-article-title">The xAPI Gap: Why Your LMS Data Doesn't Tell You What You Need to Know</h3>
-        <p class="kw-article-desc">Standard SCORM tracking hides the learner actions that matter. This article explains xAPI, why it's different, and how to implement it without rebuilding your infrastructure.</p>
-        <div class="kw-article-link">Read article →</div>
-      </a>
-
-      <a href="#" class="kw-article-card">
-        <div class="kw-article-meta">
-          <div class="kw-article-date">January 2024</div>
-          <span class="kw-article-tag">AI & Automation</span>
-        </div>
-        <h3 class="kw-article-title">Automating Localization: How FFmpeg Solved Our Multi-Language Problem</h3>
-        <p class="kw-article-desc">A technical deep-dive into the video localization pipeline we built. From shell scripts to subtitle sync, the engineering mindset applied to L&D workflows.</p>
-        <div class="kw-article-link">Read article →</div>
-      </a>
-
-      <a href="#" class="kw-article-card">
-        <div class="kw-article-meta">
-          <div class="kw-article-date">December 2023</div>
-          <span class="kw-article-tag">Instructional Design</span>
-        </div>
-        <h3 class="kw-article-title">Systems Thinking in L&D: Why Template Systems Scale Better Than Courses</h3>
-        <p class="kw-article-desc">Building for one project is easy. Building for ten projects is a system. This article covers the thinking behind scalable L&D infrastructure.</p>
-        <div class="kw-article-link">Read article →</div>
-      </a>
-
-      <a href="#" class="kw-article-card">
-        <div class="kw-article-meta">
-          <div class="kw-article-date">November 2023</div>
-          <span class="kw-article-tag">Learning Technology</span>
-        </div>
-        <h3 class="kw-article-title">Storyline + JavaScript: Building Beyond the Authoring Tool</h3>
-        <p class="kw-article-desc">Storyline is powerful, but limited. Learn how JavaScript integration opens up API connections, dynamic data, and personalized learning experiences.</p>
-        <div class="kw-article-link">Read article →</div>
-      </a>
+        <h3 class="kw-article-title" style="color:#bbb;">More articles in progress</h3>
+        <p class="kw-article-desc" style="color:#bbb;">Every article is also published as a LinkedIn newsletter. Follow along there for the full conversation and early access.</p>
+        <a href="https://linkedin.com/in/trivedi-abhishek" target="_blank" rel="noopener" class="kw-article-link" style="color:#666;">Follow on LinkedIn ↗</a>
+      </div>
     </div>
 
     <div class="kw-footer">
@@ -403,7 +545,8 @@ function switchView(view) {
 (function() {
   const params = new URLSearchParams(window.location.search);
   const initView = params.get('view') === 'visual' ? 'visual' : 'editorial';
-  document.getElementById('view-' + initView).classList.add('view-active');
+  document.getElementById('view-editorial').classList.toggle('view-active', initView === 'editorial');
+  document.getElementById('view-visual').classList.toggle('view-active', initView === 'visual');
   currentView = initView;
   document.getElementById('btn-' + initView).classList.add('vsw-active');
   if (initView === 'visual') document.getElementById('td-nav').style.display = 'flex';
@@ -423,6 +566,53 @@ if (ham && drawer) {
 // ── VIEW SWITCHER BUTTONS ──
 document.getElementById('btn-editorial').addEventListener('click', () => switchView('editorial'));
 document.getElementById('btn-visual').addEventListener('click', () => switchView('visual'));
+
+// ── EDITORIAL NAV HAMBURGER ──
+(function() {
+  var ham = document.getElementById('ed-ham');
+  var links = document.getElementById('ed-nav-links');
+  if (ham && links) {
+    ham.addEventListener('click', function() {
+      links.classList.toggle('open');
+    });
+    document.addEventListener('click', function(e) {
+      if (!ham.contains(e.target) && !links.contains(e.target)) {
+        links.classList.remove('open');
+      }
+    });
+  }
+})();
+</script>
+
+
+<script>
+
+// ── UPDATE BANNER LOGIC ──
+(function() {
+  if (!window.SHOW_UPDATE_BANNER) return;
+  if (sessionStorage.getItem('ub_dismissed')) return;
+
+  function showBanner(view) {
+    document.getElementById('ub-editorial').style.display = view === 'editorial' ? 'flex' : 'none';
+    document.getElementById('ub-visual').style.display   = view === 'visual'    ? 'flex' : 'none';
+  }
+
+  var initView = (new URLSearchParams(window.location.search).get('view') === 'visual') ? 'visual' : 'editorial';
+  showBanner(initView);
+
+  // Re-sync when view switches
+  var _origSwitch = window.switchView;
+  window.switchView = function(v) {
+    if (_origSwitch) _origSwitch(v);
+    if (!sessionStorage.getItem('ub_dismissed')) showBanner(v);
+  };
+})();
+
+function dismissBanner() {
+  document.getElementById('ub-editorial').style.display = 'none';
+  document.getElementById('ub-visual').style.display   = 'none';
+  sessionStorage.setItem('ub_dismissed', '1');
+}
 </script>
 
 </body>

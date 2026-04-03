@@ -1,7 +1,12 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- ================================================================
+       SITE UPDATE BANNER
+       Set SHOW_UPDATE_BANNER = false  to hide the banner on this page.
+       Set SHOW_UPDATE_BANNER = true   to show it.
+       ================================================================ -->
+  <script>var SHOW_UPDATE_BANNER = false;</script>
   <script type="text/javascript">
     (function(c,l,a,r,i,t,y){
         c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
@@ -234,9 +239,65 @@
     .kw-open-to-list { display: flex; flex-wrap: wrap; gap: 0.5rem; }
     @media(max-width:900px) { .kw-contact-grid { grid-template-columns: 1fr; } }
     @media(max-width:600px) { .kw-page { padding: 1.25rem 1rem; gap: 1.25rem; } .kw-page-hero { padding: 1.5rem; } }
+    @media(max-width:900px) {
+      #td-nav .n-links { display: none !important; }
+      #td-nav .n-ham { display: flex !important; }
+      #td-drawer { position: fixed; top: 58px; left: 0; right: 0; }
+    }
+  
+    /* ── UPDATE BANNER ── */
+    .update-banner {
+      display: none;
+      position: fixed; bottom: 0; left: 0; right: 0;
+      z-index: 99999;
+      align-items: center; justify-content: center; gap: 0.75rem;
+      padding: 0.6rem 1.5rem;
+      font-size: 0.78rem; font-weight: 500;
+      line-height: 1.4;
+    }
+    .update-banner .ub-text { flex: 1; text-align: center; }
+    .update-banner .ub-close {
+      background: none; border: none; cursor: pointer;
+      font-size: 1rem; line-height: 1; padding: 0 0.25rem;
+      opacity: 0.6; transition: opacity 0.15s; flex-shrink: 0;
+    }
+    .update-banner .ub-close:hover { opacity: 1; }
+
+    /* Editorial banner — navy strip */
+    #ub-editorial {
+      background: #1e3a5f;
+      color: rgba(255,255,255,0.85);
+      border-top: 1px solid rgba(255,255,255,0.1);
+      font-family: 'JetBrains Mono', 'DM Mono', monospace;
+    }
+    #ub-editorial .ub-icon { font-size: 0.85rem; }
+    #ub-editorial .ub-close { color: #fff; }
+
+    /* Visual banner — kawe.ski yellow strip */
+    #ub-visual {
+      background: #fbbf0e;
+      color: #151515;
+      border-top: 1.5px solid #151515;
+      font-family: 'Figtree', 'DM Sans', sans-serif;
+      font-weight: 600;
+    }
+    #ub-visual .ub-icon { font-size: 0.85rem; }
+    #ub-visual .ub-close { color: #151515; }
   </style>
 </head>
 <body>
+
+<!-- ── UPDATE BANNERS (controlled by SHOW_UPDATE_BANNER flag above) ── -->
+<div id="ub-editorial" class="update-banner" role="status" aria-live="polite">
+  <span class="ub-icon">🔧</span>
+  <span class="ub-text">This page is being updated — some sections may look incomplete. Check back soon.</span>
+  <button class="ub-close" onclick="dismissBanner()" aria-label="Dismiss">✕</button>
+</div>
+<div id="ub-visual" class="update-banner" role="status" aria-live="polite">
+  <span class="ub-icon">✦</span>
+  <span class="ub-text">Site update in progress · some pages may look incomplete · check back soon</span>
+  <button class="ub-close" onclick="dismissBanner()" aria-label="Dismiss">✕</button>
+</div>
 
 <div id="view-switcher">
   <button class="vsw-btn vsw-active" id="btn-editorial">Editorial</button>
@@ -273,14 +334,17 @@
 
 <nav>
   <a href="../index.html" class="nav-logo">AT<span>.</span></a>
-  <button class="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
-  <ul class="nav-links">
+  <button class="hamburger" id="ed-ham" aria-label="Menu"><span></span><span></span><span></span></button>
+  <ul class="nav-links" id="ed-nav-links">
     <li><a href="work.html">Work</a></li>
     <li><a href="about.html">About</a></li>
     <li><a href="certifications.html">Certifications</a></li>
-    <li><a href="../game/index.html">Spot the Bug</a></li>
-    <li><a href="../tools/id-model-selector.html" target="_blank" rel="noopener" class="nav-cta nav-tool">ID Model Selector ↗</a></li>
-    <li><a href="contact.html" class="nav-cta">Let's Talk</a></li>
+    <li style="position:relative;"><a href="articles.html">Articles</a><span style="position:absolute;top:-8px;right:-4px;font-family:var(--mono);font-size:0.55rem;font-weight:600;letter-spacing:0.06em;background:#c84b2f;color:#fff;padding:1px 5px;border-radius:2px;line-height:1.4;">NEW</span></li>
+    <li><a href="../id-frameworks.html">ID Cheat Sheet</a></li>
+    <li><a href="../game/index.html">Spot the Bug ↗</a></li>
+    <li><a href="../tools/id-model-selector.html" target="_blank" rel="noopener">ID Model Selector ↗</a></li>
+    <li><a href="../lms/index.html" target="_blank" rel="noopener">LMS Demo ↗</a></li>
+    <li><a href="contact.html" class="nav-cta active">Let's Talk</a></li>
   </ul>
 </nav>
 
@@ -443,6 +507,53 @@ if (ham && drawer) {
 // ── VIEW SWITCHER BUTTONS ──
 document.getElementById('btn-editorial').addEventListener('click', () => switchView('editorial'));
 document.getElementById('btn-visual').addEventListener('click', () => switchView('visual'));
+
+// ── EDITORIAL NAV HAMBURGER ──
+(function() {
+  var ham = document.getElementById('ed-ham');
+  var links = document.getElementById('ed-nav-links');
+  if (ham && links) {
+    ham.addEventListener('click', function() {
+      links.classList.toggle('open');
+    });
+    document.addEventListener('click', function(e) {
+      if (!ham.contains(e.target) && !links.contains(e.target)) {
+        links.classList.remove('open');
+      }
+    });
+  }
+})();
+</script>
+
+
+<script>
+
+// ── UPDATE BANNER LOGIC ──
+(function() {
+  if (!window.SHOW_UPDATE_BANNER) return;
+  if (sessionStorage.getItem('ub_dismissed')) return;
+
+  function showBanner(view) {
+    document.getElementById('ub-editorial').style.display = view === 'editorial' ? 'flex' : 'none';
+    document.getElementById('ub-visual').style.display   = view === 'visual'    ? 'flex' : 'none';
+  }
+
+  var initView = (new URLSearchParams(window.location.search).get('view') === 'visual') ? 'visual' : 'editorial';
+  showBanner(initView);
+
+  // Re-sync when view switches
+  var _origSwitch = window.switchView;
+  window.switchView = function(v) {
+    if (_origSwitch) _origSwitch(v);
+    if (!sessionStorage.getItem('ub_dismissed')) showBanner(v);
+  };
+})();
+
+function dismissBanner() {
+  document.getElementById('ub-editorial').style.display = 'none';
+  document.getElementById('ub-visual').style.display   = 'none';
+  sessionStorage.setItem('ub_dismissed', '1');
+}
 </script>
 
 </body>

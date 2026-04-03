@@ -3,6 +3,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- ================================================================
+       SITE UPDATE BANNER
+       Set SHOW_UPDATE_BANNER = false  to hide the banner on this page.
+       Set SHOW_UPDATE_BANNER = true   to show it.
+       ================================================================ -->
+  <script>var SHOW_UPDATE_BANNER = false;</script>
    <script type="text/javascript">
     (function(c,l,a,r,i,t,y){
         c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
@@ -765,8 +771,182 @@ code { padding: 1px 5px; }
 }
 .json-box h3 { margin-bottom: 1rem; }
 </style>
+
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Figtree:wght@400;500;600;700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+  <style>
+    /* __ VIEW SYSTEM __ */
+    #view-editorial, #view-visual { display: none; }
+    #view-editorial.view-active, #view-visual.view-active { display: block; }
+    /* __ VIEW SWITCHER __ */
+    #view-switcher {
+      position: fixed; bottom: 2rem; right: 2rem; z-index: 9000;
+      display: flex; background: #0f0f0f;
+      border: 1px solid rgba(255,255,255,0.12); border-radius: 100px;
+      padding: 4px; gap: 3px; box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    }
+    .vsw-btn {
+      font-family: 'DM Sans', sans-serif; font-size: 0.7rem; font-weight: 500;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      color: rgba(255,255,255,0.4); background: none; border: none;
+      border-radius: 100px; padding: 0.45rem 1rem; cursor: pointer; transition: all 0.2s;
+    }
+    .vsw-btn.vsw-active { background: #fff; color: #0f0f0f; font-weight: 600; }
+    .vsw-btn:hover:not(.vsw-active) { color: rgba(255,255,255,0.75); }
+    /* __ YELLOW NAV __ */
+    #td-nav {
+      position: sticky; top: 0; z-index: 200;
+      background: #fbbf0e; border-bottom: 1.5px solid #151515;
+      display: none; align-items: center; justify-content: space-between;
+      padding: 0 2.5rem; height: 58px; gap: 2rem;
+    }
+    #td-nav .n-logo { font-family: 'Outfit', sans-serif; font-size: 1rem; font-weight: 700; color: #151515; text-decoration: none; letter-spacing: -0.02em; }
+    #td-nav .n-logo span { display: block; }
+    #td-nav .n-links { display: flex; gap: 0.35rem; list-style: none; align-items: center; padding: 0; margin: 0; }
+    #td-nav .n-links a {
+      font-family: 'Outfit', sans-serif; font-size: 0.9rem; font-weight: 400;
+      color: #151515; text-decoration: none; padding: 0.5rem 0.85rem;
+      border: 1.5px solid #151515; border-radius: 8px; background: #ffffff;
+      box-shadow: rgba(0,0,0,0.15) 3px 3px 0 0; transition: box-shadow 0.12s, transform 0.12s; white-space: nowrap;
+    }
+    #td-nav .n-links a:hover { box-shadow: rgba(0,0,0,0.18) 2px 2px 0 0; transform: translate(1px,1px); }
+    #td-nav .n-links a.kw-active { background: #151515; color: #fbbf0e; box-shadow: none; }
+    #td-nav .n-cta { background: #151515 !important; color: #fbbf0e !important; font-weight: 600 !important; }
+    #td-nav .n-cta:hover { background: #2a2a2a !important; }
+    #td-nav .n-ham { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; padding: 4px; }
+    #td-nav .n-ham span { display: block; width: 22px; height: 2px; background: #151515; border-radius: 2px; transition: all 0.3s; }
+    #td-nav .n-ham.open span:nth-child(1) { transform: rotate(45deg) translate(5px,5px); }
+    #td-nav .n-ham.open span:nth-child(2) { opacity: 0; }
+    #td-nav .n-ham.open span:nth-child(3) { transform: rotate(-45deg) translate(5px,-5px); }
+    #td-drawer { display: none; position: fixed; top: 58px; left: 0; right: 0; background: #fbbf0e; border-bottom: 1.5px solid #151515; padding: 1rem 1.5rem; flex-direction: column; gap: 0.5rem; list-style: none; z-index: 199; margin: 0; }
+    #td-drawer.open { display: flex; }
+    #td-drawer a { font-family: 'Figtree', sans-serif; font-size: 0.9rem; font-weight: 500; color: #151515; text-decoration: none; padding: 0.55rem 0; border-bottom: 1px solid rgba(21,21,21,0.15); }
+    #td-drawer a:last-child { border-bottom: none; }
+    /* __ KW SHELL __ */
+    #view-visual { background: linear-gradient(to bottom, #f3e8ff 0%, #ffffff 60%); min-height: 100vh; }
+    .kw-page { max-width: 1100px; margin: 0 auto; padding: 2.5rem 2rem; display: flex; flex-direction: column; gap: 1.75rem; }
+    .kw-demo-hero { padding: 2.5rem; background: #ffffff; border: 1.5px solid #151515; border-radius: 16px; }
+    .kw-demo-eyebrow { font-family: 'Figtree',sans-serif; font-size: 0.7rem; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.5rem; }
+    .kw-demo-title { font-family: 'Outfit',sans-serif; font-size: clamp(1.6rem,3vw,2.4rem); font-weight: 700; color: #151515; margin: 0 0 0.75rem; letter-spacing: -0.025em; line-height: 1.2; }
+    .kw-demo-desc { font-family: 'Figtree',sans-serif; font-size: 0.95rem; line-height: 1.7; color: #444; margin: 0 0 1rem; max-width: 700px; }
+    .kw-demo-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .kw-demo-tag { font-family: 'Figtree',sans-serif; font-size: 0.75rem; font-weight: 600; padding: 0.25rem 0.75rem; border-radius: 6px; color: #151515; border: 1.5px solid rgba(21,21,21,0.15); white-space: nowrap; }
+    .kw-demo-frame { background: #ffffff; border: 1.5px solid #151515; border-radius: 16px; overflow: hidden; }
+    .kw-demo-frame-header { background: #fbbf0e; border-bottom: 1.5px solid #151515; padding: 0.75rem 1.25rem; display: flex; align-items: center; gap: 0.75rem; }
+    .kw-demo-frame-dots { display: flex; gap: 6px; }
+    .kw-demo-frame-dot { width: 12px; height: 12px; border-radius: 50%; border: 1.5px solid rgba(0,0,0,0.2); }
+    .kw-demo-frame-dot:nth-child(1) { background: #ff6058; }
+    .kw-demo-frame-dot:nth-child(2) { background: #ffbe2e; }
+    .kw-demo-frame-dot:nth-child(3) { background: #2aca44; }
+    .kw-demo-frame-label { font-family: 'Outfit',sans-serif; font-size: 0.78rem; font-weight: 600; color: #151515; margin-left: 0.25rem; }
+    .kw-demo-body { padding: 0; }
+    .kw-footer { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; padding: 1.5rem 0 2.5rem; border-top: 1.5px solid rgba(21,21,21,0.2); }
+    .kw-footer-copy { font-family: 'Figtree',sans-serif; font-size: 0.78rem; color: #888; }
+    .kw-footer-links { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    .kw-footer-link { font-family: 'Figtree',sans-serif; font-size: 0.78rem; font-weight: 500; color: #151515; text-decoration: none; padding: 0.35rem 1rem; border: 1.5px solid #151515; border-radius: 100px; transition: background 0.15s; white-space: nowrap; }
+    .kw-footer-link:hover { background: #fbbf0e; }
+    .kw-footer-credit { font-family: 'Figtree',sans-serif; font-size: 0.72rem; color: #aaa; }
+    .kw-footer-credit-link { color: #888; text-decoration: underline; }
+    .kw-footer-credit-link:hover { color: #151515; }
+    @media(max-width:900px) {
+      #td-nav .n-links { display: none !important; }
+      #td-nav .n-ham { display: flex !important; }
+      #td-drawer { position: fixed; top: 58px; left: 0; right: 0; }
+      .kw-page { padding: 1.25rem 1rem; gap: 1.25rem; }
+      .kw-demo-hero { padding: 1.5rem; }
+    }
+  
+    /* ── UPDATE BANNER ── */
+    .update-banner {
+      display: none;
+      position: fixed; bottom: 0; left: 0; right: 0;
+      z-index: 99999;
+      align-items: center; justify-content: center; gap: 0.75rem;
+      padding: 0.6rem 1.5rem;
+      font-size: 0.78rem; font-weight: 500;
+      line-height: 1.4;
+    }
+    .update-banner .ub-text { flex: 1; text-align: center; }
+    .update-banner .ub-close {
+      background: none; border: none; cursor: pointer;
+      font-size: 1rem; line-height: 1; padding: 0 0.25rem;
+      opacity: 0.6; transition: opacity 0.15s; flex-shrink: 0;
+    }
+    .update-banner .ub-close:hover { opacity: 1; }
+
+    /* Editorial banner — navy strip */
+    #ub-editorial {
+      background: #1e3a5f;
+      color: rgba(255,255,255,0.85);
+      border-top: 1px solid rgba(255,255,255,0.1);
+      font-family: 'JetBrains Mono', 'DM Mono', monospace;
+    }
+    #ub-editorial .ub-icon { font-size: 0.85rem; }
+    #ub-editorial .ub-close { color: #fff; }
+
+    /* Visual banner — kawe.ski yellow strip */
+    #ub-visual {
+      background: #fbbf0e;
+      color: #151515;
+      border-top: 1.5px solid #151515;
+      font-family: 'Figtree', 'DM Sans', sans-serif;
+      font-weight: 600;
+    }
+    #ub-visual .ub-icon { font-size: 0.85rem; }
+    #ub-visual .ub-close { color: #151515; }
+  </style>
 </head>
 <body>
+
+<!-- ── UPDATE BANNERS (controlled by SHOW_UPDATE_BANNER flag above) ── -->
+<div id="ub-editorial" class="update-banner" role="status" aria-live="polite">
+  <span class="ub-icon">🔧</span>
+  <span class="ub-text">This page is being updated — some sections may look incomplete. Check back soon.</span>
+  <button class="ub-close" onclick="dismissBanner()" aria-label="Dismiss">✕</button>
+</div>
+<div id="ub-visual" class="update-banner" role="status" aria-live="polite">
+  <span class="ub-icon">✦</span>
+  <span class="ub-text">Site update in progress · some pages may look incomplete · check back soon</span>
+  <button class="ub-close" onclick="dismissBanner()" aria-label="Dismiss">✕</button>
+</div>
+
+
+<div id="view-switcher">
+  <button class="vsw-btn vsw-active" id="btn-editorial">Editorial</button>
+  <button class="vsw-btn" id="btn-visual">Visual</button>
+</div>
+
+<nav id="td-nav">
+  <a href="../index.html" class="n-logo">AT<span>.</span></a>
+  <ul class="n-links">
+    <li><a href="../pages/work.html?view=visual">Work</a></li>
+    <li><a href="../pages/about.html?view=visual">About</a></li>
+    <li><a href="../pages/certifications.html?view=visual">Certifications</a></li>
+    <li><a href="../pages/articles.html?view=visual">Articles</a></li>
+    <li><a href="../id-frameworks.html?view=visual">ID Cheat Sheet</a></li>
+    <li><a href="../game/index.html?view=visual">Spot the Bug</a></li>
+    <li><a href="../tools/id-model-selector.html?view=visual">ID Model Selector</a></li>
+    <li><a href="../lms/index.html?view=visual">LMS Demo</a></li>
+    <li><a href="../pages/contact.html?view=visual" class="n-cta">Let's Talk</a></li>
+  </ul>
+  <button class="n-ham" id="td-ham" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<ul id="td-drawer">
+  <li><a href="../pages/work.html?view=visual">Work</a></li>
+  <li><a href="../pages/about.html?view=visual">About</a></li>
+  <li><a href="../pages/certifications.html?view=visual">Certifications</a></li>
+  <li><a href="../pages/articles.html?view=visual">Articles</a></li>
+  <li><a href="../id-frameworks.html?view=visual">ID Cheat Sheet</a></li>
+  <li><a href="../game/index.html?view=visual">Spot the Bug</a></li>
+  <li><a href="../tools/id-model-selector.html?view=visual">ID Model Selector</a></li>
+  <li><a href="../lms/index.html?view=visual">LMS Demo</a></li>
+  <li><a href="../pages/contact.html?view=visual">Let's Talk</a></li>
+</ul>
+
+<div id="view-editorial" class="view-active">
+
 
 <nav class="demo-nav">
   <a class="logo" href="https://abhishektrivedi.com">AT.</a>
@@ -1237,5 +1417,120 @@ window.addEventListener('load', () => {
 })();
 </script>
 <!-- ── END PROTECTION ── -->
+
+</div>
+
+<div id="view-visual">
+  <div class="kw-page">
+    <div class="kw-demo-hero">
+      <div class="kw-demo-eyebrow">Demo 04 · Learning Analytics</div>
+      <h2 class="kw-demo-title">Every interaction tracked. Every decision visible. In real time.</h2>
+      <p class="kw-demo-desc">xAPI statements from a live Storyline course feed a dashboard that shows what learners actually did — not just pass/fail. Built to prove that L&D data can be actionable without a custom LRS vendor.</p>
+      <div class="kw-demo-tags"><span class="kw-demo-tag" style="background:#fbbf0e;">xAPI / Tin Can</span><span class="kw-demo-tag" style="background:#e8d5ff;">JavaScript</span><span class="kw-demo-tag" style="background:#d5ffe8;">Real-time Data</span><span class="kw-demo-tag" style="background:#ffd5d5;">SCORM to xAPI</span></div>
+    </div>
+
+    <div class="kw-demo-frame">
+      <div class="kw-demo-frame-header">
+        <div class="kw-demo-frame-dots">
+          <div class="kw-demo-frame-dot"></div>
+          <div class="kw-demo-frame-dot"></div>
+          <div class="kw-demo-frame-dot"></div>
+        </div>
+        <span class="kw-demo-frame-label">Demo 04 — The Invisible Student</span>
+      </div>
+      <div class="kw-demo-body" id="kw-demo-embed">
+        <div id="kw-demo-content">
+          <div id="kw-demo-launcher" style="padding:3rem 2rem;text-align:center;background:#fafafa;">
+            <div style="font-family:'Outfit',sans-serif;font-size:1.1rem;font-weight:600;color:#151515;margin-bottom:0.5rem;">Interactive demo loads here</div>
+            <div style="font-family:'Figtree',sans-serif;font-size:0.85rem;color:#888;margin-bottom:1.5rem;">The full interactive experience runs in the editorial view — click below to launch it.</div>
+            <button onclick="switchView('editorial')" style="font-family:'Outfit',sans-serif;font-size:0.9rem;font-weight:600;padding:0.75rem 2rem;background:#151515;color:#fff;border:1.5px solid #151515;border-radius:8px;cursor:pointer;box-shadow:rgba(0,0,0,0.2) 3px 3px 0 0;transition:all 0.15s;" onmouseover="this.style.boxShadow='rgba(0,0,0,0.25) 2px 2px 0 0';this.style.transform='translate(1px,1px)';" onmouseout="this.style.boxShadow='rgba(0,0,0,0.2) 3px 3px 0 0';this.style.transform='';">Launch Demo &#8599;</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="kw-footer">
+      <div class="kw-footer-copy">&#169; 2026 Abhishek Trivedi &middot; Learning Experience Technologist</div>
+      <span class="kw-footer-credit">Visual design inspired by <a href="https://kawe.ski" target="_blank" rel="noopener" class="kw-footer-credit-link">kawe.ski &#8599;</a></span>
+      <div class="kw-footer-links">
+        <a href="https://www.linkedin.com/in/trivedi-abhishek/" target="_blank" class="kw-footer-link">LinkedIn</a>
+        <a href="../pages/contact.html?view=visual" class="kw-footer-link">Contact</a>
+        <a href="../index.html" class="kw-footer-link">Home</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+// __ VIEW SWITCH __
+let currentView = 'editorial';
+function switchView(view) {
+  if (view === currentView) return;
+  currentView = view;
+  document.getElementById('view-editorial').classList.toggle('view-active', view === 'editorial');
+  document.getElementById('view-visual').classList.toggle('view-active', view === 'visual');
+  document.getElementById('td-nav').style.display = view === 'visual' ? 'flex' : 'none';
+  document.getElementById('btn-editorial').classList.toggle('vsw-active', view === 'editorial');
+  document.getElementById('btn-visual').classList.toggle('vsw-active', view === 'visual');
+  const url = view === 'visual' ? '?view=visual' : window.location.pathname;
+  history.pushState({ view }, '', url);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+(function() {
+  var params = new URLSearchParams(window.location.search);
+  var initView = params.get('view') === 'visual' ? 'visual' : 'editorial';
+  document.getElementById('view-editorial').classList.toggle('view-active', initView === 'editorial');
+  document.getElementById('view-visual').classList.toggle('view-active', initView === 'visual');
+  currentView = initView;
+  document.getElementById('btn-' + initView).classList.add('vsw-active');
+  if (initView === 'visual') document.getElementById('td-nav').style.display = 'flex';
+})();
+window.addEventListener('popstate', function(e) {
+  switchView((e.state && e.state.view) || 'editorial');
+});
+document.getElementById('btn-editorial').addEventListener('click', function() { switchView('editorial'); });
+document.getElementById('btn-visual').addEventListener('click', function() { switchView('visual'); });
+var ham = document.getElementById('td-ham');
+var drawer = document.getElementById('td-drawer');
+if (ham && drawer) {
+  ham.addEventListener('click', function() {
+    ham.classList.toggle('open');
+    drawer.classList.toggle('open');
+  });
+}
+</script>
+
+
+<script>
+
+// ── UPDATE BANNER LOGIC ──
+(function() {
+  if (!window.SHOW_UPDATE_BANNER) return;
+  if (sessionStorage.getItem('ub_dismissed')) return;
+
+  function showBanner(view) {
+    document.getElementById('ub-editorial').style.display = view === 'editorial' ? 'flex' : 'none';
+    document.getElementById('ub-visual').style.display   = view === 'visual'    ? 'flex' : 'none';
+  }
+
+  var initView = (new URLSearchParams(window.location.search).get('view') === 'visual') ? 'visual' : 'editorial';
+  showBanner(initView);
+
+  // Re-sync when view switches
+  var _origSwitch = window.switchView;
+  window.switchView = function(v) {
+    if (_origSwitch) _origSwitch(v);
+    if (!sessionStorage.getItem('ub_dismissed')) showBanner(v);
+  };
+})();
+
+function dismissBanner() {
+  document.getElementById('ub-editorial').style.display = 'none';
+  document.getElementById('ub-visual').style.display   = 'none';
+  sessionStorage.setItem('ub_dismissed', '1');
+}
+</script>
+
 </body>
 </html>

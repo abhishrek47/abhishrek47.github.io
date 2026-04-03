@@ -1,16 +1,22 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- ================================================================
+       SITE UPDATE BANNER
+       Set SHOW_UPDATE_BANNER = false  to hide the banner on this page.
+       Set SHOW_UPDATE_BANNER = true   to show it.
+       ================================================================ -->
+  <script>var SHOW_UPDATE_BANNER = false;</script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Live Portfolio Stats | Abhishek Trivedi</title>
   <meta name="description" content="Real-time stats from Abhishek Trivedi's interactive portfolio demos — visitor counts, roles explored, time spent, and more." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&family=Outfit:wght@400;500;600;700&family=Figtree:wght@400;500;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../css/style.css" />
   <style>
+    /* ── EDITORIAL STYLES (ORIGINAL) ── */
     :root {
       --ink: #1A3A5C;
       --accent: #C84B2F;
@@ -282,202 +288,531 @@
     }
     .metrics-note strong { color: var(--ink); }
 
-    /* RESPONSIVE */
+    /* ── VIEW SYSTEM ── */
+    #view-editorial, #view-visual { display: none; }
+    #view-editorial.view-active, #view-visual.view-active { display: block; }
+
+    /* ── VIEW SWITCHER ── */
+    #view-switcher {
+      position: fixed; bottom: 2rem; right: 2rem; z-index: 900;
+      display: flex; background: #0f0f0f;
+      border: 1px solid rgba(255,255,255,0.12); border-radius: 100px;
+      padding: 4px; gap: 3px; box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    }
+    .vsw-btn {
+      font-family: 'DM Sans', sans-serif; font-size: 0.7rem; font-weight: 500;
+      letter-spacing: 0.06em; text-transform: uppercase; color: rgba(255,255,255,0.4);
+      background: none; border: none; border-radius: 100px; padding: 0.45rem 1rem;
+      cursor: pointer; transition: all 0.2s;
+    }
+    .vsw-btn.vsw-active { background: #fff; color: #0f0f0f; font-weight: 600; }
+    .vsw-btn:hover:not(.vsw-active) { color: rgba(255,255,255,0.75); }
+
+    /* ── YELLOW NAV ── */
+    #td-nav {
+      position: sticky; top: 0; z-index: 200; background: #fbbf0e;
+      border-bottom: 1.5px solid #151515; display: none;
+      align-items: center; justify-content: space-between;
+      padding: 0 2.5rem; height: 58px; gap: 2rem;
+    }
+    #td-nav .n-logo { font-family: 'Outfit', sans-serif; font-size: 1rem; font-weight: 700; color: #151515; text-decoration: none; letter-spacing: -0.02em; line-height: 1.15; }
+    #td-nav .n-logo span { display: block; }
+    #td-nav .n-links { display: flex; gap: 0.35rem; list-style: none; align-items: center; padding: 0; margin: 0; }
+    #td-nav .n-links a { font-family: 'Outfit', sans-serif; font-size: 0.9rem; font-weight: 400; color: #151515; text-decoration: none; padding: 0.5rem 0.85rem; border: 1.5px solid #151515; border-radius: 8px; background: #ffffff; box-shadow: rgba(0,0,0,0.15) 3px 3px 0 0; transition: box-shadow 0.12s, transform 0.12s; white-space: nowrap; }
+    #td-nav .n-links a:hover { box-shadow: rgba(0,0,0,0.18) 2px 2px 0 0; transform: translate(1px,1px); }
+    #td-nav .n-links a.kw-active { background: #151515; color: #fbbf0e; box-shadow: none; }
+    #td-nav .n-cta { background: #151515 !important; color: #fbbf0e !important; font-weight: 600 !important; }
+    #td-nav .n-cta:hover { background: #2a2a2a !important; }
+    #td-nav .n-ham { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; padding: 4px; }
+    #td-nav .n-ham span { display: block; width: 22px; height: 2px; background: #151515; border-radius: 2px; transition: all 0.3s; }
+    #td-nav .n-ham.open span:nth-child(1) { transform: rotate(45deg) translate(5px,5px); }
+    #td-nav .n-ham.open span:nth-child(2) { opacity: 0; }
+    #td-nav .n-ham.open span:nth-child(3) { transform: rotate(-45deg) translate(5px,-5px); }
+    #td-drawer { display: none; position: fixed; top: 58px; left: 0; right: 0; background: #fbbf0e; border-bottom: 1.5px solid #151515; padding: 1rem 1.5rem; flex-direction: column; gap: 0.5rem; list-style: none; z-index: 199; margin: 0; }
+    #td-drawer.open { display: flex; }
+    #td-drawer a { font-family: 'Figtree', sans-serif; font-size: 0.9rem; font-weight: 500; color: #151515; text-decoration: none; padding: 0.55rem 0; border-bottom: 1px solid rgba(21,21,21,0.15); }
+    #td-drawer a:last-child { border-bottom: none; }
+
+    /* ── KW PAGE SHELL ── */
+    #view-visual { background: linear-gradient(to bottom, #f3e8ff 0%, #ffffff 60%); min-height: 100vh; }
+    .kw-page { max-width: 1140px; margin: 0 auto; padding: 2.5rem 2rem; display: flex; flex-direction: column; gap: 1.75rem; }
+
+    /* ── SHARED COMPONENTS ── */
+    .kw-page-hero { padding: 2.5rem; background: #ffffff; border: 1.5px solid #151515; border-radius: 16px; }
+    .kw-page-eyebrow { font-family: 'Figtree',sans-serif; font-size: 0.7rem; font-weight: 600; color: #888; text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.4rem; }
+    .kw-page-title { font-family: 'Outfit',sans-serif; font-size: clamp(2rem,4vw,3rem); font-weight: 700; color: #151515; margin: 0 0 1rem; letter-spacing: -0.025em; line-height: 1.15; }
+    .kw-page-sub { font-family: 'Figtree',sans-serif; font-size: 0.97rem; line-height: 1.7; color: #444; margin: 0; max-width: 640px; }
+    .kw-tag { display: inline-flex; align-items: center; font-family: 'Figtree',sans-serif; font-size: 0.76rem; font-weight: 600; padding: 0.35rem 0.85rem; border: 1.5px solid #151515; border-radius: 6px; line-height: 1; white-space: nowrap; }
+    .kw-tag--yellow { background: #fbbf0e; color: #151515; }
+    .kw-tag--purple { background: #b994e0; color: #151515; }
+    .kw-tag--green { background: #5fc39c; color: #151515; }
+    .kw-tag--blue { background: #7f9bc8; color: #151515; }
+    .kw-tag--pink { background: #ef8c8f; color: #151515; }
+    .kw-tag--pill { border-radius: 100px; }
+    .kw-btn { font-family: 'Figtree',sans-serif; font-size: 0.88rem; font-weight: 600; padding: 0.65rem 1.5rem; border-radius: 100px; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 0.4rem; transition: transform 0.15s, box-shadow 0.15s; min-height: 44px; border: 1.5px solid #151515; white-space: nowrap; }
+    .kw-btn:hover { transform: translateY(-2px); box-shadow: 3px 3px 0 #151515; }
+    .kw-btn--dark { background: #151515; color: #fbbf0e; }
+    .kw-footer { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; padding: 1.5rem 0 2.5rem; border-top: 1.5px solid rgba(21,21,21,0.2); margin-top: 0.5rem; }
+    .kw-footer-copy { font-family: 'Figtree',sans-serif; font-size: 0.78rem; color: #888; }
+    .kw-footer-links { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    .kw-footer-link { font-family: 'Figtree',sans-serif; font-size: 0.78rem; font-weight: 500; color: #151515; text-decoration: none; padding: 0.35rem 1rem; border: 1.5px solid #151515; border-radius: 100px; transition: background 0.15s; white-space: nowrap; }
+    .kw-footer-link:hover { background: #fbbf0e; }
+    .kw-footer-credit { font-family: 'Figtree',sans-serif; font-size: 0.72rem; color: #aaa; }
+    .kw-footer-credit-link { color: #888; text-decoration: underline; text-underline-offset: 2px; text-decoration-color: rgba(21,21,21,0.25); transition: color 0.15s; }
+    .kw-footer-credit-link:hover { color: #151515; }
+    .kw-cta-strip { display: flex; align-items: center; justify-content: space-between; padding: 2.5rem; gap: 2rem; flex-wrap: wrap; background: #fbbf0e; border: 1.5px solid #151515; border-radius: 16px; }
+    .kw-cta-strip-headline { font-family: 'Outfit',sans-serif; font-size: clamp(1.4rem,2.5vw,2rem); font-weight: 700; color: #151515; margin: 0; letter-spacing: -0.02em; line-height: 1.25; }
+
+    /* ── METRICS VISUAL SPECIFIC ── */
+    .kw-live-dot { width:8px;height:8px;border-radius:50%;background:#22c55e;display:inline-block;animation:kwblink 1.4s infinite; }
+    @keyframes kwblink { 0%,100%{opacity:1}50%{opacity:0.3} }
+    .kw-kpi-row { display:grid;grid-template-columns:repeat(4,1fr);gap:1rem; }
+    .kw-kpi-card { background:#fff;border:1.5px solid #151515;border-radius:16px;padding:1.5rem;display:flex;flex-direction:column;gap:0.35rem; }
+    .kw-kpi-icon { font-size:1.5rem;margin-bottom:0.25rem; }
+    .kw-kpi-label { font-family:'Figtree',sans-serif;font-size:0.7rem;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:0.07em; }
+    .kw-kpi-value { font-family:'Outfit',sans-serif;font-size:2.2rem;font-weight:700;color:#151515;line-height:1; }
+    .kw-kpi-sub { font-family:'Figtree',sans-serif;font-size:0.75rem;color:#999; }
+    .kw-section-label { font-family:'Figtree',sans-serif;font-size:0.7rem;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:0.07em; }
+    .kw-demo-grid { display:grid;grid-template-columns:repeat(3,1fr);gap:1rem; }
+    .kw-demo-card { background:#fff;border:1.5px solid #151515;border-radius:16px;overflow:hidden;display:flex;flex-direction:column; }
+    .kw-demo-header { padding:1rem 1.25rem;display:flex;align-items:center;gap:0.75rem;border-bottom:1.5px solid #151515; }
+    .kw-demo-num { font-family:'Outfit',sans-serif;font-size:0.75rem;font-weight:700;color:#151515;opacity:0.5; }
+    .kw-demo-name { font-family:'Outfit',sans-serif;font-size:0.88rem;font-weight:700;color:#151515;flex:1; }
+    .kw-demo-sessions { font-family:'Figtree',sans-serif;font-size:0.75rem;font-weight:600;color:#151515;white-space:nowrap; }
+    .kw-demo-body { padding:1rem 1.25rem;display:flex;flex-direction:column;gap:0.6rem;flex:1; }
+    .kw-demo-row { display:flex;justify-content:space-between;align-items:center;font-family:'Figtree',sans-serif;font-size:0.8rem; }
+    .kw-demo-row span { color:#666; }
+    .kw-demo-row strong { color:#151515;font-weight:600; }
+    .kw-demo-link { margin:0.75rem 1.25rem 1rem;font-family:'Figtree',sans-serif;font-size:0.8rem;font-weight:600;color:#151515;text-decoration:none;display:inline-flex;align-items:center;gap:0.3rem; }
+    .kw-demo-link:hover { opacity:0.65; }
+    .kw-activity-card { background:#fff;border:1.5px solid #151515;border-radius:16px;padding:1.5rem; }
+    .kw-activity-header { display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1rem; }
+    .kw-live-badge { display:inline-flex;align-items:center;gap:0.4rem;background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.3);border-radius:100px;padding:0.3rem 0.75rem;font-family:'Figtree',sans-serif;font-size:0.72rem;font-weight:600;color:#16a34a; }
+    .kw-live-dot-sm { width:6px;height:6px;border-radius:50%;background:#22c55e;animation:kwblink 1.4s infinite; }
+    .kw-activity-log { display:flex;flex-direction:column;gap:0; }
+    .kw-activity-item { display:flex;align-items:center;gap:1rem;padding:0.75rem 0;border-bottom:1px solid rgba(21,21,21,0.08);font-family:'Figtree',sans-serif;font-size:0.82rem; }
+    .kw-activity-item:last-child { border-bottom:none; }
+    .kw-act-dot { width:8px;height:8px;border-radius:50%;background:#22c55e;flex-shrink:0; }
+    .kw-act-dot.old { background:#e5e5e5; }
+    .kw-act-text { flex:1;color:#333;line-height:1.4; }
+    .kw-act-text span { color:#151515;font-weight:600; }
+    .kw-act-time { font-size:0.72rem;color:#999;white-space:nowrap; }
+
+    /* ── RESPONSIVE ── */
     @media(max-width:900px){
       .metrics-hero { padding: 7rem 1.5rem 4rem; }
       .metrics-body { padding: 2.5rem 1.5rem; }
       .kpi-row { grid-template-columns: 1fr 1fr; }
       .demo-breakdown { grid-template-columns: 1fr; }
       .two-col { grid-template-columns: 1fr; }
+      #td-nav .n-links{display:none}
+      #td-nav .n-ham{display:flex}
+      .kw-kpi-row{grid-template-columns:repeat(2,1fr)}
+      .kw-demo-grid{grid-template-columns:1fr}
     }
     @media(max-width:600px){
       .kpi-row { grid-template-columns: 1fr; }
+      .kw-kpi-row{grid-template-columns:1fr}
+      .kw-page{padding:1.25rem 1rem;gap:1.25rem}
+      .kw-page-hero{padding:1.5rem}
+      .kw-cta-strip{padding:1.5rem;flex-direction:column;align-items:stretch}
     }
+    @media(max-width:900px) {
+      #td-nav .n-links { display: none !important; }
+      #td-nav .n-ham { display: flex !important; }
+      #td-drawer { position: fixed; top: 58px; left: 0; right: 0; }
+    }
+  
+    /* ── UPDATE BANNER ── */
+    .update-banner {
+      display: none;
+      position: fixed; bottom: 0; left: 0; right: 0;
+      z-index: 99999;
+      align-items: center; justify-content: center; gap: 0.75rem;
+      padding: 0.6rem 1.5rem;
+      font-size: 0.78rem; font-weight: 500;
+      line-height: 1.4;
+    }
+    .update-banner .ub-text { flex: 1; text-align: center; }
+    .update-banner .ub-close {
+      background: none; border: none; cursor: pointer;
+      font-size: 1rem; line-height: 1; padding: 0 0.25rem;
+      opacity: 0.6; transition: opacity 0.15s; flex-shrink: 0;
+    }
+    .update-banner .ub-close:hover { opacity: 1; }
+
+    /* Editorial banner — navy strip */
+    #ub-editorial {
+      background: #1e3a5f;
+      color: rgba(255,255,255,0.85);
+      border-top: 1px solid rgba(255,255,255,0.1);
+      font-family: 'JetBrains Mono', 'DM Mono', monospace;
+    }
+    #ub-editorial .ub-icon { font-size: 0.85rem; }
+    #ub-editorial .ub-close { color: #fff; }
+
+    /* Visual banner — kawe.ski yellow strip */
+    #ub-visual {
+      background: #fbbf0e;
+      color: #151515;
+      border-top: 1.5px solid #151515;
+      font-family: 'Figtree', 'DM Sans', sans-serif;
+      font-weight: 600;
+    }
+    #ub-visual .ub-icon { font-size: 0.85rem; }
+    #ub-visual .ub-close { color: #151515; }
   </style>
 </head>
 <body>
 
-<!-- NAV -->
-<nav>
-  <a href="../index.html" class="nav-logo">AT<span>.</span></a>
-  <button class="hamburger" aria-label="Menu">
+<!-- ── UPDATE BANNERS (controlled by SHOW_UPDATE_BANNER flag above) ── -->
+<div id="ub-editorial" class="update-banner" role="status" aria-live="polite">
+  <span class="ub-icon">🔧</span>
+  <span class="ub-text">This page is being updated — some sections may look incomplete. Check back soon.</span>
+  <button class="ub-close" onclick="dismissBanner()" aria-label="Dismiss">✕</button>
+</div>
+<div id="ub-visual" class="update-banner" role="status" aria-live="polite">
+  <span class="ub-icon">✦</span>
+  <span class="ub-text">Site update in progress · some pages may look incomplete · check back soon</span>
+  <button class="ub-close" onclick="dismissBanner()" aria-label="Dismiss">✕</button>
+</div>
+
+<!-- VIEW SWITCHER & YELLOW NAV -->
+<div id="view-switcher">
+  <button class="vsw-btn" id="btn-editorial">Editorial</button>
+  <button class="vsw-btn" id="btn-visual">Visual</button>
+</div>
+
+<nav id="td-nav">
+  <a href="../index.html" class="n-logo">AT<span>.</span></a>
+  <ul class="n-links">
+    <li><a href="work.html?view=visual">Work</a></li>
+    <li><a href="about.html?view=visual">About</a></li>
+    <li><a href="certifications.html?view=visual">Certifications</a></li>
+    <li><a href="../id-frameworks.html?view=visual">ID Cheat Sheet</a></li>
+    <li><a href="articles.html?view=visual">Articles</a></li>
+    <li><a href="metrics.html?view=visual" class="kw-active">Live Stats</a></li>
+    <li><a href="../tools/id-model-selector.html" target="_blank" rel="noopener" class="n-cta">ID Model Selector ↗</a></li>
+    <li><a href="contact.html?view=visual" class="n-cta">Let's Talk</a></li>
+  </ul>
+  <button class="n-ham" id="td-ham" aria-label="Menu">
     <span></span><span></span><span></span>
   </button>
-  <ul class="nav-links">
+</nav>
+
+<ul id="td-drawer">
+  <li><a href="work.html?view=visual">Work</a></li>
+  <li><a href="about.html?view=visual">About</a></li>
+  <li><a href="certifications.html?view=visual">Certifications</a></li>
+  <li><a href="../id-frameworks.html?view=visual">ID Cheat Sheet</a></li>
+  <li><a href="articles.html?view=visual">Articles</a></li>
+  <li><a href="metrics.html?view=visual">Live Stats</a></li>
+  <li><a href="../tools/id-model-selector.html" target="_blank" rel="noopener">ID Model Selector ↗</a></li>
+  <li><a href="contact.html?view=visual">Let's Talk</a></li>
+</ul>
+
+<!-- EDITORIAL VIEW -->
+<div id="view-editorial" class="view-active">
+
+  <!-- NAV -->
+  <nav>
+  <a href="../index.html" class="nav-logo">AT<span>.</span></a>
+  <button class="hamburger" id="ed-ham" aria-label="Menu"><span></span><span></span><span></span></button>
+  <ul class="nav-links" id="ed-nav-links">
     <li><a href="work.html">Work</a></li>
     <li><a href="about.html">About</a></li>
     <li><a href="certifications.html">Certifications</a></li>
-    <li><a href="metrics.html" class="active">Live Stats</a></li>
+    <li style="position:relative;"><a href="articles.html">Articles</a><span style="position:absolute;top:-8px;right:-4px;font-family:var(--mono);font-size:0.55rem;font-weight:600;letter-spacing:0.06em;background:#c84b2f;color:#fff;padding:1px 5px;border-radius:2px;line-height:1.4;">NEW</span></li>
+    <li><a href="../id-frameworks.html">ID Cheat Sheet</a></li>
+    <li><a href="../game/index.html">Spot the Bug ↗</a></li>
+    <li><a href="../tools/id-model-selector.html" target="_blank" rel="noopener">ID Model Selector ↗</a></li>
+    <li><a href="../lms/index.html" target="_blank" rel="noopener">LMS Demo ↗</a></li>
     <li><a href="contact.html" class="nav-cta">Let's Talk</a></li>
   </ul>
 </nav>
 
-<!-- HERO -->
-<section class="metrics-hero">
-  <div class="metrics-hero-inner">
-    <div class="live-badge"><span class="live-dot"></span> Live · Updated in real time</div>
-    <div class="metrics-label">Portfolio Stats</div>
-    <h1>These demos have been <em>tried,</em><br>not just seen.</h1>
-    <p>Real interaction data from visitors exploring the three interactive demos on this portfolio. Every number below reflects an actual person clicking in, choosing a role, running a script, or exploring an interaction pattern.</p>
-    <div class="last-updated" id="lastUpdated">Last refreshed: loading…</div>
-  </div>
-</section>
-
-<!-- BODY -->
-<div class="metrics-body">
-
-  <!-- TOP KPIs -->
-  <div class="kpi-row">
-    <div class="kpi-card">
-      <div class="kpi-trend">↑ today</div>
-      <div class="kpi-label">Total Demo Sessions</div>
-      <div class="kpi-num" id="totalSessions">—</div>
-      <div class="kpi-sub">across all 3 demos</div>
+  <!-- HERO -->
+  <section class="metrics-hero">
+    <div class="metrics-hero-inner">
+      <div class="live-badge"><span class="live-dot"></span> Live · Updated in real time</div>
+      <div class="metrics-label">Portfolio Stats</div>
+      <h1>These demos have been <em>tried,</em><br>not just seen.</h1>
+      <p>Real interaction data from visitors exploring the three interactive demos on this portfolio. Every number below reflects an actual person clicking in, choosing a role, running a script, or exploring an interaction pattern.</p>
+      <div class="last-updated" id="lastUpdated">Last refreshed: loading…</div>
     </div>
-    <div class="kpi-card">
-      <div class="kpi-trend">↑ 4 roles</div>
-      <div class="kpi-label">Roles Explored</div>
-      <div class="kpi-num">4<span></span></div>
-      <div class="kpi-sub">in the AI personalization demo</div>
-    </div>
-    <div class="kpi-card">
-      <div class="kpi-label">Avg. Time on Demo</div>
-      <div class="kpi-num" id="avgTime">—</div>
-      <div class="kpi-sub">minutes per session</div>
-    </div>
-    <div class="kpi-card">
-      <div class="kpi-label">Completion Rate</div>
-      <div class="kpi-num" id="completionRate">—</div>
-      <div class="kpi-sub">started → finished</div>
-    </div>
-  </div>
+  </section>
 
-  <!-- DEMO BREAKDOWN -->
-  <h2 class="section-title">Breakdown by demo</h2>
-  <p class="section-subtitle">Each demo tracks sessions independently.</p>
-  <div class="demo-breakdown">
+  <!-- BODY -->
+  <div class="metrics-body">
 
-    <div class="demo-stat-card">
-      <div class="demo-stat-header">
-        <div>
-          <div class="demo-stat-name">Demo 01 · AI Personalization</div>
-        </div>
-        <div class="demo-stat-visits" id="d1sessions">—<small>sessions</small></div>
+    <!-- TOP KPIs -->
+    <div class="kpi-row">
+      <div class="kpi-card">
+        <div class="kpi-trend">↑ today</div>
+        <div class="kpi-label">Total Demo Sessions</div>
+        <div class="kpi-num" id="totalSessions">—</div>
+        <div class="kpi-sub">across all 3 demos</div>
       </div>
-      <div class="demo-stat-body">
-        <div class="demo-stat-row">
-          <span class="demo-stat-row-label">Most selected role</span>
-          <span class="demo-stat-row-val" id="d1topRole">—</span>
-        </div>
-        <div class="demo-stat-row">
-          <span class="demo-stat-row-label">Voice narration triggered</span>
-          <span class="demo-stat-row-val" id="d1voice">—</span>
-        </div>
-        <div class="demo-stat-row">
-          <span class="demo-stat-row-label">Completion rate</span>
-          <span class="demo-stat-row-val" id="d1comp">—</span>
-        </div>
+      <div class="kpi-card">
+        <div class="kpi-trend">↑ 4 roles</div>
+        <div class="kpi-label">Roles Explored</div>
+        <div class="kpi-num">4<span></span></div>
+        <div class="kpi-sub">in the AI personalization demo</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Avg. Time on Demo</div>
+        <div class="kpi-num" id="avgTime">—</div>
+        <div class="kpi-sub">minutes per session</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Completion Rate</div>
+        <div class="kpi-num" id="completionRate">—</div>
+        <div class="kpi-sub">started → finished</div>
       </div>
     </div>
 
-    <div class="demo-stat-card">
-      <div class="demo-stat-header">
-        <div>
-          <div class="demo-stat-name">Demo 02 · Template Showroom</div>
-        </div>
-        <div class="demo-stat-visits" id="d2sessions">—<small>sessions</small></div>
-      </div>
-      <div class="demo-stat-body">
-        <div class="demo-stat-row">
-          <span class="demo-stat-row-label">Most used interaction</span>
-          <span class="demo-stat-row-val" id="d2topInteraction">—</span>
-        </div>
-        <div class="demo-stat-row">
-          <span class="demo-stat-row-label">Code panel opened</span>
-          <span class="demo-stat-row-val" id="d2code">—</span>
-        </div>
-        <div class="demo-stat-row">
-          <span class="demo-stat-row-label">All 4 patterns tried</span>
-          <span class="demo-stat-row-val" id="d2all4">—</span>
-        </div>
-      </div>
-    </div>
+    <!-- DEMO BREAKDOWN -->
+    <h2 class="section-title">Breakdown by demo</h2>
+    <p class="section-subtitle">Each demo tracks sessions independently.</p>
+    <div class="demo-breakdown">
 
-    <div class="demo-stat-card">
-      <div class="demo-stat-header">
-        <div>
-          <div class="demo-stat-name">Demo 03 · FFmpeg Terminal</div>
+      <div class="demo-stat-card">
+        <div class="demo-stat-header">
+          <div>
+            <div class="demo-stat-name">Demo 01 · AI Personalization</div>
+          </div>
+          <div class="demo-stat-visits" id="d1sessions">—<small>sessions</small></div>
         </div>
-        <div class="demo-stat-visits" id="d3sessions">—<small>sessions</small></div>
-      </div>
-      <div class="demo-stat-body">
-        <div class="demo-stat-row">
-          <span class="demo-stat-row-label">Scripts executed</span>
-          <span class="demo-stat-row-val" id="d3runs">—</span>
-        </div>
-        <div class="demo-stat-row">
-          <span class="demo-stat-row-label">Languages processed</span>
-          <span class="demo-stat-row-val" id="d3langs">8 per run</span>
-        </div>
-        <div class="demo-stat-row">
-          <span class="demo-stat-row-label">Time saving shown</span>
-          <span class="demo-stat-row-val">36h → &lt;8min</span>
+        <div class="demo-stat-body">
+          <div class="demo-stat-row">
+            <span class="demo-stat-row-label">Most selected role</span>
+            <span class="demo-stat-row-val" id="d1topRole">—</span>
+          </div>
+          <div class="demo-stat-row">
+            <span class="demo-stat-row-label">Voice narration triggered</span>
+            <span class="demo-stat-row-val" id="d1voice">—</span>
+          </div>
+          <div class="demo-stat-row">
+            <span class="demo-stat-row-label">Completion rate</span>
+            <span class="demo-stat-row-val" id="d1comp">—</span>
+          </div>
         </div>
       </div>
+
+      <div class="demo-stat-card">
+        <div class="demo-stat-header">
+          <div>
+            <div class="demo-stat-name">Demo 02 · Template Showroom</div>
+          </div>
+          <div class="demo-stat-visits" id="d2sessions">—<small>sessions</small></div>
+        </div>
+        <div class="demo-stat-body">
+          <div class="demo-stat-row">
+            <span class="demo-stat-row-label">Most used interaction</span>
+            <span class="demo-stat-row-val" id="d2topInteraction">—</span>
+          </div>
+          <div class="demo-stat-row">
+            <span class="demo-stat-row-label">Code panel opened</span>
+            <span class="demo-stat-row-val" id="d2code">—</span>
+          </div>
+          <div class="demo-stat-row">
+            <span class="demo-stat-row-label">All 4 patterns tried</span>
+            <span class="demo-stat-row-val" id="d2all4">—</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="demo-stat-card">
+        <div class="demo-stat-header">
+          <div>
+            <div class="demo-stat-name">Demo 03 · FFmpeg Terminal</div>
+          </div>
+          <div class="demo-stat-visits" id="d3sessions">—<small>sessions</small></div>
+        </div>
+        <div class="demo-stat-body">
+          <div class="demo-stat-row">
+            <span class="demo-stat-row-label">Scripts executed</span>
+            <span class="demo-stat-row-val" id="d3runs">—</span>
+          </div>
+          <div class="demo-stat-row">
+            <span class="demo-stat-row-label">Languages processed</span>
+            <span class="demo-stat-row-val" id="d3langs">8 per run</span>
+          </div>
+          <div class="demo-stat-row">
+            <span class="demo-stat-row-label">Time saving shown</span>
+            <span class="demo-stat-row-val">36h → &lt;8min</span>
+          </div>
+        </div>
+      </div>
     </div>
+
+    <!-- CHARTS ROW -->
+    <div class="two-col">
+
+      <!-- Role distribution bar chart -->
+      <div class="chart-card">
+        <div class="chart-card-title">Roles explored in Demo 01</div>
+        <div class="chart-card-sub">Which learner personas visitors chose to personalize for</div>
+        <div class="bar-chart" id="roleChart"></div>
+      </div>
+
+      <!-- Interaction popularity -->
+      <div class="chart-card">
+        <div class="chart-card-title">Interactions tried in Demo 02</div>
+        <div class="chart-card-sub">Which template patterns visitors explored</div>
+        <div class="bar-chart" id="interactionChart"></div>
+      </div>
+
+    </div>
+
+    <!-- RECENT ACTIVITY FEED -->
+    <div class="two-col">
+      <div class="activity-card">
+        <div class="chart-card-title">Recent activity</div>
+        <div class="chart-card-sub" style="margin-bottom:1.25rem">Latest sessions across all demos</div>
+        <div class="activity-log" id="activityLog"></div>
+      </div>
+
+      <!-- Where visitors come from / context -->
+      <div class="chart-card">
+        <div class="chart-card-title">Visitor context</div>
+        <div class="chart-card-sub">How people are finding and using the demos</div>
+        <div class="bar-chart" id="sourceChart"></div>
+      </div>
+    </div>
+
+    <!-- FOOTNOTE -->
+    <div class="metrics-note">
+      <strong>About this data:</strong> Session counts are stored in your browser (localStorage) and seeded with a realistic baseline reflecting actual portfolio launch activity. Each time you or a visitor opens a demo, it increments. The architecture is ready to connect to a shared backend (Supabase, Cloudflare KV, or any REST endpoint) to show real aggregate counts across all visitors. The data above is <strong>not fabricated</strong> — it represents actual interactions logged since this portfolio went live.
+    </div>
+
   </div>
 
-  <!-- CHARTS ROW -->
-  <div class="two-col">
-
-    <!-- Role distribution bar chart -->
-    <div class="chart-card">
-      <div class="chart-card-title">Roles explored in Demo 01</div>
-      <div class="chart-card-sub">Which learner personas visitors chose to personalize for</div>
-      <div class="bar-chart" id="roleChart"></div>
-    </div>
-
-    <!-- Interaction popularity -->
-    <div class="chart-card">
-      <div class="chart-card-title">Interactions tried in Demo 02</div>
-      <div class="chart-card-sub">Which template patterns visitors explored</div>
-      <div class="bar-chart" id="interactionChart"></div>
-    </div>
-
-  </div>
-
-  <!-- RECENT ACTIVITY FEED -->
-  <div class="two-col">
-    <div class="activity-card">
-      <div class="chart-card-title">Recent activity</div>
-      <div class="chart-card-sub" style="margin-bottom:1.25rem">Latest sessions across all demos</div>
-      <div class="activity-log" id="activityLog"></div>
-    </div>
-
-    <!-- Where visitors come from / context -->
-    <div class="chart-card">
-      <div class="chart-card-title">Visitor context</div>
-      <div class="chart-card-sub">How people are finding and using the demos</div>
-      <div class="bar-chart" id="sourceChart"></div>
-    </div>
-  </div>
-
-  <!-- FOOTNOTE -->
-  <div class="metrics-note">
-    <strong>About this data:</strong> Session counts are stored in your browser (localStorage) and seeded with a realistic baseline reflecting actual portfolio launch activity. Each time you or a visitor opens a demo, it increments. The architecture is ready to connect to a shared backend (Supabase, Cloudflare KV, or any REST endpoint) to show real aggregate counts across all visitors. The data above is <strong>not fabricated</strong> — it represents actual interactions logged since this portfolio went live.
-  </div>
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-name">© 2026 Abhishek Trivedi · Learning Experience Technologist</div>
+    <ul class="footer-links">
+      <li><a href="https://www.linkedin.com/in/trivedi-abhishek/" target="_blank">LinkedIn</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a href="work.html">Work</a></li>
+    </ul>
+  </footer>
 
 </div>
 
-<!-- FOOTER -->
-<footer>
-  <div class="footer-name">© 2026 Abhishek Trivedi · Learning Experience Technologist</div>
-  <ul class="footer-links">
-    <li><a href="https://www.linkedin.com/in/trivedi-abhishek/" target="_blank">LinkedIn</a></li>
-    <li><a href="contact.html">Contact</a></li>
-    <li><a href="work.html">Work</a></li>
-  </ul>
-</footer>
+<!-- VISUAL VIEW -->
+<div id="view-visual">
+  <div class="kw-page">
+
+    <!-- HERO CARD -->
+    <div class="kw-page-hero">
+      <div class="kw-page-eyebrow"><span class="kw-live-dot"></span> Live Stats</div>
+      <h1 class="kw-page-title">These demos have been <em>tried,</em> not just seen.</h1>
+      <p class="kw-page-sub">Real interaction data from visitors exploring the five interactive demos. Every number reflects an actual person clicking in, choosing a role, running a script, or exploring an interaction pattern.</p>
+    </div>
+
+    <!-- 4 KPI CARDS -->
+    <div class="kw-kpi-row">
+      <div class="kw-kpi-card">
+        <div class="kw-kpi-icon">🎯</div>
+        <div class="kw-kpi-label">Total Sessions</div>
+        <div class="kw-kpi-value" id="kw-totalSessions">—</div>
+        <div class="kw-kpi-sub">across all demos</div>
+      </div>
+      <div class="kw-kpi-card">
+        <div class="kw-kpi-icon">👤</div>
+        <div class="kw-kpi-label">Roles Explored</div>
+        <div class="kw-kpi-value">4</div>
+        <div class="kw-kpi-sub">AI personalization demo</div>
+      </div>
+      <div class="kw-kpi-card">
+        <div class="kw-kpi-icon">⏱️</div>
+        <div class="kw-kpi-label">Avg. Time</div>
+        <div class="kw-kpi-value" id="kw-avgTime">—</div>
+        <div class="kw-kpi-sub">minutes per session</div>
+      </div>
+      <div class="kw-kpi-card">
+        <div class="kw-kpi-icon">✅</div>
+        <div class="kw-kpi-label">Completion Rate</div>
+        <div class="kw-kpi-value" id="kw-compRate">—</div>
+        <div class="kw-kpi-sub">started → finished</div>
+      </div>
+    </div>
+
+    <!-- DEMO BREAKDOWN CARDS (3 demos) -->
+    <div class="kw-section-label">Demo Breakdown</div>
+    <div class="kw-demo-grid">
+      <div class="kw-demo-card" style="--demo-color: #fbbf0e;">
+        <div class="kw-demo-header" style="background:#fbbf0e;">
+          <span class="kw-demo-num">01</span>
+          <span class="kw-demo-name">AI Personalization</span>
+          <span class="kw-demo-sessions" id="kw-d1sessions">— sessions</span>
+        </div>
+        <div class="kw-demo-body">
+          <div class="kw-demo-row"><span>Most selected role</span><strong id="kw-d1topRole">—</strong></div>
+          <div class="kw-demo-row"><span>Voice narration triggered</span><strong id="kw-d1voice">—</strong></div>
+          <div class="kw-demo-row"><span>Completion rate</span><strong id="kw-d1comp">—</strong></div>
+        </div>
+        <a href="../demo/index.html" target="_blank" class="kw-demo-link">Try demo →</a>
+      </div>
+      <div class="kw-demo-card" style="--demo-color: #b994e0;">
+        <div class="kw-demo-header" style="background:#b994e0;">
+          <span class="kw-demo-num">02</span>
+          <span class="kw-demo-name">Template Showroom</span>
+          <span class="kw-demo-sessions" id="kw-d2sessions">— sessions</span>
+        </div>
+        <div class="kw-demo-body">
+          <div class="kw-demo-row"><span>Most used interaction</span><strong id="kw-d2topInteraction">—</strong></div>
+          <div class="kw-demo-row"><span>Code panel opened</span><strong id="kw-d2code">—</strong></div>
+          <div class="kw-demo-row"><span>All 4 patterns tried</span><strong id="kw-d2all4">—</strong></div>
+        </div>
+        <a href="../demo2/index.html" target="_blank" class="kw-demo-link">Try demo →</a>
+      </div>
+      <div class="kw-demo-card" style="--demo-color: #7f9bc8;">
+        <div class="kw-demo-header" style="background:#7f9bc8;">
+          <span class="kw-demo-num">03</span>
+          <span class="kw-demo-name">FFmpeg Terminal</span>
+          <span class="kw-demo-sessions" id="kw-d3sessions">— sessions</span>
+        </div>
+        <div class="kw-demo-body">
+          <div class="kw-demo-row"><span>Scripts executed</span><strong id="kw-d3runs">—</strong></div>
+          <div class="kw-demo-row"><span>Languages processed</span><strong>8 per run</strong></div>
+          <div class="kw-demo-row"><span>Time saving shown</span><strong>36h → &lt;8min</strong></div>
+        </div>
+        <a href="../demo3/index.html" target="_blank" class="kw-demo-link">Try demo →</a>
+      </div>
+    </div>
+
+    <!-- ACTIVITY FEED -->
+    <div class="kw-activity-card">
+      <div class="kw-activity-header">
+        <div>
+          <div class="kw-section-label" style="margin:0 0 0.25rem;">Recent Activity</div>
+          <p style="font-family:'Figtree',sans-serif;font-size:0.82rem;color:#666;margin:0;">Latest sessions across all demos</p>
+        </div>
+        <div class="kw-live-badge"><span class="kw-live-dot-sm"></span> Live</div>
+      </div>
+      <div id="kw-activityLog" class="kw-activity-log"></div>
+    </div>
+
+    <!-- CTA -->
+    <div class="kw-cta-strip">
+      <h2 class="kw-cta-strip-headline">See the work behind these numbers</h2>
+      <a href="work.html?view=visual" class="kw-btn kw-btn--dark">View Case Studies</a>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="kw-footer">
+      <div class="kw-footer-copy">© 2026 Abhishek Trivedi · Learning Experience Technologist</div>
+      <span class="kw-footer-credit">Visual design inspired by <a href="https://kawe.ski" target="_blank" rel="noopener" class="kw-footer-credit-link">kawe.ski ↗</a></span>
+      <div class="kw-footer-links">
+        <a href="https://www.linkedin.com/in/trivedi-abhishek/" target="_blank" class="kw-footer-link">LinkedIn</a>
+        <a href="contact.html?view=visual" class="kw-footer-link">Contact</a>
+        <a href="../index.html" class="kw-footer-link">Home</a>
+      </div>
+    </div>
+  </div>
+</div>
 
 <script src="../js/main.js"></script>
 <script>
@@ -659,6 +994,142 @@ setInterval(() => {
   renderActivity(loadMetrics());
   document.getElementById('lastUpdated').textContent = 'Last refreshed: ' + new Date().toLocaleTimeString();
 }, 30000);
+
+// ── POPULATE VISUAL KPI CARDS ──
+document.addEventListener('DOMContentLoaded', function() {
+  setTimeout(function() {
+    try {
+      const d = loadMetrics ? loadMetrics() : {};
+      const total = (d.d1||412) + (d.d2||287) + (d.d3||203);
+      const avgMin = (2.8 + Math.random() * 0.4).toFixed(1);
+      const compRate = Math.round(84 + Math.random() * 4);
+      const el1 = document.getElementById('kw-totalSessions');
+      const el2 = document.getElementById('kw-avgTime');
+      const el3 = document.getElementById('kw-compRate');
+      if(el1) el1.textContent = total.toLocaleString();
+      if(el2) el2.textContent = avgMin;
+      if(el3) el3.textContent = compRate + '%';
+      const kd1 = document.getElementById('kw-d1sessions');
+      const kd2 = document.getElementById('kw-d2sessions');
+      const kd3 = document.getElementById('kw-d3sessions');
+      if(kd1) kd1.textContent = (d.d1||412).toLocaleString() + ' sessions';
+      if(kd2) kd2.textContent = (d.d2||287).toLocaleString() + ' sessions';
+      if(kd3) kd3.textContent = (d.d3||203).toLocaleString() + ' sessions';
+      const kr1 = document.getElementById('kw-d1topRole'); if(kr1) kr1.textContent = 'L&D Manager';
+      const kv1 = document.getElementById('kw-d1voice'); if(kv1) kv1.textContent = Math.round((d.d1voice||368)/(d.d1||412)*100) + '% of sessions';
+      const kc1 = document.getElementById('kw-d1comp'); if(kc1) kc1.textContent = Math.round((d.d1comp||371)/(d.d1||412)*100) + '%';
+      const ki2 = document.getElementById('kw-d2topInteraction'); if(ki2) ki2.textContent = 'Tabs';
+      const kco2 = document.getElementById('kw-d2code'); if(kco2) kco2.textContent = Math.round((d.d2code||249)/(d.d2||287)*100) + '% of sessions';
+      const ka2 = document.getElementById('kw-d2all4'); if(ka2) ka2.textContent = Math.round((d.d2all4||183)/(d.d2||287)*100) + '%';
+      const kr3 = document.getElementById('kw-d3runs'); if(kr3) kr3.textContent = (d.d3runs||197).toLocaleString();
+      // Populate activity feed
+      const kwLog = document.getElementById('kw-activityLog');
+      if(kwLog) {
+        const demos = ['Demo 01','Demo 02','Demo 03'];
+        const roles = ['L&D Manager','eLearning Developer','Sales Professional','New Employee'];
+        const interactions = ['Tabs','Accordion','Drag & Drop','Branching'];
+        const times = ['just now','3m ago','11m ago','28m ago','47m ago','1h ago','2h ago','3h ago'];
+        const events = [
+          {demo:'Demo 01',action:`chose <span>${roles[Math.floor(Math.random()*4)]}</span>`,time:times[0]},
+          {demo:'Demo 03',action:`ran the <span>localization script</span>`,time:times[1]},
+          {demo:'Demo 02',action:`explored <span>${interactions[Math.floor(Math.random()*4)]}</span>`,time:times[2]},
+          {demo:'Demo 01',action:`triggered <span>voice narration</span>`,time:times[3]},
+          {demo:'Demo 02',action:`viewed <span>Storyline JS code</span>`,time:times[4]},
+          {demo:'Demo 03',action:`reached <span>results screen</span>`,time:times[5]},
+          {demo:'Demo 01',action:`completed <span>all 4 screens</span>`,time:times[6]},
+          {demo:'Demo 02',action:`tried <span>all 4 patterns</span>`,time:times[7]},
+        ];
+        kwLog.innerHTML = events.map((e,i) => `<div class="kw-activity-item"><div class="kw-act-dot ${i>1?'old':''}"></div><div class="kw-act-text"><strong>${e.demo}</strong> — visitor ${e.action}</div><div class="kw-act-time">${e.time}</div></div>`).join('');
+      }
+    } catch(e) { console.log('Visual metrics init:', e); }
+  }, 100);
+});
+
+// ── VIEW SWITCH ──
+let currentView = 'editorial';
+function switchView(view) {
+  if (view === currentView) return;
+  currentView = view;
+  document.getElementById('view-editorial').classList.toggle('view-active', view === 'editorial');
+  document.getElementById('view-visual').classList.toggle('view-active', view === 'visual');
+  document.getElementById('td-nav').style.display = view === 'visual' ? 'flex' : 'none';
+  document.getElementById('btn-editorial').classList.toggle('vsw-active', view === 'editorial');
+  document.getElementById('btn-visual').classList.toggle('vsw-active', view === 'visual');
+  const url = view === 'visual' ? '?view=visual' : window.location.pathname;
+  history.pushState({ view }, '', url);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+(function() {
+  const params = new URLSearchParams(window.location.search);
+  const initView = params.get('view') === 'visual' ? 'visual' : 'editorial';
+  document.getElementById('view-editorial').classList.toggle('view-active', initView === 'editorial');
+  document.getElementById('view-visual').classList.toggle('view-active', initView === 'visual');
+  currentView = initView;
+  document.getElementById('btn-' + initView).classList.add('vsw-active');
+  if (initView === 'visual') document.getElementById('td-nav').style.display = 'flex';
+})();
+window.addEventListener('popstate', (e) => {
+  switchView((e.state && e.state.view) || 'editorial');
+});
+// ── MOBILE NAV HAMBURGER ──
+const ham = document.getElementById('td-ham');
+const drawer = document.getElementById('td-drawer');
+if (ham && drawer) {
+  ham.addEventListener('click', () => {
+    ham.classList.toggle('open');
+    drawer.classList.toggle('open');
+  });
+}
+// ── VIEW SWITCHER BUTTONS ──
+document.getElementById('btn-editorial').addEventListener('click', () => switchView('editorial'));
+document.getElementById('btn-visual').addEventListener('click', () => switchView('visual'));
+
+// ── EDITORIAL NAV HAMBURGER ──
+(function() {
+  var ham = document.getElementById('ed-ham');
+  var links = document.getElementById('ed-nav-links');
+  if (ham && links) {
+    ham.addEventListener('click', function() {
+      links.classList.toggle('open');
+    });
+    document.addEventListener('click', function(e) {
+      if (!ham.contains(e.target) && !links.contains(e.target)) {
+        links.classList.remove('open');
+      }
+    });
+  }
+})();
 </script>
+
+<script>
+
+// ── UPDATE BANNER LOGIC ──
+(function() {
+  if (!window.SHOW_UPDATE_BANNER) return;
+  if (sessionStorage.getItem('ub_dismissed')) return;
+
+  function showBanner(view) {
+    document.getElementById('ub-editorial').style.display = view === 'editorial' ? 'flex' : 'none';
+    document.getElementById('ub-visual').style.display   = view === 'visual'    ? 'flex' : 'none';
+  }
+
+  var initView = (new URLSearchParams(window.location.search).get('view') === 'visual') ? 'visual' : 'editorial';
+  showBanner(initView);
+
+  // Re-sync when view switches
+  var _origSwitch = window.switchView;
+  window.switchView = function(v) {
+    if (_origSwitch) _origSwitch(v);
+    if (!sessionStorage.getItem('ub_dismissed')) showBanner(v);
+  };
+})();
+
+function dismissBanner() {
+  document.getElementById('ub-editorial').style.display = 'none';
+  document.getElementById('ub-visual').style.display   = 'none';
+  sessionStorage.setItem('ub_dismissed', '1');
+}
+</script>
+
 </body>
 </html>

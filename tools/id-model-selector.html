@@ -1,128 +1,409 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ID Model Selector — Abhishek Trivedi</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet">
-<style>
-*{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-:root{
-  --bg:#f0ece4;
-  --bg2:#e8e3d9;
-  --bg3:#dedad0;
-  --border:rgba(26,26,24,0.12);
-  --border-hover:rgba(26,26,24,0.28);
-  --text:#1a1a18;
-  --muted:#57554e;
-  --hint:#9a9488;
-  --navy:#1e2d4a;
-  --navy-dark:#162238;
-  --navy-dim:rgba(30,45,74,0.07);
-  --orange:#c8390a;
-  --orange-dark:#a32d07;
-  --orange-dim:rgba(200,57,10,0.09);
-  --r:8px;--rl:12px;
-  --font-mono:'DM Mono',monospace;
-  --font-sans:'DM Sans',sans-serif;
-}
-body{background:var(--bg);color:var(--text);font-family:var(--font-sans);font-size:15px;line-height:1.6;min-height:100vh}
+  <!-- ================================================================
+       SITE UPDATE BANNER
+       Set SHOW_UPDATE_BANNER = false  to hide the banner on this page.
+       Set SHOW_UPDATE_BANNER = true   to show it.
+       ================================================================ -->
+  <script>var SHOW_UPDATE_BANNER = false;</script>
+  <script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "vxtwcbqoas");
+  </script>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-LY3GY2LH00"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-LY3GY2LH00');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ID Model Selector — Abhishek Trivedi</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Figtree:wght@400;500;600;700&family=DM+Mono:wght@300;400;500&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
 
-nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:14px 40px;display:flex;align-items:center;justify-content:space-between;background:rgba(240,236,228,0.93);backdrop-filter:blur(10px);border-bottom:1px solid var(--border)}
-.nav-logo{font-family:var(--font-mono);font-size:14px;font-weight:500;color:var(--text);text-decoration:none}
-.nav-logo span{color:var(--orange)}
-.nav-back{font-family:var(--font-mono);font-size:12px;color:var(--muted);text-decoration:none;letter-spacing:.04em;transition:color .2s}
-.nav-back:hover{color:var(--navy)}
+    /* ── EDITORIAL VARIABLES ── */
+    :root {
+      --bg:#f0ece4; --bg2:#e8e3d9; --bg3:#dedad0;
+      --border:rgba(26,26,24,0.12); --border-hover:rgba(26,26,24,0.28);
+      --text:#1a1a18; --muted:#57554e; --hint:#9a9488;
+      --navy:#1e2d4a; --navy-dark:#162238; --navy-dim:rgba(30,45,74,0.07);
+      --orange:#c8390a; --orange-dark:#a32d07; --orange-dim:rgba(200,57,10,0.09);
+      --r:8px; --rl:12px;
+      --font-mono:'DM Mono',monospace; --font-sans:'DM Sans',sans-serif;
+    }
+    body { background:var(--bg); color:var(--text); font-family:var(--font-sans); font-size:15px; line-height:1.6; min-height:100vh; }
 
-.hero{padding:110px 40px 52px;max-width:740px;margin:0 auto}
-.hero-tag{font-family:var(--font-mono);font-size:11px;color:var(--orange);letter-spacing:.1em;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:10px}
-.hero-tag::before{content:'';display:inline-block;width:24px;height:1.5px;background:var(--orange)}
-h1{font-family:var(--font-sans);font-size:clamp(26px,4vw,40px);font-weight:700;line-height:1.15;color:var(--text);margin-bottom:14px;letter-spacing:-.02em}
-h1 em{font-style:italic;color:var(--orange)}
-.hero-sub{font-size:15px;color:var(--muted);max-width:520px;line-height:1.75}
+    /* ── EDITORIAL NAV ── */
+    nav.ed-nav { position:fixed; top:0; left:0; right:0; z-index:100; padding:14px 40px; display:flex; align-items:center; justify-content:space-between; background:rgba(240,236,228,0.93); backdrop-filter:blur(10px); border-bottom:1px solid var(--border); }
+    .nav-logo { font-family:var(--font-mono); font-size:14px; font-weight:500; color:var(--text); text-decoration:none; }
+    .nav-logo span { color:var(--orange); }
+    .nav-back { font-family:var(--font-mono); font-size:12px; color:var(--muted); text-decoration:none; letter-spacing:.04em; transition:color .2s; }
+    .nav-back:hover { color:var(--navy); }
 
-.main{max-width:740px;margin:0 auto;padding:0 40px 80px}
+    /* ── EDITORIAL HERO ── */
+    .hero { padding:110px 40px 52px; max-width:740px; margin:0 auto; }
+    .hero-tag { font-family:var(--font-mono); font-size:11px; color:var(--orange); letter-spacing:.1em; text-transform:uppercase; margin-bottom:14px; display:flex; align-items:center; gap:10px; }
+    .hero-tag::before { content:''; display:inline-block; width:24px; height:1.5px; background:var(--orange); }
+    h1 { font-family:var(--font-sans); font-size:clamp(26px,4vw,40px); font-weight:700; line-height:1.15; color:var(--text); margin-bottom:14px; letter-spacing:-.02em; }
+    h1 em { font-style:italic; color:var(--orange); }
+    .hero-sub { font-size:15px; color:var(--muted); max-width:520px; line-height:1.75; }
 
-.card{background:#fff;border:1px solid var(--border);border-radius:var(--rl);padding:32px;margin-bottom:28px}
+    /* ── EDITORIAL MAIN ── */
+    .main { max-width:740px; margin:0 auto; padding:0 40px 80px; }
+    .card { background:#fff; border:1px solid var(--border); border-radius:var(--rl); padding:32px; margin-bottom:28px; }
+    .step-group { margin-bottom:22px; }
+    .step-label { font-family:var(--font-mono); font-size:10px; letter-spacing:.09em; text-transform:uppercase; color:var(--hint); margin-bottom:8px; display:flex; align-items:center; gap:8px; }
+    .step-num { width:18px; height:18px; border-radius:50%; background:var(--navy-dim); color:var(--navy); font-size:10px; font-weight:500; display:flex; align-items:center; justify-content:center; }
+    select { width:100%; padding:11px 14px; background:var(--bg); border:1px solid var(--border); border-radius:var(--r); color:var(--text); font-family:var(--font-sans); font-size:14px; cursor:pointer; appearance:none; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239a9488' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 12px center; transition:border-color .2s,background .15s; }
+    select:focus { outline:none; border-color:var(--navy); background:#fff; }
+    select:hover { border-color:var(--border-hover); }
+    .divider { height:1px; background:var(--border); margin:24px 0; }
+    .btn-recommend { width:100%; padding:13px 24px; background:var(--navy); color:#fff; border:none; border-radius:var(--r); font-family:var(--font-mono); font-size:12px; font-weight:500; letter-spacing:.07em; text-transform:uppercase; cursor:pointer; transition:background .2s,transform .12s,opacity .2s; }
+    .btn-recommend:hover:not(:disabled) { background:var(--navy-dark); }
+    .btn-recommend:active:not(:disabled) { transform:scale(.99); }
+    .btn-recommend:disabled { opacity:.28; cursor:not-allowed; }
+    .result { display:none; }
+    .result-eyebrow { font-family:var(--font-mono); font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:var(--orange); margin-bottom:6px; }
+    .result-header { display:flex; align-items:flex-start; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-bottom:20px; }
+    .result-name { font-size:26px; font-weight:700; letter-spacing:-.02em; color:var(--text); }
+    .badge { display:inline-flex; align-items:center; padding:4px 12px; border-radius:100px; font-family:var(--font-mono); font-size:11px; white-space:nowrap; }
+    .badge-navy { background:var(--navy-dim); color:var(--navy); border:1px solid rgba(30,45,74,.18); }
+    .badge-orange { background:var(--orange-dim); color:var(--orange); border:1px solid rgba(200,57,10,.18); }
+    .why-box { background:var(--navy-dim); border:1px solid rgba(30,45,74,.1); border-radius:var(--r); padding:16px 18px; font-size:14px; color:var(--text); line-height:1.75; margin-bottom:22px; }
+    .phases-label { font-family:var(--font-mono); font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:var(--hint); margin-bottom:8px; }
+    .phases-flow { display:flex; flex-wrap:wrap; align-items:center; gap:6px; margin-bottom:22px; }
+    .phase-chip { padding:4px 12px; background:var(--bg2); border:1px solid var(--border); border-radius:100px; font-family:var(--font-mono); font-size:11px; color:var(--muted); }
+    .phase-arrow { color:var(--hint); font-size:12px; }
+    .start-box { display:flex; align-items:flex-start; gap:14px; background:var(--bg); border:1px solid var(--border); border-radius:var(--r); padding:14px 16px; margin-bottom:22px; }
+    .start-pill { flex-shrink:0; padding:5px 13px; border-radius:100px; font-family:var(--font-mono); font-size:11px; font-weight:500; }
+    .pill-sb { background:var(--navy); color:#fff; }
+    .pill-pt { background:var(--orange); color:#fff; }
+    .start-why { font-size:13px; color:var(--muted); line-height:1.65; }
+    .pc-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:22px; }
+    @media(max-width:520px){ .pc-grid { grid-template-columns:1fr; } }
+    .pc-card { background:var(--bg); border:1px solid var(--border); border-radius:var(--r); padding:14px 16px; }
+    .pc-title { font-family:var(--font-mono); font-size:10px; letter-spacing:.1em; text-transform:uppercase; margin-bottom:10px; }
+    .pc-title-pro { color:var(--navy); }
+    .pc-title-con { color:var(--orange); }
+    .pc-item { font-size:13px; color:var(--muted); line-height:1.6; padding-left:14px; position:relative; margin-bottom:5px; }
+    .pc-item::before { position:absolute; left:0; font-size:11px; }
+    .pro::before { content:'+'; color:var(--navy); font-weight:500; }
+    .con::before { content:'−'; color:var(--orange); }
+    .hook-box { border-left:2px solid var(--navy); padding:13px 18px; background:var(--bg); border-radius:0 var(--r) var(--r) 0; margin-bottom:26px; }
+    .hook-label { font-family:var(--font-mono); font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:var(--navy); margin-bottom:6px; }
+    .hook-text { font-size:13px; color:var(--muted); line-height:1.7; font-style:italic; }
+    .also-label { font-family:var(--font-mono); font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:var(--hint); margin-bottom:10px; }
+    .sec-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:24px; }
+    @media(max-width:520px){ .sec-grid { grid-template-columns:1fr; } }
+    .sec-card { background:var(--bg); border:1px solid var(--border); border-radius:var(--r); padding:14px 16px; transition:border-color .2s; }
+    .sec-card:hover { border-color:var(--border-hover); }
+    .sec-name { font-size:13px; font-weight:500; color:var(--text); margin-bottom:4px; }
+    .sec-desc { font-size:12px; color:var(--muted); line-height:1.6; }
+    .btn-reset { background:none; border:1px solid var(--border); border-radius:var(--r); padding:9px 18px; color:var(--muted); font-family:var(--font-mono); font-size:11px; letter-spacing:.06em; cursor:pointer; transition:border-color .2s,color .2s; }
+    .btn-reset:hover { border-color:var(--border-hover); color:var(--text); }
+    footer.ed-footer { border-top:1px solid var(--border); padding:24px 40px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; }
+    .footer-l, .footer-r { font-family:var(--font-mono); font-size:11px; color:var(--hint); }
+    .footer-r a { color:var(--navy); text-decoration:none; }
+    .footer-r a:hover { text-decoration:underline; }
 
-.step-group{margin-bottom:22px}
-.step-label{font-family:var(--font-mono);font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:var(--hint);margin-bottom:8px;display:flex;align-items:center;gap:8px}
-.step-num{width:18px;height:18px;border-radius:50%;background:var(--navy-dim);color:var(--navy);font-size:10px;font-weight:500;display:flex;align-items:center;justify-content:center}
+    /* ── VIEW SYSTEM ── */
+    #view-editorial, #view-visual { display: none; }
+    #view-editorial.view-active, #view-visual.view-active { display: block; }
 
-select{width:100%;padding:11px 14px;background:var(--bg);border:1px solid var(--border);border-radius:var(--r);color:var(--text);font-family:var(--font-sans);font-size:14px;cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239a9488' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;transition:border-color .2s,background .15s}
-select:focus{outline:none;border-color:var(--navy);background:#fff}
-select:hover{border-color:var(--border-hover)}
+    /* ── VIEW SWITCHER ── */
+    #view-switcher {
+      position: fixed; bottom: 2rem; right: 2rem; z-index: 900;
+      display: flex; background: #0f0f0f;
+      border: 1px solid rgba(255,255,255,0.12); border-radius: 100px;
+      padding: 4px; gap: 3px; box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    }
+    .vsw-btn {
+      font-family: 'DM Sans', sans-serif; font-size: 0.7rem; font-weight: 500;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      color: rgba(255,255,255,0.4); background: none; border: none;
+      border-radius: 100px; padding: 0.45rem 1rem; cursor: pointer; transition: all 0.2s;
+    }
+    .vsw-btn.vsw-active { background: #fff; color: #0f0f0f; font-weight: 600; }
+    .vsw-btn:hover:not(.vsw-active) { color: rgba(255,255,255,0.75); }
 
-.divider{height:1px;background:var(--border);margin:24px 0}
+    /* ── YELLOW NAV ── */
+    #td-nav {
+      position: sticky; top: 0; z-index: 200;
+      background: #fbbf0e; border-bottom: 1.5px solid #151515;
+      display: none; align-items: center; justify-content: space-between;
+      padding: 0 2.5rem; height: 58px; gap: 2rem;
+    }
+    #td-nav .n-logo {
+      font-family: 'Outfit', sans-serif; font-size: 1rem; font-weight: 700;
+      color: #151515; text-decoration: none; letter-spacing: -0.02em; line-height: 1.15;
+    }
+    #td-nav .n-logo span { display: block; }
+    #td-nav .n-links {
+      display: flex; gap: 0.35rem; list-style: none;
+      align-items: center; padding: 0; margin: 0;
+    }
+    #td-nav .n-links a {
+      font-family: 'Outfit', sans-serif; font-size: 0.9rem; font-weight: 400;
+      color: #151515; text-decoration: none;
+      padding: 0.5rem 0.85rem; border: 1.5px solid #151515; border-radius: 8px;
+      background: #ffffff; box-shadow: rgba(0,0,0,0.15) 3px 3px 0 0;
+      transition: box-shadow 0.12s, transform 0.12s; white-space: nowrap;
+    }
+    #td-nav .n-links a:hover { box-shadow: rgba(0,0,0,0.18) 2px 2px 0 0; transform: translate(1px,1px); }
+    #td-nav .n-links a.kw-active { background: #151515; color: #fbbf0e; box-shadow: none; }
+    #td-nav .n-cta { background: #151515 !important; color: #fbbf0e !important; font-weight: 600 !important; }
+    #td-nav .n-cta:hover { background: #2a2a2a !important; }
+    #td-nav .n-ham {
+      display: none; flex-direction: column; gap: 5px;
+      background: none; border: none; cursor: pointer; padding: 4px;
+    }
+    #td-nav .n-ham span {
+      display: block; width: 22px; height: 2px;
+      background: #151515; border-radius: 2px; transition: all 0.3s;
+    }
+    #td-nav .n-ham.open span:nth-child(1) { transform: rotate(45deg) translate(5px,5px); }
+    #td-nav .n-ham.open span:nth-child(2) { opacity: 0; }
+    #td-nav .n-ham.open span:nth-child(3) { transform: rotate(-45deg) translate(5px,-5px); }
+    #td-drawer {
+      display: none; position: fixed; top: 58px; left: 0; right: 0;
+      background: #fbbf0e; border-bottom: 1.5px solid #151515;
+      padding: 1rem 1.5rem; flex-direction: column; gap: 0.5rem;
+      list-style: none; z-index: 199; margin: 0;
+    }
+    #td-drawer.open { display: flex; }
+    #td-drawer a {
+      font-family: 'Figtree', sans-serif; font-size: 0.9rem; font-weight: 500;
+      color: #151515; text-decoration: none;
+      padding: 0.55rem 0; border-bottom: 1px solid rgba(21,21,21,0.15);
+    }
+    #td-drawer a:last-child { border-bottom: none; }
 
-.btn-recommend{width:100%;padding:13px 24px;background:var(--navy);color:#fff;border:none;border-radius:var(--r);font-family:var(--font-mono);font-size:12px;font-weight:500;letter-spacing:.07em;text-transform:uppercase;cursor:pointer;transition:background .2s,transform .12s,opacity .2s}
-.btn-recommend:hover:not(:disabled){background:var(--navy-dark)}
-.btn-recommend:active:not(:disabled){transform:scale(.99)}
-.btn-recommend:disabled{opacity:.28;cursor:not-allowed}
+    /* ── KW PAGE SHELL ── */
+    #view-visual { background: linear-gradient(to bottom, #f3e8ff 0%, #ffffff 60%); min-height: 100vh; }
+    .kw-page { max-width: 860px; margin: 0 auto; padding: 2.5rem 2rem; display: flex; flex-direction: column; gap: 1.5rem; }
 
-.result{display:none}
+    /* ── KW SHARED COMPONENTS ── */
+    .kw-page-hero { padding: 2.5rem; background: #ffffff; border: 1.5px solid #151515; border-radius: 16px; }
+    .kw-page-eyebrow { font-family: 'Figtree',sans-serif; font-size: 0.7rem; font-weight: 600; color: #888; text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.4rem; }
+    .kw-page-title { font-family: 'Outfit',sans-serif; font-size: clamp(1.8rem,3.5vw,2.6rem); font-weight: 700; color: #151515; margin: 0 0 0.75rem; letter-spacing: -0.025em; line-height: 1.15; }
+    .kw-page-sub { font-family: 'Figtree',sans-serif; font-size: 0.95rem; line-height: 1.7; color: #444; margin: 0; max-width: 580px; }
+    .kw-footer { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; padding: 1.5rem 0 2.5rem; border-top: 1.5px solid rgba(21,21,21,0.2); margin-top: 0.5rem; }
+    .kw-footer-copy { font-family: 'Figtree',sans-serif; font-size: 0.78rem; color: #888; }
+    .kw-footer-links { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    .kw-footer-link { font-family: 'Figtree',sans-serif; font-size: 0.78rem; font-weight: 500; color: #151515; text-decoration: none; padding: 0.35rem 1rem; border: 1.5px solid #151515; border-radius: 100px; transition: background 0.15s; white-space: nowrap; }
+    .kw-footer-link:hover { background: #fbbf0e; }
+    .kw-footer-credit { font-family: 'Figtree',sans-serif; font-size: 0.72rem; color: #aaa; }
+    .kw-footer-credit-link { color: #888; text-decoration: underline; text-underline-offset: 2px; text-decoration-color: rgba(21,21,21,0.25); transition: color 0.15s; }
+    .kw-footer-credit-link:hover { color: #151515; }
 
-.result-eyebrow{font-family:var(--font-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--orange);margin-bottom:6px}
-.result-header{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:20px}
-.result-name{font-size:26px;font-weight:700;letter-spacing:-.02em;color:var(--text)}
+    /* ── KW TOOL FORM ── */
+    .kw-tool-card { background: #fff; border: 1.5px solid #151515; border-radius: 16px; padding: 2rem; }
+    .kw-step-group { margin-bottom: 1.25rem; }
+    .kw-step-label {
+      font-family: 'Figtree',sans-serif; font-size: 0.72rem; font-weight: 700;
+      letter-spacing: 0.07em; text-transform: uppercase; color: #888;
+      margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;
+    }
+    .kw-step-num {
+      width: 20px; height: 20px; border-radius: 50%; background: #fbbf0e;
+      color: #151515; font-size: 0.7rem; font-weight: 700;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .kw-select {
+      width: 100%; padding: 0.7rem 1rem; background: #f9f9f9;
+      border: 1.5px solid #151515; border-radius: 8px;
+      color: #151515; font-family: 'Figtree',sans-serif; font-size: 0.9rem;
+      cursor: pointer; appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23151515' stroke-width='1.75' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 14px center;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .kw-select:focus { outline: none; box-shadow: 0 0 0 3px rgba(251,191,14,0.3); }
+    .kw-select:disabled { opacity: 0.45; cursor: not-allowed; }
+    .kw-divider { height: 1.5px; background: rgba(21,21,21,0.1); margin: 1.25rem 0; }
+    .kw-btn-recommend {
+      width: 100%; padding: 0.85rem 1.5rem;
+      background: #151515; color: #fff; border: 1.5px solid #151515;
+      border-radius: 8px; font-family: 'Outfit',sans-serif;
+      font-size: 0.95rem; font-weight: 600; cursor: pointer;
+      transition: background 0.15s, box-shadow 0.15s;
+      box-shadow: rgba(0,0,0,0.2) 3px 3px 0 0;
+    }
+    .kw-btn-recommend:hover:not(:disabled) { background: #2a2a2a; box-shadow: rgba(0,0,0,0.25) 2px 2px 0 0; transform: translate(1px,1px); }
+    .kw-btn-recommend:disabled { opacity: 0.35; cursor: not-allowed; box-shadow: none; }
 
-.badge{display:inline-flex;align-items:center;padding:4px 12px;border-radius:100px;font-family:var(--font-mono);font-size:11px;white-space:nowrap}
-.badge-navy{background:var(--navy-dim);color:var(--navy);border:1px solid rgba(30,45,74,.18)}
-.badge-orange{background:var(--orange-dim);color:var(--orange);border:1px solid rgba(200,57,10,.18)}
+    /* ── KW RESULT CARD ── */
+    .kw-result-card { background: #fff; border: 1.5px solid #151515; border-radius: 16px; padding: 2rem; }
+    .kw-result-eyebrow { font-family: 'Figtree',sans-serif; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #888; margin-bottom: 0.5rem; }
+    .kw-result-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.25rem; }
+    .kw-result-name { font-family: 'Outfit',sans-serif; font-size: 1.8rem; font-weight: 700; letter-spacing: -0.02em; color: #151515; }
+    .kw-badge { display: inline-flex; align-items: center; padding: 0.3rem 0.9rem; border-radius: 100px; font-family: 'Figtree',sans-serif; font-size: 0.72rem; font-weight: 600; white-space: nowrap; }
+    .kw-badge-sb { background: #151515; color: #fbbf0e; }
+    .kw-badge-pt { background: #fbbf0e; color: #151515; border: 1.5px solid #151515; }
+    .kw-why-box { background: #f3e8ff; border: 1.5px solid rgba(21,21,21,0.12); border-radius: 10px; padding: 1rem 1.2rem; font-family: 'Figtree',sans-serif; font-size: 0.9rem; color: #151515; line-height: 1.75; margin-bottom: 1.25rem; }
+    .kw-section-label { font-family: 'Figtree',sans-serif; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: #888; margin-bottom: 0.5rem; }
+    .kw-phases-flow { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem; margin-bottom: 1.25rem; }
+    .kw-phase-chip { padding: 0.25rem 0.7rem; background: #f0f0f0; border: 1.5px solid rgba(21,21,21,0.15); border-radius: 100px; font-family: 'Figtree',sans-serif; font-size: 0.75rem; font-weight: 500; color: #444; }
+    .kw-phase-arrow { color: #bbb; font-size: 0.75rem; }
+    .kw-start-box { display: flex; align-items: flex-start; gap: 0.75rem; background: #fafafa; border: 1.5px solid rgba(21,21,21,0.12); border-radius: 10px; padding: 0.9rem 1rem; margin-bottom: 1.25rem; }
+    .kw-start-pill { flex-shrink: 0; padding: 0.3rem 0.8rem; border-radius: 100px; font-family: 'Figtree',sans-serif; font-size: 0.72rem; font-weight: 700; }
+    .kw-pill-sb { background: #151515; color: #fbbf0e; }
+    .kw-pill-pt { background: #fbbf0e; color: #151515; border: 1.5px solid #151515; }
+    .kw-start-why { font-family: 'Figtree',sans-serif; font-size: 0.85rem; color: #555; line-height: 1.65; }
+    .kw-pc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1.25rem; }
+    @media(max-width:520px){ .kw-pc-grid, .kw-sec-grid { grid-template-columns: 1fr; } }
+    .kw-pc-card { background: #fafafa; border: 1.5px solid rgba(21,21,21,0.1); border-radius: 10px; padding: 1rem 1.1rem; }
+    .kw-pc-title { font-family: 'Figtree',sans-serif; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; margin-bottom: 0.6rem; }
+    .kw-pc-title-pro { color: #2a7a4a; }
+    .kw-pc-title-con { color: #c8390a; }
+    .kw-pc-item { font-family: 'Figtree',sans-serif; font-size: 0.83rem; color: #555; line-height: 1.6; padding-left: 1.1rem; position: relative; margin-bottom: 0.35rem; }
+    .kw-pc-item::before { position: absolute; left: 0; font-size: 0.75rem; font-weight: 700; }
+    .kw-pro::before { content: '+'; color: #2a7a4a; }
+    .kw-con::before { content: '−'; color: #c8390a; }
+    .kw-hook-box { border-left: 3px solid #fbbf0e; padding: 0.9rem 1.1rem; background: #fffdf0; border-radius: 0 10px 10px 0; margin-bottom: 1.5rem; }
+    .kw-hook-label { font-family: 'Figtree',sans-serif; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: #b8900a; margin-bottom: 0.35rem; }
+    .kw-hook-text { font-family: 'Figtree',sans-serif; font-size: 0.87rem; color: #555; line-height: 1.7; font-style: italic; }
+    .kw-also-label { font-family: 'Figtree',sans-serif; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: #888; margin-bottom: 0.5rem; }
+    .kw-sec-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1.5rem; }
+    .kw-sec-card { background: #f7f7f7; border: 1.5px solid rgba(21,21,21,0.1); border-radius: 10px; padding: 1rem 1.1rem; transition: border-color 0.15s, box-shadow 0.15s; }
+    .kw-sec-card:hover { border-color: #151515; box-shadow: 2px 2px 0 #151515; }
+    .kw-sec-name { font-family: 'Outfit',sans-serif; font-size: 0.9rem; font-weight: 600; color: #151515; margin-bottom: 0.3rem; }
+    .kw-sec-desc { font-family: 'Figtree',sans-serif; font-size: 0.78rem; color: #666; line-height: 1.6; }
+    .kw-btn-reset { background: none; border: 1.5px solid rgba(21,21,21,0.25); border-radius: 8px; padding: 0.6rem 1.2rem; color: #666; font-family: 'Figtree',sans-serif; font-size: 0.8rem; font-weight: 500; cursor: pointer; transition: border-color 0.15s, color 0.15s; }
+    .kw-btn-reset:hover { border-color: #151515; color: #151515; }
 
-.why-box{background:var(--navy-dim);border:1px solid rgba(30,45,74,.1);border-radius:var(--r);padding:16px 18px;font-size:14px;color:var(--text);line-height:1.75;margin-bottom:22px}
+    @media(max-width:600px) {
+      .kw-page { padding: 1.25rem 1rem; gap: 1.25rem; }
+      .kw-page-hero { padding: 1.5rem; }
+      .kw-tool-card { padding: 1.5rem; }
+      .kw-result-card { padding: 1.5rem; }
+    }
+    @media(max-width:900px) {
+      #td-nav .n-links { display: none; }
+      #td-nav .n-ham { display: flex; }
+    }
+    @media(max-width:900px) {
+      #td-nav .n-links { display: none !important; }
+      #td-nav .n-ham { display: flex !important; }
+      #td-drawer { position: fixed; top: 58px; left: 0; right: 0; }
+    }
+  
+    /* ── UPDATE BANNER ── */
+    .update-banner {
+      display: none;
+      position: fixed; bottom: 0; left: 0; right: 0;
+      z-index: 99999;
+      align-items: center; justify-content: center; gap: 0.75rem;
+      padding: 0.6rem 1.5rem;
+      font-size: 0.78rem; font-weight: 500;
+      line-height: 1.4;
+    }
+    .update-banner .ub-text { flex: 1; text-align: center; }
+    .update-banner .ub-close {
+      background: none; border: none; cursor: pointer;
+      font-size: 1rem; line-height: 1; padding: 0 0.25rem;
+      opacity: 0.6; transition: opacity 0.15s; flex-shrink: 0;
+    }
+    .update-banner .ub-close:hover { opacity: 1; }
 
-.phases-label{font-family:var(--font-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--hint);margin-bottom:8px}
-.phases-flow{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-bottom:22px}
-.phase-chip{padding:4px 12px;background:var(--bg2);border:1px solid var(--border);border-radius:100px;font-family:var(--font-mono);font-size:11px;color:var(--muted)}
-.phase-arrow{color:var(--hint);font-size:12px}
+    /* Editorial banner — navy strip */
+    #ub-editorial {
+      background: #1e3a5f;
+      color: rgba(255,255,255,0.85);
+      border-top: 1px solid rgba(255,255,255,0.1);
+      font-family: 'JetBrains Mono', 'DM Mono', monospace;
+    }
+    #ub-editorial .ub-icon { font-size: 0.85rem; }
+    #ub-editorial .ub-close { color: #fff; }
 
-.start-box{display:flex;align-items:flex-start;gap:14px;background:var(--bg);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;margin-bottom:22px}
-.start-pill{flex-shrink:0;padding:5px 13px;border-radius:100px;font-family:var(--font-mono);font-size:11px;font-weight:500}
-.pill-sb{background:var(--navy);color:#fff}
-.pill-pt{background:var(--orange);color:#fff}
-.start-why{font-size:13px;color:var(--muted);line-height:1.65}
-
-.pc-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:22px}
-@media(max-width:520px){.pc-grid{grid-template-columns:1fr}}
-.pc-card{background:var(--bg);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px}
-.pc-title{font-family:var(--font-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px}
-.pc-title-pro{color:var(--navy)}
-.pc-title-con{color:var(--orange)}
-.pc-item{font-size:13px;color:var(--muted);line-height:1.6;padding-left:14px;position:relative;margin-bottom:5px}
-.pc-item::before{position:absolute;left:0;font-size:11px}
-.pro::before{content:'+';color:var(--navy);font-weight:500}
-.con::before{content:'−';color:var(--orange)}
-
-.hook-box{border-left:2px solid var(--navy);padding:13px 18px;background:var(--bg);border-radius:0 var(--r) var(--r) 0;margin-bottom:26px}
-.hook-label{font-family:var(--font-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--navy);margin-bottom:6px}
-.hook-text{font-size:13px;color:var(--muted);line-height:1.7;font-style:italic}
-
-.also-label{font-family:var(--font-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--hint);margin-bottom:10px}
-.sec-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px}
-@media(max-width:520px){.sec-grid{grid-template-columns:1fr}}
-.sec-card{background:var(--bg);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;transition:border-color .2s}
-.sec-card:hover{border-color:var(--border-hover)}
-.sec-name{font-size:13px;font-weight:500;color:var(--text);margin-bottom:4px}
-.sec-desc{font-size:12px;color:var(--muted);line-height:1.6}
-
-.btn-reset{background:none;border:1px solid var(--border);border-radius:var(--r);padding:9px 18px;color:var(--muted);font-family:var(--font-mono);font-size:11px;letter-spacing:.06em;cursor:pointer;transition:border-color .2s,color .2s}
-.btn-reset:hover{border-color:var(--border-hover);color:var(--text)}
-
-footer{border-top:1px solid var(--border);padding:24px 40px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
-.footer-l,.footer-r{font-family:var(--font-mono);font-size:11px;color:var(--hint)}
-.footer-r a{color:var(--navy);text-decoration:none}
-.footer-r a:hover{text-decoration:underline}
-</style>
+    /* Visual banner — kawe.ski yellow strip */
+    #ub-visual {
+      background: #fbbf0e;
+      color: #151515;
+      border-top: 1.5px solid #151515;
+      font-family: 'Figtree', 'DM Sans', sans-serif;
+      font-weight: 600;
+    }
+    #ub-visual .ub-icon { font-size: 0.85rem; }
+    #ub-visual .ub-close { color: #151515; }
+  </style>
 </head>
 <body>
 
+<!-- ── UPDATE BANNERS (controlled by SHOW_UPDATE_BANNER flag above) ── -->
+<div id="ub-editorial" class="update-banner" role="status" aria-live="polite">
+  <span class="ub-icon">🔧</span>
+  <span class="ub-text">This page is being updated — some sections may look incomplete. Check back soon.</span>
+  <button class="ub-close" onclick="dismissBanner()" aria-label="Dismiss">✕</button>
+</div>
+<div id="ub-visual" class="update-banner" role="status" aria-live="polite">
+  <span class="ub-icon">✦</span>
+  <span class="ub-text">Site update in progress · some pages may look incomplete · check back soon</span>
+  <button class="ub-close" onclick="dismissBanner()" aria-label="Dismiss">✕</button>
+</div>
+
+<!-- ── VIEW SWITCHER ── -->
+<div id="view-switcher">
+  <button class="vsw-btn vsw-active" id="btn-editorial">Editorial</button>
+  <button class="vsw-btn" id="btn-visual">Visual</button>
+</div>
+
+<!-- ── YELLOW NAV (Visual only) ── -->
+<nav id="td-nav">
+  <a href="../index.html" class="n-logo">AT<span>.</span></a>
+  <ul class="n-links">
+    <li><a href="../pages/work.html?view=visual">Work</a></li>
+    <li><a href="../pages/about.html?view=visual">About</a></li>
+    <li><a href="../pages/certifications.html?view=visual">Certifications</a></li>
+    <li><a href="../id-frameworks.html?view=visual">ID Cheat Sheet</a></li>
+    <li><a href="../pages/articles.html?view=visual">Articles</a></li>
+    <li><a href="id-model-selector.html?view=visual" class="kw-active">ID Model Selector</a></li>
+    <li><a href="../pages/contact.html?view=visual" class="n-cta">Let's Talk</a></li>
+  </ul>
+  <button class="n-ham" id="td-ham" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<ul id="td-drawer">
+  <li><a href="../pages/work.html?view=visual">Work</a></li>
+  <li><a href="../pages/about.html?view=visual">About</a></li>
+  <li><a href="../pages/certifications.html?view=visual">Certifications</a></li>
+  <li><a href="../id-frameworks.html?view=visual">ID Cheat Sheet</a></li>
+  <li><a href="../pages/articles.html?view=visual">Articles</a></li>
+  <li><a href="id-model-selector.html?view=visual">ID Model Selector</a></li>
+  <li><a href="../pages/contact.html?view=visual">Let's Talk</a></li>
+</ul>
+
+<!-- ════════════════════════════════════════════
+     EDITORIAL VIEW
+════════════════════════════════════════════ -->
+<div id="view-editorial" class="view-active">
+
 <nav>
-  <a href="https://abhishektrivedi.com" class="nav-logo"><span>AT</span>.</a>
-  <a href="https://abhishektrivedi.com" class="nav-back">← back to portfolio</a>
+  <a href="../index.html" class="nav-logo">AT<span>.</span></a>
+  <button class="hamburger" id="ed-ham" aria-label="Menu"><span></span><span></span><span></span></button>
+  <ul class="nav-links" id="ed-nav-links">
+    <li><a href="../pages/work.html">Work</a></li>
+    <li><a href="../pages/about.html">About</a></li>
+    <li><a href="../pages/certifications.html">Certifications</a></li>
+    <li style="position:relative;"><a href="../pages/articles.html">Articles</a><span style="position:absolute;top:-8px;right:-4px;font-family:var(--mono);font-size:0.55rem;font-weight:600;letter-spacing:0.06em;background:#c84b2f;color:#fff;padding:1px 5px;border-radius:2px;line-height:1.4;">NEW</span></li>
+    <li><a href="../id-frameworks.html">ID Cheat Sheet</a></li>
+    <li><a href="../game/index.html">Spot the Bug ↗</a></li>
+    <li><a href="../tools/id-model-selector.html" target="_blank" rel="noopener">ID Model Selector ↗</a></li>
+    <li><a href="../lms/index.html" target="_blank" rel="noopener">LMS Demo ↗</a></li>
+    <li><a href="../pages/contact.html" class="nav-cta">Let's Talk</a></li>
+  </ul>
 </nav>
 
 <div class="hero">
@@ -183,55 +464,287 @@ footer{border-top:1px solid var(--border);padding:24px 40px;display:flex;align-i
     <div class="divider"></div>
     <button class="btn-recommend" id="recBtn" onclick="recommend()" disabled>Recommend a model →</button>
   </div>
-
   <div class="result" id="result"></div>
 </div>
 
-<footer>
+<footer class="ed-footer">
   <span class="footer-l">ID Model Selector · abhishektrivedi.com · 2026</span>
   <span class="footer-r">7 models · 100 topics · <a href="https://abhishektrivedi.com/pages/work.html#case5">see storyboard tool →</a></span>
 </footer>
 
+</div><!-- /view-editorial -->
+
+<!-- ════════════════════════════════════════════
+     VISUAL VIEW
+════════════════════════════════════════════ -->
+<div id="view-visual">
+  <div class="kw-page">
+
+    <div class="kw-page-hero">
+      <div class="kw-page-eyebrow">Interactive tool</div>
+      <h1 class="kw-page-title">Find the right ID model for your next project.</h1>
+      <p class="kw-page-sub">Pick a topic, set your learning goal and constraints — get an instant recommendation across 7 instructional design models, with a clear rationale and an interview-ready hook.</p>
+    </div>
+
+    <!-- FORM CARD -->
+    <div class="kw-tool-card">
+      <div class="kw-step-group">
+        <div class="kw-step-label"><span class="kw-step-num">1</span>Topic category</div>
+        <select class="kw-select" id="kw-cat" onchange="kwFilterTopics()">
+          <option value="">— choose a category —</option>
+          <option value="compliance">Compliance &amp; Legal</option>
+          <option value="technical">Technical &amp; IT Skills</option>
+          <option value="leadership">Leadership &amp; Management</option>
+          <option value="sales">Sales &amp; Customer Service</option>
+          <option value="onboarding">Onboarding &amp; Induction</option>
+          <option value="safety">Health, Safety &amp; Wellbeing</option>
+          <option value="soft">Soft Skills &amp; Communication</option>
+          <option value="process">Process &amp; Operations</option>
+          <option value="de">Diversity, Equity &amp; Inclusion</option>
+          <option value="digital">Digital &amp; Data Literacy</option>
+        </select>
+      </div>
+      <div class="kw-step-group">
+        <div class="kw-step-label"><span class="kw-step-num">2</span>Specific topic</div>
+        <select class="kw-select" id="kw-topic" onchange="kwCheckReady()">
+          <option value="">— select a category first —</option>
+        </select>
+      </div>
+      <div class="kw-divider"></div>
+      <div class="kw-step-group">
+        <div class="kw-step-label"><span class="kw-step-num">3</span>What should learners be able to do?</div>
+        <select class="kw-select" id="kw-goal" onchange="kwCheckReady()">
+          <option value="">— choose a learning goal —</option>
+          <option value="recall">Remember and recall key information</option>
+          <option value="understand">Understand concepts and explain them</option>
+          <option value="apply">Apply a skill or process on the job</option>
+          <option value="judge">Make judgment calls in complex situations</option>
+          <option value="change">Change a behaviour or habit</option>
+          <option value="evaluate">Evaluate performance or prove training ROI</option>
+        </select>
+      </div>
+      <div class="kw-step-group">
+        <div class="kw-step-label"><span class="kw-step-num">4</span>Main project constraint</div>
+        <select class="kw-select" id="kw-constraint" onchange="kwCheckReady()">
+          <option value="">— choose your constraint —</option>
+          <option value="tight_timeline">Tight timeline — need it fast</option>
+          <option value="unclear_req">Requirements are unclear or evolving</option>
+          <option value="stakeholder">Stakeholders need sign-off at every stage</option>
+          <option value="scale">Must scale to hundreds of learners</option>
+          <option value="deep">Deep skill transfer is the priority</option>
+          <option value="roi">Must demonstrate measurable business impact</option>
+        </select>
+      </div>
+      <div class="kw-divider"></div>
+      <button class="kw-btn-recommend" id="kw-recBtn" onclick="kwRecommend()" disabled>Recommend a model →</button>
+    </div>
+
+    <!-- RESULT (shown after recommendation) -->
+    <div id="kw-result" style="display:none;"></div>
+
+    <div class="kw-footer">
+      <div class="kw-footer-copy">© 2026 Abhishek Trivedi · Learning Experience Technologist</div>
+      <span class="kw-footer-credit">Visual design inspired by <a href="https://kawe.ski" target="_blank" rel="noopener" class="kw-footer-credit-link">kawe.ski ↗</a></span>
+      <div class="kw-footer-links">
+        <a href="https://www.linkedin.com/in/trivedi-abhishek/" target="_blank" class="kw-footer-link">LinkedIn</a>
+        <a href="../pages/contact.html?view=visual" class="kw-footer-link">Contact</a>
+        <a href="../index.html" class="kw-footer-link">Home</a>
+      </div>
+    </div>
+  </div>
+</div><!-- /view-visual -->
+
 <script>
+// ════════════════════════════════════════════
+// SHARED DATA
+// ════════════════════════════════════════════
 const topics={compliance:["Preventing workplace harassment","Data privacy and GDPR","Anti-bribery and corruption","Code of conduct","Insider trading awareness","Information security basics","Workplace discrimination","Financial compliance","HIPAA awareness","Export control regulations"],technical:["Introduction to Python","Excel for data analysis","Cloud computing fundamentals","Cybersecurity awareness","Using Salesforce CRM","Power BI dashboards","Prompt engineering basics","API integration basics","Agile and Scrum methods","DevOps fundamentals"],leadership:["First-time manager essentials","Giving and receiving feedback","Performance management","Coaching skills","Leading remote teams","Strategic thinking","Change management","Decision making under pressure","Building psychological safety","Managing conflict"],sales:["Consultative selling","Objection handling","Product knowledge fundamentals","Negotiation skills","Customer success basics","Cold outreach and prospecting","Handling difficult customers","CRM data hygiene","Cross-selling and upselling","Sales forecasting"],onboarding:["Company culture and values","Role-specific responsibilities","IT systems orientation","Benefits and HR processes","Team and org structure","90-day success framework","Manager onboarding","Remote employee onboarding","Graduate onboarding","Contractor induction"],safety:["Manual handling and ergonomics","Fire safety and evacuation","Mental health at work","Chemical hazard awareness","Construction site safety","Food hygiene and safety","Lone worker safety","Stress and burnout prevention","PPE usage","Incident reporting"],soft:["Effective written communication","Presentation and public speaking","Active listening","Email etiquette","Cross-cultural communication","Time management","Emotional intelligence","Conflict resolution","Influencing without authority","Storytelling for business"],process:["Invoice processing workflow","Customer complaint handling","Procurement procedures","Quality assurance checklist","Inventory management","Supply chain basics","Contract review process","Project intake workflow","IT helpdesk escalation","Payroll processing steps"],de:["Unconscious bias","Inclusive hiring practices","Allyship in the workplace","Microaggressions awareness","Accessibility and disability inclusion","Gender equity at work","LGBTQ+ inclusion","Cultural competency","Neurodiversity inclusion","Building inclusive teams"],digital:["Data literacy fundamentals","AI tools in the workplace","Spreadsheet fundamentals","Digital collaboration tools","Social media at work","Cybersecurity for non-technical staff","Using Microsoft 365","Understanding analytics dashboards","Digital wellbeing","No-code tool basics"]};
-const models={ADDIE:{name:"ADDIE",badge:"badge-navy",why:"ADDIE works best when the problem is well-defined, content is stable, and stakeholders need clear phase gates to sign off at each stage.",phases:["Analyze","Design","Develop","Implement","Evaluate"],start:"sb",startWhy:"ADDIE is documentation-driven — a detailed storyboard is the natural Design phase output that gets stakeholder and legal sign-off before a single screen is built.",pros:["Predictable milestones and timelines","Easy stakeholder and legal sign-off","Full audit trail — every decision documented"],cons:["Inflexible if content changes mid-project","Delays time-to-value — everything upfront","Nothing reaches learners until full development is done"],hook:"\"I use ADDIE when the problem is crystal clear. I pair it with a quick prototype in the Design phase to catch content gaps before full development starts.\""},SAM:{name:"SAM (Successive Approximation)",badge:"badge-navy",why:"SAM is the right call when requirements are fuzzy or stakeholders can't define what they want until they see something.",phases:["Preparation","Iterative design","Iterative development"],start:"pt",startWhy:"SAM skips the formal storyboard — a rough clickable prototype in week one generates real feedback faster than any written spec.",pros:["Fast to a usable version","Stakeholders shape the course through feedback sprints","Catches structural problems before full build"],cons:["Needs committed SMEs who show up for sessions","Scope can expand each sprint without discipline","Less documentation — harder to audit for compliance"],hook:"\"SAM is my go-to when SMEs struggle to articulate requirements. The savvy start sprint aligns everyone before a single screen is built.\""},"Bloom's":{name:"Bloom's Taxonomy",badge:"badge-orange",why:"Bloom's is a diagnostic lens, not a standalone model. It ensures learning objectives are pitched at the right cognitive level.",phases:["Remember","Understand","Apply","Analyze","Evaluate","Create"],start:"sb",startWhy:"Map each storyboard screen to a Bloom's level. This ensures the course moves learners up the cognitive ladder rather than staying at recall.",pros:["Forces objectives above 'understand'","Works as an overlay on any other model","Easy for stakeholders to understand and review"],cons:["Not a full design model — tells you what level, not how to build","Higher levels are hard to auto-assess in eLearning","Always needs to be combined with another model"],hook:"\"If all objectives use the word 'understand', the course is probably a click-through. I push to Apply and Analyze — that's where behaviour change lives.\""},Gagné:{name:"Gagné's 9 Events",badge:"badge-navy",why:"Gagné provides a proven 9-step instructional sequence that mirrors how the brain actually processes and retains information.",phases:["Attention","State objective","Prior knowledge","Content","Example","Practice","Feedback","Assessment","Transfer"],start:"sb",startWhy:"Each of the 9 events maps directly to a storyboard screen — the model essentially gives you the screen sequence. Document it before building.",pros:["Complete instructional coverage — nothing skipped","Excellent for compliance where soundness must be proven","Naturally produces measurable, assessable outcomes"],cons:["Can feel rigid for informal or adaptive content","9 events can bloat short courses","Experienced learners resent the early recall stages"],hook:"\"Gagné is my checklist for whether a course actually teaches. If I can't find Events 3, 6, and 7, it's probably just a slideshow.\""},Merrill:{name:"Merrill's First Principles",badge:"badge-navy",why:"Merrill puts a real-world problem at the centre of the course — not content. Learners face a situation before they're taught anything.",phases:["Problem","Activation","Demonstration","Application","Integration"],start:"sb",startWhy:"Merrill storyboards are scenario-first — you write the opening problem screen before any content exists. SMEs must validate the scenario before build.",pros:["Learners immediately see why it matters","Builds judgment not just recall","Most likely to produce real behaviour change"],cons:["Heavy scenario-writing effort upfront","Hard to get linear SME or Legal sign-off","Doesn't scale quickly across many topics"],hook:"\"Merrill is my gut-check. If the learner never solves a real problem, it's content delivery — not instruction.\""},"4C/ID":{name:"4C/ID (Four Component ID)",badge:"badge-orange",why:"4C/ID separates routine and non-routine skill elements and designs each differently. It produces the deepest skill transfer — and requires the most effort.",phases:["Learning tasks","Supportive information","Procedural information","Part-task practice"],start:"pt",startWhy:"4C/ID's non-linear structure doesn't translate well to a traditional storyboard. Prototype the simulation environment first, then layer in information scaffolds.",pros:["Deepest long-term skill transfer","Separates memorising from complex thinking","Best for judgment under real-world pressure"],cons:["Enormous design and development effort","Overkill for awareness-level or short content","Requires simulation environment — beyond basic Storyline"],hook:"\"4C/ID forces design for transfer — what does on-the-job performance actually look like, and how do we get there?\""},Kirkpatrick:{name:"Kirkpatrick Model",badge:"badge-orange",why:"Kirkpatrick doesn't help you build the course — it helps you prove it worked. Define business results first, then work backwards to design.",phases:["Reaction","Learning","Behaviour","Results"],start:"sb",startWhy:"Kirkpatrick backwards design means your storyboard starts from the business outcome and works backwards. Every screen must earn its place in that chain.",pros:["Forces business to define success upfront","Gives L&D real impact data beyond completion rates","Stakeholders co-own the training outcome"],cons:["Level 3 and 4 data hard to isolate from other factors","Requires sustained manager participation post-training","Still needs another model to actually build the course"],hook:"\"I design backwards from Level 4 — what business result do we want? That question drives the entire design.\""}};
+const models={ADDIE:{name:"ADDIE",badge:"badge-navy",kwBadge:"kw-badge-sb",why:"ADDIE works best when the problem is well-defined, content is stable, and stakeholders need clear phase gates to sign off at each stage.",phases:["Analyze","Design","Develop","Implement","Evaluate"],start:"sb",startWhy:"ADDIE is documentation-driven — a detailed storyboard is the natural Design phase output that gets stakeholder and legal sign-off before a single screen is built.",pros:["Predictable milestones and timelines","Easy stakeholder and legal sign-off","Full audit trail — every decision documented"],cons:["Inflexible if content changes mid-project","Delays time-to-value — everything upfront","Nothing reaches learners until full development is done"],hook:"\"I use ADDIE when the problem is crystal clear. I pair it with a quick prototype in the Design phase to catch content gaps before full development starts.\""},SAM:{name:"SAM (Successive Approximation)",badge:"badge-navy",kwBadge:"kw-badge-pt",why:"SAM is the right call when requirements are fuzzy or stakeholders can't define what they want until they see something.",phases:["Preparation","Iterative design","Iterative development"],start:"pt",startWhy:"SAM skips the formal storyboard — a rough clickable prototype in week one generates real feedback faster than any written spec.",pros:["Fast to a usable version","Stakeholders shape the course through feedback sprints","Catches structural problems before full build"],cons:["Needs committed SMEs who show up for sessions","Scope can expand each sprint without discipline","Less documentation — harder to audit for compliance"],hook:"\"SAM is my go-to when SMEs struggle to articulate requirements. The savvy start sprint aligns everyone before a single screen is built.\""},"Bloom's":{name:"Bloom's Taxonomy",badge:"badge-orange",kwBadge:"kw-badge-sb",why:"Bloom's is a diagnostic lens, not a standalone model. It ensures learning objectives are pitched at the right cognitive level.",phases:["Remember","Understand","Apply","Analyze","Evaluate","Create"],start:"sb",startWhy:"Map each storyboard screen to a Bloom's level. This ensures the course moves learners up the cognitive ladder rather than staying at recall.",pros:["Forces objectives above 'understand'","Works as an overlay on any other model","Easy for stakeholders to understand and review"],cons:["Not a full design model — tells you what level, not how to build","Higher levels are hard to auto-assess in eLearning","Always needs to be combined with another model"],hook:"\"If all objectives use the word 'understand', the course is probably a click-through. I push to Apply and Analyze — that's where behaviour change lives.\""},Gagné:{name:"Gagné's 9 Events",badge:"badge-navy",kwBadge:"kw-badge-sb",why:"Gagné provides a proven 9-step instructional sequence that mirrors how the brain actually processes and retains information.",phases:["Attention","State objective","Prior knowledge","Content","Example","Practice","Feedback","Assessment","Transfer"],start:"sb",startWhy:"Each of the 9 events maps directly to a storyboard screen — the model essentially gives you the screen sequence. Document it before building.",pros:["Complete instructional coverage — nothing skipped","Excellent for compliance where soundness must be proven","Naturally produces measurable, assessable outcomes"],cons:["Can feel rigid for informal or adaptive content","9 events can bloat short courses","Experienced learners resent the early recall stages"],hook:"\"Gagné is my checklist for whether a course actually teaches. If I can't find Events 3, 6, and 7, it's probably just a slideshow.\""},Merrill:{name:"Merrill's First Principles",badge:"badge-navy",kwBadge:"kw-badge-sb",why:"Merrill puts a real-world problem at the centre of the course — not content. Learners face a situation before they're taught anything.",phases:["Problem","Activation","Demonstration","Application","Integration"],start:"sb",startWhy:"Merrill storyboards are scenario-first — you write the opening problem screen before any content exists. SMEs must validate the scenario before build.",pros:["Learners immediately see why it matters","Builds judgment not just recall","Most likely to produce real behaviour change"],cons:["Heavy scenario-writing effort upfront","Hard to get linear SME or Legal sign-off","Doesn't scale quickly across many topics"],hook:"\"Merrill is my gut-check. If the learner never solves a real problem, it's content delivery — not instruction.\""},"4C/ID":{name:"4C/ID (Four Component ID)",badge:"badge-orange",kwBadge:"kw-badge-pt",why:"4C/ID separates routine and non-routine skill elements and designs each differently. It produces the deepest skill transfer — and requires the most effort.",phases:["Learning tasks","Supportive information","Procedural information","Part-task practice"],start:"pt",startWhy:"4C/ID's non-linear structure doesn't translate well to a traditional storyboard. Prototype the simulation environment first, then layer in information scaffolds.",pros:["Deepest long-term skill transfer","Separates memorising from complex thinking","Best for judgment under real-world pressure"],cons:["Enormous design and development effort","Overkill for awareness-level or short content","Requires simulation environment — beyond basic Storyline"],hook:"\"4C/ID forces design for transfer — what does on-the-job performance actually look like, and how do we get there?\""},Kirkpatrick:{name:"Kirkpatrick Model",badge:"badge-orange",kwBadge:"kw-badge-sb",why:"Kirkpatrick doesn't help you build the course — it helps you prove it worked. Define business results first, then work backwards to design.",phases:["Reaction","Learning","Behaviour","Results"],start:"sb",startWhy:"Kirkpatrick backwards design means your storyboard starts from the business outcome and works backwards. Every screen must earn its place in that chain.",pros:["Forces business to define success upfront","Gives L&D real impact data beyond completion rates","Stakeholders co-own the training outcome"],cons:["Level 3 and 4 data hard to isolate from other factors","Requires sustained manager participation post-training","Still needs another model to actually build the course"],hook:"\"I design backwards from Level 4 — what business result do we want? That question drives the entire design.\""}};
 const secondary={ADDIE:["Bloom's","Gagné"],SAM:["Merrill","Bloom's"],"Bloom's":["ADDIE","Gagné"],Gagné:["Bloom's","ADDIE"],Merrill:["Bloom's","SAM"],"4C/ID":["Merrill","Bloom's"],Kirkpatrick:["ADDIE","Gagné"]};
 const logic=[{goal:"evaluate",c:"roi",m:"Kirkpatrick"},{goal:"evaluate",c:null,m:"Kirkpatrick"},{goal:"judge",c:"deep",m:"4C/ID"},{goal:"judge",c:"unclear_req",m:"SAM"},{goal:"judge",c:null,m:"Merrill"},{goal:"change",c:"unclear_req",m:"SAM"},{goal:"change",c:null,m:"Merrill"},{goal:"apply",c:"stakeholder",m:"ADDIE"},{goal:"apply",c:"unclear_req",m:"SAM"},{goal:"apply",c:"deep",m:"Gagné"},{goal:"apply",c:null,m:"Gagné"},{goal:"understand",c:"tight_timeline",m:"Bloom's"},{goal:"understand",c:null,m:"Bloom's"},{goal:"recall",c:"stakeholder",m:"ADDIE"},{goal:"recall",c:"scale",m:"ADDIE"},{goal:"recall",c:null,m:"ADDIE"}];
 
-function filterTopics(){
-  const cat=document.getElementById('cat').value,sel=document.getElementById('topic');
-  sel.innerHTML='<option value="">— select a topic —</option>';
-  if(cat&&topics[cat])topics[cat].forEach(t=>{const o=document.createElement('option');o.value=t;o.textContent=t;sel.appendChild(o)});
+function getRecommendation(goal, constraint) {
+  let chosen = null;
+  for (const r of logic) {
+    if (r.goal === goal && (r.c === null || r.c === constraint)) { chosen = r.m; break; }
+  }
+  return chosen || "ADDIE";
+}
+
+// ════════════════════════════════════════════
+// EDITORIAL TOOL
+// ════════════════════════════════════════════
+function filterTopics() {
+  const cat = document.getElementById('cat').value;
+  const sel = document.getElementById('topic');
+  sel.innerHTML = '<option value="">— select a topic —</option>';
+  if (cat && topics[cat]) topics[cat].forEach(t => {
+    const o = document.createElement('option'); o.value = t; o.textContent = t; sel.appendChild(o);
+  });
   checkReady();
 }
-function checkReady(){
-  const ok=document.getElementById('topic').value&&document.getElementById('goal').value&&document.getElementById('constraint').value;
-  document.getElementById('recBtn').disabled=!ok;
+function checkReady() {
+  const ok = document.getElementById('topic').value && document.getElementById('goal').value && document.getElementById('constraint').value;
+  document.getElementById('recBtn').disabled = !ok;
 }
-function recommend(){
-  const goal=document.getElementById('goal').value,constraint=document.getElementById('constraint').value,topic=document.getElementById('topic').value;
-  if(!topic||!goal||!constraint)return;
-  let chosen=null;
-  for(const r of logic){if(r.goal===goal&&(r.c===null||r.c===constraint)){chosen=r.m;break;}}
-  if(!chosen)chosen="ADDIE";
-  const m=models[chosen],secs=secondary[chosen].map(s=>models[s]);
-  const phases=m.phases.map((p,i)=>`<span class="phase-chip">${p}</span>${i<m.phases.length-1?'<span class="phase-arrow">›</span>':''}`).join('');
-  const pros=m.pros.map(p=>`<div class="pc-item pro">${p}</div>`).join('');
-  const cons=m.cons.map(c=>`<div class="pc-item con">${c}</div>`).join('');
-  const secCards=secs.map(s=>`<div class="sec-card"><div class="sec-name">${s.name}</div><div class="sec-desc">${s.why}</div></div>`).join('');
-  const pillClass=m.start==='sb'?'pill-sb':'pill-pt';
-  const pillLabel=m.start==='sb'?'→ Storyboard first':'→ Prototype first';
-  document.getElementById('result').innerHTML=`<div class="card"><div class="result-eyebrow">Recommended for: ${topic}</div><div class="result-header"><div class="result-name">${m.name}</div><span class="badge ${m.badge}">${m.start==='sb'?'Storyboard first':'Prototype first'}</span></div><div class="why-box">${m.why}</div><div class="phases-label">Model phases</div><div class="phases-flow">${phases}</div><div class="start-box"><span class="start-pill ${pillClass}">${pillLabel}</span><span class="start-why">${m.startWhy}</span></div><div class="pc-grid"><div class="pc-card"><div class="pc-title pc-title-pro">Pros</div>${pros}</div><div class="pc-card"><div class="pc-title pc-title-con">Cons</div>${cons}</div></div><div class="hook-box"><div class="hook-label">Interview hook — use this</div><div class="hook-text">${m.hook}</div></div><div class="also-label">Also consider</div><div class="sec-grid">${secCards}</div><button class="btn-reset" onclick="resetTool()">← Start over</button></div>`;
-  document.getElementById('result').style.display='block';
-  document.getElementById('result').scrollIntoView({behavior:'smooth',block:'start'});
+function recommend() {
+  const goal = document.getElementById('goal').value;
+  const constraint = document.getElementById('constraint').value;
+  const topic = document.getElementById('topic').value;
+  if (!topic || !goal || !constraint) return;
+  const chosen = getRecommendation(goal, constraint);
+  const m = models[chosen], secs = secondary[chosen].map(s => models[s]);
+  const phases = m.phases.map((p,i) => `<span class="phase-chip">${p}</span>${i < m.phases.length-1 ? '<span class="phase-arrow">›</span>' : ''}`).join('');
+  const pros = m.pros.map(p => `<div class="pc-item pro">${p}</div>`).join('');
+  const cons = m.cons.map(c => `<div class="pc-item con">${c}</div>`).join('');
+  const secCards = secs.map(s => `<div class="sec-card"><div class="sec-name">${s.name}</div><div class="sec-desc">${s.why}</div></div>`).join('');
+  const pillClass = m.start === 'sb' ? 'pill-sb' : 'pill-pt';
+  const pillLabel = m.start === 'sb' ? '→ Storyboard first' : '→ Prototype first';
+  document.getElementById('result').innerHTML = `<div class="card"><div class="result-eyebrow">Recommended for: ${topic}</div><div class="result-header"><div class="result-name">${m.name}</div><span class="badge ${m.badge}">${m.start==='sb'?'Storyboard first':'Prototype first'}</span></div><div class="why-box">${m.why}</div><div class="phases-label">Model phases</div><div class="phases-flow">${phases}</div><div class="start-box"><span class="start-pill ${pillClass}">${pillLabel}</span><span class="start-why">${m.startWhy}</span></div><div class="pc-grid"><div class="pc-card"><div class="pc-title pc-title-pro">Pros</div>${pros}</div><div class="pc-card"><div class="pc-title pc-title-con">Cons</div>${cons}</div></div><div class="hook-box"><div class="hook-label">Interview hook — use this</div><div class="hook-text">${m.hook}</div></div><div class="also-label">Also consider</div><div class="sec-grid">${secCards}</div><button class="btn-reset" onclick="resetTool()">← Start over</button></div>`;
+  document.getElementById('result').style.display = 'block';
+  document.getElementById('result').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
-function resetTool(){
-  ['cat','topic','goal','constraint'].forEach(id=>document.getElementById(id).value='');
-  document.getElementById('topic').innerHTML='<option value="">— select a category first —</option>';
-  document.getElementById('result').style.display='none';
-  document.getElementById('recBtn').disabled=true;
-  window.scrollTo({top:0,behavior:'smooth'});
+function resetTool() {
+  ['cat','topic','goal','constraint'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('topic').innerHTML = '<option value="">— select a category first —</option>';
+  document.getElementById('result').style.display = 'none';
+  document.getElementById('recBtn').disabled = true;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ════════════════════════════════════════════
+// VISUAL (KW) TOOL
+// ════════════════════════════════════════════
+function kwFilterTopics() {
+  const cat = document.getElementById('kw-cat').value;
+  const sel = document.getElementById('kw-topic');
+  sel.innerHTML = '<option value="">— select a topic —</option>';
+  if (cat && topics[cat]) topics[cat].forEach(t => {
+    const o = document.createElement('option'); o.value = t; o.textContent = t; sel.appendChild(o);
+  });
+  kwCheckReady();
+}
+function kwCheckReady() {
+  const ok = document.getElementById('kw-topic').value && document.getElementById('kw-goal').value && document.getElementById('kw-constraint').value;
+  document.getElementById('kw-recBtn').disabled = !ok;
+}
+function kwRecommend() {
+  const goal = document.getElementById('kw-goal').value;
+  const constraint = document.getElementById('kw-constraint').value;
+  const topic = document.getElementById('kw-topic').value;
+  if (!topic || !goal || !constraint) return;
+  const chosen = getRecommendation(goal, constraint);
+  const m = models[chosen], secs = secondary[chosen].map(s => models[s]);
+  const phases = m.phases.map((p,i) => `<span class="kw-phase-chip">${p}</span>${i < m.phases.length-1 ? '<span class="kw-phase-arrow">›</span>' : ''}`).join('');
+  const pros = m.pros.map(p => `<div class="kw-pc-item kw-pro">${p}</div>`).join('');
+  const cons = m.cons.map(c => `<div class="kw-pc-item kw-con">${c}</div>`).join('');
+  const secCards = secs.map(s => `<div class="kw-sec-card"><div class="kw-sec-name">${s.name}</div><div class="kw-sec-desc">${s.why}</div></div>`).join('');
+  const pillClass = m.start === 'sb' ? 'kw-pill-sb' : 'kw-pill-pt';
+  const pillLabel = m.start === 'sb' ? 'Storyboard first' : 'Prototype first';
+  const badgeClass = m.kwBadge;
+  const badgeLabel = m.start === 'sb' ? 'Storyboard first' : 'Prototype first';
+  document.getElementById('kw-result').innerHTML = `<div class="kw-result-card"><div class="kw-result-eyebrow">Recommended for: ${topic}</div><div class="kw-result-header"><div class="kw-result-name">${m.name}</div><span class="kw-badge ${badgeClass}">${badgeLabel}</span></div><div class="kw-why-box">${m.why}</div><div class="kw-section-label">Model phases</div><div class="kw-phases-flow">${phases}</div><div class="kw-start-box"><span class="kw-start-pill ${pillClass}">${pillLabel}</span><span class="kw-start-why">${m.startWhy}</span></div><div class="kw-pc-grid"><div class="kw-pc-card"><div class="kw-pc-title kw-pc-title-pro">Pros</div>${pros}</div><div class="kw-pc-card"><div class="kw-pc-title kw-pc-title-con">Cons</div>${cons}</div></div><div class="kw-hook-box"><div class="kw-hook-label">Interview hook — use this</div><div class="kw-hook-text">${m.hook}</div></div><div class="kw-also-label">Also consider</div><div class="kw-sec-grid">${secCards}</div><button class="kw-btn-reset" onclick="kwResetTool()">← Start over</button></div>`;
+  document.getElementById('kw-result').style.display = 'block';
+  document.getElementById('kw-result').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+function kwResetTool() {
+  ['kw-cat','kw-topic','kw-goal','kw-constraint'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('kw-topic').innerHTML = '<option value="">— select a category first —</option>';
+  document.getElementById('kw-result').style.display = 'none';
+  document.getElementById('kw-recBtn').disabled = true;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ════════════════════════════════════════════
+// VIEW SWITCH
+// ════════════════════════════════════════════
+let currentView = 'editorial';
+function switchView(view) {
+  if (view === currentView) return;
+  currentView = view;
+  document.getElementById('view-editorial').classList.toggle('view-active', view === 'editorial');
+  document.getElementById('view-visual').classList.toggle('view-active', view === 'visual');
+  document.getElementById('td-nav').style.display = view === 'visual' ? 'flex' : 'none';
+  document.getElementById('btn-editorial').classList.toggle('vsw-active', view === 'editorial');
+  document.getElementById('btn-visual').classList.toggle('vsw-active', view === 'visual');
+  const url = view === 'visual' ? '?view=visual' : window.location.pathname;
+  history.pushState({ view }, '', url);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+(function() {
+  const params = new URLSearchParams(window.location.search);
+  const initView = params.get('view') === 'visual' ? 'visual' : 'editorial';
+  document.getElementById('view-editorial').classList.toggle('view-active', initView === 'editorial');
+  document.getElementById('view-visual').classList.toggle('view-active', initView === 'visual');
+  currentView = initView;
+  document.getElementById('btn-' + initView).classList.add('vsw-active');
+  if (initView === 'visual') document.getElementById('td-nav').style.display = 'flex';
+})();
+window.addEventListener('popstate', (e) => {
+  switchView((e.state && e.state.view) || 'editorial');
+});
+
+// ── MOBILE NAV HAMBURGER ──
+const ham = document.getElementById('td-ham');
+const drawer = document.getElementById('td-drawer');
+if (ham && drawer) {
+  ham.addEventListener('click', () => {
+    ham.classList.toggle('open');
+    drawer.classList.toggle('open');
+  });
+}
+
+// ── VIEW SWITCHER BUTTONS ──
+document.getElementById('btn-editorial').addEventListener('click', () => switchView('editorial'));
+document.getElementById('btn-visual').addEventListener('click', () => switchView('visual'));
+
+// ── EDITORIAL NAV HAMBURGER ──
+(function() {
+  var ham = document.getElementById('ed-ham');
+  var links = document.getElementById('ed-nav-links');
+  if (ham && links) {
+    ham.addEventListener('click', function() {
+      links.classList.toggle('open');
+    });
+    document.addEventListener('click', function(e) {
+      if (!ham.contains(e.target) && !links.contains(e.target)) {
+        links.classList.remove('open');
+      }
+    });
+  }
+})();
+</script>
+
+
+<script>
+
+// ── UPDATE BANNER LOGIC ──
+(function() {
+  if (!window.SHOW_UPDATE_BANNER) return;
+  if (sessionStorage.getItem('ub_dismissed')) return;
+
+  function showBanner(view) {
+    document.getElementById('ub-editorial').style.display = view === 'editorial' ? 'flex' : 'none';
+    document.getElementById('ub-visual').style.display   = view === 'visual'    ? 'flex' : 'none';
+  }
+
+  var initView = (new URLSearchParams(window.location.search).get('view') === 'visual') ? 'visual' : 'editorial';
+  showBanner(initView);
+
+  // Re-sync when view switches
+  var _origSwitch = window.switchView;
+  window.switchView = function(v) {
+    if (_origSwitch) _origSwitch(v);
+    if (!sessionStorage.getItem('ub_dismissed')) showBanner(v);
+  };
+})();
+
+function dismissBanner() {
+  document.getElementById('ub-editorial').style.display = 'none';
+  document.getElementById('ub-visual').style.display   = 'none';
+  sessionStorage.setItem('ub_dismissed', '1');
 }
 </script>
+
 </body>
 </html>
