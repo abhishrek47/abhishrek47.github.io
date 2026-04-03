@@ -1506,6 +1506,11 @@
 .cl-overlay { position:fixed;inset:0;z-index:9999;background:#0b0d0b;display:flex;align-items:center;justify-content:center;transition:opacity 0.6s ease,visibility 0.6s ease; }
 .cl-overlay.done { opacity:0;visibility:hidden;pointer-events:none; }
 .cl-overlay.skip { display:none; }
+
+  /* Return visits: hide editorial loader instantly (CSS fires before JS) */
+  html[data-style-chosen] #courseLoader { display: none !important; }
+  html[data-style-chosen] .cl-overlay   { display: none !important; }
+
 .cl-screen { width:min(560px,90vw);border:1px solid rgba(200,75,47,0.25);border-radius:6px;background:#0f1108;box-shadow:0 0 60px rgba(200,75,47,0.08),0 0 0 1px rgba(255,255,255,0.04);overflow:hidden;font-family:'Courier New',monospace; }
 .cl-header { display:flex;align-items:center;justify-content:space-between;padding:0.7rem 1.25rem;background:#161810;border-bottom:1px solid rgba(200,75,47,0.15); }
 .cl-logo { font-family:Georgia,serif;font-size:1.1rem;font-weight:bold;color:#fff;letter-spacing:-0.02em; }
@@ -1571,21 +1576,18 @@ html[data-style-chosen] #view-switcher  { display: none !important; }
   text-transform: uppercase; color: rgba(255,255,255,0.38);
 }
 
-/* Headline — centered inside the 68px header bar */
+/* Headline — full-width dark strip below the brand bar */
 #ss-headline-wrap {
-  position: absolute; left: 50%; top: 34px;
-  transform: translate(-50%, -50%);
-  z-index: 31; text-align: center; pointer-events: none;
-  white-space: nowrap;
-  background: rgba(10, 5, 22, 0.52);
-  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 100px;
-  padding: 0.4rem 1.4rem 0.45rem;
+  position: relative; flex-shrink: 0; z-index: 25;
+  text-align: center;
+  padding: 0.7rem 2rem 0.65rem;
+  background: rgba(8, 4, 20, 0.88);
+  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(255,255,255,0.05);
 }
 #ss-headline-wrap h1 {
   font-family: 'DM Serif Display', Georgia, serif;
-  font-size: clamp(0.9rem, 2.2vw, 1.45rem);
+  font-size: clamp(0.9rem, 2vw, 1.4rem);
   font-weight: 400; font-style: italic;
   color: #fff; margin: 0; line-height: 1;
 }
@@ -1596,7 +1598,8 @@ html[data-style-chosen] #view-switcher  { display: none !important; }
 #ss-panels { flex: 1; display: flex; position: relative; }
 
 .ss-panel {
-  flex: 1; position: relative; cursor: pointer;
+  flex: 1 1 0%; min-width: 0; width: 50%;
+  position: relative; cursor: pointer;
   overflow: hidden; border: none; outline: none;
   transition: flex 0.6s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex; align-items: center; justify-content: center;
@@ -1735,7 +1738,7 @@ html[data-style-chosen] #view-switcher  { display: none !important; }
 
 /* Center divider AT. logo — centered in the panels area (below 68px header) */
 #ss-divider-logo {
-  position: absolute; left: 50%; top: calc(50% + 34px);
+  position: absolute; left: 50%; top: calc(50% + 57px);
   transform: translate(-50%, -50%); z-index: 30;
   width: 52px; height: 52px; border-radius: 50%;
   background: #0f0820;
@@ -1754,8 +1757,8 @@ html[data-style-chosen] #view-switcher  { display: none !important; }
   .ss-panel, .ss-panel:hover, .ss-panel:focus-visible { flex: 1; min-height: 50svh; min-height: 50vh; }
   #ss-divider-logo { display: none; }
   #ss-brand { padding: 0 1.25rem; height: 56px; }
-  #ss-headline-wrap { top: 28px; padding: 0.3rem 1rem 0.35rem; }
-  #ss-headline-wrap h1 { font-size: clamp(0.82rem, 3.5vw, 1.1rem); }
+  #ss-headline-wrap { padding: 0.55rem 1.25rem 0.5rem; }
+  #ss-headline-wrap h1 { font-size: clamp(0.82rem, 4vw, 1rem); }
   .ss-brand-tagline { display: none; }
   .ss-bg-num { font-size: clamp(5rem, 20vw, 9rem); }
   .sse-word, .ssv-word { font-size: clamp(1.5rem, 7vw, 2.5rem); }
