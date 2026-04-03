@@ -46,9 +46,8 @@
   font-size: 0.82rem;
   font-weight: 500;
   letter-spacing: 0.01em;
-  position: fixed;
-  top: 0; left: 0; right: 0;
-  z-index: 9100;
+  position: relative;
+  z-index: 9000;
   text-align: center;
   line-height: 1.4;
 }
@@ -2181,11 +2180,24 @@ window._syncNavTop = function() {
   if (!nav) return;
   var barH = (bar && !bar.classList.contains('hidden')) ? bar.offsetHeight : 0;
   nav.style.top = barH + 'px';
-  // Push hero content below both fixed bars
   var hero = document.querySelector('#view-editorial .hero');
   if (hero) hero.style.marginTop = (barH + nav.offsetHeight) + 'px';
 };
-document.addEventListener('DOMContentLoaded', window._syncNavTop);
+// Run when editorial view-active class is added (not on DOMContentLoaded when view is still hidden)
+document.addEventListener('DOMContentLoaded', function() {
+  var ve = document.getElementById('view-editorial');
+  if (!ve) return;
+  var obs = new MutationObserver(function(mutations) {
+    mutations.forEach(function(m) {
+      if (m.target.classList.contains('view-active')) {
+        setTimeout(window._syncNavTop, 60);
+      }
+    });
+  });
+  obs.observe(ve, { attributes: true, attributeFilter: ['class'] });
+  // Also handle case where editorial is already active on load
+  if (ve.classList.contains('view-active')) setTimeout(window._syncNavTop, 60);
+});
 window.addEventListener('resize', window._syncNavTop);
 </script>
 
