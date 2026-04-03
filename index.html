@@ -1579,14 +1579,13 @@ html[data-style-chosen] #view-switcher  { display: none !important; }
 
   /* index.html: view-switcher replaced by style selector — always hidden */
   #view-switcher { display: none !important; }
-/* Split header bar — cream left / dark right */
+/* Split header bar — floats over panels so the divider line runs unbroken from top to bottom */
 #ss-brand {
-  position: relative; z-index: 30; flex-shrink: 0;
+  position: absolute; top: 0; left: 0; right: 0; z-index: 30;
   height: 68px;
   display: flex; align-items: center; justify-content: space-between;
   padding: 0 2rem; pointer-events: none;
-  background: linear-gradient(to right, #F5F2EB 50%, #0f0820 50%);
-  border-bottom: 1px solid rgba(0,0,0,0.07);
+  background: transparent;
 }
 .ss-brand-logo {
   font-family: 'DM Serif Display', Georgia, serif;
@@ -1629,7 +1628,8 @@ html[data-style-chosen] #view-switcher  { display: none !important; }
   display: flex; flex-direction: column;
   align-items: center; gap: 0.9rem;
   padding: 2rem 1.5rem; pointer-events: none;
-  margin-top: -2.5rem;
+  margin-top: 0;
+  padding-top: 68px;
 }
 
 /* Big faded background numbers */
@@ -1762,7 +1762,7 @@ html[data-style-chosen] #view-switcher  { display: none !important; }
   width: 52px; height: 52px; border-radius: 50%;
   background: #0f0820;
   border: 2px solid rgba(255,255,255,0.13);
-  display: flex; align-items: center; justify-content: center;
+  display: none; align-items: center; justify-content: center;
   font-family: 'DM Serif Display', Georgia, serif;
   font-size: 0.9rem; font-weight: 700; color: #F5F2EB;
   letter-spacing: -0.02em; pointer-events: none;
