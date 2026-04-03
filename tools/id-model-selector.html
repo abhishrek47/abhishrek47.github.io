@@ -147,7 +147,7 @@
       font-family: 'Outfit', sans-serif; font-size: 1rem; font-weight: 700;
       color: #151515; text-decoration: none; letter-spacing: -0.02em; line-height: 1.15;
     }
-    #td-nav .n-logo span { display: block; }
+    #td-nav .n-logo span { display: inline; }
     #td-nav .n-links {
       display: flex; gap: 0.35rem; list-style: none;
       align-items: center; padding: 0; margin: 0;
@@ -336,7 +336,20 @@
     }
     #ub-visual .ub-icon { font-size: 0.85rem; }
     #ub-visual .ub-close { color: #151515; }
-  </style>
+  
+    /* ── CANONICAL EDITORIAL NAV (id-model-selector) ── */
+    #view-editorial nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; justify-content:space-between; align-items:center; padding:1.2rem 4rem; background:rgba(245,242,235,0.95); backdrop-filter:blur(8px); border-bottom:1px solid #d4cfc6; }
+    #view-editorial .nav-logo { font-family:'DM Mono',monospace; font-size:0.9rem; font-weight:500; letter-spacing:0.05em; color:#0f0f0f; text-decoration:none; }
+    #view-editorial .nav-logo span { color:#c84b2f; }
+    #view-editorial .nav-links { display:flex; gap:2.5rem; list-style:none; align-items:center; }
+    #view-editorial .nav-links a { font-size:0.82rem; font-weight:500; letter-spacing:0.08em; text-transform:uppercase; color:#6b6459; text-decoration:none; transition:color 0.2s; }
+    #view-editorial .nav-links a:hover, #view-editorial .nav-links a.active { color:#c84b2f; }
+    #view-editorial .nav-cta { background:#c84b2f !important; color:white !important; padding:0.5rem 1.3rem; border-radius:2px; }
+    #view-editorial .hamburger { display:none; flex-direction:column; gap:5px; cursor:pointer; background:none; border:none; padding:4px; }
+    #view-editorial .hamburger span { display:block; width:22px; height:2px; background:#0f0f0f; transition:all 0.3s; }
+    #view-editorial #ed-nav-links.open { display:flex !important; flex-direction:column; position:absolute; top:100%; left:0; right:0; background:rgba(245,242,235,0.98); border-bottom:1px solid #d4cfc6; padding:1.5rem 2rem; gap:1.5rem; z-index:999; }
+    @media(max-width:768px) { #view-editorial nav { padding:1rem 1.5rem; } #view-editorial .nav-links { display:none; } #view-editorial .hamburger { display:flex; } }
+</style>
 </head>
 <body>
 
@@ -665,6 +678,7 @@ function switchView(view) {
   document.getElementById('view-editorial').classList.toggle('view-active', view === 'editorial');
   document.getElementById('view-visual').classList.toggle('view-active', view === 'visual');
   document.getElementById('td-nav').style.display = view === 'visual' ? 'flex' : 'none';
+  document.body.classList.toggle('visual-mode', view === 'visual');
   document.getElementById('btn-editorial').classList.toggle('vsw-active', view === 'editorial');
   document.getElementById('btn-visual').classList.toggle('vsw-active', view === 'visual');
   const url = view === 'visual' ? '?view=visual' : window.location.pathname;
@@ -677,8 +691,9 @@ function switchView(view) {
   document.getElementById('view-editorial').classList.toggle('view-active', initView === 'editorial');
   document.getElementById('view-visual').classList.toggle('view-active', initView === 'visual');
   currentView = initView;
-  document.getElementById('btn-' + initView).classList.add('vsw-active');
-  if (initView === 'visual') document.getElementById('td-nav').style.display = 'flex';
+  document.getElementById('btn-editorial').classList.toggle('vsw-active', initView === 'editorial');
+  document.getElementById('btn-visual').classList.toggle('vsw-active', initView === 'visual');
+  if (initView === 'visual') { document.getElementById('td-nav').style.display = 'flex'; document.body.classList.add('visual-mode'); }
 })();
 window.addEventListener('popstate', (e) => {
   switchView((e.state && e.state.view) || 'editorial');
@@ -744,6 +759,23 @@ function dismissBanner() {
   document.getElementById('ub-visual').style.display   = 'none';
   sessionStorage.setItem('ub_dismissed', '1');
 }
+
+// ── VIEW PERSISTENCE LINK INTERCEPTOR ──
+(function() {
+  document.addEventListener('click', function(e) {
+    if (typeof currentView === 'undefined' || currentView !== 'visual') return;
+    var link = e.target.closest('a[href]');
+    if (!link) return;
+    var href = link.getAttribute('href');
+    if (!href || href.startsWith('#') || href.startsWith('mailto:') || href.startsWith('tel:')) return;
+    if (link.target === '_blank' || link.getAttribute('target') === '_blank') return;
+    if (href.includes('?view=') || href.includes('&view=')) return;
+    if (href.startsWith('http') && !href.includes('abhishektrivedi.com') && !href.includes('abhishrek47.github.io')) return;
+    e.preventDefault();
+    var sep = href.includes('?') ? '&' : '?';
+    window.location.href = href + sep + 'view=visual';
+  });
+})();
 </script>
 
 </body>

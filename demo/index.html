@@ -516,6 +516,88 @@ code { padding: 1px 5px; }
   .next-case { flex-direction: column; }
 }
 
+
+    /* ────────────────────────────────────────
+       DEMO PAGE VISUAL MODE THEME
+       Applied via body.is-demo-page.visual-mode
+    ──────────────────────────────────────── */
+    body.is-demo-page #view-editorial { display: block !important; }
+    body.is-demo-page #view-visual { display: none !important; }
+    body.is-demo-page.visual-mode nav.demo-nav { display: none !important; }
+    body.is-demo-page.visual-mode #view-editorial > nav { display: none !important; }
+    body.is-demo-page.visual-mode > nav:not(#td-nav) { display: none !important; }
+    body.is-demo-page.visual-mode {
+      background: linear-gradient(to bottom, #f3e8ff 0%, #ffffff 60%) !important;
+      font-family: 'Outfit', 'Figtree', sans-serif;
+    }
+    body.is-demo-page.visual-mode .demo-container {
+      background: #fff !important;
+      border: 1.5px solid #151515 !important;
+      border-radius: 16px !important;
+      box-shadow: rgba(0,0,0,0.12) 4px 4px 0 0 !important;
+      max-width: 820px;
+      margin-left: auto !important;
+      margin-right: auto !important;
+    }
+    body.is-demo-page.visual-mode h1,
+    body.is-demo-page.visual-mode h2,
+    body.is-demo-page.visual-mode h3 {
+      font-family: 'Outfit', 'Figtree', sans-serif !important;
+    }
+    body.is-demo-page.visual-mode .btn-primary,
+    body.is-demo-page.visual-mode button.btn-primary,
+    body.is-demo-page.visual-mode .btn.btn-primary {
+      background: #151515 !important; color: #fbbf0e !important;
+      border-color: #151515 !important; border-radius: 8px !important;
+      box-shadow: rgba(0,0,0,0.2) 3px 3px 0 0 !important;
+    }
+    body.is-demo-page.visual-mode .btn-primary:hover,
+    body.is-demo-page.visual-mode .btn.btn-primary:hover {
+      box-shadow: rgba(0,0,0,0.25) 2px 2px 0 0 !important;
+      transform: translate(1px,1px) !important;
+    }
+    body.is-demo-page.visual-mode .tag.tag-accent,
+    body.is-demo-page.visual-mode .tag-accent { background: #fbbf0e !important; color: #151515 !important; }
+    body.is-demo-page.visual-mode .tag.tag-green { background: #d5ffe8 !important; color: #1a6b3a !important; }
+    body.is-demo-page.visual-mode .role-card { border: 1.5px solid #ddd; border-radius: 12px; }
+    body.is-demo-page.visual-mode .role-card:hover { background: rgba(251,191,14,0.1) !important; border-color: #fbbf0e !important; }
+    body.is-demo-page.visual-mode .role-card.selected { background: #151515 !important; color: #fbbf0e !important; border-color: #151515 !important; }
+    body.is-demo-page.visual-mode .step-dot.active { background: #fbbf0e !important; border-color: #fbbf0e !important; }
+    body.is-demo-page.visual-mode .step-dot.done { background: #151515 !important; border-color: #151515 !important; }
+    body.is-demo-page.visual-mode .demo-notice { border-color: rgba(251,191,14,0.6) !important; background: rgba(251,191,14,0.08) !important; }
+    body.is-demo-page.visual-mode .hood-drawer { background: #fff !important; border: 1.5px solid #151515 !important; border-radius: 12px !important; }
+    body.is-demo-page.visual-mode .hood-btn { border: 1.5px solid #151515 !important; border-radius: 8px !important; color: #151515 !important; }
+    body.is-demo-page.visual-mode .next-case { border: 1.5px solid #151515 !important; border-radius: 16px !important; background: #fff !important; }
+    body.is-demo-page.visual-mode em { color: #c84b2f; }
+    body.is-demo-page.visual-mode .screen { background: #fff !important; border: 1.5px solid #151515 !important; border-radius: 16px !important; }
+    body.is-demo-page.visual-mode .lms-shell { border: 1.5px solid #151515 !important; border-radius: 16px !important; overflow: hidden !important; }
+    body.is-demo-page.visual-mode .progress-bar-fill { background: #fbbf0e !important; }
+    body.is-demo-page.visual-mode .option-btn.selected,
+    body.is-demo-page.visual-mode .opt-btn.selected { background: #151515 !important; color: #fbbf0e !important; border-color: #151515 !important; }
+    body.is-demo-page.visual-mode .opt-btn:hover,
+    body.is-demo-page.visual-mode .option-btn:hover { border-color: #fbbf0e !important; }
+    body.is-demo-page.visual-mode .slide-section.hovered { outline-color: #fbbf0e !important; }
+    body.is-demo-page.visual-mode .section-badge.bug { background: #fbbf0e !important; color: #151515 !important; }
+    body.is-demo-page.visual-mode code, body.is-demo-page.visual-mode pre { background: #f5f5f5 !important; border: 1px solid #e0e0e0 !important; border-radius: 6px !important; }
+    body.is-demo-page.visual-mode .narration-box { border: 1.5px solid #151515 !important; border-radius: 12px !important; background: #fafafa !important; }
+    body.is-demo-page.visual-mode .voice-indicator { color: #151515 !important; }
+    body.is-demo-page.visual-mode .live-dot { background: #fbbf0e !important; }
+    body.is-demo-page.visual-mode .completion-grid { gap: 1.5rem !important; }
+    body.is-demo-page.visual-mode .completion-stat { border: 1.5px solid #e0e0e0 !important; border-radius: 12px !important; background: #fff !important; }
+    body.is-demo-page.visual-mode .completion-stat-val { color: #151515 !important; font-family: 'Outfit', sans-serif !important; }
+    body.is-demo-page.visual-mode .built-with .tag { background: #f0f0f0 !important; color: #151515 !important; border: 1px solid #e0e0e0 !important; }
+    body.is-demo-page.visual-mode .wrap { padding-top: 2rem !important; }
+    body.is-demo-page.visual-mode #screen-intro,
+    body.is-demo-page.visual-mode #screen-game,
+    body.is-demo-page.visual-mode #screen-result { padding-top: 1.5rem !important; }
+    body.is-demo-page.visual-mode .lms-topbar { background: #151515 !important; border-bottom: 2px solid #fbbf0e !important; }
+    body.is-demo-page.visual-mode .lms-sidebar { background: #f9f9f9 !important; border-right: 1.5px solid #e0e0e0 !important; }
+    body.is-demo-page.visual-mode .lms-nav-item.active { background: rgba(251,191,14,0.15) !important; border-left: 3px solid #fbbf0e !important; }
+    body.is-demo-page.visual-mode .storyboard-card { border: 1.5px solid #151515 !important; border-radius: 12px !important; }
+    body.is-demo-page.visual-mode .storyboard-card .card-header { background: #151515 !important; color: #fbbf0e !important; }
+    body.is-demo-page.visual-mode .template-preview { border: 1.5px solid #151515 !important; border-radius: 12px !important; }
+    body.is-demo-page.visual-mode .tracking-row:nth-child(even) { background: rgba(251,191,14,0.05) !important; }
+    body.is-demo-page.visual-mode .tracking-badge { background: #fbbf0e !important; color: #151515 !important; }
 </style>
 <style>
 .hero-tag { margin-bottom: 2rem; }
@@ -663,7 +745,7 @@ code { padding: 1px 5px; }
       padding: 0 2.5rem; height: 58px; gap: 2rem;
     }
     #td-nav .n-logo { font-family: 'Outfit', sans-serif; font-size: 1rem; font-weight: 700; color: #151515; text-decoration: none; letter-spacing: -0.02em; }
-    #td-nav .n-logo span { display: block; }
+    #td-nav .n-logo span { display: inline; }
     #td-nav .n-links { display: flex; gap: 0.35rem; list-style: none; align-items: center; padding: 0; margin: 0; }
     #td-nav .n-links a {
       font-family: 'Outfit', sans-serif; font-size: 0.9rem; font-weight: 400;
@@ -758,7 +840,7 @@ code { padding: 1px 5px; }
     #ub-visual .ub-close { color: #151515; }
   </style>
 </head>
-<body>
+<body class="is-demo-page">
 
 <!-- ── UPDATE BANNERS (controlled by SHOW_UPDATE_BANNER flag above) ── -->
 <div id="ub-editorial" class="update-banner" role="status" aria-live="polite">
@@ -1264,6 +1346,7 @@ function switchView(view) {
   document.getElementById('view-editorial').classList.toggle('view-active', view === 'editorial');
   document.getElementById('view-visual').classList.toggle('view-active', view === 'visual');
   document.getElementById('td-nav').style.display = view === 'visual' ? 'flex' : 'none';
+  document.body.classList.toggle('visual-mode', view === 'visual');
   document.getElementById('btn-editorial').classList.toggle('vsw-active', view === 'editorial');
   document.getElementById('btn-visual').classList.toggle('vsw-active', view === 'visual');
   const url = view === 'visual' ? '?view=visual' : window.location.pathname;
@@ -1276,8 +1359,9 @@ function switchView(view) {
   document.getElementById('view-editorial').classList.toggle('view-active', initView === 'editorial');
   document.getElementById('view-visual').classList.toggle('view-active', initView === 'visual');
   currentView = initView;
-  document.getElementById('btn-' + initView).classList.add('vsw-active');
-  if (initView === 'visual') document.getElementById('td-nav').style.display = 'flex';
+  document.getElementById('btn-editorial').classList.toggle('vsw-active', initView === 'editorial');
+  document.getElementById('btn-visual').classList.toggle('vsw-active', initView === 'visual');
+  if (initView === 'visual') { document.getElementById('td-nav').style.display = 'flex'; document.body.classList.add('visual-mode'); }
 })();
 window.addEventListener('popstate', function(e) {
   switchView((e.state && e.state.view) || 'editorial');
@@ -1323,6 +1407,23 @@ function dismissBanner() {
   document.getElementById('ub-visual').style.display   = 'none';
   sessionStorage.setItem('ub_dismissed', '1');
 }
+
+// ── VIEW PERSISTENCE LINK INTERCEPTOR ──
+(function() {
+  document.addEventListener('click', function(e) {
+    if (typeof currentView === 'undefined' || currentView !== 'visual') return;
+    var link = e.target.closest('a[href]');
+    if (!link) return;
+    var href = link.getAttribute('href');
+    if (!href || href.startsWith('#') || href.startsWith('mailto:') || href.startsWith('tel:')) return;
+    if (link.target === '_blank' || link.getAttribute('target') === '_blank') return;
+    if (href.includes('?view=') || href.includes('&view=')) return;
+    if (href.startsWith('http') && !href.includes('abhishektrivedi.com') && !href.includes('abhishrek47.github.io')) return;
+    e.preventDefault();
+    var sep = href.includes('?') ? '&' : '?';
+    window.location.href = href + sep + 'view=visual';
+  });
+})();
 </script>
 
 </body>

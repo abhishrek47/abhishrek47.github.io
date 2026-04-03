@@ -412,7 +412,7 @@
       padding: 0 2.5rem; height: 58px; gap: 2rem;
     }
     #td-nav .n-logo { font-family: 'Outfit', sans-serif; font-size: 1rem; font-weight: 700; color: #151515; text-decoration: none; letter-spacing: -0.02em; line-height: 1.15; }
-    #td-nav .n-logo span { display: block; }
+    #td-nav .n-logo span { display: inline; }
     #td-nav .n-links { display: flex; gap: 0.35rem; list-style: none; align-items: center; padding: 0; margin: 0; }
     #td-nav .n-links a { font-family: 'Outfit', sans-serif; font-size: 0.9rem; font-weight: 400; color: #151515; text-decoration: none; padding: 0.5rem 0.85rem; border: 1.5px solid #151515; border-radius: 8px; background: #ffffff; box-shadow: rgba(0,0,0,0.15) 3px 3px 0 0; transition: box-shadow 0.12s, transform 0.12s; white-space: nowrap; }
     #td-nav .n-links a:hover { box-shadow: rgba(0,0,0,0.18) 2px 2px 0 0; transform: translate(1px,1px); }
@@ -1212,6 +1212,7 @@
       document.getElementById('view-editorial').classList.toggle('view-active', view === 'editorial');
       document.getElementById('view-visual').classList.toggle('view-active', view === 'visual');
       document.getElementById('td-nav').style.display = view === 'visual' ? 'flex' : 'none';
+  document.body.classList.toggle('visual-mode', view === 'visual');
       document.getElementById('btn-editorial').classList.toggle('vsw-active', view === 'editorial');
       document.getElementById('btn-visual').classList.toggle('vsw-active', view === 'visual');
       const url = view === 'visual' ? '?view=visual' : window.location.pathname;
@@ -1224,8 +1225,9 @@
       document.getElementById('view-editorial').classList.toggle('view-active', initView === 'editorial');
       document.getElementById('view-visual').classList.toggle('view-active', initView === 'visual');
       currentView = initView;
-      document.getElementById('btn-' + initView).classList.add('vsw-active');
-      if (initView === 'visual') document.getElementById('td-nav').style.display = 'flex';
+      document.getElementById('btn-editorial').classList.toggle('vsw-active', initView === 'editorial');
+  document.getElementById('btn-visual').classList.toggle('vsw-active', initView === 'visual');
+      if (initView === 'visual') { document.getElementById('td-nav').style.display = 'flex'; document.body.classList.add('visual-mode'); }
     })();
     window.addEventListener('popstate', (e) => { switchView((e.state && e.state.view) || 'editorial'); });
     const ham = document.getElementById('td-ham');
@@ -1280,6 +1282,23 @@ function dismissBanner() {
   document.getElementById('ub-visual').style.display   = 'none';
   sessionStorage.setItem('ub_dismissed', '1');
 }
+
+// ── VIEW PERSISTENCE LINK INTERCEPTOR ──
+(function() {
+  document.addEventListener('click', function(e) {
+    if (typeof currentView === 'undefined' || currentView !== 'visual') return;
+    var link = e.target.closest('a[href]');
+    if (!link) return;
+    var href = link.getAttribute('href');
+    if (!href || href.startsWith('#') || href.startsWith('mailto:') || href.startsWith('tel:')) return;
+    if (link.target === '_blank' || link.getAttribute('target') === '_blank') return;
+    if (href.includes('?view=') || href.includes('&view=')) return;
+    if (href.startsWith('http') && !href.includes('abhishektrivedi.com') && !href.includes('abhishrek47.github.io')) return;
+    e.preventDefault();
+    var sep = href.includes('?') ? '&' : '?';
+    window.location.href = href + sep + 'view=visual';
+  });
+})();
 </script>
 
 </body>

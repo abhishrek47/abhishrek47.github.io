@@ -1037,7 +1037,7 @@
   letter-spacing: -0.02em;
   line-height: 1.15;
 }
-#td-nav .n-logo span { display: block; }
+#td-nav .n-logo span { display: inline; }
 #td-nav .n-links {
   display: flex;
   gap: 0.35rem;
@@ -1767,7 +1767,9 @@
     <li><a href="pages/certifications.html?view=visual">Certifications</a></li>
     <li><a href="id-frameworks.html?view=visual">ID Cheat Sheet</a></li>
     <li><a href="pages/articles.html?view=visual">Articles</a></li>
-    <li><a href="tools/id-model-selector.html" target="_blank" rel="noopener" class="n-cta">ID Model Selector ↗</a></li>
+    <li><a href="game/index.html?view=visual">Spot the Bug ↗</a></li>
+    <li><a href="tools/id-model-selector.html?view=visual">ID Model Selector ↗</a></li>
+    <li><a href="lms/index.html?view=visual">LMS Demo ↗</a></li>
     <li><a href="pages/contact.html?view=visual" class="n-cta">Let's Talk</a></li>
   </ul>
   <button class="n-ham" id="td-ham" aria-label="Menu">
@@ -1780,7 +1782,9 @@
   <li><a href="pages/certifications.html?view=visual">Certifications</a></li>
   <li><a href="id-frameworks.html?view=visual">ID Cheat Sheet</a></li>
   <li><a href="pages/articles.html?view=visual">Articles</a></li>
-  <li><a href="tools/id-model-selector.html" target="_blank" rel="noopener">ID Model Selector ↗</a></li>
+  <li><a href="game/index.html?view=visual">Spot the Bug ↗</a></li>
+  <li><a href="tools/id-model-selector.html?view=visual">ID Model Selector ↗</a></li>
+  <li><a href="lms/index.html?view=visual">LMS Demo ↗</a></li>
   <li><a href="pages/contact.html">Let's Talk</a></li>
 </ul>
 
@@ -2638,6 +2642,7 @@ function switchView(view) {
 
   // Toggle visual nav visibility
   document.getElementById('td-nav').style.display = view === 'visual' ? 'flex' : 'none';
+  document.body.classList.toggle('visual-mode', view === 'visual');
 
   // Update switcher buttons
   document.getElementById('btn-editorial').classList.toggle('vsw-active', view === 'editorial');
@@ -2669,7 +2674,8 @@ function switchView(view) {
   const initView = params.get('view') === 'visual' ? 'visual' : 'editorial';
   document.getElementById('view-' + initView).classList.add('view-active');
   currentView = initView;
-  document.getElementById('btn-' + initView).classList.add('vsw-active');
+  document.getElementById('btn-editorial').classList.toggle('vsw-active', initView === 'editorial');
+  document.getElementById('btn-visual').classList.toggle('vsw-active', initView === 'visual');
   if (initView === 'visual') {
     document.getElementById('td-nav').style.display = 'flex';
   }
@@ -4103,6 +4109,23 @@ function dismissBanner() {
   document.getElementById('ub-visual').style.display   = 'none';
   sessionStorage.setItem('ub_dismissed', '1');
 }
+
+// ── VIEW PERSISTENCE LINK INTERCEPTOR ──
+(function() {
+  document.addEventListener('click', function(e) {
+    if (typeof currentView === 'undefined' || currentView !== 'visual') return;
+    var link = e.target.closest('a[href]');
+    if (!link) return;
+    var href = link.getAttribute('href');
+    if (!href || href.startsWith('#') || href.startsWith('mailto:') || href.startsWith('tel:')) return;
+    if (link.target === '_blank' || link.getAttribute('target') === '_blank') return;
+    if (href.includes('?view=') || href.includes('&view=')) return;
+    if (href.startsWith('http') && !href.includes('abhishektrivedi.com') && !href.includes('abhishrek47.github.io')) return;
+    e.preventDefault();
+    var sep = href.includes('?') ? '&' : '?';
+    window.location.href = href + sep + 'view=visual';
+  });
+})();
 </script>
 
 </body>
