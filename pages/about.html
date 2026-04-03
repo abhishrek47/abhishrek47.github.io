@@ -1342,6 +1342,7 @@
 
 <style>
 /* ── Hamburger open state (inline fallback) ── */
+nav, .site-nav { position: relative !important; }
 .nav-links.open {
   display: flex !important;
   flex-direction: column !important;
@@ -1372,10 +1373,22 @@
   padding: 0 !important;
   color: var(--ink, #1a1a18) !important;
   text-decoration: none !important;
+  background: transparent !important;
+  border-radius: 0 !important;
+}
+.nav-links.open a.active {
+  background: transparent !important;
+  color: var(--ink, #1a1a18) !important;
+  font-weight: 700 !important;
+  padding: 0 0 0 0.6rem !important;
+  border-left: 3px solid var(--accent, #c84b2f) !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
 }
 .nav-links.open a.nav-cta {
   color: var(--accent, #c84b2f) !important;
   font-weight: 600 !important;
+  background: transparent !important;
 }
 .hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px) !important; }
 .hamburger.open span:nth-child(2) { opacity: 0 !important; transform: scaleX(0) !important; }

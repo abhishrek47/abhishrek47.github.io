@@ -1489,6 +1489,16 @@
   .kw-stats { grid-template-columns: repeat(2, 1fr); }
   .kw-projects { grid-template-columns: repeat(2, 1fr); }
   .kw-discs { grid-template-columns: 1fr; }
+  /* Show pixel avatar in visual view on mobile — compact row above text */
+  #view-visual .kw-avatar-card {
+    display: flex !important;
+    flex-direction: row; align-items: center;
+    min-height: auto; gap: 1rem;
+    padding: 0.875rem 1rem; order: -1;
+    border-radius: 12px;
+  }
+  #view-visual .kw-pixel-avatar { width: 72px; height: 72px; flex-shrink: 0; }
+  #view-visual .kw-avatar-name  { font-size: 0.74rem; text-align: left; line-height: 1.4; }
 }
 @media (max-width: 600px) {
   .kw-page { padding: 1.25rem 1rem; gap: 1.25rem; }
@@ -1760,33 +1770,59 @@ html[data-style-chosen] #view-switcher  { display: none !important; }
 }
 #ss-divider-logo span { color: #fbbf0e; }
 
-/* Mobile */
+/* Mobile — full-screen diagonal slash split */
 @media (max-width: 768px) {
-  /* Reflow split panels into clean card buttons on mobile */
+  /* No brand bar — AT. lives on the slash */
   #style-selector { background: #0f0820; }
-  #ss-brand {
-    padding: 0 1.25rem; height: 56px;
-    background: #0f0820 !important;
-    border-bottom: 1px solid rgba(255,255,255,0.1);
+  #ss-brand { display: none !important; }
+
+  /* Panels fill the full viewport */
+  #ss-panels {
+    position: absolute; inset: 0;
+    flex-direction: column; gap: 0; padding: 0;
+    background: linear-gradient(135deg, #0f0820 0%, #1a0848 55%, #0d0520 100%);
   }
-  .ss-brand-logo { color: #f5f0e8 !important; }
-  .ss-brand-logo span { color: #fbbf0e !important; }
-  #ss-panels { flex-direction: column; gap: 0.75rem; padding: 0.75rem 1.25rem 1.5rem; justify-content: center; }
+
+  /* Each panel takes 50% of the screen */
   .ss-panel, .ss-panel:hover, .ss-panel:focus-visible {
-    flex: none !important; min-height: 0 !important;
-    width: 100% !important;
-    border-radius: 16px; border: 1.5px solid rgba(255,255,255,0.18) !important;
-    padding: 1.4rem 1.5rem !important;
+    flex: 1 !important; width: 100% !important;
+    min-height: 0 !important; border-radius: 0 !important;
+    border: none !important; padding: 0 !important;
+    transition: none !important;
   }
-  .ss-panel:hover { flex: none !important; }
+
+  /* Editorial top half — diagonal bottom edge (slash goes bottom-right → left) */
+  #ssp-editorial {
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 56px), 0 100%);
+    z-index: 2;
+  }
+  #ssp-visual { z-index: 1; }
+
+  /* Push editorial content up, visual content down — centred in each half */
+  .ss-panel-inner {
+    margin-top: 0 !important; gap: 0.6rem !important;
+    padding: 1.5rem 2.25rem !important;
+  }
+  #ssp-editorial .ss-panel-inner { padding-bottom: 4.5rem !important; }
+  #ssp-visual .ss-panel-inner   { padding-top: 4.5rem !important; }
+
+  /* AT. badge sits exactly on the diagonal slash */
+  #ss-divider-logo {
+    display: flex !important;
+    left: 50%; top: calc(50% - 28px);
+    transform: translate(-50%, -50%);
+    z-index: 40; width: 50px; height: 50px;
+    font-size: 0.85rem;
+  }
+
   .ss-bg-num { display: none !important; }
-  .ss-panel-inner { margin-top: 0 !important; padding-top: 0 !important; }
-  .ss-enter-btn { opacity: 1 !important; transform: none !important; display: flex !important; }
+  .sse-word, .ssv-word { font-size: clamp(2rem, 9vw, 2.8rem); }
+  .ss-desc { font-size: 0.77rem; max-width: 230px; }
+  .ss-enter-btn {
+    opacity: 1 !important; transform: none !important;
+    display: flex !important; margin-top: 0.4rem;
+  }
   .ss-arrow { display: inline !important; }
-  #ss-divider-logo { display: none; }
-  .ss-brand-tagline { font-size: 0.7rem; opacity: 0.7; }
-  .sse-word, .ssv-word { font-size: clamp(1.6rem, 7vw, 2.2rem); }
-  .ss-enter-btn { margin-top: 0.65rem; }
 }
 
 /* ════════════════════════════════════════
