@@ -34,6 +34,7 @@
       --bg: #f5f0eb;
       --navy: #1e3a5f;
       --text: #1a1a1a;
+      --mid: #6b6459;
       --muted: #888888;
       --accent: #c0392b;
       --border: #e0d8d0;
@@ -63,22 +64,21 @@
     .nav-logo {
       font-family: 'JetBrains Mono', monospace;
       font-weight: 500;
-      font-size: 1.1rem;
+      font-size: 0.9rem;
       color: var(--text);
       text-decoration: none;
-      letter-spacing: -0.03em;
+      letter-spacing: 0.05em;
     }
+    .nav-logo span { color: var(--accent); }
     .nav-cta {
       background: var(--accent) !important;
       color: #fff !important;
-      padding: 0.4rem 1rem;
-      border-radius: 4px;
-      font-size: 0.8rem !important;
+      padding: 0.5rem 1.3rem;
+      border-radius: 2px;
       font-weight: 600 !important;
-      letter-spacing: 0.03em;
       transition: background 0.2s;
     }
-    .nav-cta:hover { background: #e74c3c !important; }
+    .nav-cta:hover { background: #1a1a18 !important; }
 
     /* ── NAV LINKS & HAMBURGER ── */
     .nav-links { display: flex; align-items: center; gap: 2.5rem; list-style: none; padding: 0; margin: 0; }
