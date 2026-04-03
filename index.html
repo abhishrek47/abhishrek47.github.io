@@ -1763,9 +1763,18 @@ html[data-style-chosen] #view-switcher  { display: none !important; }
 /* Mobile */
 @media (max-width: 768px) {
   /* Reflow split panels into clean card buttons on mobile */
-  #ss-panels { flex-direction: column; gap: 0.75rem; padding: 0 1.25rem 1.5rem; justify-content: center; }
+  #style-selector { background: #0f0820; }
+  #ss-brand {
+    padding: 0 1.25rem; height: 56px;
+    background: #0f0820 !important;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+  .ss-brand-logo { color: #f5f0e8 !important; }
+  .ss-brand-logo span { color: #fbbf0e !important; }
+  #ss-panels { flex-direction: column; gap: 0.75rem; padding: 0.75rem 1.25rem 1.5rem; justify-content: center; }
   .ss-panel, .ss-panel:hover, .ss-panel:focus-visible {
     flex: none !important; min-height: 0 !important;
+    width: 100% !important;
     border-radius: 16px; border: 1.5px solid rgba(255,255,255,0.18) !important;
     padding: 1.4rem 1.5rem !important;
   }
@@ -1775,7 +1784,6 @@ html[data-style-chosen] #view-switcher  { display: none !important; }
   .ss-enter-btn { opacity: 1 !important; transform: none !important; display: flex !important; }
   .ss-arrow { display: inline !important; }
   #ss-divider-logo { display: none; }
-  #ss-brand { padding: 0 1.25rem; height: 56px; }
   .ss-brand-tagline { font-size: 0.7rem; opacity: 0.7; }
   .sse-word, .ssv-word { font-size: clamp(1.6rem, 7vw, 2.2rem); }
   .ss-enter-btn { margin-top: 0.65rem; }
