@@ -611,6 +611,8 @@
   /* Synchronously show correct view on return visits — prevents blank page flash */
   html[data-at-style="visual"] #view-editorial { display: none !important; }
   html[data-at-style="visual"] #view-visual   { display: block !important; }
+  /* Also show visual nav synchronously — before JS fires */
+  html[data-at-style="visual"] #td-nav        { display: flex !important; }
 
 </style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
