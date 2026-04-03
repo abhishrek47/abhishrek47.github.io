@@ -1082,6 +1082,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 0.45rem;
+  max-width: 320px;
 }
 .kw-tag {
   display: inline-flex;
@@ -1781,7 +1782,7 @@ html[data-style-chosen] #view-switcher  { display: none !important; }
 ════════════════════════════════════════ */
 #visualLoader {
   position: fixed; inset: 0; z-index: 10001;
-  background: #0f0820;
+  background: radial-gradient(ellipse at 50% 40%, #8b5cf6 0%, #6d28d9 42%, #4c1d95 72%, #2e1065 100%);
   display: flex; flex-direction: column;
   align-items: center; justify-content: center;
   opacity: 0; visibility: hidden; pointer-events: none;
@@ -1794,6 +1795,7 @@ html[data-style-chosen] #view-switcher  { display: none !important; }
 #vl-geo-bg { position: absolute; inset: 0; pointer-events: none; }
 .vl-geo-item {
   position: absolute; animation: vlGeoFloat linear infinite; opacity: 0;
+  filter: brightness(1.6) saturate(0.5);
 }
 @keyframes vlGeoFloat {
   0%   { transform: translateY(110vh) rotate(0deg);   opacity: 0; }
@@ -1805,19 +1807,19 @@ html[data-style-chosen] #view-switcher  { display: none !important; }
 .vl-logo {
   font-family: 'DM Serif Display', Georgia, serif;
   font-size: clamp(3.5rem, 10vw, 6rem); font-weight: 700;
-  color: #fbbf0e; letter-spacing: -0.03em;
+  color: #ffffff; letter-spacing: -0.03em;
   animation: vlLogoPulse 2.2s ease infinite; position: relative; z-index: 2;
 }
 .vl-logo span { color: #7c3aed; }
 @keyframes vlLogoPulse {
-  0%,100% { text-shadow: 0 0 40px rgba(251,191,14,0.4),  0 0 80px rgba(251,191,14,0.1); }
-  50%     { text-shadow: 0 0 80px rgba(251,191,14,0.75), 0 0 160px rgba(251,191,14,0.25); }
+  0%,100% { text-shadow: 0 0 40px rgba(255,255,255,0.35), 0 0 80px rgba(251,191,14,0.15); }
+  50%     { text-shadow: 0 0 80px rgba(255,255,255,0.6),  0 0 160px rgba(251,191,14,0.3); }
 }
 
 .vl-mode-label {
   font-family: 'Outfit', sans-serif;
   font-size: 0.6rem; font-weight: 700; letter-spacing: 0.32em;
-  text-transform: uppercase; color: rgba(251,191,14,0.42);
+  text-transform: uppercase; color: rgba(233,213,255,0.7);
   margin-top: 0.4rem; margin-bottom: 2.75rem; position: relative; z-index: 2;
 }
 
@@ -1826,12 +1828,12 @@ html[data-style-chosen] #view-switcher  { display: none !important; }
   gap: 0.75rem; margin-bottom: 0.8rem; position: relative; z-index: 2;
 }
 .vl-bar-track {
-  flex: 1; height: 2px; background: rgba(255,255,255,0.07);
+  flex: 1; height: 2px; background: rgba(255,255,255,0.18);
   border-radius: 2px; position: relative;
 }
 .vl-bar-fill {
   height: 100%; width: 0%; border-radius: 2px;
-  background: linear-gradient(90deg, #7c3aed 0%, #fbbf0e 100%);
+  background: linear-gradient(90deg, #fbbf0e 0%, #e9d5ff 100%);
   transition: width 0.28s ease; position: relative;
 }
 .vl-bar-fill::after {
@@ -1843,12 +1845,12 @@ html[data-style-chosen] #view-switcher  { display: none !important; }
 .vl-bar-fill[style*="100%"]::after { opacity: 0; }
 .vl-bar-pct {
   font-family: 'Outfit', sans-serif; font-size: 0.6rem;
-  font-weight: 700; color: rgba(251,191,14,0.45); min-width: 2.5rem; text-align: right;
+  font-weight: 700; color: rgba(233,213,255,0.65); min-width: 2.5rem; text-align: right;
 }
 .vl-status-text {
   font-family: 'Outfit', sans-serif; font-size: 0.65rem;
   font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase;
-  color: rgba(255,255,255,0.28); min-height: 1.2em;
+  color: rgba(255,255,255,0.45); min-height: 1.2em;
   position: relative; z-index: 2;
 }
 
@@ -2524,9 +2526,9 @@ html[data-style-chosen] #view-switcher  { display: none !important; }
         <div class="kw-tags">
           <span class="kw-tag kw-tag--yellow">Instructional Design</span>
           <span class="kw-tag kw-tag--purple kw-tag--pill">Learning Technology</span>
-          <span class="kw-tag kw-tag--green">xAPI · SCORM · cmi5</span>
+          <span class="kw-tag kw-tag--green">xAPI · SCORM</span>
           <span class="kw-tag kw-tag--pink kw-tag--pill">AI in L&amp;D</span>
-          <span class="kw-tag kw-tag--dark kw-tag--pill">React · JavaScript</span>
+          <span class="kw-tag kw-tag--dark kw-tag--pill">JavaScript</span>
           <span class="kw-tag kw-tag--blue">Articulate 360</span>
         </div>
       </div>

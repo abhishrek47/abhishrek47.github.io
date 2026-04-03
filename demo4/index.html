@@ -1170,6 +1170,8 @@ code { padding: 1px 5px; }
   }
 
   /* ── Style persistence — hide switcher when style already chosen ── */
+  /* Demo page: view-switcher never shown */
+  #view-switcher { display: none !important; }
   html[data-at-style] #view-switcher { display: none !important; }
   /* Synchronously show correct view on return visits — prevents blank page flash */
   html[data-at-style="visual"] #view-editorial { display: none !important; }
@@ -1179,7 +1181,7 @@ code { padding: 1px 5px; }
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
 </head>
 <body class="is-demo-page">
-<script>(function(){try{var s=sessionStorage.getItem('at-style-choice');if(s){document.documentElement.setAttribute('data-at-style',s);if(s==='visual')document.documentElement.classList.add('at-visual-preload');}}catch(e){}})()</script>
+<script>(function(){try{var s=sessionStorage.getItem('at-style-choice');if(!s){var vp=new URLSearchParams(window.location.search).get('view');if(vp==='visual'||vp==='editorial')s=vp;}if(s){document.documentElement.setAttribute('data-at-style',s);}if(s==='visual')document.body.classList.add('visual-mode');}catch(e){}})()</script>
 
 
 <!-- ── UPDATE BANNERS (controlled by SHOW_UPDATE_BANNER flag above) ── -->
