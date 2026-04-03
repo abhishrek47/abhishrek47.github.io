@@ -1755,6 +1755,20 @@ html[data-style-chosen] #view-switcher  { display: none !important; }
 
 .ss-desc { font-size: 0.82rem; text-align: center; max-width: 195px; line-height: 1.5; }
 
+/* "One portfolio. Two ways in." hint on the divider */
+#ss-choose-hint {
+  position: absolute; left: 50%; top: 96px;
+  transform: translateX(-50%); z-index: 31;
+  white-space: nowrap; pointer-events: none;
+  font-family: 'DM Sans', 'Inter', sans-serif;
+  font-size: 0.7rem; font-weight: 500; letter-spacing: 0.12em;
+  text-transform: uppercase; color: rgba(255,255,255,0.55);
+  background: rgba(15,8,32,0.45);
+  backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+  border: 1px solid rgba(255,255,255,0.1);
+  padding: 0.35rem 0.85rem; border-radius: 999px;
+}
+
 /* Center divider AT. logo — centered in the panels area (below 68px header) */
 #ss-divider-logo {
   position: absolute; left: 50%; top: 50%;
@@ -1775,6 +1789,7 @@ html[data-style-chosen] #view-switcher  { display: none !important; }
   /* No brand bar — AT. lives on the slash */
   #style-selector { background: #0f0820; }
   #ss-brand { display: none !important; }
+  #ss-choose-hint { display: none !important; }
 
   /* Panels fill the full viewport */
   #ss-panels {
@@ -2055,6 +2070,8 @@ html[data-style-chosen] #view-switcher  { display: none !important; }
   </div>
   <!-- Center divider logo -->
   <div id="ss-divider-logo">AT<span>.</span></div>
+  <!-- Choose hint -->
+  <div id="ss-choose-hint">One portfolio. Two ways in.</div>
 </div>
 
 <!-- ════════════════════════════════════════
