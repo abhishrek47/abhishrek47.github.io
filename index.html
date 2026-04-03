@@ -1956,7 +1956,7 @@ html[data-style-chosen] #view-switcher  { display: none !important; }
 <!-- ════════════════════════════════════════
      STYLE SELECTOR — full-screen one-time entry
 ════════════════════════════════════════ -->
-<script>(function(){try{if(sessionStorage.getItem('at-style-choice'))document.documentElement.setAttribute('data-style-chosen','1');}catch(e){}})()</script>
+<script>(function(){try{sessionStorage.removeItem('at-style-choice');}catch(e){}})()</script>
 <div id="style-selector">
   <div id="ss-brand">
     <span class="ss-brand-logo">AT<span>.</span></span>
@@ -2678,7 +2678,7 @@ html[data-style-chosen] #view-switcher  { display: none !important; }
   <div class="kw-cta">
     <div>
       <div class="kw-cta-eyebrow">Let's work together</div>
-      <h2 class="kw-cta-headline">Most L&amp;D people design it.<br>Most devs build it.<br><em>I do both.</em></h2>
+      <h2 class="kw-cta-headline">Most IDs design it.<br>Most devs build it.<br><em>I do both.</em></h2>
       <p class="kw-cta-sub">Open to freelance projects, full-time roles, and interesting collabs.</p>
     </div>
     <div class="kw-cta-btns">
