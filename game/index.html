@@ -57,8 +57,21 @@ nav{
 .ntag{background:var(--accent);color:#fff;padding:3px 9px;border-radius:4px;font-size:10px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase}
 .nback{color:var(--text2);text-decoration:none;font-size:11px;font-family:var(--fm);transition:color 0.15s}
 .nback:hover{color:var(--accent)}
+/* ── EDITORIAL NAV LINKS ── */
+.nav-links{display:flex;align-items:center;gap:2rem;list-style:none;padding:0;margin:0}
+.nav-links li{list-style:none}
+.nav-links a{font-family:var(--fb);font-size:0.75rem;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;color:var(--text);text-decoration:none;white-space:nowrap}
+.nav-links a:hover{color:var(--accent)}
+.nav-links a.active{color:var(--accent)}
+.nav-links a.nav-cta{background:var(--accent);color:#fff;padding:0.4rem 0.9rem;border-radius:4px;font-size:0.75rem;font-weight:600;letter-spacing:0.03em}
+.nav-links a.nav-cta:hover{background:#e74c3c}
+.nav-logo{font-family:var(--fb);font-weight:700;font-size:1rem;letter-spacing:-0.03em;text-decoration:none;color:var(--text)}
+.nav-logo span{color:var(--accent)}
+.hamburger{display:none;background:none;border:none;cursor:pointer;padding:4px;flex-direction:column;gap:5px}
+.hamburger span{display:block;width:22px;height:2px;background:var(--text);border-radius:2px;transition:all 0.3s}
+@media(max-width:768px){.nav-links{display:none !important}.hamburger{display:flex !important}}
 
-.wrap{max-width:820px;margin:0 auto;padding:2.5rem 2rem 5rem}
+.wrap{max-width:820px;margin:0 auto;padding:4rem 2rem 5rem}
 
 .btn{
   display:inline-flex;align-items:center;gap:6px;
@@ -370,7 +383,7 @@ footer a{color:var(--accent);text-decoration:none}
     .vsw-btn {
       font-family: 'DM Sans', sans-serif; font-size: 0.7rem; font-weight: 500;
       letter-spacing: 0.06em; text-transform: uppercase;
-      color: rgba(255,255,255,0.4); background: none; border: none;
+      color: rgba(255,255,255,0.65); background: none; border: none;
       border-radius: 100px; padding: 0.45rem 1rem; cursor: pointer; transition: all 0.2s;
     }
     .vsw-btn.vsw-active { background: #fff; color: #0f0f0f; font-weight: 600; }
@@ -540,7 +553,7 @@ footer a{color:var(--accent);text-decoration:none}
     <li style="position:relative;"><a href="../pages/articles.html">Articles</a><span style="position:absolute;top:-8px;right:-4px;font-family:'JetBrains Mono',monospace;font-size:0.55rem;font-weight:600;letter-spacing:0.06em;background:#c84b2f;color:#fff;padding:1px 5px;border-radius:2px;line-height:1.4;">NEW</span></li>
     <li><a href="../id-frameworks.html">ID Cheat Sheet</a></li>
     <li><a href="../game/index.html" class="active">Spot the Bug ↗</a></li>
-    <li><a href="../tools/id-model-selector.html?view=visual">ID Model Selector ↗</a></li>
+    <li><a href="../tools/id-model-selector.html">ID Model Selector ↗</a></li>
     <li><a href="../lms/index.html" target="_blank" rel="noopener">LMS Demo ↗</a></li>
     <li><a href="../pages/contact.html" class="nav-cta">Let's Talk</a></li>
   </ul>

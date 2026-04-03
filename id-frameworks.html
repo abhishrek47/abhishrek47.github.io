@@ -98,10 +98,20 @@
     }
 
     .site-nav ul li a.nav-cta:hover { background: #b03d22; color: #fff; }
+    .site-nav .nav-links { list-style: none; display: flex; align-items: center; gap: 2rem; padding: 0; margin: 0; }
+    .site-nav .nav-links li { list-style: none; }
+    .site-nav .nav-links a { font-family: 'DM Sans', sans-serif; font-size: 0.78rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text); text-decoration: none; }
+    .site-nav .nav-links a:hover { color: var(--accent); }
+    .site-nav .nav-links a.active { color: var(--accent); }
+    .site-nav .nav-links a.nav-cta { background: var(--accent); color: #fff; padding: 0.55rem 1.2rem; border-radius: 3px; font-weight: 600; }
+    .site-nav .nav-links a.nav-cta:hover { background: #b03d22; color: #fff; }
+    .hamburger { display: none; background: none; border: none; cursor: pointer; padding: 4px; flex-direction: column; gap: 5px; }
+    .hamburger span { display: block; width: 22px; height: 2px; background: var(--text); border-radius: 2px; transition: all 0.3s; }
 
     @media (max-width: 768px) {
       .site-nav { padding: 1rem 1.25rem; }
-      .site-nav ul { display: none; }
+      .site-nav ul, .site-nav .nav-links { display: none !important; }
+      .hamburger { display: flex !important; }
     }
 
     /* ── PAGE CONTENT ── */
@@ -397,7 +407,7 @@
     }
     .vsw-btn {
       font-family: 'DM Sans', sans-serif; font-size: 0.7rem; font-weight: 500;
-      letter-spacing: 0.06em; text-transform: uppercase; color: rgba(255,255,255,0.4);
+      letter-spacing: 0.06em; text-transform: uppercase; color: rgba(255,255,255,0.65);
       background: none; border: none; border-radius: 100px; padding: 0.45rem 1rem;
       cursor: pointer; transition: all 0.2s;
     }
@@ -435,9 +445,9 @@
 
     /* ── SHARED COMPONENTS ── */
     .kw-page-hero { padding: 2.5rem; background: #ffffff; border: 1.5px solid #151515; border-radius: 16px; }
-    .kw-page-eyebrow { font-family: 'Figtree',sans-serif; font-size: 0.7rem; font-weight: 600; color: #888; text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.4rem; }
+    .kw-page-eyebrow { font-family: 'Figtree',sans-serif; font-size: 0.7rem; font-weight: 600; color: #666; text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.4rem; }
     .kw-page-title { font-family: 'Outfit',sans-serif; font-size: clamp(2rem,4vw,3rem); font-weight: 700; color: #151515; margin: 0 0 1rem; letter-spacing: -0.025em; line-height: 1.15; }
-    .kw-page-title em { font-style: italic; color: #888; font-weight: 400; }
+    .kw-page-title em { font-style: italic; color: #666; font-weight: 400; }
     .kw-page-sub { font-family: 'Figtree',sans-serif; font-size: 0.97rem; line-height: 1.7; color: #444; margin: 0; max-width: 640px; }
     .kw-tag { display: inline-flex; align-items: center; font-family: 'Figtree',sans-serif; font-size: 0.76rem; font-weight: 600; padding: 0.35rem 0.85rem; border: 1.5px solid #151515; border-radius: 6px; line-height: 1; white-space: nowrap; }
     .kw-tag--yellow { background: #fbbf0e; color: #151515; }
@@ -452,12 +462,12 @@
     .kw-btn:hover { transform: translateY(-2px); box-shadow: 3px 3px 0 #151515; }
     .kw-btn--dark { background: #151515; color: #fbbf0e; }
     .kw-footer { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; padding: 1.5rem 0 2.5rem; border-top: 1.5px solid rgba(21,21,21,0.2); margin-top: 0.5rem; }
-    .kw-footer-copy { font-family: 'Figtree',sans-serif; font-size: 0.78rem; color: #888; }
+    .kw-footer-copy { font-family: 'Figtree',sans-serif; font-size: 0.78rem; color: #666; }
     .kw-footer-links { display: flex; gap: 0.5rem; flex-wrap: wrap; }
     .kw-footer-link { font-family: 'Figtree',sans-serif; font-size: 0.78rem; font-weight: 500; color: #151515; text-decoration: none; padding: 0.35rem 1rem; border: 1.5px solid #151515; border-radius: 100px; transition: background 0.15s; white-space: nowrap; }
     .kw-footer-link:hover { background: #fbbf0e; }
     .kw-footer-credit { font-family: 'Figtree',sans-serif; font-size: 0.72rem; color: #aaa; }
-    .kw-footer-credit-link { color: #888; text-decoration: underline; text-underline-offset: 2px; text-decoration-color: rgba(21,21,21,0.25); transition: color 0.15s; }
+    .kw-footer-credit-link { color: #666; text-decoration: underline; text-underline-offset: 2px; text-decoration-color: rgba(21,21,21,0.25); transition: color 0.15s; }
     .kw-footer-credit-link:hover { color: #151515; }
     .kw-cta-strip { display: flex; align-items: center; justify-content: space-between; padding: 2.5rem; gap: 2rem; flex-wrap: wrap; background: #fbbf0e; border: 1.5px solid #151515; border-radius: 16px; }
     .kw-cta-strip-headline { font-family: 'Outfit',sans-serif; font-size: clamp(1.4rem,2.5vw,2rem); font-weight: 700; color: #151515; margin: 0; letter-spacing: -0.02em; line-height: 1.25; }
@@ -472,7 +482,7 @@
     .kw-fw-grid { display:grid;grid-template-columns:repeat(4,1fr);gap:1rem; }
     .kw-model-card { background:#fff;border:1.5px solid #151515;border-radius:16px;overflow:hidden;display:flex;flex-direction:column; }
     .kw-model-header { padding:1.25rem 1.5rem 1rem;border-bottom:1.5px solid #151515; }
-    .kw-model-type { font-family:'Figtree',sans-serif;font-size:0.65rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:#888;margin-bottom:0.35rem; }
+    .kw-model-type { font-family:'Figtree',sans-serif;font-size:0.65rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:#666;margin-bottom:0.35rem; }
     .kw-model-name { font-family:'Outfit',sans-serif;font-size:1.4rem;font-weight:700;color:#151515;margin:0 0 0.3rem;letter-spacing:-0.02em; }
     .kw-model-what { font-family:'Figtree',sans-serif;font-size:0.78rem;color:#666;font-style:italic;margin:0; }
     .kw-model-body { padding:1.25rem 1.5rem;display:flex;flex-direction:column;gap:0.85rem;flex:1; }
@@ -575,7 +585,7 @@
   <div id="view-editorial" class="view-active">
 
     <!-- NAV -->
-    <nav>
+    <nav class="site-nav">
   <a href="index.html" class="nav-logo">AT<span>.</span></a>
   <button class="hamburger" id="ed-ham" aria-label="Menu"><span></span><span></span><span></span></button>
   <ul class="nav-links" id="ed-nav-links">
@@ -585,7 +595,7 @@
     <li style="position:relative;"><a href="pages/articles.html">Articles</a><span style="position:absolute;top:-8px;right:-4px;font-family:var(--mono);font-size:0.55rem;font-weight:600;letter-spacing:0.06em;background:#c84b2f;color:#fff;padding:1px 5px;border-radius:2px;line-height:1.4;">NEW</span></li>
     <li><a href="id-frameworks.html" class="active">ID Cheat Sheet</a></li>
     <li><a href="game/index.html">Spot the Bug ↗</a></li>
-    <li><a href="tools/id-model-selector.html?view=visual">ID Model Selector ↗</a></li>
+    <li><a href="tools/id-model-selector.html">ID Model Selector ↗</a></li>
     <li><a href="lms/index.html" target="_blank" rel="noopener">LMS Demo ↗</a></li>
     <li><a href="pages/contact.html" class="nav-cta">Let's Talk</a></li>
   </ul>

@@ -59,7 +59,7 @@ body { font-family: var(--sans); background: var(--bg); color: var(--ink); min-h
   text-align: center; margin-bottom: 0.5rem;
 }
 .boot-sub {
-  font-family: var(--mono); font-size: 0.7rem; color: rgba(255,255,255,0.4);
+  font-family: var(--mono); font-size: 0.7rem; color: rgba(255,255,255,0.65);
   letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 3rem; text-align: center;
 }
 .boot-bar-wrap {
@@ -657,6 +657,112 @@ body { font-family: var(--sans); background: var(--bg); color: var(--ink); min-h
     body.is-demo-page.visual-mode .storyboard-card { border: 1.5px solid #151515 !important; border-radius: 12px !important; }
     body.is-demo-page.visual-mode .storyboard-card .card-header { background: #151515 !important; color: #fbbf0e !important; }
     body.is-demo-page.visual-mode .template-preview { border: 1.5px solid #151515 !important; border-radius: 12px !important; }
+
+    /* ── ENHANCED VISUAL MODE — LMS SHELL ── */
+    body.is-demo-page.visual-mode #td-nav { display: none !important; }
+    body.is-demo-page.visual-mode body,
+    body.is-demo-page.visual-mode #lms {
+      background: linear-gradient(to bottom, #f3e8ff 0%, #ffffff 60%) !important;
+    }
+    body.is-demo-page.visual-mode .lms-topbar {
+      background: #151515 !important; border-bottom: 2.5px solid #fbbf0e !important;
+    }
+    body.is-demo-page.visual-mode .lms-brand { color: #fbbf0e !important; }
+    body.is-demo-page.visual-mode .lms-brand em { color: #ffffff !important; }
+    body.is-demo-page.visual-mode .lms-course-name { color: rgba(255,255,255,0.65) !important; border-left-color: rgba(255,255,255,0.2) !important; }
+    body.is-demo-page.visual-mode .lms-learner-badge { color: rgba(255,255,255,0.5) !important; }
+    body.is-demo-page.visual-mode .lms-learner-badge span { color: #fbbf0e !important; }
+    body.is-demo-page.visual-mode .scorm-badge {
+      background: rgba(251,191,14,0.2) !important; color: #8a6800 !important;
+      border-color: rgba(251,191,14,0.5) !important;
+    }
+    body.is-demo-page.visual-mode .lms-sidebar {
+      background: #ffffff !important; border-right: 1.5px solid #e8e8e8 !important;
+    }
+    body.is-demo-page.visual-mode .sidebar-progress-header { border-bottom-color: #e8e8e8 !important; }
+    body.is-demo-page.visual-mode .sidebar-progress-label { color: #666 !important; }
+    body.is-demo-page.visual-mode .sidebar-progress-bar-wrap { background: #e8e8e8 !important; }
+    body.is-demo-page.visual-mode .sidebar-progress-bar { background: #fbbf0e !important; }
+    body.is-demo-page.visual-mode .sidebar-progress-pct { color: #666 !important; }
+    body.is-demo-page.visual-mode .sidebar-progress-pct span { color: #151515 !important; }
+    body.is-demo-page.visual-mode .sidebar-module-label { color: #767676 !important; }
+    body.is-demo-page.visual-mode .sidebar-module-label::after { background: #e8e8e8 !important; }
+    body.is-demo-page.visual-mode .sidebar-item { color: #666 !important; border-left-color: transparent !important; }
+    body.is-demo-page.visual-mode .sidebar-item:hover { background: rgba(251,191,14,0.08) !important; color: #151515 !important; }
+    body.is-demo-page.visual-mode .sidebar-item.active {
+      background: rgba(251,191,14,0.15) !important; color: #151515 !important;
+      border-left-color: #fbbf0e !important; font-weight: 600 !important;
+    }
+    body.is-demo-page.visual-mode .sidebar-item.done { color: #2d7a4f !important; }
+    body.is-demo-page.visual-mode .si-icon { border-color: #d8d8d8 !important; color: #767676 !important; }
+    body.is-demo-page.visual-mode .sidebar-item.active .si-icon {
+      border-color: #fbbf0e !important; color: #151515 !important;
+      background: rgba(251,191,14,0.2) !important;
+    }
+    body.is-demo-page.visual-mode .xapi-panel { border-top-color: #e8e8e8 !important; }
+    body.is-demo-page.visual-mode .xapi-panel-title { color: #151515 !important; }
+    body.is-demo-page.visual-mode .xapi-live-dot { background: #2d7a4f !important; }
+    body.is-demo-page.visual-mode .xapi-stmt { background: #fafafa !important; border-color: #e8e8e8 !important; }
+    body.is-demo-page.visual-mode .xapi-verb.passed { color: #151515 !important; }
+    body.is-demo-page.visual-mode .lms-content { background: transparent !important; }
+    body.is-demo-page.visual-mode .enroll-outer { background: transparent !important; }
+    body.is-demo-page.visual-mode .enroll-card {
+      background: #ffffff !important; border: 1.5px solid #151515 !important;
+      border-radius: 16px !important; box-shadow: rgba(0,0,0,0.12) 4px 4px 0 0 !important;
+    }
+    body.is-demo-page.visual-mode .enroll-eyebrow { color: #666 !important; }
+    body.is-demo-page.visual-mode .enroll-card h2 em { color: #666 !important; }
+    body.is-demo-page.visual-mode .enroll-stat { background: #f8f8f8 !important; border-color: #e0e0e0 !important; border-radius: 8px !important; }
+    body.is-demo-page.visual-mode .enroll-stat-val { color: #151515 !important; }
+    body.is-demo-page.visual-mode .enroll-stat-label { color: #666 !important; }
+    body.is-demo-page.visual-mode .enroll-name-input {
+      background: #ffffff !important; border: 1.5px solid #d4d4d4 !important;
+      border-radius: 8px !important; color: #151515 !important;
+    }
+    body.is-demo-page.visual-mode .enroll-name-input:focus { border-color: #151515 !important; }
+    body.is-demo-page.visual-mode .enroll-btn {
+      background: #151515 !important; color: #fbbf0e !important;
+      border-color: #151515 !important; border-radius: 8px !important;
+    }
+    body.is-demo-page.visual-mode .enroll-xapi-note { color: #767676 !important; }
+    body.is-demo-page.visual-mode .module-screen,
+    body.is-demo-page.visual-mode .module-content {
+      background: transparent !important;
+    }
+    body.is-demo-page.visual-mode .module-header {
+      background: #ffffff !important; border-bottom: 1.5px solid #e8e8e8 !important;
+      padding: 1.5rem 2rem !important;
+    }
+    body.is-demo-page.visual-mode .module-header h2 em { color: #666 !important; }
+    body.is-demo-page.visual-mode .module-body { padding: 1.5rem 2rem !important; }
+    body.is-demo-page.visual-mode .lesson-card {
+      background: #ffffff !important; border: 1.5px solid #d4d4d4 !important;
+      border-radius: 16px !important; box-shadow: none !important;
+    }
+    body.is-demo-page.visual-mode .lesson-card:hover { box-shadow: rgba(0,0,0,0.1) 3px 3px 0 0 !important; }
+    body.is-demo-page.visual-mode .nav-btn {
+      background: #151515 !important; color: #fbbf0e !important;
+      border-color: #151515 !important; border-radius: 8px !important;
+    }
+    body.is-demo-page.visual-mode .quiz-opt {
+      background: #ffffff !important; border: 1.5px solid #d4d4d4 !important;
+      border-radius: 10px !important; color: #151515 !important;
+    }
+    body.is-demo-page.visual-mode .quiz-opt:hover { border-color: #151515 !important; }
+    body.is-demo-page.visual-mode .quiz-opt.selected {
+      background: #151515 !important; color: #fbbf0e !important; border-color: #151515 !important;
+    }
+    body.is-demo-page.visual-mode .quiz-opt.correct { background: #e8f5e9 !important; border-color: #2d7a4f !important; color: #2d7a4f !important; }
+    body.is-demo-page.visual-mode .quiz-opt.wrong { background: #ffebee !important; border-color: #c0392b !important; color: #c0392b !important; }
+    body.is-demo-page.visual-mode .cert-container {
+      background: #ffffff !important; border: 1.5px solid #151515 !important;
+      border-radius: 16px !important; box-shadow: rgba(0,0,0,0.12) 4px 4px 0 0 !important;
+    }
+    body.is-demo-page.visual-mode .cert-accent { color: #666 !important; }
+    body.is-demo-page.visual-mode .cert-name { color: #151515 !important; }
+    body.is-demo-page.visual-mode .progress-bar-wrap { background: #e8e8e8 !important; }
+    body.is-demo-page.visual-mode .progress-bar-fill { background: #fbbf0e !important; }
+
     body.is-demo-page.visual-mode .tracking-row:nth-child(even) { background: rgba(251,191,14,0.05) !important; }
     body.is-demo-page.visual-mode .tracking-badge { background: #fbbf0e !important; color: #151515 !important; }
 </style>
@@ -676,7 +782,7 @@ body { font-family: var(--sans); background: var(--bg); color: var(--ink); min-h
     .vsw-btn {
       font-family: 'DM Sans', sans-serif; font-size: 0.7rem; font-weight: 500;
       letter-spacing: 0.06em; text-transform: uppercase;
-      color: rgba(255,255,255,0.4); background: none; border: none;
+      color: rgba(255,255,255,0.65); background: none; border: none;
       border-radius: 100px; padding: 0.45rem 1rem; cursor: pointer; transition: all 0.2s;
     }
     .vsw-btn.vsw-active { background: #fff; color: #0f0f0f; font-weight: 600; }
