@@ -527,6 +527,59 @@
     .kw-story-body { font-family:'Figtree',sans-serif;font-size:0.97rem;line-height:1.75;color:#333; }
     .kw-story-body p { margin:0 0 1rem; }
     .kw-story-body p:last-child { margin:0; }
+
+    /* ── JOURNEY TIMELINE ── */
+    .kw-journey { display:flex; flex-direction:column; gap:0.75rem; }
+    .kw-journey-head { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:0.5rem; }
+    .kw-journey-span { font-family:'Figtree',sans-serif; font-size:0.7rem; font-weight:600; color:#888; letter-spacing:0.04em; }
+    .kw-tl-wrap { position:relative; padding-left:36px; display:flex; flex-direction:column; }
+    .kw-tl-spine {
+      position:absolute; left:10px; top:10px; width:2px; height:0;
+      background:linear-gradient(to bottom,#8b5cf6 0%,#a855f7 25%,#d97706 70%,#fbbf0e 100%);
+      border-radius:2px;
+      transition:height 1.5s cubic-bezier(0.22,1,0.36,1);
+    }
+    .kw-tl-spine.kw-tl-go { height:calc(100% - 18px); }
+    .kw-tl-entry {
+      position:relative; display:flex; align-items:flex-start;
+      padding-bottom:1.1rem; opacity:0; transform:translateX(-16px);
+      transition:opacity 0.45s ease, transform 0.45s ease;
+      transition-delay:calc(var(--i,0) * 0.08s);
+    }
+    .kw-tl-entry:last-child { padding-bottom:0; }
+    .kw-tl-entry.kw-tl-vis { opacity:1; transform:none; }
+    .kw-tl-dot {
+      position:absolute; left:-30px; top:6px;
+      width:12px; height:12px; border-radius:50%;
+      background:#fff; border:2px solid #151515;
+      transform:scale(0);
+      transition:transform 0.35s cubic-bezier(0.34,1.56,0.64,1), background 0.2s;
+      transition-delay:calc(var(--i,0) * 0.08s + 0.25s);
+      z-index:2;
+    }
+    .kw-tl-entry.kw-tl-vis .kw-tl-dot { transform:scale(1); }
+    .kw-tl-entry:last-child .kw-tl-dot { background:#fbbf0e; border-color:#151515; }
+    .kw-tl-entry:hover .kw-tl-dot { background:#fbbf0e; transform:scale(1.25) !important; }
+    .kw-tl-card {
+      background:#fff; border:1.5px solid #151515; border-radius:12px;
+      padding:0.9rem 1.15rem; width:100%;
+      transition:box-shadow 0.18s, transform 0.18s;
+    }
+    .kw-tl-card:hover { box-shadow:3px 3px 0 #151515; transform:translate(-1.5px,-1.5px); }
+    .kw-tl-top { display:flex; align-items:center; justify-content:space-between; gap:0.5rem; margin-bottom:0.4rem; flex-wrap:wrap; }
+    .kw-tl-period { font-family:'JetBrains Mono',monospace; font-size:0.6rem; font-weight:600; color:#999; letter-spacing:0.06em; }
+    .kw-tl-badge { font-family:'Figtree',sans-serif; font-size:0.6rem; font-weight:700; text-transform:uppercase; letter-spacing:0.07em; padding:0.15em 0.55em; border-radius:100px; border:1.5px solid; white-space:nowrap; }
+    .kw-tl-badge--y  { background:#fbbf0e; color:#151515; border-color:#151515; }
+    .kw-tl-badge--p  { background:#f3e8ff; color:#7c3aed;  border-color:#c4b5fd; }
+    .kw-tl-role { font-family:'Outfit',sans-serif; font-size:1rem; font-weight:700; color:#151515; line-height:1.25; margin-bottom:0.2rem; }
+    .kw-tl-org  { font-family:'Figtree',sans-serif; font-size:0.7rem; font-weight:600; color:#999; text-transform:uppercase; letter-spacing:0.07em; margin-bottom:0.5rem; }
+    .kw-tl-insight { font-family:'Figtree',sans-serif; font-size:0.82rem; font-style:italic; color:#6d28d9; line-height:1.6; border-left:2px solid #c4b5fd; padding-left:0.6rem; }
+    @media(max-width:600px){
+      .kw-tl-wrap { padding-left:28px; }
+      .kw-tl-dot { left:-23px; }
+      .kw-tl-card { padding:0.8rem 0.9rem; }
+      .kw-tl-role { font-size:0.92rem; }
+    }
     .kw-discs { display:grid;grid-template-columns:repeat(3,1fr);gap:1rem; }
     .kw-disc-card { background:#fff;border:1.5px solid #151515;border-radius:16px;padding:1.5rem;display:flex;flex-direction:column; }
     .kw-disc-icon { width:44px;height:44px;border:1.5px solid #151515;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;margin-bottom:1rem; }
@@ -1381,14 +1434,131 @@
       </div>
     </div>
 
-    <div class="kw-story-card">
-      <div class="kw-story-label">The Story</div>
-      <div class="kw-story-body">
-        <p>In 2010, I was training call centre associates in Ahmedabad — batches of 5 to 20 people, new hires and tenured staff, figuring out what actually makes someone retain what they hear. That question has driven every role since.</p>
-        <p>The early years stacked layer by layer. A short detour into enterprise tech support taught me that documentation is just teaching in written form. A product training role at Asite put authoring tools in my hands for the first time — Adobe Captivate, product simulations, proper ID work. By the time I stepped into an interim Director of ID role at Astro Vaastu, I was writing curriculum and leading a function I'd only recently entered.</p>
-        <p>At eClinicalWorks I was training teams across multiple India locations simultaneously over Skype — an early lesson in designing for people you can't see. At Mindarray, I built an entire LMS from scratch: content, SCORM packages, implementation. No team, just me and a deadline.</p>
-        <p>The real turning point was Rayden Interactive — three years where Storyline stopped being a slide tool and became a development environment. I learned JavaScript properly, built complex branching scenarios, and started wiring courses to live APIs. The field kept telling me "you can't do that in Storyline." I kept doing it anyway.</p>
-        <p>At Siemens DISW, everything converged. I led a team of three, built an AI personalisation system that fetched learner identity from an enterprise LMS and generated a custom Murf AI voice greeting in real time. An FFmpeg pipeline cut 8-language video localisation from a full working day down to 90 seconds. The technical work and the learning design work were the same work — that's what 15 years of layering gets you.</p>
+    <div class="kw-journey" id="kwJourney">
+      <div class="kw-journey-head">
+        <span class="kw-story-label">The Journey</span>
+        <span class="kw-journey-span">2010 — 2026 &nbsp;·&nbsp; 9 roles &nbsp;·&nbsp; 15+ years</span>
+      </div>
+      <div class="kw-tl-wrap" id="kwTlWrap">
+        <div class="kw-tl-spine" id="kwTlSpine"></div>
+
+        <div class="kw-tl-entry" style="--i:0">
+          <div class="kw-tl-dot"></div>
+          <div class="kw-tl-card">
+            <div class="kw-tl-top">
+              <span class="kw-tl-period">Jul 2010 — Sep 2014</span>
+              <span class="kw-tl-badge kw-tl-badge--p">Training</span>
+            </div>
+            <div class="kw-tl-role">Floor & Product Trainer</div>
+            <div class="kw-tl-org">Effective Teleservices Pvt. Ltd. &nbsp;·&nbsp; Ahmedabad</div>
+            <div class="kw-tl-insight">Where it all started — training call centre associates and learning what actually makes people retain what they hear.</div>
+          </div>
+        </div>
+
+        <div class="kw-tl-entry" style="--i:1">
+          <div class="kw-tl-dot"></div>
+          <div class="kw-tl-card">
+            <div class="kw-tl-top">
+              <span class="kw-tl-period">Sep 2014 — Feb 2015</span>
+              <span class="kw-tl-badge kw-tl-badge--p">Documentation</span>
+            </div>
+            <div class="kw-tl-role">Senior Technical Support Engineer</div>
+            <div class="kw-tl-org">Excellence Infocom Pvt. Ltd. &nbsp;·&nbsp; Ahmedabad</div>
+            <div class="kw-tl-insight">A short detour into enterprise tech support — where I learned that clear documentation is a form of teaching.</div>
+          </div>
+        </div>
+
+        <div class="kw-tl-entry" style="--i:2">
+          <div class="kw-tl-dot"></div>
+          <div class="kw-tl-card">
+            <div class="kw-tl-top">
+              <span class="kw-tl-period">Mar 2015 — Jul 2016</span>
+              <span class="kw-tl-badge kw-tl-badge--p">Authoring</span>
+            </div>
+            <div class="kw-tl-role">Sr. Tech Support Engineer & Product Trainer</div>
+            <div class="kw-tl-org">Asite Solutions Pvt. Ltd. &nbsp;·&nbsp; Ahmedabad</div>
+            <div class="kw-tl-insight">First real encounter with authoring tools — built product simulations in Adobe Captivate and crossed into instructional design territory.</div>
+          </div>
+        </div>
+
+        <div class="kw-tl-entry" style="--i:3">
+          <div class="kw-tl-dot"></div>
+          <div class="kw-tl-card">
+            <div class="kw-tl-top">
+              <span class="kw-tl-period">Jul 2016 — May 2018</span>
+              <span class="kw-tl-badge kw-tl-badge--p">ID Leadership</span>
+            </div>
+            <div class="kw-tl-role">Product Trainer & Sub-Editor</div>
+            <div class="kw-tl-org">Astro Vaastu Research Center &nbsp;·&nbsp; Ahmedabad</div>
+            <div class="kw-tl-insight">Stepped into an interim Director of ID role — a significant jump that forced rapid growth in learning theory and leadership.</div>
+          </div>
+        </div>
+
+        <div class="kw-tl-entry" style="--i:4">
+          <div class="kw-tl-dot"></div>
+          <div class="kw-tl-card">
+            <div class="kw-tl-top">
+              <span class="kw-tl-period">May 2018 — Jun 2019</span>
+              <span class="kw-tl-badge kw-tl-badge--p">Remote Delivery</span>
+            </div>
+            <div class="kw-tl-role">Product Trainer & Documentation Lead</div>
+            <div class="kw-tl-org">eClinicalWorks &nbsp;·&nbsp; Ahmedabad</div>
+            <div class="kw-tl-insight">First time training distributed learners across multiple locations simultaneously — an early test of designing for people you can't see.</div>
+          </div>
+        </div>
+
+        <div class="kw-tl-entry" style="--i:5">
+          <div class="kw-tl-dot"></div>
+          <div class="kw-tl-card">
+            <div class="kw-tl-top">
+              <span class="kw-tl-period">Jul 2019 — Jul 2020</span>
+              <span class="kw-tl-badge kw-tl-badge--y">LMS Build</span>
+            </div>
+            <div class="kw-tl-role">L&D Manager & LMS Administrator</div>
+            <div class="kw-tl-org">Mindarray Systems Pvt. Ltd. &nbsp;·&nbsp; Ahmedabad</div>
+            <div class="kw-tl-insight">Built an entire LMS from scratch — solo. All SCORM content, all implementation, for internal teams and global distributors.</div>
+          </div>
+        </div>
+
+        <div class="kw-tl-entry" style="--i:6">
+          <div class="kw-tl-dot"></div>
+          <div class="kw-tl-card">
+            <div class="kw-tl-top">
+              <span class="kw-tl-period">Jul 2020 — Dec 2020</span>
+              <span class="kw-tl-badge kw-tl-badge--y">Strategy</span>
+            </div>
+            <div class="kw-tl-role">L&D Manager · ID · LMS Administrator</div>
+            <div class="kw-tl-org">EMXCEL Travel Solutions &nbsp;·&nbsp; Ahmedabad</div>
+            <div class="kw-tl-insight">Added OD training and ROI evaluation — moving from pure content creation into strategic L&D management.</div>
+          </div>
+        </div>
+
+        <div class="kw-tl-entry" style="--i:7">
+          <div class="kw-tl-dot"></div>
+          <div class="kw-tl-card">
+            <div class="kw-tl-top">
+              <span class="kw-tl-period">May 2021 — Jul 2024</span>
+              <span class="kw-tl-badge kw-tl-badge--y">eLearning Dev</span>
+            </div>
+            <div class="kw-tl-role">Senior Instructional Designer & eLearning Developer</div>
+            <div class="kw-tl-org">Rayden Interactive &nbsp;·&nbsp; Pune</div>
+            <div class="kw-tl-insight">Three years where Storyline stopped being a slide tool and became a development environment. JavaScript, xAPI, complex branching — the technical craft was forged here.</div>
+          </div>
+        </div>
+
+        <div class="kw-tl-entry" style="--i:8">
+          <div class="kw-tl-dot"></div>
+          <div class="kw-tl-card">
+            <div class="kw-tl-top">
+              <span class="kw-tl-period">Jul 2024 — Mar 2026</span>
+              <span class="kw-tl-badge kw-tl-badge--y">AI + Lead</span>
+            </div>
+            <div class="kw-tl-role">Team Lead — ID & eLearning Development</div>
+            <div class="kw-tl-org">Siemens DISW &nbsp;·&nbsp; Pune</div>
+            <div class="kw-tl-insight">Everything converged. AI personalisation connecting Storyline to an enterprise LMS in real time. FFmpeg pipeline: 8 languages, 90 seconds. Team of 3. 15 years of layering, applied at scale.</div>
+          </div>
+        </div>
+
       </div>
     </div>
 
@@ -1561,6 +1731,26 @@ function dismissBanner() {
   document.getElementById('ub-visual').style.display   = 'none';
   sessionStorage.setItem('ub_dismissed', '1');
 }
+
+// ── JOURNEY TIMELINE ANIMATION ──
+(function(){
+  var spine = document.getElementById('kwTlSpine');
+  var journey = document.getElementById('kwJourney');
+  if (!spine || !journey) return;
+  var entries = journey.querySelectorAll('.kw-tl-entry');
+  var done = false;
+  var obs = new IntersectionObserver(function(recs){
+    recs.forEach(function(r){
+      if(r.isIntersecting && !done){
+        done = true;
+        spine.classList.add('kw-tl-go');
+        entries.forEach(function(el){ el.classList.add('kw-tl-vis'); });
+        obs.disconnect();
+      }
+    });
+  }, {threshold: 0.05});
+  obs.observe(journey);
+})();
 
 // ── VIEW PERSISTENCE LINK INTERCEPTOR ──
 (function() {
