@@ -682,118 +682,7 @@
 </style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
   <script src="/js/wip.js"></script>
-<style id="at-nav-canonical">
-  /* ═══════════════════════════════════════════════════════════
-     AT-NAV-CANONICAL — single source of truth for editorial nav
-     Injected last in <head> so it wins all cascade conflicts.
-     All values verified from Chrome audit of home page.
-     ═══════════════════════════════════════════════════════════ */
-  nav:not(#td-nav) {
-    position: fixed !important;
-    top: 0; left: 0 !important; right: 0 !important;
-    z-index: 100 !important;
-    display: flex !important;
-    justify-content: space-between !important;
-    align-items: center !important;
-    padding: 1.2rem 4rem !important;
-    background: rgba(245,242,235,0.95) !important;
-    backdrop-filter: blur(8px) !important;
-    -webkit-backdrop-filter: blur(8px) !important;
-    border-bottom: 1px solid #d4cfc6 !important;
-  }
-  nav:not(#td-nav) .nav-logo {
-    font-family: 'JetBrains Mono', monospace !important;
-    font-size: 0.9rem !important;
-    font-weight: 500 !important;
-    letter-spacing: 0.05em !important;
-    color: #1a1a18 !important;
-    text-decoration: none !important;
-  }
-  nav:not(#td-nav) .nav-logo span { color: #c84b2f !important; }
-  nav:not(#td-nav) .nav-links {
-    display: flex !important;
-    gap: 2.5rem !important;
-    list-style: none !important;
-    align-items: center !important;
-    padding: 0 !important;
-    margin: 0 !important;
-  }
-  nav:not(#td-nav) .nav-links li { list-style: none !important; }
-  nav:not(#td-nav) .nav-links a {
-    font-size: 0.82rem !important;
-    font-weight: 500 !important;
-    letter-spacing: 0.08em !important;
-    text-transform: uppercase !important;
-    color: #6b6459 !important;
-    text-decoration: none !important;
-    transition: color 0.2s !important;
-    background: transparent !important;
-    padding: 0 !important;
-    border-radius: 0 !important;
-    box-shadow: none !important;
-    white-space: nowrap !important;
-    font-family: inherit !important;
-  }
-  nav:not(#td-nav) .nav-links a:hover {
-    color: #c84b2f !important;
-    background: transparent !important;
-    box-shadow: none !important;
-  }
-  nav:not(#td-nav) .nav-links a.active {
-    background: transparent !important;
-    color: #c84b2f !important;
-    padding: 0 !important;
-    border-radius: 0 !important;
-    font-weight: 600 !important;
-    box-shadow: none !important;
-  }
-  nav:not(#td-nav) .nav-links a.nav-cta {
-    background: #c84b2f !important;
-    color: #ffffff !important;
-    padding: 0.5rem 1.3rem !important;
-    border-radius: 2px !important;
-    font-weight: 600 !important;
-    font-size: 0.82rem !important;
-    letter-spacing: 0.08em !important;
-    text-transform: uppercase !important;
-    box-shadow: none !important;
-  }
-  nav:not(#td-nav) .nav-links a.nav-cta:hover {
-    background: #1a1a18 !important;
-    color: #ffffff !important;
-  }
-  nav:not(#td-nav) .hamburger {
-    display: none !important;
-    flex-direction: column !important;
-    gap: 5px !important;
-    cursor: pointer !important;
-    background: none !important;
-    border: none !important;
-    padding: 4px !important;
-    min-width: 44px !important;
-    min-height: 44px !important;
-    align-items: center !important;
-    justify-content: center !important;
-  }
-  nav:not(#td-nav) .hamburger span {
-    display: block !important;
-    width: 22px !important;
-    height: 2px !important;
-    background: #1a1a18 !important;
-    border-radius: 2px !important;
-    transition: all 0.3s !important;
-  }
-  /* Mobile: collapse links, show hamburger */
-  @media (max-width: 768px) {
-    nav:not(#td-nav) { padding: 1rem 1.5rem !important; position: fixed !important; }
-    nav:not(#td-nav) .nav-links { display: none !important; }
-    nav:not(#td-nav) .hamburger { display: flex !important; }
-  nav:not(#td-nav) .nav-links.open { display: flex !important; flex-direction: column !important; position: absolute !important; top: 100% !important; }
-  nav:not(#td-nav) .nav-links.open a { background: transparent !important; padding: 0 !important; border-radius: 0 !important; box-shadow: none !important; color: #1a1a18 !important; font-size: 1rem !important; }
-  nav:not(#td-nav) .nav-links.open a.active { background: transparent !important; color: #c84b2f !important; font-weight: 700 !important; padding: 0 0 0 0.6rem !important; border-left: 3px solid #c84b2f !important; border-radius: 0 !important; box-shadow: none !important; }
-  nav:not(#td-nav) .nav-links.open a.nav-cta { background: transparent !important; color: #c84b2f !important; padding: 0 !important; border-radius: 0 !important; box-shadow: none !important; font-weight: 600 !important; }
-  }
-</style>
+  <link rel="stylesheet" href="/css/nav-editorial.css">
 </head>
 <body>
 <script>(function(){try{var s=sessionStorage.getItem('at-style-choice');if(s){document.documentElement.setAttribute('data-at-style',s);if(s==='visual')document.documentElement.classList.add('at-visual-preload');}}catch(e){}})()</script>
@@ -841,19 +730,21 @@
 <div id="view-editorial" class="view-active">
 
 <!-- NAV -->
-<nav>
-  <a href="../index.html" class="nav-logo">AT<span>.</span></a>
-  <button class="hamburger" id="ed-ham" aria-label="Menu"><span></span><span></span><span></span></button>
-  <ul class="nav-links" id="ed-nav-links">
-    <li><a href="work.html">Work</a></li>
-    <li><a href="about.html" class="active">About</a></li>
-    <li><a href="certifications.html">Certifications</a></li>
-    <li style="position:relative;"><a href="articles.html">Articles</a><span style="position:absolute;top:-8px;right:-4px;font-family:var(--mono);font-size:0.55rem;font-weight:600;letter-spacing:0.06em;background:#c84b2f;color:#fff;padding:1px 5px;border-radius:2px;line-height:1.4;">NEW</span></li>
-    <li><a href="../id-frameworks.html">ID Cheat Sheet</a></li>
-    <li><a href="../game/index.html">Spot the Bug ↗</a></li>
-    <li><a href="../tools/id-model-selector.html">ID Model Selector ↗</a></li>
-    <li><a href="../lms/index.html" target="_blank" rel="noopener">LMS Demo ↗</a></li>
-    <li><a href="contact.html" class="nav-cta">Let's Talk</a></li>
+<nav id="at-nav">
+  <a href="/index.html" class="nav-logo">AT<span>.</span></a>
+  <button class="hamburger" id="at-ham" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+  <ul class="nav-links" id="at-nav-links">
+    <li><a href="/pages/work.html">Work</a></li>
+    <li><a href="/pages/about.html">About</a></li>
+    <li><a href="/pages/certifications.html">Certifications</a></li>
+    <li style="position:relative;"><a href="/pages/articles.html">Articles</a><span class="nav-new-badge">NEW</span></li>
+    <li><a href="/id-frameworks.html">ID Cheat Sheet</a></li>
+    <li><a href="/game/index.html">Spot the Bug ↗</a></li>
+    <li><a href="/tools/id-model-selector.html">ID Model Selector ↗</a></li>
+    <li><a href="/lms/index.html" target="_blank" rel="noopener">LMS Demo ↗</a></li>
+    <li><a href="/pages/contact.html" class="nav-cta">Let's Talk</a></li>
   </ul>
 </nav>
 
@@ -2002,5 +1893,6 @@ function dismissBanner() {
 })();
 </script>
 
+<script src="/js/nav-editorial.js" defer></script>
 </body>
 </html>

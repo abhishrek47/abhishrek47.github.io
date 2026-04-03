@@ -1,0 +1,213 @@
+/* ============================================================
+   AT-NAV-EDITORIAL — single source of truth for editorial nav
+   Uses #at-nav ID for high specificity without !important.
+   Loaded last in <head>. One file, all pages.
+   ============================================================ */
+
+#at-nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.2rem 4rem;
+  background: rgba(245,242,235,0.95);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-bottom: 1px solid #d4cfc6;
+  box-sizing: border-box;
+}
+
+/* Logo */
+#at-nav .nav-logo {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.9rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  color: #1a1a18;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+#at-nav .nav-logo span { color: #c84b2f; }
+
+/* Link list */
+#at-nav .nav-links {
+  display: flex;
+  gap: 2.5rem;
+  list-style: none;
+  align-items: center;
+  padding: 0;
+  margin: 0;
+}
+#at-nav .nav-links li {
+  list-style: none;
+  position: relative;
+}
+
+/* All links */
+#at-nav .nav-links a {
+  font-family: inherit;
+  font-size: 0.82rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #6b6459;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color 0.2s;
+  background: transparent;
+  padding: 0;
+  border-radius: 0;
+  box-shadow: none;
+  display: inline;
+}
+
+/* Hover */
+#at-nav .nav-links a:hover {
+  color: #c84b2f;
+}
+
+/* Active — orange text, slightly bolder, no pill */
+#at-nav .nav-links a.active {
+  color: #c84b2f;
+  font-weight: 600;
+  background: transparent;
+  padding: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+/* CTA button */
+#at-nav .nav-links a.nav-cta {
+  background: #c84b2f;
+  color: #ffffff;
+  padding: 0.5rem 1.3rem;
+  border-radius: 2px;
+  font-weight: 600;
+  font-size: 0.82rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  box-shadow: none;
+}
+#at-nav .nav-links a.nav-cta:hover {
+  background: #1a1a18;
+  color: #ffffff;
+}
+#at-nav .nav-links a.nav-cta.active {
+  background: #c84b2f;
+  color: #ffffff;
+  padding: 0.5rem 1.3rem;
+}
+
+/* NEW badge */
+#at-nav .nav-new-badge {
+  position: absolute;
+  top: -8px;
+  right: -4px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.55rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  background: #c84b2f;
+  color: #fff;
+  padding: 1px 5px;
+  border-radius: 2px;
+  line-height: 1.4;
+  pointer-events: none;
+}
+
+/* Hamburger — hidden on desktop */
+#at-nav .hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 4px;
+  min-width: 44px;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+}
+#at-nav .hamburger span {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: #1a1a18;
+  border-radius: 2px;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+/* ── Mobile ── */
+@media (max-width: 768px) {
+  #at-nav {
+    padding: 1rem 1.5rem;
+  }
+
+  #at-nav .nav-links {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: 100%;
+    left: 0; right: 0;
+    background: #f5f0e8;
+    border-top: 1px solid rgba(0,0,0,0.08);
+    border-bottom: 1px solid rgba(0,0,0,0.12);
+    padding: 0.75rem 1.5rem 1rem;
+    gap: 0;
+    z-index: 9999;
+    box-shadow: 0 12px 32px rgba(0,0,0,0.12);
+    margin: 0;
+  }
+  #at-nav .nav-links.open { display: flex; }
+
+  #at-nav .nav-links li {
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+    padding: 0.75rem 0;
+    margin: 0;
+  }
+  #at-nav .nav-links li:last-child { border-bottom: none; }
+
+  #at-nav .nav-links a {
+    font-size: 1rem;
+    display: block;
+    width: 100%;
+    padding: 0;
+    border-radius: 0;
+    background: transparent;
+    color: #1a1a18;
+    box-shadow: none;
+  }
+
+  #at-nav .nav-links a.active {
+    color: #c84b2f;
+    font-weight: 700;
+    padding: 0 0 0 0.6rem;
+    border-left: 3px solid #c84b2f;
+    border-radius: 0;
+    box-shadow: none;
+    background: transparent;
+  }
+
+  #at-nav .nav-links a.nav-cta {
+    background: transparent;
+    color: #c84b2f;
+    padding: 0;
+    border-radius: 0;
+    font-weight: 600;
+    box-shadow: none;
+  }
+  #at-nav .nav-links a.nav-cta.active {
+    background: transparent;
+    padding: 0;
+  }
+
+  #at-nav .nav-new-badge { display: none; }
+
+  #at-nav .hamburger { display: flex; }
+  #at-nav .hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+  #at-nav .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+  #at-nav .hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+}
