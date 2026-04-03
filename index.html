@@ -1531,6 +1531,303 @@
 .cl-screen.ready .cl-status-text { color:#3dba6e; }
 
 /* Radar, timeline, a11y, recruiter, btt — all already in css/style.css or defined inline below */
+
+/* ════════════════════════════════════════
+   STYLE SELECTOR — full-screen one-time entry
+════════════════════════════════════════ */
+html[data-style-chosen] #style-selector { display: none !important; }
+html[data-style-chosen] #view-switcher  { display: none !important; }
+
+#style-selector {
+  position: fixed; inset: 0; z-index: 10000;
+  display: flex; flex-direction: column;
+  font-family: 'DM Sans', sans-serif;
+  overflow: hidden;
+  transition: opacity 0.45s ease, visibility 0.45s;
+}
+#style-selector.ss-exit    { opacity: 0; visibility: hidden; pointer-events: none; }
+#style-selector.ss-hidden  { display: none !important; }
+
+/* Floating AT. brand top-left */
+#ss-brand {
+  position: absolute; top: 0; left: 0; right: 0; z-index: 30;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1.4rem 2rem; pointer-events: none;
+}
+.ss-brand-logo {
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-size: 1.4rem; font-weight: 700; color: #1a1a1a;
+  letter-spacing: -0.02em; mix-blend-mode: multiply;
+}
+.ss-brand-logo span { color: #c84b2f; }
+.ss-brand-tagline {
+  font-size: 0.62rem; letter-spacing: 0.12em;
+  text-transform: uppercase; color: rgba(60,60,60,0.4);
+}
+
+/* Center headline (between panels) */
+#ss-headline-wrap {
+  position: absolute; left: 50%; top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 25; text-align: center; pointer-events: none;
+  white-space: nowrap;
+}
+#ss-headline-wrap h1 {
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-size: clamp(1rem, 2.5vw, 1.85rem);
+  font-weight: 400; font-style: italic;
+  color: #fff; margin: 0; line-height: 1.3;
+  text-shadow: 0 2px 24px rgba(0,0,0,0.7), 0 0 60px rgba(0,0,0,0.5);
+}
+#ss-headline-wrap h1 em { color: #fbbf0e; font-style: normal; }
+#ss-headline-sub {
+  display: block; font-size: 0.67rem; letter-spacing: 0.08em;
+  color: rgba(255,255,255,0.45); margin-top: 0.45rem;
+}
+
+/* The two-panel split */
+#ss-panels { flex: 1; display: flex; position: relative; }
+
+.ss-panel {
+  flex: 1; position: relative; cursor: pointer;
+  overflow: hidden; border: none; outline: none;
+  transition: flex 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex; align-items: center; justify-content: center;
+}
+.ss-panel:hover, .ss-panel:focus-visible { flex: 1.5; }
+
+.ss-panel-inner {
+  position: relative; z-index: 5;
+  display: flex; flex-direction: column;
+  align-items: center; gap: 0.9rem;
+  padding: 2rem 1.5rem; pointer-events: none;
+}
+
+/* Big faded background numbers */
+.ss-bg-num {
+  position: absolute; bottom: -0.05em; right: -0.05em; z-index: 1;
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-size: clamp(7rem, 16vw, 15rem); font-weight: 700;
+  line-height: 1; user-select: none; pointer-events: none;
+  transition: color 0.45s;
+}
+
+/* MODE LABEL */
+.ss-mode-label {
+  font-size: 0.62rem; font-weight: 700; letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+/* ENTER BUTTON */
+.ss-enter-btn {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  padding: 0.7rem 1.85rem; border-radius: 100px;
+  font-size: 0.78rem; font-weight: 700;
+  letter-spacing: 0.05em; text-transform: uppercase;
+  transition: transform 0.2s, box-shadow 0.2s, gap 0.2s;
+  margin-top: 0.25rem;
+}
+.ss-panel:hover .ss-enter-btn {
+  transform: scale(1.06);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+  gap: 0.85rem;
+}
+.ss-arrow { display: inline-block; transition: transform 0.2s; }
+.ss-panel:hover .ss-arrow { transform: translateX(5px); }
+
+/* ────── EDITORIAL PANEL ────── */
+#ssp-editorial { background: #F5F2EB; }
+#ssp-editorial .ss-bg-num   { color: rgba(200,75,47,0.06); }
+#ssp-editorial:hover .ss-bg-num { color: rgba(200,75,47,0.1); }
+#ssp-editorial .ss-mode-label  { color: rgba(200,75,47,0.7); }
+#ssp-editorial .ss-desc     { color: #666; }
+#ssp-editorial .ss-enter-btn { background: #c84b2f; color: #fff; }
+#ssp-editorial:hover .ss-enter-btn { box-shadow: 0 8px 30px rgba(200,75,47,0.35); }
+
+/* Ruled paper lines on editorial */
+#ssp-editorial::before {
+  content: ''; position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  background-image: repeating-linear-gradient(
+    transparent 0px, transparent 31px,
+    rgba(200,75,47,0.055) 31px, rgba(200,75,47,0.055) 32px
+  );
+}
+
+/* Animated serif words */
+.sse-words { display: flex; flex-direction: column; align-items: center; gap: 0.2rem; }
+.sse-word {
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-size: clamp(1.75rem, 3.8vw, 3.25rem);
+  font-style: italic; color: #1a1a1a; line-height: 1.18;
+  opacity: 0; transform: translateY(20px);
+  animation: sseWordIn 0.6s ease forwards;
+}
+.sse-word:nth-child(1) { animation-delay: 0.25s; }
+.sse-word:nth-child(2) { animation-delay: 0.75s; }
+.sse-word:nth-child(3) { animation-delay: 1.25s; }
+@keyframes sseWordIn { to { opacity: 1; transform: translateY(0); } }
+
+.sse-rule {
+  height: 2px; width: 0; background: #c84b2f; border-radius: 2px;
+  animation: sseRuleGrow 0.65s 1.8s ease forwards;
+}
+@keyframes sseRuleGrow { to { width: 76px; } }
+
+/* ────── VISUAL PANEL ────── */
+#ssp-visual {
+  background: linear-gradient(135deg, #0f0820 0%, #1a0848 55%, #0d0520 100%);
+}
+#ssp-visual .ss-bg-num  { color: rgba(251,191,14,0.04); }
+#ssp-visual:hover .ss-bg-num { color: rgba(251,191,14,0.09); }
+#ssp-visual .ss-mode-label { color: rgba(251,191,14,0.6); }
+#ssp-visual .ss-desc    { color: rgba(255,255,255,0.45); }
+#ssp-visual .ss-enter-btn { background: #fbbf0e; color: #0f0820; }
+#ssp-visual:hover .ss-enter-btn { box-shadow: 0 8px 30px rgba(251,191,14,0.35); }
+
+/* Floating particle container */
+#ss-particles { position: absolute; inset: 0; z-index: 2; pointer-events: none; overflow: hidden; }
+.ss-particle {
+  position: absolute; border-radius: 50%;
+  animation: ssParticleFloat linear infinite; opacity: 0;
+}
+@keyframes ssParticleFloat {
+  0%   { transform: translateY(110%) scale(0.6) rotate(0deg); opacity: 0; }
+  12%  { opacity: 0.85; }
+  78%  { opacity: 0.4; }
+  100% { transform: translateY(-15%) scale(1.3) rotate(210deg); opacity: 0; }
+}
+
+/* Pulsing orb behind visual words */
+.ssv-orb {
+  position: absolute; width: 220px; height: 220px;
+  border-radius: 50%; z-index: 1; pointer-events: none;
+  background: radial-gradient(circle, rgba(124,58,237,0.28) 0%, transparent 68%);
+  animation: ssvOrbPulse 3.2s ease infinite;
+}
+@keyframes ssvOrbPulse {
+  0%,100% { transform: scale(1);    opacity: 0.55; }
+  50%     { transform: scale(1.28); opacity: 1; }
+}
+
+.ssv-words { display: flex; flex-direction: column; align-items: center; gap: 0.05rem; position: relative; z-index: 5; }
+.ssv-word {
+  font-family: 'Outfit', sans-serif;
+  font-size: clamp(1.75rem, 3.8vw, 3.25rem);
+  font-weight: 900; letter-spacing: 0.1em; text-transform: uppercase; line-height: 1.12;
+  background: linear-gradient(135deg, #fbbf0e 0%, #c084fc 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  opacity: 0; transform: scale(0.72) skewX(-5deg);
+  animation: ssvWordIn 0.5s cubic-bezier(0.34,1.56,0.64,1) forwards;
+}
+.ssv-word:nth-child(1) { animation-delay: 0.12s; }
+.ssv-word:nth-child(2) { animation-delay: 0.52s; }
+.ssv-word:nth-child(3) { animation-delay: 0.92s; }
+@keyframes ssvWordIn { to { opacity: 1; transform: scale(1) skewX(0deg); } }
+
+.ss-desc { font-size: 0.82rem; text-align: center; max-width: 195px; line-height: 1.5; }
+
+/* Center divider AT. logo */
+#ss-divider-logo {
+  position: absolute; left: 50%; top: 50%;
+  transform: translate(-50%, -50%); z-index: 30;
+  width: 54px; height: 54px; border-radius: 50%;
+  background: #0f0820;
+  border: 2px solid rgba(255,255,255,0.12);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-size: 0.95rem; font-weight: 700; color: #F5F2EB;
+  letter-spacing: -0.02em; pointer-events: none;
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.4), 0 4px 24px rgba(0,0,0,0.6);
+}
+#ss-divider-logo span { color: #fbbf0e; }
+
+/* Mobile */
+@media (max-width: 768px) {
+  #ss-panels { flex-direction: column; }
+  .ss-panel, .ss-panel:hover, .ss-panel:focus-visible { flex: 1; min-height: 50svh; min-height: 50vh; }
+  #ss-divider-logo { display: none; }
+  #ss-brand { padding: 0.9rem 1.25rem; }
+  #ss-headline-wrap { display: none; }
+  .ss-bg-num { font-size: clamp(5rem, 20vw, 9rem); }
+  .sse-word, .ssv-word { font-size: clamp(1.5rem, 7vw, 2.5rem); }
+}
+
+/* ════════════════════════════════════════
+   VISUAL LOADER — shown when visual mode chosen
+════════════════════════════════════════ */
+#visualLoader {
+  position: fixed; inset: 0; z-index: 9999;
+  background: #0f0820;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  opacity: 0; visibility: hidden; pointer-events: none;
+  transition: opacity 0.35s ease, visibility 0.35s;
+  overflow: hidden;
+}
+#visualLoader.vl-active  { opacity: 1; visibility: visible; pointer-events: all; }
+#visualLoader.vl-done    { opacity: 0; visibility: hidden;  pointer-events: none; }
+
+#vl-geo-bg { position: absolute; inset: 0; pointer-events: none; }
+.vl-geo-item {
+  position: absolute; animation: vlGeoFloat linear infinite; opacity: 0;
+}
+@keyframes vlGeoFloat {
+  0%   { transform: translateY(110vh) rotate(0deg);   opacity: 0; }
+  15%  { opacity: 0.75; }
+  85%  { opacity: 0.3; }
+  100% { transform: translateY(-12vh) rotate(360deg); opacity: 0; }
+}
+
+.vl-logo {
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-size: clamp(3.5rem, 10vw, 6rem); font-weight: 700;
+  color: #fbbf0e; letter-spacing: -0.03em;
+  animation: vlLogoPulse 2.2s ease infinite; position: relative; z-index: 2;
+}
+.vl-logo span { color: #7c3aed; }
+@keyframes vlLogoPulse {
+  0%,100% { text-shadow: 0 0 40px rgba(251,191,14,0.4),  0 0 80px rgba(251,191,14,0.1); }
+  50%     { text-shadow: 0 0 80px rgba(251,191,14,0.75), 0 0 160px rgba(251,191,14,0.25); }
+}
+
+.vl-mode-label {
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.6rem; font-weight: 700; letter-spacing: 0.32em;
+  text-transform: uppercase; color: rgba(251,191,14,0.42);
+  margin-top: 0.4rem; margin-bottom: 2.75rem; position: relative; z-index: 2;
+}
+
+.vl-bar-wrap {
+  width: min(340px, 75vw); display: flex; align-items: center;
+  gap: 0.75rem; margin-bottom: 0.8rem; position: relative; z-index: 2;
+}
+.vl-bar-track {
+  flex: 1; height: 2px; background: rgba(255,255,255,0.07);
+  border-radius: 2px; position: relative;
+}
+.vl-bar-fill {
+  height: 100%; width: 0%; border-radius: 2px;
+  background: linear-gradient(90deg, #7c3aed 0%, #fbbf0e 100%);
+  transition: width 0.28s ease; position: relative;
+}
+.vl-bar-fill::after {
+  content: ''; position: absolute; right: -4px; top: -4px;
+  width: 10px; height: 10px; border-radius: 50%; background: #fbbf0e;
+  box-shadow: 0 0 12px #fbbf0e, 0 0 24px rgba(251,191,14,0.5);
+  transition: opacity 0.2s;
+}
+.vl-bar-fill[style*="100%"]::after { opacity: 0; }
+.vl-bar-pct {
+  font-family: 'Outfit', sans-serif; font-size: 0.6rem;
+  font-weight: 700; color: rgba(251,191,14,0.45); min-width: 2.5rem; text-align: right;
+}
+.vl-status-text {
+  font-family: 'Outfit', sans-serif; font-size: 0.65rem;
+  font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase;
+  color: rgba(255,255,255,0.28); min-height: 1.2em;
+  position: relative; z-index: 2;
+}
+
 .radar-section{background:white;padding:5rem 4rem;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);}
 .radar-inner{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;max-width:1100px;margin:0 auto;}
 .radar-desc{font-size:.95rem;color:var(--mid);line-height:1.75;margin-bottom:2rem;max-width:42ch;}
@@ -1596,7 +1893,30 @@
     }
     #ub-visual .ub-icon { font-size: 0.85rem; }
     #ub-visual .ub-close { color: #151515; }
-  </style>
+  
+  /* ════ TOGGLE PILL — brand-split active states ════ */
+  .vsw-btn { position: relative; overflow: hidden; }
+  #btn-editorial.vsw-active { background: #c84b2f; color: #ffffff; font-weight: 700; }
+  #btn-visual.vsw-active { background: #7c3aed; color: #ffffff; font-weight: 700; }
+  /* Wave sweep overlay */
+  .vsw-wave {
+    position: absolute; top: 0; left: 0;
+    width: 100%; height: 100%;
+    border-radius: inherit; pointer-events: none;
+    opacity: 0; transform: translateX(-100%);
+  }
+  #btn-editorial .vsw-wave {
+    background: linear-gradient(90deg, transparent 0%, rgba(200,75,47,0.55) 50%, rgba(245,242,235,0.25) 100%);
+  }
+  #btn-visual .vsw-wave {
+    background: linear-gradient(90deg, transparent 0%, rgba(124,58,237,0.55) 50%, rgba(196,181,253,0.25) 100%);
+  }
+
+  /* ── Style persistence — hide switcher when style already chosen ── */
+  html[data-at-style] #view-switcher { display: none !important; }
+  html.at-visual-preload #view-editorial { opacity: 0 !important; pointer-events: none !important; }
+
+</style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
 </head>
 <body>
@@ -1611,6 +1931,70 @@
   <span class="ub-icon">✦</span>
   <span class="ub-text">Site update in progress · some pages may look incomplete · check back soon</span>
   <button class="ub-close" onclick="dismissBanner()" aria-label="Dismiss">✕</button>
+</div>
+
+<!-- ════════════════════════════════════════
+     STYLE SELECTOR — full-screen one-time entry
+════════════════════════════════════════ -->
+<script>(function(){try{if(sessionStorage.getItem('at-style-choice'))document.documentElement.setAttribute('data-style-chosen','1');}catch(e){}})()</script>
+<div id="style-selector">
+  <div id="ss-brand">
+    <span class="ss-brand-logo">AT<span>.</span></span>
+    <span class="ss-brand-tagline">Abhishek Trivedi · Learning Experience Portfolio</span>
+  </div>
+  <div id="ss-headline-wrap">
+    <h1>Choose your <em>lens.</em></h1>
+    <span id="ss-headline-sub">Two ways to experience the same portfolio. Pick what resonates.</span>
+  </div>
+  <div id="ss-panels">
+    <!-- Editorial Panel -->
+    <button class="ss-panel" id="ssp-editorial" onclick="selectStyle('editorial')" aria-label="Enter Editorial view — type-forward, structured">
+      <div class="ss-bg-num">01</div>
+      <div class="ss-panel-inner">
+        <span class="ss-mode-label">Editorial</span>
+        <div class="sse-words">
+          <div class="sse-word">Strategic.</div>
+          <div class="sse-word">Considered.</div>
+          <div class="sse-word">Crafted.</div>
+        </div>
+        <div class="sse-rule"></div>
+        <p class="ss-desc">Type-forward. Structured. Craft over flash.</p>
+        <span class="ss-enter-btn">Enter Editorial <span class="ss-arrow">→</span></span>
+      </div>
+    </button>
+    <!-- Visual Panel -->
+    <button class="ss-panel" id="ssp-visual" onclick="selectStyle('visual')" aria-label="Enter Visual view — design-led, colour-forward">
+      <div id="ss-particles"></div>
+      <div class="ss-bg-num">02</div>
+      <div class="ss-panel-inner">
+        <span class="ss-mode-label">Visual</span>
+        <div class="ssv-words">
+          <div class="ssv-word">Bold.</div>
+          <div class="ssv-word">Dynamic.</div>
+          <div class="ssv-word">Alive.</div>
+        </div>
+        <div class="ssv-orb"></div>
+        <p class="ss-desc">Design-led. Colour-forward. Sensory-first.</p>
+        <span class="ss-enter-btn">Enter Visual <span class="ss-arrow">→</span></span>
+      </div>
+    </button>
+  </div>
+  <!-- Center divider logo -->
+  <div id="ss-divider-logo">AT<span>.</span></div>
+</div>
+
+<!-- ════════════════════════════════════════
+     VISUAL LOADER — on visual mode entry
+════════════════════════════════════════ -->
+<div id="visualLoader">
+  <div id="vl-geo-bg"></div>
+  <div class="vl-logo">AT<span>.</span></div>
+  <div class="vl-mode-label">Visual Mode</div>
+  <div class="vl-bar-wrap">
+    <div class="vl-bar-track"><div class="vl-bar-fill" id="vlBarFill"></div></div>
+    <span class="vl-bar-pct" id="vlPct">0%</span>
+  </div>
+  <div class="vl-status-text" id="vlStatus">Initialising visual layer...</div>
 </div>
 
 <!-- ════════════════════════════════════════
@@ -1648,8 +2032,8 @@
      VIEW SWITCHER (always visible)
 ════════════════════════════════════════ -->
 <div id="view-switcher">
-  <button class="vsw-btn vsw-active" id="btn-editorial" onclick="switchView('editorial')">Editorial</button>
-  <button class="vsw-btn" id="btn-visual" onclick="switchView('visual')">Visual</button>
+  <button class="vsw-btn vsw-active" id="btn-editorial" onclick="switchView('editorial')"><span class="vsw-wave"></span>Editorial</button>
+  <button class="vsw-btn" id="btn-visual" onclick="switchView('visual')"><span class="vsw-wave"></span>Visual</button>
 </div>
 
 <!-- ════════════════════════════════════════
@@ -2532,14 +2916,15 @@ function switchView(view) {
   if (view === currentView) return;
   currentView = view;
 
-  // GSAP button animation on the activated button
+  // GSAP wave sweep animation on the activated button
   var _btn = view === 'visual' ? document.getElementById('btn-visual') : document.getElementById('btn-editorial');
-  if (typeof gsap !== 'undefined' && _btn) {
-    gsap.timeline()
-      .to(_btn, { scale: 1.18, duration: 0.1, ease: 'power2.out' })
-      .to(_btn, { scale: 1, duration: 0.55, ease: 'elastic.out(1, 0.45)' });
+  var _wave = _btn ? _btn.querySelector('.vsw-wave') : null;
+  if (typeof gsap !== 'undefined' && _wave) {
+    gsap.fromTo(_wave,
+      { xPercent: -100, opacity: 0.9 },
+      { xPercent: 100, opacity: 0, duration: 0.5, ease: 'power2.inOut' }
+    );
   }
-
   // Toggle view divs
   document.getElementById('view-editorial').classList.toggle('view-active', view === 'editorial');
   document.getElementById('view-visual').classList.toggle('view-active', view === 'visual');
@@ -2572,18 +2957,219 @@ function switchView(view) {
   }
 }
 
-// Read initial view from URL
+// ════════════════════════════════════════
+// VIEW INIT — respects sessionStorage style choice
+// ════════════════════════════════════════
 (function() {
-  const params = new URLSearchParams(window.location.search);
-  const initView = params.get('view') === 'visual' ? 'visual' : 'editorial';
-  document.getElementById('view-' + initView).classList.add('view-active');
-  currentView = initView;
-  document.getElementById('btn-editorial').classList.toggle('vsw-active', initView === 'editorial');
-  document.getElementById('btn-visual').classList.toggle('vsw-active', initView === 'visual');
-  if (initView === 'visual') {
-    document.getElementById('td-nav').style.display = 'flex';
+  var params     = new URLSearchParams(window.location.search);
+  var savedStyle = (function(){try{return sessionStorage.getItem('at-style-choice');}catch(e){return null;}})();
+  var sw         = document.getElementById('view-switcher');
+
+  if (savedStyle) {
+    // Already chose — skip selector, apply directly
+    var sel = document.getElementById('style-selector');
+    if (sel) sel.classList.add('ss-hidden');
+    if (sw)  sw.style.display = 'none';
+    var initView = savedStyle;
+    document.getElementById('view-' + initView).classList.add('view-active');
+    currentView = initView;
+    document.getElementById('btn-editorial').classList.toggle('vsw-active', initView === 'editorial');
+    document.getElementById('btn-visual').classList.toggle('vsw-active', initView === 'visual');
+    if (initView === 'visual') {
+      document.getElementById('td-nav').style.display = 'flex';
+      document.body.classList.add('visual-mode');
+    }
+  } else {
+    // No choice yet — show selector, hide switcher pill
+    if (sw) sw.style.display = 'none';
+    // Selector is visible by default; no view activated yet
   }
 })();
+
+
+// ════════════════════════════════════════
+// STYLE SELECTOR — particles + visual loader geo
+// ════════════════════════════════════════
+(function() {
+  // Visual panel: floating particles
+  var pc = document.getElementById('ss-particles');
+  if (pc) {
+    var palPart = ['#fbbf0e','#7c3aed','#c084fc','#fbbf0e','#a855f7'];
+    for (var i = 0; i < 24; i++) {
+      var p = document.createElement('div');
+      p.className = 'ss-particle';
+      var sz = 3 + Math.random() * 5;
+      var col = palPart[Math.floor(Math.random() * palPart.length)];
+      p.style.cssText =
+        'width:'+sz+'px;height:'+sz+'px;' +
+        'left:'+(5 + Math.random()*90)+'%;bottom:0;' +
+        'background:'+col+';' +
+        'animation-duration:'+(4+Math.random()*7)+'s;' +
+        'animation-delay:'+(Math.random()*5)+'s;' +
+        'box-shadow:0 0 '+(sz*2.5)+'px '+col+';';
+      pc.appendChild(p);
+    }
+  }
+  // Visual loader: geo bg
+  var gb = document.getElementById('vl-geo-bg');
+  if (gb) {
+    var palGeo = ['rgba(124,58,237,0.5)','rgba(251,191,14,0.55)','rgba(192,132,252,0.4)'];
+    for (var j = 0; j < 20; j++) {
+      var g = document.createElement('div');
+      g.className = 'vl-geo-item';
+      var isSquare = Math.random() > 0.5;
+      var gsz = isSquare ? (5 + Math.random()*9) : (3 + Math.random()*6);
+      g.style.cssText =
+        'left:'+(3 + Math.random()*94)+'%;bottom:0;' +
+        'width:'+gsz+'px;height:'+gsz+'px;' +
+        'border-radius:'+(isSquare?'2px':'50%')+';' +
+        'background:'+palGeo[Math.floor(Math.random()*palGeo.length)]+';' +
+        'animation-duration:'+(5+Math.random()*8)+'s;' +
+        'animation-delay:'+(Math.random()*6)+'s;';
+      gb.appendChild(g);
+    }
+  }
+})();
+
+// ════════════════════════════════════════
+// selectStyle — called when user clicks a panel
+// ════════════════════════════════════════
+function selectStyle(style) {
+  try { sessionStorage.setItem('at-style-choice', style); } catch(e) {}
+  // Fade out selector
+  var sel = document.getElementById('style-selector');
+  if (sel) sel.classList.add('ss-exit');
+  // Always hide the floating switcher pill
+  var sw = document.getElementById('view-switcher');
+  if (sw) sw.style.display = 'none';
+  // After fade, launch appropriate loader
+  setTimeout(function() {
+    if (sel) sel.classList.add('ss-hidden');
+    if (style === 'visual') {
+      _runVisualLoader(function() {
+        currentView = 'visual';
+        var ve = document.getElementById('view-editorial');
+        var vv = document.getElementById('view-visual');
+        if (ve) ve.classList.remove('view-active');
+        if (vv) vv.classList.add('view-active');
+        document.body.classList.add('visual-mode');
+        var tdnav = document.getElementById('td-nav');
+        if (tdnav) tdnav.style.display = 'flex';
+      });
+    } else {
+      _runEditorialLoader(function() {
+        currentView = 'editorial';
+        var ve = document.getElementById('view-editorial');
+        if (ve) ve.classList.add('view-active');
+      });
+    }
+  }, 460);
+}
+
+// ════════════════════════════════════════
+// Editorial loader
+// ════════════════════════════════════════
+function _runEditorialLoader(onComplete) {
+  var overlay = document.getElementById('courseLoader');
+  if (!overlay) { if (onComplete) onComplete(); return; }
+  overlay.classList.remove('done','skip');
+  var steps = [
+    {text:'Initialising learner profile...',      pct:12, log:null},
+    {text:'Fetching personalisation data...',     pct:28, log:{type:'ok',  msg:'LRS connection established · statements: active'}},
+    {text:'Loading interaction templates...',     pct:46, log:{type:'ok',  msg:'5 modules detected · SCORM 2004 wrapper ready'}},
+    {text:'Configuring xAPI statement schema...', pct:63, log:{type:'info',msg:'verb namespace: adl.net/expapi/verbs'}},
+    {text:'Applying adaptive branching rules...', pct:79, log:{type:'ok',  msg:'7 ID frameworks loaded · branch nodes: 42'}},
+    {text:'Running accessibility checks...',      pct:91, log:{type:'ok',  msg:'WCAG 2.1 AA · contrast ratios verified'}},
+    {text:'Ready.',                               pct:100,log:{type:'ok',  msg:'All systems go · welcome, learner.'}},
+  ];
+  var statusEl = document.getElementById('clStatusText');
+  var barFill  = document.getElementById('clBarFill');
+  var barPct   = document.getElementById('clBarPct');
+  var logEl    = document.getElementById('clLog');
+  var screen   = document.querySelector('.cl-screen');
+  var i = 0;
+  function addLog(entry) {
+    var line = document.createElement('div');
+    line.className = 'cl-log-line ' + entry.type;
+    line.textContent = entry.msg;
+    if (logEl) { logEl.appendChild(line); while (logEl.children.length > 3) logEl.removeChild(logEl.firstChild); }
+  }
+  function runStep() {
+    if (i >= steps.length) return;
+    var s = steps[i++];
+    if (statusEl) statusEl.textContent = s.text;
+    if (barFill)  barFill.style.width  = s.pct + '%';
+    if (barPct)   barPct.textContent   = s.pct + '%';
+    if (s.log) addLog(s.log);
+    if (s.pct === 100) {
+      if (screen) screen.classList.add('ready');
+      setTimeout(function() {
+        overlay.classList.add('done');
+        if (onComplete) onComplete();
+      }, 700);
+    } else {
+      setTimeout(runStep, 260 + Math.random() * 180);
+    }
+  }
+  setTimeout(runStep, 300);
+  setTimeout(function() {
+    if (!overlay.classList.contains('done')) {
+      overlay.classList.add('done');
+      if (onComplete) onComplete();
+    }
+  }, 7000);
+}
+
+// ════════════════════════════════════════
+// Visual loader
+// ════════════════════════════════════════
+function _runVisualLoader(onComplete) {
+  var overlay  = document.getElementById('visualLoader');
+  var barFill  = document.getElementById('vlBarFill');
+  var barPct   = document.getElementById('vlPct');
+  var statusEl = document.getElementById('vlStatus');
+  if (!overlay) { if (onComplete) onComplete(); return; }
+  overlay.classList.add('vl-active');
+  var steps = [
+    {text:'Initialising visual layer...',       pct:14},
+    {text:'Loading design system...',           pct:30},
+    {text:'Calibrating colour palette...',      pct:48},
+    {text:'Rendering portfolio layers...',      pct:64},
+    {text:'Connecting interactive modules...',  pct:80},
+    {text:'Optimising animations...',           pct:93},
+    {text:'Visual mode ready.',                 pct:100},
+  ];
+  var i = 0;
+  function runStep() {
+    if (i >= steps.length) return;
+    var s = steps[i++];
+    if (statusEl) {
+      statusEl.style.animation = 'none'; statusEl.offsetHeight;
+      statusEl.style.animation = ''; statusEl.textContent = s.text;
+    }
+    if (barFill) barFill.style.width = s.pct + '%';
+    if (barPct)  barPct.textContent  = s.pct + '%';
+    if (s.pct === 100) {
+      setTimeout(function() {
+        overlay.classList.add('vl-done');
+        setTimeout(function() {
+          overlay.classList.remove('vl-active','vl-done');
+          if (onComplete) onComplete();
+        }, 380);
+      }, 650);
+    } else {
+      setTimeout(runStep, 255 + Math.random() * 210);
+    }
+  }
+  setTimeout(runStep, 200);
+  setTimeout(function() {
+    if (overlay.classList.contains('vl-active') && !overlay.classList.contains('vl-done')) {
+      overlay.classList.add('vl-done');
+      if (onComplete) onComplete();
+    }
+  }, 7000);
+}
+
 
 // Handle browser back/forward
 window.addEventListener('popstate', (e) => {
@@ -2591,62 +3177,7 @@ window.addEventListener('popstate', (e) => {
   switchView(view);
 });
 
-// ════════════════════════════════════════
-// LOADER — first visit in session only
-// ════════════════════════════════════════
-(function() {
-  const overlay = document.getElementById('courseLoader');
-
-  const steps = [
-    {text:'Initialising learner profile...',pct:12,log:null},
-    {text:'Fetching personalisation data...',pct:28,log:{type:'ok',msg:'LRS connection established · statements: active'}},
-    {text:'Loading interaction templates...',pct:46,log:{type:'ok',msg:'5 modules detected · SCORM 2004 wrapper ready'}},
-    {text:'Configuring xAPI statement schema...',pct:63,log:{type:'info',msg:'verb namespace: adl.net/expapi/verbs'}},
-    {text:'Applying adaptive branching rules...',pct:79,log:{type:'ok',msg:'7 ID frameworks loaded · branch nodes: 42'}},
-    {text:'Running accessibility checks...',pct:91,log:{type:'ok',msg:'WCAG 2.1 AA · contrast ratios verified'}},
-    {text:'Ready.',pct:100,log:{type:'ok',msg:'All systems go · welcome, learner.'}},
-  ];
-
-  const statusEl = document.getElementById('clStatusText');
-  const barFill  = document.getElementById('clBarFill');
-  const barPct   = document.getElementById('clBarPct');
-  const logEl    = document.getElementById('clLog');
-  const screen   = document.querySelector('.cl-screen');
-  let i = 0;
-
-  function addLog(entry) {
-    const line = document.createElement('div');
-    line.className = 'cl-log-line ' + entry.type;
-    line.textContent = entry.msg;
-    logEl.appendChild(line);
-    while (logEl.children.length > 3) logEl.removeChild(logEl.firstChild);
-  }
-
-  function runStep() {
-    if (i >= steps.length) return;
-    const s = steps[i++];
-    statusEl.textContent = s.text;
-    barFill.style.width = s.pct + '%';
-    barPct.textContent = s.pct + '%';
-    if (s.log) addLog(s.log);
-    if (s.pct === 100) {
-      screen.classList.add('ready');
-      setTimeout(() => {
-        overlay.classList.add('done');
-      }, 700);
-    } else {
-      setTimeout(runStep, 260 + Math.random() * 180);
-    }
-  }
-
-  setTimeout(runStep, 300);
-  // Failsafe
-  setTimeout(() => {
-    if (!overlay.classList.contains('done')) {
-      overlay.classList.add('done');
-    }
-  }, 6000);
-})();
+// (courseLoader now handled by _runEditorialLoader)
 
 // ════════════════════════════════════════
 // DEVICE DETECTION (shared)

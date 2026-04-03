@@ -590,6 +590,25 @@ body { font-family: var(--sans); background: var(--bg); color: var(--ink); min-h
     body.is-demo-page.visual-mode {
       background: linear-gradient(to bottom, #f3e8ff 0%, #ffffff 60%) !important;
       font-family: 'Outfit', 'Figtree', sans-serif;
+      /* Redefine editorial CSS variables with visual brand values */
+      --bg:             #f0eaff;
+      --bg-surface:     #ffffff;
+      --bg-muted:       #f5f0ff;
+      --bg-subtle:      #ede0ff;
+      --bg-dark:        #1a1040;
+      --bg-dark-soft:   #2d1b69;
+      --border:         #ddd0f8;
+      --border-strong:  #c0a8f4;
+      --accent:         #7c3aed;
+      --accent-soft:    rgba(124,58,237,0.08);
+      --accent-hover:   #6d28d9;
+      --green:          #16a34a;
+      --green-soft:     rgba(22,163,74,0.1);
+      --red:            #dc2626;
+      --red-soft:       rgba(220,38,38,0.08);
+      --amber:          #d97706;
+      --amber-soft:     rgba(217,119,6,0.1);
+      --text-muted:     #767676;
     }
     body.is-demo-page.visual-mode .demo-container {
       background: #fff !important;
@@ -632,7 +651,7 @@ body { font-family: var(--sans); background: var(--bg); color: var(--ink); min-h
     body.is-demo-page.visual-mode .hood-drawer { background: #fff !important; border: 1.5px solid #e2d9f3 !important; border-radius: 12px !important; }
     body.is-demo-page.visual-mode .hood-btn { border: 1.5px solid #7c3aed !important; border-radius: 8px !important; color: #7c3aed !important; }
     body.is-demo-page.visual-mode .next-case { border: 1.5px solid #e2d9f3 !important; border-radius: 16px !important; background: #fff !important; }
-    body.is-demo-page.visual-mode em { color: #c84b2f; }
+    /* em color handled in visual mode fix block below */
     body.is-demo-page.visual-mode .screen { background: #fff !important; border: 1.5px solid #151515 !important; border-radius: 16px !important; }
     body.is-demo-page.visual-mode .lms-shell { border: 1.5px solid #151515 !important; border-radius: 16px !important; overflow: hidden !important; }
     body.is-demo-page.visual-mode .progress-bar-fill { background: #fbbf0e !important; }
@@ -660,6 +679,46 @@ body { font-family: var(--sans); background: var(--bg); color: var(--ink); min-h
     body.is-demo-page.visual-mode .storyboard-card { border: 1.5px solid #151515 !important; border-radius: 12px !important; }
     body.is-demo-page.visual-mode .storyboard-card .card-header { background: #7c3aed !important; color: #fff !important; }
     body.is-demo-page.visual-mode .template-preview { border: 1.5px solid #151515 !important; border-radius: 12px !important; }
+    /* ── Override var(--accent) orange references in visual mode ── */
+    body.is-demo-page.visual-mode .section-step,
+    body.is-demo-page.visual-mode .code-label { color: #767676 !important; }
+    body.is-demo-page.visual-mode .demo-footer a { color: #7c3aed !important; }
+    body.is-demo-page.visual-mode .tab-btn.active { color: #7c3aed !important; border-bottom-color: #7c3aed !important; }
+    body.is-demo-page.visual-mode input:focus,
+    body.is-demo-page.visual-mode textarea:focus,
+    body.is-demo-page.visual-mode select:focus {
+      border-color: #7c3aed !important;
+      box-shadow: 0 0 0 3px rgba(124,58,237,0.12) !important;
+    }
+    body.is-demo-page.visual-mode .accordion-trigger:hover,
+    body.is-demo-page.visual-mode .accordion-trigger.open .accordion-icon { color: #7c3aed !important; }
+
+    /* ── FIX: em italic accent color in visual mode ── */
+    body.is-demo-page.visual-mode em { color: #7c3aed !important; }
+    body.is-demo-page.visual-mode h1 em,
+    body.is-demo-page.visual-mode h2 em { color: #7c3aed !important; }
+
+    /* ── FIX: next-case card text on white background ── */
+    body.is-demo-page.visual-mode .next-case-title {
+      color: #1e1e2e !important;
+      font-family: 'Outfit', 'Figtree', sans-serif !important;
+    }
+    body.is-demo-page.visual-mode .next-case-label { color: #767676 !important; }
+    body.is-demo-page.visual-mode .next-case-desc { color: #555 !important; }
+    body.is-demo-page.visual-mode .next-case-arrow { color: #7c3aed !important; }
+    body.is-demo-page.visual-mode .next-case:hover {
+      background: #f8f5ff !important;
+      transform: translateY(-2px);
+    }
+    body.is-demo-page.visual-mode .next-case .built-with .tag {
+      background: #f0eaff !important; color: #333 !important;
+      border-color: #d4c4f8 !important;
+    }
+
+    /* ── FIX: GPU note card left border accent ── */
+    body.is-demo-page.visual-mode #gpu-note { border-left-color: #7c3aed !important; }
+    body.is-demo-page.visual-mode #gpu-note div[style*="var(--accent)"] { color: #7c3aed !important; }
+
 
     /* ── ENHANCED VISUAL MODE — LMS SHELL ── */
     body.is-demo-page.visual-mode #td-nav { display: none !important; }
@@ -788,7 +847,6 @@ body { font-family: var(--sans); background: var(--bg); color: var(--ink); min-h
       color: rgba(255,255,255,0.65); background: none; border: none;
       border-radius: 100px; padding: 0.45rem 1rem; cursor: pointer; transition: all 0.2s;
     }
-    .vsw-btn.vsw-active { background: #fff; color: #0f0f0f; font-weight: 600; }
     .vsw-btn:hover:not(.vsw-active) { color: rgba(255,255,255,0.75); }
     /* __ YELLOW NAV __ */
     #td-nav {
@@ -891,9 +949,35 @@ body { font-family: var(--sans); background: var(--bg); color: var(--ink); min-h
     }
     #ub-visual .ub-icon { font-size: 0.85rem; }
     #ub-visual .ub-close { color: #151515; }
-  </style>
+  
+  /* ════ TOGGLE PILL — brand-split active states ════ */
+  .vsw-btn { position: relative; overflow: hidden; }
+  #btn-editorial.vsw-active { background: #c84b2f; color: #ffffff; font-weight: 700; }
+  #btn-visual.vsw-active { background: #7c3aed; color: #ffffff; font-weight: 700; }
+  /* Wave sweep overlay */
+  .vsw-wave {
+    position: absolute; top: 0; left: 0;
+    width: 100%; height: 100%;
+    border-radius: inherit; pointer-events: none;
+    opacity: 0; transform: translateX(-100%);
+  }
+  #btn-editorial .vsw-wave {
+    background: linear-gradient(90deg, transparent 0%, rgba(200,75,47,0.55) 50%, rgba(245,242,235,0.25) 100%);
+  }
+  #btn-visual .vsw-wave {
+    background: linear-gradient(90deg, transparent 0%, rgba(124,58,237,0.55) 50%, rgba(196,181,253,0.25) 100%);
+  }
+
+  /* ── Style persistence — hide switcher when style already chosen ── */
+  html[data-at-style] #view-switcher { display: none !important; }
+  html.at-visual-preload #view-editorial { opacity: 0 !important; pointer-events: none !important; }
+
+</style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
 </head>
 <body class="is-demo-page">
+<script>(function(){try{var s=sessionStorage.getItem('at-style-choice');if(s){document.documentElement.setAttribute('data-at-style',s);if(s==='visual')document.documentElement.classList.add('at-visual-preload');}}catch(e){}})()</script>
+
 
 <!-- ── UPDATE BANNERS (controlled by SHOW_UPDATE_BANNER flag above) ── -->
 <div id="ub-editorial" class="update-banner" role="status" aria-live="polite">
@@ -909,8 +993,8 @@ body { font-family: var(--sans); background: var(--bg); color: var(--ink); min-h
 
 
 <div id="view-switcher">
-  <button class="vsw-btn vsw-active" id="btn-editorial">Editorial</button>
-  <button class="vsw-btn" id="btn-visual">Visual</button>
+  <button class="vsw-btn vsw-active" id="btn-editorial"><span class="vsw-wave"></span>Editorial</button>
+  <button class="vsw-btn" id="btn-visual"><span class="vsw-wave"></span>Visual</button>
 </div>
 
 <nav id="td-nav">
@@ -1555,6 +1639,16 @@ let currentView = 'editorial';
 function switchView(view) {
   if (view === currentView) return;
   currentView = view;
+
+  // GSAP wave sweep animation on the activated button
+  var _btn = view === 'visual' ? document.getElementById('btn-visual') : document.getElementById('btn-editorial');
+  var _wave = _btn ? _btn.querySelector('.vsw-wave') : null;
+  if (typeof gsap !== 'undefined' && _wave) {
+    gsap.fromTo(_wave,
+      { xPercent: -100, opacity: 0.9 },
+      { xPercent: 100, opacity: 0, duration: 0.5, ease: 'power2.inOut' }
+    );
+  }
   document.getElementById('view-editorial').classList.toggle('view-active', view === 'editorial');
   document.getElementById('view-visual').classList.toggle('view-active', view === 'visual');
   document.getElementById('td-nav').style.display = view === 'visual' ? 'flex' : 'none';
@@ -1567,7 +1661,16 @@ function switchView(view) {
 }
 (function() {
   var params = new URLSearchParams(window.location.search);
-  var initView = params.get('view') === 'visual' ? 'visual' : 'editorial';
+    // ── Restore saved style from sessionStorage ──
+  var _savedStyle = (function(){try{return sessionStorage.getItem('at-style-choice');}catch(e){return null;}})();
+  var _sw = document.getElementById('view-switcher');
+  if (_savedStyle) {
+    // Hide the floating switcher pill
+    if (_sw) _sw.style.display = 'none';
+    // Remove flash-prevention opacity
+    document.documentElement.classList.remove('at-visual-preload');
+  }
+  var initView = _savedStyle || (params.get(\'view\') === \'visual\' ? \'visual\' : \'editorial\');
   document.getElementById('view-editorial').classList.toggle('view-active', initView === 'editorial');
   document.getElementById('view-visual').classList.toggle('view-active', initView === 'visual');
   currentView = initView;
