@@ -528,57 +528,57 @@
     .kw-story-body p { margin:0 0 1rem; }
     .kw-story-body p:last-child { margin:0; }
 
-    /* ── JOURNEY TIMELINE ── */
-    .kw-journey { display:flex; flex-direction:column; gap:0.75rem; }
-    .kw-journey-head { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:0.5rem; }
-    .kw-journey-span { font-family:'Figtree',sans-serif; font-size:0.7rem; font-weight:600; color:#888; letter-spacing:0.04em; }
-    .kw-tl-wrap { position:relative; padding-left:36px; display:flex; flex-direction:column; }
-    .kw-tl-spine {
-      position:absolute; left:10px; top:10px; width:2px; height:0;
-      background:linear-gradient(to bottom,#8b5cf6 0%,#a855f7 25%,#d97706 70%,#fbbf0e 100%);
-      border-radius:2px;
-      transition:height 1.5s cubic-bezier(0.22,1,0.36,1);
-    }
-    .kw-tl-spine.kw-tl-go { height:calc(100% - 18px); }
-    .kw-tl-entry {
-      position:relative; display:flex; align-items:flex-start;
-      padding-bottom:1.1rem; opacity:0; transform:translateX(-16px);
-      transition:opacity 0.45s ease, transform 0.45s ease;
-      transition-delay:calc(var(--i,0) * 0.08s);
-    }
-    .kw-tl-entry:last-child { padding-bottom:0; }
-    .kw-tl-entry.kw-tl-vis { opacity:1; transform:none; }
-    .kw-tl-dot {
-      position:absolute; left:-30px; top:6px;
-      width:12px; height:12px; border-radius:50%;
-      background:#fff; border:2px solid #151515;
-      transform:scale(0);
-      transition:transform 0.35s cubic-bezier(0.34,1.56,0.64,1), background 0.2s;
-      transition-delay:calc(var(--i,0) * 0.08s + 0.25s);
-      z-index:2;
-    }
-    .kw-tl-entry.kw-tl-vis .kw-tl-dot { transform:scale(1); }
-    .kw-tl-entry:last-child .kw-tl-dot { background:#fbbf0e; border-color:#151515; }
-    .kw-tl-entry:hover .kw-tl-dot { background:#fbbf0e; transform:scale(1.25) !important; }
-    .kw-tl-card {
-      background:#fff; border:1.5px solid #151515; border-radius:12px;
-      padding:0.9rem 1.15rem; width:100%;
-      transition:box-shadow 0.18s, transform 0.18s;
-    }
-    .kw-tl-card:hover { box-shadow:3px 3px 0 #151515; transform:translate(-1.5px,-1.5px); }
-    .kw-tl-top { display:flex; align-items:center; justify-content:space-between; gap:0.5rem; margin-bottom:0.4rem; flex-wrap:wrap; }
-    .kw-tl-period { font-family:'JetBrains Mono',monospace; font-size:0.6rem; font-weight:600; color:#999; letter-spacing:0.06em; }
-    .kw-tl-badge { font-family:'Figtree',sans-serif; font-size:0.6rem; font-weight:700; text-transform:uppercase; letter-spacing:0.07em; padding:0.15em 0.55em; border-radius:100px; border:1.5px solid; white-space:nowrap; }
-    .kw-tl-badge--y  { background:#fbbf0e; color:#151515; border-color:#151515; }
-    .kw-tl-badge--p  { background:#f3e8ff; color:#7c3aed;  border-color:#c4b5fd; }
-    .kw-tl-role { font-family:'Outfit',sans-serif; font-size:1rem; font-weight:700; color:#151515; line-height:1.25; margin-bottom:0.2rem; }
-    .kw-tl-org  { font-family:'Figtree',sans-serif; font-size:0.7rem; font-weight:600; color:#999; text-transform:uppercase; letter-spacing:0.07em; margin-bottom:0.5rem; }
-    .kw-tl-insight { font-family:'Figtree',sans-serif; font-size:0.82rem; font-style:italic; color:#6d28d9; line-height:1.6; border-left:2px solid #c4b5fd; padding-left:0.6rem; }
+    /* ── JOURNEY TIMELINE v2 ── */
+    .kw-journey { display:flex; flex-direction:column; gap:0.5rem; }
+    .kw-journey-head { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:0.5rem; margin-bottom:0.5rem; }
+    .kw-journey-span { font-family:'Figtree',sans-serif; font-size:0.7rem; font-weight:600; color:#888; }
+    /* Year progress bar */
+    .tj-yearbar { position:relative; height:3px; background:rgba(21,21,21,0.08); border-radius:3px; margin-bottom:2rem; }
+    .tj-yearbar-fill { position:absolute; left:0; top:0; height:100%; width:0; background:linear-gradient(to right,#8b5cf6,#a855f7 40%,#f59e0b 75%,#fbbf0e); border-radius:3px; transition:width 1.4s cubic-bezier(0.22,1,0.36,1); }
+    .tj-yearbar.tj-go .tj-yearbar-fill { width:100%; }
+    .tj-yb-tick { position:absolute; top:-4px; width:11px; height:11px; border-radius:50%; background:#fff; border:2px solid rgba(21,21,21,0.25); transform:translateX(-50%); }
+    .tj-yb-label { position:absolute; top:9px; font-family:'JetBrains Mono',monospace; font-size:0.58rem; color:#aaa; transform:translateX(-50%); white-space:nowrap; letter-spacing:0.04em; }
+    /* Phase headers */
+    .tj-phase { display:flex; align-items:center; gap:0.75rem; padding:0.6rem 1rem; border-radius:8px; margin-bottom:0.75rem; margin-top:0.25rem; opacity:0; transform:translateX(-16px); transition:opacity 0.4s ease,transform 0.4s ease; }
+    .tj-phase.tj-vis { opacity:1; transform:none; }
+    .tj-phase--purple { background:#f3e8ff; border-left:3px solid #8b5cf6; }
+    .tj-phase--mid    { background:#fef9ec; border-left:3px solid #f59e0b; }
+    .tj-phase--yellow { background:#fffbeb; border-left:3px solid #fbbf0e; }
+    .tj-phase-tag { font-family:'JetBrains Mono',monospace; font-size:0.58rem; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:#aaa; flex-shrink:0; }
+    .tj-phase-name { font-family:'Outfit',sans-serif; font-size:0.88rem; font-weight:700; color:#151515; }
+    .tj-phase-years { font-family:'Figtree',sans-serif; font-size:0.7rem; color:#aaa; margin-left:auto; white-space:nowrap; }
+    /* Cards */
+    .tj-card { position:relative; background:#fff; border:1.5px solid rgba(21,21,21,0.18); border-radius:12px; padding:1rem 1.1rem 0.9rem 1.4rem; margin-bottom:0.65rem; overflow:hidden; opacity:0; transform:translateY(22px); transition:opacity 0.42s ease,transform 0.42s ease,box-shadow 0.17s,border-color 0.17s; transition-delay:calc(var(--i,0)*0.06s); cursor:default; }
+    .tj-card.tj-vis { opacity:1; transform:none; }
+    .tj-card:hover { box-shadow:4px 4px 0 #151515; transform:translate(-2px,-2px); border-color:#151515; }
+    .tj-card.tj-vis:hover { transform:translate(-2px,-2px) !important; }
+    .tj-card--current { background:#fbbf0e; border-color:#151515; }
+    .tj-card--current:hover { box-shadow:4px 4px 0 rgba(21,21,21,0.4); }
+    .tj-card--current .tj-org { color:rgba(21,21,21,0.55); }
+    .tj-card--current .tj-insight { color:rgba(21,21,21,0.7); border-left-color:rgba(21,21,21,0.3); }
+    .tj-card--current .tj-chip { background:rgba(21,21,21,0.1); color:#151515; border-color:rgba(21,21,21,0.2); }
+    .tj-card--current .tj-badge--p,.tj-card--current .tj-badge--y { background:rgba(21,21,21,0.12); color:#151515; border-color:rgba(21,21,21,0.25); }
+    .tj-stripe { position:absolute; left:0; top:0; bottom:0; width:4px; background:var(--sc,#8b5cf6); border-radius:2px 0 0 2px; }
+    .tj-card--current .tj-stripe { background:#151515; }
+    .tj-num { position:absolute; right:0.85rem; top:50%; transform:translateY(-50%); font-family:'Outfit',sans-serif; font-size:4rem; font-weight:800; color:rgba(21,21,21,0.045); line-height:1; pointer-events:none; user-select:none; }
+    .tj-card--current .tj-num { color:rgba(21,21,21,0.08); }
+    .tj-head { display:flex; align-items:center; gap:0.45rem; flex-wrap:wrap; margin-bottom:0.35rem; }
+    .tj-period { font-family:'JetBrains Mono',monospace; font-size:0.58rem; font-weight:600; color:#aaa; letter-spacing:0.06em; }
+    .tj-badge { font-family:'Figtree',sans-serif; font-size:0.58rem; font-weight:700; text-transform:uppercase; letter-spacing:0.07em; padding:0.12em 0.52em; border-radius:100px; border:1.5px solid; white-space:nowrap; }
+    .tj-badge--p { background:#f3e8ff; color:#7c3aed; border-color:#c4b5fd; }
+    .tj-badge--y { background:#fef3c7; color:#92400e; border-color:#fcd34d; }
+    .tj-role { font-family:'Outfit',sans-serif; font-size:0.98rem; font-weight:700; color:#151515; line-height:1.25; margin-bottom:0.18rem; }
+    .tj-org { font-family:'Figtree',sans-serif; font-size:0.68rem; font-weight:600; color:#aaa; text-transform:uppercase; letter-spacing:0.07em; margin-bottom:0.45rem; }
+    .tj-insight { font-family:'Figtree',sans-serif; font-size:0.8rem; font-style:italic; color:#6d28d9; line-height:1.55; border-left:2px solid #c4b5fd; padding-left:0.55rem; margin-bottom:0.6rem; }
+    .tj-chips { display:flex; flex-wrap:wrap; gap:0.3rem; }
+    .tj-chip { font-family:'Figtree',sans-serif; font-size:0.62rem; font-weight:600; color:#555; background:#f5f5f5; border:1px solid rgba(21,21,21,0.12); padding:0.12em 0.5em; border-radius:4px; opacity:0; transform:scale(0.75); transition:opacity 0.22s ease,transform 0.22s ease; transition-delay:calc(var(--j,0)*0.04s + var(--i,0)*0.06s + 0.35s); }
+    .tj-card.tj-vis .tj-chip { opacity:1; transform:scale(1); }
     @media(max-width:600px){
-      .kw-tl-wrap { padding-left:28px; }
-      .kw-tl-dot { left:-23px; }
-      .kw-tl-card { padding:0.8rem 0.9rem; }
-      .kw-tl-role { font-size:0.92rem; }
+      .tj-yearbar { display:none; }
+      .tj-num { font-size:3rem; }
+      .tj-card { padding-left:1.2rem; }
+      .tj-phase-name { font-size:0.82rem; }
+      .tj-role { font-size:0.92rem; }
     }
     .kw-discs { display:grid;grid-template-columns:repeat(3,1fr);gap:1rem; }
     .kw-disc-card { background:#fff;border:1.5px solid #151515;border-radius:16px;padding:1.5rem;display:flex;flex-direction:column; }
@@ -593,7 +593,21 @@
     .kw-roles-title { font-family:'Outfit',sans-serif;font-size:1.1rem;font-weight:700;color:#151515;margin:0 0 1rem; }
     .kw-roles-list { display:flex;flex-wrap:wrap;gap:0.5rem; }
     @media(max-width:900px) { .kw-stats{grid-template-columns:repeat(2,1fr)};.kw-discs{grid-template-columns:1fr}; }
-    @media(max-width:600px) { .kw-stats{gap:0.75rem}; .kw-page { padding: 1.25rem 1rem; gap: 1.25rem; } .kw-page-hero { padding: 1.5rem; } .kw-cta-strip { padding: 1.5rem; flex-direction: column; align-items: stretch; } }
+    @media(max-width:600px) {
+      .kw-stats { gap:0.75rem; }
+      .kw-page { padding: 1.25rem 1rem; gap: 1.25rem; }
+      .kw-page-hero { padding: 1.5rem; }
+      .kw-cta-strip { padding: 1.5rem; flex-direction: column; align-items: stretch; }
+      .kw-page-title { font-size: clamp(1.7rem,6vw,2.5rem); }
+      .kw-cta-strip-headline { font-size: 1.3rem; }
+    }
+    @media(max-width:480px) {
+      .kw-page { padding: 1rem 0.875rem; }
+      .kw-page-hero { padding: 1.25rem; }
+      .kw-stats { grid-template-columns: repeat(2,1fr); gap: 0.6rem; }
+      .kw-stat { padding: 1rem; }
+      .kw-stat-value { font-size: 1.35rem; }
+    }
     @media(max-width:900px) {
       #td-nav .n-links { display: none !important; }
       #td-nav .n-ham { display: flex !important; }
@@ -1412,7 +1426,7 @@
         <div class="kw-stat-icon">⏱</div>
         <div class="kw-stat-label">Years in L&amp;D</div>
         <div class="kw-stat-value">15+</div>
-        <div class="kw-stat-desc">BPO trainer to systems-level eLearning architect.</div>
+        <div class="kw-stat-desc">L&D practitioner turned systems-level eLearning architect.</div>
       </div>
       <div class="kw-stat">
         <div class="kw-stat-icon">🎭</div>
@@ -1439,127 +1453,196 @@
         <span class="kw-story-label">The Journey</span>
         <span class="kw-journey-span">2010 — 2026 &nbsp;·&nbsp; 9 roles &nbsp;·&nbsp; 15+ years</span>
       </div>
-      <div class="kw-tl-wrap" id="kwTlWrap">
-        <div class="kw-tl-spine" id="kwTlSpine"></div>
 
-        <div class="kw-tl-entry" style="--i:0">
-          <div class="kw-tl-dot"></div>
-          <div class="kw-tl-card">
-            <div class="kw-tl-top">
-              <span class="kw-tl-period">Jul 2010 — Sep 2014</span>
-              <span class="kw-tl-badge kw-tl-badge--p">Training</span>
-            </div>
-            <div class="kw-tl-role">Floor & Product Trainer</div>
-            <div class="kw-tl-org">Effective Teleservices Pvt. Ltd. &nbsp;·&nbsp; Ahmedabad</div>
-            <div class="kw-tl-insight">Where it all started — training call centre associates and learning what actually makes people retain what they hear.</div>
-          </div>
-        </div>
-
-        <div class="kw-tl-entry" style="--i:1">
-          <div class="kw-tl-dot"></div>
-          <div class="kw-tl-card">
-            <div class="kw-tl-top">
-              <span class="kw-tl-period">Sep 2014 — Feb 2015</span>
-              <span class="kw-tl-badge kw-tl-badge--p">Documentation</span>
-            </div>
-            <div class="kw-tl-role">Senior Technical Support Engineer</div>
-            <div class="kw-tl-org">Excellence Infocom Pvt. Ltd. &nbsp;·&nbsp; Ahmedabad</div>
-            <div class="kw-tl-insight">A short detour into enterprise tech support — where I learned that clear documentation is a form of teaching.</div>
-          </div>
-        </div>
-
-        <div class="kw-tl-entry" style="--i:2">
-          <div class="kw-tl-dot"></div>
-          <div class="kw-tl-card">
-            <div class="kw-tl-top">
-              <span class="kw-tl-period">Mar 2015 — Jul 2016</span>
-              <span class="kw-tl-badge kw-tl-badge--p">Authoring</span>
-            </div>
-            <div class="kw-tl-role">Sr. Tech Support Engineer & Product Trainer</div>
-            <div class="kw-tl-org">Asite Solutions Pvt. Ltd. &nbsp;·&nbsp; Ahmedabad</div>
-            <div class="kw-tl-insight">First real encounter with authoring tools — built product simulations in Adobe Captivate and crossed into instructional design territory.</div>
-          </div>
-        </div>
-
-        <div class="kw-tl-entry" style="--i:3">
-          <div class="kw-tl-dot"></div>
-          <div class="kw-tl-card">
-            <div class="kw-tl-top">
-              <span class="kw-tl-period">Jul 2016 — May 2018</span>
-              <span class="kw-tl-badge kw-tl-badge--p">ID Leadership</span>
-            </div>
-            <div class="kw-tl-role">Product Trainer & Sub-Editor</div>
-            <div class="kw-tl-org">Astro Vaastu Research Center &nbsp;·&nbsp; Ahmedabad</div>
-            <div class="kw-tl-insight">Stepped into an interim Director of ID role — a significant jump that forced rapid growth in learning theory and leadership.</div>
-          </div>
-        </div>
-
-        <div class="kw-tl-entry" style="--i:4">
-          <div class="kw-tl-dot"></div>
-          <div class="kw-tl-card">
-            <div class="kw-tl-top">
-              <span class="kw-tl-period">May 2018 — Jun 2019</span>
-              <span class="kw-tl-badge kw-tl-badge--p">Remote Delivery</span>
-            </div>
-            <div class="kw-tl-role">Product Trainer & Documentation Lead</div>
-            <div class="kw-tl-org">eClinicalWorks &nbsp;·&nbsp; Ahmedabad</div>
-            <div class="kw-tl-insight">First time training distributed learners across multiple locations simultaneously — an early test of designing for people you can't see.</div>
-          </div>
-        </div>
-
-        <div class="kw-tl-entry" style="--i:5">
-          <div class="kw-tl-dot"></div>
-          <div class="kw-tl-card">
-            <div class="kw-tl-top">
-              <span class="kw-tl-period">Jul 2019 — Jul 2020</span>
-              <span class="kw-tl-badge kw-tl-badge--y">LMS Build</span>
-            </div>
-            <div class="kw-tl-role">L&D Manager & LMS Administrator</div>
-            <div class="kw-tl-org">Mindarray Systems Pvt. Ltd. &nbsp;·&nbsp; Ahmedabad</div>
-            <div class="kw-tl-insight">Built an entire LMS from scratch — solo. All SCORM content, all implementation, for internal teams and global distributors.</div>
-          </div>
-        </div>
-
-        <div class="kw-tl-entry" style="--i:6">
-          <div class="kw-tl-dot"></div>
-          <div class="kw-tl-card">
-            <div class="kw-tl-top">
-              <span class="kw-tl-period">Jul 2020 — Dec 2020</span>
-              <span class="kw-tl-badge kw-tl-badge--y">Strategy</span>
-            </div>
-            <div class="kw-tl-role">L&D Manager · ID · LMS Administrator</div>
-            <div class="kw-tl-org">EMXCEL Travel Solutions &nbsp;·&nbsp; Ahmedabad</div>
-            <div class="kw-tl-insight">Added OD training and ROI evaluation — moving from pure content creation into strategic L&D management.</div>
-          </div>
-        </div>
-
-        <div class="kw-tl-entry" style="--i:7">
-          <div class="kw-tl-dot"></div>
-          <div class="kw-tl-card">
-            <div class="kw-tl-top">
-              <span class="kw-tl-period">May 2021 — Jul 2024</span>
-              <span class="kw-tl-badge kw-tl-badge--y">eLearning Dev</span>
-            </div>
-            <div class="kw-tl-role">Senior Instructional Designer & eLearning Developer</div>
-            <div class="kw-tl-org">Rayden Interactive &nbsp;·&nbsp; Pune</div>
-            <div class="kw-tl-insight">Three years where Storyline stopped being a slide tool and became a development environment. JavaScript, xAPI, complex branching — the technical craft was forged here.</div>
-          </div>
-        </div>
-
-        <div class="kw-tl-entry" style="--i:8">
-          <div class="kw-tl-dot"></div>
-          <div class="kw-tl-card">
-            <div class="kw-tl-top">
-              <span class="kw-tl-period">Jul 2024 — Mar 2026</span>
-              <span class="kw-tl-badge kw-tl-badge--y">AI + Lead</span>
-            </div>
-            <div class="kw-tl-role">Team Lead — ID & eLearning Development</div>
-            <div class="kw-tl-org">Siemens DISW &nbsp;·&nbsp; Pune</div>
-            <div class="kw-tl-insight">Everything converged. AI personalisation connecting Storyline to an enterprise LMS in real time. FFmpeg pipeline: 8 languages, 90 seconds. Team of 3. 15 years of layering, applied at scale.</div>
-          </div>
-        </div>
-
+      <!-- Year bar -->
+      <div class="tj-yearbar" id="tjYearbar">
+        <div class="tj-yearbar-fill"></div>
+        <div class="tj-yb-tick" style="left:0%"></div>   <div class="tj-yb-label" style="left:0%">2010</div>
+        <div class="tj-yb-tick" style="left:25%"></div>  <div class="tj-yb-label" style="left:25%">2014</div>
+        <div class="tj-yb-tick" style="left:56%"></div>  <div class="tj-yb-label" style="left:56%">2018</div>
+        <div class="tj-yb-tick" style="left:69%"></div>  <div class="tj-yb-label" style="left:69%">2021</div>
+        <div class="tj-yb-tick" style="left:100%"></div> <div class="tj-yb-label" style="left:100%">2026</div>
       </div>
+
+      <!-- Phase 1: Foundation -->
+      <div class="tj-phase tj-phase--purple" style="transition-delay:0s">
+        <span class="tj-phase-tag">Phase 01</span>
+        <span class="tj-phase-name">Foundation</span>
+        <span class="tj-phase-years">2010 — 2018</span>
+      </div>
+
+      <div class="tj-card" style="--i:0;--sc:#8b5cf6">
+        <div class="tj-stripe"></div>
+        <div class="tj-num">01</div>
+        <div class="tj-head">
+          <span class="tj-period">Jul 2010 — Sep 2014</span>
+          <span class="tj-badge tj-badge--p">Training</span>
+        </div>
+        <div class="tj-role">Floor & Product Trainer</div>
+        <div class="tj-org">Effective Teleservices Pvt. Ltd. &nbsp;·&nbsp; Ahmedabad</div>
+        <div class="tj-insight">Where it all started — training new employees from scratch and learning what actually makes people retain what they hear.</div>
+        <div class="tj-chips">
+          <span class="tj-chip" style="--j:0">Training Design</span>
+          <span class="tj-chip" style="--j:1">TNA / TNI</span>
+          <span class="tj-chip" style="--j:2">Facilitation</span>
+          <span class="tj-chip" style="--j:3">Performance Mgmt</span>
+        </div>
+      </div>
+
+      <div class="tj-card" style="--i:1;--sc:#9333ea">
+        <div class="tj-stripe"></div>
+        <div class="tj-num">02</div>
+        <div class="tj-head">
+          <span class="tj-period">Sep 2014 — Feb 2015</span>
+          <span class="tj-badge tj-badge--p">Documentation</span>
+        </div>
+        <div class="tj-role">Senior Technical Support Engineer</div>
+        <div class="tj-org">Excellence Infocom Pvt. Ltd. &nbsp;·&nbsp; Ahmedabad</div>
+        <div class="tj-insight">A short detour into enterprise tech support — where I learned that clear documentation is a form of teaching.</div>
+        <div class="tj-chips">
+          <span class="tj-chip" style="--j:0">Enterprise Support</span>
+          <span class="tj-chip" style="--j:1">Documentation</span>
+          <span class="tj-chip" style="--j:2">Knowledge Base</span>
+        </div>
+      </div>
+
+      <div class="tj-card" style="--i:2;--sc:#a855f7">
+        <div class="tj-stripe"></div>
+        <div class="tj-num">03</div>
+        <div class="tj-head">
+          <span class="tj-period">Mar 2015 — Jul 2016</span>
+          <span class="tj-badge tj-badge--p">Authoring</span>
+        </div>
+        <div class="tj-role">Sr. Tech Support Engineer & Product Trainer</div>
+        <div class="tj-org">Asite Solutions Pvt. Ltd. &nbsp;·&nbsp; Ahmedabad</div>
+        <div class="tj-insight">First real encounter with authoring tools — built product simulations in Adobe Captivate and crossed into instructional design territory properly.</div>
+        <div class="tj-chips">
+          <span class="tj-chip" style="--j:0">Adobe Captivate</span>
+          <span class="tj-chip" style="--j:1">Product Simulation</span>
+          <span class="tj-chip" style="--j:2">TNA</span>
+        </div>
+      </div>
+
+      <div class="tj-card" style="--i:3;--sc:#c026d3">
+        <div class="tj-stripe"></div>
+        <div class="tj-num">04</div>
+        <div class="tj-head">
+          <span class="tj-period">Jul 2016 — May 2018</span>
+          <span class="tj-badge tj-badge--p">ID Leadership</span>
+        </div>
+        <div class="tj-role">Product Trainer & Sub-Editor</div>
+        <div class="tj-org">Astro Vaastu Research Center &nbsp;·&nbsp; Ahmedabad</div>
+        <div class="tj-insight">Stepped into an interim Director of ID role — a significant jump that forced rapid growth in learning theory and team leadership.</div>
+        <div class="tj-chips">
+          <span class="tj-chip" style="--j:0">Curriculum Design</span>
+          <span class="tj-chip" style="--j:1">CRM Training</span>
+          <span class="tj-chip" style="--j:2">Team Lead</span>
+        </div>
+      </div>
+
+      <!-- Phase 2: Going Technical -->
+      <div class="tj-phase tj-phase--mid" style="transition-delay:0.05s">
+        <span class="tj-phase-tag">Phase 02</span>
+        <span class="tj-phase-name">Going Technical</span>
+        <span class="tj-phase-years">2018 — 2021</span>
+      </div>
+
+      <div class="tj-card" style="--i:4;--sc:#f59e0b">
+        <div class="tj-stripe"></div>
+        <div class="tj-num">05</div>
+        <div class="tj-head">
+          <span class="tj-period">May 2018 — Jun 2019</span>
+          <span class="tj-badge tj-badge--y">Remote</span>
+        </div>
+        <div class="tj-role">Product Trainer & Documentation Lead</div>
+        <div class="tj-org">eClinicalWorks &nbsp;·&nbsp; Ahmedabad</div>
+        <div class="tj-insight">First time training distributed learners across multiple locations simultaneously — an early test of designing for people you can't see.</div>
+        <div class="tj-chips">
+          <span class="tj-chip" style="--j:0">Remote Delivery</span>
+          <span class="tj-chip" style="--j:1">Curriculum Writing</span>
+          <span class="tj-chip" style="--j:2">Assessment Design</span>
+        </div>
+      </div>
+
+      <div class="tj-card" style="--i:5;--sc:#f59e0b">
+        <div class="tj-stripe"></div>
+        <div class="tj-num">06</div>
+        <div class="tj-head">
+          <span class="tj-period">Jul 2019 — Jul 2020</span>
+          <span class="tj-badge tj-badge--y">LMS Build</span>
+        </div>
+        <div class="tj-role">L&D Manager & LMS Administrator</div>
+        <div class="tj-org">Mindarray Systems Pvt. Ltd. &nbsp;·&nbsp; Ahmedabad</div>
+        <div class="tj-insight">Built an entire LMS from scratch — solo. All SCORM content, all implementation, for internal teams and global distributors.</div>
+        <div class="tj-chips">
+          <span class="tj-chip" style="--j:0">ABARA LMS</span>
+          <span class="tj-chip" style="--j:1">SCORM</span>
+          <span class="tj-chip" style="--j:2">LMS Implementation</span>
+          <span class="tj-chip" style="--j:3">Global Training</span>
+        </div>
+      </div>
+
+      <div class="tj-card" style="--i:6;--sc:#d97706">
+        <div class="tj-stripe"></div>
+        <div class="tj-num">07</div>
+        <div class="tj-head">
+          <span class="tj-period">Jul 2020 — Dec 2020</span>
+          <span class="tj-badge tj-badge--y">Strategy</span>
+        </div>
+        <div class="tj-role">L&D Manager · ID · LMS Administrator</div>
+        <div class="tj-org">EMXCEL Travel Solutions &nbsp;·&nbsp; Ahmedabad</div>
+        <div class="tj-insight">Added OD training and ROI evaluation — moving from pure content creation into strategic L&D management.</div>
+        <div class="tj-chips">
+          <span class="tj-chip" style="--j:0">Zing HR LMS</span>
+          <span class="tj-chip" style="--j:1">OD Training</span>
+          <span class="tj-chip" style="--j:2">ROI Evaluation</span>
+        </div>
+      </div>
+
+      <!-- Phase 3: The Build -->
+      <div class="tj-phase tj-phase--yellow" style="transition-delay:0.1s">
+        <span class="tj-phase-tag">Phase 03</span>
+        <span class="tj-phase-name">The Build</span>
+        <span class="tj-phase-years">2021 — 2026</span>
+      </div>
+
+      <div class="tj-card" style="--i:7;--sc:#fbbf0e">
+        <div class="tj-stripe"></div>
+        <div class="tj-num">08</div>
+        <div class="tj-head">
+          <span class="tj-period">May 2021 — Jul 2024</span>
+          <span class="tj-badge tj-badge--y">eLearning Dev</span>
+        </div>
+        <div class="tj-role">Senior Instructional Designer & eLearning Developer</div>
+        <div class="tj-org">Rayden Interactive &nbsp;·&nbsp; Pune</div>
+        <div class="tj-insight">Three years where Storyline stopped being a slide tool and became a development environment. JavaScript, xAPI, complex branching — the technical craft was forged here.</div>
+        <div class="tj-chips">
+          <span class="tj-chip" style="--j:0">Storyline 360</span>
+          <span class="tj-chip" style="--j:1">JavaScript</span>
+          <span class="tj-chip" style="--j:2">SCORM / xAPI</span>
+          <span class="tj-chip" style="--j:3">Branching Scenarios</span>
+        </div>
+      </div>
+
+      <div class="tj-card tj-card--current" style="--i:8;--sc:#151515">
+        <div class="tj-stripe"></div>
+        <div class="tj-num">09</div>
+        <div class="tj-head">
+          <span class="tj-period">Jul 2024 — Mar 2026</span>
+          <span class="tj-badge tj-badge--y">AI + Lead</span>
+        </div>
+        <div class="tj-role">Team Lead — ID & eLearning Development</div>
+        <div class="tj-org">Siemens DISW &nbsp;·&nbsp; Pune</div>
+        <div class="tj-insight">Everything converged. AI personalisation, live LMS API integration, FFmpeg pipeline cutting 8-language localisation to 90 seconds. 15 years of layering, applied at scale with a team.</div>
+        <div class="tj-chips">
+          <span class="tj-chip" style="--j:0">AI Integration</span>
+          <span class="tj-chip" style="--j:1">REST API</span>
+          <span class="tj-chip" style="--j:2">FFmpeg</span>
+          <span class="tj-chip" style="--j:3">xAPI / LRS</span>
+          <span class="tj-chip" style="--j:4">Team Leadership</span>
+        </div>
+      </div>
+
     </div>
 
     <div class="kw-discs">
@@ -1734,17 +1817,19 @@ function dismissBanner() {
 
 // ── JOURNEY TIMELINE ANIMATION ──
 (function(){
-  var spine = document.getElementById('kwTlSpine');
   var journey = document.getElementById('kwJourney');
-  if (!spine || !journey) return;
-  var entries = journey.querySelectorAll('.kw-tl-entry');
-  var done = false;
+  if (!journey) return;
+  var yearbar = document.getElementById('tjYearbar');
+  var phases  = journey.querySelectorAll('.tj-phase');
+  var cards   = journey.querySelectorAll('.tj-card');
+  var triggered = false;
   var obs = new IntersectionObserver(function(recs){
     recs.forEach(function(r){
-      if(r.isIntersecting && !done){
-        done = true;
-        spine.classList.add('kw-tl-go');
-        entries.forEach(function(el){ el.classList.add('kw-tl-vis'); });
+      if(r.isIntersecting && !triggered){
+        triggered = true;
+        if(yearbar) yearbar.classList.add('tj-go');
+        phases.forEach(function(el){ el.classList.add('tj-vis'); });
+        cards.forEach(function(el){ el.classList.add('tj-vis'); });
         obs.disconnect();
       }
     });

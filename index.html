@@ -1762,13 +1762,23 @@ html[data-style-chosen] #view-switcher  { display: none !important; }
 
 /* Mobile */
 @media (max-width: 768px) {
-  #ss-panels { flex-direction: column; }
-  .ss-panel, .ss-panel:hover, .ss-panel:focus-visible { flex: 1; min-height: 50svh; min-height: 50vh; }
+  /* Reflow split panels into clean card buttons on mobile */
+  #ss-panels { flex-direction: column; gap: 0.75rem; padding: 0 1.25rem 1.5rem; justify-content: center; }
+  .ss-panel, .ss-panel:hover, .ss-panel:focus-visible {
+    flex: none !important; min-height: 0 !important;
+    border-radius: 16px; border: 1.5px solid rgba(255,255,255,0.18) !important;
+    padding: 1.4rem 1.5rem !important;
+  }
+  .ss-panel:hover { flex: none !important; }
+  .ss-bg-num { display: none !important; }
+  .ss-panel-inner { margin-top: 0 !important; padding-top: 0 !important; }
+  .ss-enter-btn { opacity: 1 !important; transform: none !important; display: flex !important; }
+  .ss-arrow { display: inline !important; }
   #ss-divider-logo { display: none; }
   #ss-brand { padding: 0 1.25rem; height: 56px; }
-  .ss-brand-tagline { display: none; }
-  .ss-bg-num { font-size: clamp(5rem, 20vw, 9rem); }
-  .sse-word, .ssv-word { font-size: clamp(1.5rem, 7vw, 2.5rem); }
+  .ss-brand-tagline { font-size: 0.7rem; opacity: 0.7; }
+  .sse-word, .ssv-word { font-size: clamp(1.6rem, 7vw, 2.2rem); }
+  .ss-enter-btn { margin-top: 0.65rem; }
 }
 
 /* ════════════════════════════════════════
@@ -2020,7 +2030,7 @@ html[data-style-chosen] #view-switcher  { display: none !important; }
 <!-- ════════════════════════════════════════
      LOADER — runs first visit only
 ════════════════════════════════════════ -->
-<div id="courseLoader" class="cl-overlay">
+<div id="courseLoader" class="cl-overlay skip">
   <div class="cl-screen">
     <div class="cl-header">
       <div class="cl-logo">AT<span>.</span></div>
@@ -2387,7 +2397,7 @@ html[data-style-chosen] #view-switcher  { display: none !important; }
     <div class="tl-header">
       <div class="tl-eyebrow">— 15 years · 9 roles · one direction</div>
       <h2 class="tl-title">The journey that<br>built this <em>skillset.</em></h2>
-      <p class="tl-sub">Started training call centre associates in Ahmedabad in 2010. Every role since has added a layer — instructional design, then eLearning dev, then LMS admin, then JavaScript, then AI. Drag the timeline or click any role to explore.</p>
+      <p class="tl-sub">Started in L&D in Ahmedabad in 2010. Every role since has added a layer — instructional design, then eLearning dev, then LMS admin, then JavaScript, then AI. Drag the timeline or click any role to explore.</p>
     </div>
     <div class="tl-scrubber-wrap">
       <div class="tl-year-start">2010</div>
@@ -2540,7 +2550,7 @@ html[data-style-chosen] #view-switcher  { display: none !important; }
         <div class="kw-stat-icon">⏱</div>
         <div class="kw-stat-label">Years in L&amp;D</div>
         <div class="kw-stat-value">15+</div>
-        <div class="kw-stat-desc">BPO trainer to systems-level eLearning architect.</div>
+        <div class="kw-stat-desc">L&D practitioner turned systems-level eLearning architect.</div>
       </div>
       <div class="kw-stat">
         <div class="kw-stat-icon">🎭</div>
@@ -3497,7 +3507,7 @@ else foInitPills();
 
 // Career timeline
 const TL_ROLES=[
-  {period:'Jul 2010 – Sep 2014',startYear:2010.5,role:'Floor & Product Trainer',company:'Effective Teleservices Pvt. Ltd.',location:'Ahmedabad, Gujarat',skills:['Training Design','TNA/TNI','Facilitation','Performance Mgmt'],highlight:'Where it all started — training call centre associates from scratch and learning what makes people actually retain what they hear.',desc:'Managed batches of 5–20 new hires and tenured associates through incubation and on-the-job training. Identified training needs, conducted refresher sessions, and handled MIS and performance reporting.'},
+  {period:'Jul 2010 – Sep 2014',startYear:2010.5,role:'Floor & Product Trainer',company:'Effective Teleservices Pvt. Ltd.',location:'Ahmedabad, Gujarat',skills:['Training Design','TNA/TNI','Facilitation','Performance Mgmt'],highlight:'Where it all started — training new employees from scratch and learning what actually makes people retain what they hear.',desc:'Managed batches of 5–20 new hires and tenured associates through incubation and on-the-job training. Identified training needs, conducted refresher sessions, and handled MIS and performance reporting.'},
   {period:'Sep 2014 – Feb 2015',startYear:2014.75,role:'Senior Technical Support Engineer',company:'Excellence Infocom Pvt. Ltd.',location:'Ahmedabad, Gujarat',skills:['Documentation','Enterprise Support','Knowledge Base'],highlight:'A short but formative detour into enterprise tech support — where I learned that clear documentation is a form of teaching.',desc:'Point of contact for enterprise customers of HHAExchange. Created support documentation that empowered users to self-serve.'},
   {period:'Mar 2015 – Jul 2016',startYear:2015.25,role:'Sr. Tech Support Engineer & Product Trainer',company:'Asite Solutions Pvt. Ltd.',location:'Ahmedabad, Gujarat',skills:['Adobe Captivate','Product Simulation','TNA','UX Design'],highlight:'First real encounter with authoring tools — built product simulations in Adobe Captivate and crossed into instructional design territory properly.',desc:'Created product simulation videos for Asite\'s suite using Adobe Captivate. Collaborated with developers and QA teams to design training that matched how the product actually worked.'},
   {period:'Jul 2016 – May 2018',startYear:2016.5,role:'Product Trainer & Sub-Editor',company:'Astro Vaastu Research Center',location:'Ahmedabad, Gujarat',skills:['Instructional Design','CRM Training','Mobile App Training','Curriculum Design'],highlight:'Took on the interim Director of Instructional Design role — a significant jump in responsibility that forced rapid growth in ID theory and leadership.',desc:'Trained real estate dealers and brokers on CRM tools and a new Android/iOS app. First leadership role in ID.'},

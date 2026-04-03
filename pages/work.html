@@ -314,7 +314,20 @@
     .kw-project-link { font-family: 'Figtree',sans-serif; font-size: 0.8rem; font-weight: 600; color: #151515; text-decoration: none; display: inline-flex; align-items: center; gap: 0.3rem; margin-top: auto; }
     .kw-project-link:hover { opacity: 0.65; }
     @media(max-width:900px) { .kw-work-grid { grid-template-columns: repeat(2,1fr); } }
-    @media(max-width:600px) { .kw-work-grid { grid-template-columns: 1fr; } .kw-page { padding: 1.25rem 1rem; gap: 1.25rem; } .kw-page-hero { padding: 1.5rem; } .kw-cta-strip { padding: 1.5rem; flex-direction: column; align-items: stretch; } }
+    @media(max-width:600px) {
+      .kw-work-grid { grid-template-columns: 1fr; }
+      .kw-work-grid .kw-project-card:nth-child(4) { grid-column: 1; }
+      .kw-page { padding: 1.25rem 1rem; gap: 1.25rem; }
+      .kw-page-hero { padding: 1.5rem; }
+      .kw-cta-strip { padding: 1.5rem; flex-direction: column; align-items: stretch; }
+      .kw-cta-strip-headline { font-size: 1.3rem; }
+      .kw-page-title { font-size: clamp(1.7rem,6vw,2.5rem); }
+    }
+    @media(max-width:480px) {
+      .kw-project-thumb { height: 130px; font-size: 2rem; }
+      .kw-page-hero { padding: 1.25rem; }
+      .kw-btn { padding: 0.6rem 1.2rem; font-size: 0.82rem; }
+    }
     @media(max-width:900px) {
       #td-nav .n-links { display: none !important; }
       #td-nav .n-ham { display: flex !important; }
