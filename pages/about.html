@@ -1695,7 +1695,7 @@ nav, .site-nav { position: relative !important; }
       <div class="kw-roles-label">What I'm Looking For</div>
       <h3 class="kw-roles-title">Open to opportunities in:</h3>
       <div class="kw-roles-list">
-        <span class="kw-tag kw-tag--yellow kw-tag--pill">Full-time Senior LET</span>
+        <span class="kw-tag kw-tag--yellow kw-tag--pill">Full-time</span>
         <span class="kw-tag kw-tag--yellow kw-tag--pill">Contract engagements</span>
         <span class="kw-tag kw-tag--yellow kw-tag--pill">Remote-first</span>
         <span class="kw-tag kw-tag--yellow kw-tag--pill">Technical L&D scope</span>
@@ -1813,25 +1813,65 @@ function dismissBanner() {
   sessionStorage.setItem('ub_dismissed', '1');
 }
 
-// ── JOURNEY TIMELINE ANIMATION ──
+// ── JOURNEY TIMELINE ANIMATION (sequential) ──
 (function(){
   var journey = document.getElementById('kwJourney');
   if (!journey) return;
-  var yearbar = document.getElementById('tjYearbar');
-  var phases  = journey.querySelectorAll('.tj-phase');
-  var cards   = journey.querySelectorAll('.tj-card');
+  var fill    = journey.querySelector('.tj-yearbar-fill');
+  var phases  = Array.from(journey.querySelectorAll('.tj-phase'));
+  var cards   = Array.from(journey.querySelectorAll('.tj-card'));
   var triggered = false;
-  var obs = new IntersectionObserver(function(recs){
-    recs.forEach(function(r){
-      if(r.isIntersecting && !triggered){
+
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    if (fill) { fill.style.transition = 'none'; fill.style.width = '100%'; }
+    phases.forEach(function(el){ el.classList.add('tj-vis'); });
+    cards.forEach(function(el){ el.style.setProperty('--i','0'); el.classList.add('tj-vis'); });
+    return;
+  }
+
+  var seq = [
+    { el: phases[0], pct: 0,   lineMs: 0   },
+    { el: cards[0],  pct: 26,  lineMs: 360 },
+    { el: cards[1],  pct: 31,  lineMs: 160 },
+    { el: cards[2],  pct: 41,  lineMs: 240 },
+    { el: cards[3],  pct: 52,  lineMs: 260 },
+    { el: phases[1], pct: 52,  lineMs: 0   },
+    { el: cards[4],  pct: 59,  lineMs: 200 },
+    { el: cards[5],  pct: 65,  lineMs: 180 },
+    { el: cards[6],  pct: 69,  lineMs: 140 },
+    { el: phases[2], pct: 69,  lineMs: 0   },
+    { el: cards[7],  pct: 90,  lineMs: 320 },
+    { el: cards[8],  pct: 100, lineMs: 220 },
+  ];
+
+  function runStep(i) {
+    if (i >= seq.length) return;
+    var s = seq[i];
+    if (fill) {
+      fill.style.transition = s.lineMs > 0
+        ? 'width ' + s.lineMs + 'ms cubic-bezier(0.4,0,0.2,1)'
+        : 'none';
+      fill.style.width = s.pct + '%';
+    }
+    setTimeout(function() {
+      s.el.style.transitionDelay = '0ms';
+      s.el.style.setProperty('--i', '0');
+      s.el.classList.add('tj-vis');
+      setTimeout(function(){ runStep(i + 1); }, 90);
+    }, s.lineMs + 20);
+  }
+
+  var obs = new IntersectionObserver(function(recs) {
+    recs.forEach(function(r) {
+      if (r.isIntersecting && !triggered) {
         triggered = true;
-        if(yearbar) yearbar.classList.add('tj-go');
-        phases.forEach(function(el){ el.classList.add('tj-vis'); });
-        cards.forEach(function(el){ el.classList.add('tj-vis'); });
         obs.disconnect();
+        if (fill) { fill.style.transition = 'none'; fill.style.width = '0%'; }
+        setTimeout(function(){ runStep(0); }, 80);
       }
     });
-  }, {threshold: 0.05});
+  }, { threshold: 0.05 });
+
   obs.observe(journey);
 })();
 
