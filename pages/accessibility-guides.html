@@ -326,7 +326,8 @@ function switchView(view) {
 (function() {
   const params = new URLSearchParams(window.location.search);
   const initView = params.get('view') === 'visual' ? 'visual' : 'editorial';
-  document.getElementById('view-' + initView).classList.add('view-active');
+  document.getElementById('view-editorial').classList.toggle('view-active', initView === 'editorial');
+  document.getElementById('view-visual').classList.toggle('view-active', initView === 'visual');
   currentView = initView;
   document.getElementById('btn-' + initView).classList.add('vsw-active');
   if (initView === 'visual') document.getElementById('td-nav').style.display = 'flex';
