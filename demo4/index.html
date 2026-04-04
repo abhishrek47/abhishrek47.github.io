@@ -1283,7 +1283,7 @@ code { padding: 1px 5px; }
             </div>
           </div>
           <div style="display:flex;gap:10px;">
-            <button class="btn btn-primary" id="next-btn-1" onclick="goCS(2)" style="display:none;">Next →</button>
+            <button class="btn btn-primary" id="next-btn-1" onclick="goCS(2)" style="opacity:0.4;pointer-events:none;" disabled>Next →</button>
             <button class="btn" onclick="skipVideo()">⏭ Skip to end</button>
           </div>
         </div>
@@ -1298,7 +1298,7 @@ code { padding: 1px 5px; }
           <div class="quiz-option" onclick="answerQuiz(this,false)"><span class="quiz-letter">C</span>Daniel Kahneman, Princeton</div>
           <div class="quiz-option" onclick="answerQuiz(this,false)"><span class="quiz-letter">D</span>Edgar Schein, MIT</div>
           <div style="margin-top:1rem;">
-            <button class="btn btn-primary" id="next-btn-2" onclick="goCS(3)" style="display:none;">Next →</button>
+            <button class="btn btn-primary" id="next-btn-2" onclick="goCS(3)" style="opacity:0.4;pointer-events:none;" disabled>Next →</button>
             <button class="btn btn-ghost" onclick="goCS(1)">← Back</button>
           </div>
         </div>
@@ -1315,7 +1315,7 @@ code { padding: 1px 5px; }
             <div class="sort-item" data-correct="unsafe" onclick="tagItem(this,'unsafe')">Dismissing ideas</div>
           </div>
           <div style="margin-top:1rem;">
-            <button class="btn btn-primary" id="next-btn-3" onclick="goCS(4)" style="display:none;">Next →</button>
+            <button class="btn btn-primary" id="next-btn-3" onclick="goCS(4)" style="opacity:0.4;pointer-events:none;" disabled>Next →</button>
             <button class="btn btn-ghost" onclick="goCS(2)">← Back</button>
           </div>
         </div>
@@ -1510,7 +1510,7 @@ function playVideo() {
       videoPlaying = false;
       document.getElementById('play-btn').textContent = '✓';
       document.getElementById('video-status').textContent = 'Complete';
-      document.getElementById('next-btn-1').style.display = 'inline-flex';
+      _enableBtn('next-btn-1');
       fireStatement('completed', 'Video -- Psychological Safety Intro', { completion: true, duration: 'PT2M30S' });
     }
   }, 80);
@@ -1523,7 +1523,7 @@ function skipVideo() {
   document.getElementById('play-btn').textContent = '✓';
   document.getElementById('video-status').textContent = 'Skipped';
   videoPlaying = false;
-  document.getElementById('next-btn-1').style.display = 'inline-flex';
+  _enableBtn('next-btn-1');
   fireStatement('skipped', 'Video -- Psychological Safety Intro');
 }
 
@@ -1536,7 +1536,7 @@ function answerQuiz(el, correct) {
     success: correct,
     score: { scaled: correct ? 1.0 : 0.0, raw: correct ? 1 : 0, max: 1 }
   });
-  document.getElementById('next-btn-2').style.display = 'inline-flex';
+  _enableBtn('next-btn-2');
 }
 
 function tagItem(el, tag) {
@@ -1552,7 +1552,7 @@ function tagItem(el, tag) {
   if (sortedCount >= 4) {
     setTimeout(() => {
       fireStatement('completed', 'Sort Activity -- Behaviours', { completion: true });
-      document.getElementById('next-btn-3').style.display = 'inline-flex';
+      _enableBtn('next-btn-3');
     }, 400);
   }
 }
@@ -1615,9 +1615,9 @@ function restartDemo() {
   document.getElementById('video-fill').style.width = '0%';
   document.getElementById('play-btn').textContent = '▶';
   document.getElementById('video-status').textContent = 'Click Play to begin';
-  document.getElementById('next-btn-1').style.display = 'none';
-  document.getElementById('next-btn-2').style.display = 'none';
-  document.getElementById('next-btn-3').style.display = 'none';
+  _disableBtn('next-btn-1');
+  _disableBtn('next-btn-2');
+  _disableBtn('next-btn-3');
   document.getElementById('reflection-text').value = '';
   document.getElementById('ref-count').textContent = '0';
   document.querySelectorAll('.quiz-option').forEach(o => { o.className = 'quiz-option'; o.onclick = function(){ answerQuiz(this, ['A','B','C','D'].indexOf(this.querySelector('.quiz-letter').textContent) === 1); }; });
