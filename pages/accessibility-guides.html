@@ -560,14 +560,23 @@
     /* ── BUNDLE CARD ── */
     .kw-bundle-card { background: #fff; border: 1.5px solid #151515; border-radius: 16px; padding: 2rem; display: flex; flex-direction: column; gap: 1.5rem; }
     .kw-bundle-trust { display: flex; gap: 0.5rem; flex-wrap: wrap; }
-    .kw-mini-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.75rem; }
-    .kw-mini-card { background: #f7f7f7; border: 1px solid #e0e0e0; border-radius: 12px; padding: 1.1rem 1.25rem; display: flex; flex-direction: column; gap: 0.3rem; }
-    .kw-mini-num { font-family: 'JetBrains Mono',monospace; font-size: 0.6rem; color: #bbb; letter-spacing: 0.08em; }
-    .kw-mini-icon { font-size: 1.4rem; margin: 0.2rem 0; }
-    .kw-mini-title { font-family: 'Outfit',sans-serif; font-size: 0.92rem; font-weight: 700; color: #151515; }
-    .kw-mini-sub { font-family: 'Figtree',sans-serif; font-size: 0.75rem; color: #888; line-height: 1.4; }
+    /* Numbered list inside bundle card */
+    .kw-mini-list { border: 1px solid #e0e0e0; border-radius: 10px; overflow: hidden; }
+    .kw-mini-row { display: flex; align-items: center; gap: 0.9rem; padding: 0.85rem 1.1rem; border-bottom: 1px solid #e8e8e8; background: #fff; transition: background 0.12s; }
+    .kw-mini-row:last-child { border-bottom: none; }
+    .kw-mini-row:hover { background: #fffdf4; }
+    .kw-mini-num { font-family: 'JetBrains Mono',monospace; font-size: 0.6rem; color: #ccc; letter-spacing: 0.08em; flex-shrink: 0; width: 16px; }
+    .kw-mini-icon-sm { font-size: 1.1rem; flex-shrink: 0; }
+    .kw-mini-info { display: flex; align-items: baseline; gap: 0.6rem; flex: 1; flex-wrap: wrap; }
+    .kw-mini-title { font-family: 'Outfit',sans-serif; font-size: 0.88rem; font-weight: 700; color: #151515; white-space: nowrap; }
+    .kw-mini-sub { font-family: 'Figtree',sans-serif; font-size: 0.75rem; color: #999; }
     .kw-bundle-cta { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; border-top: 1.5px solid #e8e8e8; padding-top: 1.25rem; }
     .kw-bundle-cta-meta { font-family: 'Figtree',sans-serif; font-size: 0.78rem; color: #888; }
+
+    /* ── CRAFT SECTION (heading + expandable panels as one unit) ── */
+    .kw-craft-section { background: #fff; border: 1.5px solid #151515; border-radius: 16px; overflow: hidden; }
+    .kw-craft-heading { padding: 2rem 2rem 1.5rem; }
+    .kw-expand-stack--inset { border: none; border-radius: 0; border-top: 1.5px solid #151515; }
 
     /* ── BIG SECTION HEADING ── */
     .kw-big-heading-block { padding: 0.5rem 0; }
@@ -887,30 +896,38 @@
         <div class="kw-page-eyebrow">What's inside</div>
         <h2 class="kw-section-heading">Four guides. Four real problems.</h2>
       </div>
-      <div class="kw-mini-grid">
-        <div class="kw-mini-card">
-          <div class="kw-mini-num">01</div>
-          <div class="kw-mini-icon">🎯</div>
-          <div class="kw-mini-title">Focus Order</div>
-          <div class="kw-mini-sub">Tab navigation that makes sense</div>
+      <div class="kw-mini-list">
+        <div class="kw-mini-row">
+          <span class="kw-mini-num">01</span>
+          <span class="kw-mini-icon-sm">🎯</span>
+          <div class="kw-mini-info">
+            <span class="kw-mini-title">Focus Order</span>
+            <span class="kw-mini-sub">Tab navigation that makes sense</span>
+          </div>
         </div>
-        <div class="kw-mini-card">
-          <div class="kw-mini-num">02</div>
-          <div class="kw-mini-icon">🎨</div>
-          <div class="kw-mini-title">Colour Contrast</div>
-          <div class="kw-mini-sub">4.5:1 minimum. Most templates fail.</div>
+        <div class="kw-mini-row">
+          <span class="kw-mini-num">02</span>
+          <span class="kw-mini-icon-sm">🎨</span>
+          <div class="kw-mini-info">
+            <span class="kw-mini-title">Colour Contrast</span>
+            <span class="kw-mini-sub">4.5:1 minimum. Most templates fail.</span>
+          </div>
         </div>
-        <div class="kw-mini-card">
-          <div class="kw-mini-num">03</div>
-          <div class="kw-mini-icon">🖼️</div>
-          <div class="kw-mini-title">Alt Text Strategy</div>
-          <div class="kw-mini-sub">What screen readers actually say</div>
+        <div class="kw-mini-row">
+          <span class="kw-mini-num">03</span>
+          <span class="kw-mini-icon-sm">🖼️</span>
+          <div class="kw-mini-info">
+            <span class="kw-mini-title">Alt Text Strategy</span>
+            <span class="kw-mini-sub">What screen readers actually say</span>
+          </div>
         </div>
-        <div class="kw-mini-card">
-          <div class="kw-mini-num">04</div>
-          <div class="kw-mini-icon">⌨️</div>
-          <div class="kw-mini-title">Keyboard Navigation</div>
-          <div class="kw-mini-sub">Mouse-only by default. Not anymore.</div>
+        <div class="kw-mini-row">
+          <span class="kw-mini-num">04</span>
+          <span class="kw-mini-icon-sm">⌨️</span>
+          <div class="kw-mini-info">
+            <span class="kw-mini-title">Keyboard Navigation</span>
+            <span class="kw-mini-sub">Mouse-only by default. Not anymore.</span>
+          </div>
         </div>
       </div>
       <div class="kw-bundle-cta">
@@ -919,14 +936,14 @@
       </div>
     </div>
 
-    <!-- BIG SECTION HEADING -->
-    <div class="kw-big-heading-block">
-      <h2 class="kw-big-heading">Accessibility isn't a checklist.<br>It's a craft.</h2>
-      <p class="kw-big-heading-sub">Each guide goes deep on one real problem Storyline doesn't solve. Expand any section below to see exactly what's inside.</p>
-    </div>
+    <!-- CRAFT SECTION: heading + 4 expandable guides in one bordered unit -->
+    <div class="kw-craft-section">
+      <div class="kw-craft-heading">
+        <h2 class="kw-big-heading">Accessibility isn't a checklist.<br>It's a craft.</h2>
+        <p class="kw-big-heading-sub">Each guide goes deep on one real problem Storyline doesn't solve. Expand any entry to see what's inside.</p>
+      </div>
 
-    <!-- 4 EXPANDABLE SECTIONS with coloured rectangle toggles -->
-    <div class="kw-expand-stack">
+    <div class="kw-expand-stack kw-expand-stack--inset">
 
       <!-- 01 Focus Order — yellow toggle -->
       <div class="kw-expand-section">
@@ -1083,6 +1100,7 @@
       </div>
 
     </div><!-- /.kw-expand-stack -->
+    </div><!-- /.kw-craft-section -->
 
     <!-- WHO IT'S FOR -->
     <div class="kw-audience-card">
