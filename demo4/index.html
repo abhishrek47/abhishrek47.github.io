@@ -1563,12 +1563,14 @@ function tagItem(el, tag) {
     response: tag,
     success: tag === correct
   });
-  sortedCount++;
-  if (sortedCount >= 4) {
-    setTimeout(() => {
-      fireStatement('completed', 'Sort Activity -- Behaviours', { completion: true });
-      _enableBtn('next-btn-3');
-    }, 400);
+  if (tag === 'safe') {
+    sortedCount++;
+    if (sortedCount >= 2) {
+      setTimeout(() => {
+        fireStatement('completed', 'Sort Activity -- Behaviours', { completion: true });
+        _enableBtn('next-btn-3');
+      }, 400);
+    }
   }
 }
 
