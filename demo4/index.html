@@ -1480,6 +1480,21 @@ function setStepPill(n) {
   }
 }
 
+function _enableBtn(id) {
+  var b = document.getElementById(id);
+  if (!b) return;
+  b.style.opacity = '';
+  b.style.pointerEvents = '';
+  b.removeAttribute('disabled');
+}
+function _disableBtn(id) {
+  var b = document.getElementById(id);
+  if (!b) return;
+  b.style.opacity = '0.4';
+  b.style.pointerEvents = 'none';
+  b.setAttribute('disabled', '');
+}
+
 function goCS(n) {
   document.querySelectorAll('.course-screen').forEach(s => s.classList.remove('active'));
   document.getElementById('cs-' + n).classList.add('active');
