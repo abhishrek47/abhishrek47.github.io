@@ -1482,6 +1482,7 @@ function switchView(view) {
   document.getElementById('view-visual').classList.toggle('view-active', view === 'visual');
   document.getElementById('td-nav').style.display = view === 'visual' ? 'flex' : 'none';
   document.body.classList.toggle('visual-mode', view === 'visual');
+  document.documentElement.setAttribute('data-at-style', view);
   document.getElementById('btn-editorial').classList.toggle('vsw-active', view === 'editorial');
   document.getElementById('btn-visual').classList.toggle('vsw-active', view === 'visual');
   const url = view === 'visual' ? '?view=visual' : window.location.pathname;
