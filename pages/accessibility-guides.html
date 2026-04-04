@@ -471,6 +471,102 @@
     @media(max-width:900px) { .kw-guides-grid { grid-template-columns: 1fr; } }
     @media(max-width:600px) { .kw-page { padding: 1.25rem 1rem; gap: 1.25rem; } .kw-page-hero { padding: 1.5rem; } }
 
+    /* ── HERO BUTTONS ── */
+    .kw-hero-btns { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 1.25rem; }
+    .kw-btn-primary { font-family: 'Outfit',sans-serif; font-size: 0.9rem; font-weight: 700; background: #fbbf0e; color: #151515; border: 1.5px solid #151515; border-radius: 8px; padding: 0.7rem 1.5rem; text-decoration: none; transition: background 0.15s, box-shadow 0.15s; white-space: nowrap; }
+    .kw-btn-primary:hover { background: #f5b400; box-shadow: 3px 3px 0 #151515; }
+    .kw-btn-secondary { font-family: 'Outfit',sans-serif; font-size: 0.9rem; font-weight: 600; background: #fff; color: #151515; border: 1.5px solid #151515; border-radius: 8px; padding: 0.7rem 1.5rem; text-decoration: none; transition: background 0.15s; white-space: nowrap; }
+    .kw-btn-secondary:hover { background: #f7f7f7; }
+    .kw-btn-dark { font-family: 'Outfit',sans-serif; font-size: 0.88rem; font-weight: 700; background: #151515; color: #fff; border: 1.5px solid #151515; border-radius: 8px; padding: 0.65rem 1.35rem; text-decoration: none; transition: background 0.15s; white-space: nowrap; flex-shrink: 0; }
+    .kw-btn-dark:hover { background: #2a2a2a; }
+    .kw-btn-lg { font-size: 1.05rem; padding: 0.85rem 2rem; }
+
+    /* ── TRUST STRIP ── */
+    .kw-trust-strip { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    .kw-trust-item { font-family: 'Figtree',sans-serif; font-size: 0.82rem; font-weight: 500; color: #151515; background: #fff; border: 1.5px solid #151515; border-radius: 100px; padding: 0.35rem 0.85rem; display: flex; align-items: center; gap: 0.4rem; }
+    .kw-trust-check { color: #2a8a4e; font-weight: 700; }
+
+    /* ── SECTION HEADING ── */
+    .kw-section-heading { font-family: 'Outfit',sans-serif; font-size: clamp(1.5rem,3vw,2.2rem); font-weight: 700; color: #151515; margin: 0.25rem 0 0; letter-spacing: -0.02em; }
+
+    /* ── DETAIL GUIDE CARDS ── */
+    .kw-guide-detail-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+    .kw-guide-detail-card { background: #fff; border: 1.5px solid #151515; border-radius: 16px; padding: 1.5rem; display: flex; flex-direction: column; gap: 1rem; transition: box-shadow 0.18s; }
+    .kw-guide-detail-card:hover { box-shadow: 4px 4px 0 #151515; }
+    .kw-gdc-header { display: flex; align-items: flex-start; gap: 0.75rem; }
+    .kw-gdc-num { font-family: 'JetBrains Mono',monospace; font-size: 0.65rem; font-weight: 500; color: #999; letter-spacing: 0.08em; padding-top: 2px; flex-shrink: 0; }
+    .kw-gdc-icon { font-size: 1.5rem; flex-shrink: 0; }
+    .kw-gdc-titles { flex: 1; }
+    .kw-gdc-title { font-family: 'Outfit',sans-serif; font-size: 1.05rem; font-weight: 700; color: #151515; letter-spacing: -0.01em; margin-bottom: 2px; }
+    .kw-gdc-sub { font-family: 'Figtree',sans-serif; font-size: 0.72rem; color: #888; }
+    .kw-gdc-desc { font-family: 'Figtree',sans-serif; font-size: 0.85rem; color: #444; line-height: 1.65; margin: 0; }
+    .kw-gdc-what { background: #f7f7f7; border-radius: 10px; padding: 0.85rem 1rem; }
+    .kw-gdc-what-label { font-family: 'Outfit',sans-serif; font-size: 0.62rem; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.6rem; }
+    .kw-gdc-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.4rem; }
+    .kw-gdc-list li { font-family: 'Figtree',sans-serif; font-size: 0.8rem; color: #444; line-height: 1.5; padding-left: 1.1rem; position: relative; }
+    .kw-gdc-list li::before { content: '—'; position: absolute; left: 0; color: #fbbf0e; font-weight: 700; }
+
+    /* Focus order demo */
+    .kw-gdc-focus-demo { border-top: 1px solid #e8e8e8; padding-top: 0.85rem; }
+    .kw-gdc-demo-label { font-family: 'Outfit',sans-serif; font-size: 0.62rem; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.6rem; }
+    .kw-gdc-pills-row { display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap; }
+    .kw-gdc-badge { font-family: 'Figtree',sans-serif; font-size: 0.68rem; font-weight: 600; padding: 3px 9px; border-radius: 100px; }
+    .kw-gdc-fail { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); color: #dc2626; }
+    .kw-gdc-pass { background: rgba(42,138,78,0.1); border: 1px solid rgba(42,138,78,0.3); color: #2a8a4e; }
+    .kw-gdc-arrow { font-size: 0.9rem; color: #aaa; padding: 0 0.2rem; }
+
+    /* Contrast table */
+    .kw-gdc-contrast-table { border: 1.5px solid #e0e0e0; border-radius: 10px; overflow: hidden; font-family: 'Figtree',sans-serif; font-size: 0.78rem; }
+    .kw-gdc-contrast-row { display: grid; grid-template-columns: 1fr auto auto; gap: 0.5rem; padding: 0.55rem 0.85rem; border-bottom: 1px solid #e0e0e0; align-items: center; }
+    .kw-gdc-contrast-row:last-child { border-bottom: none; }
+    .kw-gdc-contrast-header { font-family: 'Outfit',sans-serif; font-size: 0.6rem; font-weight: 700; color: #999; text-transform: uppercase; letter-spacing: 0.07em; background: #f7f7f7; }
+    .kw-gdc-fail-badge { font-family: 'Outfit',monospace; font-size: 0.65rem; font-weight: 700; background: rgba(239,68,68,0.12); color: #dc2626; padding: 2px 7px; border-radius: 4px; text-align: center; white-space: nowrap; }
+    .kw-gdc-pass-badge { font-family: 'Outfit',monospace; font-size: 0.65rem; font-weight: 700; background: rgba(42,138,78,0.12); color: #2a8a4e; padding: 2px 7px; border-radius: 4px; text-align: center; white-space: nowrap; }
+
+    /* Screen reader demo */
+    .kw-gdc-sr-demo { border-top: 1px solid #e8e8e8; padding-top: 0.85rem; display: flex; flex-direction: column; gap: 0.5rem; }
+    .kw-gdc-sr-row { display: flex; align-items: flex-start; gap: 0.6rem; padding: 0.5rem 0.75rem; border-radius: 8px; font-size: 0.78rem; }
+    .kw-gdc-sr-fail { background: rgba(239,68,68,0.07); border: 1px solid rgba(239,68,68,0.2); }
+    .kw-gdc-sr-pass { background: rgba(42,138,78,0.07); border: 1px solid rgba(42,138,78,0.2); }
+    .kw-gdc-sr-label { font-family: 'Outfit',sans-serif; font-size: 0.62rem; font-weight: 700; white-space: nowrap; flex-shrink: 0; padding-top: 1px; }
+    .kw-gdc-sr-fail .kw-gdc-sr-label { color: #dc2626; }
+    .kw-gdc-sr-pass .kw-gdc-sr-label { color: #2a8a4e; }
+    .kw-gdc-sr-row code { font-family: 'JetBrains Mono',monospace; font-size: 0.72rem; color: #151515; background: rgba(21,21,21,0.06); padding: 2px 6px; border-radius: 4px; line-height: 1.5; }
+
+    /* Keyboard shortcut demo */
+    .kw-gdc-kb-shortcuts { border-top: 1px solid #e8e8e8; padding-top: 0.85rem; display: flex; flex-direction: column; gap: 0.4rem; }
+    .kw-gdc-kb-row { display: flex; align-items: center; gap: 0.75rem; font-family: 'Figtree',sans-serif; font-size: 0.78rem; color: #555; }
+    .kw-gdc-kb-row kbd { font-family: 'JetBrains Mono',monospace; font-size: 0.68rem; background: #f0f0f0; border: 1px solid #ccc; border-radius: 4px; padding: 2px 7px; color: #151515; box-shadow: 0 1px 0 #bbb; white-space: nowrap; }
+
+    /* Who it's for */
+    .kw-audience-card { background: #151515; border-radius: 16px; padding: 2rem; display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: start; }
+    .kw-audience-title { font-family: 'Outfit',sans-serif; font-size: 1.4rem; font-weight: 700; color: #fff; margin: 0.25rem 0 0.75rem; letter-spacing: -0.02em; }
+    .kw-audience-desc { font-family: 'Figtree',sans-serif; font-size: 0.85rem; color: rgba(255,255,255,0.65); line-height: 1.65; margin: 0; }
+    .kw-audience-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.65rem; }
+    .kw-audience-list li { font-family: 'Figtree',sans-serif; font-size: 0.88rem; color: rgba(255,255,255,0.85); display: flex; align-items: flex-start; gap: 0.6rem; line-height: 1.4; }
+    .kw-check { color: #fbbf0e; font-weight: 700; flex-shrink: 0; }
+
+    /* Demo callout */
+    .kw-demo-callout { background: #fbbf0e; border: 1.5px solid #151515; border-radius: 16px; padding: 1.5rem 1.75rem; display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; flex-wrap: wrap; }
+    .kw-demo-callout-eyebrow { font-family: 'Outfit',sans-serif; font-size: 0.65rem; font-weight: 700; color: rgba(21,21,21,0.6); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.4rem; }
+    .kw-demo-callout-text { font-family: 'Figtree',sans-serif; font-size: 0.88rem; color: #151515; line-height: 1.6; max-width: 520px; }
+
+    /* CTA block */
+    .kw-cta-block { background: #fff; border: 1.5px solid #151515; border-radius: 16px; padding: 2.5rem; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 0.75rem; }
+    .kw-cta-title { font-family: 'Outfit',sans-serif; font-size: clamp(1.5rem,3vw,2.2rem); font-weight: 700; color: #151515; letter-spacing: -0.02em; margin: 0; }
+    .kw-cta-sub { font-family: 'Figtree',sans-serif; font-size: 0.88rem; color: #888; margin: 0 0 0.5rem; }
+    .kw-cta-btns { display: flex; gap: 0.75rem; flex-wrap: wrap; justify-content: center; }
+
+    @media(max-width:900px) {
+      .kw-guide-detail-grid { grid-template-columns: 1fr; }
+      .kw-audience-card { grid-template-columns: 1fr; gap: 1.25rem; }
+    }
+    @media(max-width:600px) {
+      .kw-page { padding: 1.25rem 1rem; gap: 1.25rem; }
+      .kw-page-hero { padding: 1.5rem; }
+      .kw-demo-callout { flex-direction: column; align-items: flex-start; }
+    }
+
     /* ── NAV (editorial) ── */
     nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; padding: 1.2rem 4rem; background: rgba(245,242,235,0.97); backdrop-filter: blur(8px); border-bottom: 1px solid #d4cfc6; }
     .nav-logo { font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; font-weight: 500; letter-spacing: 0.05em; color: #0f0f0f; text-decoration: none; }
@@ -720,53 +816,193 @@
 
 <div id="view-visual">
   <div class="kw-page">
+
+    <!-- HERO -->
     <div class="kw-page-hero">
-      <div class="kw-page-eyebrow">Accessibility</div>
+      <div class="kw-page-eyebrow">♿ Accessibility Guides</div>
       <h1 class="kw-page-title">WCAG guides for Storyline developers</h1>
-      <p class="kw-page-sub">Practical, implementation-focused guides for WCAG 2.1 AA compliance. Focus order, color contrast, alt text, keyboard navigation — everything Storyline developers need.</p>
+      <p class="kw-page-sub">Four practical guides covering the accessibility gaps Storyline doesn't solve out of the box. Focus order, colour contrast, alt text, keyboard navigation. Not theory. Working solutions you can drop into your next project.</p>
+      <div class="kw-hero-btns">
+        <a href="https://abhishektrivedi.gumroad.com/" target="_blank" rel="noopener" class="kw-btn-primary">Get the Guides →</a>
+        <a href="../index.html?view=visual" class="kw-btn-secondary">Try live demos ↓</a>
+      </div>
     </div>
 
-    <div class="kw-guides-grid">
-      <div class="kw-guide-card">
-        <div class="kw-guide-icon">🎯</div>
-        <h3 class="kw-guide-title">Focus Order & Keyboard Navigation</h3>
-        <p class="kw-guide-desc">How to manage tab order, avoid keyboard traps, and ensure all interactive elements are keyboard accessible in Storyline.</p>
-        <a href="#" class="kw-guide-link">Read guide →</a>
+    <!-- TRUST STRIP -->
+    <div class="kw-trust-strip">
+      <div class="kw-trust-item"><span class="kw-trust-check">✓</span> WCAG 2.1 AA standard</div>
+      <div class="kw-trust-item"><span class="kw-trust-check">✓</span> Storyline-specific fixes</div>
+      <div class="kw-trust-item"><span class="kw-trust-check">✓</span> PDF · Instant download</div>
+      <div class="kw-trust-item"><span class="kw-trust-check">✓</span> No basics, no filler</div>
+    </div>
+
+    <!-- SECTION HEADING -->
+    <div class="kw-page-hero" style="padding: 1.5rem 2rem;">
+      <div class="kw-page-eyebrow">What's inside</div>
+      <h2 class="kw-section-heading">Four guides. Four real problems.</h2>
+    </div>
+
+    <!-- 4 DETAIL GUIDE CARDS -->
+    <div class="kw-guide-detail-grid">
+
+      <!-- 01 Focus Order -->
+      <div class="kw-guide-detail-card">
+        <div class="kw-gdc-header">
+          <div class="kw-gdc-num">01</div>
+          <div class="kw-gdc-icon">🎯</div>
+          <div class="kw-gdc-titles">
+            <div class="kw-gdc-title">Focus Order</div>
+            <div class="kw-gdc-sub">Tab navigation in Storyline 360</div>
+          </div>
+        </div>
+        <p class="kw-gdc-desc">Storyline sets tab order by object creation sequence — not reading order. This guide shows how to override it and build predictable, logical focus flows that keyboard users can actually navigate.</p>
+        <div class="kw-gdc-what">
+          <div class="kw-gdc-what-label">What's covered</div>
+          <ul class="kw-gdc-list">
+            <li>Why Storyline's default tab order breaks keyboard navigation</li>
+            <li>How to set explicit tabIndex values in Slide Properties</li>
+            <li>Testing focus order with keyboard and screen readers</li>
+            <li>The logical order pattern: navigation → content → actions</li>
+          </ul>
+        </div>
+        <div class="kw-gdc-focus-demo">
+          <div class="kw-gdc-demo-label">Tab order: broken → fixed</div>
+          <div class="kw-gdc-pills-row">
+            <div class="kw-gdc-badge kw-gdc-fail">Next →</div>
+            <div class="kw-gdc-badge kw-gdc-fail">Start Course</div>
+            <div class="kw-gdc-badge kw-gdc-fail">Resources</div>
+            <span class="kw-gdc-arrow">→</span>
+            <div class="kw-gdc-badge kw-gdc-pass">Start Course</div>
+            <div class="kw-gdc-badge kw-gdc-pass">Menu</div>
+            <div class="kw-gdc-badge kw-gdc-pass">Next →</div>
+          </div>
+        </div>
       </div>
 
-      <div class="kw-guide-card">
-        <div class="kw-guide-icon">🎨</div>
-        <h3 class="kw-guide-title">Color Contrast & Visual Design</h3>
-        <p class="kw-guide-desc">Meeting WCAG AA contrast ratios (4.5:1), avoiding color-only information, and designing for color blindness.</p>
-        <a href="#" class="kw-guide-link">Read guide →</a>
+      <!-- 02 Colour Contrast -->
+      <div class="kw-guide-detail-card">
+        <div class="kw-gdc-header">
+          <div class="kw-gdc-num">02</div>
+          <div class="kw-gdc-icon">🎨</div>
+          <div class="kw-gdc-titles">
+            <div class="kw-gdc-title">Colour Contrast</div>
+            <div class="kw-gdc-sub">WCAG 2.1 AA requires 4.5:1</div>
+          </div>
+        </div>
+        <p class="kw-gdc-desc">Most Storyline templates fail WCAG contrast requirements. This guide covers practical fixes for text, buttons, and interactive elements — with exact ratios you can measure and verify.</p>
+        <div class="kw-gdc-what">
+          <div class="kw-gdc-what-label">What's covered</div>
+          <ul class="kw-gdc-list">
+            <li>Why 4.5:1 is the minimum — and what exceeding it looks like</li>
+            <li>Common Storyline colour combinations that fail (and what to replace them with)</li>
+            <li>How to test contrast with browser devtools and free tools</li>
+            <li>Designing accessible hover states and focus indicators</li>
+          </ul>
+        </div>
+        <div class="kw-gdc-contrast-table">
+          <div class="kw-gdc-contrast-row kw-gdc-contrast-header">
+            <span>Combination</span><span>Ratio</span><span>Status</span>
+          </div>
+          <div class="kw-gdc-contrast-row">
+            <span>Grey text on light grey</span><span>2.1:1</span><span class="kw-gdc-fail-badge">FAIL</span>
+          </div>
+          <div class="kw-gdc-contrast-row">
+            <span>Navy text on white</span><span>7.2:1</span><span class="kw-gdc-pass-badge">PASS</span>
+          </div>
+          <div class="kw-gdc-contrast-row">
+            <span>#fbbf0e on #151515</span><span>9.8:1</span><span class="kw-gdc-pass-badge">PASS ✦</span>
+          </div>
+        </div>
       </div>
 
-      <div class="kw-guide-card">
-        <div class="kw-guide-icon">🖼️</div>
-        <h3 class="kw-guide-title">Alt Text & Image Descriptions</h3>
-        <p class="kw-guide-desc">Writing effective alt text, handling decorative images, and providing context for complex graphics in courses.</p>
-        <a href="#" class="kw-guide-link">Read guide →</a>
+      <!-- 03 Alt Text -->
+      <div class="kw-guide-detail-card">
+        <div class="kw-gdc-header">
+          <div class="kw-gdc-num">03</div>
+          <div class="kw-gdc-icon">🖼️</div>
+          <div class="kw-gdc-titles">
+            <div class="kw-gdc-title">Alt Text Strategy</div>
+            <div class="kw-gdc-sub">What screen readers actually announce</div>
+          </div>
+        </div>
+        <p class="kw-gdc-desc">Not every image needs alt text — and "image of chart" helps nobody. A framework for deciding what's informational, what's decorative, and what screen readers should actually say.</p>
+        <div class="kw-gdc-what">
+          <div class="kw-gdc-what-label">What's covered</div>
+          <ul class="kw-gdc-list">
+            <li>The informational vs. decorative decision tree</li>
+            <li>Writing alt text that carries meaning, not just description</li>
+            <li>How to mark decorative images so screen readers skip them</li>
+            <li>Complex graphics: charts, diagrams, process flows</li>
+          </ul>
+        </div>
+        <div class="kw-gdc-sr-demo">
+          <div class="kw-gdc-demo-label">Screen reader output</div>
+          <div class="kw-gdc-sr-row kw-gdc-sr-fail"><span class="kw-gdc-sr-label">❌ Missing</span><code>"image"</code></div>
+          <div class="kw-gdc-sr-row kw-gdc-sr-pass"><span class="kw-gdc-sr-label">✓ Fixed</span><code>"Bar chart: three-step compliance workflow — Identify, Apply, Verify."</code></div>
+        </div>
       </div>
 
-      <div class="kw-guide-card">
-        <div class="kw-guide-icon">🔊</div>
-        <h3 class="kw-guide-title">Audio & Captions</h3>
-        <p class="kw-guide-desc">Providing accurate captions and transcripts for all audio content. Tools and workflows for Storyline video.</p>
-        <a href="#" class="kw-guide-link">Read guide →</a>
+      <!-- 04 Keyboard Navigation -->
+      <div class="kw-guide-detail-card">
+        <div class="kw-gdc-header">
+          <div class="kw-gdc-num">04</div>
+          <div class="kw-gdc-icon">⌨️</div>
+          <div class="kw-gdc-titles">
+            <div class="kw-gdc-title">Keyboard Navigation</div>
+            <div class="kw-gdc-sub">Mouse-only by default. Keyboard users locked out.</div>
+          </div>
+        </div>
+        <p class="kw-gdc-desc">Custom interactions in Storyline are mouse-only by default. This guide shows how to add Enter, Space, and arrow key support so keyboard users can actually use your courses.</p>
+        <div class="kw-gdc-what">
+          <div class="kw-gdc-what-label">What's covered</div>
+          <ul class="kw-gdc-list">
+            <li>Adding keydown event listeners to custom interactions</li>
+            <li>Making accordions, tabs, and modals keyboard accessible</li>
+            <li>Focus management after modal open/close</li>
+            <li>Testing with keyboard only — no mouse allowed</li>
+          </ul>
+        </div>
+        <div class="kw-gdc-kb-shortcuts">
+          <div class="kw-gdc-demo-label">Keys to support</div>
+          <div class="kw-gdc-kb-row"><kbd>Tab</kbd> / <kbd>Shift+Tab</kbd><span>Move focus forward / backward</span></div>
+          <div class="kw-gdc-kb-row"><kbd>Enter</kbd> / <kbd>Space</kbd><span>Activate button or control</span></div>
+          <div class="kw-gdc-kb-row"><kbd>Esc</kbd><span>Close modal or dismiss overlay</span></div>
+          <div class="kw-gdc-kb-row"><kbd>↑</kbd> <kbd>↓</kbd><span>Navigate lists and menus</span></div>
+        </div>
       </div>
 
-      <div class="kw-guide-card">
-        <div class="kw-guide-icon">📱</div>
-        <h3 class="kw-guide-title">Responsive & Mobile Accessibility</h3>
-        <p class="kw-guide-desc">Ensuring courses remain accessible on mobile devices. Touch targets, zoom levels, and responsive layouts.</p>
-        <a href="#" class="kw-guide-link">Read guide →</a>
-      </div>
+    </div><!-- /.kw-guide-detail-grid -->
 
-      <div class="kw-guide-card">
-        <div class="kw-guide-icon">⚙️</div>
-        <h3 class="kw-guide-title">Testing & Validation</h3>
-        <p class="kw-guide-desc">Tools and techniques for testing accessibility. Screen readers, automated testing, and manual QA checklists.</p>
-        <a href="#" class="kw-guide-link">Read guide →</a>
+    <!-- WHO IT'S FOR -->
+    <div class="kw-audience-card">
+      <div class="kw-audience-left">
+        <div class="kw-page-eyebrow" style="color:rgba(255,255,255,0.5)">Built for</div>
+        <h3 class="kw-audience-title">People who build in Storyline.</h3>
+        <p class="kw-audience-desc">These guides assume you already know Storyline. They skip the basics and go straight to the accessibility gaps that matter — the ones QA catches, the ones learners feel, and the ones most developers don't know exist.</p>
+      </div>
+      <ul class="kw-audience-list">
+        <li><span class="kw-check">✓</span>Instructional designers using Storyline 360</li>
+        <li><span class="kw-check">✓</span>eLearning developers building custom interactions</li>
+        <li><span class="kw-check">✓</span>L&D teams working toward WCAG 2.1 AA compliance</li>
+        <li><span class="kw-check">✓</span>QA reviewers checking accessibility standards</li>
+      </ul>
+    </div>
+
+    <!-- LIVE DEMOS CALLOUT -->
+    <div class="kw-demo-callout">
+      <div>
+        <div class="kw-demo-callout-eyebrow">Live demos on the homepage</div>
+        <div class="kw-demo-callout-text">Every guide has a live interactive demo on the home page. Toggle focus order, contrast states, alt text, and keyboard accessibility in real time — before you buy anything.</div>
+      </div>
+      <a href="../index.html?view=visual" class="kw-btn-dark">Try the demos →</a>
+    </div>
+
+    <!-- CTA BLOCK -->
+    <div class="kw-cta-block">
+      <h2 class="kw-cta-title">Available now on Gumroad.</h2>
+      <p class="kw-cta-sub">PDF · Instant download · No subscription</p>
+      <div class="kw-cta-btns">
+        <a href="https://abhishektrivedi.gumroad.com/" target="_blank" rel="noopener" class="kw-btn-primary kw-btn-lg">Get the Guides →</a>
       </div>
     </div>
 
@@ -779,6 +1015,7 @@
         <a href="../index.html" class="kw-footer-link">Home</a>
       </div>
     </div>
+
   </div>
 </div>
 
