@@ -446,7 +446,7 @@
     }
 
     /* ── SHARED COMPONENTS ── */
-    .kw-page-hero { padding: 2.5rem; background: #ffffff; border: 1.5px solid #151515; border-radius: 16px; }
+    .kw-page-hero { padding: 2rem 2.5rem; background: #ffffff; border: 1.5px solid #151515; border-radius: 16px; }
     .kw-page-eyebrow { font-family: 'Figtree',sans-serif; font-size: 0.7rem; font-weight: 600; color: #666; text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.4rem; }
     .kw-page-title { font-family: 'Outfit',sans-serif; font-size: clamp(2rem,4vw,3rem); font-weight: 700; color: #151515; margin: 0 0 1rem; letter-spacing: -0.025em; line-height: 1.15; }
     .kw-page-sub { font-family: 'Figtree',sans-serif; font-size: 0.97rem; line-height: 1.7; color: #444; margin: 0; max-width: 640px; }
@@ -552,7 +552,10 @@
     .kw-demo-callout-text { font-family: 'Figtree',sans-serif; font-size: 0.88rem; color: #151515; line-height: 1.6; max-width: 520px; }
 
     /* CTA block */
-    .kw-cta-block { background: #fff; border: 1.5px solid #151515; border-radius: 16px; padding: 2.5rem; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 0.75rem; }
+    .kw-end-row { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem; padding: 0.75rem 0; }
+    .kw-end-meta { font-family: 'Figtree',sans-serif; font-size: 0.78rem; color: #aaa; }
+    .kw-end-link { font-family: 'Outfit',sans-serif; font-size: 0.82rem; font-weight: 600; color: #151515; text-decoration: none; border-bottom: 1.5px solid #fbbf0e; padding-bottom: 1px; transition: border-color 0.2s; }
+    .kw-end-link:hover { border-color: #151515; }
     .kw-cta-title { font-family: 'Outfit',sans-serif; font-size: clamp(1.5rem,3vw,2.2rem); font-weight: 700; color: #151515; letter-spacing: -0.02em; margin: 0; }
     .kw-cta-sub { font-family: 'Figtree',sans-serif; font-size: 0.88rem; color: #888; margin: 0 0 0.5rem; }
     .kw-cta-btns { display: flex; gap: 0.75rem; flex-wrap: wrap; justify-content: center; }
@@ -884,9 +887,6 @@
       <div class="kw-page-eyebrow">♿ Accessibility Guides</div>
       <h1 class="kw-page-title">WCAG guides for Storyline developers</h1>
       <p class="kw-page-sub">Four practical guides covering the accessibility gaps Storyline doesn't solve out of the box. Focus order, colour contrast, alt text, keyboard navigation. Not theory. Working solutions you can drop into your next project.</p>
-      <div class="kw-hero-btns">
-        <a href="https://abhishektrivedi.gumroad.com/" target="_blank" rel="noopener" class="kw-btn-primary">Get the Guides →</a>
-      </div>
     </div>
 
     <!-- BUNDLE CARD: trust + 4 mini-cards + CTA all in one box -->
@@ -955,13 +955,10 @@
       </ul>
     </div>
 
-    <!-- CTA BLOCK -->
-    <div class="kw-cta-block">
-      <h2 class="kw-cta-title">Available now on Gumroad.</h2>
-      <p class="kw-cta-sub">PDF · Instant download · No subscription</p>
-      <div class="kw-cta-btns">
-        <a href="https://abhishektrivedi.gumroad.com/" target="_blank" rel="noopener" class="kw-btn-primary kw-btn-lg">Get the Guides →</a>
-      </div>
+    <!-- MINIMAL CTA ROW -->
+    <div class="kw-end-row">
+      <span class="kw-end-meta">PDF · Instant download · No subscription</span>
+      <a href="https://abhishektrivedi.gumroad.com/" target="_blank" rel="noopener" class="kw-end-link">Get it on Gumroad ↗</a>
     </div>
 
     <div class="kw-footer">
