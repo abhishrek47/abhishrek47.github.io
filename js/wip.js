@@ -64,10 +64,11 @@ var SITE_WIP = true;
   }
 })();
 
-// ── HOME BUTTON — sits next to AT. logo in both navs, all subpages ───────────
-// AT. logo keeps its original href (view selector). The Home link is a
-// secondary label placed immediately after the logo with a thin separator.
-// Does NOT add to nav-links (avoids crowding). Guards against double-inject.
+// ── HOME BUTTON — first <li> in each nav list, all subpages ──────────────────
+// Injected inside the <ul> so it shares the same flex row as Work/About/etc.
+// Guarantees perfect vertical alignment without any justify-content hacks.
+// A right-border separator creates a clear visual break from section items.
+// AT. logo keeps its original href (view selector). Guards against double-inject.
 // ─────────────────────────────────────────────────────────────────────────────
 (function () {
   var path = window.location.pathname;
@@ -75,67 +76,77 @@ var SITE_WIP = true;
 
   var s = document.createElement('style');
   s.textContent = [
-    /* Both navs: allow logo + home to sit flush on the left */
-    '#td-nav { justify-content: flex-start !important; }',
-    '#td-nav .n-links { margin-left: auto !important; }',
-    '#td-nav .n-ham  { flex-shrink: 0; }',
-    '#at-nav { justify-content: flex-start !important; }',
-    '#at-nav .nav-links { margin-left: auto !important; }',
-    '#at-nav .hamburger { flex-shrink: 0; }',
-
-    /* Visual nav home label */
-    '#td-nav .n-home {',
-    '  font-family:"Outfit",sans-serif; font-size:0.72rem; font-weight:700;',
-    '  color:rgba(21,21,21,0.5); text-decoration:none; white-space:nowrap;',
-    '  border-left:1.5px solid rgba(21,21,21,0.2);',
-    '  padding-left:0.6rem; margin-left:0.5rem; align-self:center;',
+    /* ── Editorial home item ── */
+    '#at-nav .wip-home-li {',
+    '  padding-right: 1rem;',
+    '  border-right: 1px solid #d4cfc6;',
     '}',
-    '#td-nav .n-home:hover { color:#151515; }',
-
-    /* Editorial nav home label — terracotta, matches editorial accent */
-    '#at-nav .n-home-ed {',
-    '  font-family:inherit; font-size:0.82rem; font-weight:600;',
-    '  letter-spacing:0.08em; text-transform:uppercase;',
-    '  color:#c84b2f; text-decoration:none; white-space:nowrap;',
-    '  border-left:1px solid #d4cfc6;',
-    '  padding-left:1rem; margin-left:0.75rem; align-self:center;',
+    '#at-nav .wip-home-li a {',
+    '  color: #9b8e80 !important;',
+    '  font-weight: 500 !important;',
+    '  background: transparent !important;',
+    '  box-shadow: none !important;',
+    '  padding: 0 !important;',
+    '  border-radius: 0 !important;',
     '}',
-    '#at-nav .n-home-ed:hover { color:#a33825; }',
+    '#at-nav .wip-home-li a:hover { color: #c84b2f !important; }',
+    /* Mobile: vertical dropdown — drop the right border */
+    '@media (max-width: 768px) {',
+    '  #at-nav .wip-home-li { padding-right: 0; border-right: none; }',
+    '}',
 
-    /* Mobile drawer home entry (visual) */
-    '#td-drawer .td-home-link { font-weight:700; }',
+    /* ── Visual home item ── */
+    '#td-nav .wip-home-li {',
+    '  padding-right: 0.6rem;',
+    '  border-right: 1.5px solid rgba(21,21,21,0.15);',
+    '}',
+    '#td-nav .wip-home-li a {',
+    '  color: rgba(21,21,21,0.45) !important;',
+    '  font-size: 0.7rem !important;',
+    '  border: none !important;',
+    '  box-shadow: none !important;',
+    '  background: transparent !important;',
+    '  padding: 0 !important;',
+    '}',
+    '#td-nav .wip-home-li a:hover {',
+    '  color: rgba(21,21,21,0.9) !important;',
+    '  box-shadow: none !important;',
+    '  transform: none !important;',
+    '}',
+
+    /* ── Visual mobile drawer home ── */
+    '#td-drawer .wip-td-home a { font-weight: 700; }',
   ].join('\n');
   document.head.appendChild(s);
 
   function inject() {
-    // VISUAL NAV — home label after AT. logo
+    // VISUAL NAV — first li in .n-links
     var tdNav  = document.getElementById('td-nav');
-    var tdLogo = tdNav && tdNav.querySelector('.n-logo');
-    if (tdLogo && !tdNav.querySelector('.n-home')) {
-      var vh = document.createElement('a');
-      vh.href = '/index.html?view=visual';
-      vh.className = 'n-home';
-      vh.textContent = 'Home';
-      tdLogo.insertAdjacentElement('afterend', vh);
+    var nLinks = tdNav && tdNav.querySelector('.n-links');
+    if (nLinks && !nLinks.querySelector('.wip-home-li')) {
+      var vli = document.createElement('li');
+      vli.className = 'wip-home-li';
+      vli.innerHTML = '<a href="/index.html?view=visual">Home</a>';
+      nLinks.insertBefore(vli, nLinks.firstChild);
     }
 
     // VISUAL DRAWER — first item on mobile
     var tdDrawer = document.getElementById('td-drawer');
-    if (tdDrawer && !tdDrawer.querySelector('.td-home-link')) {
+    if (tdDrawer && !tdDrawer.querySelector('.wip-td-home')) {
       var dli = document.createElement('li');
-      dli.innerHTML = '<a href="/index.html?view=visual" class="td-home-link">Home</a>';
+      dli.className = 'wip-td-home';
+      dli.innerHTML = '<a href="/index.html?view=visual">Home</a>';
       tdDrawer.insertBefore(dli, tdDrawer.firstChild);
     }
 
-    // EDITORIAL NAV — home label after AT. logo
-    var atNav  = document.getElementById('at-nav');
-    var atLogo = atNav && atNav.querySelector('.nav-logo');
-    if (atLogo && !atNav.querySelector('.n-home-ed')) {
-      var eh = document.createElement('a');
-      eh.href = '/index.html?view=editorial';
-      eh.className = 'n-home-ed';
-      eh.textContent = 'Home';
-      atLogo.insertAdjacentElement('afterend', eh);
+    // EDITORIAL NAV — first li in .nav-links
+    var atNav    = document.getElementById('at-nav');
+    var navLinks = atNav && atNav.querySelector('.nav-links');
+    if (navLinks && !navLinks.querySelector('.wip-home-li')) {
+      var eli = document.createElement('li');
+      eli.className = 'wip-home-li';
+      eli.innerHTML = '<a href="/index.html?view=editorial">Home</a>';
+      navLinks.insertBefore(eli, navLinks.firstChild);
     }
   }
 
