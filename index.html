@@ -3737,9 +3737,10 @@ function switchView(view) {
       document.body.classList.add('visual-mode');
     }
   } else {
-    // Check if arriving via a ?view= direct link (e.g. from subpage Home button)
+    // No saved choice — check for ?view= param (e.g. from subpage Home button)
     var urlView = params.get('view');
     if (urlView === 'visual' || urlView === 'editorial') {
+      // Direct link — skip selector, activate view immediately
       var _cl3 = document.getElementById('courseLoader');
       if (_cl3) _cl3.classList.add('skip');
       var sel3 = document.getElementById('style-selector');
@@ -3755,9 +3756,8 @@ function switchView(view) {
         document.body.classList.add('visual-mode');
       }
     } else {
-      // No choice yet — show selector, hide switcher pill
+      // No choice, no param — show selector
       if (sw) sw.style.display = 'none';
-      // Selector is visible by default; no view activated yet
     }
   }
 })();
