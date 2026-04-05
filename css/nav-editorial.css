@@ -79,6 +79,15 @@
   box-shadow: none !important;
 }
 
+/* Home link — terracotta always-on, no hover change needed */
+#at-nav .nav-links a.at-home-link {
+  color: #c84b2f;
+  font-weight: 600;
+}
+#at-nav .nav-links a.at-home-link:hover {
+  color: #a33825;
+}
+
 /* CTA button */
 #at-nav .nav-links a.nav-cta {
   background: #c84b2f;
