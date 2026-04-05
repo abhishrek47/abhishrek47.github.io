@@ -77,10 +77,10 @@ var SITE_WIP = true;
   s.textContent = [
     /* Both navs: allow logo + home to sit flush on the left */
     '#td-nav { justify-content: flex-start !important; }',
-    '#td-nav .n-links { margin-left: auto; }',
+    '#td-nav .n-links { margin-left: auto !important; }',
     '#td-nav .n-ham  { flex-shrink: 0; }',
     '#at-nav { justify-content: flex-start !important; }',
-    '#at-nav .nav-links { margin-left: auto; }',
+    '#at-nav .nav-links { margin-left: auto !important; }',
     '#at-nav .hamburger { flex-shrink: 0; }',
 
     /* Visual nav home label */
