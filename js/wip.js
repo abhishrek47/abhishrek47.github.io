@@ -63,3 +63,67 @@ var SITE_WIP = true;
     document.addEventListener('DOMContentLoaded', mount);
   }
 })();
+
+// ── HOME BUTTON — inject into both navs on every subpage ─────────────────────
+// Uses absolute paths (/index.html?view=...) so depth of page doesn't matter.
+// Guards against double-injection. Skips homepage itself.
+// ─────────────────────────────────────────────────────────────────────────────
+(function () {
+  var path = window.location.pathname;
+  if (path === '/' || path === '/index.html') return;
+
+  // ── CSS (visual nav home button + editorial home link via nav-editorial.css)
+  var s = document.createElement('style');
+  s.textContent = [
+    /* Visual nav: dark pill so it reads as "origin", not just another page */
+    '#td-nav .n-home-link {',
+    '  background: #151515 !important; color: #fbbf0e !important;',
+    '  border-color: #151515 !important; box-shadow: none !important;',
+    '  font-weight: 700; letter-spacing: -0.01em;',
+    '}',
+    '#td-nav .n-home-link:hover { opacity: 0.82; transform: none !important; }',
+    /* Mobile drawer home link */
+    '#td-drawer .td-home-link { font-weight: 700; }',
+  ].join('\n');
+  document.head.appendChild(s);
+
+  function inject() {
+    // ── VISUAL NAV: AT. logo → visual home
+    var tdLogo = document.querySelector('#td-nav .n-logo');
+    if (tdLogo) tdLogo.href = '/index.html?view=visual';
+
+    // ── VISUAL NAV: Home pill (desktop)
+    var tdLinks = document.querySelector('#td-nav .n-links');
+    if (tdLinks && !tdLinks.querySelector('.n-home-link')) {
+      var li = document.createElement('li');
+      li.innerHTML = '<a href="/index.html?view=visual" class="n-home-link">← Home</a>';
+      tdLinks.insertBefore(li, tdLinks.firstChild);
+    }
+
+    // ── VISUAL NAV: Home link (mobile drawer)
+    var tdDrawer = document.getElementById('td-drawer');
+    if (tdDrawer && !tdDrawer.querySelector('.td-home-link')) {
+      var dli = document.createElement('li');
+      dli.innerHTML = '<a href="/index.html?view=visual" class="td-home-link">← Home</a>';
+      tdDrawer.insertBefore(dli, tdDrawer.firstChild);
+    }
+
+    // ── EDITORIAL NAV: AT. logo → editorial home
+    var atLogo = document.querySelector('#at-nav .nav-logo');
+    if (atLogo) atLogo.href = '/index.html?view=editorial';
+
+    // ── EDITORIAL NAV: Home link (styled via nav-editorial.css .at-home-link)
+    var atLinks = document.getElementById('at-nav-links');
+    if (atLinks && !atLinks.querySelector('.at-home-link')) {
+      var ali = document.createElement('li');
+      ali.innerHTML = '<a href="/index.html?view=editorial" class="at-home-link">Home</a>';
+      atLinks.insertBefore(ali, atLinks.firstChild);
+    }
+  }
+
+  if (document.body) {
+    inject();
+  } else {
+    document.addEventListener('DOMContentLoaded', inject);
+  }
+})();
