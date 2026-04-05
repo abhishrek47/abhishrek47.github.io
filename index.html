@@ -1524,6 +1524,15 @@
   color: #666666;
   line-height: 1.5;
 }
+.kw-avatar-hint {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem;
+  font-weight: 500;
+  color: rgba(124,58,237,0.55);
+  letter-spacing: 0.08em;
+  text-transform: lowercase;
+  transition: opacity 0.4s;
+}
 
 /* ── STAT CARDS ── */
 .kw-stats {
@@ -3017,6 +3026,7 @@ window.addEventListener('resize', window._syncNavTop);
       <div class="kw-avatar-card">
         <canvas class="kw-pixel-avatar" id="kwPixelAvatar" width="140" height="140"></canvas>
         <div class="kw-avatar-name">Abhishek Trivedi<br>Pune, India</div>
+        <div class="kw-avatar-hint" id="kwAvatarHint">click to reveal ↓</div>
       </div>
     </div>
 
@@ -5262,6 +5272,8 @@ function initThreeJS() {
         ctx.drawImage(_img, 0, 0, W, H);
         canvas.classList.add('revealed');
         canvas.title = '';
+        var hint = document.getElementById('kwAvatarHint');
+        if (hint) hint.style.opacity = '0';
         _done = true; _busy = false;
       }
     }

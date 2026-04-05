@@ -442,7 +442,7 @@
     #view-visual { background: linear-gradient(to bottom, #f3e8ff 0%, #ffffff 60%); min-height: 100vh; }
     .kw-page {
       max-width: 1140px; margin: 0 auto;
-      padding: 2.5rem 2rem; display: flex; flex-direction: column; gap: 1.75rem;
+      padding: 2.5rem 2rem; display: flex; flex-direction: column; gap: 1.25rem;
     }
 
     /* ── SHARED COMPONENTS ── */
@@ -558,19 +558,19 @@
     .kw-cta-btns { display: flex; gap: 0.75rem; flex-wrap: wrap; justify-content: center; }
 
     /* ── BUNDLE CARD ── */
-    .kw-bundle-card { background: #fff; border: 1.5px solid #151515; border-radius: 16px; padding: 2rem; display: flex; flex-direction: column; gap: 1.5rem; }
-    .kw-bundle-trust { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    .kw-bundle-card { background: #fff; border: 1.5px solid #151515; border-radius: 16px; padding: 1.5rem; display: flex; flex-direction: column; gap: 1rem; }
+    .kw-bundle-trust { display: flex; gap: 0.4rem; flex-wrap: wrap; }
     /* Numbered list inside bundle card */
     .kw-mini-list { border: 1px solid #e0e0e0; border-radius: 10px; overflow: hidden; }
-    .kw-mini-row { display: flex; align-items: center; gap: 0.9rem; padding: 0.85rem 1.1rem; border-bottom: 1px solid #e8e8e8; background: #fff; transition: background 0.12s; }
+    .kw-mini-row { display: flex; align-items: center; gap: 0.75rem; padding: 0.6rem 1rem; border-bottom: 1px solid #e8e8e8; background: #fff; transition: background 0.12s; }
     .kw-mini-row:last-child { border-bottom: none; }
     .kw-mini-row:hover { background: #fffdf4; }
     .kw-mini-num { font-family: 'JetBrains Mono',monospace; font-size: 0.6rem; color: #ccc; letter-spacing: 0.08em; flex-shrink: 0; width: 16px; }
-    .kw-mini-icon-sm { font-size: 1.1rem; flex-shrink: 0; }
-    .kw-mini-info { display: flex; align-items: baseline; gap: 0.6rem; flex: 1; flex-wrap: wrap; }
-    .kw-mini-title { font-family: 'Outfit',sans-serif; font-size: 0.88rem; font-weight: 700; color: #151515; white-space: nowrap; }
-    .kw-mini-sub { font-family: 'Figtree',sans-serif; font-size: 0.75rem; color: #999; }
-    .kw-bundle-cta { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; border-top: 1.5px solid #e8e8e8; padding-top: 1.25rem; }
+    .kw-mini-icon-sm { font-size: 1rem; flex-shrink: 0; }
+    .kw-mini-info { display: flex; align-items: baseline; gap: 0.5rem; flex: 1; flex-wrap: wrap; }
+    .kw-mini-title { font-family: 'Outfit',sans-serif; font-size: 0.85rem; font-weight: 700; color: #151515; white-space: nowrap; }
+    .kw-mini-sub { font-family: 'Figtree',sans-serif; font-size: 0.73rem; color: #999; }
+    .kw-bundle-cta { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; border-top: 1.5px solid #e8e8e8; padding-top: 1rem; }
     .kw-bundle-cta-meta { font-family: 'Figtree',sans-serif; font-size: 0.78rem; color: #888; }
 
     /* ── CRAFT SECTION (heading + expandable panels as one unit) ── */
@@ -935,172 +935,6 @@
         <div class="kw-bundle-cta-meta">PDF · Instant download · No subscription</div>
       </div>
     </div>
-
-    <!-- CRAFT SECTION: heading + 4 expandable guides in one bordered unit -->
-    <div class="kw-craft-section">
-      <div class="kw-craft-heading">
-        <h2 class="kw-big-heading">Accessibility isn't a checklist.<br>It's a craft.</h2>
-        <p class="kw-big-heading-sub">Each guide goes deep on one real problem Storyline doesn't solve. Expand any entry to see what's inside.</p>
-      </div>
-
-    <div class="kw-expand-stack kw-expand-stack--inset">
-
-      <!-- 01 Focus Order — yellow toggle -->
-      <div class="kw-expand-section">
-        <div class="kw-expand-hd" onclick="kwGuideToggle(1)">
-          <div class="kw-expand-hd-left">
-            <div class="kw-gdc-num">01</div>
-            <span class="kw-expand-hd-icon">🎯</span>
-            <div>
-              <div class="kw-expand-hd-title">Focus Order</div>
-              <div class="kw-expand-hd-sub">Tab navigation in Storyline 360</div>
-            </div>
-          </div>
-          <button class="kw-rect-toggle kw-rect-toggle-1" id="kw-guide-toggle-1" aria-expanded="false">Expand ↓</button>
-        </div>
-        <div class="kw-expand-body" id="kw-guide-body-1">
-          <div class="kw-expand-inner">
-            <p class="kw-gdc-desc">Storyline sets tab order by object creation sequence — not reading order. This guide shows how to override it and build predictable, logical focus flows that keyboard users can actually navigate.</p>
-            <div class="kw-gdc-what">
-              <div class="kw-gdc-what-label">What's covered</div>
-              <ul class="kw-gdc-list">
-                <li>Why Storyline's default tab order breaks keyboard navigation</li>
-                <li>How to set explicit tabIndex values in Slide Properties</li>
-                <li>Testing focus order with keyboard and screen readers</li>
-                <li>The logical order pattern: navigation → content → actions</li>
-              </ul>
-            </div>
-            <div class="kw-gdc-focus-demo">
-              <div class="kw-gdc-demo-label">Tab order: broken → fixed</div>
-              <div class="kw-gdc-pills-row">
-                <div class="kw-gdc-badge kw-gdc-fail">Next →</div>
-                <div class="kw-gdc-badge kw-gdc-fail">Start Course</div>
-                <div class="kw-gdc-badge kw-gdc-fail">Resources</div>
-                <span class="kw-gdc-arrow">→</span>
-                <div class="kw-gdc-badge kw-gdc-pass">Start Course</div>
-                <div class="kw-gdc-badge kw-gdc-pass">Menu</div>
-                <div class="kw-gdc-badge kw-gdc-pass">Next →</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 02 Colour Contrast — purple toggle -->
-      <div class="kw-expand-section">
-        <div class="kw-expand-hd" onclick="kwGuideToggle(2)">
-          <div class="kw-expand-hd-left">
-            <div class="kw-gdc-num">02</div>
-            <span class="kw-expand-hd-icon">🎨</span>
-            <div>
-              <div class="kw-expand-hd-title">Colour Contrast</div>
-              <div class="kw-expand-hd-sub">WCAG 2.1 AA requires 4.5:1</div>
-            </div>
-          </div>
-          <button class="kw-rect-toggle kw-rect-toggle-2" id="kw-guide-toggle-2" aria-expanded="false">Expand ↓</button>
-        </div>
-        <div class="kw-expand-body" id="kw-guide-body-2">
-          <div class="kw-expand-inner">
-            <p class="kw-gdc-desc">Most Storyline templates fail WCAG contrast requirements. This guide covers practical fixes for text, buttons, and interactive elements — with exact ratios you can measure and verify.</p>
-            <div class="kw-gdc-what">
-              <div class="kw-gdc-what-label">What's covered</div>
-              <ul class="kw-gdc-list">
-                <li>Why 4.5:1 is the minimum — and what exceeding it looks like</li>
-                <li>Common Storyline colour combinations that fail (and what to replace them with)</li>
-                <li>How to test contrast with browser devtools and free tools</li>
-                <li>Designing accessible hover states and focus indicators</li>
-              </ul>
-            </div>
-            <div class="kw-gdc-contrast-table">
-              <div class="kw-gdc-contrast-row kw-gdc-contrast-header">
-                <span>Combination</span><span>Ratio</span><span>Status</span>
-              </div>
-              <div class="kw-gdc-contrast-row">
-                <span>Grey text on light grey</span><span>2.1:1</span><span class="kw-gdc-fail-badge">FAIL</span>
-              </div>
-              <div class="kw-gdc-contrast-row">
-                <span>Navy text on white</span><span>7.2:1</span><span class="kw-gdc-pass-badge">PASS</span>
-              </div>
-              <div class="kw-gdc-contrast-row">
-                <span>#fbbf0e on #151515</span><span>9.8:1</span><span class="kw-gdc-pass-badge">PASS ✦</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 03 Alt Text — green toggle -->
-      <div class="kw-expand-section">
-        <div class="kw-expand-hd" onclick="kwGuideToggle(3)">
-          <div class="kw-expand-hd-left">
-            <div class="kw-gdc-num">03</div>
-            <span class="kw-expand-hd-icon">🖼️</span>
-            <div>
-              <div class="kw-expand-hd-title">Alt Text Strategy</div>
-              <div class="kw-expand-hd-sub">What screen readers actually announce</div>
-            </div>
-          </div>
-          <button class="kw-rect-toggle kw-rect-toggle-3" id="kw-guide-toggle-3" aria-expanded="false">Expand ↓</button>
-        </div>
-        <div class="kw-expand-body" id="kw-guide-body-3">
-          <div class="kw-expand-inner">
-            <p class="kw-gdc-desc">Not every image needs alt text — and "image of chart" helps nobody. A framework for deciding what's informational, what's decorative, and what screen readers should actually say.</p>
-            <div class="kw-gdc-what">
-              <div class="kw-gdc-what-label">What's covered</div>
-              <ul class="kw-gdc-list">
-                <li>The informational vs. decorative decision tree</li>
-                <li>Writing alt text that carries meaning, not just description</li>
-                <li>How to mark decorative images so screen readers skip them</li>
-                <li>Complex graphics: charts, diagrams, process flows</li>
-              </ul>
-            </div>
-            <div class="kw-gdc-sr-demo">
-              <div class="kw-gdc-demo-label">Screen reader output</div>
-              <div class="kw-gdc-sr-row kw-gdc-sr-fail"><span class="kw-gdc-sr-label">❌ Missing</span><code>"image"</code></div>
-              <div class="kw-gdc-sr-row kw-gdc-sr-pass"><span class="kw-gdc-sr-label">✓ Fixed</span><code>"Bar chart: three-step compliance workflow — Identify, Apply, Verify."</code></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 04 Keyboard Navigation — orange toggle -->
-      <div class="kw-expand-section">
-        <div class="kw-expand-hd" onclick="kwGuideToggle(4)">
-          <div class="kw-expand-hd-left">
-            <div class="kw-gdc-num">04</div>
-            <span class="kw-expand-hd-icon">⌨️</span>
-            <div>
-              <div class="kw-expand-hd-title">Keyboard Navigation</div>
-              <div class="kw-expand-hd-sub">Mouse-only by default. Keyboard users locked out.</div>
-            </div>
-          </div>
-          <button class="kw-rect-toggle kw-rect-toggle-4" id="kw-guide-toggle-4" aria-expanded="false">Expand ↓</button>
-        </div>
-        <div class="kw-expand-body" id="kw-guide-body-4">
-          <div class="kw-expand-inner">
-            <p class="kw-gdc-desc">Custom interactions in Storyline are mouse-only by default. This guide shows how to add Enter, Space, and arrow key support so keyboard users can actually use your courses.</p>
-            <div class="kw-gdc-what">
-              <div class="kw-gdc-what-label">What's covered</div>
-              <ul class="kw-gdc-list">
-                <li>Adding keydown event listeners to custom interactions</li>
-                <li>Making accordions, tabs, and modals keyboard accessible</li>
-                <li>Focus management after modal open/close</li>
-                <li>Testing with keyboard only — no mouse allowed</li>
-              </ul>
-            </div>
-            <div class="kw-gdc-kb-shortcuts">
-              <div class="kw-gdc-demo-label">Keys to support</div>
-              <div class="kw-gdc-kb-row"><kbd>Tab</kbd> / <kbd>Shift+Tab</kbd><span>Move focus forward / backward</span></div>
-              <div class="kw-gdc-kb-row"><kbd>Enter</kbd> / <kbd>Space</kbd><span>Activate button or control</span></div>
-              <div class="kw-gdc-kb-row"><kbd>Esc</kbd><span>Close modal or dismiss overlay</span></div>
-              <div class="kw-gdc-kb-row"><kbd>↑</kbd> <kbd>↓</kbd><span>Navigate lists and menus</span></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-    </div><!-- /.kw-expand-stack -->
-    </div><!-- /.kw-craft-section -->
 
     <!-- WHO IT'S FOR -->
     <div class="kw-audience-card">
