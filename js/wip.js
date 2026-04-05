@@ -64,92 +64,101 @@ var SITE_WIP = true;
   }
 })();
 
-// ── HOME BUTTON — first <li> in each nav list, all subpages ──────────────────
-// Injected inside the <ul> so it shares the same flex row as Work/About/etc.
-// Guarantees perfect vertical alignment without any justify-content hacks.
-// A right-border separator creates a clear visual break from section items.
-// AT. logo keeps its original href (view selector). Guards against double-inject.
+// ── HOME PILL — fixed bottom-left, all subpages ───────────────────────────────
+// A small "← Back to Home" pill in the bottom-left corner. Completely separate
+// from the nav so AT. logo retains full visual dominance. Arrow makes the
+// action self-evident. Styled per active view (editorial cream / visual dark).
+// Coexists with the WIP badge at bottom-right. Guards against double-inject.
 // ─────────────────────────────────────────────────────────────────────────────
 (function () {
   var path = window.location.pathname;
   if (path === '/' || path === '/index.html') return;
 
+  // Detect active view: URL param > sessionStorage > default editorial
+  var params = new URLSearchParams(window.location.search);
+  var view = params.get('view');
+  if (!view) {
+    try { view = sessionStorage.getItem('at-style-choice'); } catch(e) {}
+  }
+  if (view !== 'visual') view = 'editorial';
+
+  var isVisual = view === 'visual';
+
   var s = document.createElement('style');
   s.textContent = [
-    /* ── Editorial home item ── */
-    '#at-nav .wip-home-li {',
-    '  padding-right: 1rem;',
-    '  border-right: 1px solid #d4cfc6;',
+    '#wip-home-pill {',
+    '  position: fixed;',
+    '  bottom: 1.4rem;',
+    '  left: 1.4rem;',
+    '  z-index: 9998;',
+    '  display: flex;',
+    '  align-items: center;',
+    '  gap: 0.3rem;',
+    '  padding: 0.38rem 0.85rem;',
+    '  border-radius: 2px;',
+    '  font-size: 0.62rem;',
+    '  font-weight: 600;',
+    '  letter-spacing: 0.1em;',
+    '  text-transform: uppercase;',
+    '  text-decoration: none;',
+    '  white-space: nowrap;',
+    '  cursor: pointer;',
+    '  opacity: 0;',
+    '  transform: translateY(4px);',
+    '  transition: opacity 0.4s ease, transform 0.4s ease, color 0.18s, background 0.18s, border-color 0.18s;',
     '}',
-    '#at-nav .wip-home-li a {',
-    '  color: #9b8e80 !important;',
-    '  font-weight: 500 !important;',
-    '  background: transparent !important;',
-    '  box-shadow: none !important;',
-    '  padding: 0 !important;',
-    '  border-radius: 0 !important;',
+    '#wip-home-pill.wip-pill-in { opacity: 1; transform: translateY(0); }',
+
+    /* Editorial: cream pill, terracotta on hover */
+    '#wip-home-pill.wip-ed {',
+    '  background: rgba(245,242,235,0.96);',
+    '  backdrop-filter: blur(8px);',
+    '  -webkit-backdrop-filter: blur(8px);',
+    '  border: 1px solid #d4cfc6;',
+    '  color: #9b8e80;',
+    '  font-family: inherit;',
     '}',
-    '#at-nav .wip-home-li a:hover { color: #c84b2f !important; }',
-    /* Mobile: vertical dropdown — drop the right border */
-    '@media (max-width: 768px) {',
-    '  #at-nav .wip-home-li { padding-right: 0; border-right: none; }',
+    '#wip-home-pill.wip-ed:hover { color: #c84b2f; border-color: #c84b2f; }',
+
+    /* Visual: dark pill, yellow text; inverts on hover */
+    '#wip-home-pill.wip-vis {',
+    '  background: rgba(21,21,21,0.88);',
+    '  backdrop-filter: blur(8px);',
+    '  -webkit-backdrop-filter: blur(8px);',
+    '  border: 1.5px solid rgba(21,21,21,0.9);',
+    '  color: #fbbf0e;',
+    '  font-family: "Outfit", sans-serif;',
+    '}',
+    '#wip-home-pill.wip-vis:hover {',
+    '  background: #fbbf0e;',
+    '  border-color: #fbbf0e;',
+    '  color: #151515;',
     '}',
 
-    /* ── Visual home item ── */
-    '#td-nav .wip-home-li {',
-    '  padding-right: 0.6rem;',
-    '  border-right: 1.5px solid rgba(21,21,21,0.15);',
+    /* On mobile bump it up so it clears any bottom chrome */
+    '@media (max-width: 640px) {',
+    '  #wip-home-pill { bottom: 1rem; left: 1rem; }',
     '}',
-    '#td-nav .wip-home-li a {',
-    '  color: rgba(21,21,21,0.45) !important;',
-    '  font-size: 0.7rem !important;',
-    '  border: none !important;',
-    '  box-shadow: none !important;',
-    '  background: transparent !important;',
-    '  padding: 0 !important;',
-    '}',
-    '#td-nav .wip-home-li a:hover {',
-    '  color: rgba(21,21,21,0.9) !important;',
-    '  box-shadow: none !important;',
-    '  transform: none !important;',
-    '}',
-
-    /* ── Visual mobile drawer home ── */
-    '#td-drawer .wip-td-home a { font-weight: 700; }',
   ].join('\n');
   document.head.appendChild(s);
 
-  function inject() {
-    // VISUAL NAV — first li in .n-links
-    var tdNav  = document.getElementById('td-nav');
-    var nLinks = tdNav && tdNav.querySelector('.n-links');
-    if (nLinks && !nLinks.querySelector('.wip-home-li')) {
-      var vli = document.createElement('li');
-      vli.className = 'wip-home-li';
-      vli.innerHTML = '<a href="/index.html?view=visual">Home</a>';
-      nLinks.insertBefore(vli, nLinks.firstChild);
-    }
-
-    // VISUAL DRAWER — first item on mobile
-    var tdDrawer = document.getElementById('td-drawer');
-    if (tdDrawer && !tdDrawer.querySelector('.wip-td-home')) {
-      var dli = document.createElement('li');
-      dli.className = 'wip-td-home';
-      dli.innerHTML = '<a href="/index.html?view=visual">Home</a>';
-      tdDrawer.insertBefore(dli, tdDrawer.firstChild);
-    }
-
-    // EDITORIAL NAV — first li in .nav-links
-    var atNav    = document.getElementById('at-nav');
-    var navLinks = atNav && atNav.querySelector('.nav-links');
-    if (navLinks && !navLinks.querySelector('.wip-home-li')) {
-      var eli = document.createElement('li');
-      eli.className = 'wip-home-li';
-      eli.innerHTML = '<a href="/index.html?view=editorial">Home</a>';
-      navLinks.insertBefore(eli, navLinks.firstChild);
-    }
+  function mount() {
+    if (document.getElementById('wip-home-pill')) return;
+    var pill = document.createElement('a');
+    pill.id = 'wip-home-pill';
+    pill.className = isVisual ? 'wip-vis' : 'wip-ed';
+    pill.href = '/index.html?view=' + view;
+    pill.setAttribute('aria-label', 'Back to ' + view + ' home page');
+    pill.innerHTML = '&#8592;&nbsp;Back to Home';
+    document.body.appendChild(pill);
+    // Fade in after paint
+    requestAnimationFrame(function () {
+      requestAnimationFrame(function () {
+        pill.classList.add('wip-pill-in');
+      });
+    });
   }
 
-  if (document.body) inject();
-  else document.addEventListener('DOMContentLoaded', inject);
+  if (document.body) mount();
+  else document.addEventListener('DOMContentLoaded', mount);
 })();
