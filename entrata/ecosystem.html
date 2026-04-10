@@ -1,0 +1,900 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Entrata Product Ecosystem — Interactive Demo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #f5f0eb;
+  --surface: #ffffff;
+  --navy: #1e3a5f;
+  --navy-dark: #162d4a;
+  --text: #1a1a1a;
+  --muted: #888888;
+  --accent: #c0392b;
+  --accent-h: #e74c3c;
+  --border: #e0d8d0;
+  --surface2: #f0ebe4;
+  --font-head: 'Playfair Display', Georgia, serif;
+  --font-body: 'DM Sans', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+html, body { min-height: 100vh; font-family: var(--font-body); background: var(--bg); color: var(--text); }
+
+nav {
+  position: sticky; top: 0; z-index: 100;
+  display: flex; align-items: center;
+  padding: 0 2rem; height: 56px;
+  background: var(--bg); border-bottom: 1px solid var(--border);
+}
+.nav-logo {
+  font-family: var(--font-mono); font-size: 14px; font-weight: 500;
+  color: var(--text); text-decoration: none; letter-spacing: -0.5px;
+}
+.nav-logo span { color: var(--accent); }
+
+.hero {
+  background: var(--navy); color: white;
+  padding: 4rem 2rem 3rem;
+  text-align: center;
+}
+.hero-label {
+  font-family: var(--font-mono); font-size: 10px; font-weight: 500;
+  letter-spacing: 2.5px; text-transform: uppercase; color: rgba(255,255,255,0.5);
+  margin-bottom: 1rem;
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+}
+.hero-label::before, .hero-label::after {
+  content: ''; display: inline-block; width: 24px; height: 1px; background: rgba(255,255,255,0.25);
+}
+.hero h1 {
+  font-family: var(--font-head); font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 700; line-height: 1.15; margin-bottom: 1rem;
+  color: white;
+}
+.hero h1 em { font-style: italic; color: #f5a99a; }
+.hero-sub {
+  font-size: 15px; color: rgba(255,255,255,0.6);
+  max-width: 520px; margin: 0 auto 2rem; line-height: 1.7;
+}
+.hero-meta {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 100px; padding: 6px 14px;
+  font-family: var(--font-mono); font-size: 10px; color: rgba(255,255,255,0.5);
+  letter-spacing: 1px;
+}
+.hero-meta span { color: rgba(255,255,255,0.3); }
+
+main { max-width: 960px; margin: 0 auto; padding: 3rem 1.5rem; }
+
+.progress-wrap { margin-bottom: 2rem; }
+.progress-label {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 8px;
+}
+.progress-label span { font-family: var(--font-mono); font-size: 10px; color: var(--muted); letter-spacing: 1px; }
+.progress-bar {
+  height: 3px; background: var(--border); border-radius: 2px; overflow: hidden;
+}
+.progress-fill {
+  height: 100%; background: var(--accent); border-radius: 2px;
+  transition: width 0.4s cubic-bezier(0.4,0,0.2,1);
+}
+
+.stage-nav {
+  display: flex; gap: 0; margin-bottom: 2rem;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 12px; overflow: hidden;
+}
+.stage-btn {
+  flex: 1; padding: 14px 8px; border: none; background: transparent;
+  cursor: pointer; font-family: var(--font-body); transition: all 0.15s;
+  border-right: 1px solid var(--border); display: flex; flex-direction: column;
+  align-items: center; gap: 5px; min-width: 0;
+}
+.stage-btn:last-child { border-right: none; }
+.stage-btn .s-num {
+  font-family: var(--font-mono); font-size: 9px; color: var(--muted);
+  letter-spacing: 1px;
+}
+.stage-btn .s-label {
+  font-size: 11px; font-weight: 500; color: var(--muted);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 80px;
+}
+.stage-btn .s-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--border); transition: background 0.15s;
+}
+.stage-btn.active {
+  background: var(--navy); 
+}
+.stage-btn.active .s-num { color: rgba(255,255,255,0.4); }
+.stage-btn.active .s-label { color: white; }
+.stage-btn.active .s-dot { background: #f5a99a; }
+.stage-btn:not(.active):hover { background: var(--surface2); }
+.stage-btn.visited .s-dot { background: var(--accent); opacity: 0.4; }
+
+.stage-panel { display: none; animation: fadeIn 0.2s ease; }
+.stage-panel.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+.panel-header { margin-bottom: 1.75rem; }
+.panel-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; margin-bottom: 0.5rem; }
+.panel-title { font-family: var(--font-head); font-size: 1.75rem; font-weight: 700; }
+.stage-badge {
+  font-family: var(--font-mono); font-size: 9px; letter-spacing: 1.5px;
+  background: var(--surface2); color: var(--muted); border: 1px solid var(--border);
+  padding: 4px 10px; border-radius: 100px; white-space: nowrap; flex-shrink: 0; margin-top: 4px;
+}
+.panel-sub { font-size: 14px; color: var(--muted); line-height: 1.6; max-width: 600px; }
+
+.modules-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 10px; margin-bottom: 1.25rem;
+}
+.module-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 10px; padding: 16px; cursor: pointer; transition: all 0.15s;
+  position: relative; overflow: hidden;
+}
+.module-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0;
+  height: 2px; background: transparent; transition: background 0.15s;
+}
+.module-card:hover { border-color: #ccc; transform: translateY(-1px); box-shadow: 0 4px 16px rgba(0,0,0,0.06); }
+.module-card:hover::before { background: var(--border); }
+.module-card.selected { border-color: var(--accent); background: #fdf5f4; }
+.module-card.selected::before { background: var(--accent); }
+.module-icon {
+  width: 34px; height: 34px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 10px; font-size: 16px;
+}
+.module-name { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+.module-desc { font-size: 11.5px; color: var(--muted); line-height: 1.5; }
+.module-tag {
+  display: inline-block; margin-top: 10px; font-family: var(--font-mono);
+  font-size: 9px; letter-spacing: 1px; padding: 2px 7px; border-radius: 100px;
+}
+.tag-ops { background: #e6f1fb; color: #185fa5; }
+.tag-ai  { background: #e1f5ee; color: #0f6e56; }
+.tag-res { background: #faeeda; color: #854f0b; }
+.tag-fin { background: #eeedfe; color: #534ab7; }
+
+.detail-box {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 10px; padding: 1.5rem; min-height: 150px; margin-bottom: 1.25rem;
+  transition: all 0.2s;
+}
+.detail-empty {
+  display: flex; align-items: center; gap: 10px;
+  color: var(--muted); font-size: 13px; height: 100%; min-height: 110px;
+}
+.detail-empty-arrow {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--surface2); display: flex; align-items: center; justify-content: center;
+  font-size: 12px; flex-shrink: 0; animation: bounce 2s ease-in-out infinite;
+}
+@keyframes bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+.detail-title {
+  font-family: var(--font-head); font-size: 1.2rem; font-weight: 700;
+  margin-bottom: 8px;
+}
+.detail-body { font-size: 13px; color: #444; line-height: 1.7; margin-bottom: 1rem; }
+.detail-flows { display: flex; flex-wrap: wrap; gap: 7px; }
+.flow-label {
+  font-family: var(--font-mono); font-size: 9px; letter-spacing: 1px;
+  color: var(--muted); text-transform: uppercase; width: 100%; margin-bottom: 2px;
+}
+.flow-chip {
+  font-size: 11.5px; padding: 4px 10px; border-radius: 100px;
+  background: var(--surface2); border: 1px solid var(--border);
+  color: var(--muted); display: flex; align-items: center; gap: 5px;
+}
+.flow-chip.primary {
+  background: #fdf5f4; border-color: #f5c4b3; color: var(--accent);
+}
+.flow-chip .chip-dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; flex-shrink: 0; }
+
+.insight-box {
+  background: var(--navy); border-radius: 10px;
+  padding: 1.25rem 1.5rem; margin-bottom: 2rem;
+}
+.insight-label {
+  font-family: var(--font-mono); font-size: 9px; letter-spacing: 2px;
+  text-transform: uppercase; color: #f5a99a; margin-bottom: 6px;
+  display: flex; align-items: center; gap: 8px;
+}
+.insight-label::before { content: ''; display: inline-block; width: 14px; height: 2px; background: var(--accent); }
+.insight-text { font-size: 13px; color: rgba(255,255,255,0.7); line-height: 1.7; }
+.insight-text strong { color: white; font-weight: 500; }
+
+.nav-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding-top: 1rem; border-top: 1px solid var(--border);
+}
+.nav-btn {
+  font-family: var(--font-body); font-size: 13px; font-weight: 500;
+  padding: 10px 20px; border-radius: 8px; cursor: pointer; transition: all 0.15s;
+  border: 1px solid var(--border); background: var(--surface); color: var(--text);
+}
+.nav-btn:hover:not(:disabled) { background: var(--surface2); }
+.nav-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+.nav-btn.primary {
+  background: var(--navy); color: white; border-color: var(--navy);
+}
+.nav-btn.primary:hover:not(:disabled) { background: var(--navy-dark); border-color: var(--navy-dark); }
+.nav-stage-counter {
+  font-family: var(--font-mono); font-size: 11px; color: var(--muted);
+  display: flex; align-items: center; gap: 6px;
+}
+.nav-stage-counter .pip {
+  width: 6px; height: 6px; border-radius: 50%; background: var(--border);
+  transition: background 0.15s;
+}
+.nav-stage-counter .pip.done { background: var(--accent); }
+.nav-stage-counter .pip.current { background: var(--navy); }
+
+footer {
+  text-align: center; padding: 2rem;
+  border-top: 1px solid var(--border);
+  font-size: 12px; color: var(--muted);
+}
+footer a { color: var(--muted); text-decoration: none; }
+footer a:hover { color: var(--accent); }
+footer strong { color: var(--text); font-weight: 500; }
+
+@media (max-width: 640px) {
+  .stage-btn .s-label { font-size: 10px; max-width: 56px; }
+  .hero { padding: 2.5rem 1.25rem 2rem; }
+  main { padding: 2rem 1rem; }
+  .panel-title { font-size: 1.4rem; }
+  .modules-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 400px) {
+  .modules-grid { grid-template-columns: 1fr; }
+  .stage-btn { padding: 10px 4px; }
+  .stage-btn .s-num { display: none; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="https://abhishektrivedi.com">AT<span>.</span></a>
+</nav>
+
+<div class="hero">
+  <div class="hero-label">Research demo</div>
+  <h1>How Entrata's platform <em>actually works.</em></h1>
+  <p class="hero-sub">An interactive map of Entrata's product ecosystem — built to understand how 65+ modules connect across the full resident lifecycle.</p>
+  <div class="hero-meta">
+    Built by Abhishek Trivedi <span>·</span> abhishektrivedi.com <span>·</span> Pre-interview research
+  </div>
+</div>
+
+<main>
+
+  <div class="progress-wrap">
+    <div class="progress-label">
+      <span id="progress-text">STAGE 1 OF 5 — ATTRACT</span>
+      <span id="progress-pct">20%</span>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="progress-fill" style="width:20%"></div>
+    </div>
+  </div>
+
+  <div class="stage-nav" id="stage-nav">
+    <button class="stage-btn active" onclick="goTo(0)">
+      <span class="s-num">01</span>
+      <span class="s-dot"></span>
+      <span class="s-label">Attract</span>
+    </button>
+    <button class="stage-btn" onclick="goTo(1)">
+      <span class="s-num">02</span>
+      <span class="s-dot"></span>
+      <span class="s-label">Lease</span>
+    </button>
+    <button class="stage-btn" onclick="goTo(2)">
+      <span class="s-num">03</span>
+      <span class="s-dot"></span>
+      <span class="s-label">Move In</span>
+    </button>
+    <button class="stage-btn" onclick="goTo(3)">
+      <span class="s-num">04</span>
+      <span class="s-dot"></span>
+      <span class="s-label">Reside</span>
+    </button>
+    <button class="stage-btn" onclick="goTo(4)">
+      <span class="s-num">05</span>
+      <span class="s-dot"></span>
+      <span class="s-label">Renew</span>
+    </button>
+  </div>
+
+  <div id="all-panels">
+
+  <!-- STAGE 0: ATTRACT -->
+  <div class="stage-panel active" id="panel-0">
+    <div class="panel-header">
+      <div class="panel-top">
+        <h2 class="panel-title">Attracting prospects</h2>
+        <span class="stage-badge">STAGE 1 OF 5</span>
+      </div>
+      <p class="panel-sub">Before a lease is signed, Entrata helps properties find, filter, and engage the right renters across every digital channel.</p>
+    </div>
+    <div class="modules-grid">
+      <div class="module-card" onclick="showDetail(0,0)">
+        <div class="module-icon" style="background:#e6f1fb;">🏠</div>
+        <div class="module-name">ProspectPortal</div>
+        <div class="module-desc">Branded listing portal for each property. Prospects search units, view floor plans, and self-schedule tours.</div>
+        <span class="module-tag tag-ops">PROPERTY OPS</span>
+      </div>
+      <div class="module-card" onclick="showDetail(0,1)">
+        <div class="module-icon" style="background:#e1f5ee;">📣</div>
+        <div class="module-name">Digital Marketing Bundle</div>
+        <div class="module-desc">SEO, paid ads, ILS syndication to Zillow and Apartments.com. AI adjusts spend based on live occupancy rates.</div>
+        <span class="module-tag tag-ai">AI & AUTOMATION</span>
+      </div>
+      <div class="module-card" onclick="showDetail(0,2)">
+        <div class="module-icon" style="background:#faeeda;">⭐</div>
+        <div class="module-name">ReputationAdvisor</div>
+        <div class="module-desc">Monitors and responds to reviews across 30+ platforms. Sentiment trends surface in the Analytics module.</div>
+        <span class="module-tag tag-res">RESIDENT EXP</span>
+      </div>
+      <div class="module-card" onclick="showDetail(0,3)">
+        <div class="module-icon" style="background:#eeedfe;">🤖</div>
+        <div class="module-name">LeadManager</div>
+        <div class="module-desc">AI lead scoring, automated drip sequences, and a CRM kanban view for leasing agents.</div>
+        <span class="module-tag tag-ai">AI & AUTOMATION</span>
+      </div>
+    </div>
+    <div class="detail-box" id="detail-0">
+      <div class="detail-empty">
+        <div class="detail-empty-arrow">↑</div>
+        <span>Select a module above to see how it connects to the rest of the platform</span>
+      </div>
+    </div>
+    <div class="insight-box">
+      <div class="insight-label">L&D angle</div>
+      <p class="insight-text">New leasing agents need to understand these tools in their first week. <strong>Onboarding for ProspectPortal, LeadManager workflows, and reputation response templates</strong> is a core training need at any property management company using Entrata. Three distinct tools, one learner group, one onboarding track.</p>
+    </div>
+  </div>
+
+  <!-- STAGE 1: LEASE -->
+  <div class="stage-panel" id="panel-1">
+    <div class="panel-header">
+      <div class="panel-top">
+        <h2 class="panel-title">Leasing and screening</h2>
+        <span class="stage-badge">STAGE 2 OF 5</span>
+      </div>
+      <p class="panel-sub">Prospect becomes applicant. Entrata manages applications, screening, digital lease generation, and access provisioning.</p>
+    </div>
+    <div class="modules-grid">
+      <div class="module-card" onclick="showDetail(1,0)">
+        <div class="module-icon" style="background:#e1f5ee;">🔍</div>
+        <div class="module-name">ResidentVerify</div>
+        <div class="module-desc">Background checks, credit screening, income verification — integrated into the application flow and auditable for fair housing.</div>
+        <span class="module-tag tag-ops">PROPERTY OPS</span>
+      </div>
+      <div class="module-card" onclick="showDetail(1,1)">
+        <div class="module-icon" style="background:#e6f1fb;">📋</div>
+        <div class="module-name">Leasing Center</div>
+        <div class="module-desc">Digital lease generation, e-signature, and document management. State-specific templates auto-populated from applicant data.</div>
+        <span class="module-tag tag-ops">PROPERTY OPS</span>
+      </div>
+      <div class="module-card" onclick="showDetail(1,2)">
+        <div class="module-icon" style="background:#faeeda;">🔐</div>
+        <div class="module-name">Access Connect</div>
+        <div class="module-desc">Keyless entry credentials provisioned automatically once lease is countersigned. Revoked on lease end.</div>
+        <span class="module-tag tag-res">RESIDENT EXP</span>
+      </div>
+      <div class="module-card" onclick="showDetail(1,3)">
+        <div class="module-icon" style="background:#eeedfe;">💬</div>
+        <div class="module-name">Message Center</div>
+        <div class="module-desc">Centralised inbox for leasing teams — emails, SMS, and chat from prospects all in one thread, tied to the applicant record.</div>
+        <span class="module-tag tag-ai">AI & AUTOMATION</span>
+      </div>
+    </div>
+    <div class="detail-box" id="detail-1">
+      <div class="detail-empty">
+        <div class="detail-empty-arrow">↑</div>
+        <span>Select a module above to see how it connects to the rest of the platform</span>
+      </div>
+    </div>
+    <div class="insight-box">
+      <div class="insight-label">L&D angle</div>
+      <p class="insight-text"><strong>Fair housing compliance training</strong> maps directly to ResidentVerify and the screening workflow. This is a recurring regulatory requirement — and a prime candidate for a short, xAPI-tracked eLearning module with scenario-based assessment. Completion records double as audit evidence.</p>
+    </div>
+  </div>
+
+  <!-- STAGE 2: MOVE IN -->
+  <div class="stage-panel" id="panel-2">
+    <div class="panel-header">
+      <div class="panel-top">
+        <h2 class="panel-title">Move-in and payments</h2>
+        <span class="stage-badge">STAGE 3 OF 5</span>
+      </div>
+      <p class="panel-sub">First impressions set retention. Entrata handles rent setup, utility billing, and onboarding residents to the payment portal.</p>
+    </div>
+    <div class="modules-grid">
+      <div class="module-card" onclick="showDetail(2,0)">
+        <div class="module-icon" style="background:#eeedfe;">💳</div>
+        <div class="module-name">ResidentPay</div>
+        <div class="module-desc">Online rent payments, autopay, partial payments, and late fee configuration. Posts directly to Accounting GL.</div>
+        <span class="module-tag tag-fin">FINANCE</span>
+      </div>
+      <div class="module-card" onclick="showDetail(2,1)">
+        <div class="module-icon" style="background:#e1f5ee;">⚡</div>
+        <div class="module-name">ResidentUtility</div>
+        <div class="module-desc">RUBS or submeter utility billing integrated into the resident portal alongside rent. Reduces manual billing work.</div>
+        <span class="module-tag tag-fin">FINANCE</span>
+      </div>
+      <div class="module-card" onclick="showDetail(2,2)">
+        <div class="module-icon" style="background:#faeeda;">📦</div>
+        <div class="module-name">Procure to Pay</div>
+        <div class="module-desc">Vendor invoice processing, approval chains, and AP automation for property management teams.</div>
+        <span class="module-tag tag-fin">FINANCE</span>
+      </div>
+      <div class="module-card" onclick="showDetail(2,3)">
+        <div class="module-icon" style="background:#e6f1fb;">📱</div>
+        <div class="module-name">SiteTablet</div>
+        <div class="module-desc">iPad kiosk at the front desk. Residents sign documents, make payments, and log packages without staff involvement.</div>
+        <span class="module-tag tag-res">RESIDENT EXP</span>
+      </div>
+    </div>
+    <div class="detail-box" id="detail-2">
+      <div class="detail-empty">
+        <div class="detail-empty-arrow">↑</div>
+        <span>Select a module above to see how it connects to the rest of the platform</span>
+      </div>
+    </div>
+    <div class="insight-box">
+      <div class="insight-label">L&D angle</div>
+      <p class="insight-text">Finance and accounting staff need training on <strong>ResidentPay reconciliation, delinquency workflows, and Procure to Pay approval chains</strong>. This is where role-based learning paths matter — leasing agents and finance teams need different content from the same platform, at the same time.</p>
+    </div>
+  </div>
+
+  <!-- STAGE 3: RESIDE -->
+  <div class="stage-panel" id="panel-3">
+    <div class="panel-header">
+      <div class="panel-top">
+        <h2 class="panel-title">Resident experience and operations</h2>
+        <span class="stage-badge">STAGE 4 OF 5</span>
+      </div>
+      <p class="panel-sub">Day-to-day property management. Maintenance, accounting, capital planning, and keeping residents satisfied month after month.</p>
+    </div>
+    <div class="modules-grid">
+      <div class="module-card" onclick="showDetail(3,0)">
+        <div class="module-icon" style="background:#faeeda;">🔧</div>
+        <div class="module-name">Facilities Management</div>
+        <div class="module-desc">Maintenance request portal, work order routing, vendor dispatch, and completion tracking with required photo sign-off.</div>
+        <span class="module-tag tag-ops">PROPERTY OPS</span>
+      </div>
+      <div class="module-card" onclick="showDetail(3,1)">
+        <div class="module-icon" style="background:#eeedfe;">📊</div>
+        <div class="module-name">Accounting</div>
+        <div class="module-desc">Full property-management GL — accounts payable/receivable, bank reconciliation, and financial statements by property or portfolio.</div>
+        <span class="module-tag tag-fin">FINANCE</span>
+      </div>
+      <div class="module-card" onclick="showDetail(3,2)">
+        <div class="module-icon" style="background:#e6f1fb;">📈</div>
+        <div class="module-name">Budgeting</div>
+        <div class="module-desc">Annual budget creation, variance tracking, and forecasting tied to live accounting data. Visible to regional managers in real time.</div>
+        <span class="module-tag tag-fin">FINANCE</span>
+      </div>
+      <div class="module-card" onclick="showDetail(3,3)">
+        <div class="module-icon" style="background:#e1f5ee;">🏢</div>
+        <div class="module-name">Facilities Pro</div>
+        <div class="module-desc">Capital planning, asset lifecycle tracking, and preventive maintenance scheduling across the full property portfolio.</div>
+        <span class="module-tag tag-ops">PROPERTY OPS</span>
+      </div>
+    </div>
+    <div class="detail-box" id="detail-3">
+      <div class="detail-empty">
+        <div class="detail-empty-arrow">↑</div>
+        <span>Select a module above to see how it connects to the rest of the platform</span>
+      </div>
+    </div>
+    <div class="insight-box">
+      <div class="insight-label">L&D angle</div>
+      <p class="insight-text">Maintenance coordinators, property accountants, and regional managers are <strong>three distinct learner groups</strong> with different workflows in this stage. An LMS with role-based paths — and completion tracking via xAPI — directly supports compliance and process adoption here. One platform, three audiences, three different learning paths.</p>
+    </div>
+  </div>
+
+  <!-- STAGE 4: RENEW -->
+  <div class="stage-panel" id="panel-4">
+    <div class="panel-header">
+      <div class="panel-top">
+        <h2 class="panel-title">Renewal, analytics, and training</h2>
+        <span class="stage-badge">STAGE 5 OF 5</span>
+      </div>
+      <p class="panel-sub">Retaining residents costs less than replacing them. Entrata surfaces data to act before residents leave — and trains the teams who use the platform.</p>
+    </div>
+    <div class="modules-grid">
+      <div class="module-card" onclick="showDetail(4,0)">
+        <div class="module-icon" style="background:#e1f5ee;">🤖</div>
+        <div class="module-name">AI &amp; Automation Suite</div>
+        <div class="module-desc">Predictive renewal offers, churn risk scoring, and automated outreach triggered by behaviour signals across the platform.</div>
+        <span class="module-tag tag-ai">AI & AUTOMATION</span>
+      </div>
+      <div class="module-card" onclick="showDetail(4,1)">
+        <div class="module-icon" style="background:#eeedfe;">📉</div>
+        <div class="module-name">Analytics</div>
+        <div class="module-desc">Portfolio dashboards: occupancy, NOI, leasing velocity, maintenance backlog, resident satisfaction — configurable by role.</div>
+        <span class="module-tag tag-fin">FINANCE</span>
+      </div>
+      <div class="module-card" onclick="showDetail(4,2)">
+        <div class="module-icon" style="background:#faeeda;">🎓</div>
+        <div class="module-name">Training Services</div>
+        <div class="module-desc">Entrata's own learning platform for end-user training on all modules. Product walkthroughs, certification paths, release training.</div>
+        <span class="module-tag tag-res">RESIDENT EXP</span>
+      </div>
+      <div class="module-card" onclick="showDetail(4,3)">
+        <div class="module-icon" style="background:#e6f1fb;">💰</div>
+        <div class="module-name">Job Costing</div>
+        <div class="module-desc">Tracks spend by project — renovation, capital work, unit turns. Links vendor invoices to specific jobs for ROI analysis.</div>
+        <span class="module-tag tag-fin">FINANCE</span>
+      </div>
+    </div>
+    <div class="detail-box" id="detail-4">
+      <div class="detail-empty">
+        <div class="detail-empty-arrow">↑</div>
+        <span>Select a module above to see how it connects to the rest of the platform</span>
+      </div>
+    </div>
+    <div class="insight-box">
+      <div class="insight-label">L&D angle</div>
+      <p class="insight-text"><strong>Training Services is Entrata's own product for user education.</strong> As Senior L&D Partner, understanding this platform is the starting point — whether you build on top of it, complement it with an LMS, or redesign how Entrata India trains its 900-person team. The Analytics module also tells the story of what good L&D measurement looks like: data that drives decisions, not reports that gather dust.</p>
+    </div>
+  </div>
+
+  </div>
+
+  <div class="nav-row">
+    <button class="nav-btn" id="prev-btn" onclick="navStage(-1)" disabled>← Previous</button>
+    <div class="nav-stage-counter" id="pips">
+      <div class="pip current"></div>
+      <div class="pip"></div>
+      <div class="pip"></div>
+      <div class="pip"></div>
+      <div class="pip"></div>
+    </div>
+    <button class="nav-btn primary" id="next-btn" onclick="navStage(1)">Next stage →</button>
+  </div>
+
+</main>
+
+<section class="diagrams-section">
+  <div class="diagrams-inner">
+
+    <div class="diag-header">
+      <div class="diag-label">Research diagrams</div>
+      <h2 class="diag-title">Reading the role <em>clearly.</em></h2>
+      <p class="diag-sub">Three diagrams built during pre-interview research — to understand what Entrata does, what this role actually asks for, and whether the scope matches the title.</p>
+    </div>
+
+    <div class="diag-tabs" id="diag-tabs">
+      <button class="diag-tab active" onclick="switchDiag(0)">
+        <span class="dtab-num">01</span>
+        <span class="dtab-label">What Entrata does</span>
+      </button>
+      <button class="diag-tab" onclick="switchDiag(1)">
+        <span class="dtab-num">02</span>
+        <span class="dtab-label">Role breakdown</span>
+      </button>
+      <button class="diag-tab" onclick="switchDiag(2)">
+        <span class="dtab-num">03</span>
+        <span class="dtab-label">Three jobs in one</span>
+      </button>
+    </div>
+
+    <div class="diag-context-boxes">
+
+      <div class="diag-pane active" id="dpane-0">
+        <div class="diag-context">
+          <div class="ctx-badge">Context</div>
+          <p>Entrata is a property management SaaS platform — one login, one database, one vendor for everything a landlord needs. The Pune office (900+ engineers) builds the product shipped to 20,000+ US apartment communities daily. Understanding this grounds every L&D conversation in what the business actually does.</p>
+        </div>
+        <div class="svg-viewer">
+          <div class="svg-toolbar">
+            <span class="svg-filename">entrata_what_they_do.svg</span>
+            <div class="zoom-controls">
+              <button onclick="zoom('svg-0',-0.15)">−</button>
+              <span id="zoom-label-0">100%</span>
+              <button onclick="zoom('svg-0',0.15)">+</button>
+              <button onclick="resetZoom('svg-0')">Reset</button>
+            </div>
+          </div>
+          <div class="svg-scroll-wrap" id="svg-0-wrap">
+            <div class="svg-inner" id="svg-0" style="transform-origin: top left;">
+              <img src="entrata_what_they_do.svg" alt="Entrata product overview diagram" style="display:block; width:100%; height:auto; min-width:700px;">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="diag-pane" id="dpane-1">
+        <div class="diag-context">
+          <div class="ctx-badge">Context</div>
+          <p>The JD maps to five distinct responsibility clusters: program management, instructional design, facilitation, learning technology, and change management. Understanding which of these overlap with existing skills and which are gaps is the starting point for an honest conversation about scope in Round 1.</p>
+        </div>
+        <div class="svg-viewer">
+          <div class="svg-toolbar">
+            <span class="svg-filename">entrata_role_understanding.svg</span>
+            <div class="zoom-controls">
+              <button onclick="zoom('svg-1',-0.15)">−</button>
+              <span id="zoom-label-1">100%</span>
+              <button onclick="zoom('svg-1',0.15)">+</button>
+              <button onclick="resetZoom('svg-1')">Reset</button>
+            </div>
+          </div>
+          <div class="svg-scroll-wrap" id="svg-1-wrap">
+            <div class="svg-inner" id="svg-1" style="transform-origin: top left;">
+              <img src="entrata_role_understanding.svg" alt="Role breakdown diagram" style="display:block; width:100%; height:auto; min-width:700px;">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="diag-pane" id="dpane-2">
+        <div class="diag-context">
+          <div class="ctx-badge">Context</div>
+          <p>This role is effectively three jobs compressed into one title: an OD Consultant, an eLearning Developer, and an L&D Programme Manager. My Siemens role covered the eLearning development track in depth. The other two tracks — facilitation-heavy OD and programme management — are adjacent skills, not core ones. This diagram is the basis for the salary and scope conversation.</p>
+        </div>
+        <div class="svg-viewer">
+          <div class="svg-toolbar">
+            <span class="svg-filename">entrata_three_jobs.svg</span>
+            <div class="zoom-controls">
+              <button onclick="zoom('svg-2',-0.15)">−</button>
+              <span id="zoom-label-2">100%</span>
+              <button onclick="zoom('svg-2',0.15)">+</button>
+              <button onclick="resetZoom('svg-2')">Reset</button>
+            </div>
+          </div>
+          <div class="svg-scroll-wrap" id="svg-2-wrap">
+            <div class="svg-inner" id="svg-2" style="transform-origin: top left;">
+              <img src="entrata_three_jobs.svg" alt="Three jobs in one diagram" style="display:block; width:100%; height:auto; min-width:700px;">
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+
+
+  </div>
+</section>
+
+<style>
+.diagrams-section {
+  background: var(--navy); padding: 4rem 0 3rem;
+  border-top: 1px solid var(--border);
+}
+.diagrams-inner {
+  max-width: 960px; margin: 0 auto; padding: 0 1.5rem;
+}
+.diag-label {
+  font-family: var(--font-mono); font-size: 9px; letter-spacing: 2.5px;
+  text-transform: uppercase; color: rgba(255,255,255,0.4);
+  display: flex; align-items: center; gap: 10px; margin-bottom: 1rem;
+}
+.diag-label::before { content: ''; display: inline-block; width: 16px; height: 2px; background: var(--accent); }
+.diag-title {
+  font-family: var(--font-head); font-size: clamp(1.8rem, 4vw, 2.5rem);
+  font-weight: 700; color: white; margin-bottom: 0.75rem; line-height: 1.2;
+}
+.diag-title em { font-style: italic; color: #f5a99a; }
+.diag-sub {
+  font-size: 14px; color: rgba(255,255,255,0.55); line-height: 1.7;
+  max-width: 600px; margin-bottom: 2rem;
+}
+.diag-tabs {
+  display: flex; gap: 0; margin-bottom: 1.5rem;
+  background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 10px; overflow: hidden;
+}
+.diag-tab {
+  flex: 1; padding: 12px 8px; border: none; background: transparent;
+  cursor: pointer; font-family: var(--font-body); transition: all 0.15s;
+  border-right: 1px solid rgba(255,255,255,0.08);
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  min-width: 0;
+}
+.diag-tab:last-child { border-right: none; }
+.dtab-num {
+  font-family: var(--font-mono); font-size: 9px; color: rgba(255,255,255,0.3);
+  letter-spacing: 1px;
+}
+.dtab-label {
+  font-size: 12px; font-weight: 500; color: rgba(255,255,255,0.5);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 110px;
+}
+.diag-tab.active { background: rgba(255,255,255,0.1); }
+.diag-tab.active .dtab-num { color: #f5a99a; }
+.diag-tab.active .dtab-label { color: white; }
+.diag-tab:not(.active):hover { background: rgba(255,255,255,0.05); }
+
+.diag-pane { display: none; }
+.diag-pane.active { display: block; }
+
+.diag-context {
+  background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 8px 8px 0;
+  padding: 14px 16px; margin-bottom: 1rem;
+}
+.ctx-badge {
+  font-family: var(--font-mono); font-size: 9px; letter-spacing: 1.5px;
+  text-transform: uppercase; color: #f5a99a; margin-bottom: 6px;
+}
+.diag-context p { font-size: 13px; color: rgba(255,255,255,0.65); line-height: 1.7; }
+
+.svg-viewer {
+  background: white; border-radius: 10px; overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+.svg-toolbar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 14px; background: #f8f6f3; border-bottom: 1px solid var(--border);
+  gap: 1rem;
+}
+.svg-filename {
+  font-family: var(--font-mono); font-size: 10px; color: var(--muted);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.zoom-controls {
+  display: flex; align-items: center; gap: 6px; flex-shrink: 0;
+}
+.zoom-controls button {
+  font-family: var(--font-mono); font-size: 12px; font-weight: 500;
+  padding: 3px 9px; border: 1px solid var(--border); border-radius: 5px;
+  background: white; color: var(--text); cursor: pointer; transition: all 0.1s;
+  line-height: 1.4;
+}
+.zoom-controls button:hover { background: var(--surface2); }
+.zoom-controls span {
+  font-family: var(--font-mono); font-size: 11px; color: var(--muted);
+  min-width: 38px; text-align: center;
+}
+.svg-scroll-wrap {
+  overflow: auto; max-height: 520px; padding: 16px; background: white;
+  cursor: grab;
+}
+.svg-scroll-wrap:active { cursor: grabbing; }
+.svg-inner { display: inline-block; transition: transform 0.15s ease; }
+
+
+
+@media (max-width: 600px) {
+  .dtab-label { font-size: 10px; max-width: 72px; }
+  .diagrams-section { padding: 2.5rem 0 2rem; }
+  .svg-scroll-wrap { max-height: 380px; }
+}
+</style>
+
+<script>
+var diagScales = [1, 1, 1];
+function switchDiag(n) {
+  document.querySelectorAll('.diag-pane').forEach(function(p,i){ p.classList.toggle('active', i===n); });
+  document.querySelectorAll('.diag-tab').forEach(function(t,i){ t.classList.toggle('active', i===n); });
+}
+function zoom(id, delta) {
+  var idx = parseInt(id.replace('svg-',''));
+  diagScales[idx] = Math.min(3, Math.max(0.3, diagScales[idx] + delta));
+  applyZoom(id, idx);
+}
+function resetZoom(id) {
+  var idx = parseInt(id.replace('svg-',''));
+  diagScales[idx] = 1;
+  applyZoom(id, idx);
+}
+function applyZoom(id, idx) {
+  document.getElementById(id).style.transform = 'scale('+diagScales[idx]+')';
+  document.getElementById('zoom-label-'+idx).textContent = Math.round(diagScales[idx]*100)+'%';
+  var wrap = document.getElementById(id+'-wrap');
+  var img = document.querySelector('#'+id+' img');
+  if (img) {
+    wrap.style.minHeight = Math.round(img.offsetHeight * diagScales[idx] + 32) + 'px';
+  }
+}
+</script>
+
+<footer>
+  Built by <strong>Abhishek Trivedi</strong> · Learning Experience Technologist ·
+  <a href="https://abhishektrivedi.com">abhishektrivedi.com</a> ·
+  <a href="/cdn-cgi/l/email-protection#1a6d756871347b78727369727f716e68736c7f7e735a7d777b737634797577">Let's Talk</a>
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+var current = 0;
+var total = 5;
+var stages = ['ATTRACT','LEASE','MOVE IN','RESIDE','RENEW'];
+
+var details = [
+  [
+    { title: "ProspectPortal", body: "A white-labeled website for each property. Prospects see available units, floor plans, pricing, and photos. They can self-schedule tours and start an application without ever calling the leasing office. Units update in real time as availability changes.", flows: [["Sends leads to LeadManager CRM",true],["Digital Marketing Bundle drives traffic here",false],["Tour bookings trigger Message Center alerts",false]] },
+    { title: "Digital Marketing Bundle", body: "Manages paid search, ILS syndication (Zillow, Apartments.com, Rent.com), and SEO for each property. AI adjusts ad spend based on vacancy rates — if a property hits 95% occupied, it automatically dials back spend. Lead source tracking shows which channels convert.", flows: [["Connects to ProspectPortal for landing pages",true],["AI pulls occupancy data from Analytics",false],["Lead source data feeds back to LeadManager",false]] },
+    { title: "ReputationAdvisor", body: "Aggregates reviews from 30+ platforms into one dashboard. Staff respond from within Entrata without switching tabs. Sentiment trends are tracked over time and surface in the Analytics module. Alerts fire when a property rating drops below a defined threshold.", flows: [["Review sentiment surfaces in Analytics",true],["Response templates managed centrally",false],["Rating alerts sent to leasing managers",false]] },
+    { title: "LeadManager", body: "AI scores inbound leads by likelihood to convert based on budget, timing, and unit preferences. Automated drip sequences follow up with cold leads. Leasing agents see their full pipeline in a single kanban board. Integrates with Message Center for seamless follow-up.", flows: [["Receives leads from ProspectPortal and ILS",true],["Triggers Message Center for agent follow-up",false],["Converts to ResidentVerify application",false]] }
+  ],
+  [
+    { title: "ResidentVerify", body: "Integrated background and credit screening within the application flow. Property managers set criteria — credit score floor, income ratio, criminal history rules. Decisions are stored and auditable for fair housing compliance. Applicants receive results within minutes.", flows: [["Triggered after application submitted in LeadManager",true],["Approved applicants proceed to Leasing Center",false],["Results stored in applicant record for audit",false]] },
+    { title: "Leasing Center", body: "Generates state-specific lease documents automatically from the property's template library. Residents sign digitally from any device. Pet agreements, parking addons, and addenda all attach to the same document package. Signed leases trigger downstream access and accounting actions.", flows: [["Pulls applicant data from ResidentVerify",true],["Signed lease triggers Access Connect",false],["Documents archived in Accounting GL",false]] },
+    { title: "Access Connect", body: "Once a lease is countersigned, keyless entry credentials are provisioned automatically. Works with smart locks, key fobs, and access panels. No manual step needed from the leasing team. Move-out or early termination triggers immediate credential revocation.", flows: [["Triggered by Leasing Center on execution",true],["Integrates with smart lock vendors",false],["Revocation on lease end or termination",false]] },
+    { title: "Message Center", body: "All prospect and resident communication in one inbox — email, SMS, and chat. Leasing agents don't manage separate email threads. Conversation history attaches to the prospect or resident record. AI drafts suggested replies based on message context.", flows: [["Receives leads from LeadManager",true],["AI drafts suggested replies",false],["Full context from applicant record",false]] }
+  ],
+  [
+    { title: "ResidentPay", body: "Residents pay rent online via ACH, credit card, or debit. Autopay reduces delinquency without any staff intervention. Partial payments, payment plans, and late fees are configured at the property level. All payments post directly to the Accounting GL.", flows: [["Payments reconcile to Accounting automatically",true],["Utility charges from ResidentUtility bundled in same invoice",false],["Delinquency alerts surface in leasing dashboard",false]] },
+    { title: "ResidentUtility", body: "Handles RUBS (ratio utility billing) or submeter-based utility billing. Residents see utility charges alongside rent in the same portal. Reduces manual billing work for property staff significantly. Variance alerts flag abnormal consumption for follow-up.", flows: [["Bills route through ResidentPay for unified collection",true],["Usage data stored for reporting and disputes",false],["Abnormal usage alerts go to facilities team",false]] },
+    { title: "Procure to Pay", body: "Vendor invoices submitted digitally. Approval chains configured by property or cost category. Three-way matching against purchase orders. Payment released via ACH when approved. Full audit trail from invoice receipt to payment confirmation.", flows: [["Invoices coded to Accounting GL automatically",true],["Approval workflow triggered by amount threshold",false],["Paid invoices attach to Job Costing",false]] },
+    { title: "SiteTablet", body: "iPad kiosk at the front desk. Residents check in for appointments, sign documents, make payments, and log package pickups — all without staff involvement. Reduces front-desk workload during peak hours. Actions sync to the resident record in real time.", flows: [["Actions sync to resident record in real time",true],["Document signatures go to Leasing Center archive",false],["Package log visible in Message Center",false]] }
+  ],
+  [
+    { title: "Facilities Management", body: "Residents submit maintenance requests via the portal or app. Work orders auto-route to the right tech based on trade and availability. Completion photos required before close-out. Vendor dispatch for jobs beyond in-house capacity. Cost posts to Job Costing.", flows: [["Work orders route from resident requests",true],["Completion data feeds Facilities Pro asset history",false],["Cost posts to Accounting via Job Costing",false]] },
+    { title: "Accounting", body: "Full property-management GL — chart of accounts, bank reconciliation, accounts payable and receivable, and financial statements by property or portfolio. Audit-ready and tied to every other financial module. The single source of truth for all money movement.", flows: [["ResidentPay and ResidentUtility post here automatically",true],["Procure to Pay invoices reconcile here",false],["Budgeting module draws actuals for variance reports",false]] },
+    { title: "Budgeting", body: "Property managers build annual budgets unit by unit. Once approved, actuals from Accounting post against budget lines in real time. Regional managers see portfolio-level variance before it becomes a problem. Capital items feed into Facilities Pro for long-range planning.", flows: [["Pulls actuals from Accounting in real time",true],["Budget vs. actual visible in Analytics dashboards",false],["Capital items feed into Facilities Pro",false]] },
+    { title: "Facilities Pro", body: "Tracks every asset at the property — HVAC units, appliances, roofing, elevators. Records install date, expected life, and replacement cost. Capital planning tool for 3–5 year spend forecasting. Condition data surfaces in Analytics for portfolio-level planning.", flows: [["Asset history fed by Facilities Management",true],["Capital forecasts feed into Budgeting",false],["Condition data surfaces in Analytics",false]] }
+  ],
+  [
+    { title: "AI & Automation Suite", body: "Machine learning models predict which residents are likely to not renew — based on payment history, maintenance request volume, and portal engagement. Triggers personalised retention offers 90 days before lease end. Also automates routine communications: renewal reminders, package notifications, inspection scheduling.", flows: [["Pulls behaviour signals from all modules",true],["Personalised offers sent via Message Center",false],["Renewal decisions update Leasing Center",false]] },
+    { title: "Analytics", body: "Portfolio command center. Occupancy, NOI, leasing velocity, maintenance backlog, collection rates, and resident satisfaction — all in configurable dashboards. Property managers, regional VPs, and ownership groups see different views of the same data. Aggregates every module in real time.", flows: [["Aggregates data from every module",true],["Custom dashboards by role and portfolio",false],["Exports to ownership reporting formats",false]] },
+    { title: "Training Services", body: "Entrata's built-in training platform for end users — property managers, leasing agents, and accounting staff. Contains product walkthroughs, certification paths, and release notes training. This is the L&D team's closest internal product counterpart — and the starting point for any training architecture conversation.", flows: [["Module-specific training tied to product releases",true],["Completion tracking for compliance requirements",false],["The platform the Senior L&D Partner role works around",false]] },
+    { title: "Job Costing", body: "Tracks spend by project — unit turns, renovations, capital improvements. Links vendor invoices from Procure to Pay to specific jobs. Gives ownership accurate cost-per-unit data for renovation ROI decisions. Feeds into Budgeting for ongoing capital planning.", flows: [["Vendor invoices tagged from Procure to Pay",true],["Cost data feeds Budgeting and Facilities Pro",false],["Renovation ROI calculated per unit for Analytics",false]] }
+  ]
+];
+
+function showDetail(stage, idx) {
+  var grid = document.querySelectorAll('#panel-' + stage + ' .module-card');
+  grid.forEach(function(c) { c.classList.remove('selected'); });
+  grid[idx].classList.add('selected');
+  var d = details[stage][idx];
+  var flowsHtml = '<div class="flow-label">Connects to</div>' + d.flows.map(function(f) {
+    return '<span class="flow-chip' + (f[1] ? ' primary' : '') + '"><span class="chip-dot"></span>' + f[0] + '</span>';
+  }).join('');
+  document.getElementById('detail-' + stage).innerHTML =
+    '<div class="detail-title">' + d.title + '</div>' +
+    '<div class="detail-body">' + d.body + '</div>' +
+    '<div class="detail-flows">' + flowsHtml + '</div>';
+}
+
+function goTo(n) {
+  var panels = document.querySelectorAll('.stage-panel');
+  var btns = document.querySelectorAll('.stage-btn');
+  btns[current].classList.remove('active');
+  if (current < n) btns[current].classList.add('visited');
+  panels[current].classList.remove('active');
+  current = n;
+  panels[current].classList.add('active');
+  btns[current].classList.remove('visited');
+  btns[current].classList.add('active');
+  updateUI();
+}
+
+function navStage(dir) {
+  var next = current + dir;
+  if (next < 0 || next >= total) return;
+  goTo(next);
+}
+
+function updateUI() {
+  document.getElementById('prev-btn').disabled = current === 0;
+  var nextBtn = document.getElementById('next-btn');
+  nextBtn.disabled = current === total - 1;
+  nextBtn.textContent = current === total - 1 ? 'All stages complete' : 'Next stage →';
+  var pct = Math.round((current + 1) / total * 100);
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-text').textContent = 'STAGE ' + (current + 1) + ' OF ' + total + ' — ' + stages[current];
+  document.getElementById('progress-pct').textContent = pct + '%';
+  var pips = document.querySelectorAll('.nav-stage-coun
