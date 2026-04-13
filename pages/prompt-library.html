@@ -1,0 +1,1741 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Prompt Library for Instructional Designers — Abhishek Trivedi</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f5f0eb;
+    --navy: #1e3a5f;
+    --navy-dark: #162d4a;
+    --terra: #c0392b;
+    --terra-light: #e74c3c;
+    --text: #1a1a1a;
+    --muted: #888888;
+    --border: #e0d8d0;
+    --white: #ffffff;
+    --linen-dark: #ede7df;
+    --card-bg: #ffffff;
+    --serif: 'Playfair Display', Georgia, serif;
+    --sans: 'DM Sans', system-ui, sans-serif;
+    --mono: 'JetBrains Mono', monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--sans);
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  .site-header {
+    background: var(--navy);
+    padding: 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.15);
+  }
+
+  .terra-bar { height: 3px; background: var(--terra); }
+
+  .header-inner {
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 14px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .logo {
+    font-family: var(--mono);
+    font-size: 1rem;
+    color: var(--terra);
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-decoration: none;
+  }
+
+  .header-meta {
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.5);
+    font-family: var(--mono);
+  }
+
+  /* ── HERO ── */
+  .hero {
+    background: var(--navy-dark);
+    padding: 40px 32px 36px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: radial-gradient(ellipse at 30% 50%, rgba(192,57,43,0.08) 0%, transparent 60%),
+                radial-gradient(ellipse at 70% 30%, rgba(255,255,255,0.03) 0%, transparent 50%);
+    pointer-events: none;
+  }
+
+  .hero-label {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    color: var(--terra);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    display: block;
+  }
+
+  .hero h1 {
+    font-family: var(--serif);
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    color: var(--white);
+    line-height: 1.2;
+    max-width: 700px;
+    margin: 0 auto 16px;
+  }
+
+  .hero h1 em {
+    color: var(--terra);
+    font-style: italic;
+  }
+
+  .hero-sub {
+    color: rgba(255,255,255,0.6);
+    font-size: 0.95rem;
+    max-width: 540px;
+    margin: 0 auto 32px;
+    line-height: 1.6;
+  }
+
+  .hero-stats {
+    display: flex;
+    gap: 32px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .stat {
+    text-align: center;
+  }
+
+  .stat-num {
+    font-family: var(--serif);
+    font-size: 1.6rem;
+    color: var(--terra);
+    font-weight: 700;
+    display: block;
+  }
+
+  .stat-label {
+    font-size: 0.72rem;
+    color: rgba(255,255,255,0.45);
+    font-family: var(--mono);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  /* ── HOW TO USE ── */
+  .how-to {
+    background: var(--terra);
+    padding: 16px 24px;
+    text-align: center;
+  }
+
+  .how-to p {
+    color: var(--white);
+    font-size: 0.85rem;
+    font-weight: 500;
+  }
+
+  .how-to strong { font-family: var(--mono); }
+
+  /* ── FILTERS ── */
+  .filters-wrap {
+    max-width: 100%;
+    margin: 24px auto 0;
+    padding: 0 32px;
+  }
+
+  .filters-label {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 12px;
+    display: block;
+  }
+
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .filter-btn {
+    font-family: var(--sans);
+    font-size: 0.82rem;
+    font-weight: 500;
+    padding: 7px 16px;
+    border: 1.5px solid var(--border);
+    border-radius: 100px;
+    background: var(--white);
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+
+  .filter-btn:hover {
+    border-color: var(--navy);
+    color: var(--navy);
+  }
+
+  .filter-btn.active {
+    background: var(--navy);
+    border-color: var(--navy);
+    color: var(--white);
+  }
+
+  /* ── SEARCH ── */
+  .search-wrap {
+    max-width: 100%;
+    margin: 12px auto 0;
+    padding: 0 32px;
+  }
+
+  .search-input {
+    width: 100%;
+    max-width: 420px;
+    padding: 10px 16px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    font-family: var(--sans);
+    font-size: 0.9rem;
+    background: var(--white);
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .search-input:focus { border-color: var(--navy); }
+  .search-input::placeholder { color: var(--muted); }
+
+  /* ── GRID ── */
+  .prompts-wrap {
+    max-width: 100%;
+    margin: 20px auto 40px;
+    padding: 0 32px;
+  }
+
+  .category-section { margin-bottom: 40px; }
+
+  .category-heading {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--border);
+  }
+
+  .category-icon {
+    width: 32px;
+    height: 32px;
+    background: var(--navy);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    flex-shrink: 0;
+  }
+
+  .category-title {
+    font-family: var(--serif);
+    font-size: 1.2rem;
+    color: var(--navy);
+    font-weight: 600;
+  }
+
+  .category-count {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    color: var(--muted);
+    background: var(--linen-dark);
+    padding: 2px 8px;
+    border-radius: 100px;
+  }
+
+  .prompts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+  }
+
+  /* ── PROMPT CARD ── */
+  .prompt-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    transition: box-shadow 0.2s, border-color 0.2s, transform 0.2s;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .prompt-card:hover {
+    box-shadow: 0 4px 20px rgba(30,58,95,0.1);
+    border-color: rgba(30,58,95,0.25);
+    transform: translateY(-1px);
+  }
+
+  .prompt-card.hidden { display: none; }
+
+  .prompt-num {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+  }
+
+  .prompt-title {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--navy);
+    line-height: 1.4;
+  }
+
+  .prompt-use {
+    font-size: 0.78rem;
+    color: var(--muted);
+    line-height: 1.4;
+  }
+
+  .prompt-text {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--terra);
+    border-radius: 6px;
+    padding: 12px 14px;
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    color: var(--text);
+    line-height: 1.65;
+    white-space: pre-wrap;
+    word-break: break-word;
+    flex: 1;
+  }
+
+  .prompt-example {
+    background: rgba(192,57,43,0.04);
+    border: 1px dashed rgba(192,57,43,0.3);
+    border-radius: 6px;
+    padding: 10px 12px;
+    font-size: 0.76rem;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  .prompt-example strong {
+    color: var(--terra);
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    display: block;
+    margin-bottom: 4px;
+    font-family: var(--mono);
+  }
+
+  .copy-btn {
+    align-self: flex-end;
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    font-weight: 500;
+    padding: 7px 14px;
+    background: var(--navy);
+    color: var(--white);
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.15s, transform 0.1s;
+    letter-spacing: 0.03em;
+  }
+
+  .copy-btn:hover { background: var(--navy-dark); }
+  .copy-btn:active { transform: scale(0.97); }
+  .copy-btn.copied { background: #2d7a2d; }
+
+  /* ── FOOTER ── */
+  .site-footer {
+    background: var(--navy-dark);
+    padding: 32px 24px;
+    text-align: center;
+  }
+
+  .footer-inner { max-width: 700px; margin: 0 auto; }
+
+  .footer-logo {
+    font-family: var(--mono);
+    font-size: 1.1rem;
+    color: var(--terra);
+    font-weight: 500;
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  .footer-tagline {
+    font-family: var(--serif);
+    font-size: 1rem;
+    color: rgba(255,255,255,0.6);
+    font-style: italic;
+    margin-bottom: 16px;
+  }
+
+  .footer-links {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .footer-links a {
+    font-size: 0.82rem;
+    color: rgba(255,255,255,0.45);
+    text-decoration: none;
+    font-family: var(--mono);
+    transition: color 0.2s;
+  }
+
+  .footer-links a:hover { color: var(--terra); }
+
+  .no-results {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--muted);
+    display: none;
+  }
+
+  .no-results h3 {
+    font-family: var(--serif);
+    font-size: 1.2rem;
+    color: var(--navy);
+    margin-bottom: 8px;
+  }
+
+  @media (max-width: 600px) {
+    .hero { padding: 40px 20px 36px; }
+    .prompts-grid { grid-template-columns: 1fr; }
+    .hero-stats { gap: 20px; }
+    .filters { gap: 6px; }
+    .filter-btn { font-size: 0.76rem; padding: 6px 12px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="terra-bar"></div>
+<header class="site-header">
+  <div class="header-inner">
+    <a class="logo" href="https://abhishektrivedi.com">AT.</a>
+    <span class="header-meta">abhishektrivedi.com</span>
+  </div>
+</header>
+
+<section class="hero">
+  <span class="hero-label">Free Resource · Learning Experience Technologist</span>
+  <h1>AI Prompt Library for<br><em>Instructional Designers</em></h1>
+  <p class="hero-sub">50 tested prompts organised by ID workflow stage. Copy, fill the brackets, and get results — no prompt engineering experience needed.</p>
+  <div class="hero-stats">
+    <div class="stat"><span class="stat-num">50</span><span class="stat-label">Prompts</span></div>
+    <div class="stat"><span class="stat-num">8</span><span class="stat-label">ID Stages</span></div>
+    <div class="stat"><span class="stat-num">100%</span><span class="stat-label">Copy-paste ready</span></div>
+  </div>
+</section>
+
+<div class="how-to">
+  <p>How to use: Click <strong>Copy Prompt</strong> → Paste into Claude or ChatGPT → Replace <strong>[BRACKETED]</strong> text with your details → Iterate.</p>
+</div>
+
+<div class="filters-wrap">
+  <span class="filters-label">Filter by stage</span>
+  <div class="filters" id="filters">
+    <button class="filter-btn active" data-cat="all">All 50</button>
+    <button class="filter-btn" data-cat="analysis">Needs Analysis</button>
+    <button class="filter-btn" data-cat="objectives">Learning Objectives</button>
+    <button class="filter-btn" data-cat="scenarios">Scenario Writing</button>
+    <button class="filter-btn" data-cat="assessment">Assessment Design</button>
+    <button class="filter-btn" data-cat="storyboard">Storyboarding</button>
+    <button class="filter-btn" data-cat="sme">SME Collaboration</button>
+    <button class="filter-btn" data-cat="review">Review & QA</button>
+    <button class="filter-btn" data-cat="evaluation">Evaluation</button>
+  </div>
+</div>
+
+<div class="search-wrap">
+  <input class="search-input" type="text" id="search" placeholder="Search prompts..." />
+</div>
+
+<div class="prompts-wrap" id="prompts-wrap">
+
+  <!-- NEEDS ANALYSIS -->
+  <div class="category-section" data-cat="analysis">
+    <div class="category-heading">
+      <div class="category-icon">🔍</div>
+      <span class="category-title">Needs Analysis</span>
+      <span class="category-count">7 prompts</span>
+    </div>
+    <div class="prompts-grid">
+
+      <div class="prompt-card" data-cat="analysis">
+        <span class="prompt-num">01 · NEEDS ANALYSIS</span>
+        <div class="prompt-title">SME Interview Question Generator</div>
+        <div class="prompt-use">Use when: preparing for your first SME discovery call</div>
+        <div class="prompt-text">You are an experienced instructional designer conducting a needs analysis for a new course.
+
+Generate 12 discovery questions for an SME interview about [TOPIC, e.g. "workplace safety for construction workers"].
+
+The audience is [LEARNER ROLE, e.g. "frontline supervisors, 5-15 yrs experience"].
+
+The business context is [CONTEXT, e.g. "3 incidents in the last 6 months, leadership wants mandatory training"].
+
+Structure the questions across: current performance gaps, root causes, existing knowledge, barriers to change, and success metrics. Include one question that surfaces what the SME thinks learners already know but actually don't.</div>
+        <div class="prompt-example"><strong>Filled example</strong>Topic: "Customer complaint handling" · Audience: "Call centre agents, 6-18 months experience" · Context: "CSAT scores dropped 12% after a process change"</div>
+        <button class="copy-btn" onclick="copyPrompt(this)">Copy Prompt</button>
+      </div>
+
+      <div class="prompt-card" data-cat="analysis">
+        <span class="prompt-num">02 · NEEDS ANALYSIS</span>
+        <div class="prompt-title">Performance Gap Diagnosis</div>
+        <div class="prompt-use">Use when: a stakeholder says "we need training" but you're not sure it's a training problem</div>
+        <div class="prompt-text">I'm an instructional designer reviewing a potential training request. Help me diagnose whether this is a training problem or a performance system problem.
+
+The situation: [DESCRIBE THE SITUATION, e.g. "Sales reps are missing their quarterly targets. Manager says they need product knowledge training."]
+
+Ask me 5 diagnostic questions — one at a time — to determine whether the gap is caused by: lack of knowledge/skill, lack of motivation, unclear expectations, lack of tools/resources, or consequences not aligned with desired behaviour.
+
+After my answers, give me a verdict with your reasoning and recommend the appropriate intervention type.</div>
+        <div class="prompt-example"><strong>Filled example</strong>Situation: "New hires are making errors in the onboarding process. HR wants a 4-hour compliance e-learning module."</div>
+        <button class="copy-btn" onclick="copyPrompt(this)">Copy Prompt</button>
+      </div>
+
+      <div class="prompt-card" data-cat="analysis">
+        <span class="prompt-num">03 · NEEDS ANALYSIS</span>
+        <div class="prompt-title">Learner Persona Builder</div>
+        <div class="prompt-use">Use when: designing for an audience you haven't met yet</div>
+        <div class="prompt-text">Build 2 distinct learner personas for a course on [TOPIC].
+
+The actual learners are: [DESCRIBE AUDIENCE, e.g. "mid-level managers in a manufacturing company, mostly 35-50 years old, not tech-savvy"].
+
+For each persona include:
+- Name, role, and a one-line backstory
+- What they already know about this topic
+- What they think they know (but don't)
+- Their biggest frustration related to this topic
+- How they prefer to learn (and what they resist)
+- What success looks like for them personally
+- One quote they might say in a training session
+
+Make them feel real, not like HR job descriptions.</div>
+        <div class="prompt-example"><strong>Filled example</strong>Topic: "Data privacy and GDPR" · Audience: "Marketing team members, mix of digital natives and people who joined before social media existed"</div>
+        <button class="copy-btn" onclick="copyPrompt(this)">Copy Prompt</button>
+      </div>
+
+      <div class="prompt-card" data-cat="analysis">
+        <span class="prompt-num">04 · NEEDS ANALYSIS</span>
+        <div class="prompt-title">SME Interview Transcript Analyser</div>
+        <div class="prompt-use">Use when: you have raw SME notes and need structured insights</div>
+        <div class="prompt-text">I'm going to paste notes from an SME interview. Analyse them and extract:
+
+1. Key performance gaps (what learners can't do now)
+2. Root causes mentioned or implied
+3. Critical knowledge the SME assumes but didn't explicitly state
+4. Contradictions or gaps in the SME's own account
+5. 3 learning objectives the content could support
+6. Questions I should ask in a follow-up interview
+
+Here are the notes:
+[PASTE YOUR SME INTERVIEW NOTES HERE]</div>
+        <div class="prompt-example"><strong>Filled example</strong>Paste 200-400 words of raw interview notes. The more specific the notes, the more specific the output.</div>
+        <button class="copy-btn" onclick="copyPrompt(this)">Copy Prompt</button>
+      </div>
+
+      <div class="prompt-card" data-cat="analysis">
+        <span class="prompt-num">05 · NEEDS ANALYSIS</span>
+        <div class="prompt-title">Stakeholder Brief Translator</div>
+        <div class="prompt-use">Use when: a stakeholder sends a vague brief and you need to translate it into design requirements</div>
+        <div class="prompt-text">I received this brief from a stakeholder for a new training project:
+
+[PASTE STAKEHOLDER BRIEF]
+
+Translate this into a structured needs analysis summary with:
+- Stated business problem (what they said)
+- Inferred real problem (what they probably mean)
+- Target audience and current performance baseline
+- Desired performance after training
+- Assumptions I need to validate before designing
+- Red flags or risks in this brief
+- 3 clarifying questions I should send back before starting work</div>
+        <div class="prompt-example"><strong>Filled example</strong>Brief: "We need a 30-minute e-learning on time management for the whole company. Can you have it ready in two weeks?"</div>
+        <button class="copy-btn" onclick="copyPrompt(this)">Copy Prompt</button>
+      </div>
+
+      <div class="prompt-card" data-cat="analysis">
+        <span class="prompt-num">06 · NEEDS ANALYSIS</span>
+        <div class="prompt-title">Task Analysis Breakdown</div>
+        <div class="prompt-use">Use when: you need to deconstruct a complex skill or procedure into teachable steps</div>
+        <div class="prompt-text">Perform a cognitive task analysis for the following skill or procedure:
+
+Skill: [SKILL OR TASK, e.g. "Conducting a performance review conversation"]
+Performer level: [NOVICE / INTERMEDIATE / EXPERT]
+Context: [WHERE THIS HAPPENS, e.g. "1:1 meeting between manager and direct report"]
+
+Break it into:
+1. Pre-conditions (what the performer needs to know/have before starting)
+2. Step-by-step procedure (what they physically/cognitively do)
+3. Decision points (where they might diverge based on the situation)
+4. Common errors at each step
+5. Cues an expert uses that a novice wouldn't notice
+6. What "good" looks like vs "barely acceptable"</div>
+        <div class="prompt-example"><strong>Filled example</strong>Skill: "Diagnosing a customer's internet connectivity issue over the phone" · Level: Novice · Context: "Technical support call centre"</div>
+        <button class="copy-btn" onclick="copyPrompt(this)">Copy Prompt</button>
+      </div>
+
+      <div class="prompt-card" data-cat="analysis">
+        <span class="prompt-num">07 · NEEDS ANALYSIS</span>
+        <div class="prompt-title">Action Mapping Starter</div>
+        <div class="prompt-use">Use when: beginning a Cathy Moore-style action map for a performance problem</div>
+        <div class="prompt-text">Help me build an action map for a training project.
+
+Business goal: [BUSINESS GOAL, e.g. "Reduce customer churn rate by 15% in 6 months"]
+The people who need to change behaviour: [AUDIENCE, e.g. "Customer success managers"]
+
+Step 1: Identify 4-6 specific actions these people need to take differently to achieve the business goal. Not "understand" or "know" — observable actions.
+
+Step 2: For each action, identify what's currently stopping them (knowledge gap, motivation, environment, tools).
+
+Step 3: For each knowledge gap, suggest the minimum content needed — not everything they could know, just what they need to do the action.
+
+Output as a structured list, not a paragraph.</div>
+        <div class="prompt-example"><strong>Filled example</strong>Goal: "Increase upsell revenue by 20%" · Audience: "Retail store associates in a telecom company"</div>
+        <button class="copy-btn" onclick="copyPrompt(this)">Copy Prompt</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- LEARNING OBJECTIVES -->
+  <div class="category-section" data-cat="objectives">
+    <div class="category-heading">
+      <div class="category-icon">🎯</div>
+      <span class="category-title">Learning Objectives</span>
+      <span class="category-count">6 prompts</span>
+    </div>
+    <div class="prompts-grid">
+
+      <div class="prompt-card" data-cat="objectives">
+        <span class="prompt-num">08 · OBJECTIVES</span>
+        <div class="prompt-title">Objectives at the Right Bloom's Level</div>
+        <div class="prompt-use">Use when: writing objectives and unsure which cognitive level is right</div>
+        <div class="prompt-text">Write 5 learning objectives for a course on [TOPIC].
+
+The learners are [AUDIENCE]. They will use this knowledge/skill in [CONTEXT WHERE THEY'LL APPLY IT].
+
+The desired Bloom's taxonomy level is [LEVEL: Remember / Understand / Apply / Analyse / Evaluate / Create].
+
+Rules:
+- Use strong, measurable action verbs (no "understand", "know", or "appreciate")
+- Each objective should be testable — I should be able to design an assessment for it
+- Format: "By the end of this module, learners will be able to [VERB] [OBJECT] [CONDITION/STANDARD]"
+- Flag if any objective I could combine or if I'm missing a critical one</div>
+        <div class="prompt-example"><strong>Filled example</strong>Topic: "Conflict resolution for team leads" · Audience: "Newly promoted managers" · Context: "Weekly team meetings and 1:1s" · Level: Apply</div>
+        <button class="copy-btn" onclick="copyPrompt(this)">Copy Prompt</button>
+      </div>
+
+      <div class="prompt-card" data-cat="objectives">
+        <span class="prompt-num">09 · OBJECTIVES</span>
+        <div class="prompt-title">Objective Audit — Fix My Draft</div>
+        <div class="prompt-use">Use when: you've written objectives and want to stress-test them</div>
+        <div class="prompt-text">Audit these learning objectives and improve them:
+
+[PASTE YOUR CURRENT OBJECTIVES]
+
+For each one:
+1. Identify the Bloom's level (as written)
+2. Flag if the verb is weak or untestable
+3. Flag if the objective describes activities rather than outcomes
+4. Rewrite it at the appropriate Bloom's level for the course
+5. Suggest a brief assessment activity that would test this objective
+
+Be direct. If an objective is fundamentally broken, say so and explain why.</div>
+        <div class="prompt-example"><strong>Filled example</strong>Paste objectives like: "Learners will understand the importance of cybersecurity" / "Participants will be aware of data protection rules"</div>
+        <button class="copy-btn" onclick="copyPrompt(this)">Copy Prompt</button>
+      </div>
+
+      <div class="prompt-card" data-cat="objectives">
+        <span class="prompt-num">10 · OBJECTIVES</span>
+        <div class="prompt-title">Module Objectives from Course Goal</div>
+        <div class="prompt-use">Use when: breaking a course-level goal into module-level objectives</div>
+        <div class="prompt-text">I have a course-level goal and need to break it into module objectives.
+
+Course goal: [COURSE GOAL, e.g. "Learners will be able to conduct a compliant sales conversation under the new FCA regulations"]
+
+This is a [NUMBER]-module course. The audience is [AUDIENCE].
+
+For each module, suggest:
+- A clear module title
+- 2-3 learning objectives at the appropriate Bloom's level
+- The relationship between this module and the course goal
+- The order rationale (why this module belongs here in the sequence)</div>
+        <div class="prompt-example"><strong>Filled example</strong>Goal: "New joiners will be able to follow the full order fulfilment process without supervision within 4 weeks" · Modules: 5 · Audience: "Warehouse operatives"</div>
+        <button class="copy-btn" onclick="copyPrompt(this)">Copy Prompt</button>
+      </div>
+
+      <div class="prompt-card" data-cat="objectives">
+        <span class="prompt-num">11 · OBJECTIVES</span>
+        <div class="prompt-title">Competency to Objective Converter</div>
+        <div class="prompt-use">Use when: HR gives you a competency framework and you need to turn it into training objectives</div>
+        <div class="prompt-text">Convert this competency description into actionable learning objectives suitable for a [LENGTH, e.g. "45-minute"] e-learning module.
+
+Competency: [PASTE COMPETENCY DESCRIPTION]
+Proficiency level expected: [LEVEL, e.g. "Developing / Proficient / Expert"]
+Audience: [AUDIENCE]
+
+For each objective:
+- Use Bloom's verbs appropriate to the proficiency level
+- Make it specific enough to design an assessment around
+- Avoid restating the competency description — translate it into behaviours I can teach and measure</div>
+        <div class="prompt-example"><strong>Filled example</strong>Competency: "Demonstrates commercial awareness by understanding market dynamics and translating them into business decisions"</div>
+        <button class="copy-btn" onclick="copyPrompt(this)">Copy Prompt</button>
+      </div>
+
+      <div class="prompt-card" data-cat="objectives">
+        <span class="prompt-num">12 · OBJECTIVES</span>
+        <div class="prompt-title">Attitude / Behaviour Objective Writer</div>
+        <div class="prompt-use">Use when: the training goal involves changing mindsets, not just skills</div>
+        <div class="prompt-text">Write learning objectives for a training that needs to change attitude or behaviour, not just build knowledge.
+
+The behavioural change needed: [DESCRIBE THE CHANGE, e.g. "Managers need to move from task-assigning to coaching conversations"]
+Current state: [WHAT THEY DO NOW]
+Desired state: [WHAT THEY SHOULD DO]
+Audience: [AUDIENCE]
+
+Important: attitude change can't be directly measured. Write objectives that measure the behavioural evidence of attitude change — what I'd see someone doing differently if they'd internalised the shift.
+
+Include one objective at each level: behaviour in a controlled setting, behaviour in a real work situation, and behaviour under pressure.</div>
+        <div class="prompt-example"><strong>Filled example</strong>Change: "Customer service agents shift from script-reading to genuine empathy" · Now: "Following scripts, rushing to solutions" · Desired: "Active listening, acknowledging emotion before solving"</div>
+        <button class="copy-btn" onclick="copyPrompt(this)">Copy Prompt</button>
+      </div>
+
+      <div class="prompt-card" data-cat="objectives">
+        <span class="prompt-num">13 · OBJECTIVES</span>
+        <div class="prompt-title">Terminal vs Enabling Objectives</div>
+        <div class="prompt-use">Use when: designing a multi-step course that builds toward a final performance</div>
+        <div class="prompt-text">For this terminal objective, write 4-6 enabling objectives that scaffold toward it.
+
+Terminal objective: [YOUR TERMINAL OBJECTIVE, e.g. "Given a client brief, learners will be able to design a compliant, needs-mapped L&D programme within 5 working days"]
+
+Audience: [AUDIENCE, e.g. "Junior L&D business partners, 0-2 years in role"]
+
+Enabling objectives should:
+- Build prerequisite knowledge and skills in logical order
+- Connect explicitly to the terminal objective
+- Cover knowledge, process, and judgment — not just facts
+- Be teachable in distinct modules
+
+Flag any enabling objective that I could skip if learners already have the prerequisite skill.</div>
+        <div class="prompt-example"><strong>Filled example</strong>Terminal: "Learners will be able to identify and respond to signs of financial vulnerability in a customer conversation in real time"</div>
+        <button class="copy-btn" onclick="copyPrompt(this)">Copy Prompt</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SCENARIO WRITING -->
+  <div class="category-section" data-cat="scenarios">
+    <div class="category-heading">
+      <div class="category-icon">🎭</div>
+      <span class="category-title">Scenario Writing</span>
+      <span class="category-count">7 prompts</span>
+    </div>
+    <div class="prompts-grid">
+
+      <div class="prompt-card" data-cat="scenarios">
+        <span class="prompt-num">14 · SCENARIOS</span>
+        <div class="prompt-title">Branching Scenario Builder</div>
+        <div class="prompt-use">Use when: designing a decision-based scenario with meaningful consequences</div>
+        <div class="prompt-text">Write a branching scenario for an e-learning course on [TOPIC].
+
+Learner role: [WHO THEY PLAY IN THE SCENARIO, e.g. "a team lead"]
+The decision they face: [CORE DECISION, e.g. "whether to report a colleague's safety violation"]
+Stakes: [WHAT'S AT RISK, e.g. "team relationships, personal reputation, legal liability"]
+
+Structure:
+- Opening situation (2-3 sentences, realistic, immediate)
+- 3 choices (one clearly wrong, one appealing-but-wrong, one right-but-difficult)
+- Consequence for each choice (realistic, not punitive — show real-world impact)
+- A follow-up decision for the correct branch only
+
+Make the "wrong but tempting" choice genuinely tempting — the one a real person would actually pick under pressure.</div>
+        <div class="prompt-example"><strong>Filled example</strong>Topic: "Giving feedback to a defensive colleague" · Role: "Project manager" · Decision: "How to address missed deadlines without damaging the relationship"</div>
+        <button class="copy-btn" onclick="copyPrompt(this)">Copy Prompt</button>
+      </div>
+
+      <div class="prompt-card" data-cat="scenarios">
+        <span class="prompt-num">15 · SCENARIOS</span>
+        <div class="prompt-title">Realistic Character Creator</div>
+        <div class="prompt-use">Use when: you need believable characters for scenario-based learning</div>
+        <div class="prompt-text">Create 3 realistic characters for scenarios in a course about [TOPIC].
+
+The course audience is [AUDIENCE]. The characters will appear as colleagues, customers, or managers that learners interact with.
+
+For each character:
+- Name and role (specific, not generic)
+- Communication style and personality (one telling detail, not a list)
+- Their default reaction to the situation: what they do/say before the learner intervenes
+- What they actually need (vs what they appear to want)
+- One piece of dialogue that immediately establishes their character
+
+Avoid stereotypes. Make at least one character surprising — not what you'd expect from their role.</div>
+        <div class="prompt-example"><strong>Filled example</strong>Topic: "Handling difficult conversations about performance" · Audience: "People managers in a tech company"</div>
+        <button class="copy-btn" onclick="copyPrompt(this)">Copy Prompt</button>
+      </div>
+
+      <div class="prompt-card" data-cat="scenarios">
+        <span class="prompt-num">16 · SCENARIOS</span>
+        <div class="prompt-title">Scenario Opener — Hook the Learner</div>
+        <div class="prompt-use">Use when: you need a strong opening line that drops learners immediately into a situation</div>
+        <div class="prompt-text">Write 5 different opening lines for a scenario-based e-learning module on [TOPIC].
+
+Each opener should:
+- Drop the learner in the middle of a situation (in medias res — no preamble)
+- Create immediate stakes or tension
+- Be under 40 words
+- Avoid starting with "You are a..." or "Imagine you are..."
+- Use present tense
+
+The audience is [AUDIENCE]. The performance gap this scenario addresses is [PERFORMANCE GAP].
+
+Label each by the emotional hook it uses (urgency, curiosity, discomfort, empathy, consequence).</div>
+        <div class="prompt-example"><strong>Filled example</strong>Topic: "Spotting early signs of employee disengagement" · Audience: "Line managers" · Gap: "Managers wait too long before having check-in conversations"</div>
+        <button class="copy-btn" onclick="copyPrompt(this)">Copy Prompt</button>
+      </div>
+
+      <div class="prompt-card" data-cat="scenarios">
+        <span class="prompt-num">17 · SCENARIOS</span>
+        <div class="prompt-title">Wrong-But-Tempting Distractor Generator</div>
+        <div class="prompt-use">Use when: your scenario choices are too obvious and learners are guessing correctly without thinking</div>
+        <div class="prompt-text">I have a scenario with a correct answer. Help me write 2 distractors that are wrong but genuinely tempting.
+
+The scenario: [DESCRIBE THE SITUATION]
+The correct choice: [WHAT THE LEARNER SHOULD DO]
+The learning objective this tests: [OBJECTIVE]
+The audience: [AUDIENCE]
+
+Distractor 1: The choice that feels efficient or "common sense" but misses the nuance
+Distractor 2: The choice that follows the rules but for the wrong reason, or at the wrong time
+
+For each distractor:
+- Write the choice text (15-25 words)
+- Write the consequence/feedback (what actually happens, and why this was wrong)
+- Explain the cognitive trap that makes this choice appealing</div>
+        <div class="prompt-example"><strong>Filled example</strong>Scenario: "A customer is clearly upset. They've been on hold for 20 minutes." · Correct: "Acknowledge the wait before anything else"</div>
+        <button class="copy-btn" onclick="copyPrompt(this)">Copy Prompt</button>
+      </div>
+
+      <div class="prompt-card" data-cat="scenarios">
+        <span class="prompt-num">18 · SCENARIOS</span>
+        <div class="prompt-title">Consequence Feedback Writer</div>
+        <div class="prompt-use">Use when: writing the feedback text after each scenario choice</div>
+        <div class="prompt-text">Write consequence feedback for each of these scenario choices. The feedback should show real-world impact — not just "correct/incorrect."
+
+Topic: [TOPIC]
+Scenario summary: [BRIEF SITUATION DESCRIPTION]
+Choice A (correct): [CHOICE TEXT]
+Choice B (wrong — avoidance): [CHOICE TEXT]
+Choice C (wrong — overreaction): [CHOICE TEXT]
+
+For each feedback block:
+- Show what happens next (the real consequence, 2-3 sentences)
+- Explain the principle behind the correct/incorrect approach
+- For wrong choices: don't be punitive — show the human cost, not just the rule broken
+- For the correct choice: don't over-celebrate — acknowledge the difficulty
+- Max 80 words per feedback block</div>
+        <div class="prompt-example"><strong>Filled example</strong>Topic: "Raising a compliance concern with your manager" · A (correct): "I schedule a private conversation and bring documentation" · B: "I say nothing and hope someone else reports it" · C: "I escalate directly to the compliance team without talking to my manager"</div>
+        <button class="copy-btn" onclick="copyPrompt(this)">Copy Prompt</button>
+      </div>
+
+      <div class="prompt-card" data-cat="scenarios">
+        <span class="prompt-num">19 · SCENARIOS</span>
+        <div class="prompt-title">Mini-Case Study Generator</div>
+        <div class="prompt-use">Use when: you need a short real-world case to anchor a module</div>
+        <div class="prompt-text">Write a mini case study (250-350 words) for a module on [TOPIC].
+
+The case should:
+- Feature a realistic workplace situation (not a textbook example)
+- Introduce a character with a specific problem or decision
+- Build tension without resolving it (the learner will decide the outcome)
+- Include one detail that reveals what the character got wrong without stating it explicitly
+- End with a question that prompts reflection, not a quiz
+
+Audience: [AUDIENCE]
+The concept this case illustrates: [KEY CONCEPT]
+Setting: [INDUSTRY/WORKPLACE TYPE]
+
+Do not name the character after a common training character name (no Alex, Sam, or Jordan).</div>
+        <div class="prompt-example"><strong>Filled example</strong>Topic: "Unconscious bias in hiring decisions" · Audience: "Hiring managers" · Concept: "Affinity bias" · Setting: "Fast-growing startup"</div>
+        <button class="copy-btn" onclick="copyPrompt(this)">Copy Prompt</button>
+      </div>
+
+      <div class="prompt-card" data-cat="scenarios">
+        <span class="prompt-num">20 · SCENARIOS</span>
+        <div class="prompt-title">Simulation Dialogue Writer</div>
+        <div class="prompt-use">Use when: building a conversation-based simulation (like a devlin.ai or custom chatbot)</div>
+        <div class="prompt-text">Write a realistic dialogue for a conversation simulation on [TOPIC].
+
+The learner plays: [LEARNER ROLE]
+The AI character plays: [CHARACTER NAME AND ROLE]
+The situation: [SITUATION DESCRIPTION]
+The skill being practised: [SKILL]
+Target length: [NUMBER] exchanges
+
+Rules:
+- The AI character should not make it easy. They should be realistic — defensive, distracted, or emotionally charged as appropriate.
+- Each AI response should present a new micro-challenge for the learner to navigate.
+- Include one moment where the character's tone shifts based on the learner's approach.
+- Write the character's internal state in [brackets] before each line — this is for the designer, not the learner.
+- End on an unresolved note — real conversations rarely wrap up cleanly.</div>
+        <div class="prompt-example"><strong>Filled example</strong>Topic: "Negotiating a deadline extension" · Learner: "Project manager" · Character: "Priya, the stressed client sponsor" · Skill: "Assertive communication under pressure"</div>
+        <button class="copy-btn" onclick="copyPrompt(this)">Copy Prompt</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ASSESSMENT DESIGN -->
+  <div class="category-section" data-cat="assessment">
+    <div class="category-heading">
+      <div class="category-icon">📋</div>
+      <span class="category-title">Assessment Design</span>
+      <span class="category-count">6 prompts</span>
+    </div>
+    <div class="prompts-grid">
+
+      <div class="prompt-card" data-cat="assessment">
+        <span class="prompt-num">21 · ASSESSMENT</span>
+        <div class="prompt-title">Question Bank Generator</div>
+        <div class="prompt-use">Use when: building a quiz or knowledge check from content you've written</div>
+        <div class="prompt-text">Generate a question bank for a module on [TOPIC].
+
+Content summary: [BRIEF SUMMARY OF THE MODULE CONTENT — 100-200 words OR paste the actual content]
+
+Create:
+- 4 questions at Remember/Understand level (straightforward knowledge check)
+- 4 questions at Apply level (scenario-based, requires using the knowledge)
+- 2 questions at Analyse/Evaluate level (requires judgment or comparison)
+
+For each question:
+- Question stem (avoid "which of the following...")
+- 4 answer options (1 correct, 3 plausible distractors)
+- Correct answer indicated
+- Brief rationale for why each distractor is wrong
+- The learning objective this question tests</div>
+        <div class="prompt-example"><strong>Filled example</strong>Topic: "The 5 stages of ADDIE" · Content: paste your module script or key points</div>
+        <button class="copy-btn" onclick="copyPrompt(this)">Copy Prompt</button>
+      </div>
+
+      <div class="prompt-card" data-cat="assessment">
+        <span class="prompt-num">22 · ASSESSMENT</span>
+        <div class="prompt-title">Scenario-Based Assessment Designer</div>
+        <div class="prompt-use">Use when: moving beyond knowledge recall to performance assessment</div>
+        <div class="prompt-text">Design a scenario-based assessment (not a knowledge quiz) for this learning objective:
+
+Objective: [YOUR LEARNING OBJECTIVE]
+Audience: [AUDIENCE]
+Course context: [BRIEF COURSE DESCRIPTION]
+
+The assessment should:
+- Present a realistic workplace situation
+- Require the learner to make 2-3 sequential decisions
+- Have clear success criteria (what a "passing" response looks like)
+- Avoid having an obviously correct answer
+- Be completable in under 8 minutes
+
+Include:
+1. The scenario setup
+2. Each decision point with 3 options
+3. Scoring rubric (what earns full marks, partial marks, zero)
+4. The feedback learners receive for each pathway</div>
+        <div class="prompt-example"><strong>Filled example</strong>Objective: "Apply motivational interviewing techniques when a patient resists a recommended lifestyle change" · Audience: "Diabetes care nurses"</div>
+        <button class="copy-btn" onclick="copyPrompt(this)">Copy Prompt</button>
+      </div>
+
+      <div class="prompt-card" data-cat="assessment">
+        <span class="prompt-num">23 · ASSESSMENT</span>
+        <div class="prompt-title">Knowledge Check — 5 Quick Questions</div>
+        <div class="prompt-use">Use when: designing a short mid-module check (not a final assessment)</div>
+        <div class="prompt-text">Write 5 knowledge check questions for a mid-module pause in a course on [TOPIC].
+
+These are formative (checking understanding, not grading). The content covered so far: [BRIEF CONTENT SUMMARY].
+
+Requirements:
+- Mix question types: 2 multiple choice, 1 true/false with explanation, 1 fill-in-the-blank, 1 "what would you do?" scenario
+- Keep each question under 30 words
+- Feedback for wrong answers should teach, not just correct
+- Avoid trick questions — these build confidence and surface gaps, not catch learners out
+- Include the correct answer and 2-sentence feedback for each</div>
+        <div class="prompt-example"><strong>Filled example</strong>Topic: "Active listening techniques" · Content covered: "The SOLER framework and the difference between listening and waiting to speak"</div>
+        <button class="copy-btn" onclick="copyPrompt(this)">Copy Prompt</button>
+      </div>
+
+      <div class="prompt-card" data-cat="assessment">
+        <span class="prompt-num">24 · ASSESSMENT</span>
+        <div class="prompt-title">Competency Rubric Builder</div>
+        <div class="prompt-use">Use when: assessing a skill or behaviour that can't be measured by a quiz</div>
+        <div class="prompt-text">Build an assessment rubric for evaluating this skill or behaviour:
+
+Skill: [SKILL TO BE ASSESSED, e.g. "facilitation of a team problem-solving session"]
+Evaluator: [WHO WILL USE THIS RUBRIC, e.g. "line manager observing a live session"]
+Assessment context: [WHERE/WHEN THIS WILL BE OBSERVED]
+
+Create a rubric with:
+- 4 performance dimensions (the key aspects of this skill)
+- 3 proficiency levels per dimension: Developing / Proficient / Exceeds
+- Behavioural indicators for each level (observable, specific, not vague)
+- A scoring guide
+
+Make the indicators concrete enough that two different evaluators would reach the same score for the same performance.</div>
+        <div class="prompt-example"><strong>Filled example</strong>Skill: "Handling an objection in a sales conversation" · Evaluator: "Sales coach reviewing a call recording" · Context: "Real customer calls, B2B SaaS"</div>
+        <button class="copy-btn" onclick="copyPrompt(this)">Copy Prompt</button>
+      </div>
+
+      <div class="prompt-card" data-cat="assessment">
+        <span class="prompt-num">25 · ASSESSMENT</span>
+        <div class="prompt-title">Pre-Assessment / Diagnostic Test</div>
+        <div class="prompt-use">Use when: you want to gauge learner prior knowledge before the course begins</div>
+        <div class="prompt-text">Design a pre-assessment diagnostic for a course on [TOPIC].
+
+Audience: [AUDIENCE]
+Expected prior knowledge range: [LOW — "most have no background" / MIXED — "varies widely" / HIGH — "most have some experience"]
+
+Create 8 questions that:
+- Span from basic to advanced without being condescending at the low end
+- Include 2 questions that reveal misconceptions (not just gaps)
+- Are framed as "help us personalise your experience" not "prove what you know"
+- Include one question that surfaces real-world application, not just definitions
+
+After the questions, describe how results should segment learners (e.g., skip Module 1 if score >6/8).</div>
+        <div class="prompt-example"><strong>Filled example</strong>Topic: "Excel for data analysis" · Audience: "Finance team members" · Prior knowledge: Mixed — "some power users, some barely use formulas"</div>
+        <button class="copy-btn" onclick="copyPrompt(this)">Copy Prompt</button>
+      </div>
+
+      <div class="prompt-card" data-cat="assessment">
+        <span class="prompt-num">26 · ASSESSMENT</span>
+        <div class="prompt-title">Assessment Alignment Checker</div>
+        <div class="prompt-use">Use when: you want to verify your assessments actually test your objectives</div>
+        <div class="prompt-text">I need to check that my assessments are aligned to my learning objectives.
+
+Here are my objectives:
+[PASTE YOUR LEARNING OBJECTIVES]
+
+Here are my assessment questions:
+[PASTE YOUR ASSESSMENT QUESTIONS]
+
+For each assessment question:
+1. Which objective does it test?
+2. Does the cognitive level of the question match the level of the objective?
+3. Is this question actually testing performance or just recall?
+4. Is there any objective with no question testing it?
+5. Are there questions testing things not in my objectives?
+
+Flag any misalignment and suggest specific fixes.</div>
+        <div class="prompt-example"><strong>Filled example</strong>Paste 3-5 objectives and 8-10 quiz questions to get a full alignment audit in seconds.</div>
+        <button class="copy-btn" onclick="copyPrompt(this)">Copy Prompt</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- STORYBOARDING -->
+  <div class="category-section" data-cat="storyboard">
+    <div class="category-heading">
+      <div class="category-icon">📐</div>
+      <span class="category-title">Storyboarding</span>
+      <span class="category-count">6 prompts</span>
+    </div>
+    <div class="prompts-grid">
+
+      <div class="prompt-card" data-cat="storyboard">
+        <span class="prompt-num">27 · STORYBOARD</span>
+        <div class="prompt-title">Module Outline Generator</div>
+        <div class="prompt-use">Use when: starting a new module and need a structure before writing slide-by-slide</div>
+        <div class="prompt-text">Create a detailed module outline for a [LENGTH, e.g. "20-minute"] e-learning module on [TOPIC].
+
+Objective: [MODULE OBJECTIVE]
+Audience: [AUDIENCE]
+Delivery: [TOOL — e.g. "Articulate Storyline 360 / Rise / SCORM"]
+Tone: [TONE — e.g. "conversational and direct / formal / empathetic"]
+
+For each section of the module, include:
+- Section title and purpose
+- Content approach (scenario / explanation / demonstration / practice)
+- Estimated slide count or time
+- The Gagne event(s) this section addresses
+- Key visual or interaction type
+
+End with a course arc summary: how does the emotional/cognitive journey progress from open to close?</div>
+        <div class="prompt-example"><strong>Filled example</strong>Topic: "Delivering difficult feedback" · Objective: "Apply the SBI model in a real feedback conversation" · Length: 25 mins · Tool: Storyline 360</div>
+        <button class="copy-btn" onclick="copyPrompt(this)">Copy Prompt</button>
+      </div>
+
+      <div class="prompt-card" data-cat="storyboard">
+        <span class="prompt-num">28 · STORYBOARD</span>
+        <div class="prompt-title">Slide Script Writer</div>
+        <div class="prompt-use">Use when: writing narration script from your slide content notes</div>
+        <div class="prompt-text">Write a narration script for this e-learning slide.
+
+Slide purpose: [WHAT THIS SLIDE DOES, e.g. "introduces the concept of cognitive load"]
+Key points to cover: [LIST YOUR KEY POINTS]
+Previous slide: [BRIEF DESCRIPTION — so the script flows naturally from it]
+Next slide: [BRIEF DESCRIPTION — so the script sets it up]
+Tone: [e.g. "warm but direct — not academic"]
+Estimated read time: [e.g. "45-60 seconds"]
+
+Rules:
+- Write for the ear, not the eye (conversational, short sentences)
+- Don't read what's already on screen
+- One idea per sentence
+- End with a transition that moves naturally to the next slide
+- Avoid "In this slide, we will..." and "As you can see..."</div>
+        <div class="prompt-example"><strong>Filled example</strong>Purpose: "Show why multitasking reduces quality" · Points: "Working memory limit, task-switching cost, 40% productivity loss stat" · Tone: "Direct, evidence-based, slightly provocative"</div>
+        <button class="copy-btn" onclick="copyPrompt(this)">Copy Prompt</button>
+      </div>
+
+      <div class="prompt-card" data-cat="storyboard">
+        <span class="prompt-num">29 · STORYBOARD</span>
+        <div class="prompt-title">On-Screen Text Trimmer</div>
+        <div class="prompt-use">Use when: you've written slide text and need to cut it down for eLearning</div>
+        <div class="prompt-text">I have slide text that's too long for an e-learning screen. Trim it without losing meaning.
+
+Original text:
+[PASTE YOUR SLIDE TEXT]
+
+Constraints:
+- Maximum [NUMBER] words on screen
+- Keep the most important point prominent
+- Use bullet points if appropriate (max 4, max 8 words each)
+- The narration will cover the detail — the screen only needs the skeleton
+- Suggest a slide headline (5-7 words, not a sentence) that carries the main idea
+
+Also flag: is there anything in the original text that should be cut entirely, not just shortened?</div>
+        <div class="prompt-example"><strong>Filled example</strong>Paste any slide text over 80 words. Works especially well on content lifted from Word docs or PowerPoints.</div>
+        <button class="copy-btn" onclick="copyPrompt(this)">Copy Prompt</button>
+      </div>
+
+      <div class="prompt-card" data-cat="storyboard">
+        <span class="prompt-num">30 · STORYBOARD</span>
+        <div class="prompt-title">Interaction Type Recommender</div>
+        <div class="prompt-use">Use when: you know what you want to teach but not how to make it interactive</div>
+        <div class="prompt-text">I need to make this content more interactive. Suggest 4 different interaction types that would work.
+
+Content: [DESCRIBE THE CONTENT, e.g. "a 5-step process for responding to a workplace accident"]
+Objective: [THE OBJECTIVE THIS SUPPORTS]
+Tool: [YOUR AUTHORING TOOL, e.g. "Articulate Storyline / Rise / Lectora"]
+Audience tech comfort: [LOW / MEDIUM / HIGH]
+Available development time: [e.g. "2 days"]
+
+For each interaction type:
+- Name and brief description
+- Why it fits this content
+- Estimated build time (in hours)
+- What Storyline/Rise feature it uses
+- One risk to watch for</div>
+        <div class="prompt-example"><strong>Filled example</strong>Content: "The 4 types of workplace conflict and when each needs escalation" · Tool: Storyline 360 · Time: 1 day · Audience: Low tech comfort</div>
+        <button class="copy-btn" onclick="copyPrompt(this)">Copy Prompt</button>
+      </div>
+
+      <div class="prompt-card" data-cat="storyboard">
+        <span class="prompt-num">31 · STORYBOARD</span>
+        <div class="prompt-title">Introduction Slide Writer</div>
+        <div class="prompt-use">Use when: writing the first 60 seconds of a module — the part most IDs write last and it shows</div>
+        <div class="prompt-text">Write a compelling course/module introduction for a [LENGTH] module on [TOPIC].
+
+Audience: [AUDIENCE]
+Their likely attitude to this topic: [e.g. "they think they already know it / they dread it / they're curious"]
+The performance gap this course addresses: [GAP]
+
+The introduction should:
+- Hook with a specific situation or statistic (not "Welcome to this module on...")
+- Establish why this matters to the learner personally (not the company)
+- Preview the module clearly without listing every slide
+- Set expectations for any scenarios, reflections, or interactions
+- Be 60-80 seconds when read aloud (roughly 150-200 words)
+
+Write it as narration script, then separately as on-screen text (max 30 words).</div>
+        <div class="prompt-example"><strong>Filled example</strong>Topic: "Email writing for professional communication" · Audience: "Graduate joiners" · Attitude: "They think they're already good at this" · Gap: "External emails lack structure and appropriate tone"</div>
+        <button class="copy-btn" onclick="copyPrompt(this)">Copy Prompt</button>
+      </div>
+
+      <div class="prompt-card" data-cat="storyboard">
+        <span class="prompt-num">32 · STORYBOARD</span>
+        <div class="prompt-title">Storyboard Template Filler</div>
+        <div class="prompt-use">Use when: you have a content dump from an SME and need to turn it into a slide-by-slide storyboard</div>
+        <div class="prompt-text">Turn this content dump into a storyboard. I'll give you the raw content and the module structure. You fill in the slide-by-slide detail.
+
+Module objective: [OBJECTIVE]
+Module length: [NUMBER] slides / [DURATION]
+Tone: [TONE]
+Interaction budget: [NUMBER] interactive moments in the module
+
+Raw content:
+[PASTE SME CONTENT — could be a Word doc dump, bullet points, or rough notes]
+
+For each slide output:
+Slide [N]: [TITLE]
+Purpose: [what this slide does in the learning arc]
+On-screen text: [max 40 words]
+Narration: [60-90 words]
+Visual direction: [what image/graphic/diagram would work]
+Interaction: [yes/no — if yes, what type]</div>
+        <div class="prompt-example"><strong>Filled example</strong>Paste 400-600 words of SME content — an email they sent, a PowerPoint they made, or notes from your interview. Ask for 8-10 slides.</div>
+        <button class="copy-btn" onclick="copyPrompt(this)">Copy Prompt</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SME COLLABORATION -->
+  <div class="category-section" data-cat="sme">
+    <div class="category-heading">
+      <div class="category-icon">🤝</div>
+      <span class="category-title">SME Collaboration</span>
+      <span class="category-count">6 prompts</span>
+    </div>
+    <div class="prompts-grid">
+
+      <div class="prompt-card" data-cat="sme">
+        <span class="prompt-num">33 · SME</span>
+        <div class="prompt-title">SME Briefing Email Writer</div>
+        <div class="prompt-use">Use when: onboarding a new SME who has never worked with an instructional designer before</div>
+        <div class="prompt-text">Write a briefing email to an SME for a new course project.
+
+Context: [PROJECT BRIEF — what the course is about, why it's being built]
+SME's role: [WHO THEY ARE, e.g. "Head of Compliance, extremely busy, not familiar with ID process"]
+My role: [YOUR ROLE AND COMPANY/CLIENT]
+
+The email should:
+- Explain the project in plain language (no ID jargon)
+- Clarify exactly what I need from them and what I don't
+- Set realistic expectations for time commitment
+- Give them a concrete first step
+- Be under 200 words
+- Warm but efficient — not overly formal, not overly casual
+
+Include a subject line. Do not use "I hope this email finds you well."</div>
+        <div class="prompt-example"><strong>Filled example</strong>Project: "Compliance course on the new expense policy" · SME: "Finance Director who's never been interviewed for ID before" · My role: "Freelance ID, 2-month project"</div>
+        <button class="copy-btn" onclick="copyPrompt(this)">Copy Prompt</button>
+      </div>
+
+      <div class="prompt-card" data-cat="sme">
+        <span class="prompt-num">34 · SME</span>
+        <div class="prompt-title">SME Content Simplifier</div>
+        <div class="prompt-use">Use when: an SME has given you dense, jargon-heavy content that learners won't understand</div>
+        <div class="prompt-text">Simplify this content for a non-expert audience without losing accuracy.
+
+The content is written by: [SME ROLE, e.g. "a legal counsel"]
+The learner audience is: [AUDIENCE, e.g. "frontline retail staff with no legal background"]
+Reading level target: [e.g. "plain English — Grade 8 reading level"]
+
+Original content:
+[PASTE SME CONTENT]
+
+Rewrite it so that:
+- Every technical term is either removed or immediately explained
+- Sentences are under 20 words where possible
+- The key action or implication is in the first sentence of each paragraph
+- Passive voice is replaced with active voice
+- The meaning is preserved — flag any place where simplification changes meaning
+
+Show original and rewrite side by side for easy SME review.</div>
+        <div class="prompt-example"><strong>Filled example</strong>Paste legal, medical, financial, or technical content that needs to be accessible to a general workforce audience.</div>
+        <button class="copy-btn" onclick="copyPrompt(this)">Copy Prompt</button>
+      </div>
+
+      <div class="prompt-card" data-cat="sme">
+        <span class="prompt-num">35 · SME</span>
+        <div class="prompt-title">Scope Creep Pushback Email</div>
+        <div class="prompt-use">Use when: an SME or stakeholder is adding content that wasn't in the original brief</div>
+        <div class="prompt-text">Help me write a professional email pushing back on scope creep without damaging the relationship.
+
+The situation: [DESCRIBE WHAT THEY'VE ASKED FOR, e.g. "The SME now wants to add a 15-minute section on regulatory history that wasn't in the brief"]
+The original brief was: [BRIEF SUMMARY OF AGREED SCOPE]
+The impact of the addition: [TIME / COST / DEADLINE IMPACT]
+My relationship with this person: [e.g. "Good — we've worked together before / Tense — they're difficult to manage"]
+
+Write an email that:
+- Acknowledges their input positively
+- Clearly explains the impact on scope, timeline, or cost
+- Offers 2 options (include it with adjusted timeline/cost, or park it for v2)
+- Doesn't apologise for the boundary
+- Keeps the door open for further conversation
+
+Under 150 words.</div>
+        <div class="prompt-example"><strong>Filled example</strong>Situation: "SME wants to add their entire department handbook as 'reference material' inside the SCORM module" · Impact: "Would add 3 weeks to build time"</div>
+        <button class="copy-btn" onclick="copyPrompt(this)">Copy Prompt</button>
+      </div>
+
+      <div class="prompt-card" data-cat="sme">
+        <span class="prompt-num">36 · SME</span>
+        <div class="prompt-title">Review Feedback Interpreter</div>
+        <div class="prompt-use">Use when: you've received vague or contradictory feedback from an SME review</div>
+        <div class="prompt-text">Help me interpret and respond to this SME review feedback.
+
+The feedback I received:
+[PASTE THE FEEDBACK — can be email, tracked changes notes, or verbal notes you transcribed]
+
+For each piece of feedback:
+1. Categorise it: factual correction / tone preference / scope expansion / preference without rationale / genuine gap
+2. Suggest how to respond (accept / negotiate / push back / ask for clarification)
+3. Flag any feedback that contradicts a previous decision or the original brief
+4. Draft a response email to the SME that addresses each point efficiently
+
+My goal is to address legitimate concerns, hold the line on design decisions that are educationally sound, and move the project forward.</div>
+        <div class="prompt-example"><strong>Filled example</strong>Paste any SME review email or tracked changes summary. Works especially well when feedback is "this doesn't feel right" without specifics.</div>
+        <button class="copy-btn" onclick="copyPrompt(this)">Copy Prompt</button>
+      </div>
+
+      <div class="prompt-card" data-cat="sme">
+        <span class="prompt-num">37 · SME</span>
+        <div class="prompt-title">Expert Interview Follow-Up</div>
+        <div class="prompt-use">Use when: you've done an SME interview and need to follow up on gaps</div>
+        <div class="prompt-text">Write a follow-up email to an SME after an initial interview, requesting clarification on specific gaps.
+
+The interview covered: [BRIEF SUMMARY OF TOPICS COVERED]
+The gaps I identified: [LIST THE SPECIFIC THINGS I STILL NEED]
+Tone: [e.g. "Collaborative and efficient — they're very busy"]
+
+Structure the email as:
+- Thank them for their time (one sentence, not gushing)
+- Summarise the 3-4 things you got clarity on (shows you listened)
+- Ask for clarification on [NUMBER] specific points — numbered list, each question max 2 sentences
+- Specify the format you need (a call / a written reply / a document)
+- Give a clear deadline
+
+Under 200 words total.</div>
+        <div class="prompt-example"><strong>Filled example</strong>Gaps: "What happens when the process fails? Who owns the decision at step 3? Is there an exception for contractor staff?"</div>
+        <button class="copy-btn" onclick="copyPrompt(this)">Copy Prompt</button>
+      </div>
+
+      <div class="prompt-card" data-cat="sme">
+        <span class="prompt-num">38 · SME</span>
+        <div class="prompt-title">Stakeholder Presentation Builder</div>
+        <div class="prompt-use">Use when: presenting a course concept or prototype to a non-ID stakeholder for approval</div>
+        <div class="prompt-text">Help me structure a stakeholder presentation for a course concept review.
+
+The course: [COURSE TITLE AND BRIEF]
+What I'm presenting: [e.g. "storyboard for module 1 / overall course structure / prototype demo"]
+The audience: [WHO WILL BE IN THE ROOM, e.g. "Head of HR, L&D Director, 2 business stakeholders"]
+Key decision I need: [e.g. "sign-off to proceed to full development"]
+Potential objections I expect: [LIST THEM]
+
+Structure a 15-minute presentation with:
+- Opening that connects to their business goal (not my design goal)
+- What I built and why (design decisions explained in business terms)
+- What I need from them in this session
+- How to handle each expected objection
+
+Write the key talking points for each section, not a script.</div>
+        <div class="prompt-example"><strong>Filled example</strong>Course: "Sales negotiation training" · Presenting: "Full storyboard for Module 2" · Key decision: "Approval to record narration" · Objection: "This looks too long"</div>
+        <button class="copy-btn" onclick="copyPrompt(this)">Copy Prompt</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- REVIEW & QA -->
+  <div class="category-section" data-cat="review">
+    <div class="category-heading">
+      <div class="category-icon">✅</div>
+      <span class="category-title">Review & QA</span>
+      <span class="category-count">6 prompts</span>
+    </div>
+    <div class="prompts-grid">
+
+      <div class="prompt-card" data-cat="review">
+        <span class="prompt-num">39 · REVIEW</span>
+        <div class="prompt-title">Script Readability Audit</div>
+        <div class="prompt-use">Use when: checking narration script before sending to voice talent or TTS</div>
+        <div class="prompt-text">Audit this narration script for readability and voiceover quality.
+
+[PASTE YOUR NARRATION SCRIPT]
+
+Check for:
+1. Sentences over 20 words (flag and suggest shorter alternatives)
+2. Passive voice (rewrite as active)
+3. Jargon or acronyms without explanation
+4. Words that are hard to say aloud (tongue-twisters, unusual stress patterns)
+5. Reading level (estimate grade level and target: plain English)
+6. Pace — estimate read time at 130 words/minute
+7. Consistency of tone — flag any sections that feel notably different
+
+Provide a revised version of any flagged sections alongside your notes.</div>
+        <div class="prompt-example"><strong>Filled example</strong>Paste 200-500 words of narration script. Especially useful before recording to catch problems that are expensive to fix post-production.</div>
+        <button class="copy-btn" onclick="copyPrompt(this)">Copy Prompt</button>
+      </div>
+
+      <div class="prompt-card" data-cat="review">
+        <span class="prompt-num">40 · REVIEW</span>
+        <div class="prompt-title">Accessibility Checklist for eLearning</div>
+        <div class="prompt-use">Use when: doing a pre-publish accessibility check on a Storyline or Rise course</div>
+        <div class="prompt-text">Generate an accessibility review checklist for a [TOOL, e.g. "Storyline 360"] e-learning course targeting [STANDARD, e.g. "WCAG 2.1 AA"].
+
+The course includes: [LIST ELEMENTS — e.g. "video with narration, quiz questions, branching scenario, downloadable PDF"]
+
+For each element type, list:
+- Specific things to check (not general guidance — exact items to verify)
+- The WCAG criterion it relates to
+- How to test it (manually / screen reader / automated tool)
+- Common failure mode in Storyline/Rise specifically
+- The fix if it fails
+
+Format as a numbered checklist I can work through during QA, not a guide to accessibility principles.</div>
+        <div class="prompt-example"><strong>Filled example</strong>Tool: Storyline 360 · Standard: WCAG 2.1 AA · Elements: "Animated slides with narration, drag-and-drop interaction, PDF job aid, 10-question quiz"</div>
+        <button class="copy-btn" onclick="copyPrompt(this)">Copy Prompt</button>
+      </div>
+
+      <div class="prompt-card" data-cat="review">
+        <span class="prompt-num">41 · REVIEW</span>
+        <div class="prompt-title">Instructional Design Review</div>
+        <div class="prompt-use">Use when: peer-reviewing another ID's course or reviewing your own before handover</div>
+        <div class="prompt-text">Review this course content against instructional design best practices.
+
+I'm going to paste the course outline/storyboard. Evaluate it on:
+
+1. Objective alignment — do activities and assessments match the stated objectives?
+2. Cognitive load — is there too much information per screen/section?
+3. Practice opportunities — is there enough application before the assessment?
+4. Sequencing — does the content build logically?
+5. Feedback quality — is the feedback instructional or just correct/incorrect?
+6. Gagne's events — which events are missing or weak?
+7. The "so what?" test — is it clear throughout why this matters to the learner?
+
+Here's the storyboard/outline:
+[PASTE CONTENT]
+
+Be specific about what's working and what needs changing. Don't soften critique.</div>
+        <div class="prompt-example"><strong>Filled example</strong>Paste a module outline, slide-by-slide storyboard, or even a finished course script for a full instructional design audit.</div>
+        <button class="copy-btn" onclick="copyPrompt(this)">Copy Prompt</button>
+      </div>
+
+      <div class="prompt-card" data-cat="review">
+        <span class="prompt-num">42 · REVIEW</span>
+        <div class="prompt-title">Tone Consistency Checker</div>
+        <div class="prompt-use">Use when: multiple people have contributed to a course and it now has multiple "voices"</div>
+        <div class="prompt-text">Review this content for tone consistency and rewrite any sections that don't match the established voice.
+
+The intended tone is: [DESCRIBE TONE, e.g. "direct and encouraging — like a knowledgeable colleague, not a corporate voice"]
+Audience: [AUDIENCE]
+
+Paste the content:
+[PASTE SCRIPT OR SLIDES]
+
+For each section:
+1. Rate tone consistency: consistent / slightly off / significantly off
+2. For "off" sections: describe how the tone differs
+3. Rewrite each flagged section in the correct tone
+
+Also flag: any jargon that crept in, any sentences that sound like they were written by a committee, and any places where the writer's voice is noticeably different from the rest.</div>
+        <div class="prompt-example"><strong>Filled example</strong>Tone: "Warm, direct, evidence-based — think Harvard Business Review, not HR policy document" · Paste a multi-author script or content from different sources</div>
+        <button class="copy-btn" onclick="copyPrompt(this)">Copy Prompt</button>
+      </div>
+
+      <div class="prompt-card" data-cat="review">
+        <span class="prompt-num">43 · REVIEW</span>
+        <div class="prompt-title">Bias and Inclusion Check</div>
+        <div class="prompt-use">Use when: doing a final review before launch to check for bias in characters, scenarios, or language</div>
+        <div class="prompt-text">Review this course content for potential bias, exclusionary language, or representation issues.
+
+[PASTE COURSE CONTENT — scenarios, character descriptions, examples, visuals descriptions]
+
+Check for:
+1. Demographic assumptions (e.g., assuming all managers are male, all carers are female)
+2. Cultural assumptions (examples that only apply to Western workplaces)
+3. Ability/disability — are any examples exclusionary to learners with disabilities?
+4. Language — any terms that have shifted in acceptability or carry implicit bias?
+5. Representation — are different groups shown in stereotyped roles?
+6. Examples — do they all come from the same type of organisation or sector?
+
+For each issue found: flag the specific text, explain the concern, and suggest a fix.</div>
+        <div class="prompt-example"><strong>Filled example</strong>Paste scenario text, character descriptions, or any content that features people making decisions — common bias entry points in ID work.</div>
+        <button class="copy-btn" onclick="copyPrompt(this)">Copy Prompt</button>
+      </div>
+
+      <div class="prompt-card" data-cat="review">
+        <span class="prompt-num">44 · REVIEW</span>
+        <div class="prompt-title">Final Pre-Launch QA Checklist</div>
+        <div class="prompt-use">Use when: doing the final check before publishing a SCORM/xAPI course to an LMS</div>
+        <div class="prompt-text">Generate a pre-launch QA checklist for a [TOOL] course published as [FORMAT, e.g. "SCORM 2004 to Moodle"].
+
+The course includes: [DESCRIBE COURSE ELEMENTS]
+LMS: [LMS NAME]
+
+I need a systematic checklist covering:
+1. Content accuracy (last-mile checks)
+2. Navigation and user experience
+3. SCORM/xAPI package integrity
+4. LMS-specific settings (completion criteria, grading, attempts)
+5. Browser and device compatibility
+6. Accessibility
+7. Tracking and reporting verification
+
+For each item: what to check, how to check it, and what a "pass" looks like. Format as a checkable list I can work through in order, from most critical to nice-to-have.</div>
+        <div class="prompt-example"><strong>Filled example</strong>Tool: Storyline 360 · Format: SCORM 2004 · LMS: Cornerstone / TalentLMS / Moodle · Elements: "Video, quiz with retry, branching, certificate slide"</div>
+        <button class="copy-btn" onclick="copyPrompt(this)">Copy Prompt</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- EVALUATION -->
+  <div class="category-section" data-cat="evaluation">
+    <div class="category-heading">
+      <div class="category-icon">📊</div>
+      <span class="category-title">Evaluation</span>
+      <span class="category-count">6 prompts</span>
+    </div>
+    <div class="prompts-grid">
+
+      <div class="prompt-card" data-cat="evaluation">
+        <span class="prompt-num">45 · EVALUATION</span>
+        <div class="prompt-title">Kirkpatrick Level 1 Survey Designer</div>
+        <div class="prompt-use">Use when: building a post-course learner reaction survey that actually tells you something useful</div>
+        <div class="prompt-text">Design a Level 1 Kirkpatrick evaluation survey for a course on [TOPIC].
+
+Don't give me generic "rate this course 1-5" questions. Design questions that:
+- Distinguish between learners who found it engaging and those who found it valuable (not the same thing)
+- Surface specific elements that worked and didn't
+- Capture likelihood to apply the learning (a better predictor than satisfaction)
+- Include 2 open-text questions that learners will actually answer
+- Take under 3 minutes to complete
+
+The course audience is [AUDIENCE]. The primary business goal was [BUSINESS GOAL].
+
+Max 8 questions total. Include the rating scale for each closed question and explain why you chose that scale.</div>
+        <div class="prompt-example"><strong>Filled example</strong>Topic: "Onboarding new team members remotely" · Audience: "People managers" · Business goal: "Reduce new hire turnover in the first 90 days"</div>
+        <button class="copy-btn" onclick="copyPrompt(this)">Copy Prompt</button>
+      </div>
+
+      <div class="prompt-card" data-cat="evaluation">
+        <span class="prompt-num">46 · EVALUATION</span>
+        <div class="prompt-title">Level 3 Behaviour Observation Tool</div>
+        <div class="prompt-use">Use when: designing a manager observation checklist for post-training behaviour transfer</div>
+        <div class="prompt-text">Design a Level 3 Kirkpatrick behaviour observation tool for a training on [TOPIC].
+
+The training objectives were: [LIST OBJECTIVES]
+Who will use this tool: [e.g. "line manager observing team member in real work situations"]
+When it will be used: [e.g. "4-6 weeks after training completion"]
+
+Create an observation checklist that:
+- Lists 8-10 specific, observable behaviours (not "demonstrates understanding of...")
+- Uses a frequency scale (Never / Sometimes / Usually / Always) not a quality scale
+- Includes space for one specific example per behaviour
+- Takes under 15 minutes to complete
+- Guides the manager on what to look for — one sentence of context per behaviour
+- Includes a summary section for overall assessment and development notes</div>
+        <div class="prompt-example"><strong>Filled example</strong>Training: "Coaching conversations for people managers" · Objectives: "Use open questions, acknowledge emotions, agree next steps without directing"</div>
+        <button class="copy-btn" onclick="copyPrompt(this)">Copy Prompt</button>
+      </div>
+
+      <div class="prompt-card" data-cat="evaluation">
+        <span class="prompt-num">47 · EVALUATION</span>
+        <div class="prompt-title">LMS Data Interpreter</div>
+        <div class="prompt-use">Use when: you have completion and score data and need to turn it into a stakeholder narrative</div>
+        <div class="prompt-text">Interpret this LMS data and help me write a stakeholder summary.
+
+Course title: [TITLE]
+Training cohort: [WHO COMPLETED IT, e.g. "all sales managers, n=47"]
+Data:
+[PASTE YOUR DATA — completion rates, scores, time-on-task, quiz performance by question, drop-off points]
+
+I need:
+1. A plain English interpretation of what the data shows (2-3 key findings)
+2. Any patterns that suggest a design problem (e.g., high fail rate on one question, high drop-off on a specific slide)
+3. Recommendations for course improvement based on the data
+4. A 150-word executive summary I can include in a stakeholder report
+5. What additional data I should collect to answer questions the current data raises</div>
+        <div class="prompt-example"><strong>Filled example</strong>Paste any LMS export — completion rates, quiz scores, time data. Even rough numbers work. The more specific the data, the more specific the insight.</div>
+        <button class="copy-btn" onclick="copyPrompt(this)">Copy Prompt</button>
+      </div>
+
+      <div class="prompt-card" data-cat="evaluation">
+        <span class="prompt-num">48 · EVALUATION</span>
+        <div class="prompt-title">ROI Conversation Prep</div>
+        <div class="prompt-use">Use when: a stakeholder asks "what's the ROI of this training?" and you need to answer honestly</div>
+        <div class="prompt-text">Help me prepare for a stakeholder conversation about training ROI.
+
+The training: [TRAINING DESCRIPTION]
+What I can measure: [LIST WHAT DATA YOU HAVE ACCESS TO]
+What I can't measure: [LIST WHAT YOU CAN'T ACCESS]
+The business problem it was designed to solve: [PROBLEM]
+
+Help me:
+1. Distinguish what I can prove, what I can infer, and what I can't claim
+2. Frame the value of the training without overstating it
+3. Propose a measurement approach for future cohorts that would give better data
+4. Respond to "can you prove it was worth the investment?" honestly and professionally
+5. Redirect the conversation from "did training work?" to "did the performance system support transfer?"</div>
+        <div class="prompt-example"><strong>Filled example</strong>Training: "Sales objection handling" · Have: completion rates, pre/post quiz scores · Don't have: individual sales figures, manager observation data</div>
+        <button class="copy-btn" onclick="copyPrompt(this)">Copy Prompt</button>
+      </div>
+
+      <div class="prompt-card" data-cat="evaluation">
+        <span class="prompt-num">49 · EVALUATION</span>
+        <div class="prompt-title">Open Feedback Analyser</div>
+        <div class="prompt-use">Use when: you have a lot of open-text survey responses and need to find themes quickly</div>
+        <div class="prompt-text">Analyse these open-text learner feedback responses and extract actionable themes.
+
+[PASTE ALL OPEN TEXT RESPONSES — can be 10 or 100]
+
+I need:
+1. Top 3-5 themes (positive and negative) with frequency count
+2. Verbatim quotes that best represent each theme
+3. Any feedback that contradicts the majority view (outliers worth noting)
+4. Specific, actionable recommendations for each negative theme
+5. One insight that surprised you — something the data shows that I might not have expected
+6. A 100-word summary I can share with the course SME
+
+Don't sanitise the feedback — if learners were harsh, I need to know that in plain terms.</div>
+        <div class="prompt-example"><strong>Filled example</strong>Paste 15-50 open text responses from a post-course survey. Works on any length — the pattern recognition is most useful with 20+ responses.</div>
+        <button class="copy-btn" onclick="copyPrompt(this)">Copy Prompt</button>
+      </div>
+
+      <div class="prompt-card" data-cat="evaluation">
+        <span class="prompt-num">50 · EVALUATION</span>
+        <div class="prompt-title">Course Improvement Recommendation Report</div>
+        <div class="prompt-use">Use when: it's time to revise an existing course and you need to justify the changes</div>
+        <div class="prompt-text">Help me write a course improvement recommendation report.
+
+Course: [COURSE TITLE]
+Last updated: [DATE]
+Evidence of issues: [WHAT DATA OR FEEDBACK PROMPTED THIS REVIEW — e.g. "drop in assessment scores, outdated content flagged by SME, learner feedback themes"]
+
+Write a structured report with:
+1. Executive summary (why this course needs updating — 100 words)
+2. Current performance data (summarise what I give you in [DATA])
+3. Specific issues identified (categorised: content accuracy / instructional design / technical / accessibility)
+4. Recommended changes (prioritised: critical / important / nice-to-have)
+5. Effort estimate for each change category
+6. Success metrics — how we'll know the revision worked
+7. Recommendation: full rebuild vs targeted update vs retire the course
+
+Data: [PASTE YOUR DATA AND FEEDBACK]</div>
+        <div class="prompt-example"><strong>Filled example</strong>Course: "Data security awareness" · Issues: "Content references 2022 regulations that have changed, quiz pass rate dropped from 82% to 61% over 18 months, 3 SMEs flagged factual errors"</div>
+        <button class="copy-btn" onclick="copyPrompt(this)">Copy Prompt</button>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="no-results" id="no-results">
+    <h3>No prompts match your search.</h3>
+    <p>Try a different keyword or clear the filter.</p>
+  </div>
+
+</div>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <span class="footer-logo">AT.</span>
+    <p class="footer-tagline">I build learning experiences that think.</p>
+    <div class="footer-links">
+      <a href="https://abhishektrivedi.com">Portfolio</a>
+      <a href="https://abhishektrivedi.com/lms">LMS Demo</a>
+      <a href="https://abhishektrivedi.com/id-frameworks.html">ID Cheat Sheet</a>
+      <a href="https://linkedin.com/in/trivedi-abhishek">LinkedIn</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // ── Filter logic ──────────────────────────────────────────────────────
+  const filterBtns = document.querySelectorAll('.filter-btn');
+  const cards = document.querySelectorAll('.prompt-card');
+  const sections = document.querySelectorAll('.category-section');
+  const searchInput = document.getElementById('search');
+  const noResults = document.getElementById('no-results');
+
+  let activeFilter = 'all';
+  let searchQuery = '';
+
+  function applyFilters() {
+    let visibleCount = 0;
+
+    cards.forEach(card => {
+      const cat = card.dataset.cat;
+      const text = card.textContent.toLowerCase();
+      const matchesCat = activeFilter === 'all' || cat === activeFilter;
+      const matchesSearch = searchQuery === '' || text.includes(searchQuery);
+
+      if (matchesCat && matchesSearch) {
+        card.classList.remove('hidden');
+        visibleCount++;
+      } else {
+        card.classList.add('hidden');
+      }
+    });
+
+    // Show/hide sections based on visible cards
+    sections.forEach(section => {
+      const cat = section.dataset.cat;
+      const hasVisible = section.querySelectorAll('.prompt-card:not(.hidden)').length > 0;
+      section.style.display = (activeFilter === 'all' || cat === activeFilter) && hasVisible ? '' : 'none';
+    });
+
+    noResults.style.display = visibleCount === 0 ? 'block' : 'none';
+  }
+
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      filterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeFilter = btn.dataset.cat;
+      applyFilters();
+    });
+  });
+
+  searchInput.addEventListener('input', e => {
+    searchQuery = e.target.value.toLowerCase().trim();
+    applyFilters();
+  });
+
+  // ── Copy logic ────────────────────────────────────────────────────────
+  function copyPrompt(btn) {
+    const card = btn.closest('.prompt-card');
+    const promptText = card.querySelector('.prompt-text').textContent;
+    navigator.clipboard.writeText(promptText).then(() => {
+      btn.textContent = 'Copied!';
+      btn.classList.add('copied');
+      setTimeout(() => {
+        btn.textContent = 'Copy Prompt';
+        btn.classList.remove('copied');
+      }, 2000);
+    });
+  }
+</script>
+
+</body>
+</html>
