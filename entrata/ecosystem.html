@@ -918,4 +918,32 @@ function updateUI() {
   document.getElementById('progress-fill').style.width = pct + '%';
   document.getElementById('progress-text').textContent = 'STAGE ' + (current + 1) + ' OF ' + total + ' — ' + stages[current];
   document.getElementById('progress-pct').textContent = pct + '%';
-  var pips = document.querySelectorAll('.nav-stage-coun
+  var pips = document.querySelectorAll('.nav-stage-counter .pip');
+  pips.forEach(function(p, i) {
+    p.className = 'pip' + (i < current ? ' done' : i === current ? ' current' : '');
+  });
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+var diagScales = [1, 1, 1];
+function switchDiag(n) {
+  document.querySelectorAll('.diag-pane').forEach(function(p, i) { p.classList.toggle('active', i === n); });
+  document.querySelectorAll('.diag-tab').forEach(function(t, i) { t.classList.toggle('active', i === n); });
+}
+function zoom(id, delta) {
+  var idx = parseInt(id.replace('svg-', ''));
+  diagScales[idx] = Math.min(3, Math.max(0.3, diagScales[idx] + delta));
+  applyZoom(id, idx);
+}
+function resetZoom(id) {
+  var idx = parseInt(id.replace('svg-', ''));
+  diagScales[idx] = 1;
+  applyZoom(id, idx);
+}
+function applyZoom(id, idx) {
+  document.getElementById(id).style.transform = 'scale(' + diagScales[idx] + ')';
+  document.getElementById('zoom-label-' + idx).textContent = Math.round(diagScales[idx] * 100) + '%';
+}
+</script>
+</body>
+</html>
