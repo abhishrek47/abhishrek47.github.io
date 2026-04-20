@@ -1746,5 +1746,141 @@ function dismissBanner() {
 })();
 </script>
 
+
+  <!-- ═══════════════════════════════════════════════════
+     THE HARD PART — Newsletter Popup
+     ═══════════════════════════════════════════════════ -->
+
+<!-- Firebase SDK -->
+<script type="module">
+  import { initializeApp }  from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+  import { getFirestore, collection, addDoc } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+  const SOURCE = 'lms';
+
+  const app = initializeApp({
+    apiKey:            "AIzaSyBoX4532if5fLugOIYFqvE6SONUWPFMykQ",
+    authDomain:        "abhishek-newsletter.firebaseapp.com",
+    projectId:         "abhishek-newsletter",
+    storageBucket:     "abhishek-newsletter.firebasestorage.app",
+    messagingSenderId: "89175755590",
+    appId:             "1:89175755590:web:6dcb06a4a0cd078bf53347",
+    measurementId:     "G-6BDWEKMT5J"
+  }, 'newsletter');
+
+  const db = getFirestore(app);
+
+  window.subscribeNewsletter = async function(email) {
+    const btn = document.getElementById('nl-submit');
+    const msg = document.getElementById('nl-msg');
+    btn.disabled = true;
+    btn.textContent = 'Saving...';
+    try {
+      await addDoc(collection(db, 'newsletter_subscribers'), {
+        email:      email.toLowerCase().trim(),
+        source:     SOURCE,
+        subscribed: new Date().toISOString(),
+        active:     true
+      });
+      if (typeof gtag !== 'undefined') {
+        gtag('event', 'newsletter_subscribe', { source: 'popup', page: SOURCE });
+      }
+      msg.textContent = "You're in. I'll email you when the next piece drops.";
+      msg.className = 'nl-msg success';
+      setTimeout(() => closeNewsletter(true), 2500);
+    } catch (err) {
+      console.error('Subscribe error:', err.code, err.message);
+      msg.textContent = 'Something went wrong. Try again in a moment.';
+      msg.className = 'nl-msg error';
+      btn.disabled = false;
+      btn.textContent = 'Subscribe';
+    }
+  };
+</script>
+
+<style>
+#nl-overlay { position:fixed; inset:0; z-index:9000; background:rgba(14,26,46,0.75); backdrop-filter:blur(4px); display:flex; align-items:center; justify-content:center; padding:1.5rem; opacity:0; pointer-events:none; transition:opacity 0.3s ease; }
+#nl-overlay.visible { opacity:1; pointer-events:all; }
+#nl-card { background:#f5f0eb; border-radius:20px; padding:2.5rem 2rem 2rem; max-width:480px; width:100%; position:relative; box-shadow:0 24px 80px rgba(0,0,0,0.35); transform:translateY(20px); transition:transform 0.3s ease; }
+#nl-overlay.visible #nl-card { transform:translateY(0); }
+#nl-close { position:absolute; top:1rem; right:1rem; width:32px; height:32px; border-radius:50%; background:rgba(30,58,95,0.08); border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:1.1rem; color:#555; line-height:1; transition:background 0.15s; }
+#nl-close:hover { background:rgba(30,58,95,0.15); }
+.nl-eyebrow { font-family:'JetBrains Mono',monospace; font-size:0.62rem; letter-spacing:3px; text-transform:uppercase; color:#c0392b; font-weight:700; margin-bottom:0.75rem; display:flex; align-items:center; gap:0.5rem; }
+.nl-eyebrow::before { content:''; display:inline-block; width:20px; height:2px; background:#c0392b; }
+#nl-card h2 { font-family:'Playfair Display',Georgia,serif; font-size:1.55rem; font-weight:800; color:#1e3a5f; line-height:1.25; margin-bottom:0.75rem; }
+#nl-card h2 em { color:#c0392b; font-style:italic; }
+.nl-body { font-family:'DM Sans',Arial,sans-serif; font-size:0.88rem; color:#333; line-height:1.65; margin-bottom:1.5rem; }
+.nl-body strong { color:#1e3a5f; font-weight:600; }
+.nl-list { list-style:none; margin-bottom:1.5rem; display:flex; flex-direction:column; gap:0.4rem; }
+.nl-list li { font-family:'DM Sans',Arial,sans-serif; font-size:0.84rem; color:#333; display:flex; align-items:center; gap:0.5rem; }
+.nl-list li::before { content:'\2713'; color:#2d7a2d; font-weight:700; font-size:0.8rem; flex-shrink:0; }
+.nl-form { display:flex; gap:0.5rem; margin-bottom:0.6rem; }
+#nl-email { flex:1; padding:0.7rem 1rem; font-family:'DM Sans',Arial,sans-serif; font-size:0.88rem; border:1.5px solid #e0d8d0; border-radius:8px; background:#fff; color:#1a1a1a; outline:none; transition:border-color 0.15s; }
+#nl-email:focus { border-color:#1e3a5f; }
+#nl-email::placeholder { color:#aaa; }
+#nl-submit { padding:0.7rem 1.25rem; background:#c0392b; color:#fff; font-family:'DM Sans',Arial,sans-serif; font-size:0.88rem; font-weight:600; border:none; border-radius:8px; cursor:pointer; white-space:nowrap; transition:background 0.15s, transform 0.1s; }
+#nl-submit:hover:not(:disabled) { background:#e74c3c; transform:translateY(-1px); }
+#nl-submit:disabled { opacity:0.65; cursor:not-allowed; }
+.nl-msg { font-family:'JetBrains Mono',monospace; font-size:0.72rem; min-height:1.2rem; margin-bottom:0.4rem; }
+.nl-msg.success { color:#2d7a2d; }
+.nl-msg.error { color:#c0392b; }
+.nl-note { font-family:'JetBrains Mono',monospace; font-size:0.62rem; color:#444; text-align:center; }
+.nl-dismiss { display:block; text-align:center; margin-top:0.85rem; font-family:'JetBrains Mono',monospace; font-size:0.68rem; color:#c0392b; cursor:pointer; text-decoration:underline; text-decoration-color:rgba(192,57,43,0.4); background:none; border:none; width:100%; font-weight:500; }
+.nl-dismiss:hover { color:#e74c3c; }
+@media (max-width:480px) {
+  #nl-card { padding:2rem 1.25rem 1.5rem; border-radius:14px; }
+  #nl-card h2 { font-size:1.3rem; }
+  .nl-form { flex-direction:column; }
+  #nl-submit { width:100%; }
+}
+</style>
+
+<div id="nl-overlay" role="dialog" aria-modal="true" aria-labelledby="nl-heading">
+  <div id="nl-card">
+    <button id="nl-close" onclick="closeNewsletter(false)" aria-label="Close">&#x2715;</button>
+    <p class="nl-eyebrow">The Hard Part &middot; Newsletter</p>
+    <h2 id="nl-heading">Get the next piece in your <em>inbox.</em></h2>
+    <p class="nl-body">I write about the <strong>technical side of L&amp;D</strong> &mdash; xAPI, AI workflows, Storyline JavaScript, automation. Practical things built and tested, not recycled theory.</p>
+    <ul class="nl-list">
+      <li>New articles straight to your inbox</li>
+      <li>In-depth technical write-ups, free</li>
+      <li>No fluff, no reposted content</li>
+    </ul>
+    <div class="nl-form">
+      <input type="email" id="nl-email" placeholder="your@email.com" autocomplete="email" onkeydown="if(event.key==='Enter') handleNLSubscribe()"/>
+      <button id="nl-submit" onclick="handleNLSubscribe()">Subscribe</button>
+    </div>
+    <p id="nl-msg" class="nl-msg"></p>
+    <p class="nl-note">No spam. Unsubscribe anytime. Sent only when something worth reading is ready.</p>
+    <button class="nl-dismiss" onclick="closeNewsletter(false)">I'll catch it on LinkedIn instead</button>
+  </div>
+</div>
+
+<script>
+function setCookie(n,v,d){const e=new Date();e.setTime(e.getTime()+d*864e5);document.cookie=n+'='+v+';expires='+e.toUTCString()+';path=/;SameSite=Lax';}
+function getCookie(n){return document.cookie.split(';').some(c=>c.trim().startsWith(n+'='));}
+function showNewsletter(){document.getElementById('nl-overlay').classList.add('visible');document.getElementById('nl-email').focus();}
+function closeNewsletter(subscribed){document.getElementById('nl-overlay').classList.remove('visible');setCookie('nl_seen','1',subscribed?365:30);}
+function handleNLSubscribe(){
+  const email=document.getElementById('nl-email').value.trim();
+  const msg=document.getElementById('nl-msg');
+  if(!email||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){msg.textContent='Please enter a valid email address.';msg.className='nl-msg error';return;}
+  if(typeof window.subscribeNewsletter==='function'){window.subscribeNewsletter(email);}
+  else{msg.textContent='Loading… try again in a moment.';msg.className='nl-msg error';}
+}
+(function(){
+  if(getCookie('nl_seen'))return;
+  let shown=false;
+  function show(){if(shown)return;shown=true;window.removeEventListener('scroll',check);setTimeout(showNewsletter,600);}
+  function check(){const p=window.scrollY/(document.documentElement.scrollHeight-window.innerHeight);if(p>=0.25)show();}
+  window.addEventListener('scroll',check,{passive:true});
+  setTimeout(function(){if(!shown)show();},30000);
+})();
+document.getElementById('nl-overlay').addEventListener('click',function(e){if(e.target===this)closeNewsletter(false);});
+document.addEventListener('keydown',function(e){if(e.key==='Escape')closeNewsletter(false);});
+</script>
+
+<!-- END Newsletter Popup -->
+
 </body>
 </html>
