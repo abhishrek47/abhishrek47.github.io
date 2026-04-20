@@ -1449,7 +1449,7 @@ updateSidebar();
   window._newsletterDB = db;
   window._newsletterReady = true;
 
-  // Subscribe function — writes directly, no read required
+  // Subscribe function — writes to Firestore then triggers confirmation email via Worker
   window.subscribeNewsletter = async function(email) {
     const btn = document.getElementById('nl-submit');
     const msg = document.getElementById('nl-msg');
@@ -1457,7 +1457,7 @@ updateSidebar();
     btn.textContent = 'Saving...';
 
     try {
-      // Write subscriber — Firestore rules allow create, not read
+      // 1. Write to Firestore
       await addDoc(collection(db, 'newsletter_subscribers'), {
         email:      email.toLowerCase().trim(),
         source:     'job-search-agent-guide',
@@ -1465,12 +1465,21 @@ updateSidebar();
         active:     true
       });
 
-      // Track in GA4
+      // 2. Send confirmation email via Cloudflare Worker
+      // Replace this URL after running: wrangler deploy
+      const WORKER_URL = 'https://newsletter-confirm.work-abhishektrivedi.workers.dev';
+      fetch(WORKER_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email.toLowerCase().trim() })
+      }).catch(() => {}); // fire-and-forget — Firestore write already succeeded
+
+      // 3. Track in GA4
       if (typeof gtag !== 'undefined') {
         gtag('event', 'newsletter_subscribe', { source: 'popup', page: 'job-search-agent' });
       }
 
-      msg.textContent = "You're in. I'll email you when the next piece drops.";
+      msg.textContent = "You're in. Check your inbox for a confirmation.";
       msg.className = 'nl-msg success';
       setTimeout(() => closeNewsletter(true), 2500);
 
