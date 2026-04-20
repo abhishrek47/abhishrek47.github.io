@@ -58,72 +58,67 @@ body { background: var(--bg); color: var(--text); font-family: var(--sans); font
 .nav-links a.nav-cta:hover { background: var(--accent-hover); color: var(--white); }
 
 /* HERO */
-.hero { background: #1e3a5f; padding: 4rem 0 4rem; position: relative; overflow: hidden; }
+.hero { background: #1e3a5f; padding: 4rem 0; position: relative; overflow: hidden; }
 .hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 10% 90%, rgba(192,57,43,0.14) 0%, transparent 50%), radial-gradient(ellipse at 90% 10%, rgba(255,255,255,0.03) 0%, transparent 40%); pointer-events: none; }
 
 .hero-inner {
   position: relative; z-index: 1;
   display: grid;
   grid-template-columns: 260px 1fr 260px;
-  max-width: 1400px;
+  max-width: 1440px;
   margin: 0 auto;
-  padding: 0 2.5rem;
-  gap: 2.5rem;
+  padding: 0 2rem;
+  gap: 0;
   align-items: center;
-  min-height: 440px;
+  min-height: 480px;
 }
 
-/* LEFT/RIGHT SIDE PANELS */
-.hero-side {
-  display: flex; flex-direction: column; gap: 0.7rem;
-}
+/* Vertical separators */
+.hero-side { border-right: 1px solid rgba(255,255,255,0.07); padding: 0 2rem 0 0; display: flex; flex-direction: column; gap: 0; }
+.hero-side.right { border-right: none; border-left: 1px solid rgba(255,255,255,0.07); padding: 0 0 0 2rem; }
+
+/* Column label */
 .hero-side-label {
-  font-family: var(--mono); font-size: 0.6rem;
-  color: rgba(255,255,255,0.88); letter-spacing: 2.5px;
-  text-transform: uppercase; margin-bottom: 0.25rem;
+  font-family: var(--mono); font-size: 0.62rem;
+  color: #c0392b; letter-spacing: 3px;
+  text-transform: uppercase; margin-bottom: 1.25rem;
+  display: flex; align-items: center; gap: 0.5rem; font-weight: 700;
 }
-.hero-no-item {
-  display: flex; align-items: flex-start; gap: 0.6rem;
-  padding: 0.8rem 0.9rem;
-  background: rgba(255,255,255,0.07);
-  border: 1px solid rgba(255,255,255,0.14);
-  border-radius: 9px;
-  transition: border-color 0.2s;
-}
-.hero-no-item:hover { border-color: rgba(192,57,43,0.4); }
-.hero-no-x {
-  font-size: 0.95rem; color: var(--accent);
-  font-weight: 700; flex-shrink: 0; line-height: 1.5;
-}
-.hero-no-text { display: flex; flex-direction: column; gap: 0.1rem; }
-.hero-no-text s {
-  font-size: 0.7rem; font-family: var(--mono);
-  color: rgba(255,255,255,0.75);
-  text-decoration-color: rgba(192,57,43,0.7);
-  text-decoration-thickness: 1.5px;
-  letter-spacing: 0.2px;
-}
-.hero-no-text strong {
-  font-size: 0.88rem; font-weight: 600;
-  color: #ffffff;
-  font-family: var(--sans); line-height: 1.3;
-}
+.hero-side-label::after { content: ''; display: inline-block; width: 18px; height: 2px; background: #c0392b; }
+
+/* Each no-cost item */
+.hero-no-item { margin-bottom: 1.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.06); }
+.hero-no-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+
+/* "No more" prefix */
+.hero-no-pre { font-family: var(--sans); font-size: 0.72rem; color: rgba(255,255,255,0.45); margin-bottom: 0.15rem; display: block; }
+.hero-no-pre .hero-no-x { color: var(--accent); font-weight: 700; margin-right: 0.2rem; }
+
+/* Big dim keyword with CSS strikethrough bar overlay */
+.hero-no-keyword { position: relative; display: inline-block; margin-bottom: 0.4rem; }
+.hero-no-keyword-text { font-family: var(--serif); font-size: clamp(1.6rem, 2.8vw, 2.4rem); font-weight: 700; color: rgba(255,255,255,0.18); line-height: 1.1; display: block; }
+.hero-no-keyword::after { content: ''; position: absolute; left: 0; right: 0; top: 50%; transform: translateY(-50%); height: 2px; background: #c0392b; opacity: 0.85; }
+
+/* Bold white truth */
+.hero-no-truth { font-family: var(--sans); font-size: 0.95rem; color: #ffffff; font-weight: 700; display: block; margin-bottom: 0.15rem; }
+.hero-no-support { font-family: var(--sans); font-size: 0.75rem; color: rgba(255,255,255,0.65); display: block; line-height: 1.4; }
 
 /* CENTER */
-.hero-center { text-align: center; }
-.hero-label { font-family: var(--mono); font-size: 0.7rem; color: rgba(255,255,255,0.8); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 1.75rem; display: inline-flex; align-items: center; gap: 0.75rem; }
-.hero-label::before, .hero-label::after { content: ''; display: inline-block; width: 28px; height: 1px; background: var(--accent); }
-.hero h1 { font-family: var(--serif); font-size: clamp(2rem, 3.5vw, 3.2rem); font-weight: 800; color: #ffffff; line-height: 1.15; margin: 0 auto 1.5rem; }
+.hero-center { text-align: center; padding: 0 2rem; }
+.hero-label { font-family: var(--mono); font-size: 0.7rem; color: #c0392b; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 1.75rem; display: inline-flex; align-items: center; gap: 0.75rem; font-weight: 700; }
+.hero-label::before, .hero-label::after { content: ''; display: inline-block; width: 24px; height: 2px; background: var(--accent); }
+.hero h1 { font-family: var(--serif); font-size: clamp(1.9rem, 3.2vw, 3rem); font-weight: 800; color: #ffffff; line-height: 1.15; margin: 0 auto 1.5rem; }
 .hero h1 em { color: #c0392b; font-style: italic; }
-.hero-sub { color: #d8e4f0; font-size: 0.97rem; max-width: 420px; margin: 0 auto 2rem; line-height: 1.8; }
+.hero-sub { color: #d8e4f0; font-size: 0.95rem; max-width: 380px; margin: 0 auto 2rem; line-height: 1.8; }
 .hero-pills { display: flex; align-items: center; justify-content: center; gap: 0.4rem; flex-wrap: wrap; }
-.hero-pill { font-family: var(--mono); font-size: 0.65rem; color: rgba(255,255,255,0.8); background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.16); padding: 0.28rem 0.7rem; border-radius: 100px; letter-spacing: 0.5px; }
+.hero-pill { font-family: var(--mono); font-size: 0.65rem; color: rgba(255,255,255,0.85); background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.16); padding: 0.28rem 0.7rem; border-radius: 100px; letter-spacing: 0.5px; }
 
 /* Collapse sides on smaller screens */
 @media (max-width: 1100px) {
   .hero-inner { grid-template-columns: 1fr; padding: 0 1.5rem; min-height: unset; }
-  .hero-side { display: none; }
+  .hero-side, .hero-side.right { display: none; }
   .hero h1 { font-size: clamp(1.9rem, 5vw, 3rem); }
+  .hero-center { padding: 0; }
 }
 
 /* HERO → STATS TRANSITION */
@@ -490,26 +485,26 @@ code { font-family: var(--mono); font-size: 0.84em; background: rgba(30,58,95,0.
     <!-- LEFT: No-cost items -->
     <div class="hero-side">
       <p class="hero-side-label">What you won't need</p>
+
       <div class="hero-no-item">
-        <span class="hero-no-x">✗</span>
-        <div class="hero-no-text">
-          <s>Apify subscription</s>
-          <strong>No scraping fees</strong>
-        </div>
+        <span class="hero-no-pre"><span class="hero-no-x">✗</span> No more</span>
+        <div class="hero-no-keyword"><span class="hero-no-keyword-text">Apify</span></div>
+        <strong class="hero-no-truth">Zero scraping fees.</strong>
+        <span class="hero-no-support">Claude searches the web natively.</span>
       </div>
+
       <div class="hero-no-item">
-        <span class="hero-no-x">✗</span>
-        <div class="hero-no-text">
-          <s>API keys or credits</s>
-          <strong>No pay-per-call charges</strong>
-        </div>
+        <span class="hero-no-pre"><span class="hero-no-x">✗</span> No more</span>
+        <div class="hero-no-keyword"><span class="hero-no-keyword-text">API Keys</span></div>
+        <strong class="hero-no-truth">No pay-per-call charges.</strong>
+        <span class="hero-no-support">Your Claude Pro subscription covers it.</span>
       </div>
+
       <div class="hero-no-item">
-        <span class="hero-no-x">✗</span>
-        <div class="hero-no-text">
-          <s>External servers</s>
-          <strong>Runs on your machine</strong>
-        </div>
+        <span class="hero-no-pre"><span class="hero-no-x">✗</span> No more</span>
+        <div class="hero-no-keyword"><span class="hero-no-keyword-text">Servers</span></div>
+        <strong class="hero-no-truth">Runs on your machine.</strong>
+        <span class="hero-no-support">No cloud. No hosting. No bill.</span>
       </div>
     </div>
 
@@ -528,28 +523,28 @@ code { font-family: var(--mono); font-size: 0.84em; background: rgba(30,58,95,0.
     </div>
 
     <!-- RIGHT: More no-cost items -->
-    <div class="hero-side">
-      <p class="hero-side-label">Or install, or subscribe to</p>
+    <div class="hero-side right">
+      <p class="hero-side-label">Won't cost you extra</p>
+
       <div class="hero-no-item">
-        <span class="hero-no-x">✗</span>
-        <div class="hero-no-text">
-          <s>Zapier or Make</s>
-          <strong>No automation tools</strong>
-        </div>
+        <span class="hero-no-pre"><span class="hero-no-x">✗</span> No more</span>
+        <div class="hero-no-keyword"><span class="hero-no-keyword-text">Zapier</span></div>
+        <strong class="hero-no-truth">No automation tools.</strong>
+        <span class="hero-no-support">Claude is the automation layer.</span>
       </div>
+
       <div class="hero-no-item">
-        <span class="hero-no-x">✗</span>
-        <div class="hero-no-text">
-          <s>Code you write</s>
-          <strong>Claude writes it all</strong>
-        </div>
+        <span class="hero-no-pre"><span class="hero-no-x">✗</span> No more</span>
+        <div class="hero-no-keyword"><span class="hero-no-keyword-text">Coding</span></div>
+        <strong class="hero-no-truth">Claude writes it all.</strong>
+        <span class="hero-no-support">You describe. Claude builds.</span>
       </div>
+
       <div class="hero-no-item">
-        <span class="hero-no-x">✗</span>
-        <div class="hero-no-text">
-          <s>LinkedIn Premium tools</s>
-          <strong>Works with free search</strong>
-        </div>
+        <span class="hero-no-pre"><span class="hero-no-x">✗</span> No more</span>
+        <div class="hero-no-keyword"><span class="hero-no-keyword-text">Premium</span></div>
+        <strong class="hero-no-truth">Works with free search.</strong>
+        <span class="hero-no-support">No LinkedIn Premium needed.</span>
       </div>
     </div>
 
