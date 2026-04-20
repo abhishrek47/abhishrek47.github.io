@@ -50,7 +50,7 @@ async function run() {
       <td style="padding:10px 0;border-bottom:1px solid #f0ebe5;">
         <table width="100%" cellpadding="0" cellspacing="0"><tr>
           <td style="font-family:Arial,sans-serif;font-size:14px;color:#1a1a1a;font-weight:600;">
-            ${s.email}
+            <a href="mailto:${s.email}" style="color:#1a1a1a;text-decoration:none;font-weight:600;">${s.email}</a>
           </td>
           <td align="right" style="font-family:'Courier New',monospace;font-size:11px;color:#c0392b;letter-spacing:1px;text-transform:uppercase;">
             ${s.source || 'unknown'}
@@ -83,8 +83,8 @@ async function run() {
         </h1>
       </td>
       <td align="right" style="vertical-align:top;">
-        <div style="background:#c0392b;border-radius:50%;width:52px;height:52px;display:inline-flex;align-items:center;justify-content:center;">
-          <span style="font-family:Georgia,serif;font-size:22px;color:#fff;font-weight:800;">${count}</span>
+        <div style="background:#c0392b;border-radius:50%;width:52px;height:52px;line-height:52px;text-align:center;display:inline-block;vertical-align:middle;">
+          <span style="font-family:Georgia,serif;font-size:22px;color:#fff;font-weight:800;line-height:52px;">${count}</span>
         </div>
       </td>
     </tr></table>
