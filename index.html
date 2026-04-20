@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -2401,144 +2402,6 @@ html[data-style-chosen] #view-switcher  { display: none !important; }
   <link rel="stylesheet" href="/css/nav-editorial.css">
 </head>
 <body>
-
-  <!-- ═══════════════════════════════════════════════════
-     THE HARD PART — Newsletter Popup
-     Paste before </body> on any page.
-     Change SOURCE below to identify which page.
-     ═══════════════════════════════════════════════════ -->
-
-<!-- Firebase SDK -->
-<script type="module">
-  import { initializeApp }  from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-  import { getFirestore, collection, addDoc } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
-
-  // ── Change this per page ──────────────────────────
-  const SOURCE = 'home';   // e.g. 'home', 'about', 'work', 'job-search-agent-guide'
-  // ─────────────────────────────────────────────────
-
-  const app = initializeApp({
-    apiKey:            "AIzaSyBoX4532if5fLugOIYFqvE6SONUWPFMykQ",
-    authDomain:        "abhishek-newsletter.firebaseapp.com",
-    projectId:         "abhishek-newsletter",
-    storageBucket:     "abhishek-newsletter.firebasestorage.app",
-    messagingSenderId: "89175755590",
-    appId:             "1:89175755590:web:6dcb06a4a0cd078bf53347",
-    measurementId:     "G-6BDWEKMT5J"
-  }, 'newsletter');
-
-  const db = getFirestore(app);
-
-  window.subscribeNewsletter = async function(email) {
-    const btn = document.getElementById('nl-submit');
-    const msg = document.getElementById('nl-msg');
-    btn.disabled = true;
-    btn.textContent = 'Saving...';
-    try {
-      await addDoc(collection(db, 'newsletter_subscribers'), {
-        email:      email.toLowerCase().trim(),
-        source:     SOURCE,
-        subscribed: new Date().toISOString(),
-        active:     true
-      });
-      if (typeof gtag !== 'undefined') {
-        gtag('event', 'newsletter_subscribe', { source: 'popup', page: SOURCE });
-      }
-      msg.textContent = "You're in. I'll email you when the next piece drops.";
-      msg.className = 'nl-msg success';
-      setTimeout(() => closeNewsletter(true), 2500);
-    } catch (err) {
-      console.error('Subscribe error:', err.code, err.message);
-      msg.textContent = 'Something went wrong. Try again in a moment.';
-      msg.className = 'nl-msg error';
-      btn.disabled = false;
-      btn.textContent = 'Subscribe';
-    }
-  };
-</script>
-
-<style>
-#nl-overlay { position:fixed; inset:0; z-index:9000; background:rgba(14,26,46,0.75); backdrop-filter:blur(4px); display:flex; align-items:center; justify-content:center; padding:1.5rem; opacity:0; pointer-events:none; transition:opacity 0.3s ease; }
-#nl-overlay.visible { opacity:1; pointer-events:all; }
-#nl-card { background:#f5f0eb; border-radius:20px; padding:2.5rem 2rem 2rem; max-width:480px; width:100%; position:relative; box-shadow:0 24px 80px rgba(0,0,0,0.35); transform:translateY(20px); transition:transform 0.3s ease; }
-#nl-overlay.visible #nl-card { transform:translateY(0); }
-#nl-close { position:absolute; top:1rem; right:1rem; width:32px; height:32px; border-radius:50%; background:rgba(30,58,95,0.08); border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:1.1rem; color:#555; line-height:1; transition:background 0.15s; }
-#nl-close:hover { background:rgba(30,58,95,0.15); }
-.nl-eyebrow { font-family:'JetBrains Mono',monospace; font-size:0.62rem; letter-spacing:3px; text-transform:uppercase; color:#c0392b; font-weight:700; margin-bottom:0.75rem; display:flex; align-items:center; gap:0.5rem; }
-.nl-eyebrow::before { content:''; display:inline-block; width:20px; height:2px; background:#c0392b; }
-#nl-card h2 { font-family:'Playfair Display',Georgia,serif; font-size:1.55rem; font-weight:800; color:#1e3a5f; line-height:1.25; margin-bottom:0.75rem; }
-#nl-card h2 em { color:#c0392b; font-style:italic; }
-.nl-body { font-family:'DM Sans',Arial,sans-serif; font-size:0.88rem; color:#333; line-height:1.65; margin-bottom:1.5rem; }
-.nl-body strong { color:#1e3a5f; font-weight:600; }
-.nl-list { list-style:none; margin-bottom:1.5rem; display:flex; flex-direction:column; gap:0.4rem; }
-.nl-list li { font-family:'DM Sans',Arial,sans-serif; font-size:0.84rem; color:#333; display:flex; align-items:center; gap:0.5rem; }
-.nl-list li::before { content:'✓'; color:#2d7a2d; font-weight:700; font-size:0.8rem; flex-shrink:0; }
-.nl-form { display:flex; gap:0.5rem; margin-bottom:0.6rem; }
-#nl-email { flex:1; padding:0.7rem 1rem; font-family:'DM Sans',Arial,sans-serif; font-size:0.88rem; border:1.5px solid #e0d8d0; border-radius:8px; background:#fff; color:#1a1a1a; outline:none; transition:border-color 0.15s; }
-#nl-email:focus { border-color:#1e3a5f; }
-#nl-email::placeholder { color:#aaa; }
-#nl-submit { padding:0.7rem 1.25rem; background:#c0392b; color:#fff; font-family:'DM Sans',Arial,sans-serif; font-size:0.88rem; font-weight:600; border:none; border-radius:8px; cursor:pointer; white-space:nowrap; transition:background 0.15s, transform 0.1s; }
-#nl-submit:hover:not(:disabled) { background:#e74c3c; transform:translateY(-1px); }
-#nl-submit:disabled { opacity:0.65; cursor:not-allowed; }
-.nl-msg { font-family:'JetBrains Mono',monospace; font-size:0.72rem; min-height:1.2rem; margin-bottom:0.4rem; }
-.nl-msg.success { color:#2d7a2d; }
-.nl-msg.error { color:#c0392b; }
-.nl-note { font-family:'JetBrains Mono',monospace; font-size:0.62rem; color:#444; text-align:center; }
-.nl-dismiss { display:block; text-align:center; margin-top:0.85rem; font-family:'JetBrains Mono',monospace; font-size:0.68rem; color:#c0392b; cursor:pointer; text-decoration:underline; text-decoration-color:rgba(192,57,43,0.4); background:none; border:none; width:100%; font-weight:500; }
-.nl-dismiss:hover { color:#e74c3c; }
-@media (max-width:480px) {
-  #nl-card { padding:2rem 1.25rem 1.5rem; border-radius:14px; }
-  #nl-card h2 { font-size:1.3rem; }
-  .nl-form { flex-direction:column; }
-  #nl-submit { width:100%; }
-}
-</style>
-
-<div id="nl-overlay" role="dialog" aria-modal="true" aria-labelledby="nl-heading">
-  <div id="nl-card">
-    <button id="nl-close" onclick="closeNewsletter(false)" aria-label="Close">✕</button>
-    <p class="nl-eyebrow">The Hard Part · Newsletter</p>
-    <h2 id="nl-heading">Get the next piece in your <em>inbox.</em></h2>
-    <p class="nl-body">I write about the <strong>technical side of L&D</strong> — xAPI, AI workflows, Storyline JavaScript, automation. Practical things built and tested, not recycled theory.</p>
-    <ul class="nl-list">
-      <li>New articles straight to your inbox</li>
-      <li>Technical guides like this one, free</li>
-      <li>No fluff, no reposted content</li>
-    </ul>
-    <div class="nl-form">
-      <input type="email" id="nl-email" placeholder="your@email.com" autocomplete="email" onkeydown="if(event.key==='Enter') handleNLSubscribe()"/>
-      <button id="nl-submit" onclick="handleNLSubscribe()">Subscribe</button>
-    </div>
-    <p id="nl-msg" class="nl-msg"></p>
-    <p class="nl-note">No spam. Unsubscribe anytime. Sent only when something worth reading is ready.</p>
-    <button class="nl-dismiss" onclick="closeNewsletter(false)">I'll catch it on LinkedIn instead</button>
-  </div>
-</div>
-
-<script>
-function setCookie(n,v,d){const e=new Date();e.setTime(e.getTime()+d*864e5);document.cookie=n+'='+v+';expires='+e.toUTCString()+';path=/;SameSite=Lax';}
-function getCookie(n){return document.cookie.split(';').some(c=>c.trim().startsWith(n+'='));}
-function showNewsletter(){document.getElementById('nl-overlay').classList.add('visible');document.getElementById('nl-email').focus();}
-function closeNewsletter(subscribed){document.getElementById('nl-overlay').classList.remove('visible');setCookie('nl_seen','1',subscribed?365:30);}
-function handleNLSubscribe(){
-  const email=document.getElementById('nl-email').value.trim();
-  const msg=document.getElementById('nl-msg');
-  if(!email||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){msg.textContent='Please enter a valid email address.';msg.className='nl-msg error';return;}
-  if(typeof window.subscribeNewsletter==='function'){window.subscribeNewsletter(email);}
-  else{msg.textContent='Loading… try again in a moment.';msg.className='nl-msg error';}
-}
-(function(){
-  if(getCookie('nl_seen'))return;
-  let shown=false;
-  function check(){if(shown)return;const p=window.scrollY/(document.documentElement.scrollHeight-window.innerHeight);if(p>=0.40){shown=true;window.removeEventListener('scroll',check);setTimeout(showNewsletter,600);}}
-  window.addEventListener('scroll',check,{passive:true});
-})();
-document.getElementById('nl-overlay').addEventListener('click',function(e){if(e.target===this)closeNewsletter(false);});
-document.addEventListener('keydown',function(e){if(e.key==='Escape')closeNewsletter(false);});
-</script>
-
-<!-- END Newsletter Popup -->
-
 <!-- ── UPDATE BANNERS (controlled by SHOW_UPDATE_BANNER flag above) ── -->
 <div id="ub-editorial" class="update-banner" role="status" aria-live="polite">
   <span class="ub-icon">🔧</span>
@@ -2660,7 +2523,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape')closeNewslet
      3D NAV (only shows in 3D view)
 ════════════════════════════════════════ -->
 <nav id="td-nav">
-  <a href="index.html" class="n-logo">AT<span>.</span></a>
+  <a href="index.html" class="n-logo" onclick="event.stopPropagation()">AT<span>.</span></a>
   <ul class="n-links">
     <li><a href="pages/work.html?view=visual">Work</a></li>
     <li><a href="pages/about.html?view=visual">About</a></li>
@@ -5756,6 +5619,361 @@ else kwFoInitPills();
   });
 })();
 </script>
+
+
+  <!-- ═══════════════════════════════════════════════════
+     THE HARD PART — Newsletter Popup
+     Two variants: editorial (serif/linen) + visual (bento/yellow)
+     ═══════════════════════════════════════════════════ -->
+
+<!-- Firebase SDK -->
+<script type="module">
+  import { initializeApp }  from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+  import { getFirestore, collection, addDoc } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+  const SOURCE = 'home';
+
+  const app = initializeApp({
+    apiKey:            "AIzaSyBoX4532if5fLugOIYFqvE6SONUWPFMykQ",
+    authDomain:        "abhishek-newsletter.firebaseapp.com",
+    projectId:         "abhishek-newsletter",
+    storageBucket:     "abhishek-newsletter.firebasestorage.app",
+    messagingSenderId: "89175755590",
+    appId:             "1:89175755590:web:6dcb06a4a0cd078bf53347",
+    measurementId:     "G-6BDWEKMT5J"
+  }, 'newsletter');
+
+  const db = getFirestore(app);
+
+  async function doSubscribe(email, btnId, msgId, closeFn) {
+    const btn = document.getElementById(btnId);
+    const msg = document.getElementById(msgId);
+    btn.disabled = true;
+    btn.textContent = 'Saving...';
+    try {
+      await addDoc(collection(db, 'newsletter_subscribers'), {
+        email:      email.toLowerCase().trim(),
+        source:     SOURCE,
+        subscribed: new Date().toISOString(),
+        active:     true
+      });
+      if (typeof gtag !== 'undefined') {
+        gtag('event', 'newsletter_subscribe', { source: 'popup', page: SOURCE });
+      }
+      msg.textContent = "You're in. I'll email you when the next piece drops.";
+      msg.className = (btnId === 'nl-submit-v' ? 'nlv-msg' : 'nl-msg') + ' success';
+      setTimeout(() => closeFn(true), 2500);
+    } catch (err) {
+      console.error('Subscribe error:', err.code, err.message);
+      msg.textContent = 'Something went wrong. Try again in a moment.';
+      msg.className = (btnId === 'nl-submit-v' ? 'nlv-msg' : 'nl-msg') + ' error';
+      btn.disabled = false;
+      btn.textContent = 'Subscribe';
+    }
+  }
+
+  window.subscribeNewsletter  = email => doSubscribe(email, 'nl-submit',   'nl-msg',   window.closeNewsletter);
+  window.subscribeNewsletterV = email => doSubscribe(email, 'nl-submit-v', 'nl-msg-v', window.closeNewsletterV);
+</script>
+
+<style>
+/* ─────────────────────────────────────────────
+   SHARED base
+───────────────────────────────────────────── */
+#nl-overlay,
+#nl-overlay-v {
+  position: fixed; inset: 0; z-index: 9000;
+  display: flex; align-items: center; justify-content: center;
+  padding: 1.5rem;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+#nl-overlay.visible,
+#nl-overlay-v.visible { opacity: 1; pointer-events: all; }
+
+/* ─────────────────────────────────────────────
+   EDITORIAL popup  (linen · serif · terracotta)
+───────────────────────────────────────────── */
+#nl-overlay { background: rgba(14,26,46,0.75); backdrop-filter: blur(4px); }
+#nl-card {
+  background: #f5f0eb; border-radius: 20px;
+  padding: 2.5rem 2rem 2rem; max-width: 480px; width: 100%;
+  position: relative; box-shadow: 0 24px 80px rgba(0,0,0,0.35);
+  transform: translateY(20px); transition: transform 0.3s ease;
+}
+#nl-overlay.visible #nl-card { transform: translateY(0); }
+#nl-close {
+  position: absolute; top: 1rem; right: 1rem;
+  width: 32px; height: 32px; border-radius: 50%;
+  background: rgba(30,58,95,0.08); border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem; color: #555; transition: background 0.15s;
+}
+#nl-close:hover { background: rgba(30,58,95,0.15); }
+.nl-eyebrow {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.62rem;
+  letter-spacing: 3px; text-transform: uppercase; color: #c0392b;
+  font-weight: 700; margin-bottom: 0.75rem;
+  display: flex; align-items: center; gap: 0.5rem;
+}
+.nl-eyebrow::before {
+  content: ''; display: inline-block;
+  width: 20px; height: 2px; background: #c0392b;
+}
+#nl-card h2 {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1.55rem; font-weight: 800; color: #1e3a5f;
+  line-height: 1.25; margin-bottom: 0.75rem;
+}
+#nl-card h2 em { color: #c0392b; font-style: italic; }
+.nl-body {
+  font-family: 'DM Sans', Arial, sans-serif; font-size: 0.88rem;
+  color: #333; line-height: 1.65; margin-bottom: 1.5rem;
+}
+.nl-body strong { color: #1e3a5f; font-weight: 600; }
+.nl-list { list-style: none; margin-bottom: 1.5rem; display: flex; flex-direction: column; gap: 0.4rem; }
+.nl-list li {
+  font-family: 'DM Sans', Arial, sans-serif; font-size: 0.84rem;
+  color: #333; display: flex; align-items: center; gap: 0.5rem;
+}
+.nl-list li::before { content: '\2713'; color: #2d7a2d; font-weight: 700; font-size: 0.8rem; flex-shrink: 0; }
+.nl-form { display: flex; gap: 0.5rem; margin-bottom: 0.6rem; }
+#nl-email {
+  flex: 1; padding: 0.7rem 1rem;
+  font-family: 'DM Sans', Arial, sans-serif; font-size: 0.88rem;
+  border: 1.5px solid #e0d8d0; border-radius: 8px;
+  background: #fff; color: #1a1a1a; outline: none;
+  transition: border-color 0.15s;
+}
+#nl-email:focus { border-color: #1e3a5f; }
+#nl-email::placeholder { color: #aaa; }
+#nl-submit {
+  padding: 0.7rem 1.25rem; background: #c0392b; color: #fff;
+  font-family: 'DM Sans', Arial, sans-serif; font-size: 0.88rem; font-weight: 600;
+  border: none; border-radius: 8px; cursor: pointer; white-space: nowrap;
+  transition: background 0.15s, transform 0.1s;
+}
+#nl-submit:hover:not(:disabled) { background: #e74c3c; transform: translateY(-1px); }
+#nl-submit:disabled { opacity: 0.65; cursor: not-allowed; }
+.nl-msg { font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; min-height: 1.2rem; margin-bottom: 0.4rem; }
+.nl-msg.success { color: #2d7a2d; }
+.nl-msg.error   { color: #c0392b; }
+.nl-note { font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; color: #444; text-align: center; }
+.nl-dismiss {
+  display: block; text-align: center; margin-top: 0.85rem;
+  font-family: 'JetBrains Mono', monospace; font-size: 0.68rem;
+  color: #c0392b; cursor: pointer;
+  text-decoration: underline; text-decoration-color: rgba(192,57,43,0.4);
+  background: none; border: none; width: 100%; font-weight: 500;
+}
+.nl-dismiss:hover { color: #e74c3c; }
+@media (max-width:480px) {
+  #nl-card { padding: 2rem 1.25rem 1.5rem; border-radius: 14px; }
+  #nl-card h2 { font-size: 1.3rem; }
+  .nl-form { flex-direction: column; }
+  #nl-submit { width: 100%; }
+}
+
+/* ─────────────────────────────────────────────
+   VISUAL popup  (white card · bold border · yellow)
+───────────────────────────────────────────── */
+#nl-overlay-v { background: rgba(15,8,32,0.55); backdrop-filter: blur(6px); }
+#nl-card-v {
+  background: #ffffff;
+  border: 2px solid #151515;
+  border-radius: 16px;
+  padding: 2.5rem 2rem 2rem;
+  max-width: 480px; width: 100%;
+  position: relative;
+  box-shadow: 6px 6px 0 #151515;
+  transform: translateY(20px); transition: transform 0.3s ease;
+}
+#nl-overlay-v.visible #nl-card-v { transform: translateY(0); }
+#nl-close-v {
+  position: absolute; top: 1rem; right: 1rem;
+  width: 32px; height: 32px; border-radius: 8px;
+  background: #f3e8ff; border: 1.5px solid #151515;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  font-size: 0.9rem; color: #151515; transition: background 0.15s;
+}
+#nl-close-v:hover { background: #fbbf0e; }
+.nlv-eyebrow {
+  font-family: 'Figtree', 'Segoe UI', sans-serif;
+  font-size: 0.7rem; font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase; color: #151515;
+  margin-bottom: 0.85rem;
+  display: flex; align-items: center; gap: 0.5rem;
+}
+.nlv-star {
+  width: 22px; height: 22px;
+  background: #fbbf0e; border: 1.5px solid #151515;
+  border-radius: 6px;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 0.65rem; flex-shrink: 0;
+}
+#nl-card-v h2 {
+  font-family: 'Outfit', 'Figtree', sans-serif;
+  font-size: 1.6rem; font-weight: 700; color: #151515;
+  line-height: 1.2; margin-bottom: 0.75rem;
+  letter-spacing: -0.025em;
+}
+#nl-card-v h2 em { font-style: italic; color: #888888; font-weight: 400; }
+.nlv-body {
+  font-family: 'Figtree', 'Segoe UI', sans-serif;
+  font-size: 0.88rem; color: #444; line-height: 1.65; margin-bottom: 1.25rem;
+}
+.nlv-body strong { color: #151515; font-weight: 600; }
+.nlv-list { list-style: none; margin-bottom: 1.5rem; display: flex; flex-direction: column; gap: 0.4rem; }
+.nlv-list li {
+  font-family: 'Figtree', 'Segoe UI', sans-serif;
+  font-size: 0.84rem; color: #333;
+  display: flex; align-items: center; gap: 0.6rem;
+}
+.nlv-list li::before {
+  content: '\2713';
+  display: flex; align-items: center; justify-content: center;
+  width: 18px; height: 18px; flex-shrink: 0;
+  background: #fbbf0e; border: 1.5px solid #151515; border-radius: 4px;
+  font-size: 0.65rem; font-weight: 900; color: #151515;
+}
+.nlv-form { display: flex; gap: 0.5rem; margin-bottom: 0.6rem; }
+#nl-email-v {
+  flex: 1; padding: 0.7rem 1rem;
+  font-family: 'Figtree', 'Segoe UI', sans-serif; font-size: 0.88rem;
+  border: 1.5px solid #151515; border-radius: 8px;
+  background: #fff; color: #151515; outline: none;
+  transition: box-shadow 0.15s;
+}
+#nl-email-v:focus { box-shadow: 3px 3px 0 #fbbf0e; }
+#nl-email-v::placeholder { color: #aaa; }
+#nl-submit-v {
+  padding: 0.7rem 1.25rem;
+  background: #fbbf0e; color: #151515;
+  font-family: 'Figtree', 'Segoe UI', sans-serif;
+  font-size: 0.88rem; font-weight: 700;
+  border: 1.5px solid #151515; border-radius: 8px;
+  cursor: pointer; white-space: nowrap;
+  transition: box-shadow 0.12s, transform 0.1s;
+}
+#nl-submit-v:hover:not(:disabled) { box-shadow: 3px 3px 0 #151515; transform: translate(-1px, -1px); }
+#nl-submit-v:disabled { opacity: 0.65; cursor: not-allowed; }
+.nlv-msg { font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; min-height: 1.2rem; margin-bottom: 0.4rem; }
+.nlv-msg.success { color: #2d7a2d; }
+.nlv-msg.error   { color: #c0392b; }
+.nlv-note {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.62rem; color: #888; text-align: center;
+}
+.nlv-dismiss {
+  display: block; text-align: center; margin-top: 0.85rem;
+  font-family: 'Figtree', 'Segoe UI', sans-serif;
+  font-size: 0.72rem; color: #888;
+  cursor: pointer; text-decoration: underline;
+  background: none; border: none; width: 100%;
+}
+.nlv-dismiss:hover { color: #151515; }
+@media (max-width:480px) {
+  #nl-card-v { padding: 2rem 1.25rem 1.5rem; box-shadow: 4px 4px 0 #151515; }
+  #nl-card-v h2 { font-size: 1.3rem; }
+  .nlv-form { flex-direction: column; }
+  #nl-submit-v { width: 100%; }
+}
+</style>
+
+<!-- ── EDITORIAL popup markup ── -->
+<div id="nl-overlay" role="dialog" aria-modal="true" aria-labelledby="nl-heading">
+  <div id="nl-card">
+    <button id="nl-close" onclick="closeNewsletter(false)" aria-label="Close">&#x2715;</button>
+    <p class="nl-eyebrow">The Hard Part &middot; Newsletter</p>
+    <h2 id="nl-heading">Get the next piece in your <em>inbox.</em></h2>
+    <p class="nl-body">I write about the <strong>technical side of L&amp;D</strong> &mdash; xAPI, AI workflows, Storyline JavaScript, automation. Practical things built and tested, not recycled theory.</p>
+    <ul class="nl-list">
+      <li>New articles straight to your inbox</li>
+      <li>In-depth technical write-ups, free</li>
+      <li>No fluff, no reposted content</li>
+    </ul>
+    <div class="nl-form">
+      <input type="email" id="nl-email" placeholder="your@email.com" autocomplete="email" onkeydown="if(event.key==='Enter') handleNLSubscribe()"/>
+      <button id="nl-submit" onclick="handleNLSubscribe()">Subscribe</button>
+    </div>
+    <p id="nl-msg" class="nl-msg"></p>
+    <p class="nl-note">No spam. Unsubscribe anytime. Sent only when something worth reading is ready.</p>
+    <button class="nl-dismiss" onclick="closeNewsletter(false)">I'll catch it on LinkedIn instead</button>
+  </div>
+</div>
+
+<!-- ── VISUAL popup markup ── -->
+<div id="nl-overlay-v" role="dialog" aria-modal="true" aria-labelledby="nl-v-heading">
+  <div id="nl-card-v">
+    <button id="nl-close-v" onclick="closeNewsletterV(false)" aria-label="Close">&#x2715;</button>
+    <p class="nlv-eyebrow"><span class="nlv-star">&#x2736;</span>The Hard Part &middot; Newsletter</p>
+    <h2 id="nl-v-heading">Get the next piece in your <em>inbox.</em></h2>
+    <p class="nlv-body">I write about the <strong>technical side of L&amp;D</strong> &mdash; xAPI, AI workflows, Storyline JavaScript, automation. Practical things built and tested, not recycled theory.</p>
+    <ul class="nlv-list">
+      <li>New articles straight to your inbox</li>
+      <li>In-depth technical write-ups, free</li>
+      <li>No fluff, no reposted content</li>
+    </ul>
+    <div class="nlv-form">
+      <input type="email" id="nl-email-v" placeholder="your@email.com" autocomplete="email" onkeydown="if(event.key==='Enter') handleNLSubscribeV()"/>
+      <button id="nl-submit-v" onclick="handleNLSubscribeV()">Subscribe</button>
+    </div>
+    <p id="nl-msg-v" class="nlv-msg"></p>
+    <p class="nlv-note">No spam. Unsubscribe anytime. Sent only when something worth reading is ready.</p>
+    <button class="nlv-dismiss" onclick="closeNewsletterV(false)">I'll catch it on LinkedIn instead</button>
+  </div>
+</div>
+
+<script>
+function setCookie(n,v,d){const e=new Date();e.setTime(e.getTime()+d*864e5);document.cookie=n+'='+v+';expires='+e.toUTCString()+';path=/;SameSite=Lax';}
+function getCookie(n){return document.cookie.split(';').some(c=>c.trim().startsWith(n+'='));}
+
+/* ── Editorial ── */
+function showNewsletter(){document.getElementById('nl-overlay').classList.add('visible');document.getElementById('nl-email').focus();}
+window.closeNewsletter=function closeNewsletter(subscribed){document.getElementById('nl-overlay').classList.remove('visible');setCookie('nl_seen','1',subscribed?365:30);}
+function handleNLSubscribe(){
+  const email=document.getElementById('nl-email').value.trim();
+  const msg=document.getElementById('nl-msg');
+  if(!email||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){msg.textContent='Please enter a valid email address.';msg.className='nl-msg error';return;}
+  if(typeof window.subscribeNewsletter==='function'){window.subscribeNewsletter(email);}
+  else{msg.textContent='Loading\u2026 try again in a moment.';msg.className='nl-msg error';}
+}
+
+/* ── Visual ── */
+function showNewsletterV(){document.getElementById('nl-overlay-v').classList.add('visible');document.getElementById('nl-email-v').focus();}
+window.closeNewsletterV=function closeNewsletterV(subscribed){document.getElementById('nl-overlay-v').classList.remove('visible');setCookie('nl_seen','1',subscribed?365:30);}
+function handleNLSubscribeV(){
+  const email=document.getElementById('nl-email-v').value.trim();
+  const msg=document.getElementById('nl-msg-v');
+  if(!email||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){msg.textContent='Please enter a valid email address.';msg.className='nlv-msg error';return;}
+  if(typeof window.subscribeNewsletterV==='function'){window.subscribeNewsletterV(email);}
+  else{msg.textContent='Loading\u2026 try again in a moment.';msg.className='nlv-msg error';}
+}
+
+/* ── Shared trigger — picks popup based on active view ── */
+(function(){
+  if(getCookie('nl_seen'))return;
+  let shown=false;
+  function show(){
+    if(shown)return;shown=true;
+    window.removeEventListener('scroll',check);
+    setTimeout(function(){
+      if(document.body.classList.contains('visual-mode')){showNewsletterV();}
+      else{showNewsletter();}
+    },600);
+  }
+  function check(){const p=window.scrollY/(document.documentElement.scrollHeight-window.innerHeight);if(p>=0.25)show();}
+  window.addEventListener('scroll',check,{passive:true});
+  setTimeout(function(){if(!shown)show();},30000);
+})();
+
+/* ── Dismiss on overlay click or Escape ── */
+document.getElementById('nl-overlay').addEventListener('click',function(e){if(e.target===this)closeNewsletter(false);});
+document.getElementById('nl-overlay-v').addEventListener('click',function(e){if(e.target===this)closeNewsletterV(false);});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'){closeNewsletter(false);closeNewsletterV(false);}});
+</script>
+
+<!-- END Newsletter Popup -->
 
 </body>
 </html>
