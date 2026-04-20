@@ -1,0 +1,1427 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Build Your Own Job Search Agent · Abhishek Trivedi</title>
+<meta name="robots" content="noindex, nofollow">
+<!-- Microsoft Clarity -->
+<script type="text/javascript">
+  (function(c,l,a,r,i,t,y){
+      c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+      t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+      y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+  })(window, document, "clarity", "script", "vxtwcbqoas");
+</script>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-LY3GY2LH00"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-LY3GY2LH00');
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;1,700;1,800&family=DM+Sans:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f5f0eb;
+  --navy: #1e3a5f;
+  --navy-dark: #162d4a;
+  --text: #1a1a1a;
+  --muted: #555555;
+  --accent: #c0392b;
+  --accent-hover: #e74c3c;
+  --border: #e0d8d0;
+  --white: #ffffff;
+  --serif: 'Playfair Display', Georgia, serif;
+  --sans: 'DM Sans', sans-serif;
+  --mono: 'JetBrains Mono', monospace;
+  --green: #2d7a2d;
+  --green-bg: #f0f8f0;
+  --sidebar-w: 240px;
+  --nav-h: 60px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 1rem; line-height: 1.75; -webkit-font-smoothing: antialiased; }
+
+/* NAV */
+.site-nav { position: sticky; top: 0; z-index: 200; background: var(--bg); border-bottom: 1px solid var(--border); padding: 0 2rem; display: flex; align-items: center; justify-content: space-between; height: var(--nav-h); }
+.nav-logo { font-family: var(--mono); font-size: 1.1rem; font-weight: 500; color: var(--navy); text-decoration: none; }
+.nav-links { display: flex; align-items: center; gap: 1.5rem; list-style: none; }
+.nav-links a { font-size: 0.85rem; color: var(--text); text-decoration: none; font-weight: 500; transition: color 0.2s; }
+.nav-links a:hover { color: var(--accent); }
+.nav-links a.nav-cta { background: var(--accent); color: var(--white); padding: 0.4rem 1rem; border-radius: 4px; font-size: 0.8rem; }
+.nav-links a.nav-cta:hover { background: var(--accent-hover); color: var(--white); }
+
+/* HERO */
+.hero { background: #1e3a5f; padding: 4rem 0 4rem; position: relative; overflow: hidden; }
+.hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 10% 90%, rgba(192,57,43,0.14) 0%, transparent 50%), radial-gradient(ellipse at 90% 10%, rgba(255,255,255,0.03) 0%, transparent 40%); pointer-events: none; }
+
+.hero-inner {
+  position: relative; z-index: 1;
+  display: grid;
+  grid-template-columns: 260px 1fr 260px;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2.5rem;
+  gap: 2.5rem;
+  align-items: center;
+  min-height: 440px;
+}
+
+/* LEFT/RIGHT SIDE PANELS */
+.hero-side {
+  display: flex; flex-direction: column; gap: 0.7rem;
+}
+.hero-side-label {
+  font-family: var(--mono); font-size: 0.6rem;
+  color: rgba(255,255,255,0.88); letter-spacing: 2.5px;
+  text-transform: uppercase; margin-bottom: 0.25rem;
+}
+.hero-no-item {
+  display: flex; align-items: flex-start; gap: 0.6rem;
+  padding: 0.8rem 0.9rem;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.14);
+  border-radius: 9px;
+  transition: border-color 0.2s;
+}
+.hero-no-item:hover { border-color: rgba(192,57,43,0.4); }
+.hero-no-x {
+  font-size: 0.95rem; color: var(--accent);
+  font-weight: 700; flex-shrink: 0; line-height: 1.5;
+}
+.hero-no-text { display: flex; flex-direction: column; gap: 0.1rem; }
+.hero-no-text s {
+  font-size: 0.7rem; font-family: var(--mono);
+  color: rgba(255,255,255,0.75);
+  text-decoration-color: rgba(192,57,43,0.7);
+  text-decoration-thickness: 1.5px;
+  letter-spacing: 0.2px;
+}
+.hero-no-text strong {
+  font-size: 0.88rem; font-weight: 600;
+  color: #ffffff;
+  font-family: var(--sans); line-height: 1.3;
+}
+
+/* CENTER */
+.hero-center { text-align: center; }
+.hero-label { font-family: var(--mono); font-size: 0.7rem; color: rgba(255,255,255,0.8); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 1.75rem; display: inline-flex; align-items: center; gap: 0.75rem; }
+.hero-label::before, .hero-label::after { content: ''; display: inline-block; width: 28px; height: 1px; background: var(--accent); }
+.hero h1 { font-family: var(--serif); font-size: clamp(2rem, 3.5vw, 3.2rem); font-weight: 800; color: #ffffff; line-height: 1.15; margin: 0 auto 1.5rem; }
+.hero h1 em { color: #c0392b; font-style: italic; }
+.hero-sub { color: #d8e4f0; font-size: 0.97rem; max-width: 420px; margin: 0 auto 2rem; line-height: 1.8; }
+.hero-pills { display: flex; align-items: center; justify-content: center; gap: 0.4rem; flex-wrap: wrap; }
+.hero-pill { font-family: var(--mono); font-size: 0.65rem; color: rgba(255,255,255,0.8); background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.16); padding: 0.28rem 0.7rem; border-radius: 100px; letter-spacing: 0.5px; }
+
+/* Collapse sides on smaller screens */
+@media (max-width: 1100px) {
+  .hero-inner { grid-template-columns: 1fr; padding: 0 1.5rem; min-height: unset; }
+  .hero-side { display: none; }
+  .hero h1 { font-size: clamp(1.9rem, 5vw, 3rem); }
+}
+
+/* HERO → STATS TRANSITION */
+.hero-wave { display: block; width: 100%; height: 32px; background: var(--white); clip-path: ellipse(55% 100% at 50% 100%); margin-top: -1px; }
+
+/* STATS STRIP */
+.intro-strip { background: var(--white); border-bottom: 1px solid var(--border); padding: 2rem 2rem 2.5rem; display: flex; align-items: center; justify-content: center; flex-wrap: wrap; }
+.intro-stat { text-align: center; flex: 1; min-width: 140px; padding: 0 1.5rem; }
+.intro-stat .big { font-family: var(--serif); font-size: 2.4rem; font-weight: 800; color: var(--accent); line-height: 1; display: block; font-style: italic; }
+.intro-stat .sm { font-size: 0.88rem; color: var(--text); margin-top: 0.5rem; font-weight: 400; }
+.intro-divider { width: 1px; height: 52px; background: var(--border); flex-shrink: 0; }
+
+/* SETUP SECTION */
+.setup-section { max-width: 1400px; margin: 3rem auto; padding: 0 3rem; }
+
+/* BEFORE / AFTER STRIP */
+.before-after {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: 16px; overflow: hidden; margin-bottom: 1.5rem;
+  display: grid; grid-template-columns: 1fr 1fr;
+}
+.ba-col { padding: 2rem; }
+.ba-col.before { border-right: 1px solid var(--border); }
+.ba-col.after { background: rgba(30,58,95,0.03); }
+.ba-label {
+  font-family: var(--mono); font-size: 0.65rem; letter-spacing: 2px;
+  text-transform: uppercase; font-weight: 500; margin-bottom: 1.25rem;
+  display: flex; align-items: center; gap: 0.5rem;
+}
+.ba-col.before .ba-label { color: var(--muted); }
+.ba-col.after .ba-label { color: var(--navy); }
+.ba-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.ba-col.before .ba-dot { background: var(--border); }
+.ba-col.after .ba-dot { background: var(--accent); }
+.ba-item {
+  display: flex; align-items: flex-start; gap: 0.75rem;
+  padding: 0.6rem 0; border-bottom: 1px solid var(--border);
+  font-size: 0.9rem; line-height: 1.5;
+}
+.ba-item:last-child { border-bottom: none; }
+.ba-icon { font-size: 0.8rem; flex-shrink: 0; margin-top: 0.1rem; width: 18px; text-align: center; }
+.ba-col.before .ba-item { color: var(--muted); }
+.ba-col.after .ba-item { color: var(--text); }
+.ba-col.after .ba-item strong { color: var(--navy); font-weight: 500; }
+
+/* FILTER FUNNEL */
+.filter-funnel { margin: 1.5rem 0; }
+.filter-row {
+  display: flex; align-items: center; gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+.filter-bar {
+  height: 52px; border-radius: 8px; background: var(--navy);
+  display: flex; align-items: center; padding: 0 1.25rem;
+  gap: 1rem; flex: 1; transition: opacity 0.2s;
+}
+.filter-bar.f1 { margin-left: 0; }
+.filter-bar.f2 { margin-left: 2%; }
+.filter-bar.f3 { margin-left: 4%; }
+.filter-bar.f4 { margin-left: 6%; }
+.filter-bar.f5 { margin-left: 8%; background: var(--accent); }
+.filter-num { font-family: var(--mono); font-size: 0.65rem; color: rgba(255,255,255,0.82); min-width: 16px; flex-shrink: 0; }
+.filter-name { font-size: 0.9rem; color: #ffffff; font-weight: 500; flex: 1; }
+.filter-rule { font-size: 0.8rem; color: rgba(255,255,255,0.88); }
+.filter-arrow { color: var(--muted); font-size: 0.75rem; flex-shrink: 0; font-family: var(--mono); white-space: nowrap; }
+.filter-pass {
+  text-align: center; padding: 1rem;
+  background: var(--green-bg); border: 1px solid rgba(45,122,45,0.2);
+  border-radius: 8px; margin-top: 0.75rem;
+  font-size: 0.88rem; color: var(--green); font-weight: 500;
+}
+
+/* MOBILE PROGRESS PILL */
+.mobile-progress-pill {
+  display: none;
+  position: fixed; bottom: 1.25rem; left: 50%; transform: translateX(-50%);
+  z-index: 300;
+  background: var(--navy); color: var(--white);
+  font-family: var(--mono); font-size: 0.7rem;
+  padding: 0.5rem 1.1rem; border-radius: 100px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+  display: none; align-items: center; gap: 0.6rem;
+  white-space: nowrap; pointer-events: none;
+}
+.mobile-progress-pill .pill-accent { color: var(--accent); font-weight: 500; }
+.mobile-progress-pill .pill-track {
+  width: 48px; height: 3px; background: rgba(255,255,255,0.2);
+  border-radius: 2px; overflow: hidden;
+}
+.mobile-progress-pill .pill-fill {
+  height: 100%; background: var(--accent); border-radius: 2px;
+  width: 0%; transition: width 0.3s ease;
+}
+@media (max-width: 1024px) {
+  .mobile-progress-pill { display: flex; }
+}
+
+/* HOW IT WORKS STRIP */
+.how-strip { background: var(--navy); border-radius: 16px; padding: 2.5rem 2rem; margin-bottom: 1.5rem; display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; }
+.how-step { padding: 0.75rem 1.5rem; display: flex; align-items: flex-start; gap: 1rem; position: relative; }
+.how-step:not(:last-child)::after { content: '→'; position: absolute; right: -0.6rem; top: 1.4rem; color: var(--accent); font-size: 1.2rem; z-index: 1; }
+.how-num { font-family: var(--mono); font-size: 0.72rem; color: var(--accent); font-weight: 500; min-width: 22px; padding-top: 0.25rem; flex-shrink: 0; }
+.how-text strong { display: block; color: #ffffff; font-size: 1.05rem; font-weight: 500; margin-bottom: 0.5rem; line-height: 1.3; }
+.how-text span { color: rgba(255,255,255,0.82); font-size: 0.88rem; line-height: 1.55; }
+
+/* TOC */
+.toc { background: var(--white); border: 1px solid var(--border); border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem; }
+.toc-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.25rem; }
+.toc-icon { width: 36px; height: 36px; background: var(--navy); border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.toc-icon svg { width: 18px; height: 18px; stroke: white; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.toc-title { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 2px; text-transform: uppercase; color: var(--text); font-weight: 500; }
+.toc ol { list-style: none; counter-reset: toc; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.35rem 2rem; }
+.toc ol li { counter-increment: toc; display: flex; align-items: baseline; gap: 0.6rem; padding: 0.2rem 0; }
+.toc ol li::before { content: counter(toc, decimal-leading-zero); font-family: var(--mono); font-size: 0.68rem; color: var(--accent); flex-shrink: 0; min-width: 20px; }
+.toc ol li a { font-size: 0.9rem; color: var(--navy); text-decoration: none; font-weight: 500; transition: color 0.15s; }
+.toc ol li a:hover { color: var(--accent); }
+
+/* OS TOGGLE CARD */
+.os-card { background: var(--navy); border-radius: 16px; padding: 1.75rem 2rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap; }
+.os-card-text { flex: 1; min-width: 200px; }
+.os-card-text p { font-family: var(--mono); font-size: 0.72rem; color: rgba(255,255,255,0.88); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 0.35rem; }
+.os-card-text strong { font-family: var(--sans); font-size: 1rem; color: var(--white); font-weight: 500; }
+.os-btns { display: flex; gap: 0.75rem; }
+.os-btn { font-family: var(--mono); font-size: 0.82rem; font-weight: 500; padding: 0.6rem 1.4rem; border-radius: 8px; border: 1.5px solid rgba(255,255,255,0.3); cursor: pointer; transition: all 0.15s; background: transparent; color: rgba(255,255,255,0.9); display: flex; align-items: center; gap: 0.5rem; }
+.os-btn:hover { color: #fff; border-color: rgba(255,255,255,0.6); }
+.os-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+.os-btn svg { width: 16px; height: 16px; flex-shrink: 0; }
+.effort-badge { display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; padding: 0.5rem 1rem; font-family: var(--mono); font-size: 0.72rem; color: rgba(255,255,255,0.85); }
+.effort-badge strong { color: var(--white); }
+.effort-badge .dot { color: var(--accent); }
+
+/* OS SWITCHING — fix for table rows */
+body.os-win .mac-only { display: none !important; }
+body.os-mac .win-only { display: none !important; }
+body.os-win tr.mac-only { display: none !important; }
+body.os-mac tr.win-only { display: none !important; }
+body.os-win .mac-only { display: none !important; }
+
+/* LAYOUT */
+.page-body { display: grid; grid-template-columns: var(--sidebar-w) 1fr; max-width: 1400px; margin: 0 auto; padding: 0 3rem; gap: 4rem; align-items: start; }
+
+/* SIDEBAR */
+.sidebar { position: sticky; top: calc(var(--nav-h) + 1rem); padding: 1.5rem 0; }
+.sidebar-label { font-family: var(--mono); font-size: 0.65rem; letter-spacing: 2px; text-transform: uppercase; color: var(--text); font-weight: 500; margin-bottom: 1rem; padding-left: 1rem; }
+.sidebar-nav { list-style: none; }
+.sidebar-nav li a { display: flex; align-items: center; gap: 0.6rem; padding: 0.45rem 1rem; border-radius: 6px; font-size: 0.82rem; color: var(--text); text-decoration: none; font-weight: 500; transition: all 0.15s; line-height: 1.3; border-left: 2px solid transparent; }
+.sidebar-nav li a .snum { font-family: var(--mono); font-size: 0.65rem; color: var(--muted); flex-shrink: 0; min-width: 18px; transition: color 0.15s; }
+.sidebar-nav li a:hover { color: var(--navy); background: rgba(30,58,95,0.07); }
+.sidebar-nav li a:hover .snum { color: var(--accent); }
+.sidebar-nav li a.active { color: var(--navy); background: rgba(30,58,95,0.07); border-left-color: var(--accent); }
+.sidebar-nav li a.active .snum { color: var(--accent); }
+.sidebar-progress { margin-top: 1.5rem; padding: 0 1rem; }
+.sidebar-progress-label { font-family: var(--mono); font-size: 0.65rem; color: var(--text); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 0.5rem; display: flex; justify-content: space-between; }
+.sidebar-progress-track { height: 3px; background: var(--border); border-radius: 2px; overflow: hidden; }
+.sidebar-progress-fill { height: 100%; background: var(--accent); border-radius: 2px; width: 0%; transition: width 0.3s ease; }
+.ask-claude-wrap { margin-top: 1.5rem; padding: 0 1rem; }
+.ask-claude-btn { display: flex; align-items: center; justify-content: center; gap: 0.5rem; width: 100%; background: var(--accent); color: var(--white); font-family: var(--mono); font-size: 0.72rem; font-weight: 500; letter-spacing: 0.5px; text-transform: uppercase; padding: 0.65rem 1rem; border-radius: 8px; border: none; cursor: pointer; transition: background 0.15s, transform 0.1s; text-decoration: none; }
+.ask-claude-btn:hover { background: var(--accent-hover); transform: translateY(-1px); }
+.ask-claude-btn svg { width: 14px; height: 14px; flex-shrink: 0; }
+.ask-claude-sub { font-family: var(--mono); font-size: 0.6rem; color: var(--muted); text-align: center; margin-top: 0.5rem; line-height: 1.5; padding: 0 0.5rem; }
+
+/* CONTENT */
+.content { padding: 2rem 0 6rem; min-width: 0; max-width: 820px; }
+.section { margin-bottom: 4rem; scroll-margin-top: calc(var(--nav-h) + 1.5rem); }
+.section-header { display: flex; align-items: flex-start; gap: 1rem; margin-bottom: 1.5rem; }
+.section-num-badge { width: 40px; height: 40px; background: var(--navy); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-family: var(--mono); font-size: 0.72rem; color: rgba(255,255,255,0.8); flex-shrink: 0; margin-top: 0.3rem; }
+.section h2 { font-family: var(--serif); font-size: clamp(1.6rem, 2.5vw, 2.2rem); font-weight: 700; color: var(--navy); line-height: 1.25; }
+.section h2 em { color: var(--accent); font-style: italic; }
+.section h3 { font-size: 1rem; font-weight: 500; color: var(--navy); margin: 1.75rem 0 0.6rem; }
+.section p { color: var(--text); margin-bottom: 0.9rem; font-size: 1rem; line-height: 1.8; }
+.section p strong { color: var(--navy); font-weight: 600; }
+.divider { border: none; border-top: 1px solid var(--border); margin: 4rem 0; }
+
+/* STEP CARDS */
+.step-card { background: var(--white); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem 1.75rem; margin-bottom: 1rem; transition: border-color 0.2s, box-shadow 0.2s; }
+.step-card:hover { border-color: rgba(30,58,95,0.2); box-shadow: 0 2px 12px rgba(30,58,95,0.06); }
+.step-card-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem; gap: 1rem; }
+.step-card h3 { font-size: 0.97rem; font-weight: 500; color: var(--navy); margin: 0; }
+.step-num { font-family: var(--mono); font-size: 0.65rem; color: var(--muted); letter-spacing: 1px; flex-shrink: 0; }
+.step-card p { font-size: 0.93rem; color: var(--text); margin-bottom: 0.6rem; line-height: 1.75; }
+.step-card p:last-child { margin-bottom: 0; }
+
+/* OS PILL */
+.os-pill { display: inline-flex; align-items: center; gap: 0.3rem; font-family: var(--mono); font-size: 0.6rem; letter-spacing: 1px; text-transform: uppercase; padding: 0.15rem 0.55rem; border-radius: 3px; margin-bottom: 0.5rem; font-weight: 500; }
+.os-pill.mac { background: rgba(30,58,95,0.08); color: var(--navy); }
+.os-pill.win { background: rgba(192,57,43,0.07); color: var(--accent); }
+
+/* CODE */
+.code-block { background: var(--navy-dark); border-radius: 8px; padding: 1.1rem 1.4rem; margin: 0.85rem 0; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.code-block pre { font-family: var(--mono); font-size: 0.8rem; color: #dde6f0; line-height: 1.8; white-space: pre; word-break: normal; }
+.cm { color: #7fa8c9; } .ck { color: #f0bc7a; } .cv { color: #85d4a8; }
+code { font-family: var(--mono); font-size: 0.84em; background: rgba(30,58,95,0.1); color: var(--navy); padding: 0.12em 0.38em; border-radius: 4px; word-break: break-all; }
+
+/* SKILL.MD */
+.skillmd { border: 1px solid var(--border); border-radius: 10px; margin: 1.1rem 0; overflow: hidden; }
+.skillmd-head { background: var(--navy); padding: 0.55rem 1.2rem; display: flex; align-items: center; justify-content: space-between; }
+.skillmd-head strong { font-family: var(--mono); font-size: 0.78rem; color: var(--white); }
+.skillmd-head span { font-family: var(--mono); font-size: 0.65rem; color: rgba(255,255,255,0.8); letter-spacing: 1px; text-transform: uppercase; }
+.skillmd-body { background: var(--navy-dark); padding: 1.1rem 1.4rem; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.skillmd-body pre { font-family: var(--mono); font-size: 0.78rem; color: #dde6f0; line-height: 1.8; white-space: pre; }
+.sh { color: #f0bc7a; font-weight: 500; } .sc { color: #7fa8c9; } .sv { color: #85d4a8; }
+
+/* CONVERSATION TEMPLATE BLOCK */
+.convo-block { background: var(--white); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin: 1.25rem 0; }
+.convo-header { background: var(--bg); padding: 0.6rem 1.25rem; display: flex; align-items: center; gap: 0.6rem; border-bottom: 1px solid var(--border); }
+.convo-dot { width: 10px; height: 10px; border-radius: 50%; }
+.convo-dot.you { background: var(--accent); }
+.convo-label { font-family: var(--mono); font-size: 0.68rem; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; }
+.convo-body { padding: 1.25rem 1.5rem; }
+.convo-body p { font-size: 0.9rem; color: var(--text); margin-bottom: 0.6rem; line-height: 1.7; }
+.convo-body p:last-child { margin-bottom: 0; }
+.convo-body .placeholder { color: var(--accent); font-style: italic; }
+
+/* TABLE */
+.tool-table { width: 100%; border-collapse: collapse; margin: 1.25rem 0; font-size: 0.88rem; }
+.tool-table th { background: var(--navy); color: var(--white); font-family: var(--mono); font-size: 0.68rem; letter-spacing: 1px; text-transform: uppercase; padding: 0.7rem 1rem; text-align: left; font-weight: 500; }
+.tool-table th:first-child { border-radius: 8px 0 0 0; } .tool-table th:last-child { border-radius: 0 8px 0 0; }
+.tool-table td { padding: 0.7rem 1rem; border-bottom: 1px solid var(--border); vertical-align: top; line-height: 1.6; }
+.tool-table tr:last-child td { border-bottom: none; }
+.tool-table tr:nth-child(even) td { background: rgba(245,240,235,0.5); }
+.tool-table td:first-child { font-family: var(--mono); font-size: 0.78rem; color: var(--accent); white-space: nowrap; }
+.tool-table td:nth-child(2) { color: var(--navy); font-weight: 500; }
+.tool-table td:nth-child(3) { color: var(--text); }
+
+/* ALERTS */
+.alert { border-radius: 10px; padding: 0.9rem 1.1rem; margin: 1rem 0; display: flex; gap: 0.7rem; align-items: flex-start; font-size: 0.88rem; line-height: 1.65; }
+.alert-icon { font-size: 0.85rem; flex-shrink: 0; margin-top: 0.1rem; }
+.alert.warning { background: rgba(192,57,43,0.06); border-left: 3px solid var(--accent); }
+.alert.info { background: rgba(30,58,95,0.06); border-left: 3px solid var(--navy); }
+.alert.success { background: var(--green-bg); border-left: 3px solid var(--green); }
+.alert strong { color: var(--navy); }
+
+/* EMAIL MOCKUP */
+.email-mockup { border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin: 1.25rem 0; font-family: var(--mono); font-size: 0.78rem; box-shadow: 0 4px 20px rgba(30,58,95,0.08); }
+.email-header { background: var(--navy); padding: 1rem 1.5rem; }
+.email-header .elabel { color: rgba(255,255,255,0.85); font-size: 0.62rem; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 0.3rem; }
+.email-header .etitle { color: var(--white); font-size: 0.88rem; font-weight: 500; }
+.email-header .esub { color: rgba(255,255,255,0.88); font-size: 0.68rem; margin-top: 0.2rem; }
+.email-section { padding: 0.9rem 1.5rem; border-bottom: 1px solid var(--border); background: var(--white); }
+.email-section-label { font-size: 0.62rem; letter-spacing: 2px; text-transform: uppercase; color: var(--accent); margin-bottom: 0.65rem; font-weight: 600; }
+.email-row { display: flex; gap: 1rem; margin-bottom: 0.35rem; }
+.email-row .k { color: #444444; min-width: 150px; flex-shrink: 0; font-weight: 500; }
+.email-row .v { color: var(--text); }
+.ebadge { display: inline-block; background: var(--navy); color: var(--white); font-size: 0.62rem; padding: 0.15rem 0.5rem; border-radius: 3px; margin-left: 0.4rem; }
+.ebadge.red { background: var(--accent); } .ebadge.green { background: var(--green); }
+.email-footer { padding: 0.65rem 1.5rem; background: var(--bg); }
+.email-footer p { font-size: 0.65rem; color: var(--text); text-align: center; }
+
+/* DIAGRAM */
+.diagram-wrap { background: var(--white); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem; margin: 1.25rem 0; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.diagram-wrap svg { display: block; width: 100%; height: auto; min-width: 420px; }
+
+/* CTA */
+.cta-section { background: var(--navy); border-radius: 20px; padding: 3rem 2.5rem; text-align: center; margin-top: 4rem; position: relative; overflow: hidden; }
+.cta-section::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 80% 50%, rgba(192,57,43,0.15) 0%, transparent 60%); pointer-events: none; }
+.cta-section h2 { font-family: var(--serif); font-size: clamp(1.6rem, 3vw, 2rem); color: var(--white); margin-bottom: 0.85rem; line-height: 1.3; }
+.cta-section h2 em { color: var(--accent); font-style: italic; }
+.cta-section p { color: rgba(255,255,255,0.85); font-size: 0.95rem; max-width: 440px; margin: 0 auto 2rem; line-height: 1.7; }
+.cta-btn { display: inline-block; background: var(--accent); color: var(--white); font-family: var(--sans); font-size: 0.9rem; font-weight: 500; padding: 0.85rem 2rem; border-radius: 8px; text-decoration: none; transition: background 0.2s, transform 0.15s; }
+.cta-btn:hover { background: var(--accent-hover); transform: translateY(-1px); }
+
+/* FOOTER */
+.site-footer { border-top: 1px solid var(--border); padding: 2rem; text-align: center; }
+.site-footer p { font-size: 0.82rem; color: var(--text); }
+.site-footer a { color: var(--navy); text-decoration: none; font-weight: 500; }
+.site-footer a:hover { color: var(--accent); }
+
+/* RESPONSIVE — TABLET */
+@media (max-width: 1024px) {
+  .page-body { grid-template-columns: 1fr; padding: 0 1.5rem; }
+  .sidebar { display: none; }
+  .intro-divider { display: none; }
+  .intro-strip { flex-wrap: wrap; padding: 0; gap: 0; }
+  .intro-stat { min-width: 45%; padding: 1.5rem 1rem; border-bottom: 1px solid var(--border); }
+  .setup-section { padding: 0 1.5rem; }
+  .toc ol { grid-template-columns: 1fr 1fr; }
+  .content { max-width: 100%; }
+  .how-strip { grid-template-columns: 1fr; gap: 0.5rem; }
+  .how-step:not(:last-child)::after { content: '↓'; position: static; transform: none; display: block; color: var(--accent); font-size: 0.9rem; text-align: left; padding-left: 1.75rem; margin-top: 0.25rem; }
+  .before-after { grid-template-columns: 1fr; }
+  .ba-col.before { border-right: none; border-bottom: 1px solid var(--border); }
+  .filter-rule { display: none; }
+  .filter-arrow { font-size: 0.68rem; }
+}
+
+/* RESPONSIVE — MOBILE */
+@media (max-width: 640px) {
+  .site-nav { padding: 0 1rem; }
+  .nav-links { display: none; }
+  .hero { padding: 2.5rem 1.25rem 2.5rem; }
+  .hero h1 { font-size: 1.9rem; }
+  .hero-sub { font-size: 0.95rem; max-width: 100%; }
+  .hero-pills { gap: 0.4rem; }
+  .hero-pill { font-size: 0.63rem; padding: 0.25rem 0.6rem; }
+  .hero-wave { height: 20px; }
+  .intro-strip { padding: 0; }
+  .intro-stat { min-width: 50%; padding: 1.25rem 0.75rem; }
+  .intro-stat .big { font-size: 1.9rem; }
+  .intro-stat .sm { font-size: 0.8rem; }
+  .setup-section { padding: 0 1rem; margin: 1.5rem auto; }
+  .how-strip { padding: 1.25rem; }
+  .toc { padding: 1.25rem; }
+  .toc ol { grid-template-columns: 1fr; gap: 0.25rem; }
+  .toc ol li a { font-size: 0.85rem; }
+  .os-card { flex-direction: column; gap: 1rem; padding: 1.25rem; }
+  .os-btns { width: 100%; }
+  .os-btn { flex: 1; justify-content: center; font-size: 0.75rem; padding: 0.5rem 0.75rem; }
+  .effort-badge { font-size: 0.68rem; padding: 0.4rem 0.75rem; }
+  .page-body { padding: 0 1rem; }
+  .content { padding: 1.5rem 0 4rem; }
+  .section { margin-bottom: 3rem; }
+  .section h2 { font-size: 1.4rem; }
+  .section-num-badge { width: 32px; height: 32px; font-size: 0.65rem; flex-shrink: 0; }
+  .step-card { padding: 1rem 1.1rem; }
+  .step-card h3 { font-size: 0.9rem; line-height: 1.3; }
+  .step-card p { font-size: 0.88rem; }
+  .code-block { padding: 0.85rem 1rem; border-radius: 6px; }
+  .code-block pre { font-size: 0.7rem; }
+  .skillmd-body { padding: 0.85rem 1rem; }
+  .skillmd-body pre { font-size: 0.68rem; }
+  .convo-body { padding: 1rem 1.1rem; }
+  .convo-body p { font-size: 0.85rem; }
+  .tool-table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; font-size: 0.8rem; }
+  .tool-table th, .tool-table td { font-size: 0.75rem; padding: 0.55rem 0.7rem; }
+  .email-row { flex-direction: column; gap: 0.05rem; }
+  .email-row .k { min-width: unset; font-size: 0.62rem; color: var(--accent); font-weight: 500; }
+  .email-mockup { font-size: 0.72rem; }
+  .email-section { padding: 0.75rem 1rem; }
+  .email-header { padding: 0.85rem 1rem; }
+  .cta-section { padding: 2rem 1.25rem; border-radius: 12px; }
+  .diagram-wrap { padding: 0.75rem 0.5rem; }
+  .hero-nopes-grid { grid-template-columns: 1fr 1fr; }
+  .hero-nope-text { font-size: 0.8rem; }
+  .hero-nope-punchline span { font-size: 0.85rem; }
+  .filter-bar { height: 46px; padding: 0 1rem; }
+  .filter-name { font-size: 0.85rem; }
+  .ba-item { font-size: 0.85rem; }
+  .mobile-progress-pill { bottom: 1rem; font-size: 0.65rem; padding: 0.45rem 0.9rem; }
+  .alert { font-size: 0.84rem; padding: 0.8rem 1rem; }
+  code { font-size: 0.78em; word-break: break-all; }
+}
+
+/* MOBILE NAV — hamburger hint */
+@media (max-width: 640px) {
+  .nav-logo { font-size: 1rem; }
+  .site-nav::after { content: 'AT.'; font-family: var(--mono); font-size: 0.72rem; color: var(--muted); display: none; }
+}
+</style>
+</head>
+<body class="os-mac">
+
+<nav class="site-nav">
+  <a href="../index.html" class="nav-logo">AT.</a>
+  <ul class="nav-links">
+    <li><a href="../pages/work.html">Work</a></li>
+    <li><a href="../pages/about.html">About</a></li>
+    <li><a href="../index.html#contact" class="nav-cta">Let's Talk</a></li>
+  </ul>
+</nav>
+
+<header class="hero">
+  <div class="hero-inner">
+
+    <!-- LEFT: No-cost items -->
+    <div class="hero-side">
+      <p class="hero-side-label">What you won't need</p>
+      <div class="hero-no-item">
+        <span class="hero-no-x">✗</span>
+        <div class="hero-no-text">
+          <s>Apify subscription</s>
+          <strong>No scraping fees</strong>
+        </div>
+      </div>
+      <div class="hero-no-item">
+        <span class="hero-no-x">✗</span>
+        <div class="hero-no-text">
+          <s>API keys or credits</s>
+          <strong>No pay-per-call charges</strong>
+        </div>
+      </div>
+      <div class="hero-no-item">
+        <span class="hero-no-x">✗</span>
+        <div class="hero-no-text">
+          <s>External servers</s>
+          <strong>Runs on your machine</strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- CENTER: Headline -->
+    <div class="hero-center">
+      <p class="hero-label">The Hard Part · Technical Guide</p>
+      <h1>Build a job search agent that runs while you <em>sleep.</em></h1>
+      <p class="hero-sub">A step-by-step guide to building an autonomous agent that finds, filters, and emails you relevant jobs every morning — no input required from you.</p>
+      <div class="hero-pills">
+        <span class="hero-pill">Claude Cowork</span>
+        <span class="hero-pill">Gmail MCP</span>
+        <span class="hero-pill">SKILL.md</span>
+        <span class="hero-pill">Python SMTP</span>
+        <span class="hero-pill">Scheduled task</span>
+      </div>
+    </div>
+
+    <!-- RIGHT: More no-cost items -->
+    <div class="hero-side">
+      <p class="hero-side-label">Or install, or subscribe to</p>
+      <div class="hero-no-item">
+        <span class="hero-no-x">✗</span>
+        <div class="hero-no-text">
+          <s>Zapier or Make</s>
+          <strong>No automation tools</strong>
+        </div>
+      </div>
+      <div class="hero-no-item">
+        <span class="hero-no-x">✗</span>
+        <div class="hero-no-text">
+          <s>Code you write</s>
+          <strong>Claude writes it all</strong>
+        </div>
+      </div>
+      <div class="hero-no-item">
+        <span class="hero-no-x">✗</span>
+        <div class="hero-no-text">
+          <s>LinkedIn Premium tools</s>
+          <strong>Works with free search</strong>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</header>
+
+<div class="hero-wave" aria-hidden="true"></div>
+
+<div class="intro-strip">
+  <div class="intro-stat">
+    <span class="big">0</span>
+    <p class="sm">Lines of code you write</p>
+  </div>
+  <div class="intro-divider"></div>
+  <div class="intro-stat">
+    <span class="big mac-only">~45 min</span>
+    <span class="big win-only">~55 min</span>
+    <p class="sm">Total setup time</p>
+  </div>
+  <div class="intro-divider"></div>
+  <div class="intro-stat">
+    <span class="big">9am</span>
+    <p class="sm">When the digest arrives</p>
+  </div>
+  <div class="intro-divider"></div>
+  <div class="intro-stat">
+    <span class="big">12</span>
+    <p class="sm">Steps total, not 120</p>
+  </div>
+</div>
+
+<div class="setup-section">
+
+  <!-- Before / After -->
+  <div class="before-after">
+    <div class="ba-col before">
+      <div class="ba-label"><div class="ba-dot"></div>Without this agent</div>
+      <div class="ba-item"><span class="ba-icon">✗</span>Manually check 5+ job boards daily</div>
+      <div class="ba-item"><span class="ba-icon">✗</span>Read 30+ listings to filter relevant ones</div>
+      <div class="ba-item"><span class="ba-icon">✗</span>Miss interview emails buried in inbox</div>
+      <div class="ba-item"><span class="ba-icon">✗</span>Apply to agency roles by mistake</div>
+      <div class="ba-item"><span class="ba-icon">✗</span>Search quality depends on your mood that day</div>
+    </div>
+    <div class="ba-col after">
+      <div class="ba-label"><div class="ba-dot"></div>With this agent</div>
+      <div class="ba-item"><span class="ba-icon">✓</span><strong>9 boards searched automatically</strong> every morning</div>
+      <div class="ba-item"><span class="ba-icon">✓</span><strong>Only pre-filtered roles</strong> land in your inbox</div>
+      <div class="ba-item"><span class="ba-icon">✓</span><strong>Interview and assessment alerts</strong> surface daily</div>
+      <div class="ba-item"><span class="ba-icon">✓</span><strong>Hard filter on role type</strong> blocks agencies entirely</div>
+      <div class="ba-item"><span class="ba-icon">✓</span><strong>Same criteria applied</strong> every day without fail</div>
+    </div>
+  </div>
+
+  <!-- How it works strip -->
+  <div class="how-strip" role="img" aria-label="Three step overview: describe to Claude, Claude builds the agent, digest arrives daily">
+    <div class="how-step">
+      <span class="how-num">01</span>
+      <div class="how-text">
+        <strong>You describe what you want</strong>
+        <span>Your role targets, filters, job boards, email format — in plain language to Claude</span>
+      </div>
+    </div>
+    <div class="how-step">
+      <span class="how-num">02</span>
+      <div class="how-text">
+        <strong>Claude builds the agent</strong>
+        <span>Writes the SKILL.md, sets up the schedule, connects Gmail, handles failure logic</span>
+      </div>
+    </div>
+    <div class="how-step">
+      <span class="how-num">03</span>
+      <div class="how-text">
+        <strong>Digest arrives every morning</strong>
+        <span>New roles, application updates, filter reasoning — without you doing anything</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOC -->
+  <div class="toc">
+    <div class="toc-header">
+      <div class="toc-icon">
+        <svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+      </div>
+      <p class="toc-title">What this guide covers</p>
+    </div>
+    <ol>
+      <li><a href="#how-it-works">How the system works</a></li>
+      <li><a href="#what-you-need">What you need first</a></li>
+      <li><a href="#gmail-password">Gmail app password</a></li>
+      <li><a href="#email-config">Email config file</a></li>
+      <li><a href="#cowork-setup">Setting up Cowork</a></li>
+      <li><a href="#gmail-mcp">Connecting Gmail MCP</a></li>
+      <li><a href="#skillmd">Claude writes your SKILL.md</a></li>
+      <li><a href="#scheduling">Scheduling the task</a></li>
+      <li><a href="#machine-awake">Keeping your machine awake</a></li>
+      <li><a href="#first-run">Your first run</a></li>
+      <li><a href="#email-output">What the email looks like</a></li>
+      <li><a href="#troubleshooting">Troubleshooting</a></li>
+    </ol>
+  </div>
+
+  <!-- OS toggle -->
+  <div class="os-card">
+    <div class="os-card-text">
+      <p>Select your operating system</p>
+      <strong>Steps update automatically throughout the guide</strong>
+    </div>
+    <div class="os-btns">
+      <button class="os-btn active" id="btn-mac" onclick="setOS('mac')">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+        Apple Mac
+      </button>
+      <button class="os-btn" id="btn-win" onclick="setOS('win')">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 12V6.75l6-1.32v6.57H3zm17 0V5l-9 1.75V12h9zm0 1H12v5.25L21 20v-7zm-18 0v5.25L9 19.5V13H2z"/></svg>
+        Windows
+      </button>
+    </div>
+    <div class="effort-badge mac-only"><span class="dot">●</span> Estimated time: <strong>~45 minutes</strong></div>
+    <div class="effort-badge win-only"><span class="dot">●</span> Estimated time: <strong>~55 minutes</strong></div>
+  </div>
+
+</div>
+
+<div class="page-body">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <p class="sidebar-label">In this guide</p>
+    <ul class="sidebar-nav" id="sidebar-nav">
+      <li><a href="#how-it-works" data-section="how-it-works"><span class="snum">01</span>How it works</a></li>
+      <li><a href="#what-you-need" data-section="what-you-need"><span class="snum">02</span>What you need</a></li>
+      <li><a href="#gmail-password" data-section="gmail-password"><span class="snum">03</span>Gmail app password</a></li>
+      <li><a href="#email-config" data-section="email-config"><span class="snum">04</span>Email config file</a></li>
+      <li><a href="#cowork-setup" data-section="cowork-setup"><span class="snum">05</span>Cowork setup</a></li>
+      <li><a href="#gmail-mcp" data-section="gmail-mcp"><span class="snum">06</span>Gmail MCP</a></li>
+      <li><a href="#skillmd" data-section="skillmd"><span class="snum">07</span>SKILL.md via Claude</a></li>
+      <li><a href="#scheduling" data-section="scheduling"><span class="snum">08</span>Scheduling</a></li>
+      <li><a href="#machine-awake" data-section="machine-awake"><span class="snum">09</span>Keep awake</a></li>
+      <li><a href="#first-run" data-section="first-run"><span class="snum">10</span>First run</a></li>
+      <li><a href="#email-output" data-section="email-output"><span class="snum">11</span>Email output</a></li>
+      <li><a href="#troubleshooting" data-section="troubleshooting"><span class="snum">12</span>Troubleshooting</a></li>
+    </ul>
+    <div class="sidebar-progress">
+      <div class="sidebar-progress-label"><span>Progress</span><span id="progress-pct">0%</span></div>
+      <div class="sidebar-progress-track"><div class="sidebar-progress-fill" id="progress-fill"></div></div>
+    </div>
+    <div class="ask-claude-wrap">
+      <a id="ask-claude-btn" class="ask-claude-btn" href="https://claude.ai" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2"/></svg>
+        Ask Claude
+      </a>
+      <p class="ask-claude-sub">Stuck on a step? Opens Claude with your current step pre-filled.</p>
+    </div>
+  </aside>
+
+  <main class="content">
+
+    <!-- 01 -->
+    <section class="section" id="how-it-works">
+      <div class="section-header">
+        <div class="section-num-badge">01</div>
+        <h2>How the system <em>works</em></h2>
+      </div>
+      <p>This is not a script you run manually. It is an autonomous agent that fires at 9am every morning, does its job, and emails you a digest — whether your machine is open or not.</p>
+      <p>The execution engine is Claude Cowork, Anthropic's desktop tool for running autonomous Claude tasks on a schedule. Each morning the task fires, Cowork loads a plain markdown file called <code>SKILL.md</code> into a fresh Claude session, and Claude runs the full workflow with zero memory from previous runs. Everything it needs is in the file.</p>
+      <div class="diagram-wrap">
+        <svg viewBox="0 0 640 300" xmlns="http://www.w3.org/2000/svg">
+          <defs><marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#888" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
+          <rect x="190" y="14" width="260" height="44" rx="8" fill="#1e3a5f"/>
+          <text font-family="'DM Sans',sans-serif" font-size="13" font-weight="500" fill="#fff" x="320" y="33" text-anchor="middle" dominant-baseline="central">Scheduled task fires at 9am</text>
+          <text font-family="'DM Sans',sans-serif" font-size="11" fill="rgba(255,255,255,0.85)" x="320" y="50" text-anchor="middle" dominant-baseline="central">Machine awake · Claude Cowork running</text>
+          <line x1="320" y1="58" x2="320" y2="76" stroke="#e0d8d0" stroke-width="1" marker-end="url(#arr)"/>
+          <rect x="170" y="76" width="300" height="44" rx="8" fill="#f5f0eb" stroke="#1e3a5f" stroke-width="1"/>
+          <text font-family="'DM Sans',sans-serif" font-size="13" font-weight="500" fill="#1e3a5f" x="320" y="94" text-anchor="middle" dominant-baseline="central">9 job board searches run</text>
+          <text font-family="'DM Sans',sans-serif" font-size="11" fill="#444" x="320" y="110" text-anchor="middle" dominant-baseline="central">Himalayas · Remotive · WeWorkRemotely · LinkedIn · more</text>
+          <line x1="320" y1="120" x2="320" y2="138" stroke="#e0d8d0" stroke-width="1" marker-end="url(#arr)"/>
+          <rect x="170" y="138" width="300" height="44" rx="8" fill="#f5f0eb" stroke="#1e3a5f" stroke-width="1"/>
+          <text font-family="'DM Sans',sans-serif" font-size="13" font-weight="500" fill="#1e3a5f" x="320" y="156" text-anchor="middle" dominant-baseline="central">Every result screened against 5 filters</text>
+          <text font-family="'DM Sans',sans-serif" font-size="11" fill="#444" x="320" y="172" text-anchor="middle" dominant-baseline="central">Full listing URL fetched and read before judging</text>
+          <line x1="320" y1="182" x2="320" y2="200" stroke="#e0d8d0" stroke-width="1" marker-end="url(#arr)"/>
+          <rect x="170" y="200" width="300" height="44" rx="8" fill="#f5f0eb" stroke="#1e3a5f" stroke-width="1"/>
+          <text font-family="'DM Sans',sans-serif" font-size="13" font-weight="500" fill="#1e3a5f" x="320" y="218" text-anchor="middle" dominant-baseline="central">Gmail inbox checked</text>
+          <text font-family="'DM Sans',sans-serif" font-size="11" fill="#444" x="320" y="234" text-anchor="middle" dominant-baseline="central">Interviews · assessments · rejections · last 24h</text>
+          <line x1="320" y1="244" x2="320" y2="262" stroke="#e0d8d0" stroke-width="1" marker-end="url(#arr)"/>
+          <rect x="200" y="262" width="240" height="28" rx="8" fill="#c0392b"/>
+          <text font-family="'DM Sans',sans-serif" font-size="13" font-weight="500" fill="#fff" x="320" y="277" text-anchor="middle" dominant-baseline="central">Digest email delivered to your inbox</text>
+          <rect x="14" y="76" width="122" height="168" rx="8" fill="none" stroke="#e0d8d0" stroke-width="0.5" stroke-dasharray="4 3"/>
+          <text font-family="'JetBrains Mono',monospace" font-size="9.5" fill="#555" x="75" y="94" text-anchor="middle">Tools used</text>
+          <text font-family="'JetBrains Mono',monospace" font-size="9.5" fill="#c0392b" x="75" y="114" text-anchor="middle">WebSearch</text>
+          <text font-family="'JetBrains Mono',monospace" font-size="9.5" fill="#c0392b" x="75" y="132" text-anchor="middle">WebFetch</text>
+          <text font-family="'JetBrains Mono',monospace" font-size="9.5" fill="#c0392b" x="75" y="150" text-anchor="middle">Gmail MCP</text>
+          <text font-family="'JetBrains Mono',monospace" font-size="9.5" fill="#c0392b" x="75" y="168" text-anchor="middle">Read</text>
+          <text font-family="'JetBrains Mono',monospace" font-size="9.5" fill="#c0392b" x="75" y="186" text-anchor="middle">Bash</text>
+          <text font-family="'JetBrains Mono',monospace" font-size="9.5" fill="#c0392b" x="75" y="204" text-anchor="middle">Write</text>
+          <line x1="136" y1="159" x2="168" y2="159" stroke="#e0d8d0" stroke-width="0.5" stroke-dasharray="3 2"/>
+        </svg>
+      </div>
+      <p>No browser tab open. No Terminal window. No manual trigger. Your machine just needs to be awake.</p>
+    </section>
+
+    <hr class="divider">
+
+    <!-- 02 -->
+    <section class="section" id="what-you-need">
+      <div class="section-header">
+        <div class="section-num-badge">02</div>
+        <h2>What you need <em>first</em></h2>
+      </div>
+      <p>Four things need to be in place before running anything. All four are required.</p>
+      <table class="tool-table">
+        <thead><tr><th>Requirement</th><th>What it is</th><th>Why it is needed</th></tr></thead>
+        <tbody>
+          <tr><td>Claude Cowork</td><td>Anthropic's desktop agent tool</td><td>Runs the scheduled task. Without it there is no execution engine.</td></tr>
+          <tr><td>Gmail account</td><td>The inbox the agent reads and sends from</td><td>Agent checks for interview emails and sends your digest from here.</td></tr>
+          <tr><td>Gmail app password</td><td>16-character token from Google settings</td><td>Lets Claude send email via SMTP without your real password exposed.</td></tr>
+          <tr class="mac-only"><td>Mac on power</td><td>MacBook connected to mains or powered monitor</td><td>Task only fires if the machine is awake. Sleep = missed run.</td></tr>
+          <tr class="win-only"><td>Windows PC on power</td><td>PC connected to mains with sleep prevention on</td><td>Task only fires if the machine is awake. Sleep = missed run.</td></tr>
+        </tbody>
+      </table>
+      <div class="alert info"><span class="alert-icon">ℹ</span><span>You do not need to know how to code. Every file in this guide is plain text. Every command is copy-paste ready.</span></div>
+
+      <h3>How the 5 filters work</h3>
+      <p>Every job found gets passed through all 5 filters in sequence. Fail any one and it is dropped. Only roles that clear all 5 reach your inbox.</p>
+      <div class="filter-funnel">
+        <div class="filter-row">
+          <div class="filter-bar f1">
+            <span class="filter-num">01</span>
+            <span class="filter-name">Location</span>
+            <span class="filter-rule">Remote from your country or hybrid your city only</span>
+          </div>
+          <span class="filter-arrow">drops US-only →</span>
+        </div>
+        <div class="filter-row">
+          <div class="filter-bar f2">
+            <span class="filter-num">02</span>
+            <span class="filter-name">Shift timing</span>
+            <span class="filter-rule">Your timezone compatible, no overnight shifts</span>
+          </div>
+          <span class="filter-arrow">drops night shifts →</span>
+        </div>
+        <div class="filter-row">
+          <div class="filter-bar f3">
+            <span class="filter-num">03</span>
+            <span class="filter-name">Seniority</span>
+            <span class="filter-rule">Senior, Lead, Principal, Specialist only</span>
+          </div>
+          <span class="filter-arrow">drops junior roles →</span>
+        </div>
+        <div class="filter-row">
+          <div class="filter-bar f4">
+            <span class="filter-num">04</span>
+            <span class="filter-name">Role type</span>
+            <span class="filter-rule">Internal L&amp;D teams only — no agencies</span>
+          </div>
+          <span class="filter-arrow">drops agencies →</span>
+        </div>
+        <div class="filter-row">
+          <div class="filter-bar f5">
+            <span class="filter-num">05</span>
+            <span class="filter-name">Blocked companies</span>
+            <span class="filter-rule">Your personal no-fly list — hard block</span>
+          </div>
+          <span class="filter-arrow">drops blocked →</span>
+        </div>
+        <div class="filter-pass">✓ Only what passes all 5 reaches your inbox</div>
+      </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- 03 -->
+    <section class="section" id="gmail-password">
+      <div class="section-header">
+        <div class="section-num-badge">03</div>
+        <h2>Gmail <em>app password</em></h2>
+      </div>
+      <p>This step is identical on Mac and Windows. Do not use your regular Gmail password — it will not work and it is not secure.</p>
+      <div class="alert warning"><span class="alert-icon">!</span><span><strong>Never use your actual Gmail password.</strong> A Gmail app password is a separate 16-character token that can be revoked at any time without changing your main password.</span></div>
+
+      <div class="step-card">
+        <div class="step-card-top"><h3>Enable 2-Step Verification</h3><span class="step-num">3.1</span></div>
+        <p>App passwords only work when 2FA is active. Go to <code>myaccount.google.com</code>, click Security, and enable 2-Step Verification if it is not already on.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-card-top"><h3>Generate the app password</h3><span class="step-num">3.2</span></div>
+        <p>Still in <code>myaccount.google.com</code>, use the search bar and search for <strong>App passwords</strong>. Type <code>Job Agent</code> as the name and click Create. Google shows a 16-character password in groups of four:</p>
+        <div class="code-block"><pre><span class="cv">abcd efgh ijkl mnop</span></pre></div>
+        <p>Copy it immediately. Google only shows it once.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-card-top"><h3>Remove the spaces before saving</h3><span class="step-num">3.3</span></div>
+        <p>Google adds spaces for readability. Remove them before using it anywhere:</p>
+        <div class="code-block"><pre><span class="cv">abcdefghijklmnop</span>   <span class="cm"># 16 chars, no spaces</span></pre></div>
+      </div>
+      <div class="alert success"><span class="alert-icon">✓</span><span>Keep this ready. You will paste it into a file in the next section. Do not paste it into a chat or shared document.</span></div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- 04 -->
+    <section class="section" id="email-config">
+      <div class="section-header">
+        <div class="section-num-badge">04</div>
+        <h2>Email <em>config file</em></h2>
+      </div>
+      <p>The Gmail app password lives in a plain text file on your machine. Claude reads it from disk at runtime — it is never hardcoded in the prompt, never exposed in a log.</p>
+
+      <div class="mac-only">
+        <div class="step-card">
+          <div class="step-card-top"><h3>Open Terminal and create the file</h3><span class="step-num">4.1</span></div>
+          <span class="os-pill mac">Mac</span>
+          <div class="code-block"><pre><span class="cm"># Create the folder</span>
+mkdir -p ~/Downloads/Job\ Search
+
+<span class="cm"># Open the config file in nano</span>
+nano ~/Downloads/Job\ Search/email_config.txt</pre></div>
+        </div>
+        <div class="step-card">
+          <div class="step-card-top"><h3>Type exactly this inside the file</h3><span class="step-num">4.2</span></div>
+          <span class="os-pill mac">Mac</span>
+          <div class="code-block"><pre><span class="ck">GMAIL_USER</span>=<span class="cv">your.email@gmail.com</span>
+<span class="ck">GMAIL_APP_PASSWORD</span>=<span class="cv">abcdefghijklmnop</span></pre></div>
+          <p>Replace both values with your actual Gmail address and 16-character app password from Section 3.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-card-top"><h3>Save and exit nano</h3><span class="step-num">4.3</span></div>
+          <span class="os-pill mac">Mac</span>
+          <div class="code-block"><pre>Ctrl+O   <span class="cm"># Write the file</span>
+Enter    <span class="cm"># Confirm filename</span>
+Ctrl+X   <span class="cm"># Exit nano</span></pre></div>
+        </div>
+        <div class="step-card">
+          <div class="step-card-top"><h3>Verify the file</h3><span class="step-num">4.4</span></div>
+          <span class="os-pill mac">Mac</span>
+          <div class="code-block"><pre>cat ~/Downloads/Job\ Search/email_config.txt</pre></div>
+          <p>Both lines should print back. If not, repeat from step 4.1.</p>
+        </div>
+      </div>
+
+      <div class="win-only">
+        <div class="step-card">
+          <div class="step-card-top"><h3>Open Notepad</h3><span class="step-num">4.1</span></div>
+          <span class="os-pill win">Windows</span>
+          <p>Press <code>Win + R</code>, type <code>notepad</code>, and press Enter.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-card-top"><h3>Type exactly this inside Notepad</h3><span class="step-num">4.2</span></div>
+          <span class="os-pill win">Windows</span>
+          <div class="code-block"><pre><span class="ck">GMAIL_USER</span>=<span class="cv">your.email@gmail.com</span>
+<span class="ck">GMAIL_APP_PASSWORD</span>=<span class="cv">abcdefghijklmnop</span></pre></div>
+          <p>Replace both values with your actual Gmail address and app password from Section 3.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-card-top"><h3>Save to the right location</h3><span class="step-num">4.3</span></div>
+          <span class="os-pill win">Windows</span>
+          <p>File → Save As → navigate to Downloads → create a folder called <code>Job Search</code> → save as <code>email_config.txt</code>. Set Save as type to <strong>All Files</strong> to avoid a <code>.txt.txt</code> double extension. Full path:</p>
+          <div class="code-block"><pre><span class="cv">C:\Users\YourName\Downloads\Job Search\email_config.txt</span></pre></div>
+        </div>
+        <div class="step-card">
+          <div class="step-card-top"><h3>Verify in PowerShell</h3><span class="step-num">4.4</span></div>
+          <span class="os-pill win">Windows</span>
+          <p>Press <code>Win + X</code> → Terminal or PowerShell, then run:</p>
+          <div class="code-block"><pre>Get-Content "$env:USERPROFILE\Downloads\Job Search\email_config.txt"</pre></div>
+          <p>Both lines should print back. If not, re-check the save path.</p>
+        </div>
+      </div>
+      <div class="alert info"><span class="alert-icon">ℹ</span><span>If this file is missing at runtime, the agent logs a warning and skips sending rather than crashing the whole run.</span></div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- 05 -->
+    <section class="section" id="cowork-setup">
+      <div class="section-header">
+        <div class="section-num-badge">05</div>
+        <h2>Setting up <em>Cowork</em></h2>
+      </div>
+      <p>Cowork is Anthropic's desktop tool for running Claude autonomously on a schedule. The setup is the same on Mac and Windows.</p>
+      <div class="step-card">
+        <div class="step-card-top"><h3>Download and install the Claude desktop app</h3><span class="step-num">5.1</span></div>
+        <p>Go to <code>claude.ai</code>, download the desktop app for your OS, install it, and sign in with your Anthropic account.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-card-top"><h3>Switch to Cowork mode</h3><span class="step-num">5.2</span></div>
+        <p>Open the Claude desktop app. Look for the Cowork option in the sidebar or via the mode switcher at the top. Switch to it. Cowork is the mode that supports scheduled autonomous tasks.</p>
+      </div>
+      <div class="alert warning"><span class="alert-icon">!</span><span><strong>Cowork requires Claude Pro or higher.</strong> Check your plan at <code>claude.ai/settings</code> before proceeding.</span></div>
+      <div class="alert info"><span class="alert-icon">ℹ</span><span><strong>Cowork is a beta product.</strong> UI labels may differ slightly as Anthropic updates it. If a label does not match this guide exactly, look for anything related to "schedule", "automate", or "task" in the interface — the underlying capability is stable.</span></div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- 06 -->
+    <section class="section" id="gmail-mcp">
+      <div class="section-header">
+        <div class="section-num-badge">06</div>
+        <h2>Connecting <em>Gmail MCP</em></h2>
+      </div>
+      <p>MCP stands for Model Context Protocol. It gives Claude live access to your Gmail inbox during each run. You authorize it once — it persists on both Mac and Windows.</p>
+      <div class="step-card">
+        <div class="step-card-top"><h3>Open Connectors in Cowork</h3><span class="step-num">6.1</span></div>
+        <p>Inside Cowork, look for a Connectors or Integrations section in the settings panel. Click Add connector.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-card-top"><h3>Connect Gmail</h3><span class="step-num">6.2</span></div>
+        <p>Find Gmail in the list and click Connect. A Google OAuth screen will appear. Sign in with the same account your <code>email_config.txt</code> uses. Grant the read permissions.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-card-top"><h3>Confirm the connection</h3><span class="step-num">6.3</span></div>
+        <p>Gmail should now appear as a connected service in your Cowork connectors list. The agent will use this to search your inbox for application emails from the past 24 hours on every run.</p>
+      </div>
+      <div class="alert success"><span class="alert-icon">✓</span><span>This authorization persists until you manually revoke it from your Google account settings. Note: Google may invalidate inactive tokens after several months of no use — if the connection drops after a long break, simply reconnect.</span></div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- 07 -->
+    <section class="section" id="skillmd">
+      <div class="section-header">
+        <div class="section-num-badge">07</div>
+        <h2>Getting Claude to write your <em>SKILL.md</em></h2>
+      </div>
+      <p>You do not write this file yourself. You open a Claude chat, describe what you want in plain language, and Claude writes the entire SKILL.md for you. Your job is to know what you want clearly enough to describe it.</p>
+      <p>The SKILL.md is the brain of the agent — a plain markdown file Claude reads cold at the start of every run with no memory from previous days. Everything the agent needs must be in this file. Claude builds it from your description.</p>
+
+      <div class="step-card">
+        <div class="step-card-top"><h3>Open a new Claude chat</h3><span class="step-num">7.1</span></div>
+        <p>Go to <code>claude.ai</code> or open the Claude desktop app in standard chat mode (not Cowork). Start a new conversation.</p>
+      </div>
+
+      <div class="step-card">
+        <div class="step-card-top"><h3>Describe your profile and requirements</h3><span class="step-num">7.2</span></div>
+        <p>Tell Claude who you are and what you are looking for. Be specific — vague descriptions produce vague filters. Here is a template that works well:</p>
+
+        <div class="convo-block">
+          <div class="convo-header">
+            <div class="convo-dot you"></div>
+            <span class="convo-label">Your message to Claude</span>
+          </div>
+          <div class="convo-body">
+            <p>I want you to write a SKILL.md file for an autonomous job search agent running in Claude Cowork.</p>
+            <p><strong>About me:</strong><br>
+            — <span class="placeholder">[X]</span>+ years in L&D<br>
+            — Targeting: Senior Instructional Designer, Learning Technologist, Senior LXD, eLearning Developer<br>
+            — Location: <span class="placeholder">[Your City]</span> — remote or hybrid <span class="placeholder">[Your City]</span> only<br>
+            — Timezone: <span class="placeholder">[Your timezone]</span> — no overnight shifts<br>
+            — Core tools: <span class="placeholder">[Your stack — Storyline, xAPI, LMS, etc.]</span><br>
+            — Email: <span class="placeholder">your@gmail.com</span></p>
+            <p><strong>My hard filters — every job must pass ALL of these:</strong><br>
+            1. Remote from <span class="placeholder">[Country]</span> or Hybrid <span class="placeholder">[Your City]</span> only<br>
+            2. <span class="placeholder">[Timezone]</span>-compatible hours only, nothing past <span class="placeholder">[time]</span><br>
+            3. Senior, Lead, or Principal titles only — no Analyst or Associate<br>
+            4. Internal L&D teams only — no agencies, no outsourcing firms<br>
+            5. Blocked companies: <span class="placeholder">[list any you want excluded]</span></p>
+            <p><strong>Job boards to search:</strong> Himalayas, Remotive, WeWorkRemotely, Wellfound, Greenhouse, LinkedIn</p>
+            <p>The agent should check my Gmail inbox daily for interview calls, assessments, and rejections from the last 24 hours.</p>
+            <p>Credentials file: <span class="placeholder mac-only">~/Downloads/Job Search/email_config.txt</span><span class="placeholder win-only">C:\Users\YourName\Downloads\Job Search\email_config.txt</span></p>
+            <p>Send me a formatted daily email digest with new roles and application updates. Include filter reasoning for rejected roles. Handle failures gracefully — log them, never crash silently.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-card-top"><h3>Iterate until it is right</h3><span class="step-num">7.3</span></div>
+        <p>Claude will generate the full SKILL.md. Read through it. If anything is wrong — a filter is too loose, a job board is missing, the email format is not what you want — just tell Claude in plain language. It revises immediately.</p>
+        <p>You are the product manager. Claude is the engineer writing the spec file. Keep going until the file reflects exactly what you want.</p>
+      </div>
+
+      <div class="step-card">
+        <div class="step-card-top"><h3>Save the file Claude produces</h3><span class="step-num">7.4</span></div>
+        <p>Once you are happy with it, copy the full SKILL.md content and save it as a plain text file:</p>
+        <div class="mac-only">
+          <div class="code-block"><pre>~/Downloads/Job Search/SKILL.md</pre></div>
+          <p>Open TextEdit, paste the content, go to <strong>Format → Make Plain Text</strong>, then save.</p>
+        </div>
+        <div class="win-only">
+          <div class="code-block"><pre>C:\Users\YourName\Downloads\Job Search\SKILL.md</pre></div>
+          <p>Open Notepad, paste the content, and save as <code>SKILL.md</code> with Save as type set to <strong>All Files</strong>.</p>
+        </div>
+      </div>
+
+      <div class="alert info"><span class="alert-icon">ℹ</span><span>The reference blocks below show what a complete SKILL.md looks like — not for you to fill in manually, but so you can recognise what Claude builds and give better feedback during your review.</span></div>
+
+      <h3>What Claude builds — reference only</h3>
+
+      <div class="skillmd">
+        <div class="skillmd-head"><strong>SKILL.md</strong><span>Candidate profile</span></div>
+        <div class="skillmd-body"><pre><span class="sh">## Candidate Profile</span>
+<span class="sv">Name:</span> Your Full Name
+<span class="sv">Role targets:</span> Senior Learning Experience Designer,
+              Learning Technologist, eLearning Developer
+<span class="sv">Location:</span> [Your City, Country]
+<span class="sv">Work mode:</span> Remote or Hybrid [Your City] only
+<span class="sv">Experience:</span> [X]+ years across L&D
+<span class="sv">Core stack:</span> [Your tools]
+<span class="sv">Email:</span> your.email@gmail.com</pre></div>
+      </div>
+
+      <div class="skillmd">
+        <div class="skillmd-head"><strong>SKILL.md</strong><span>Hard filters</span></div>
+        <div class="skillmd-body"><pre><span class="sh">## Hard Filters — ALL must pass</span>
+
+<span class="sv">Filter 1 — Location:</span> Remote [Country] OR Hybrid [City] only.
+<span class="sv">Filter 2 — Shift timing:</span> [Timezone]-compatible only. No overnight.
+<span class="sv">Filter 3 — Seniority:</span> Senior, Lead, Principal, Specialist only.
+  Reject: Analyst, Associate, Coordinator, Intern, Trainee.
+<span class="sv">Filter 4 — Role type:</span> Internal L&D only.
+  Reject: agencies, outsourcing, client-billing models.
+<span class="sv">Filter 5 — Blocked companies:</span> [List — one per line]</pre></div>
+      </div>
+      <div class="alert info"><span class="alert-icon">ℹ</span><span><strong>Filter 4 is the most important.</strong> Internal L&D means the company has its own team serving its own employees. An agency producing content for external clients fails this filter regardless of the job title.</span></div>
+
+      <div class="skillmd">
+        <div class="skillmd-head"><strong>SKILL.md</strong><span>Search, Gmail check, email config, format, failure handling</span></div>
+        <div class="skillmd-body"><pre><span class="sh">## Search Instructions</span>
+Run all 9 queries. Use WebFetch to read full listing before filtering.
+<span class="sc"># Queries cover: Himalayas, Remotive, WeWorkRemotely,</span>
+<span class="sc"># Wellfound, Greenhouse, LinkedIn × multiple role titles</span>
+
+<span class="sh">## Gmail Inbox Check</span>
+Use Gmail MCP. Search last 24h for: interview, assessment,
+application, offer, next steps, unfortunately.
+Classify and include in digest under APPLICATION UPDATES.
+
+<span class="sh">## Email Config</span>
+<span class="mac-only">Read from: ~/Downloads/Job Search/email_config.txt</span><span class="win-only">Read from: C:\Users\YourName\Downloads\Job Search\email_config.txt</span>
+Use Python SMTP. Subject: Daily Job Search Update — [date] — [N] new roles.
+If file missing: log warning, skip sending, continue run.
+
+<span class="sh">## Failure Handling</span>
+Never fail silently. Log every run to agent_log.txt.
+Format: [DATE] [TIME] — Screened: N. Passed: N. Sent: yes/no</pre></div>
+      </div>
+      <div class="alert success"><span class="alert-icon">✓</span><span>Once Claude has generated your SKILL.md and you have saved it, you are ready to schedule the task. Keep the file path handy for the next section.</span></div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- 08 -->
+    <section class="section" id="scheduling">
+      <div class="section-header">
+        <div class="section-num-badge">08</div>
+        <h2>Scheduling the <em>task</em></h2>
+      </div>
+
+      <div class="mac-only">
+        <p>On Mac, Cowork manages the schedule internally. No Terminal needed for this step.</p>
+        <div class="step-card">
+          <div class="step-card-top"><h3>Create a scheduled task in Cowork</h3><span class="step-num">8.1</span></div>
+          <span class="os-pill mac">Mac</span>
+          <div class="code-block"><pre><span class="ck">Task name:</span>     <span class="cv">daily-job-search</span>
+<span class="ck">Prompt source:</span> <span class="cv">~/Downloads/Job Search/SKILL.md</span>
+<span class="ck">Schedule:</span>      <span class="cv">Daily at 9:00 AM</span>
+<span class="ck">Connectors:</span>    <span class="cv">Gmail MCP</span>  <span class="cm">(must be enabled)</span></pre></div>
+        </div>
+        <div class="step-card">
+          <div class="step-card-top"><h3>Save and activate</h3><span class="step-num">8.2</span></div>
+          <span class="os-pill mac">Mac</span>
+          <p>Save the task. Cowork will fire it daily at your chosen time as long as the Mac is awake and the Claude app is running.</p>
+        </div>
+      </div>
+
+      <div class="win-only">
+        <p>On Windows, Cowork manages the schedule internally. You also need Claude in Startup apps so it launches automatically after any reboot.</p>
+        <div class="step-card">
+          <div class="step-card-top"><h3>Create a scheduled task in Cowork</h3><span class="step-num">8.1</span></div>
+          <span class="os-pill win">Windows</span>
+          <div class="code-block"><pre><span class="ck">Task name:</span>     <span class="cv">daily-job-search</span>
+<span class="ck">Prompt source:</span> <span class="cv">C:\Users\YourName\Downloads\Job Search\SKILL.md</span>
+<span class="ck">Schedule:</span>      <span class="cv">Daily at 9:00 AM</span>
+<span class="ck">Connectors:</span>    <span class="cv">Gmail MCP</span>  <span class="cm">(must be enabled)</span></pre></div>
+        </div>
+        <div class="step-card">
+          <div class="step-card-top"><h3>Add Claude to Startup apps</h3><span class="step-num">8.2</span></div>
+          <span class="os-pill win">Windows</span>
+          <p>Press <code>Win + I</code> → Apps → Startup → find Claude → toggle <strong>On</strong>. Without this, a reboot leaves Cowork offline and the task will not fire.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-card-top"><h3>Verify in Task Scheduler (optional)</h3><span class="step-num">8.3</span></div>
+          <span class="os-pill win">Windows</span>
+          <p>Press <code>Win + S</code>, search Task Scheduler, open it. Look for <code>daily-job-search</code> in the library. Next Run Time should show tomorrow at 9:00 AM.</p>
+        </div>
+      </div>
+      <div class="alert info"><span class="alert-icon">ℹ</span><span>Each run opens a completely fresh Claude session with no memory from previous days. SKILL.md is the entire context Claude works from.</span></div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- 09 -->
+    <section class="section" id="machine-awake">
+      <div class="section-header">
+        <div class="section-num-badge">09</div>
+        <h2>Keeping your machine <em>awake</em></h2>
+      </div>
+      <p>The scheduled task only fires if the machine is awake. Sleep means a missed run — no catch-up, just a gap in that day's digest.</p>
+
+      <div class="mac-only">
+        <div class="step-card">
+          <div class="step-card-top"><h3>Prevent sleep on power adapter</h3><span class="step-num">9.1</span></div>
+          <span class="os-pill mac">Mac</span>
+          <p><strong>System Settings → Battery → Options</strong> and enable:</p>
+          <div class="code-block"><pre><span class="cv">Prevent automatic sleeping on power adapter when display is off</span>  ON</pre></div>
+          <p>This path applies to macOS Ventura (13) and later. On older macOS, find the equivalent in System Preferences → Energy Saver.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-card-top"><h3>Add Claude to Login Items</h3><span class="step-num">9.2</span></div>
+          <span class="os-pill mac">Mac</span>
+          <p><strong>System Settings → General → Login Items</strong> → click <code>+</code> → add the Claude desktop app. Cowork starts automatically on every boot.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-card-top"><h3>Clamshell mode with a powered monitor</h3><span class="step-num">9.3</span></div>
+          <span class="os-pill mac">Mac</span>
+          <p>If your external monitor charges the Mac via USB-C Power Delivery, closing the laptop lid keeps the Mac fully awake without fan noise. The Mac draws power from the monitor, stays awake, and the agent fires at 9am regardless. This is the cleanest always-on setup for this workflow.</p>
+        </div>
+        <div class="alert warning"><span class="alert-icon">!</span><span>On battery only, the Mac may sleep regardless of Battery settings. The agent requires mains power to run reliably overnight.</span></div>
+      </div>
+
+      <div class="win-only">
+        <div class="step-card">
+          <div class="step-card-top"><h3>Disable sleep when plugged in</h3><span class="step-num">9.1</span></div>
+          <span class="os-pill win">Windows</span>
+          <p><strong>Settings → System → Power and sleep</strong> and set:</p>
+          <div class="code-block"><pre>When plugged in, PC goes to sleep after: <span class="cv">Never</span></pre></div>
+          <p>This applies to both Windows 10 and Windows 11. The path is the same.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-card-top"><h3>Screen can sleep, PC cannot</h3><span class="step-num">9.2</span></div>
+          <span class="os-pill win">Windows</span>
+          <p>On the same screen you can allow the display to turn off while keeping the PC awake:</p>
+          <div class="code-block"><pre>When plugged in, turn off display after: <span class="cv">30 minutes</span>
+When plugged in, PC goes to sleep after: <span class="cv">Never</span></pre></div>
+          <p>The agent fires regardless of whether the display is on or off.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-card-top"><h3>Confirm Claude is in Startup apps</h3><span class="step-num">9.3</span></div>
+          <span class="os-pill win">Windows</span>
+          <p><strong>Settings → Apps → Startup</strong> → confirm Claude is toggled On. A reboot without this leaves Cowork offline and the task will not fire.</p>
+        </div>
+        <div class="alert warning"><span class="alert-icon">!</span><span>On battery only, Windows may still sleep depending on your power plan. The agent requires mains power to run reliably.</span></div>
+      </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- 10 -->
+    <section class="section" id="first-run">
+      <div class="section-header">
+        <div class="section-num-badge">10</div>
+        <h2>Your first <em>run</em></h2>
+      </div>
+      <p>Before waiting until 9am tomorrow, trigger a manual test run to confirm everything works end to end.</p>
+      <div class="step-card">
+        <div class="step-card-top"><h3>Trigger a manual run in Cowork</h3><span class="step-num">10.1</span></div>
+        <p>Find your saved task in Cowork and look for a Run now or Test option. Trigger it. Watch the activity panel as Claude works through each step in sequence.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-card-top"><h3>What to expect during the run</h3><span class="step-num">10.2</span></div>
+        <p>The first run takes longer because Claude fetches each listing URL to read the full description before filtering. Expect 8 to 15 minutes across 9 boards. Subsequent daily runs are faster as fewer new listings appear each day.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-card-top"><h3>Check your inbox</h3><span class="step-num">10.3</span></div>
+        <p>The digest should arrive within a minute or two of the run completing. If it lands in spam, mark it as not spam and add your own Gmail address to your Contacts — this resolves permanently within one or two runs.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-card-top"><h3>Check the log file</h3><span class="step-num">10.4</span></div>
+        <div class="mac-only"><div class="code-block"><pre>cat ~/Downloads/Job\ Search/agent_log.txt</pre></div></div>
+        <div class="win-only">
+          <p>Open PowerShell and run:</p>
+          <div class="code-block"><pre>Get-Content "$env:USERPROFILE\Downloads\Job Search\agent_log.txt"</pre></div>
+        </div>
+        <p>A timestamped entry should confirm: roles screened, roles passed, email sent yes/no.</p>
+      </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- 11 -->
+    <section class="section" id="email-output">
+      <div class="section-header">
+        <div class="section-num-badge">11</div>
+        <h2>What the email <em>looks like</em></h2>
+      </div>
+      <p>A representative example of the digest you receive each morning. This uses sanitized data — not real applications or companies.</p>
+      <div class="email-mockup">
+        <div class="email-header">
+          <p class="elabel">Daily Job Search Update</p>
+          <p class="etitle">April 20, 2026 · 2 new roles found</p>
+          <p class="esub">Boards: 9 · Screened: 34 · Passed: 2 · Filtered: 32</p>
+        </div>
+        <div class="email-section">
+          <p class="email-section-label">Application Updates (last 24h)</p>
+          <div class="email-row"><span class="k">ACME CORP</span><span class="v">Interview Scheduled <span class="ebadge">HIGH</span></span></div>
+          <div class="email-row"><span class="k">Role</span><span class="v">Senior Learning Experience Designer</span></div>
+          <div class="email-row"><span class="k">Date and Time</span><span class="v">April 22, 2026 at 11:00 AM IST</span></div>
+          <div class="email-row"><span class="k">Contact</span><span class="v">Priya Sharma (Recruiter)</span></div>
+          <br>
+          <div class="email-row"><span class="k">GLOBALBANK</span><span class="v">Assessment Pending <span class="ebadge red">ACTION</span></span></div>
+          <div class="email-row"><span class="k">Action</span><span class="v">Complete assessment — check inbox from careers@globalbank.com</span></div>
+        </div>
+        <div class="email-section">
+          <p class="email-section-label">New Roles Found: 2</p>
+          <div class="email-row"><span class="k">TechCorp</span><span class="v">Senior LXD — Remote <span class="ebadge green">PASSED</span></span></div>
+          <div class="email-row"><span class="k">Filters</span><span class="v">All 5 passed · Internal L&amp;D team confirmed</span></div>
+          <div class="email-row"><span class="k">URL</span><span class="v">himalayas.app/jobs/techcorp-senior-lxd</span></div>
+          <br>
+          <div class="email-row"><span class="k">GlobalBank GCC</span><span class="v">Learning Technologist — Hybrid <span class="ebadge green">PASSED</span></span></div>
+          <div class="email-row"><span class="k">Filters</span><span class="v">All 5 passed · GCC internal team confirmed</span></div>
+          <div class="email-row"><span class="k">URL</span><span class="v">greenhouse.io/globalbank/learning-technologist</span></div>
+        </div>
+        <div class="email-section">
+          <p class="email-section-label">Why 32 roles were filtered out</p>
+          <div class="email-row"><span class="k">Not remote eligible</span><span class="v">11 roles</span></div>
+          <div class="email-row"><span class="k">Agency / outsourcing</span><span class="v">8 roles</span></div>
+          <div class="email-row"><span class="k">Seniority too low</span><span class="v">6 roles</span></div>
+          <div class="email-row"><span class="k">Customer-facing L&amp;D</span><span class="v">5 roles</span></div>
+          <div class="email-row"><span class="k">Listing closed</span><span class="v">2 roles</span></div>
+        </div>
+        <div class="email-footer"><p>Your recruitment agent · Running daily at 9am · No input required</p></div>
+      </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- 12 -->
+    <section class="section" id="troubleshooting">
+      <div class="section-header">
+        <div class="section-num-badge">12</div>
+        <h2><em>Troubleshooting</em></h2>
+      </div>
+
+      <div class="step-card">
+        <div class="step-card-top"><h3>No email received after a run</h3><span class="step-num">Fix</span></div>
+        <p>Check the log file first (Section 10). If it shows "Sent: no", the SMTP step failed. Most likely the Gmail app password in <code>email_config.txt</code> has spaces, is wrong, or the file path is incorrect. Re-check Section 4.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-card-top"><h3>Email arrives but lands in spam</h3><span class="step-num">Fix</span></div>
+        <p>Gmail sometimes flags self-addressed SMTP email. Open it in spam, click Not spam, and add your own address to Google Contacts. Resolves permanently within one or two runs.</p>
+      </div>
+
+      <div class="mac-only">
+        <div class="step-card">
+          <div class="step-card-top"><h3>Scheduled task did not fire at 9am</h3><span class="step-num">Fix</span></div>
+          <span class="os-pill mac">Mac</span>
+          <p>Almost always because the Mac was asleep or Cowork was not running. Confirm System Settings → Battery → Options has sleep prevention enabled. Confirm Claude is in Login Items. The task will fire correctly from tomorrow.</p>
+        </div>
+      </div>
+      <div class="win-only">
+        <div class="step-card">
+          <div class="step-card-top"><h3>Scheduled task did not fire at 9am</h3><span class="step-num">Fix</span></div>
+          <span class="os-pill win">Windows</span>
+          <p>Confirm the PC was not asleep. Confirm Settings → Power and sleep → sleep is set to Never when plugged in. Confirm Claude is in Startup apps. Open Task Scheduler and check Last Run Time — if it shows never, re-create the task in Cowork.</p>
+        </div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-card-top"><h3>Gmail MCP shows as disconnected</h3><span class="step-num">Fix</span></div>
+        <p>Go to Cowork → Connectors and reconnect Gmail. The OAuth token may have expired or been revoked — Google can invalidate tokens after extended inactivity (several months). Re-authorize using the same Google account. Takes under two minutes.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-card-top"><h3>Too many irrelevant roles passing the filters</h3><span class="step-num">Fix</span></div>
+        <p>Open a new Claude chat, paste your current SKILL.md, and ask Claude to tighten Filter 4. Tell it which types of roles are slipping through. Also add specific agency names to Filter 5. Claude will rewrite the relevant sections — save the updated file and the next run will use the tighter criteria.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-card-top"><h3>Gmail app password stopped working</h3><span class="step-num">Fix</span></div>
+        <p>App passwords are invalidated if you change your main Google password, disable 2FA, or revoke them manually. Go to <code>myaccount.google.com</code>, generate a new app password named "Job Agent", remove the spaces, update <code>email_config.txt</code>, and the next run picks it up automatically.</p>
+      </div>
+    </section>
+
+    <div class="cta-section">
+      <h2>Questions about the <em>setup?</em></h2>
+      <p>Go back to the newsletter post on LinkedIn and leave a comment. If something here is unclear, your question probably helps the next person who reads this guide.</p>
+      <a href="https://linkedin.com/in/trivedi-abhishek" class="cta-btn" target="_blank" rel="noopener">Find me on LinkedIn →</a>
+    </div>
+
+  </main>
+</div>
+
+<div class="mobile-progress-pill" id="mobile-pill" aria-hidden="true">
+  <span class="pill-accent" id="pill-step">Step 1</span>
+  <span id="pill-title">How it works</span>
+  <div class="pill-track"><div class="pill-fill" id="pill-fill"></div></div>
+  <span class="pill-accent" id="pill-pct">0%</span>
+</div>
+
+<footer class="site-footer">
+  <p>© 2026 <a href="../index.html">Abhishek Trivedi</a> · Learning Experience Technologist · <a href="mailto:work.abhishektrivedi@gmail.com">work.abhishektrivedi@gmail.com</a></p>
+</footer>
+
+<script>
+function setOS(os) {
+  document.body.classList.remove('os-mac','os-win');
+  document.body.classList.add('os-'+os);
+  document.getElementById('btn-mac').classList.toggle('active', os==='mac');
+  document.getElementById('btn-win').classList.toggle('active', os==='win');
+  localStorage.setItem('preferred-os', os);
+}
+(function(){ const s=localStorage.getItem('preferred-os'); if(s==='win') setOS('win'); })();
+
+const sections = Array.from(document.querySelectorAll('.section[id]'));
+const navLinks = document.querySelectorAll('#sidebar-nav a');
+const fill = document.getElementById('progress-fill');
+const pct = document.getElementById('progress-pct');
+const askBtn = document.getElementById('ask-claude-btn');
+const pillStep = document.getElementById('pill-step');
+const pillTitle = document.getElementById('pill-title');
+const pillFill = document.getElementById('pill-fill');
+const pillPct = document.getElementById('pill-pct');
+
+const sectionMeta = {
+  'how-it-works':   { num:'01', title:'How the system works' },
+  'what-you-need':  { num:'02', title:'What you need before you start' },
+  'gmail-password': { num:'03', title:'Setting up your Gmail app password' },
+  'email-config':   { num:'04', title:'Creating the email config file' },
+  'cowork-setup':   { num:'05', title:'Setting up Claude Cowork' },
+  'gmail-mcp':      { num:'06', title:'Connecting Gmail MCP' },
+  'skillmd':        { num:'07', title:'Getting Claude to write your SKILL.md' },
+  'scheduling':     { num:'08', title:'Scheduling the task' },
+  'machine-awake':  { num:'09', title:'Keeping your machine awake' },
+  'first-run':      { num:'10', title:'Your first run' },
+  'email-output':   { num:'11', title:'What the email looks like' },
+  'troubleshooting':{ num:'12', title:'Troubleshooting' },
+};
+
+function buildClaudeURL(id) {
+  const os = document.body.classList.contains('os-win') ? 'Windows' : 'Mac';
+  const m = sectionMeta[id] || sectionMeta['how-it-works'];
+  const guide = 'https://abhishektrivedi.com/pages/job-search-agent.html';
+  const msg = [
+    `I'm following Abhishek Trivedi's guide to building an autonomous job search agent using Claude Cowork.`,
+    ``,
+    `The full guide is here: ${guide}`,
+    `Please read that page first so you have the complete context before helping me.`,
+    ``,
+    `I'm currently on Step ${m.num}: "${m.title}" (${os}).`,
+    ``,
+    `I need help with this step. Can you walk me through it clearly?`
+  ].join('\n');
+  return 'https://claude.ai/new?q=' + encodeURIComponent(msg);
+}
+
+let currentSection = 'how-it-works';
+
+function updateSidebar() {
+  const scrollY = window.scrollY;
+  const docH = document.documentElement.scrollHeight - window.innerHeight;
+  const p = Math.min(100, Math.round((scrollY / Math.max(docH,1)) * 100));
+  if(fill) fill.style.width = p+'%';
+  if(pct) pct.textContent = p+'%';
+  if(pillFill) pillFill.style.width = p+'%';
+  if(pillPct) pillPct.textContent = p+'%';
+
+  let current = 'how-it-works';
+  sections.forEach(sec => {
+    if(scrollY >= sec.getBoundingClientRect().top + scrollY - 120) current = sec.id;
+  });
+
+  navLinks.forEach(l => l.classList.toggle('active', l.dataset.section === current));
+
+  if(current !== currentSection) {
+    currentSection = current;
+    if(askBtn) askBtn.href = buildClaudeURL(current);
+    const m = sectionMeta[current];
+    if(m) {
+      if(pillStep) pillStep.textContent = 'Step ' + m.num;
+      if(pillTitle) pillTitle.textContent = m.title.length > 28 ? m.title.substring(0,28)+'…' : m.title;
+    }
+  }
+}
+
+window.addEventListener('scroll', updateSidebar, { passive:true });
+updateSidebar();
+</script>
+</body>
+</html>
