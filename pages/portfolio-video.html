@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>How I Built My Portfolio Video with Claude Design — Abhishek Trivedi</title>
+  <meta name="description" content="The actual Claude Design session that produced a 60fps portfolio video — interface screenshots, real prompts, bugs found, and the Cowork render pipeline." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;1,700&family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <!-- Microsoft Clarity -->
+  <script type="text/javascript">
+    (function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+    t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+    y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "vxtwcbqoas");
+  </script>
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-LY3GY2LH00"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-LY3GY2LH00');
+  </script>
+
+  <style>
+    :root {
+      --bg:#f5f0eb; --navy:#1e3a5f; --navy-dark:#162d4a;
+      --text:#1a1a1a; --muted:#777; --accent:#c0392b; --accent-h:#e74c3c;
+      --border:#e0d8d0; --surface:#fff;
+      --serif:'Playfair Display',Georgia,serif;
+      --sans:'Inter',system-ui,sans-serif;
+      --mono:'JetBrains Mono',monospace;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{font-family:var(--sans);background:var(--bg);color:var(--text);font-size:1rem;line-height:1.75}
+
+    /* ── NAV ── */
+    .site-nav{position:sticky;top:0;z-index:200;background:var(--bg);border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:60px}
+    .nav-logo{font-family:var(--mono);font-size:1.1rem;color:var(--text);text-decoration:none}
+    .nav-logo span{color:var(--accent)}
+    .nav-links{display:flex;list-style:none;gap:.2rem;align-items:center}
+    .nav-links a{font-size:.85rem;color:var(--text);text-decoration:none;padding:.35rem .65rem;border-radius:4px;transition:background .15s}
+    .nav-links a:hover{background:rgba(0,0,0,.06)}
+    .nav-links a.nav-cta{background:var(--accent);color:#fff;font-weight:500}
+
+    /* ── PROSE ── */
+    .prose{max-width:680px;margin:0 auto;padding:4rem 2rem 2rem}
+    .eyebrow{display:flex;align-items:center;gap:.6rem;font-family:var(--mono);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:1.2rem}
+    .eyebrow::before{content:'';width:22px;height:2px;background:var(--accent);display:inline-block}
+    h1{font-family:var(--serif);font-size:clamp(2rem,4.5vw,3rem);font-weight:800;line-height:1.15;margin-bottom:1.25rem}
+    h1 em{font-style:italic;color:var(--accent)}
+    .article-meta{font-size:.85rem;color:var(--muted);padding-bottom:2rem;margin-bottom:0;border-bottom:1px solid var(--border);display:flex;gap:1.5rem;flex-wrap:wrap}
+    p{margin-bottom:1.2rem}
+    p strong{font-weight:600}
+    a{color:var(--accent);text-decoration:none}
+
+    /* ── SECTION MARKERS ── */
+    .section-marker{display:flex;align-items:center;gap:.75rem;margin:3.5rem auto 1.25rem;max-width:680px;padding:0 2rem}
+    .section-marker .badge{font-family:var(--mono);font-size:.68rem;background:var(--accent);color:#fff;padding:.2rem .65rem;border-radius:4px;text-transform:uppercase;letter-spacing:.08em;white-space:nowrap}
+    .section-marker .rule{flex:1;height:1px;background:var(--border)}
+    .section-label{font-family:var(--mono);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);max-width:680px;margin:3.5rem auto .75rem;padding:0 2rem;display:flex;align-items:center;gap:.5rem}
+    .section-label::before{content:'';width:18px;height:2px;background:var(--accent);display:inline-block}
+
+    /* ── ANNOTATION ── */
+    .annotation{max-width:680px;margin:.5rem auto;padding:0 2rem}
+    .annotation p{margin-bottom:1rem;color:#444}
+    .callout{border-left:3px solid var(--accent);background:rgba(192,57,43,.06);padding:.9rem 1.3rem;border-radius:0 10px 10px 0;margin:1.5rem 0;font-size:.94rem}
+    .callout p{margin-bottom:0;color:var(--text)}
+
+    /* ═══════════════════════════════════════
+       PROCESS INFOGRAPHIC
+    ═══════════════════════════════════════ */
+    .infographic-wrap{max-width:900px;margin:2.5rem auto 0;padding:0 1.5rem}
+
+    .pipeline-diagram{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:2.5rem 2rem;overflow:hidden}
+    .pipeline-title{text-align:center;font-family:var(--mono);font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:2rem}
+
+    /* Horizontal flow */
+    .pipeline-flow{display:flex;align-items:flex-start;gap:0;position:relative}
+    .pipeline-step{flex:1;display:flex;flex-direction:column;align-items:center;text-align:center;position:relative;padding:0 .5rem}
+    .pipeline-step:not(:last-child)::after{content:'→';position:absolute;right:-8px;top:28px;font-size:1.1rem;color:var(--border);font-weight:300;z-index:1}
+
+    .step-icon{width:56px;height:56px;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto .75rem;font-size:1.4rem;flex-shrink:0}
+    .step-icon.design{background:rgba(192,57,43,.1)}
+    .step-icon.export{background:rgba(30,58,95,.1)}
+    .step-icon.cowork{background:rgba(45,122,74,.1)}
+    .step-icon.render{background:rgba(160,110,0,.1)}
+    .step-icon.done{background:rgba(30,58,95,.15)}
+
+    .step-name{font-size:.78rem;font-weight:700;color:var(--text);margin-bottom:.4rem;line-height:1.2}
+    .step-detail{font-size:.68rem;color:var(--muted);line-height:1.6}
+
+    /* Divider with labels */
+    .pipeline-phase-row{display:flex;gap:0;margin-top:2rem;border-top:1px dashed var(--border);padding-top:1rem}
+    .phase-block{flex:1;text-align:center}
+    .phase-block:first-child{flex:2}
+    .phase-block:last-child{flex:3}
+    .phase-label{font-family:var(--mono);font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;padding:.2rem .6rem;border-radius:4px;display:inline-block}
+    .phase-label.cd{background:rgba(192,57,43,.1);color:var(--accent)}
+    .phase-label.cw{background:rgba(30,58,95,.1);color:var(--navy)}
+
+    /* ═══════════════════════════════════════
+       CLAUDE DESIGN INTERFACE MOCKUP
+    ═══════════════════════════════════════ */
+    .cd-wrapper{max-width:1060px;margin:1.5rem auto;padding:0 1.5rem}
+    .cd-shell{border-radius:14px;overflow:hidden;border:1px solid #d0c8c0;box-shadow:0 8px 40px rgba(0,0,0,.12);background:#fff}
+
+    /* Top bar */
+    .cd-topbar{background:#fafafa;border-bottom:1px solid #ebe7e3;display:flex;align-items:center;gap:0;height:44px;padding:0 14px}
+    .cd-traffic{display:flex;gap:6px;margin-right:14px}
+    .cd-traffic span{width:12px;height:12px;border-radius:50%}
+    .cd-traffic .r{background:#ff5f57}.cd-traffic .y{background:#febc2e}.cd-traffic .g{background:#28c840}
+    .cd-tabs{display:flex;gap:2px}
+    .cd-tab{font-size:.75rem;color:#888;padding:.3rem .9rem;border-radius:6px;cursor:default;font-family:var(--sans)}
+    .cd-tab.active{background:#fff;color:var(--text);font-weight:500;border:1px solid #e0dbd6;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+    .cd-topbar-right{margin-left:auto;display:flex;align-items:center;gap:8px}
+    .cd-topbar-right .cd-btn{font-size:.72rem;font-family:var(--sans);padding:.25rem .7rem;border-radius:6px;border:1px solid #ddd;background:#fff;color:#555;cursor:default}
+    .cd-topbar-right .cd-btn.primary{background:var(--accent);color:#fff;border-color:var(--accent);font-weight:500}
+    .cd-avatar{width:26px;height:26px;border-radius:50%;background:var(--navy);color:#fff;font-size:.68rem;font-weight:600;display:flex;align-items:center;justify-content:center}
+
+    /* Body */
+    .cd-body{display:flex;min-height:480px}
+    .cd-left{width:290px;min-width:290px;background:#fff;border-right:1px solid #ede8e4;display:flex;flex-direction:column;overflow:hidden}
+    .cd-left-header{padding:10px 14px 8px;border-bottom:1px solid #ede8e4}
+    .cd-project-name{font-size:.78rem;font-weight:600;color:var(--text);margin-bottom:6px}
+    .cd-left-tabs{display:flex;gap:0;border-bottom:2px solid #eee}
+    .cd-left-tab{font-size:.74rem;padding:.35rem .8rem;color:#888;cursor:default;border-bottom:2px solid transparent;margin-bottom:-2px}
+    .cd-left-tab.active{color:var(--text);font-weight:600;border-bottom-color:var(--text)}
+    .cd-messages{flex:1;overflow-y:auto;padding:12px 14px;display:flex;flex-direction:column;gap:12px}
+    .cd-msg-you .cd-msg-label{font-size:.69rem;font-weight:700;color:var(--text);margin-bottom:3px}
+    .cd-msg-claude .cd-msg-label{font-size:.69rem;font-weight:700;color:var(--accent);margin-bottom:3px}
+    .cd-msg-text{font-size:.77rem;line-height:1.62;color:#333}
+    .cd-msg-text strong{font-weight:600;color:var(--text)}
+    .cd-chip{display:inline-flex;align-items:center;gap:5px;font-size:.71rem;color:#555;background:#f5f2ef;border:1px solid #e8e4e0;border-radius:8px;padding:.2rem .6rem;margin:2px 2px 2px 0;cursor:default}
+    .cd-chip svg{width:10px;height:10px;color:var(--accent);flex-shrink:0}
+    .cd-chip.warn{border-color:#f0d8d4;background:#fdf5f5;color:var(--accent)}
+    .cd-plan{background:#f9f7f5;border-radius:8px;padding:9px 11px;margin:5px 0;font-size:.72rem;line-height:1.85;color:#333}
+    .cd-plan b{color:var(--text)}
+    .cd-plan .time{color:#999;font-family:var(--mono);font-size:.67rem}
+    .cd-issue{font-size:.72rem;line-height:1.7;color:#333;padding-left:0;margin:4px 0}
+    .cd-issue li{margin-left:14px;margin-bottom:2px}
+    .cd-issue li b{color:var(--text)}
+    .cd-feedback{background:#fff8f0;border-left:2px solid #e8a060;border-radius:0 6px 6px 0;padding:7px 10px;font-size:.72rem;line-height:1.65;color:#444;margin:4px 0}
+    .cd-input-bar{border-top:1px solid #ede8e4;padding:9px 12px;display:flex;align-items:center;gap:7px;background:#fff}
+    .cd-input-fake{flex:1;background:#f5f2ef;border-radius:8px;padding:.45rem .8rem;font-size:.74rem;color:#aaa;font-family:var(--sans)}
+    .cd-send-btn{background:var(--accent);color:#fff;border:none;border-radius:8px;padding:.4rem .85rem;font-size:.72rem;font-weight:600;cursor:default;font-family:var(--sans)}
+    .cd-send-btn.off{background:#e0dbd8;color:#aaa}
+    .cd-bottom-icons{display:flex;gap:9px;align-items:center}
+    .cd-bottom-icons svg{width:15px;height:15px;color:#999}
+
+    /* Right panel */
+    .cd-right{flex:1;background:#ede9e4;display:flex;flex-direction:column;position:relative;min-width:0}
+    .cd-right-topbar{background:#fafafa;border-bottom:1px solid #ebe7e3;display:flex;align-items:center;padding:0 14px;height:37px;gap:14px}
+    .cd-right-topbar .cd-tool{font-size:.72rem;color:#666;cursor:default;display:flex;align-items:center;gap:4px}
+    .cd-right-topbar .cd-tool svg{width:12px;height:12px}
+    .cd-zoom{font-size:.72rem;color:#666;margin-left:auto;font-family:var(--mono)}
+    .cd-canvas-area{flex:1;display:flex;align-items:center;justify-content:center;padding:16px}
+    .cd-frame{width:100%;aspect-ratio:16/9;max-height:320px;background:#f5f0eb;border-radius:6px;overflow:hidden;position:relative;border-top:3px solid var(--accent);box-shadow:0 2px 16px rgba(0,0,0,.1)}
+    .cd-playbar{background:#111;padding:7px 14px;display:flex;align-items:center;gap:10px}
+    .cd-playbar svg{width:17px;height:17px;color:#fff;flex-shrink:0;cursor:default}
+    .cd-scrubber{flex:1;height:3px;background:#333;border-radius:2px;position:relative}
+    .cd-scrubber-fill{height:100%;background:#fff;border-radius:2px}
+    .cd-scrubber-dot{position:absolute;right:0;top:50%;transform:translate(50%,-50%);width:10px;height:10px;border-radius:50%;background:#fff}
+    .cd-time{font-family:var(--mono);font-size:.67rem;color:#888;white-space:nowrap}
+
+    /* ═══════════════════════════════════════
+       ANIMATION FRAME SCENES
+    ═══════════════════════════════════════ */
+    .scene-title{width:100%;height:100%;background:#f5f0eb;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;position:relative}
+    .scene-title .eyeline{font-family:var(--mono);font-size:.52rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);display:flex;align-items:center;gap:8px;margin-bottom:14px}
+    .scene-title .eyeline::before,.scene-title .eyeline::after{content:'';width:28px;height:1px;background:var(--accent)}
+    .scene-title h2.title-name{font-family:'Instrument Serif','Playfair Display',serif;font-size:clamp(1.6rem,4.5vw,3.4rem);font-weight:400;line-height:1.05;color:var(--text);text-align:center}
+    .scene-title h2.title-name em{font-style:italic;color:var(--accent)}
+    .scene-title .at-logo{position:absolute;top:12px;right:14px;font-family:var(--mono);font-size:.9rem;font-weight:600;color:var(--text)}
+    .scene-stats{width:100%;height:100%;background:var(--navy-dark);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;gap:10px}
+    .scene-stats .stats-label{font-family:var(--mono);font-size:.48rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.35)}
+    .scene-stats .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;width:100%}
+    .scene-stats .stat{text-align:center}
+    .scene-stats .stat .num{font-family:'Instrument Serif',serif;font-size:clamp(1.3rem,2.8vw,2.4rem);color:var(--accent);font-weight:400;display:block;line-height:1}
+    .scene-stats .stat .lbl{font-size:.5rem;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:.1em;margin-top:3px;display:block}
+    .scene-compare{width:100%;height:100%;background:#f5f0eb;display:grid;grid-template-columns:1fr 1fr}
+    .scene-compare .col{padding:14px;display:flex;flex-direction:column;gap:4px}
+    .scene-compare .col-label{font-family:var(--mono);font-size:.48rem;letter-spacing:.14em;text-transform:uppercase;color:#999;margin-bottom:4px}
+    .scene-compare .col.good{background:var(--navy)}
+    .scene-compare .col.good .col-label{color:rgba(255,255,255,.45)}
+    .scene-compare .row{font-size:.56rem;color:#888;padding:3px 6px;background:rgba(0,0,0,.04);border-radius:3px}
+    .scene-compare .row.h{background:rgba(192,57,43,.1);color:var(--accent);font-weight:600}
+    .scene-compare .col.good .row{background:rgba(255,255,255,.08);color:rgba(255,255,255,.65)}
+    .scene-compare .col.good .row.h{background:var(--accent);color:#fff}
+    .scene-compare .divider{width:1px;background:var(--border)}
+    .scene-ffmpeg{width:100%;height:100%;background:#0d1117;display:flex;flex-direction:column;padding:10px;font-family:var(--mono);font-size:.55rem;line-height:1.9}
+    .scene-ffmpeg .ff-bar{background:#1a2332;border-radius:4px 4px 0 0;padding:4px 10px;display:flex;gap:5px;margin-bottom:1px}
+    .scene-ffmpeg .ff-dot{width:8px;height:8px;border-radius:50%}
+    .scene-ffmpeg .ff-dot.r{background:#ff5f57}.scene-ffmpeg .ff-dot.y{background:#febc2e}.scene-ffmpeg .ff-dot.g{background:#28c840}
+    .scene-ffmpeg .ff-title{color:rgba(255,255,255,.3);font-size:.5rem;margin-left:auto}
+    .scene-ffmpeg .ff-body{background:#0d1117;border-radius:0 0 4px 4px;flex:1;padding:7px 10px;overflow:hidden}
+    .scene-ffmpeg .cmd{color:#7eb8f7}.scene-ffmpeg .out{color:#4ec94e}.scene-ffmpeg .dim{color:#444}.scene-ffmpeg .lang{color:#f0b86e}.scene-ffmpeg .done{color:var(--accent);font-weight:600}
+    .scene-langs{width:100%;height:100%;background:#f5f0eb;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:14px;gap:8px}
+    .scene-langs .langs-title{font-family:'Instrument Serif',serif;font-size:clamp(.85rem,1.8vw,1.5rem);color:var(--text);text-align:center}
+    .scene-langs .langs-title em{font-style:italic;color:var(--accent)}
+    .scene-langs .langs-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;width:100%}
+    .lang-card{background:var(--navy);border-radius:5px;padding:5px 7px}
+    .lang-card .lang-name{font-size:.58rem;font-weight:600;color:#fff}
+    .lang-card .lang-time{font-family:var(--mono);font-size:.52rem;color:var(--accent);margin-top:1px}
+    .scene-outro{width:100%;height:100%;background:var(--navy);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;gap:8px;text-align:center}
+    .scene-outro .outro-eyebrow{font-family:var(--mono);font-size:.48rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.35)}
+    .scene-outro .outro-title{font-family:'Instrument Serif',serif;font-size:clamp(.9rem,2.2vw,1.9rem);color:#fff;line-height:1.2}
+    .scene-outro .outro-title em{font-style:italic;color:var(--accent)}
+    .scene-outro .outro-pill{background:rgba(255,255,255,.1);color:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.18);font-size:.56rem;padding:.28rem .85rem;border-radius:20px;font-family:var(--mono)}
+    .scene-outro .outro-at{font-family:var(--mono);font-size:.95rem;font-weight:600;color:rgba(255,255,255,.85);margin-top:2px}
+    .scene-outro .outro-at span{color:var(--accent)}
+
+    /* ═══════════════════════════════════════
+       THREE-UP SCENES
+    ═══════════════════════════════════════ */
+    .scenes-trio{max-width:1060px;margin:1.5rem auto;padding:0 1.5rem;display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+    .mini-shell{border-radius:10px;overflow:hidden;border:1px solid #d0c8c0;box-shadow:0 3px 16px rgba(0,0,0,.08)}
+    .mini-topbar{background:#fafafa;border-bottom:1px solid #ebe7e3;padding:0 10px;height:34px;display:flex;align-items:center;gap:8px}
+    .mini-topbar .cd-traffic{gap:5px}
+    .mini-topbar .cd-traffic span{width:10px;height:10px}
+    .mini-label{font-family:var(--mono);font-size:.62rem;color:#888;margin-left:4px}
+    .mini-frame{aspect-ratio:16/9;overflow:hidden;border-top:3px solid var(--accent)}
+
+    /* ═══════════════════════════════════════
+       ITERATION CARDS
+    ═══════════════════════════════════════ */
+    .iterations{max-width:680px;margin:1.5rem auto;padding:0 2rem;display:flex;flex-direction:column;gap:.85rem}
+    .iter-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.1rem 1.3rem;display:flex;gap:.9rem;align-items:flex-start}
+    .iter-num{font-family:var(--mono);font-size:.7rem;color:#fff;background:var(--accent);width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-weight:700;margin-top:1px}
+    .iter-num.ok{background:#2d7a4a}
+    .iter-title{font-weight:600;font-size:.9rem;margin-bottom:.25rem}
+    .iter-desc{font-size:.86rem;color:#555;line-height:1.6}
+
+    /* ═══════════════════════════════════════
+       COPY-PASTE PROMPTS
+    ═══════════════════════════════════════ */
+    .prompts-section{max-width:900px;margin:0 auto;padding:0 1.5rem}
+    .prompts-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .prompt-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;display:flex;flex-direction:column}
+    .prompt-card-header{padding:1rem 1.25rem .75rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:.75rem}
+    .prompt-tool-badge{font-family:var(--mono);font-size:.67rem;font-weight:600;padding:.22rem .65rem;border-radius:5px;text-transform:uppercase;letter-spacing:.07em;white-space:nowrap}
+    .prompt-tool-badge.design{background:rgba(192,57,43,.1);color:var(--accent)}
+    .prompt-tool-badge.cowork{background:rgba(30,58,95,.12);color:var(--navy)}
+    .prompt-card-title{font-weight:600;font-size:.88rem;color:var(--text)}
+    .prompt-body{padding:1rem 1.25rem;flex:1;position:relative}
+    .prompt-text{font-family:var(--mono);font-size:.72rem;line-height:1.75;color:#333;white-space:pre-wrap;background:#f9f7f5;border-radius:8px;padding:.9rem 1rem;border:1px solid var(--border)}
+    .prompt-text .ph{color:#999;font-style:italic}
+    .prompt-actions{padding:.75rem 1.25rem 1rem;display:flex;align-items:center;justify-content:space-between}
+    .copy-btn{display:inline-flex;align-items:center;gap:.4rem;font-size:.75rem;font-weight:600;font-family:var(--sans);padding:.38rem .9rem;border-radius:7px;border:none;cursor:pointer;transition:all .15s}
+    .copy-btn.design{background:var(--accent);color:#fff}
+    .copy-btn.design:hover{background:var(--accent-h)}
+    .copy-btn.cowork{background:var(--navy);color:#fff}
+    .copy-btn.cowork:hover{background:var(--navy-dark)}
+    .copy-btn.copied{background:#2d7a4a!important;color:#fff!important}
+    .prompt-note{font-size:.72rem;color:var(--muted)}
+
+    /* ═══════════════════════════════════════
+       FINAL SPECS
+    ═══════════════════════════════════════ */
+    .specs-row{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin:2rem auto;max-width:680px}
+    .spec-cell{background:var(--surface);padding:1.1rem 1rem;text-align:center}
+    .spec-val{font-family:var(--mono);font-size:1.25rem;font-weight:500;color:var(--accent);display:block;margin-bottom:.15rem}
+    .spec-key{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.07em}
+
+    /* ═══════════════════════════════════════
+       FOOTER
+    ═══════════════════════════════════════ */
+    .site-footer{background:var(--navy-dark);color:rgba(255,255,255,.5);text-align:center;padding:2rem;font-size:.82rem;margin-top:5rem}
+    .site-footer a{color:rgba(255,255,255,.75);text-decoration:none;margin:0 .75rem}
+
+    /* ═══════════════════════════════════════
+       RESPONSIVE
+    ═══════════════════════════════════════ */
+    @media(max-width:800px){
+      .site-nav{padding:0 1rem}.nav-links{display:none}
+      .prose,.annotation,.section-marker,.section-label,.iterations{padding-left:1.25rem;padding-right:1.25rem}
+      .cd-wrapper,.infographic-wrap,.prompts-section,.scenes-trio{padding-left:.9rem;padding-right:.9rem}
+      .cd-left{width:230px;min-width:230px}
+      .scenes-trio{grid-template-columns:1fr}
+      .prompts-grid{grid-template-columns:1fr}
+      h1{font-size:1.9rem}
+      .specs-row{grid-template-columns:repeat(2,1fr);margin-left:1.25rem;margin-right:1.25rem}
+      .pipeline-flow{flex-direction:column;align-items:flex-start;gap:1.25rem}
+      .pipeline-step{flex-direction:row;text-align:left;gap:1rem;align-items:flex-start}
+      .pipeline-step::after{display:none}
+      .step-icon{width:44px;height:44px;flex-shrink:0;margin:0}
+      .step-name,.step-detail{text-align:left}
+    }
+    @media(max-width:560px){
+      .cd-body{flex-direction:column}
+      .cd-left{width:100%;min-width:unset;border-right:none;border-bottom:1px solid #ede8e4;max-height:240px}
+    }
+  </style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <a href="/index.html" class="nav-logo">AT<span>.</span></a>
+  <ul class="nav-links">
+    <li><a href="/pages/work.html">Work</a></li>
+    <li><a href="/pages/about.html">About</a></li>
+    <li><a href="/pages/certifications.html">Certifications</a></li>
+    <li><a href="/id-frameworks.html">ID Cheat Sheet</a></li>
+    <li><a href="/game/index.html">Spot the Bug</a></li>
+    <li><a href="/tools/id-model-selector.html" class="nav-cta nav-tool">ID Model Selector ↗</a></li>
+    <li><a href="/lms/index.html" class="nav-cta nav-tool">LMS Demo ↗</a></li>
+    <li><a href="/pages/contact.html" class="nav-cta">Let's Talk</a></li>
+  </ul>
+</nav>
+
+
+<!-- ─── HEADER ─── -->
+<div class="prose">
+  <div class="eyebrow">Behind the Scenes · April 2026</div>
+  <h1>I built a portfolio video inside a chat window. Here's the <em>actual session.</em></h1>
+  <div class="article-meta">
+    <span>Abhishek Trivedi</span>
+    <span>Claude Design + Claude Cowork</span>
+    <span>1:45 · 60fps · 1920×1080</span>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════
+     PROCESS INFOGRAPHIC
+═══════════════════════════════════════ -->
+<div class="infographic-wrap" style="margin-top:2rem;">
+  <div class="pipeline-diagram">
+    <div class="pipeline-title">The full pipeline — from idea to MP4</div>
+    <div class="pipeline-flow">
+
+      <div class="pipeline-step">
+        <div class="step-icon design">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#c0392b" stroke-width="1.8"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        </div>
+        <div class="step-name">Describe your idea</div>
+        <div class="step-detail">Open Claude Design.<br/>Type what you want —<br/>brand, tone, structure.</div>
+      </div>
+
+      <div class="pipeline-step">
+        <div class="step-icon design">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#c0392b" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6M9 12h6M9 15h4"/></svg>
+        </div>
+        <div class="step-name">Claude reads context</div>
+        <div class="step-detail">Reads your design system,<br/>plans the story arc,<br/>then builds all scenes.</div>
+      </div>
+
+      <div class="pipeline-step">
+        <div class="step-icon design">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#c0392b" stroke-width="1.8"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        </div>
+        <div class="step-name">Live preview + QA</div>
+        <div class="step-detail">Plays in real time.<br/>Claude self-screenshots<br/>and fixes layout bugs.</div>
+      </div>
+
+      <div class="pipeline-step">
+        <div class="step-icon export">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#1e3a5f" stroke-width="1.8"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        </div>
+        <div class="step-name">Export ZIP</div>
+        <div class="step-detail">One click. Downloads<br/>React + JSX animation<br/>as a self-contained file.</div>
+      </div>
+
+      <div class="pipeline-step">
+        <div class="step-icon cowork">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#2d7a4a" stroke-width="1.8"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+        </div>
+        <div class="step-name">Cowork renders it</div>
+        <div class="step-detail">Playwright headless Chrome.<br/>Fake RAF clock. React<br/>commit signals per frame.</div>
+      </div>
+
+      <div class="pipeline-step">
+        <div class="step-icon render">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#a06e00" stroke-width="1.8"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        </div>
+        <div class="step-name">Frames → ffmpeg</div>
+        <div class="step-detail">JPEG frames stitched<br/>at your CRF setting. Audio mixed.<br/>faststart for web.</div>
+      </div>
+
+      <div class="pipeline-step">
+        <div class="step-icon done">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#1e3a5f" stroke-width="1.8"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div class="step-name">MP4 ready</div>
+        <div class="step-detail">1920×1080 · 60fps<br/>H.264 · 12.4MB<br/>Ready to share.</div>
+      </div>
+
+    </div>
+
+    <!-- Phase labels -->
+    <div style="display:flex;gap:8px;justify-content:center;margin-top:2rem;flex-wrap:wrap;">
+      <span class="phase-label cd">Claude Design — you describe, Claude builds</span>
+      <span class="phase-label" style="background:rgba(30,58,95,.08);color:var(--navy);">Export</span>
+      <span class="phase-label cw">Claude Cowork — renders the final video</span>
+    </div>
+  </div>
+</div>
+
+<div class="annotation" style="margin-top:1.5rem;">
+  <p>Below is the actual session — the real interface, real prompts, and the exact moments that shaped the final video. Scroll through it.</p>
+</div>
+
+
+<!-- ═══════════════════════════════════════
+     MOMENT 1: First prompt + interface
+═══════════════════════════════════════ -->
+<div class="section-marker">
+  <span class="badge">Moment 01</span>
+  <div class="rule"></div>
+</div>
+
+<div class="cd-wrapper">
+  <div class="cd-shell">
+    <div class="cd-topbar">
+      <div class="cd-traffic"><span class="r"></span><span class="y"></span><span class="g"></span></div>
+      <div class="cd-tabs">
+        <div class="cd-tab">Design Files</div>
+        <div class="cd-tab active">Portfolio Video.html</div>
+      </div>
+      <div class="cd-topbar-right">
+        <div class="cd-btn">Tweaks</div><div class="cd-btn">Edit</div>
+        <div class="cd-btn primary">Share</div><div class="cd-avatar">A</div>
+      </div>
+    </div>
+    <div class="cd-body">
+      <div class="cd-left">
+        <div class="cd-left-header">
+          <div class="cd-project-name">Portfolio Video Design</div>
+          <div class="cd-left-tabs">
+            <div class="cd-left-tab active">Portfolio Video Design</div>
+            <div class="cd-left-tab">Comments</div>
+          </div>
+        </div>
+        <div class="cd-messages">
+          <div class="cd-msg-you">
+            <div class="cd-msg-label">You</div>
+            <div class="cd-msg-text">Create a crisp looking video using my brand colors of my portfolio website. This should be a video which showcases Abhishek Trivedi's skill sets and experience to recruiters looking for Instructional Designers, eLearning Developers and Learning Experience Designers. QA the video so there are no errors. Use as much animation as needed, make it very lively and engaging.</div>
+          </div>
+          <div class="cd-msg-claude">
+            <div class="cd-msg-label">Claude</div>
+            <div class="cd-msg-text">I'll create a crisp portfolio video. Let me start by exploring the design system and planning the story.</div>
+            <div style="margin-top:5px;">
+              <span class="cd-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Listing files, Copying starter</span>
+              <span class="cd-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Reading ×5</span>
+            </div>
+            <div class="cd-plan" style="margin-top:7px;">
+              <b>Story arc (60s):</b><br/>
+              1. <b>Hook</b> <span class="time">(0–6s)</span> — Identity card reveal<br/>
+              2. <b>The tension</b> <span class="time">(6–14s)</span> — Typical CV vs this one<br/>
+              3. <b>The stats</b> <span class="time">(14–22s)</span> — Counters ticking up<br/>
+              4. <b>Three disciplines</b> <span class="time">(22–32s)</span> — ID / Dev / AI<br/>
+              5. <b>Case studies</b> <span class="time">(32–50s)</span> — Voice API, 8 languages<br/>
+              6. <b>Outro</b> <span class="time">(50–60s)</span> — Contact CTA, AT. logo
+            </div>
+            <span class="cd-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Writing</span>
+            <span class="cd-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Writing</span>
+          </div>
+        </div>
+        <div class="cd-input-bar">
+          <div class="cd-bottom-icons">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4"/></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+          </div>
+          <div class="cd-input-fake">Describe what you want to create...</div>
+          <div class="cd-send-btn off">Send</div>
+        </div>
+      </div>
+      <div class="cd-right">
+        <div class="cd-right-topbar">
+          <div class="cd-tool"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4z"/></svg>Edit</div>
+          <div class="cd-zoom">100%</div>
+        </div>
+        <div class="cd-canvas-area">
+          <div class="cd-frame">
+            <div class="scene-title">
+              <div class="at-logo">AT<span style="color:var(--accent)">.</span></div>
+              <div class="eyeline">PORTFOLIO · 2026</div>
+              <h2 class="title-name">Abhishek <em>Trivedi.</em></h2>
+            </div>
+          </div>
+        </div>
+        <div class="cd-playbar">
+          <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          <div class="cd-scrubber"><div class="cd-scrubber-fill" style="width:1%"></div><div class="cd-scrubber-dot"></div></div>
+          <div class="cd-time">0:01.00 &nbsp; 1:45.58</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="annotation">
+  <p>Left panel: the conversation. Right panel: the animation, playing live. No timeline, no keyframe editor. The <strong>red bar at the top of the canvas</strong> is the brand accent — pulled automatically from the design system file. The font, colors, and layout token were all read before the first scene was built.</p>
+</div>
+
+
+<!-- ═══════════════════════════════════════
+     MOMENT 2: Three scenes
+═══════════════════════════════════════ -->
+<div class="section-marker">
+  <span class="badge">Moment 02</span>
+  <div class="rule"></div>
+</div>
+<div class="annotation"><p>Three scenes from the animation as they appeared in the preview — all built in the same session.</p></div>
+
+<div class="scenes-trio">
+  <div class="mini-shell">
+    <div class="mini-topbar"><div class="cd-traffic"><span class="r"></span><span class="y"></span><span class="g"></span></div><span class="mini-label">Scene 3 · Stats</span></div>
+    <div class="mini-frame"><div class="scene-stats">
+      <div class="stats-label">By the numbers</div>
+      <div class="stats-grid">
+        <div class="stat"><span class="num">15+</span><span class="lbl">Years in L&D</span></div>
+        <div class="stat"><span class="num">3</span><span class="lbl">Disciplines</span></div>
+        <div class="stat"><span class="num">9</span><span class="lbl">Roles</span></div>
+        <div class="stat"><span class="num">36h</span><span class="lbl">Saved/run</span></div>
+      </div>
+    </div></div>
+  </div>
+  <div class="mini-shell">
+    <div class="mini-topbar"><div class="cd-traffic"><span class="r"></span><span class="y"></span><span class="g"></span></div><span class="mini-label">Scene 6 · ffmpeg sim</span></div>
+    <div class="mini-frame"><div class="scene-ffmpeg">
+      <div class="ff-bar"><span class="ff-dot r"></span><span class="ff-dot y"></span><span class="ff-dot g"></span><span class="ff-title">localize.sh</span></div>
+      <div class="ff-body">
+        <div class="dim"># Building 8 language variants</div>
+        <div><span class="cmd">$ ffmpeg</span><span style="color:#ccc;"> -i source.mp4 \</span></div>
+        <div style="padding-left:10px;color:#ccc;">-filter:a subtitles=en.srt</div>
+        <div class="lang">Processing: English... ✓</div>
+        <div class="lang">Processing: Hindi... ✓</div>
+        <div class="lang">Processing: Spanish... ✓</div>
+        <div class="lang">Processing: Japanese... ✓</div>
+        <div class="done">8 languages · 90s total</div>
+      </div>
+    </div></div>
+  </div>
+  <div class="mini-shell">
+    <div class="mini-topbar"><div class="cd-traffic"><span class="r"></span><span class="y"></span><span class="g"></span></div><span class="mini-label">Scene 6 · Languages</span></div>
+    <div class="mini-frame"><div class="scene-langs">
+      <div class="langs-title">8 languages in <em>90 seconds.</em></div>
+      <div class="langs-grid">
+        <div class="lang-card"><div class="lang-name">English</div><div class="lang-time">11.2s</div></div>
+        <div class="lang-card"><div class="lang-name">Hindi</div><div class="lang-time">11.8s</div></div>
+        <div class="lang-card"><div class="lang-name">Spanish</div><div class="lang-time">10.9s</div></div>
+        <div class="lang-card"><div class="lang-name">Japanese</div><div class="lang-time">12.1s</div></div>
+        <div class="lang-card"><div class="lang-name">French</div><div class="lang-time">11.4s</div></div>
+        <div class="lang-card"><div class="lang-name">Korean</div><div class="lang-time">11.6s</div></div>
+        <div class="lang-card"><div class="lang-name">German</div><div class="lang-time">10.7s</div></div>
+        <div class="lang-card"><div class="lang-name">Arabic</div><div class="lang-time">11.3s</div></div>
+      </div>
+    </div></div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════
+     MOMENT 3: Bugs found + fixed
+═══════════════════════════════════════ -->
+<div class="section-marker">
+  <span class="badge">Moment 03</span>
+  <div class="rule"></div>
+</div>
+<div class="annotation"><p>After the first build, Claude Design screenshotted its own output and listed every bug — 6 scenes had layout issues. It then fixed them without being asked.</p></div>
+
+<div class="cd-wrapper">
+  <div class="cd-shell">
+    <div class="cd-topbar">
+      <div class="cd-traffic"><span class="r"></span><span class="y"></span><span class="g"></span></div>
+      <div class="cd-tabs"><div class="cd-tab active">Portfolio Video.html</div></div>
+      <div class="cd-topbar-right"><div class="cd-btn primary">Share</div><div class="cd-avatar">A</div></div>
+    </div>
+    <div class="cd-body">
+      <div class="cd-left">
+        <div class="cd-left-header">
+          <div class="cd-project-name">Portfolio Video Design</div>
+          <div class="cd-left-tabs"><div class="cd-left-tab active">Portfolio Video Design</div><div class="cd-left-tab">Comments</div></div>
+        </div>
+        <div class="cd-messages">
+          <div class="cd-msg-claude">
+            <div class="cd-msg-label">Claude</div>
+            <span class="cd-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Screenshot, Viewing image</span>
+            <div class="cd-msg-text" style="margin-top:6px;">I see several issues to fix:</div>
+            <ul class="cd-issue">
+              <li><b>Scene 3:</b> Headline overlapping table below</li>
+              <li><b>Scene 6:</b> Headline clips into Storyline player mock</li>
+              <li><b>Scene 7:</b> Only 7 language cards — Arabic clipped</li>
+              <li><b>Scene 8:</b> "one system." overlapping the grid</li>
+              <li><b>Scene 9:</b> "it." overlapping column headers</li>
+              <li><b>Scene 10:</b> AT. logo clashes with terracotta bar</li>
+            </ul>
+            <div style="margin-top:6px;">
+              <span class="cd-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Editing</span>
+              <span class="cd-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Editing</span>
+              <span class="cd-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Screenshot</span>
+            </div>
+            <div class="cd-msg-text" style="margin-top:6px;">Spacing issue is JSX whitespace collapsing trailing spaces. Fixed with explicit <code style="background:#f0ede8;padding:1px 4px;border-radius:3px;font-size:.75em;">{' '}</code> characters.</div>
+          </div>
+        </div>
+        <div class="cd-input-bar">
+          <div class="cd-input-fake">Describe what you want to create...</div>
+          <div class="cd-send-btn off">Send</div>
+        </div>
+      </div>
+      <div class="cd-right">
+        <div class="cd-right-topbar"><div class="cd-zoom">100%</div></div>
+        <div class="cd-canvas-area">
+          <div class="cd-frame">
+            <div class="scene-compare">
+              <div class="col" style="background:#f5f0eb;">
+                <div class="col-label">Typical L&D CV</div>
+                <div class="row">Proficient in Storyline 360</div>
+                <div class="row">Experienced in ADDIE</div>
+                <div class="row">Familiar with AI tools</div>
+                <div class="row">Delivered on time</div>
+                <div style="margin-top:4px;font-size:.5rem;color:var(--accent);background:rgba(192,57,43,.08);padding:3px 5px;border-radius:3px;">⚠ headline overflowing here</div>
+              </div>
+              <div class="divider"></div>
+              <div class="col good">
+                <div class="col-label">this one.</div>
+                <div class="row h">JS inside Storyline — API calls, live injection</div>
+                <div class="row">7 frameworks · 28 storyboards</div>
+                <div class="row h">Live AI voice personalisation in browser</div>
+                <div class="row">8 languages in 90 seconds</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="cd-playbar">
+          <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          <div class="cd-scrubber"><div class="cd-scrubber-fill" style="width:18%"></div><div class="cd-scrubber-dot" style="right:82%"></div></div>
+          <div class="cd-time">0:18.40 &nbsp; 1:45.58</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════
+     MOMENT 4: My feedback + network error
+═══════════════════════════════════════ -->
+<div class="section-marker">
+  <span class="badge">Moment 04</span>
+  <div class="rule"></div>
+</div>
+<div class="annotation"><p>After fixes, Claude Design said it was done. I pushed back on content — some scenes weren't right. Mid-way through applying changes, the session hit a network error.</p></div>
+
+<div class="cd-wrapper">
+  <div class="cd-shell">
+    <div class="cd-topbar">
+      <div class="cd-traffic"><span class="r"></span><span class="y"></span><span class="g"></span></div>
+      <div class="cd-tabs"><div class="cd-tab active">Portfolio Video.html</div></div>
+      <div class="cd-topbar-right"><div class="cd-btn primary">Share</div><div class="cd-avatar">A</div></div>
+    </div>
+    <div class="cd-body">
+      <div class="cd-left">
+        <div class="cd-left-header">
+          <div class="cd-project-name">Portfolio Video Design</div>
+          <div class="cd-left-tabs"><div class="cd-left-tab active">Portfolio Video Design</div><div class="cd-left-tab">Comments</div></div>
+        </div>
+        <div class="cd-messages">
+          <div class="cd-msg-you">
+            <div class="cd-msg-label">You</div>
+            <div class="cd-msg-text">Replace the typical L&D CV screen — looks too pushy. Replace stats with 3 disciplines etc. On case study 2 show ffmpeg simulation first, then 8 languages with elapsed seconds. Remove "NOW HIRING MANAGERS, PLEASE READ." Also show Camtasia video editing experience.</div>
+          </div>
+          <div class="cd-msg-claude">
+            <div class="cd-msg-label">Claude</div>
+            <div class="cd-msg-text">Got it. Let me plan the changes:</div>
+            <div class="cd-feedback">
+              1. <b>Scene 3</b> → "What I actually do" — three disciplines<br/>
+              2. <b>Scene 2</b> → 15+ years · 3 disciplines · 9 roles · 7 frameworks<br/>
+              3. <b>Scene 6</b> → ffmpeg terminal sim → then 8 language cards<br/>
+              4. <b>Scene 10</b> → Remove "NOW HIRING MANAGERS" eyebrow<br/>
+              5. <b>New scene</b> → Camtasia timeline with Lottie layers
+            </div>
+            <span class="cd-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Reading, Fetching</span>
+            <span class="cd-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Editing ×2</span>
+            <div style="margin-top:5px;">
+              <span class="cd-chip warn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>Network error: connection lost mid-stream</span>
+            </div>
+          </div>
+        </div>
+        <div class="cd-input-bar">
+          <div class="cd-input-fake">Describe what you want to create...</div>
+          <div class="cd-send-btn">▷ Send</div>
+        </div>
+      </div>
+      <div class="cd-right">
+        <div class="cd-right-topbar"><div class="cd-zoom">100%</div></div>
+        <div class="cd-canvas-area">
+          <div class="cd-frame">
+            <div class="scene-outro">
+              <div class="outro-eyebrow">Available</div>
+              <div class="outro-title">Open to the <em>right opportunity.</em></div>
+              <div class="outro-pill">work.abhishektrivedi@gmail.com</div>
+              <div class="outro-at">AT<span>.</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="cd-playbar">
+          <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          <div class="cd-scrubber"><div class="cd-scrubber-fill" style="width:95%"></div><div class="cd-scrubber-dot" style="right:5%"></div></div>
+          <div class="cd-time">1:41.20 &nbsp; 1:45.58</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="annotation">
+  <p>The network error is left in. That's what working with a research preview looks like — it reconnected, picked up from where it stopped, and finished. The session wasn't clean. The output was.</p>
+</div>
+
+
+<!-- ═══════════════════════════════════════
+     RENDER ITERATIONS
+═══════════════════════════════════════ -->
+<div class="section-marker">
+  <span class="badge">Cowork Render</span>
+  <div class="rule"></div>
+</div>
+<div class="annotation"><p>The exported ZIP is a browser animation — not a video. Claude Cowork built the render pipeline and took four attempts to get it right.</p></div>
+
+<div class="iterations">
+  <div class="iter-card">
+    <div class="iter-num">1</div>
+    <div>
+      <div class="iter-title">24fps — zoom transitions looked choppy</div>
+      <div class="iter-desc">Standard film rate. The easing curves needed 60fps to look smooth. Bumped.</div>
+    </div>
+  </div>
+  <div class="iter-card">
+    <div class="iter-num">2</div>
+    <div>
+      <div class="iter-title">60fps but duplicate frames — still wrong</div>
+      <div class="iter-desc">React schedules state updates asynchronously. Screenshots were taken before React committed the new frame. Fixed by injecting a <code style="font-size:.82em;background:#f0ede8;padding:1px 4px;border-radius:3px;">useEffect</code> signal — captures only after React confirms the frame is fully rendered.</div>
+    </div>
+  </div>
+  <div class="iter-card">
+    <div class="iter-num">3</div>
+    <div>
+      <div class="iter-title">Frame sync fixed — added TTS audio, then removed it</div>
+      <div class="iter-desc">Clean motion. Google TTS narration added. Listened to it once. Removed it. Generic voice doesn't add anything to a visual-first portfolio video.</div>
+    </div>
+  </div>
+  <div class="iter-card">
+    <div class="iter-num ok">4</div>
+    <div>
+      <div class="iter-title">Background music mixed in — done</div>
+      <div class="iter-desc">Kevin MacLeod "Carefree" (CC Attribution) at −8dB, 1.5s fade in, 3s fade out. This is the video you watched.</div>
+    </div>
+  </div>
+</div>
+
+<div class="specs-row">
+  <div class="spec-cell"><span class="spec-val">1920×1080</span><span class="spec-key">Resolution</span></div>
+  <div class="spec-cell"><span class="spec-val">60fps</span><span class="spec-key">Frame rate</span></div>
+  <div class="spec-cell"><span class="spec-val">1:45</span><span class="spec-key">Duration</span></div>
+  <div class="spec-cell"><span class="spec-val">6,330</span><span class="spec-key">Frames</span></div>
+  <div class="spec-cell"><span class="spec-val">4</span><span class="spec-key">Render attempts</span></div>
+  <div class="spec-cell"><span class="spec-val">12.4MB</span><span class="spec-key">Final size</span></div>
+</div>
+
+
+<!-- ═══════════════════════════════════════
+     COPY-PASTE PROMPTS
+═══════════════════════════════════════ -->
+<div class="section-label">Try it yourself</div>
+
+<div class="annotation">
+  <p>Want to build something similar? These are the exact prompts — adapted for your own project. Start with Claude Design, then bring the exported ZIP to Cowork.</p>
+</div>
+
+<div class="prompts-section" style="margin-top:.5rem;">
+  <div class="prompts-grid">
+
+    <!-- Prompt 1: Claude Design -->
+    <div class="prompt-card">
+      <div class="prompt-card-header">
+        <span class="prompt-tool-badge design">Claude Design</span>
+        <span class="prompt-card-title">Opening prompt</span>
+      </div>
+      <div class="prompt-body">
+        <div class="prompt-text" id="prompt-design">Create a crisp animated portfolio video using my brand colors and design system. The audience is [<span class="ph">e.g. recruiters / hiring managers</span>] looking for [<span class="ph">your role title</span>].
+
+Structure it as: hook (identity reveal) → what I do (3 disciplines) → key stats (numbers that matter) → 2–3 case studies with live demos → outro with CTA.
+
+Use typography-led animation — text driving the story, not decorating it. Reference my design system files for colors, fonts, and token values. QA every scene for layout issues before handing off.</div>
+      </div>
+      <div class="prompt-actions">
+        <button class="copy-btn design" onclick="copyPrompt('prompt-design', this)">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          Copy prompt
+        </button>
+        <span class="prompt-note">Attach your design system file</span>
+      </div>
+    </div>
+
+    <!-- Prompt 2: Claude Cowork -->
+    <div class="prompt-card">
+      <div class="prompt-card-header">
+        <span class="prompt-tool-badge cowork">Claude Cowork</span>
+        <span class="prompt-card-title">Render prompt</span>
+      </div>
+      <div class="prompt-body">
+        <div class="prompt-text" id="prompt-cowork">I have a Claude Design export (ZIP file) attached. It's a React animation that plays in the browser. Please render it as a proper MP4 video.
+
+Requirements:
+- 60fps, 1920×1080
+- H.264, high quality (CRF 14)
+- No audio needed (or add: mix in [<span class="ph">track name</span>] CC music at low volume)
+- Trim to exact animation duration
+- Save to my Downloads folder
+
+Use Playwright headless Chrome to capture frames. Make sure React has fully committed each frame before screenshotting — don't use a fixed timeout, use a render signal.</div>
+      </div>
+      <div class="prompt-actions">
+        <button class="copy-btn cowork" onclick="copyPrompt('prompt-cowork', this)">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          Copy prompt
+        </button>
+        <span class="prompt-note">Attach the exported ZIP</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Tips row -->
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px;">
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1rem;">
+      <div style="font-size:.68rem;font-family:var(--mono);text-transform:uppercase;letter-spacing:.1em;color:var(--accent);margin-bottom:.5rem;">Tip 01</div>
+      <div style="font-size:.8rem;color:#444;line-height:1.6;"><strong>Import your design system.</strong> Use the Import button in Claude Design to attach your brand tokens file. The model reads it before writing a single line of animation code.</div>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1rem;">
+      <div style="font-size:.68rem;font-family:var(--mono);text-transform:uppercase;letter-spacing:.1em;color:var(--accent);margin-bottom:.5rem;">Tip 02</div>
+      <div style="font-size:.8rem;color:#444;line-height:1.6;"><strong>Push back early.</strong> The first build is a draft. Ask it to change anything that doesn't feel right — tone, content, layout. It's a conversation, not a one-shot prompt.</div>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1rem;">
+      <div style="font-size:.68rem;font-family:var(--mono);text-transform:uppercase;letter-spacing:.1em;color:var(--accent);margin-bottom:.5rem;">Tip 03</div>
+      <div style="font-size:.8rem;color:#444;line-height:1.6;"><strong>Cowork needs context.</strong> Tell it the target resolution, frame rate, and quality. Without these it'll pick defaults. Mention the render-signal requirement — it prevents duplicate frames.</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- CLOSING -->
+<div class="prose" style="padding-top:2.5rem;padding-bottom:0;">
+  <div class="callout">
+    <p>Both tools are research previews. What took four render attempts today will likely take one in six months. The process will get faster. The direction is already clear.</p>
+  </div>
+  <p style="color:var(--muted);font-size:.9rem;margin-top:1rem;">Questions? <a href="/pages/contact.html">Reach out</a> or find me on <a href="https://linkedin.com/in/trivedi-abhishek">LinkedIn</a>.</p>
+</div>
+
+<footer class="site-footer">
+  <p>© 2026 Abhishek Trivedi · Learning Experience Technologist</p>
+  <p style="margin-top:.5rem;">
+    <a href="https://linkedin.com/in/trivedi-abhishek">LinkedIn</a>
+    <a href="/pages/contact.html">Contact</a>
+    <a href="/pages/work.html">Work</a>
+  </p>
+</footer>
+
+<script>
+function copyPrompt(id, btn) {
+  const el = document.getElementById(id);
+  const text = el.innerText.replace(/\n\s*\n/g, '\n\n').trim();
+  navigator.clipboard.writeText(text).then(() => {
+    const orig = btn.innerHTML;
+    btn.classList.add('copied');
+    btn.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Copied!`;
+    setTimeout(() => { btn.classList.remove('copied'); btn.innerHTML = orig; }, 2000);
+  });
+}
+</script>
+</body>
+</html>
