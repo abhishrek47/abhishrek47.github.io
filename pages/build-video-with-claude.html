@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How I Built a Marketing Video by Talking to Claude</title>
+<style>
+  :root {
+    --navy: #1e3a5f;
+    --red: #c0392b;
+    --linen: #f5f0eb;
+    --ink: #1a1a1a;
+    --muted: #777;
+    --border: #e2dcd5;
+    --green: #16a34a;
+    --amber: #d97706;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: Arial, sans-serif; background: var(--linen); color: var(--ink); line-height: 1.7; }
+
+  /* ── Hero ── */
+  .hero {
+    background: var(--navy);
+    color: white;
+    padding: 60px 24px 52px;
+    text-align: center;
+  }
+  .hero .eyebrow {
+    font-size: 11px; letter-spacing: 3px; text-transform: uppercase;
+    color: rgba(255,255,255,0.4); margin-bottom: 18px;
+  }
+  .hero h1 {
+    font-family: Georgia, serif; font-weight: normal;
+    font-size: clamp(26px, 4vw, 42px); line-height: 1.25;
+    max-width: 680px; margin: 0 auto 20px;
+  }
+  .hero .sub {
+    font-size: 17px; color: rgba(255,255,255,0.62);
+    max-width: 500px; margin: 0 auto 36px;
+  }
+  .hero-tags { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+  .hero-tags span {
+    background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.17);
+    color: rgba(255,255,255,0.75); font-size: 12px; padding: 5px 14px; border-radius: 20px;
+  }
+
+  .wrap { max-width: 760px; margin: 0 auto; padding: 0 24px; }
+
+  /* ── Sections ── */
+  .section { padding: 60px 0; }
+  .section + .section { border-top: 1px solid var(--border); }
+
+  .section-title {
+    font-family: Georgia, serif; font-size: 26px; font-weight: normal;
+    margin-bottom: 10px; color: var(--navy);
+  }
+  .section-lead {
+    font-size: 15px; color: var(--muted); margin-bottom: 36px; max-width: 580px;
+  }
+
+  /* ── Notice box ── */
+  .notice {
+    border-radius: 10px;
+    padding: 22px 26px;
+    margin-bottom: 36px;
+    font-size: 15px;
+    line-height: 1.7;
+  }
+  .notice.blue {
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    color: #1e3a5f;
+  }
+  .notice.amber {
+    background: #fffbeb;
+    border: 1px solid #fcd34d;
+    color: #78350f;
+  }
+  .notice strong { font-weight: 700; }
+  .notice a { color: var(--navy); font-weight: 600; }
+
+  /* ── What I actually did ── */
+  .flow-steps { display: flex; flex-direction: column; gap: 0; }
+
+  .flow-step {
+    display: flex;
+    gap: 0;
+    position: relative;
+  }
+  .flow-step:not(:last-child)::before {
+    content: '';
+    position: absolute;
+    left: 20px;
+    top: 44px;
+    bottom: -1px;
+    width: 2px;
+    background: var(--border);
+    z-index: 0;
+  }
+  .flow-dot {
+    flex-shrink: 0;
+    width: 42px;
+    height: 42px;
+    background: white;
+    border: 2px solid var(--navy);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: Georgia, serif;
+    font-size: 16px;
+    color: var(--navy);
+    margin-right: 22px;
+    margin-top: 2px;
+    position: relative;
+    z-index: 1;
+    flex-shrink: 0;
+  }
+  .flow-body {
+    flex: 1;
+    padding-bottom: 40px;
+  }
+  .flow-body h3 { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
+  .flow-body p { font-size: 15px; color: #444; line-height: 1.7; }
+
+  /* ── Conversation bubbles ── */
+  .convo { display: flex; flex-direction: column; gap: 14px; margin-top: 16px; }
+
+  .bubble {
+    max-width: 88%;
+    padding: 13px 18px;
+    border-radius: 14px;
+    font-size: 14px;
+    line-height: 1.65;
+  }
+  .bubble.me {
+    background: var(--navy);
+    color: white;
+    align-self: flex-end;
+    border-bottom-right-radius: 4px;
+  }
+  .bubble.claude {
+    background: white;
+    border: 1px solid var(--border);
+    color: var(--ink);
+    align-self: flex-start;
+    border-bottom-left-radius: 4px;
+  }
+  .bubble-label {
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .bubble-label.right { text-align: right; }
+
+  .bubble code {
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    background: rgba(0,0,0,0.08);
+    padding: 1px 6px;
+    border-radius: 3px;
+  }
+  .bubble.me code { background: rgba(255,255,255,0.15); color: white; }
+
+  /* ── What Claude handled ── */
+  .handled-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-top: 8px;
+  }
+  @media (max-width: 560px) { .handled-grid { grid-template-columns: 1fr; } }
+  .handled-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 18px 20px;
+  }
+  .handled-card .hc-label {
+    font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 8px;
+  }
+  .handled-card p { font-size: 14px; color: #444; line-height: 1.6; }
+
+  /* ── Requirement box ── */
+  .req-box {
+    background: white;
+    border: 2px solid var(--navy);
+    border-radius: 10px;
+    padding: 28px 32px;
+  }
+  .req-box h3 { font-size: 20px; font-weight: 700; margin-bottom: 14px; color: var(--navy); }
+  .req-box p { font-size: 15px; color: #444; line-height: 1.7; margin-bottom: 14px; }
+  .req-box p:last-child { margin-bottom: 0; }
+  .req-box a { color: var(--navy); font-weight: 600; }
+  .req-box .pill {
+    display: inline-block;
+    background: var(--navy);
+    color: white;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-right: 6px;
+    vertical-align: middle;
+  }
+
+  /* ── Generator ── */
+  .gen-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 36px;
+    margin-top: 24px;
+  }
+
+  .field-label { display: block; font-size: 13px; font-weight: 700; margin-bottom: 6px; }
+  .field-hint { font-weight: normal; color: var(--muted); font-size: 11px; }
+  .field-row { margin-bottom: 20px; }
+  .field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+  @media (max-width: 560px) { .field-grid { grid-template-columns: 1fr; } }
+
+  input[type="text"], input[type="url"], select {
+    width: 100%; padding: 10px 13px;
+    font-family: Arial, sans-serif; font-size: 14px;
+    border: 1px solid #ddd; border-radius: 6px;
+    background: #fafafa; color: var(--ink);
+    transition: border-color 0.15s;
+  }
+  input:focus, select:focus { outline: none; border-color: var(--navy); background: white; }
+
+  .color-row { display: flex; align-items: center; gap: 10px; }
+  input[type="color"] {
+    width: 44px; height: 42px; padding: 3px;
+    border: 1px solid #ddd; border-radius: 6px;
+    cursor: pointer; flex-shrink: 0;
+  }
+
+  .kp-rows { display: flex; flex-direction: column; gap: 10px; margin-bottom: 6px; }
+  .kp-row { display: flex; align-items: center; gap: 10px; }
+  .kp-num { width: 20px; text-align: right; font-size: 13px; color: var(--muted); flex-shrink: 0; }
+
+  .sec-div {
+    font-size: 10px; letter-spacing: 2.5px; text-transform: uppercase;
+    color: var(--muted); padding: 20px 0 14px;
+    border-bottom: 1px solid var(--border); margin-bottom: 20px;
+  }
+  .sec-div:first-child { padding-top: 0; }
+
+  .gen-btn {
+    width: 100%; margin-top: 28px; background: var(--red); color: white;
+    border: none; padding: 16px; font-size: 16px; font-weight: 700;
+    border-radius: 8px; cursor: pointer; transition: background 0.15s;
+  }
+  .gen-btn:hover { background: #a93226; }
+
+  /* Output */
+  .out-wrap { display: none; margin-top: 32px; }
+  .out-wrap.show { display: block; }
+
+  .out-toolbar {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 10px; flex-wrap: wrap; gap: 10px;
+  }
+  .out-toolbar span { font-size: 14px; color: var(--muted); }
+  .btn-copy, .btn-dl {
+    padding: 9px 20px; font-size: 13px; font-weight: 700;
+    border-radius: 6px; cursor: pointer; border: none; transition: all 0.15s;
+  }
+  .btn-copy { background: white; border: 1px solid var(--border); color: var(--ink); }
+  .btn-copy:hover { border-color: var(--navy); color: var(--navy); }
+  .btn-dl { background: var(--navy); color: white; margin-left: 8px; }
+  .btn-dl:hover { background: #152d4a; }
+
+  #code-out {
+    background: #1e1e2e; color: #cdd6f4;
+    font-family: 'Courier New', monospace; font-size: 12.5px;
+    line-height: 1.65; padding: 24px; border-radius: 8px;
+    max-height: 380px; overflow-y: auto; white-space: pre;
+  }
+
+  .paste-box {
+    background: var(--navy); color: white;
+    border-radius: 8px; padding: 26px 30px; margin-top: 22px;
+  }
+  .paste-box h4 { font-size: 17px; margin-bottom: 12px; }
+  .paste-box p { font-size: 14px; color: rgba(255,255,255,0.7); line-height: 1.7; margin-bottom: 10px; }
+  .paste-box p:last-child { margin-bottom: 0; }
+  .paste-box .prompt-eg {
+    background: rgba(255,255,255,0.1); border-left: 3px solid rgba(255,255,255,0.3);
+    padding: 12px 16px; border-radius: 0 6px 6px 0; font-size: 14px;
+    color: rgba(255,255,255,0.9); line-height: 1.65; margin: 14px 0;
+  }
+</style>
+</head>
+<body>
+
+<!-- Hero -->
+<header class="hero">
+  <div class="eyebrow">Behind the build</div>
+  <h1>I built a marketing video by describing what I wanted. Claude wrote the code.</h1>
+  <p class="sub">No video software. No subscriptions. Just a conversation — I described what I wanted, Claude built it.</p>
+  <div class="hero-tags">
+    <span>25 seconds</span>
+    <span>Full HD</span>
+    <span>Built with Claude</span>
+    <span>No video software</span>
+    <span>Free tools only</span>
+  </div>
+</header>
+
+<!-- What I actually did -->
+<div class="section">
+<div class="wrap">
+
+  <h2 class="section-title">What I actually did</h2>
+  <p class="section-lead">My entire job was to describe what I wanted and tell Claude when something looked wrong. That's it.</p>
+
+  <div class="flow-steps">
+
+    <div class="flow-step">
+      <div class="flow-dot">1</div>
+      <div class="flow-body">
+        <h3>I told Claude what I wanted to build</h3>
+        <p>Described the video — 25 seconds, my brand colours, 5 scenes, what each scene should say and do. That was my entire input. Claude figured out how to build it.</p>
+        <div class="convo">
+          <div>
+            <div class="bubble-label right">Me</div>
+            <div class="bubble me">Build me a 25-second marketing video for my newsletter. Navy background, red accent. Scene 1: title card. Scene 2: the problem statement with a strikethrough animation. Scene 3: a Venn diagram showing the gap between L&D and engineering. Scene 4: a comparison table. Scene 5: CTA. Export as MP4.</div>
+          </div>
+          <div>
+            <div class="bubble-label">Claude</div>
+            <div class="bubble claude">On it. I'll build the video by generating each frame as an image, then stitching them together into a video file. Setting up the scenes now with smooth transitions between each one — rendering...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flow-step">
+      <div class="flow-dot">2</div>
+      <div class="flow-body">
+        <h3>Claude rendered the video — I reviewed it</h3>
+        <p>Claude ran the code in the background and produced the MP4. I watched it and noted what looked off.</p>
+        <div class="convo">
+          <div>
+            <div class="bubble-label right">Me</div>
+            <div class="bubble me">Some issues. The strikethrough line goes way past the text. The Venn diagram labels are clipping outside the circles. The icon and text in the comparison table aren't aligned.</div>
+          </div>
+          <div>
+            <div class="bubble-label">Claude</div>
+            <div class="bubble claude">Found all three. Strikethrough line — fixed, it was extending beyond the text. Venn labels — fixed, moved them to where they fit inside the circles. Icon and text alignment — fixed, they're now centred against each other. Re-rendering now...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flow-step">
+      <div class="flow-dot">3</div>
+      <div class="flow-body">
+        <h3>We iterated until it looked right</h3>
+        <p>A few more rounds — column headers too small, crossfade looked murky, animation timing felt slow. Each time: I described what was wrong, Claude diagnosed and fixed it.</p>
+        <div class="convo">
+          <div>
+            <div class="bubble-label right">Me</div>
+            <div class="bubble me">Column headings font is too small. Also the crossfade between scenes looks wrong — it gets darker instead of dissolving cleanly.</div>
+          </div>
+          <div>
+            <div class="bubble-label">Claude</div>
+            <div class="bubble claude">Headings made larger. The dark crossfade was a layering issue — both scenes were fading simultaneously which made the transition go dark instead of dissolving cleanly. Fixed the layering order. Rendering now...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flow-step">
+      <div class="flow-dot">4</div>
+      <div class="flow-body">
+        <h3>Final video — done</h3>
+        <p>25 seconds. Full HD. 0.7 MB. Ready to upload. I didn't touch the code once — just described what I wanted and what needed fixing.</p>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+</div>
+
+<!-- What Claude handled in the background -->
+<div class="section">
+<div class="wrap">
+
+  <h2 class="section-title">What Claude handled in the background</h2>
+  <p class="section-lead">I never had to think about any of this. Claude owned it.</p>
+
+  <div class="handled-grid">
+    <div class="handled-card">
+      <div class="hc-label">Building the video</div>
+      <p>Claude wrote all the code to generate 750 individual frames and stitch them into a finished video file.</p>
+    </div>
+    <div class="handled-card">
+      <div class="hc-label">Animations</div>
+      <p>Every motion — text sliding in, elements fading, smooth transitions between scenes — all designed and built by Claude.</p>
+    </div>
+    <div class="handled-card">
+      <div class="hc-label">Fonts and text layout</div>
+      <p>Downloaded the fonts, loaded them into the video, sized and positioned every word on every slide.</p>
+    </div>
+    <div class="handled-card">
+      <div class="hc-label">Exporting the file</div>
+      <p>Turned 750 images into a proper MP4 video — full HD, compressed, ready to upload anywhere.</p>
+    </div>
+    <div class="handled-card">
+      <div class="hc-label">Fixing every bug</div>
+      <p>When something looked wrong, I described it in plain English. Claude found the cause and fixed it.</p>
+    </div>
+    <div class="handled-card">
+      <div class="hc-label">All of the code</div>
+      <p>I didn't write a single line. Every fix, every re-render, every tweak — entirely Claude.</p>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- What you need -->
+<div class="section">
+<div class="wrap">
+
+  <h2 class="section-title">What you need to do this</h2>
+  <p class="section-lead">One requirement that actually matters.</p>
+
+  <div class="req-box">
+    <h3>Claude Max — via the Cowork desktop app</h3>
+    <p>
+      This kind of build takes 20–30 back-and-forth rounds. On <strong>Claude Pro</strong>, you'll burn through your message limit after a few iterations and have to wait. That completely kills the flow.
+    </p>
+    <p>
+      <span class="pill">Claude Max</span> gives you the headroom to actually iterate — describe, render, review, fix, repeat — without hitting a wall halfway through.
+    </p>
+    <p>
+      The <strong>Cowork desktop app</strong> is what makes it seamless — Claude has direct access to your files, runs the code, and delivers the output without you switching between windows or copying scripts manually.
+    </p>
+    <p>
+      Get it at <a href="https://claude.ai" target="_blank">claude.ai</a> → Claude Max plan → download the Cowork desktop app.
+    </p>
+  </div>
+
+  <div class="notice amber" style="margin-top: 20px;">
+    <strong>Can you do it on Pro?</strong> Yes, but slowly. You'll get rate-limited mid-iteration and lose momentum. If you're serious about building something polished, Max is worth it.
+  </div>
+
+</div>
+</div>
+
+<!-- Generator -->
+<div class="section">
+<div class="wrap">
+
+  <h2 class="section-title">Generate your video brief</h2>
+  <p class="section-lead">Fill this in, copy the output, and paste it into Claude. It's your starting prompt — pre-loaded with your brand, content, and colours. Claude takes it from there.</p>
+
+  <div class="notice blue">
+    <strong>How to use this:</strong> Fill in the form → click Generate → copy the prompt → open Claude (Cowork desktop app) → paste it in. Claude will build the video script, render it, and deliver your MP4.
+  </div>
+
+  <div class="gen-card">
+
+    <div class="sec-div">Your brand</div>
+    <div class="field-grid">
+      <div class="field-row">
+        <label class="field-label">Brand or company name</label>
+        <input type="text" id="brand_name" placeholder="e.g. Acme Learning">
+      </div>
+      <div class="field-row">
+        <label class="field-label">Website or link <span class="field-hint">(on the final slide)</span></label>
+        <input type="url" id="cta_url" placeholder="e.g. yoursite.com">
+      </div>
+    </div>
+
+    <div class="sec-div">What the video says</div>
+    <div class="field-row">
+      <label class="field-label">Main headline</label>
+      <input type="text" id="main_title" placeholder="e.g. Why Generic Training Fails Engineers">
+    </div>
+    <div class="field-row">
+      <label class="field-label">One-line tagline <span class="field-hint">(under the headline)</span></label>
+      <input type="text" id="tagline" placeholder="e.g. A better approach that actually sticks.">
+    </div>
+    <div class="field-row">
+      <label class="field-label">Call to action <span class="field-hint">(final slide)</span></label>
+      <input type="text" id="cta_text" placeholder="e.g. Read the full guide">
+    </div>
+
+    <div class="sec-div">Key points <span style="font-size:11px;font-weight:normal;letter-spacing:0;text-transform:none;">(up to 4 — shown as a bullet list in the middle of the video)</span></div>
+    <div class="kp-rows">
+      <div class="kp-row"><span class="kp-num">1</span><input type="text" id="kp1" placeholder="e.g. Engineers learn by doing, not watching slides"></div>
+      <div class="kp-row"><span class="kp-num">2</span><input type="text" id="kp2" placeholder="e.g. Context matters more than content"></div>
+      <div class="kp-row"><span class="kp-num">3</span><input type="text" id="kp3" placeholder="e.g. Data should drive what you build next"></div>
+      <div class="kp-row"><span class="kp-num">4</span><input type="text" id="kp4" placeholder="Optional fourth point"></div>
+    </div>
+
+    <div class="sec-div" style="margin-top:22px;">Colors</div>
+    <div class="field-grid" style="grid-template-columns:1fr 1fr 1fr;">
+      <div class="field-row">
+        <label class="field-label">Background</label>
+        <div class="color-row">
+          <input type="color" id="c_primary_p" value="#1e3a5f" oninput="syncHex('c_primary',this.value)">
+          <input type="text" id="c_primary" value="#1e3a5f" oninput="syncPicker('c_primary_p',this.value)" placeholder="#1e3a5f">
+        </div>
+      </div>
+      <div class="field-row">
+        <label class="field-label">Accent / highlight</label>
+        <div class="color-row">
+          <input type="color" id="c_accent_p" value="#c0392b" oninput="syncHex('c_accent',this.value)">
+          <input type="text" id="c_accent" value="#c0392b" oninput="syncPicker('c_accent_p',this.value)" placeholder="#c0392b">
+        </div>
+      </div>
+      <div class="field-row">
+        <label class="field-label">Slide background</label>
+        <div class="color-row">
+          <input type="color" id="c_light_p" value="#f5f0eb" oninput="syncHex('c_light',this.value)">
+          <input type="text" id="c_light" value="#f5f0eb" oninput="syncPicker('c_light_p',this.value)" placeholder="#f5f0eb">
+        </div>
+      </div>
+    </div>
+
+    <div class="sec-div">Video length</div>
+    <div class="field-grid">
+      <div class="field-row">
+        <label class="field-label">Duration</label>
+        <select id="duration">
+          <option value="20">20 seconds</option>
+          <option value="25" selected>25 seconds</option>
+          <option value="30">30 seconds</option>
+          <option value="45">45 seconds</option>
+          <option value="60">60 seconds</option>
+        </select>
+      </div>
+      <div class="field-row">
+        <label class="field-label">Frame rate</label>
+        <select id="fps">
+          <option value="24">24 fps</option>
+          <option value="30" selected>30 fps</option>
+        </select>
+      </div>
+    </div>
+
+    <button class="gen-btn" onclick="generate()">Generate my Claude prompt →</button>
+  </div>
+
+  <div id="out-wrap" class="out-wrap">
+    <div class="out-toolbar">
+      <span>Your Claude prompt — ready to paste</span>
+      <div>
+        <button class="btn-copy" onclick="doCopy()">Copy prompt</button>
+      </div>
+    </div>
+    <div id="code-out"></div>
+
+    <div class="paste-box">
+      <h4>Now open Claude and paste this in</h4>
+      <p>Open the <strong>Cowork desktop app</strong> → start a new session → paste the prompt. Claude will build the video, render all the frames, encode the MP4, and deliver it to your downloads folder.</p>
+      <div class="prompt-eg">
+        If something looks off in the video, just describe it: <em>"The text on slide 2 is too small"</em> or <em>"The crossfade looks dark."</em> Claude will diagnose and fix it.
+      </div>
+      <p>Expect 3–5 rounds of iteration before it looks exactly right. That's normal — it's how I did it too.</p>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<script>
+function syncHex(id, val) { document.getElementById(id).value = val; }
+function syncPicker(id, val) {
+  if (/^#[0-9a-fA-F]{6}$/.test(val)) document.getElementById(id).value = val;
+}
+
+function hexRGB(hex) {
+  hex = hex.replace('#','');
+  if (hex.length===3) hex = hex.split('').map(c=>c+c).join('');
+  const n = parseInt(hex,16);
+  return [(n>>16)&255,(n>>8)&255,n&255];
+}
+function esc(s){ return s.replace(/\\/g,'\\\\').replace(/`/g,'\\`'); }
+
+function generate() {
+  const brand   = document.getElementById('brand_name').value.trim() || 'My Brand';
+  const title   = document.getElementById('main_title').value.trim() || 'My Main Headline';
+  const tagline = document.getElementById('tagline').value.trim()    || 'A compelling tagline.';
+  const ctaTxt  = document.getElementById('cta_text').value.trim()   || 'Learn more';
+  const ctaUrl  = document.getElementById('cta_url').value.trim()    || 'yourwebsite.com';
+  const dur     = document.getElementById('duration').value;
+  const fps     = document.getElementById('fps').value;
+
+  const kps = [1,2,3,4]
+    .map(n => document.getElementById('kp'+n).value.trim())
+    .filter(Boolean);
+  if (!kps.length) kps.push('Key insight one','Key insight two','Key insight three');
+
+  const prim  = document.getElementById('c_primary').value || '#1e3a5f';
+  const acc   = document.getElementById('c_accent').value  || '#c0392b';
+  const light = document.getElementById('c_light').value   || '#f5f0eb';
+
+  const kpList = kps.map((k,i) => `${i+1}. ${k}`).join('\n');
+
+  const prompt =
+`Build me a ${dur}-second marketing video and export it as an MP4.
+
+BRAND: ${brand}
+WEBSITE / CTA URL: ${ctaUrl}
+
+VIDEO STRUCTURE — 3 scenes:
+
+Scene 1 — Intro (first ~${Math.round(dur*0.22)}s)
+Primary background colour: ${prim}
+Show the brand name "${brand}", then animate in the headline:
+"${title}"
+Tagline underneath: "${tagline}"
+
+Scene 2 — Key Points (middle ~${Math.round(dur*0.4)}s)
+Light background: ${light}
+Accent colour: ${acc}
+Animated bullet list — each point fades in one at a time:
+${kpList}
+
+Scene 3 — CTA (final ~${Math.round(dur*0.38)}s)
+Primary background: ${prim}
+Large text: "${ctaTxt}"
+URL underneath: ${ctaUrl}
+
+TECHNICAL SPECS:
+- Resolution: 1920×1080
+- Frame rate: ${fps}fps
+- Duration: ${dur} seconds (${parseInt(dur)*parseInt(fps)} total frames)
+- Output: H.264 MP4 via FFmpeg
+- Font: DM Serif Display for headlines, DM Sans for body text (download TTFs from Google Fonts and place in /tmp/fonts/)
+- Smooth crossfades between scenes (0.4s dissolve)
+- Easing on all animations (ease_out_cubic or ease_out_expo)
+
+Render the video, encode it, and save the final MP4 to my downloads folder.`;
+
+  window._prompt = prompt;
+  document.getElementById('code-out').textContent = prompt;
+  document.getElementById('out-wrap').classList.add('show');
+  document.getElementById('out-wrap').scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+function doCopy() {
+  if (!window._prompt) return;
+  navigator.clipboard.writeText(window._prompt).then(() => {
+    const b = document.querySelector('.btn-copy');
+    b.textContent = 'Copied!';
+    setTimeout(() => b.textContent = 'Copy prompt', 2000);
+  });
+}
+</script>
+
+</body>
+</html>
