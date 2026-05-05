@@ -286,7 +286,7 @@
     /* ── ARTICLES PAGE SPECIFIC ── */
     .kw-articles-list { display: flex; flex-direction: column; gap: 1rem; }
     .kw-article-card { background: #fff; border: 1.5px solid #151515; border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; gap: 0; transition: transform 0.18s, box-shadow 0.18s; }
-    .kw-article-card-img { width: 100%; height: 120px; display: block; background: #162d4a; flex-shrink: 0; }
+    .kw-article-card-img { width: 100%; height: 200px; display: block; background: #f8f8f8; flex-shrink: 0; overflow: hidden; }
     .kw-article-card-img svg { width: 100%; height: 100%; display: block; }
     .kw-article-card-body { padding: 1.5rem; display: flex; flex-direction: column; gap: 0.75rem; flex: 1; }
     .kw-article-card:hover { transform: translateY(-3px); box-shadow: 4px 4px 0 #151515; }
@@ -691,30 +691,26 @@
 
       <a href="articles/technical-ld-engineering.html?view=visual" class="kw-article-card">
         <div class="kw-article-card-img">
-          <svg viewBox="0 0 400 120" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
-            <rect width="400" height="120" fill="#162d4a"/>
-            <g opacity="0.06" stroke="#f5f0eb" stroke-width="0.5">
-              <line x1="0" y1="30" x2="400" y2="30"/><line x1="0" y1="60" x2="400" y2="60"/><line x1="0" y1="90" x2="400" y2="90"/>
-              <line x1="40" y1="0" x2="40" y2="120"/><line x1="80" y1="0" x2="80" y2="120"/><line x1="120" y1="0" x2="120" y2="120"/><line x1="160" y1="0" x2="160" y2="120"/><line x1="200" y1="0" x2="200" y2="120"/><line x1="240" y1="0" x2="240" y2="120"/><line x1="280" y1="0" x2="280" y2="120"/><line x1="320" y1="0" x2="320" y2="120"/><line x1="360" y1="0" x2="360" y2="120"/>
-            </g>
-            <rect x="10" y="18" width="155" height="75" rx="4" fill="#1e3a5f" stroke="#4a7aaa" stroke-width="0.75"/>
-            <text x="87" y="34" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="#4a7aaa">ENG TEAM</text>
-            <rect x="18" y="42" width="50" height="3.5" rx="1" fill="#c0392b" opacity="0.7"/>
-            <rect x="18" y="50" width="85" height="3.5" rx="1" fill="#4a7aaa" opacity="0.5"/>
-            <rect x="18" y="58" width="70" height="3.5" rx="1" fill="#4a7aaa" opacity="0.5"/>
-            <rect x="18" y="66" width="40" height="3.5" rx="1" fill="#c0392b" opacity="0.4"/>
-            <rect x="18" y="74" width="60" height="3.5" rx="1" fill="#4a7aaa" opacity="0.35"/>
-            <text x="200" y="55" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" fill="#c0392b" opacity="0.9">GAP</text>
-            <line x1="165" y1="60" x2="235" y2="60" stroke="#c0392b" stroke-width="1.2" stroke-dasharray="4 3" opacity="0.7"/>
-            <rect x="235" y="18" width="155" height="75" rx="4" fill="#1e3a5f" stroke="#4a7aaa" stroke-width="0.75"/>
-            <text x="312" y="34" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="#4a7aaa">L&amp;D TEAM</text>
-            <rect x="244" y="40" width="8" height="8" rx="1.5" fill="none" stroke="#f5f0eb" stroke-width="0.75" opacity="0.5"/>
-            <rect x="244" y="54" width="8" height="8" rx="1.5" fill="none" stroke="#f5f0eb" stroke-width="0.75" opacity="0.5"/>
-            <rect x="244" y="68" width="8" height="8" rx="1.5" fill="#4a7aaa" opacity="0.5"/>
-            <rect x="258" y="43" width="70" height="3" rx="1" fill="#f5f0eb" opacity="0.3"/>
-            <rect x="258" y="57" width="55" height="3" rx="1" fill="#f5f0eb" opacity="0.3"/>
-            <rect x="258" y="71" width="64" height="3" rx="1" fill="#f5f0eb" opacity="0.3"/>
-            <text x="200" y="111" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="rgba(245,240,235,0.3)">bridging the gap · technical l&amp;d in engineering orgs</text>
+          <!-- Technical L&D: 3-panel gap. Text anchored to center safe zone, panels extend to edges -->
+          <svg viewBox="0 0 1000 200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+            <!-- Left panel: black -->
+            <rect x="0" y="0" width="390" height="200" fill="#151515"/>
+            <text x="295" y="66" text-anchor="middle" font-family="'Figtree',Helvetica,sans-serif" font-size="12" font-weight="600" fill="#888" letter-spacing="3">ENGINEERING TEAM</text>
+            <text x="295" y="114" text-anchor="middle" font-family="'Outfit',Helvetica,sans-serif" font-size="40" font-weight="700" fill="#ffffff">NEEDS</text>
+            <rect x="205" y="140" width="160" height="9" rx="4.5" fill="#fbbf0e"/>
+            <rect x="205" y="157" width="120" height="9" rx="4.5" fill="#fbbf0e" opacity="0.55"/>
+            <rect x="205" y="174" width="140" height="9" rx="4.5" fill="#fbbf0e" opacity="0.35"/>
+            <!-- Center: yellow gap zone -->
+            <rect x="390" y="0" width="220" height="200" fill="#fbbf0e"/>
+            <text x="500" y="90" text-anchor="middle" font-family="'Outfit',Helvetica,sans-serif" font-size="58" font-weight="700" fill="#151515">≠</text>
+            <text x="500" y="133" text-anchor="middle" font-family="'Figtree',Helvetica,sans-serif" font-size="13" font-weight="700" fill="#151515" letter-spacing="4">GAP</text>
+            <!-- Right panel: light -->
+            <rect x="610" y="0" width="390" height="200" fill="#f0f0f0"/>
+            <text x="705" y="66" text-anchor="middle" font-family="'Figtree',Helvetica,sans-serif" font-size="12" font-weight="600" fill="#aaa" letter-spacing="3">L&amp;D TEAM</text>
+            <text x="705" y="114" text-anchor="middle" font-family="'Outfit',Helvetica,sans-serif" font-size="40" font-weight="700" fill="#cccccc">DELIVERS</text>
+            <rect x="640" y="140" width="90" height="9" rx="4.5" fill="#ccc"/>
+            <rect x="640" y="157" width="60" height="9" rx="4.5" fill="#ccc" opacity="0.7"/>
+            <rect x="640" y="174" width="40" height="9" rx="4.5" fill="#ccc" opacity="0.5"/>
           </svg>
         </div>
         <div class="kw-article-card-body">
@@ -730,40 +726,28 @@
 
       <a href="job-search-agent.html?view=visual" class="kw-article-card">
         <div class="kw-article-card-img">
-          <svg viewBox="0 0 400 120" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
-            <rect width="400" height="120" fill="#162d4a"/>
-            <circle cx="40" cy="18" r="1.5" fill="#f5f0eb" opacity="0.4"/>
-            <circle cx="130" cy="12" r="1" fill="#f5f0eb" opacity="0.35"/>
-            <circle cx="240" cy="16" r="1.8" fill="#f5f0eb" opacity="0.5"/>
-            <circle cx="340" cy="10" r="1.2" fill="#f5f0eb" opacity="0.3"/>
-            <circle cx="385" cy="20" r="1" fill="#f5f0eb" opacity="0.45"/>
-            <circle cx="180" cy="8" r="1.2" fill="#f5f0eb" opacity="0.3"/>
-            <circle cx="310" cy="22" r="0.8" fill="#f5f0eb" opacity="0.35"/>
-            <path d="M370 6 A14 14 0 1 0 370 34 A9 9 0 1 1 370 6" fill="#f5f0eb" opacity="0.1"/>
-            <!-- Node 1 -->
-            <rect x="10" y="42" width="72" height="34" rx="4" fill="#1e3a5f" stroke="#4a7aaa" stroke-width="0.75"/>
-            <text x="46" y="57" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7.5" fill="#f5f0eb" opacity="0.8">JOB</text>
-            <text x="46" y="68" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7.5" fill="#4a7aaa">BOARDS</text>
-            <!-- Arrow -->
-            <line x1="82" y1="59" x2="100" y2="59" stroke="#c0392b" stroke-width="1.5"/>
-            <polygon points="100,55.5 107,59 100,62.5" fill="#c0392b"/>
-            <!-- Node 2 -->
-            <rect x="107" y="42" width="72" height="34" rx="4" fill="#1e3a5f" stroke="#c0392b" stroke-width="1.2"/>
-            <text x="143" y="57" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7.5" fill="#f5f0eb" opacity="0.8">CLAUDE</text>
-            <text x="143" y="68" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7.5" fill="#c0392b">FILTER</text>
-            <!-- Arrow -->
-            <line x1="179" y1="59" x2="197" y2="59" stroke="#c0392b" stroke-width="1.5"/>
-            <polygon points="197,55.5 204,59 197,62.5" fill="#c0392b"/>
-            <!-- Node 3 -->
-            <rect x="204" y="42" width="72" height="34" rx="4" fill="#1e3a5f" stroke="#4a7aaa" stroke-width="0.75"/>
-            <text x="240" y="57" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7.5" fill="#f5f0eb" opacity="0.8">GMAIL</text>
-            <text x="240" y="68" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7.5" fill="#4a7aaa">INBOX</text>
-            <!-- Return path -->
-            <path d="M240 76 L240 96 L143 96 L143 76" stroke="#f5f0eb" stroke-width="1" stroke-dasharray="4 3" fill="none" opacity="0.3"/>
-            <!-- Result box -->
-            <rect x="87" y="88" width="112" height="22" rx="4" fill="#1e3a5f" stroke="#4a7aaa" stroke-width="0.6" opacity="0.9"/>
-            <text x="143" y="103" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="rgba(245,240,235,0.7)">07:30 AM digest</text>
-            <text x="320" y="103" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="rgba(245,240,235,0.3)">zero api keys · no scrapers</text>
+          <!-- Job Search Agent: 3-box pipeline. All content x=245–755 safe zone -->
+          <svg viewBox="0 0 1000 200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+            <rect width="1000" height="200" fill="#fbbf0e"/>
+            <!-- Box 1: Job Boards -->
+            <rect x="245" y="58" width="158" height="86" rx="12" fill="#151515"/>
+            <text x="324" y="101" text-anchor="middle" font-family="'Outfit',Helvetica,sans-serif" font-size="19" font-weight="700" fill="#ffffff">9 BOARDS</text>
+            <text x="324" y="124" text-anchor="middle" font-family="'Figtree',Helvetica,sans-serif" font-size="12" fill="rgba(255,255,255,0.45)">LinkedIn · Indeed +7</text>
+            <!-- Arrow 1 -->
+            <line x1="405" y1="101" x2="432" y2="101" stroke="#151515" stroke-width="3.5" stroke-linecap="round"/>
+            <polygon points="432,94 446,101 432,108" fill="#151515"/>
+            <!-- Box 2: Claude Filter (center, highlighted) -->
+            <rect x="446" y="46" width="108" height="110" rx="12" fill="#151515" stroke="#ffffff" stroke-width="3"/>
+            <text x="500" y="94" text-anchor="middle" font-family="'Outfit',Helvetica,sans-serif" font-size="17" font-weight="700" fill="#fbbf0e">CLAUDE</text>
+            <text x="500" y="116" text-anchor="middle" font-family="'Outfit',Helvetica,sans-serif" font-size="17" font-weight="700" fill="#ffffff">FILTER</text>
+            <text x="500" y="144" text-anchor="middle" font-family="'Figtree',Helvetica,sans-serif" font-size="11" fill="rgba(255,255,255,0.4)">5 smart filters</text>
+            <!-- Arrow 2 -->
+            <line x1="556" y1="101" x2="582" y2="101" stroke="#151515" stroke-width="3.5" stroke-linecap="round"/>
+            <polygon points="582,94 596,101 582,108" fill="#151515"/>
+            <!-- Box 3: Daily Digest -->
+            <rect x="596" y="58" width="158" height="86" rx="12" fill="#151515"/>
+            <text x="675" y="101" text-anchor="middle" font-family="'Outfit',Helvetica,sans-serif" font-size="19" font-weight="700" fill="#ffffff">DIGEST</text>
+            <text x="675" y="124" text-anchor="middle" font-family="'Figtree',Helvetica,sans-serif" font-size="12" fill="rgba(255,255,255,0.45)">09:00 AM · daily</text>
           </svg>
         </div>
         <div class="kw-article-card-body">
@@ -779,34 +763,25 @@
 
       <a href="articles/portfolio-rebuild.html?view=visual" class="kw-article-card">
         <div class="kw-article-card-img">
-          <svg viewBox="0 0 400 120" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
-            <rect width="400" height="120" fill="#162d4a"/>
-            <g opacity="0.06" stroke="#f5f0eb" stroke-width="0.5">
-              <line x1="0" y1="30" x2="400" y2="30"/><line x1="0" y1="60" x2="400" y2="60"/><line x1="0" y1="90" x2="400" y2="90"/>
-              <line x1="60" y1="0" x2="60" y2="120"/><line x1="120" y1="0" x2="120" y2="120"/><line x1="180" y1="0" x2="180" y2="120"/><line x1="240" y1="0" x2="240" y2="120"/><line x1="300" y1="0" x2="300" y2="120"/><line x1="360" y1="0" x2="360" y2="120"/>
-            </g>
-            <!-- Main branch -->
-            <line x1="60" y1="8" x2="60" y2="112" stroke="#4a7aaa" stroke-width="2"/>
-            <!-- Feature branch -->
-            <path d="M60 35 Q110 35 110 60 Q110 85 60 85" stroke="#c0392b" stroke-width="1.5" fill="none"/>
-            <!-- Commits main -->
-            <circle cx="60" cy="16" r="6" fill="#162d4a" stroke="#4a7aaa" stroke-width="2"/>
-            <circle cx="60" cy="35" r="6" fill="#162d4a" stroke="#c0392b" stroke-width="2"/>
-            <circle cx="60" cy="60" r="6" fill="#162d4a" stroke="#4a7aaa" stroke-width="2"/>
-            <circle cx="60" cy="85" r="7" fill="#c0392b" stroke="#c0392b" stroke-width="2"/>
-            <circle cx="60" cy="106" r="6" fill="#162d4a" stroke="#4a7aaa" stroke-width="2"/>
-            <!-- Commits branch -->
-            <circle cx="110" cy="47" r="5.5" fill="#162d4a" stroke="#c0392b" stroke-width="1.5"/>
-            <circle cx="110" cy="72" r="5.5" fill="#162d4a" stroke="#c0392b" stroke-width="1.5"/>
-            <!-- Hash labels -->
-            <text x="74" y="19" font-family="JetBrains Mono,monospace" font-size="7" fill="rgba(245,240,235,0.4)">a3f91c</text>
-            <text x="74" y="38" font-family="JetBrains Mono,monospace" font-size="7" fill="rgba(245,240,235,0.4)">c7b290</text>
-            <text x="74" y="63" font-family="JetBrains Mono,monospace" font-size="7" fill="rgba(245,240,235,0.4)">e2d841</text>
-            <!-- 200+ badge -->
-            <rect x="155" y="22" width="200" height="60" rx="6" fill="#1e3a5f" stroke="#4a7aaa" stroke-width="0.75"/>
-            <text x="255" y="56" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="34" font-weight="bold" fill="#c0392b">200+</text>
-            <text x="255" y="71" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8.5" fill="rgba(245,240,235,0.5)">commits · AI-assisted dev</text>
-            <text x="200" y="108" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="rgba(245,240,235,0.3)">portfolio rebuild · github · claude code</text>
+          <!-- Portfolio Rebuild: 200+ centered, git graph decorative. Safe zone x=250–750 -->
+          <svg viewBox="0 0 1000 200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+            <rect width="1000" height="200" fill="#151515"/>
+            <!-- Git branch: shifted right to stay in safe zone -->
+            <line x1="210" y1="15" x2="210" y2="185" stroke="#333" stroke-width="3"/>
+            <path d="M210 55 Q258 55 258 100 Q258 145 210 145" stroke="#3a3a3a" stroke-width="2" fill="none"/>
+            <circle cx="210" cy="28" r="7" fill="#151515" stroke="#444" stroke-width="2.5"/>
+            <circle cx="210" cy="55" r="7" fill="#151515" stroke="#fbbf0e" stroke-width="2.5"/>
+            <circle cx="210" cy="100" r="7" fill="#151515" stroke="#444" stroke-width="2.5"/>
+            <circle cx="210" cy="145" r="8" fill="#fbbf0e" stroke="#fbbf0e" stroke-width="2.5"/>
+            <circle cx="210" cy="172" r="7" fill="#151515" stroke="#444" stroke-width="2.5"/>
+            <circle cx="258" cy="72" r="6" fill="#151515" stroke="#3a3a3a" stroke-width="2"/>
+            <circle cx="258" cy="128" r="6" fill="#151515" stroke="#3a3a3a" stroke-width="2"/>
+            <text x="276" y="32" font-family="'JetBrains Mono',monospace" font-size="11" fill="#444">a3f91c</text>
+            <text x="276" y="59" font-family="'JetBrains Mono',monospace" font-size="11" fill="#666">c7b290</text>
+            <text x="276" y="104" font-family="'JetBrains Mono',monospace" font-size="11" fill="#444">e2d841</text>
+            <!-- Main stat: 200+ — centered at x=590 so it sits right of git graph -->
+            <text x="620" y="130" text-anchor="middle" font-family="'Outfit',Helvetica,sans-serif" font-size="108" font-weight="700" fill="#fbbf0e">200+</text>
+            <text x="620" y="168" text-anchor="middle" font-family="'Figtree',Helvetica,sans-serif" font-size="15" fill="rgba(255,255,255,0.35)" letter-spacing="3">commits · AI-assisted dev</text>
           </svg>
         </div>
         <div class="kw-article-card-body">
@@ -822,36 +797,30 @@
 
       <a href="articles/ai-voice-lms.html?view=visual" class="kw-article-card">
         <div class="kw-article-card-img">
-          <svg viewBox="0 0 400 120" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
-            <rect width="400" height="120" fill="#162d4a"/>
-            <g opacity="0.06" stroke="#f5f0eb" stroke-width="0.5">
-              <line x1="0" y1="30" x2="400" y2="30"/><line x1="0" y1="60" x2="400" y2="60"/><line x1="0" y1="90" x2="400" y2="90"/>
-              <line x1="50" y1="0" x2="50" y2="120"/><line x1="150" y1="0" x2="150" y2="120"/><line x1="200" y1="0" x2="200" y2="120"/><line x1="250" y1="0" x2="250" y2="120"/><line x1="350" y1="0" x2="350" y2="120"/>
-            </g>
-            <!-- LMS -->
-            <rect x="20" y="38" width="95" height="44" rx="3" fill="#1e3a5f" stroke="#4a7aaa" stroke-width="0.75"/>
-            <text x="67" y="55" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="#f5f0eb">ENTERPRISE LMS</text>
-            <text x="67" y="67" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="#4a7aaa">cmi.core.student_name</text>
-            <circle cx="115" cy="60" r="3" fill="#c0392b"/>
-            <line x1="118" y1="60" x2="135" y2="60" stroke="#c0392b" stroke-width="1.5"/>
-            <polygon points="135,57 140,60 135,63" fill="#c0392b"/>
-            <!-- JS -->
-            <rect x="140" y="28" width="90" height="64" rx="3" fill="#1e3a5f" stroke="#c0392b" stroke-width="1"/>
-            <text x="185" y="46" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="#f5f0eb">JS TRIGGER</text>
-            <rect x="150" y="52" width="30" height="3" rx="1" fill="#c0392b" opacity="0.5"/>
-            <rect x="150" y="59" width="55" height="3" rx="1" fill="#4a7aaa" opacity="0.5"/>
-            <rect x="150" y="66" width="45" height="3" rx="1" fill="#4a7aaa" opacity="0.5"/>
-            <rect x="150" y="73" width="25" height="3" rx="1" fill="#c0392b" opacity="0.35"/>
-            <circle cx="230" cy="60" r="3" fill="#c0392b"/>
-            <line x1="233" y1="60" x2="250" y2="60" stroke="#c0392b" stroke-width="1.5"/>
-            <polygon points="250,57 255,60 250,63" fill="#c0392b"/>
-            <!-- API -->
-            <rect x="255" y="38" width="95" height="44" rx="3" fill="#1e3a5f" stroke="#4a7aaa" stroke-width="0.75"/>
-            <text x="302" y="55" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="#f5f0eb">AI VOICE API</text>
-            <text x="302" y="67" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="#4a7aaa">→ audioFile URL</text>
-            <!-- return wave -->
-            <polyline points="145,100 152,90 159,108 166,95 173,104 180,92 187,100" stroke="#c0392b" stroke-width="1.5" fill="none" opacity="0.7"/>
-            <text x="210" y="104" font-family="JetBrains Mono,monospace" font-size="7.5" fill="rgba(245,240,235,0.5)">Hello, [First Name]</text>
+          <!-- AI Voice LMS: white bg, 3-box pipeline. All text x=260–740 safe zone -->
+          <svg viewBox="0 0 1000 200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+            <rect width="1000" height="200" fill="#ffffff"/>
+            <!-- LMS source box — shifted right vs original -->
+            <rect x="185" y="54" width="162" height="94" rx="12" fill="#151515"/>
+            <text x="266" y="97" text-anchor="middle" font-family="'Outfit',Helvetica,sans-serif" font-size="14" font-weight="700" fill="#fbbf0e">ENTERPRISE</text>
+            <text x="266" y="118" text-anchor="middle" font-family="'Outfit',Helvetica,sans-serif" font-size="14" font-weight="700" fill="#ffffff">LMS</text>
+            <text x="266" y="138" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="9.5" fill="rgba(255,255,255,0.35)">learner data</text>
+            <!-- Arrow 1 -->
+            <line x1="349" y1="101" x2="378" y2="101" stroke="#151515" stroke-width="3" stroke-linecap="round"/>
+            <polygon points="378,94 392,101 378,108" fill="#151515"/>
+            <!-- Central AI Voice box (yellow) -->
+            <rect x="392" y="40" width="216" height="122" rx="12" fill="#fbbf0e" stroke="#151515" stroke-width="2.5"/>
+            <text x="500" y="88" text-anchor="middle" font-family="'Outfit',Helvetica,sans-serif" font-size="17" font-weight="700" fill="#151515">AI VOICE</text>
+            <!-- Waveform centered in box -->
+            <polyline points="410,113 421,128 432,98 443,135 454,106 465,122 476,103 487,119 498,108 509,125 520,105 531,116 542,102 553,120 563,113" stroke="#151515" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+            <!-- Arrow 2 -->
+            <line x1="610" y1="101" x2="638" y2="101" stroke="#151515" stroke-width="3" stroke-linecap="round"/>
+            <polygon points="638,94 652,101 638,108" fill="#151515"/>
+            <!-- Output: personalized greeting — ends at x=812 -->
+            <rect x="652" y="44" width="160" height="114" rx="12" fill="#151515"/>
+            <polygon points="652,101 634,110 652,119" fill="#151515"/>
+            <text x="732" y="88" text-anchor="middle" font-family="'Outfit',Helvetica,sans-serif" font-size="15" font-weight="600" fill="rgba(255,255,255,0.45)">Hello,</text>
+            <text x="732" y="120" text-anchor="middle" font-family="'Outfit',Helvetica,sans-serif" font-size="24" font-weight="700" fill="#fbbf0e">Abhishek</text>
           </svg>
         </div>
         <div class="kw-article-card-body">
