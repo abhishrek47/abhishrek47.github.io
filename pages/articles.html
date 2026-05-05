@@ -141,6 +141,15 @@
     .articles-list { display: flex; flex-direction: column; gap: 0; }
     .coming-soon { padding: 2.5rem 0; display: flex; align-items: center; gap: 1rem; color: var(--muted); font-size: 0.85rem; border-bottom: 1px solid var(--border); }
     .coming-soon-line { flex: 1; height: 1px; background: var(--border); }
+    .article-row { display: flex; flex-direction: column; gap: 0.5rem; padding: 1.75rem 0; border-bottom: 1px solid var(--border); text-decoration: none; color: inherit; transition: opacity 0.2s; }
+    .article-row:hover { opacity: 0.75; }
+    .article-row-meta { display: flex; align-items: center; gap: 0.75rem; }
+    .article-row-tag { font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); background: rgba(192,57,43,0.1); padding: 0.18rem 0.55rem; border-radius: 3px; }
+    .article-row-date { font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--muted); }
+    .article-row h3 { font-family: 'Playfair Display', Georgia, serif; font-size: 1.2rem; font-weight: 700; line-height: 1.35; color: var(--text); margin: 0; }
+    .article-row p { font-size: 0.88rem; color: var(--muted); line-height: 1.65; margin: 0; }
+    .article-row-cta { font-size: 0.82rem; font-weight: 600; color: var(--accent); display: flex; align-items: center; gap: 0.35rem; }
+    .article-row-cta::after { content: '→'; }
     .newsletter-section { background: #1e3a5f; padding: 4rem 2.5rem; text-align: center; }
     .newsletter-inner { max-width: 520px; margin: 0 auto; }
     .newsletter-inner .section-label { justify-content: center; color: rgba(255,255,255,0.5); }
@@ -504,11 +513,37 @@
   </a>
 
   <div class="articles-list">
-    <div class="coming-soon">
-      <span class="coming-soon-line"></span>
-      <span style="white-space:nowrap; font-family: 'JetBrains Mono', monospace; font-size:0.72rem;">More articles coming</span>
-      <span class="coming-soon-line"></span>
-    </div>
+
+    <a href="https://www.linkedin.com/pulse/technical-ld-engineering-organizations-abhishek-trivedi-sswlf/" target="_blank" rel="noopener" class="article-row">
+      <div class="article-row-meta">
+        <span class="article-row-tag">L&D Strategy</span>
+        <span class="article-row-date">May 2026 · Issue #4</span>
+      </div>
+      <h3>Technical L&D in Engineering Organizations</h3>
+      <p>What engineering teams actually need from L&D — and what most teams deliver instead. The gap is wider than most L&D professionals want to admit.</p>
+      <span class="article-row-cta">Read on LinkedIn</span>
+    </a>
+
+    <a href="job-search-agent.html" class="article-row">
+      <div class="article-row-meta">
+        <span class="article-row-tag">AI Workflow</span>
+        <span class="article-row-date">Apr 2026 · Issue #3</span>
+      </div>
+      <h3>Your job search runs while you sleep</h3>
+      <p>How I built an autonomous job search agent using Claude Cowork — no Apify, no paid scrapers, no API keys. It searches job boards, filters roles, checks your Gmail, and emails you a digest every morning.</p>
+      <span class="article-row-cta">Read the build guide</span>
+    </a>
+
+    <a href="https://www.linkedin.com/pulse/i-rebuilt-my-portfolio-ai-200-commits-later-heres-what-trivedi-eqihf/" target="_blank" rel="noopener" class="article-row">
+      <div class="article-row-meta">
+        <span class="article-row-tag">Portfolio</span>
+        <span class="article-row-date">Apr 2026 · Issue #2</span>
+      </div>
+      <h3>I rebuilt my portfolio with AI. 200+ commits later, here's what I actually learned.</h3>
+      <p>How Claude Code, GitHub, and 15 years of L&D thinking turned a stale site into a live engineering showcase. What AI-assisted development actually looks like — not the marketing version.</p>
+      <span class="article-row-cta">Read on LinkedIn</span>
+    </a>
+
   </div>
 
 </main>
@@ -553,14 +588,35 @@
         <div class="kw-article-link">Read article →</div>
       </a>
 
-      <div class="kw-article-card" style="background:#fafafa;border-style:dashed;cursor:default;">
+      <a href="https://www.linkedin.com/pulse/technical-ld-engineering-organizations-abhishek-trivedi-sswlf/" target="_blank" rel="noopener" class="kw-article-card">
         <div class="kw-article-meta">
-          <span class="kw-article-tag" style="background:#e5e5e5;color:#888;border-color:#ccc;">Coming soon</span>
+          <div class="kw-article-date">May 2026 · Issue #4</div>
+          <span class="kw-article-tag">L&D Strategy</span>
         </div>
-        <h3 class="kw-article-title" style="color:#bbb;">More articles in progress</h3>
-        <p class="kw-article-desc" style="color:#bbb;">Every article is also published as a LinkedIn newsletter. Follow along there for the full conversation and early access.</p>
-        <a href="https://linkedin.com/in/trivedi-abhishek" target="_blank" rel="noopener" class="kw-article-link" style="color:#666;">Follow on LinkedIn ↗</a>
-      </div>
+        <h3 class="kw-article-title">Technical L&D in Engineering Organizations</h3>
+        <p class="kw-article-desc">What engineering teams actually need from L&D — and what most teams deliver instead. The gap is wider than most L&D professionals want to admit.</p>
+        <div class="kw-article-link">Read on LinkedIn →</div>
+      </a>
+
+      <a href="job-search-agent.html?view=visual" class="kw-article-card">
+        <div class="kw-article-meta">
+          <div class="kw-article-date">Apr 2026 · Issue #3</div>
+          <span class="kw-article-tag">AI Workflow</span>
+        </div>
+        <h3 class="kw-article-title">Your job search runs while you sleep</h3>
+        <p class="kw-article-desc">An autonomous job search agent built on Claude Cowork. No paid scrapers, no API subscriptions. Searches, filters, and emails you a digest every morning.</p>
+        <div class="kw-article-link">Read the build guide →</div>
+      </a>
+
+      <a href="https://www.linkedin.com/pulse/i-rebuilt-my-portfolio-ai-200-commits-later-heres-what-trivedi-eqihf/" target="_blank" rel="noopener" class="kw-article-card">
+        <div class="kw-article-meta">
+          <div class="kw-article-date">Apr 2026 · Issue #2</div>
+          <span class="kw-article-tag">Portfolio</span>
+        </div>
+        <h3 class="kw-article-title">I rebuilt my portfolio with AI. 200+ commits later, here's what I actually learned.</h3>
+        <p class="kw-article-desc">How Claude Code, GitHub, and 15 years of L&D thinking turned a stale portfolio into a live engineering showcase. The honest version of AI-assisted development.</p>
+        <div class="kw-article-link">Read on LinkedIn →</div>
+      </a>
     </div>
 
     <div class="kw-footer">
