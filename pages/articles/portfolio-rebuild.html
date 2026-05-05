@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script>var SHOW_UPDATE_BANNER = false;</script>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>I Rebuilt My Portfolio with AI. 200+ Commits Later, Here's What I Actually Learned. · Abhishek Trivedi</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Figtree:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,700;1,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <!-- Microsoft Clarity -->
+  <script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "vxtwcbqoas");
+  </script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-LY3GY2LH00"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-LY3GY2LH00');</script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #f5f0eb; --navy: #1e3a5f; --navy-dark: #162d4a; --text: #1a1a1a;
+      --muted: #888888; --accent: #c0392b; --accent-hover: #e74c3c;
+      --border: #e0d8d0; --serif: 'Playfair Display', Georgia, serif;
+      --sans: 'Inter', sans-serif; --mono: 'JetBrains Mono', monospace;
+    }
+    body { color: var(--text); line-height: 1.7; }
+    #view-editorial, #view-visual { display: none; }
+    #view-editorial.view-active, #view-visual.view-active { display: block; }
+
+    /* VIEW SWITCHER */
+    #view-switcher {
+      position: fixed; bottom: 2rem; right: 2rem; z-index: 900;
+      display: flex; background: #0f0f0f;
+      border: 1px solid rgba(255,255,255,0.12); border-radius: 100px;
+      padding: 4px; gap: 3px; box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    }
+    .vsw-btn {
+      font-family: var(--mono); font-size: 0.7rem; font-weight: 500;
+      letter-spacing: 0.06em; text-transform: uppercase; color: rgba(255,255,255,0.4);
+      background: none; border: none; border-radius: 100px; padding: 0.45rem 1rem;
+      cursor: pointer; transition: all 0.2s; position: relative; overflow: hidden;
+    }
+    .vsw-btn:hover:not(.vsw-active) { color: rgba(255,255,255,0.75); }
+    #btn-editorial.vsw-active { background: #c84b2f; color: #fff; font-weight: 700; }
+    #btn-visual.vsw-active { background: #7c3aed; color: #fff; font-weight: 700; }
+    html[data-at-style] #view-switcher { display: none !important; }
+    html[data-at-style="visual"] #view-editorial { display: none !important; }
+    html[data-at-style="visual"] #view-visual { display: block !important; }
+    html[data-at-style="visual"] #td-nav { display: flex !important; }
+
+    /* YELLOW NAV */
+    #td-nav {
+      position: sticky; top: 0; z-index: 200; background: #fbbf0e;
+      border-bottom: 1.5px solid #151515; display: none;
+      align-items: center; justify-content: space-between;
+      padding: 0 2.5rem; height: 58px; gap: 2rem;
+    }
+    #td-nav .n-logo { font-family: 'Outfit', sans-serif; font-size: 1rem; font-weight: 700; color: #151515; text-decoration: none; }
+    #td-nav .n-links { display: flex; gap: 0.35rem; list-style: none; align-items: center; padding: 0; margin: 0; }
+    #td-nav .n-links a { font-family: 'Outfit', sans-serif; font-size: 0.9rem; font-weight: 400; color: #151515; text-decoration: none; padding: 0.5rem 0.85rem; border: 1.5px solid #151515; border-radius: 8px; background: #fff; box-shadow: rgba(0,0,0,0.15) 3px 3px 0 0; transition: box-shadow 0.12s, transform 0.12s; }
+    #td-nav .n-links a:hover { box-shadow: rgba(0,0,0,0.18) 2px 2px 0 0; transform: translate(1px,1px); }
+    #td-nav .n-links a.kw-active { background: #151515; color: #fbbf0e; box-shadow: none; }
+    #td-nav .n-ham { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; padding: 4px; }
+    #td-nav .n-ham span { display: block; width: 22px; height: 2px; background: #151515; border-radius: 2px; }
+    #td-drawer { display: none; position: fixed; top: 58px; left: 0; right: 0; background: #fbbf0e; border-bottom: 1.5px solid #151515; padding: 1rem 1.5rem; flex-direction: column; gap: 0.5rem; list-style: none; z-index: 199; margin: 0; }
+    #td-drawer.open { display: flex; }
+    #td-drawer a { font-family: 'Figtree', sans-serif; font-size: 0.9rem; font-weight: 500; color: #151515; text-decoration: none; padding: 0.55rem 0; border-bottom: 1px solid rgba(21,21,21,0.15); }
+
+    /* KW PAGE */
+    #view-visual { background: linear-gradient(to bottom, #fef9e7 0%, #ffffff 60%); min-height: 100vh; }
+    .kw-page { max-width: 1140px; margin: 0 auto; padding: 2.5rem 2rem; display: flex; flex-direction: column; gap: 1.75rem; }
+    .kw-page-hero { padding: 2.5rem; background: #fff; border: 1.5px solid #151515; border-radius: 16px; }
+    .kw-page-title { font-family: 'Outfit',sans-serif; font-size: clamp(1.6rem,3.5vw,2.5rem); font-weight: 700; color: #151515; margin: 0 0 1rem; letter-spacing: -0.025em; line-height: 1.2; }
+    .kw-page-sub { font-family: 'Figtree',sans-serif; font-size: 0.97rem; line-height: 1.7; color: #444; margin: 0; max-width: 640px; }
+    .kw-tag { display: inline-flex; align-items: center; font-family: 'Figtree',sans-serif; font-size: 0.76rem; font-weight: 600; padding: 0.35rem 0.85rem; border: 1.5px solid #151515; border-radius: 6px; line-height: 1; white-space: nowrap; }
+    .kw-tag--yellow { background: #fbbf0e; color: #151515; }
+    .kw-tag--green { background: #bbf7d0; color: #151515; }
+    .kw-tag--pill { border-radius: 100px; }
+    .kw-btn { font-family: 'Figtree',sans-serif; font-size: 0.88rem; font-weight: 600; padding: 0.65rem 1.5rem; border-radius: 100px; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 0.4rem; transition: transform 0.15s, box-shadow 0.15s; border: 1.5px solid #151515; }
+    .kw-btn:hover { transform: translateY(-2px); box-shadow: 3px 3px 0 #151515; }
+    .kw-btn--dark { background: #151515; color: #fbbf0e; }
+    .kw-btn--outline { background: #fff; color: #151515; }
+    .kw-footer { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; padding: 1.5rem 0 2.5rem; border-top: 1.5px solid rgba(21,21,21,0.2); margin-top: 0.5rem; }
+    .kw-footer-copy { font-family: 'Figtree',sans-serif; font-size: 0.78rem; color: #888; }
+    .kw-footer-links { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    .kw-footer-link { font-family: 'Figtree',sans-serif; font-size: 0.78rem; font-weight: 500; color: #151515; text-decoration: none; padding: 0.35rem 1rem; border: 1.5px solid #151515; border-radius: 100px; transition: background 0.15s; }
+    .kw-footer-link:hover { background: #fbbf0e; }
+    .kw-back-link { font-family:'Figtree',sans-serif;font-size:0.82rem;color:#666;text-decoration:none;display:inline-flex;align-items:center;gap:0.4rem;margin-bottom:1.5rem;transition:color 0.15s; }
+    .kw-back-link:hover { color:#151515; }
+    .kw-article-meta { display:flex;flex-wrap:wrap;gap:0.5rem;margin-bottom:1rem; }
+    .kw-card { background:#fff;border:1.5px solid #151515;border-radius:16px;padding:1.5rem; }
+    .kw-card-title { font-family:'Outfit',sans-serif;font-size:1rem;font-weight:700;color:#151515;margin:0 0 1rem; }
+    .kw-stat-grid { display:grid;grid-template-columns:repeat(3,1fr);gap:1rem; }
+    .kw-stat { background:#fff;border:1.5px solid #151515;border-radius:16px;padding:1.25rem;text-align:center; }
+    .kw-stat-num { font-family:'Outfit',sans-serif;font-size:2.2rem;font-weight:700;color:#c0392b;line-height:1;margin-bottom:0.25rem; }
+    .kw-stat-label { font-family:'Figtree',sans-serif;font-size:0.75rem;color:#666;line-height:1.4; }
+    .kw-lessons-list { display:flex;flex-direction:column;gap:1rem; }
+    .kw-lesson { background:#fff;border:1.5px solid #151515;border-radius:16px;padding:1.25rem;display:flex;gap:1rem;align-items:flex-start; }
+    .kw-lesson-num { font-family:'Outfit',sans-serif;font-size:1.8rem;font-weight:700;color:#e5e5e5;line-height:1;flex-shrink:0; }
+    .kw-lesson-title { font-family:'Outfit',sans-serif;font-size:0.95rem;font-weight:700;color:#151515;margin:0 0 0.4rem; }
+    .kw-lesson-desc { font-family:'Figtree',sans-serif;font-size:0.83rem;color:#555;line-height:1.6;margin:0; }
+    .kw-lesson-tag { font-family:'Figtree',sans-serif;font-size:0.72rem;font-weight:600;background:#fbbf0e;color:#151515;padding:0.2rem 0.6rem;border-radius:4px;display:inline-block;margin-top:0.5rem; }
+    .kw-cta-strip { display:flex;align-items:center;justify-content:space-between;padding:2.5rem;gap:2rem;flex-wrap:wrap;background:#fbbf0e;border:1.5px solid #151515;border-radius:16px; }
+    .kw-cta-strip-headline { font-family:'Outfit',sans-serif;font-size:clamp(1.4rem,2.5vw,2rem);font-weight:700;color:#151515;margin:0;letter-spacing:-0.02em;line-height:1.25; }
+    @media(max-width:900px){#td-nav .n-links{display:none}#td-nav .n-ham{display:flex}}
+    @media(max-width:600px){.kw-stat-grid{grid-template-columns:1fr 1fr}.kw-page{padding:1.25rem 1rem}.kw-page-hero{padding:1.5rem}.kw-cta-strip{padding:1.5rem;flex-direction:column}}
+
+    /* EDITORIAL */
+    #view-editorial { background: var(--bg); }
+    #view-editorial nav {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.25rem 2.5rem; background: var(--bg); border-bottom: 1px solid var(--border);
+      position: sticky; top: 0; z-index: 100;
+    }
+    #view-editorial .nav-logo { font-family: var(--mono); font-weight: 500; font-size: 1.1rem; color: var(--text); text-decoration: none; }
+    #view-editorial .nav-logo span { color: var(--accent); }
+    #view-editorial .nav-links { display: flex; align-items: center; gap: 1.75rem; list-style: none; }
+    #view-editorial .nav-links a { font-size: 0.85rem; color: var(--text); text-decoration: none; font-weight: 500; transition: color 0.2s; }
+    #view-editorial .nav-links a:hover { color: var(--accent); }
+    #view-editorial .nav-links a.active { background: #1a1a18; color: #f5f0e8 !important; padding: 0.2em 0.7em; border-radius: 4px; }
+    #view-editorial .nav-cta { background: var(--accent) !important; color: #fff !important; padding: 0.4rem 1rem; border-radius: 4px; font-size: 0.8rem !important; }
+    #view-editorial .article-hero { background: var(--navy); padding: 4rem 2.5rem 3rem; }
+    #view-editorial .article-hero-inner { max-width: 760px; margin: 0 auto; }
+    #view-editorial .back-link { display: inline-flex; align-items: center; gap: 0.4rem; font-family: var(--mono); font-size: 0.78rem; color: rgba(255,255,255,0.45); text-decoration: none; margin-bottom: 2rem; transition: color 0.2s; }
+    #view-editorial .back-link:hover { color: rgba(255,255,255,0.8); }
+    #view-editorial .article-meta { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+    #view-editorial .article-tag { font-family: var(--mono); font-size: 0.7rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); background: rgba(192,57,43,0.2); padding: 0.2rem 0.6rem; border-radius: 3px; }
+    #view-editorial .article-date { font-size: 0.78rem; color: rgba(255,255,255,0.35); font-family: var(--mono); }
+    #view-editorial .article-hero h1 { font-family: var(--serif); font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 700; line-height: 1.2; color: #fff; margin-bottom: 1.25rem; }
+    #view-editorial .article-hero p.lead { font-size: 1.05rem; color: rgba(255,255,255,0.6); max-width: 620px; line-height: 1.75; }
+    #view-editorial .hero-image-block { background: var(--navy-dark); border-bottom: 3px solid var(--accent); }
+    #view-editorial .hero-image-block svg { display: block; }
+    #view-editorial .article-body { max-width: 680px; margin: 0 auto; padding: 3.5rem 2.5rem 6rem; font-family: var(--sans); }
+    #view-editorial .article-body h2 { font-family: var(--serif); font-size: 1.6rem; font-weight: 700; color: var(--text); margin: 3rem 0 1rem; line-height: 1.3; }
+    #view-editorial .article-body h3 { font-family: var(--sans); font-size: 1rem; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: var(--accent); margin: 2.5rem 0 0.75rem; }
+    #view-editorial .article-body p { margin-bottom: 1.25rem; font-size: 1rem; line-height: 1.8; color: var(--text); }
+    #view-editorial .article-body strong { font-weight: 600; }
+    #view-editorial .article-body ul, #view-editorial .article-body ol { padding-left: 1.5rem; margin-bottom: 1.25rem; line-height: 2; }
+    #view-editorial .article-body li { margin-bottom: 0.5rem; }
+    #view-editorial .article-body pre { background: var(--navy-dark); border-radius: 8px; padding: 1.5rem; margin: 1.5rem 0; overflow-x: auto; border-left: 3px solid var(--accent); }
+    #view-editorial .article-body code { font-family: var(--mono); font-size: 0.82rem; color: #f5f0eb; line-height: 1.7; }
+    #view-editorial .article-body p code { background: rgba(30,58,95,0.12); padding: 0.1em 0.4em; border-radius: 3px; font-size: 0.85em; color: var(--navy); }
+    #view-editorial .callout { background: rgba(30,58,95,0.07); border-left: 3px solid var(--navy); padding: 1.25rem 1.5rem; border-radius: 0 6px 6px 0; margin: 1.5rem 0; }
+    #view-editorial .callout-accent { background: rgba(192,57,43,0.07); border-left: 3px solid var(--accent); }
+    #view-editorial .callout-green { background: rgba(45,122,45,0.07); border-left: 3px solid #2d7a2d; }
+    #view-editorial .callout p { margin: 0; font-size: 0.95rem; }
+    #view-editorial .callout strong { color: var(--accent); }
+    #view-editorial .callout-green strong { color: #2d7a2d; }
+    #view-editorial .article-divider { border: none; border-top: 1px solid var(--border); margin: 3rem 0; }
+    #view-editorial footer { background: var(--bg); border-top: 1px solid var(--border); padding: 1.5rem 2.5rem; display: flex; align-items: center; justify-content: space-between; font-size: 0.8rem; color: var(--muted); }
+    #view-editorial footer a { color: var(--muted); text-decoration: none; }
+    #view-editorial footer a:hover { color: var(--accent); }
+    #view-editorial .footer-links { display: flex; gap: 1.5rem; }
+    @media(max-width:600px){ #view-editorial .article-hero { padding: 2.5rem 1.25rem 2rem; } #view-editorial .article-body { padding: 2rem 1.25rem 4rem; } #view-editorial nav { padding: 1rem 1.25rem; } }
+  </style>
+  <script src="/js/wip.js"></script>
+  <link rel="stylesheet" href="/css/nav-editorial.css">
+</head>
+<body>
+<script>(function(){try{var s=sessionStorage.getItem('at-style-choice');if(s){document.documentElement.setAttribute('data-at-style',s);}}catch(e){}})()</script>
+
+<!-- YELLOW NAV -->
+<nav id="td-nav">
+  <a href="../../index.html" class="n-logo">AT.</a>
+  <ul class="n-links">
+    <li><a href="../work.html?view=visual">Work</a></li>
+    <li><a href="../about.html?view=visual">About</a></li>
+    <li><a href="../certifications.html?view=visual">Certifications</a></li>
+    <li><a href="../articles.html?view=visual" class="kw-active">Articles</a></li>
+    <li><a href="../../id-frameworks.html?view=visual">ID Cheat Sheet</a></li>
+    <li><a href="../contact.html?view=visual" class="n-cta kw-active">Let's Talk</a></li>
+  </ul>
+  <button class="n-ham" id="td-ham" aria-label="Menu"><span></span><span></span><span></span></button>
+</nav>
+<ul id="td-drawer">
+  <li><a href="../work.html?view=visual">Work</a></li>
+  <li><a href="../about.html?view=visual">About</a></li>
+  <li><a href="../articles.html?view=visual">Articles</a></li>
+  <li><a href="../contact.html?view=visual">Let's Talk</a></li>
+</ul>
+
+<!-- EDITORIAL VIEW -->
+<div id="view-editorial" class="view-active">
+
+<nav id="at-nav">
+  <a href="/index.html" class="nav-logo">AT<span>.</span></a>
+  <button class="hamburger" id="at-ham" aria-label="Menu"><span></span><span></span><span></span></button>
+  <ul class="nav-links" id="at-nav-links">
+    <li><a href="/pages/work.html">Work</a></li>
+    <li><a href="/pages/about.html">About</a></li>
+    <li><a href="/pages/certifications.html">Certifications</a></li>
+    <li><a href="/pages/articles.html" class="active">Articles</a></li>
+    <li><a href="/id-frameworks.html">ID Cheat Sheet</a></li>
+    <li><a href="/pages/contact.html" class="nav-cta">Let's Talk</a></li>
+  </ul>
+</nav>
+
+<div class="article-hero">
+  <div class="article-hero-inner">
+    <a href="../articles.html" class="back-link">← Back to Articles</a>
+    <div class="article-meta">
+      <span class="article-tag">Portfolio</span>
+      <span class="article-tag">AI-Assisted Dev</span>
+      <span class="article-date">April 2026 · Issue #2</span>
+    </div>
+    <h1>I rebuilt my portfolio with AI. 200+ commits later, here's what I actually learned.</h1>
+    <p class="lead">How Claude Code, GitHub, and 15 years of L&D thinking turned a stale site into a live engineering showcase. What AI-assisted development actually looks like — not the marketing version.</p>
+  </div>
+</div>
+
+<div class="hero-image-block">
+  <svg width="100%" viewBox="0 0 900 240" xmlns="http://www.w3.org/2000/svg">
+    <rect width="900" height="240" fill="#162d4a"/>
+    <g opacity="0.06" stroke="#f5f0eb" stroke-width="0.5">
+      <line x1="0" y1="40" x2="900" y2="40"/><line x1="0" y1="80" x2="900" y2="80"/>
+      <line x1="0" y1="120" x2="900" y2="120"/><line x1="0" y1="160" x2="900" y2="160"/>
+      <line x1="0" y1="200" x2="900" y2="200"/>
+      <line x1="90" y1="0" x2="90" y2="240"/><line x1="180" y1="0" x2="180" y2="240"/>
+      <line x1="270" y1="0" x2="270" y2="240"/><line x1="360" y1="0" x2="360" y2="240"/>
+      <line x1="450" y1="0" x2="450" y2="240"/><line x1="540" y1="0" x2="540" y2="240"/>
+      <line x1="630" y1="0" x2="630" y2="240"/><line x1="720" y1="0" x2="720" y2="240"/>
+      <line x1="810" y1="0" x2="810" y2="240"/>
+    </g>
+    <!-- Git graph: main branch -->
+    <line x1="80" y1="20" x2="80" y2="220" stroke="#4a7aaa" stroke-width="2.5"/>
+    <!-- Feature branches -->
+    <path d="M80 60 Q140 60 140 100 Q140 140 80 140" stroke="#c0392b" stroke-width="1.5" fill="none"/>
+    <path d="M80 100 Q200 100 200 140 Q200 180 80 180" stroke="#4a7aaa" stroke-width="1" fill="none" opacity="0.5"/>
+    <!-- Main commits -->
+    <circle cx="80" cy="30" r="7" fill="#162d4a" stroke="#4a7aaa" stroke-width="2"/>
+    <circle cx="80" cy="60" r="7" fill="#162d4a" stroke="#c0392b" stroke-width="2.5"/>
+    <circle cx="80" cy="100" r="7" fill="#162d4a" stroke="#4a7aaa" stroke-width="2"/>
+    <circle cx="80" cy="140" r="9" fill="#c0392b" stroke="#c0392b" stroke-width="2"/>
+    <circle cx="80" cy="180" r="7" fill="#162d4a" stroke="#4a7aaa" stroke-width="2"/>
+    <circle cx="80" cy="210" r="7" fill="#162d4a" stroke="#4a7aaa" stroke-width="2"/>
+    <!-- Branch commits -->
+    <circle cx="140" cy="80" r="6" fill="#162d4a" stroke="#c0392b" stroke-width="2"/>
+    <circle cx="140" cy="120" r="6" fill="#162d4a" stroke="#c0392b" stroke-width="2"/>
+    <circle cx="200" cy="120" r="5" fill="#162d4a" stroke="#4a7aaa" stroke-width="1.5" opacity="0.6"/>
+    <circle cx="200" cy="160" r="5" fill="#162d4a" stroke="#4a7aaa" stroke-width="1.5" opacity="0.6"/>
+    <!-- Hash labels -->
+    <text x="100" y="33" font-family="JetBrains Mono,monospace" font-size="8" fill="rgba(245,240,235,0.4)">feat: nav</text>
+    <text x="100" y="63" font-family="JetBrains Mono,monospace" font-size="8" fill="rgba(245,240,235,0.5)">feat: articles page</text>
+    <text x="100" y="103" font-family="JetBrains Mono,monospace" font-size="8" fill="rgba(245,240,235,0.4)">fix: mobile layout</text>
+    <text x="100" y="143" font-family="JetBrains Mono,monospace" font-size="8" fill="rgba(245,240,235,0.6)">feat: dual-view system</text>
+    <text x="100" y="183" font-family="JetBrains Mono,monospace" font-size="8" fill="rgba(245,240,235,0.4)">chore: analytics</text>
+    <!-- 200+ badge -->
+    <rect x="320" y="60" width="220" height="100" rx="6" fill="#1e3a5f" stroke="#4a7aaa" stroke-width="0.75"/>
+    <text x="430" y="110" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="42" font-weight="bold" fill="#c0392b">200+</text>
+    <text x="430" y="132" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" fill="rgba(245,240,235,0.5)">commits · AI-assisted</text>
+    <!-- Before/After labels -->
+    <rect x="580" y="50" width="140" height="50" rx="4" fill="rgba(30,58,95,0.4)" stroke="#4a7aaa" stroke-width="0.75"/>
+    <text x="650" y="70" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="rgba(245,240,235,0.5)">BEFORE</text>
+    <text x="650" y="84" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="rgba(245,240,235,0.35)">static CV · no updates</text>
+    <rect x="580" y="120" width="140" height="50" rx="4" fill="#1e3a5f" stroke="#c0392b" stroke-width="1"/>
+    <text x="650" y="140" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="#c0392b">AFTER</text>
+    <text x="650" y="154" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="rgba(245,240,235,0.5)">live engineering showcase</text>
+    <line x1="650" y1="100" x2="650" y2="120" stroke="#c0392b" stroke-width="1.5"/>
+    <polygon points="646,118 650,124 654,118" fill="#c0392b"/>
+    <!-- Bottom label -->
+    <text x="450" y="222" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="rgba(245,240,235,0.3)">github · claude code · 15 years of l&amp;d thinking</text>
+  </svg>
+</div>
+
+<article class="article-body">
+
+  <p>My portfolio had been quietly embarrassing me for a while. It was a static site — the kind of thing you build once, feel proud of for three months, then let drift. The work section hadn't been updated in over a year. The design was fine in a "template I found once" way. And there was nothing on it that showed how I actually think.</p>
+  <p>I'd been helping organisations build technical learning systems for 15 years. The portfolio didn't reflect any of that. It was a work history with some project thumbnails. A CV with a domain name.</p>
+  <p>So I rebuilt it — from scratch, using AI as a real collaborator, not as a shortcut. Two hundred commits later, this is what that actually looked like.</p>
+
+  <h2>Why from scratch, and why AI</h2>
+  <p>I could have picked a template and swapped in content. That would have taken a weekend. But I wanted to understand what I was building — every layout decision, every component, every line of JavaScript. I've spent years telling clients that understanding the architecture of your learning technology matters. I figured the same principle applied here.</p>
+  <p>Using Claude Code as a collaborator wasn't about generating a site. It was about having a thinking partner who could hold technical context while I focused on design and content decisions. I directed the work. The AI handled the implementation speed. The combination let me build something more ambitious than I'd attempt alone in the time I had available.</p>
+
+  <h2>What 200+ commits actually represents</h2>
+  <p>The number sounds impressive. It's also slightly misleading. Let me break down what's inside it:</p>
+
+  <h3>The real commits</h3>
+  <p>Probably 40% of those commits are genuine feature work — building the dual editorial/visual view system, the articles infrastructure, the newsletter integration, the contact form, the Storyline 360 demo pages. Things that required actual design thinking and back-and-forth iteration.</p>
+
+  <h3>The fix commits</h3>
+  <p>Around 30% are fixes. Mobile layout breaking on specific viewports. A Google Analytics tag in the wrong place. A hover state that looked wrong in Safari. Navigation that worked on desktop but collapsed oddly at 768px. These aren't embarrassing — they're just what happens when you're testing against real browsers and real screen sizes instead of a localhost preview.</p>
+
+  <div class="callout callout-accent">
+    <p><strong>The lesson I didn't expect:</strong> AI writes code faster than you can test it. The bottleneck isn't generation — it's verification. Every feature that took 10 minutes to generate took 30 minutes to test properly across devices and edge cases.</p>
+  </div>
+
+  <h3>The exploration commits</h3>
+  <p>Maybe 30% are exploratory — directions I took, lived with for a day, and then backed away from. A sidebar navigation that made sense architecturally but felt wrong visually. A colour scheme I liked at 11pm that I didn't like at 9am. A JavaScript approach that worked but that I couldn't explain clearly, so I replaced it with something I could.</p>
+  <p>These commits are not wasted work. They're how I understood what I actually wanted.</p>
+
+  <h2>What AI-assisted development actually looks like</h2>
+  <p>The marketing version: you describe what you want, the AI builds it, you ship it.</p>
+  <p>The real version is more interesting and more effortful than that.</p>
+
+  <h3>Context is the actual work</h3>
+  <p>The quality of what AI builds is directly proportional to the quality of context you provide. That means before every session I needed to know — precisely — what I was trying to build, what constraints existed, and what decisions had already been made. Vague prompts produce technically valid but architecturally inconsistent code. I learned this the hard way around commit 40.</p>
+  <p>Maintaining that context across sessions is its own skill. I started keeping a running document of design decisions — not for the AI, but for myself. What pattern am I using for this? Why did I choose this CSS variable structure? What's the rule for when something goes in the editorial view vs the visual view? Without that, the AI would give me reasonable answers that contradicted decisions I'd made two weeks earlier.</p>
+
+  <h3>You still need to understand the code</h3>
+  <p>I can't stress this enough. If you don't understand what's been generated, you cannot debug it when it breaks. And it will break — in the specific, unpredictable ways that real browser environments surface.</p>
+  <p>There were moments where I asked for something, got a solution that looked right, shipped it, and then watched it fail in a specific browser or at a specific screen size. Understanding what the code was doing — even at a surface level — meant I could describe the failure accurately enough to get a real fix rather than a patch that introduced a new problem.</p>
+
+  <div class="callout">
+    <p>The engineers I've worked with for 15 years would recognise this pattern immediately. AI is a very capable junior developer. It writes fast, it doesn't get tired, and it has broad knowledge. But it needs direction, review, and someone who understands the system well enough to catch what it gets wrong.</p>
+  </div>
+
+  <h3>The hallucination problem in front-end work</h3>
+  <p>Language model hallucinations in code tend to be subtle and plausible. Not nonsense — plausible approaches that are slightly wrong for your specific context. A CSS property that works in one browser but not another. A JavaScript method that exists but doesn't behave as described for edge cases. An API pattern that was deprecated in the version you're actually using.</p>
+  <p>The filter for this is always: test it. Not just in the preview. In the real environment, on mobile, in Safari, with a slow connection. Hallucinations that survive that filter don't matter. The ones that don't survive are your problem to catch, and you can only catch them if you're actually testing.</p>
+
+  <h2>What I built that I'm actually proud of</h2>
+
+  <h3>The dual-view system</h3>
+  <p>Every page on the site exists in two forms — an editorial view (dark navy hero, linen body, serif typography) and a visual view (inspired by the kawe.ski design system, bright and bold). A fixed pill switcher in the corner lets you move between them. Session storage remembers your preference across pages.</p>
+  <p>This wasn't a vanity feature. It's a demonstration of a real capability — understanding that the same content can serve different audience expectations, and building a system that handles both without duplicating the content. That's an instructional design principle applied to a portfolio. I wanted recruiters who care about aesthetics to see the visual view. I wanted engineers and L&D practitioners to see the editorial.</p>
+
+  <h3>The articles infrastructure</h3>
+  <p>This newsletter you're reading exists as a proper editorial system now — not just LinkedIn posts, but dedicated article pages with full content, code blocks, SVG diagrams, and callout boxes. Each article is also mirrored in the visual view. It took longer to build than I expected and is more useful than I expected.</p>
+
+  <h3>The Storyline 360 demo toolkit</h3>
+  <p>Eight interactive demos, each documented with a dedicated case study. Custom notepad component, theme switcher, progress bar, video compliance tracker, speech-to-text, guided tour, PDF certificate generator, zoom and pan. Built inside the portfolio itself, not as separate links to external platforms.</p>
+
+  <hr class="article-divider"/>
+
+  <h2>What I'd do differently</h2>
+  <p>Start with the content, not the design. I spent early sessions on visual decisions that changed three times because I hadn't yet decided what the site was actually for. If I'd spent the first two weeks writing all the case studies and articles, the design work would have been faster and more decisive.</p>
+  <p>Commit smaller. Many of my "fix" commits are patching things that a smaller, more focused original commit would have caught earlier. The discipline of small, atomic commits isn't just a Git hygiene thing — it's a thinking tool. It forces you to finish one thing before starting another.</p>
+  <p>Test earlier on mobile. I left mobile testing too late twice, and both times it required reworking decisions I'd already made. Mobile-first isn't just a responsive design principle — it's a constraint that clarifies design decisions before you've overcommitted to desktop assumptions.</p>
+
+  <h2>What 15 years of L&D actually added</h2>
+  <p>Here's the thing I didn't expect: domain expertise is a significant advantage in AI-assisted development. Not because AI knows less about code — it knows more. But because knowing what you're building, who it's for, and what it needs to communicate gives you the judgment to direct the work well and to reject output that's technically correct but wrong for the context.</p>
+  <p>Every decision about information architecture — what goes where, how navigation should work, what a case study needs to contain — was faster and more confident because of 15 years of thinking about how people process information. The AI could implement. I knew what to implement.</p>
+
+  <hr class="article-divider"/>
+  <p style="color:var(--muted);font-style:italic;font-size:0.9rem;">If you're thinking about rebuilding your portfolio and wondering whether to use AI for it — the answer is probably yes, but not in the way the demos make it look. Happy to talk through how I approached it: <a href="https://linkedin.com/in/trivedi-abhishek" style="color:var(--accent);">connect on LinkedIn</a>.</p>
+
+</article>
+
+<footer>
+  <span>© 2026 Abhishek Trivedi · Learning Experience Technologist</span>
+  <div class="footer-links">
+    <a href="https://linkedin.com/in/trivedi-abhishek" target="_blank">LinkedIn</a>
+    <a href="../../index.html#contact">Contact</a>
+    <a href="../articles.html">Articles</a>
+  </div>
+</footer>
+
+</div>
+
+<!-- VISUAL VIEW -->
+<div id="view-visual">
+  <div class="kw-page">
+    <div class="kw-page-hero">
+      <a href="../articles.html?view=visual" class="kw-back-link">← Back to Articles</a>
+      <div class="kw-article-meta">
+        <span class="kw-tag kw-tag--yellow">Portfolio</span>
+        <span class="kw-tag kw-tag--green">AI-Assisted Dev</span>
+        <span style="font-family:'Figtree',sans-serif;font-size:0.78rem;color:#888;align-self:center;">April 2026 · Issue #2</span>
+      </div>
+      <h1 class="kw-page-title">I rebuilt my portfolio with AI. 200+ commits later, here's what I actually learned.</h1>
+      <p class="kw-page-sub">What Claude Code, GitHub, and 15 years of L&D thinking actually looks like when combined. Not the marketing version of AI-assisted development — the real one.</p>
+    </div>
+
+    <!-- Stats -->
+    <div class="kw-stat-grid">
+      <div class="kw-stat">
+        <div class="kw-stat-num">200+</div>
+        <div class="kw-stat-label">Git commits over the rebuild</div>
+      </div>
+      <div class="kw-stat">
+        <div class="kw-stat-num">2</div>
+        <div class="kw-stat-label">Complete design views per page</div>
+      </div>
+      <div class="kw-stat">
+        <div class="kw-stat-num">8</div>
+        <div class="kw-stat-label">Storyline 360 demos built and documented</div>
+      </div>
+    </div>
+
+    <!-- What the commits break down to -->
+    <div class="kw-card">
+      <div class="kw-card-title">📊 What 200+ commits actually represents</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:0.5rem;">
+        <div style="background:#f8f8f8;border:1.5px solid #e0e0e0;border-radius:12px;padding:1rem;text-align:center;">
+          <div style="font-family:'Outfit',sans-serif;font-size:1.6rem;font-weight:700;color:#151515;">~40%</div>
+          <div style="font-family:'Figtree',sans-serif;font-size:0.78rem;color:#666;margin-top:0.25rem;">Real feature work — dual views, articles, newsletter, demos</div>
+        </div>
+        <div style="background:#f8f8f8;border:1.5px solid #e0e0e0;border-radius:12px;padding:1rem;text-align:center;">
+          <div style="font-family:'Outfit',sans-serif;font-size:1.6rem;font-weight:700;color:#151515;">~30%</div>
+          <div style="font-family:'Figtree',sans-serif;font-size:0.78rem;color:#666;margin-top:0.25rem;">Fixes — mobile layouts, cross-browser issues, edge cases</div>
+        </div>
+        <div style="background:#fbbf0e;border:1.5px solid #151515;border-radius:12px;padding:1rem;text-align:center;">
+          <div style="font-family:'Outfit',sans-serif;font-size:1.6rem;font-weight:700;color:#151515;">~30%</div>
+          <div style="font-family:'Figtree',sans-serif;font-size:0.78rem;color:#333;margin-top:0.25rem;">Exploration — directions tried, understood, then abandoned</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Key lessons -->
+    <div style="font-family:'Figtree',sans-serif;font-size:0.72rem;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:0.08em;">What AI-assisted development actually looks like</div>
+    <div class="kw-lessons-list">
+      <div class="kw-lesson">
+        <div class="kw-lesson-num">01</div>
+        <div>
+          <h3 class="kw-lesson-title">Context is the real work</h3>
+          <p class="kw-lesson-desc">Quality of AI output is directly proportional to quality of context. Vague prompts produce technically valid but architecturally inconsistent code. I learned this the hard way around commit 40. I started keeping a document of all design decisions — not for the AI, but for myself.</p>
+          <span class="kw-lesson-tag">Before every session</span>
+        </div>
+      </div>
+      <div class="kw-lesson">
+        <div class="kw-lesson-num">02</div>
+        <div>
+          <h3 class="kw-lesson-title">You still need to understand the code</h3>
+          <p class="kw-lesson-desc">If you don't understand what's been generated, you cannot debug it when it breaks. And it breaks — in specific, unpredictable ways. Understanding the code at even a surface level meant I could describe failures accurately enough to get real fixes rather than patches that introduced new problems.</p>
+          <span class="kw-lesson-tag">Non-negotiable</span>
+        </div>
+      </div>
+      <div class="kw-lesson">
+        <div class="kw-lesson-num">03</div>
+        <div>
+          <h3 class="kw-lesson-title">Generation is fast. Testing is the bottleneck.</h3>
+          <p class="kw-lesson-desc">AI writes code faster than you can test it. Every feature that took 10 minutes to generate took 30 minutes to test properly across devices and edge cases. The constraint isn't creativity or speed — it's your ability to verify output against reality.</p>
+          <span class="kw-lesson-tag">The hidden cost</span>
+        </div>
+      </div>
+      <div class="kw-lesson">
+        <div class="kw-lesson-num">04</div>
+        <div>
+          <h3 class="kw-lesson-title">Domain expertise is an advantage, not a given</h3>
+          <p class="kw-lesson-desc">15 years of L&D thinking made every architecture decision faster. AI knows more about code than I do. But knowing what you're building, who it's for, and what it needs to communicate gives you the judgment to direct the work well and to reject output that's technically correct but wrong for the context.</p>
+          <span class="kw-lesson-tag">Unexpected finding</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="kw-cta-strip">
+      <h2 class="kw-cta-strip-headline">Thinking about a portfolio rebuild?</h2>
+      <a href="https://linkedin.com/in/trivedi-abhishek" target="_blank" class="kw-btn kw-btn--dark">Let's talk →</a>
+    </div>
+
+    <div class="kw-footer">
+      <div class="kw-footer-copy">© 2026 Abhishek Trivedi · Learning Experience Technologist</div>
+      <div class="kw-footer-links">
+        <a href="https://www.linkedin.com/in/trivedi-abhishek/" target="_blank" class="kw-footer-link">LinkedIn</a>
+        <a href="../contact.html?view=visual" class="kw-footer-link">Contact</a>
+        <a href="../articles.html?view=visual" class="kw-footer-link">Articles</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- VIEW SWITCHER -->
+<div id="view-switcher">
+  <button class="vsw-btn vsw-active" id="btn-editorial">Editorial</button>
+  <button class="vsw-btn" id="btn-visual">Visual</button>
+</div>
+
+<script>
+(function(){
+  var ed=document.getElementById('view-editorial');
+  var vi=document.getElementById('view-visual');
+  var nav=document.getElementById('td-nav');
+  var sw=document.getElementById('view-switcher');
+  var be=document.getElementById('btn-editorial');
+  var bv=document.getElementById('btn-visual');
+  function show(mode){
+    if(mode==='visual'){
+      ed.classList.remove('view-active');vi.classList.add('view-active');
+      nav.style.display='flex';be.classList.remove('vsw-active');bv.classList.add('vsw-active');
+    } else {
+      vi.classList.remove('view-active');ed.classList.add('view-active');
+      nav.style.display='none';bv.classList.remove('vsw-active');be.classList.add('vsw-active');
+    }
+    try{sessionStorage.setItem('at-style-choice',mode);}catch(e){}
+  }
+  var saved=null;try{saved=sessionStorage.getItem('at-style-choice');}catch(e){}
+  var url=new URLSearchParams(location.search).get('view');
+  if(url==='visual'||saved==='visual') show('visual');
+  be.addEventListener('click',function(){show('editorial');});
+  bv.addEventListener('click',function(){show('visual');});
+  // Ham menu
+  var ham=document.getElementById('td-ham');var drawer=document.getElementById('td-drawer');
+  if(ham)ham.addEventListener('click',function(){drawer.classList.toggle('open');ham.classList.toggle('open');});
+})();
+</script>
+</body>
+</html>

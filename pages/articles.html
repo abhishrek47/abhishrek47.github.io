@@ -141,8 +141,11 @@
     .articles-list { display: flex; flex-direction: column; gap: 0; }
     .coming-soon { padding: 2.5rem 0; display: flex; align-items: center; gap: 1rem; color: var(--muted); font-size: 0.85rem; border-bottom: 1px solid var(--border); }
     .coming-soon-line { flex: 1; height: 1px; background: var(--border); }
-    .article-row { display: flex; flex-direction: column; gap: 0.5rem; padding: 1.75rem 0; border-bottom: 1px solid var(--border); text-decoration: none; color: inherit; transition: opacity 0.2s; }
+    .article-row { display: flex; flex-direction: row; gap: 1.25rem; align-items: flex-start; padding: 1.75rem 0; border-bottom: 1px solid var(--border); text-decoration: none; color: inherit; transition: opacity 0.2s; }
     .article-row:hover { opacity: 0.75; }
+    .article-row-thumb { flex-shrink: 0; width: 130px; height: 86px; border-radius: 5px; overflow: hidden; background: #162d4a; }
+    .article-row-thumb svg { width: 100%; height: 100%; display: block; }
+    .article-row-body { display: flex; flex-direction: column; gap: 0.45rem; flex: 1; min-width: 0; }
     .article-row-meta { display: flex; align-items: center; gap: 0.75rem; }
     .article-row-tag { font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); background: rgba(192,57,43,0.1); padding: 0.18rem 0.55rem; border-radius: 3px; }
     .article-row-date { font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--muted); }
@@ -150,6 +153,7 @@
     .article-row p { font-size: 0.88rem; color: var(--muted); line-height: 1.65; margin: 0; }
     .article-row-cta { font-size: 0.82rem; font-weight: 600; color: var(--accent); display: flex; align-items: center; gap: 0.35rem; }
     .article-row-cta::after { content: '→'; }
+    @media (max-width: 600px) { .article-row { flex-direction: column; gap: 0.75rem; } .article-row-thumb { width: 100%; height: 130px; } }
     .newsletter-section { background: #1e3a5f; padding: 4rem 2.5rem; text-align: center; }
     .newsletter-inner { max-width: 520px; margin: 0 auto; }
     .newsletter-inner .section-label { justify-content: center; color: rgba(255,255,255,0.5); }
@@ -281,7 +285,10 @@
 
     /* ── ARTICLES PAGE SPECIFIC ── */
     .kw-articles-list { display: flex; flex-direction: column; gap: 1rem; }
-    .kw-article-card { background: #fff; border: 1.5px solid #151515; border-radius: 16px; padding: 1.5rem; display: flex; flex-direction: column; gap: 0.75rem; transition: transform 0.18s, box-shadow 0.18s; }
+    .kw-article-card { background: #fff; border: 1.5px solid #151515; border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; gap: 0; transition: transform 0.18s, box-shadow 0.18s; }
+    .kw-article-card-img { width: 100%; height: 120px; display: block; background: #162d4a; flex-shrink: 0; }
+    .kw-article-card-img svg { width: 100%; height: 100%; display: block; }
+    .kw-article-card-body { padding: 1.5rem; display: flex; flex-direction: column; gap: 0.75rem; flex: 1; }
     .kw-article-card:hover { transform: translateY(-3px); box-shadow: 4px 4px 0 #151515; }
     .kw-article-meta { display: flex; align-items: center; gap: 0.75rem; }
     .kw-article-date { font-family: 'Figtree',sans-serif; font-size: 0.76rem; font-weight: 600; color: #666; text-transform: uppercase; letter-spacing: 0.06em; }
@@ -514,34 +521,140 @@
 
   <div class="articles-list">
 
-    <a href="https://www.linkedin.com/pulse/technical-ld-engineering-organizations-abhishek-trivedi-sswlf/" target="_blank" rel="noopener" class="article-row">
-      <div class="article-row-meta">
-        <span class="article-row-tag">L&D Strategy</span>
-        <span class="article-row-date">May 2026 · Issue #4</span>
+    <a href="articles/technical-ld-engineering.html" class="article-row">
+      <div class="article-row-thumb">
+        <svg viewBox="0 0 130 86" xmlns="http://www.w3.org/2000/svg">
+          <rect width="130" height="86" fill="#162d4a"/>
+          <g opacity="0.06" stroke="#f5f0eb" stroke-width="0.5">
+            <line x1="0" y1="21" x2="130" y2="21"/><line x1="0" y1="43" x2="130" y2="43"/><line x1="0" y1="65" x2="130" y2="65"/>
+            <line x1="22" y1="0" x2="22" y2="86"/><line x1="44" y1="0" x2="44" y2="86"/><line x1="65" y1="0" x2="65" y2="86"/><line x1="87" y1="0" x2="87" y2="86"/><line x1="108" y1="0" x2="108" y2="86"/>
+          </g>
+          <!-- Eng box -->
+          <rect x="5" y="17" width="48" height="45" rx="3" fill="#1e3a5f" stroke="#4a7aaa" stroke-width="0.75"/>
+          <text x="29" y="29" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="5" fill="#4a7aaa">ENG TEAM</text>
+          <rect x="11" y="34" width="18" height="2.5" rx="1" fill="#c0392b" opacity="0.7"/>
+          <rect x="11" y="40" width="30" height="2.5" rx="1" fill="#4a7aaa" opacity="0.5"/>
+          <rect x="11" y="46" width="24" height="2.5" rx="1" fill="#4a7aaa" opacity="0.5"/>
+          <rect x="11" y="52" width="14" height="2.5" rx="1" fill="#c0392b" opacity="0.4"/>
+          <!-- Gap -->
+          <line x1="53" y1="39" x2="77" y2="39" stroke="#c0392b" stroke-width="0.9" stroke-dasharray="2.5 2" opacity="0.7"/>
+          <text x="65" y="35" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="5.5" fill="#c0392b" opacity="0.9">GAP</text>
+          <circle cx="65" cy="43" r="3.5" fill="#c0392b" opacity="0.15"/>
+          <!-- L&D box -->
+          <rect x="77" y="17" width="48" height="45" rx="3" fill="#1e3a5f" stroke="#4a7aaa" stroke-width="0.75"/>
+          <text x="101" y="29" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="5" fill="#4a7aaa">L&amp;D TEAM</text>
+          <rect x="83" y="33" width="5" height="5" rx="1" fill="none" stroke="#f5f0eb" stroke-width="0.75" opacity="0.5"/>
+          <rect x="83" y="43" width="5" height="5" rx="1" fill="none" stroke="#f5f0eb" stroke-width="0.75" opacity="0.5"/>
+          <rect x="83" y="53" width="5" height="5" rx="1" fill="#4a7aaa" opacity="0.5"/>
+          <rect x="91" y="35" width="26" height="2" rx="1" fill="#f5f0eb" opacity="0.3"/>
+          <rect x="91" y="45" width="18" height="2" rx="1" fill="#f5f0eb" opacity="0.3"/>
+          <rect x="91" y="55" width="22" height="2" rx="1" fill="#f5f0eb" opacity="0.3"/>
+          <text x="65" y="78" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="4" fill="rgba(245,240,235,0.3)">technical l&amp;d · engineering orgs</text>
+        </svg>
       </div>
-      <h3>Technical L&D in Engineering Organizations</h3>
-      <p>What engineering teams actually need from L&D — and what most teams deliver instead. The gap is wider than most L&D professionals want to admit.</p>
-      <span class="article-row-cta">Read on LinkedIn</span>
+      <div class="article-row-body">
+        <div class="article-row-meta">
+          <span class="article-row-tag">L&D Strategy</span>
+          <span class="article-row-date">May 2026 · Issue #4</span>
+        </div>
+        <h3>Technical L&D in Engineering Organizations</h3>
+        <p>What engineering teams actually need from L&D — and what most teams deliver instead. The gap is wider than most L&D professionals want to admit.</p>
+        <span class="article-row-cta">Read the article</span>
+      </div>
     </a>
 
     <a href="job-search-agent.html" class="article-row">
-      <div class="article-row-meta">
-        <span class="article-row-tag">AI Workflow</span>
-        <span class="article-row-date">Apr 2026 · Issue #3</span>
+      <div class="article-row-thumb">
+        <svg viewBox="0 0 130 86" xmlns="http://www.w3.org/2000/svg">
+          <rect width="130" height="86" fill="#162d4a"/>
+          <!-- Stars -->
+          <circle cx="14" cy="11" r="0.8" fill="#f5f0eb" opacity="0.4"/>
+          <circle cx="44" cy="7" r="0.6" fill="#f5f0eb" opacity="0.35"/>
+          <circle cx="80" cy="9" r="1" fill="#f5f0eb" opacity="0.5"/>
+          <circle cx="112" cy="14" r="0.7" fill="#f5f0eb" opacity="0.3"/>
+          <circle cx="125" cy="7" r="0.5" fill="#f5f0eb" opacity="0.45"/>
+          <circle cx="60" cy="5" r="0.6" fill="#f5f0eb" opacity="0.3"/>
+          <!-- Moon -->
+          <path d="M118 8 A8 8 0 1 0 118 24 A5 5 0 1 1 118 8" fill="#f5f0eb" opacity="0.12"/>
+          <!-- Node 1: JOB BOARDS -->
+          <rect x="3" y="32" width="28" height="20" rx="3" fill="#1e3a5f" stroke="#4a7aaa" stroke-width="0.75"/>
+          <text x="17" y="40" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="4" fill="#f5f0eb" opacity="0.8">JOB</text>
+          <text x="17" y="47" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="4" fill="#4a7aaa">BOARDS</text>
+          <!-- Arrow 1 -->
+          <line x1="31" y1="42" x2="38" y2="42" stroke="#c0392b" stroke-width="1"/>
+          <polygon points="38,39.5 42,42 38,44.5" fill="#c0392b"/>
+          <!-- Node 2: CLAUDE -->
+          <rect x="42" y="32" width="28" height="20" rx="3" fill="#1e3a5f" stroke="#c0392b" stroke-width="1"/>
+          <text x="56" y="40" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="4" fill="#f5f0eb" opacity="0.8">CLAUDE</text>
+          <text x="56" y="47" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="4" fill="#c0392b">FILTER</text>
+          <!-- Arrow 2 -->
+          <line x1="70" y1="42" x2="77" y2="42" stroke="#c0392b" stroke-width="1"/>
+          <polygon points="77,39.5 81,42 77,44.5" fill="#c0392b"/>
+          <!-- Node 3: GMAIL -->
+          <rect x="81" y="32" width="28" height="20" rx="3" fill="#1e3a5f" stroke="#4a7aaa" stroke-width="0.75"/>
+          <text x="95" y="40" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="4" fill="#f5f0eb" opacity="0.8">GMAIL</text>
+          <text x="95" y="47" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="4" fill="#4a7aaa">DIGEST</text>
+          <!-- Return path -->
+          <path d="M95 52 L95 63 L56 63 L56 52" stroke="#f5f0eb" stroke-width="0.75" stroke-dasharray="3 2.5" fill="none" opacity="0.35"/>
+          <!-- Result box -->
+          <rect x="32" y="54" width="48" height="14" rx="3" fill="#1e3a5f" stroke="#4a7aaa" stroke-width="0.5" opacity="0.85"/>
+          <text x="56" y="64" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="4.5" fill="rgba(245,240,235,0.7)">07:30 AM digest</text>
+          <text x="65" y="79" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="4" fill="rgba(245,240,235,0.3)">job search agent · zero api keys</text>
+        </svg>
       </div>
-      <h3>Your job search runs while you sleep</h3>
-      <p>How I built an autonomous job search agent using Claude Cowork — no Apify, no paid scrapers, no API keys. It searches job boards, filters roles, checks your Gmail, and emails you a digest every morning.</p>
-      <span class="article-row-cta">Read the build guide</span>
+      <div class="article-row-body">
+        <div class="article-row-meta">
+          <span class="article-row-tag">AI Workflow</span>
+          <span class="article-row-date">Apr 2026 · Issue #3</span>
+        </div>
+        <h3>Your job search runs while you sleep</h3>
+        <p>How I built an autonomous job search agent using Claude Cowork — no Apify, no paid scrapers, no API keys. It searches job boards, filters roles, checks your Gmail, and emails you a digest every morning.</p>
+        <span class="article-row-cta">Read the build guide</span>
+      </div>
     </a>
 
-    <a href="https://www.linkedin.com/pulse/i-rebuilt-my-portfolio-ai-200-commits-later-heres-what-trivedi-eqihf/" target="_blank" rel="noopener" class="article-row">
-      <div class="article-row-meta">
-        <span class="article-row-tag">Portfolio</span>
-        <span class="article-row-date">Apr 2026 · Issue #2</span>
+    <a href="articles/portfolio-rebuild.html" class="article-row">
+      <div class="article-row-thumb">
+        <svg viewBox="0 0 130 86" xmlns="http://www.w3.org/2000/svg">
+          <rect width="130" height="86" fill="#162d4a"/>
+          <g opacity="0.06" stroke="#f5f0eb" stroke-width="0.5">
+            <line x1="0" y1="21" x2="130" y2="21"/><line x1="0" y1="43" x2="130" y2="43"/><line x1="0" y1="65" x2="130" y2="65"/>
+            <line x1="22" y1="0" x2="22" y2="86"/><line x1="44" y1="0" x2="44" y2="86"/><line x1="65" y1="0" x2="65" y2="86"/><line x1="87" y1="0" x2="87" y2="86"/>
+          </g>
+          <!-- Main branch line -->
+          <line x1="26" y1="8" x2="26" y2="78" stroke="#4a7aaa" stroke-width="1.5"/>
+          <!-- Feature branch -->
+          <path d="M26 28 Q50 28 50 43 Q50 58 26 58" stroke="#c0392b" stroke-width="1" fill="none"/>
+          <!-- Commits on main -->
+          <circle cx="26" cy="14" r="4" fill="#162d4a" stroke="#4a7aaa" stroke-width="1.5"/>
+          <circle cx="26" cy="28" r="4" fill="#162d4a" stroke="#c0392b" stroke-width="1.5"/>
+          <circle cx="26" cy="43" r="4" fill="#162d4a" stroke="#4a7aaa" stroke-width="1.5"/>
+          <circle cx="26" cy="58" r="4.5" fill="#c0392b" stroke="#c0392b" stroke-width="1.5"/>
+          <circle cx="26" cy="72" r="4" fill="#162d4a" stroke="#4a7aaa" stroke-width="1.5"/>
+          <!-- Commits on branch -->
+          <circle cx="50" cy="35" r="3.5" fill="#162d4a" stroke="#c0392b" stroke-width="1.5"/>
+          <circle cx="50" cy="50" r="3.5" fill="#162d4a" stroke="#c0392b" stroke-width="1.5"/>
+          <!-- Hash labels -->
+          <text x="36" y="17" font-family="JetBrains Mono,monospace" font-size="4" fill="rgba(245,240,235,0.4)">a3f91c</text>
+          <text x="36" y="31" font-family="JetBrains Mono,monospace" font-size="4" fill="rgba(245,240,235,0.4)">c7b290</text>
+          <text x="36" y="46" font-family="JetBrains Mono,monospace" font-size="4" fill="rgba(245,240,235,0.4)">e2d841</text>
+          <!-- 200+ badge -->
+          <rect x="68" y="18" width="56" height="32" rx="4" fill="#1e3a5f" stroke="#4a7aaa" stroke-width="0.75"/>
+          <text x="96" y="33" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c0392b">200+</text>
+          <text x="96" y="43" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="5" fill="rgba(245,240,235,0.5)">commits</text>
+          <text x="96" y="63" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="4.5" fill="rgba(245,240,235,0.35)">AI-assisted dev</text>
+          <text x="65" y="79" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="4" fill="rgba(245,240,235,0.3)">portfolio rebuild · github · claude</text>
+        </svg>
       </div>
-      <h3>I rebuilt my portfolio with AI. 200+ commits later, here's what I actually learned.</h3>
-      <p>How Claude Code, GitHub, and 15 years of L&D thinking turned a stale site into a live engineering showcase. What AI-assisted development actually looks like — not the marketing version.</p>
-      <span class="article-row-cta">Read on LinkedIn</span>
+      <div class="article-row-body">
+        <div class="article-row-meta">
+          <span class="article-row-tag">Portfolio</span>
+          <span class="article-row-date">Apr 2026 · Issue #2</span>
+        </div>
+        <h3>I rebuilt my portfolio with AI. 200+ commits later, here's what I actually learned.</h3>
+        <p>How Claude Code, GitHub, and 15 years of L&D thinking turned a stale site into a live engineering showcase. What AI-assisted development actually looks like — not the marketing version.</p>
+        <span class="article-row-cta">Read the article</span>
+      </div>
     </a>
 
   </div>
@@ -578,44 +691,147 @@
 
     <div class="kw-articles-list">
       <a href="articles/ai-voice-lms.html?view=visual" class="kw-article-card">
-        <div class="kw-article-meta">
-          <div class="kw-article-date">March 2026</div>
-          <span class="kw-article-tag">AI Integration</span>
-          <span class="kw-article-tag" style="background:#7f9bc8;">Storyline 360</span>
+        <div class="kw-article-card-body">
+          <div class="kw-article-meta">
+            <div class="kw-article-date">March 2026</div>
+            <span class="kw-article-tag">AI Integration</span>
+            <span class="kw-article-tag" style="background:#7f9bc8;">Storyline 360</span>
+          </div>
+          <h3 class="kw-article-title">I made an enterprise LMS speak my learner's name using a live AI voice API. Here's every wall I hit to get there.</h3>
+          <p class="kw-article-desc">CORS for a week, a name that came back reversed, an API key sitting in plain JavaScript — what it actually took to ship real-time AI personalisation inside a SCORM course running in an enterprise LMS.</p>
+          <div class="kw-article-link">Read article →</div>
         </div>
-        <h3 class="kw-article-title">I made an enterprise LMS speak my learner's name using a live AI voice API. Here's every wall I hit to get there.</h3>
-        <p class="kw-article-desc">CORS for a week, a name that came back reversed, an API key sitting in plain JavaScript — what it actually took to ship real-time AI personalisation inside a SCORM course running in an enterprise LMS.</p>
-        <div class="kw-article-link">Read article →</div>
       </a>
 
-      <a href="https://www.linkedin.com/pulse/technical-ld-engineering-organizations-abhishek-trivedi-sswlf/" target="_blank" rel="noopener" class="kw-article-card">
-        <div class="kw-article-meta">
-          <div class="kw-article-date">May 2026 · Issue #4</div>
-          <span class="kw-article-tag">L&D Strategy</span>
+      <a href="articles/technical-ld-engineering.html?view=visual" class="kw-article-card">
+        <div class="kw-article-card-img">
+          <svg viewBox="0 0 400 120" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+            <rect width="400" height="120" fill="#162d4a"/>
+            <g opacity="0.06" stroke="#f5f0eb" stroke-width="0.5">
+              <line x1="0" y1="30" x2="400" y2="30"/><line x1="0" y1="60" x2="400" y2="60"/><line x1="0" y1="90" x2="400" y2="90"/>
+              <line x1="40" y1="0" x2="40" y2="120"/><line x1="80" y1="0" x2="80" y2="120"/><line x1="120" y1="0" x2="120" y2="120"/><line x1="160" y1="0" x2="160" y2="120"/><line x1="200" y1="0" x2="200" y2="120"/><line x1="240" y1="0" x2="240" y2="120"/><line x1="280" y1="0" x2="280" y2="120"/><line x1="320" y1="0" x2="320" y2="120"/><line x1="360" y1="0" x2="360" y2="120"/>
+            </g>
+            <rect x="10" y="18" width="155" height="75" rx="4" fill="#1e3a5f" stroke="#4a7aaa" stroke-width="0.75"/>
+            <text x="87" y="34" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="#4a7aaa">ENG TEAM</text>
+            <rect x="18" y="42" width="50" height="3.5" rx="1" fill="#c0392b" opacity="0.7"/>
+            <rect x="18" y="50" width="85" height="3.5" rx="1" fill="#4a7aaa" opacity="0.5"/>
+            <rect x="18" y="58" width="70" height="3.5" rx="1" fill="#4a7aaa" opacity="0.5"/>
+            <rect x="18" y="66" width="40" height="3.5" rx="1" fill="#c0392b" opacity="0.4"/>
+            <rect x="18" y="74" width="60" height="3.5" rx="1" fill="#4a7aaa" opacity="0.35"/>
+            <text x="200" y="55" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" fill="#c0392b" opacity="0.9">GAP</text>
+            <line x1="165" y1="60" x2="235" y2="60" stroke="#c0392b" stroke-width="1.2" stroke-dasharray="4 3" opacity="0.7"/>
+            <rect x="235" y="18" width="155" height="75" rx="4" fill="#1e3a5f" stroke="#4a7aaa" stroke-width="0.75"/>
+            <text x="312" y="34" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="#4a7aaa">L&amp;D TEAM</text>
+            <rect x="244" y="40" width="8" height="8" rx="1.5" fill="none" stroke="#f5f0eb" stroke-width="0.75" opacity="0.5"/>
+            <rect x="244" y="54" width="8" height="8" rx="1.5" fill="none" stroke="#f5f0eb" stroke-width="0.75" opacity="0.5"/>
+            <rect x="244" y="68" width="8" height="8" rx="1.5" fill="#4a7aaa" opacity="0.5"/>
+            <rect x="258" y="43" width="70" height="3" rx="1" fill="#f5f0eb" opacity="0.3"/>
+            <rect x="258" y="57" width="55" height="3" rx="1" fill="#f5f0eb" opacity="0.3"/>
+            <rect x="258" y="71" width="64" height="3" rx="1" fill="#f5f0eb" opacity="0.3"/>
+            <text x="200" y="111" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="rgba(245,240,235,0.3)">bridging the gap · technical l&amp;d in engineering orgs</text>
+          </svg>
         </div>
-        <h3 class="kw-article-title">Technical L&D in Engineering Organizations</h3>
-        <p class="kw-article-desc">What engineering teams actually need from L&D — and what most teams deliver instead. The gap is wider than most L&D professionals want to admit.</p>
-        <div class="kw-article-link">Read on LinkedIn →</div>
+        <div class="kw-article-card-body">
+          <div class="kw-article-meta">
+            <div class="kw-article-date">May 2026 · Issue #4</div>
+            <span class="kw-article-tag">L&D Strategy</span>
+          </div>
+          <h3 class="kw-article-title">Technical L&D in Engineering Organizations</h3>
+          <p class="kw-article-desc">What engineering teams actually need from L&D — and what most teams deliver instead. The gap is wider than most L&D professionals want to admit.</p>
+          <div class="kw-article-link">Read the article →</div>
+        </div>
       </a>
 
       <a href="job-search-agent.html?view=visual" class="kw-article-card">
-        <div class="kw-article-meta">
-          <div class="kw-article-date">Apr 2026 · Issue #3</div>
-          <span class="kw-article-tag">AI Workflow</span>
+        <div class="kw-article-card-img">
+          <svg viewBox="0 0 400 120" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+            <rect width="400" height="120" fill="#162d4a"/>
+            <circle cx="40" cy="18" r="1.5" fill="#f5f0eb" opacity="0.4"/>
+            <circle cx="130" cy="12" r="1" fill="#f5f0eb" opacity="0.35"/>
+            <circle cx="240" cy="16" r="1.8" fill="#f5f0eb" opacity="0.5"/>
+            <circle cx="340" cy="10" r="1.2" fill="#f5f0eb" opacity="0.3"/>
+            <circle cx="385" cy="20" r="1" fill="#f5f0eb" opacity="0.45"/>
+            <circle cx="180" cy="8" r="1.2" fill="#f5f0eb" opacity="0.3"/>
+            <circle cx="310" cy="22" r="0.8" fill="#f5f0eb" opacity="0.35"/>
+            <path d="M370 6 A14 14 0 1 0 370 34 A9 9 0 1 1 370 6" fill="#f5f0eb" opacity="0.1"/>
+            <!-- Node 1 -->
+            <rect x="10" y="42" width="72" height="34" rx="4" fill="#1e3a5f" stroke="#4a7aaa" stroke-width="0.75"/>
+            <text x="46" y="57" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7.5" fill="#f5f0eb" opacity="0.8">JOB</text>
+            <text x="46" y="68" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7.5" fill="#4a7aaa">BOARDS</text>
+            <!-- Arrow -->
+            <line x1="82" y1="59" x2="100" y2="59" stroke="#c0392b" stroke-width="1.5"/>
+            <polygon points="100,55.5 107,59 100,62.5" fill="#c0392b"/>
+            <!-- Node 2 -->
+            <rect x="107" y="42" width="72" height="34" rx="4" fill="#1e3a5f" stroke="#c0392b" stroke-width="1.2"/>
+            <text x="143" y="57" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7.5" fill="#f5f0eb" opacity="0.8">CLAUDE</text>
+            <text x="143" y="68" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7.5" fill="#c0392b">FILTER</text>
+            <!-- Arrow -->
+            <line x1="179" y1="59" x2="197" y2="59" stroke="#c0392b" stroke-width="1.5"/>
+            <polygon points="197,55.5 204,59 197,62.5" fill="#c0392b"/>
+            <!-- Node 3 -->
+            <rect x="204" y="42" width="72" height="34" rx="4" fill="#1e3a5f" stroke="#4a7aaa" stroke-width="0.75"/>
+            <text x="240" y="57" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7.5" fill="#f5f0eb" opacity="0.8">GMAIL</text>
+            <text x="240" y="68" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7.5" fill="#4a7aaa">INBOX</text>
+            <!-- Return path -->
+            <path d="M240 76 L240 96 L143 96 L143 76" stroke="#f5f0eb" stroke-width="1" stroke-dasharray="4 3" fill="none" opacity="0.3"/>
+            <!-- Result box -->
+            <rect x="87" y="88" width="112" height="22" rx="4" fill="#1e3a5f" stroke="#4a7aaa" stroke-width="0.6" opacity="0.9"/>
+            <text x="143" y="103" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="rgba(245,240,235,0.7)">07:30 AM digest</text>
+            <text x="320" y="103" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="rgba(245,240,235,0.3)">zero api keys · no scrapers</text>
+          </svg>
         </div>
-        <h3 class="kw-article-title">Your job search runs while you sleep</h3>
-        <p class="kw-article-desc">An autonomous job search agent built on Claude Cowork. No paid scrapers, no API subscriptions. Searches, filters, and emails you a digest every morning.</p>
-        <div class="kw-article-link">Read the build guide →</div>
+        <div class="kw-article-card-body">
+          <div class="kw-article-meta">
+            <div class="kw-article-date">Apr 2026 · Issue #3</div>
+            <span class="kw-article-tag">AI Workflow</span>
+          </div>
+          <h3 class="kw-article-title">Your job search runs while you sleep</h3>
+          <p class="kw-article-desc">An autonomous job search agent built on Claude Cowork. No paid scrapers, no API subscriptions. Searches, filters, and emails you a digest every morning.</p>
+          <div class="kw-article-link">Read the build guide →</div>
+        </div>
       </a>
 
-      <a href="https://www.linkedin.com/pulse/i-rebuilt-my-portfolio-ai-200-commits-later-heres-what-trivedi-eqihf/" target="_blank" rel="noopener" class="kw-article-card">
-        <div class="kw-article-meta">
-          <div class="kw-article-date">Apr 2026 · Issue #2</div>
-          <span class="kw-article-tag">Portfolio</span>
+      <a href="articles/portfolio-rebuild.html?view=visual" class="kw-article-card">
+        <div class="kw-article-card-img">
+          <svg viewBox="0 0 400 120" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+            <rect width="400" height="120" fill="#162d4a"/>
+            <g opacity="0.06" stroke="#f5f0eb" stroke-width="0.5">
+              <line x1="0" y1="30" x2="400" y2="30"/><line x1="0" y1="60" x2="400" y2="60"/><line x1="0" y1="90" x2="400" y2="90"/>
+              <line x1="60" y1="0" x2="60" y2="120"/><line x1="120" y1="0" x2="120" y2="120"/><line x1="180" y1="0" x2="180" y2="120"/><line x1="240" y1="0" x2="240" y2="120"/><line x1="300" y1="0" x2="300" y2="120"/><line x1="360" y1="0" x2="360" y2="120"/>
+            </g>
+            <!-- Main branch -->
+            <line x1="60" y1="8" x2="60" y2="112" stroke="#4a7aaa" stroke-width="2"/>
+            <!-- Feature branch -->
+            <path d="M60 35 Q110 35 110 60 Q110 85 60 85" stroke="#c0392b" stroke-width="1.5" fill="none"/>
+            <!-- Commits main -->
+            <circle cx="60" cy="16" r="6" fill="#162d4a" stroke="#4a7aaa" stroke-width="2"/>
+            <circle cx="60" cy="35" r="6" fill="#162d4a" stroke="#c0392b" stroke-width="2"/>
+            <circle cx="60" cy="60" r="6" fill="#162d4a" stroke="#4a7aaa" stroke-width="2"/>
+            <circle cx="60" cy="85" r="7" fill="#c0392b" stroke="#c0392b" stroke-width="2"/>
+            <circle cx="60" cy="106" r="6" fill="#162d4a" stroke="#4a7aaa" stroke-width="2"/>
+            <!-- Commits branch -->
+            <circle cx="110" cy="47" r="5.5" fill="#162d4a" stroke="#c0392b" stroke-width="1.5"/>
+            <circle cx="110" cy="72" r="5.5" fill="#162d4a" stroke="#c0392b" stroke-width="1.5"/>
+            <!-- Hash labels -->
+            <text x="74" y="19" font-family="JetBrains Mono,monospace" font-size="7" fill="rgba(245,240,235,0.4)">a3f91c</text>
+            <text x="74" y="38" font-family="JetBrains Mono,monospace" font-size="7" fill="rgba(245,240,235,0.4)">c7b290</text>
+            <text x="74" y="63" font-family="JetBrains Mono,monospace" font-size="7" fill="rgba(245,240,235,0.4)">e2d841</text>
+            <!-- 200+ badge -->
+            <rect x="155" y="22" width="200" height="60" rx="6" fill="#1e3a5f" stroke="#4a7aaa" stroke-width="0.75"/>
+            <text x="255" y="56" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="34" font-weight="bold" fill="#c0392b">200+</text>
+            <text x="255" y="71" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8.5" fill="rgba(245,240,235,0.5)">commits · AI-assisted dev</text>
+            <text x="200" y="108" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="rgba(245,240,235,0.3)">portfolio rebuild · github · claude code</text>
+          </svg>
         </div>
-        <h3 class="kw-article-title">I rebuilt my portfolio with AI. 200+ commits later, here's what I actually learned.</h3>
-        <p class="kw-article-desc">How Claude Code, GitHub, and 15 years of L&D thinking turned a stale portfolio into a live engineering showcase. The honest version of AI-assisted development.</p>
-        <div class="kw-article-link">Read on LinkedIn →</div>
+        <div class="kw-article-card-body">
+          <div class="kw-article-meta">
+            <div class="kw-article-date">Apr 2026 · Issue #2</div>
+            <span class="kw-article-tag">Portfolio</span>
+          </div>
+          <h3 class="kw-article-title">I rebuilt my portfolio with AI. 200+ commits later, here's what I actually learned.</h3>
+          <p class="kw-article-desc">How Claude Code, GitHub, and 15 years of L&D thinking turned a stale portfolio into a live engineering showcase. The honest version of AI-assisted development.</p>
+          <div class="kw-article-link">Read the article →</div>
+        </div>
       </a>
     </div>
 
