@@ -440,14 +440,14 @@
       <a href="../articles.html?view=visual" class="kw-back-link">← Back to Articles</a>
       <div class="kw-article-meta">
         <span class="kw-tag kw-tag--yellow">Portfolio</span>
-        <span class="kw-tag kw-tag--green">AI-Assisted Dev</span>
+        <span class="kw-tag kw-tag--yellow">AI Collaboration</span>
         <span style="font-family:'Figtree',sans-serif;font-size:0.78rem;color:#888;align-self:center;">April 2026 · Issue #2</span>
       </div>
       <h1 class="kw-page-title">I rebuilt my portfolio with AI. 200+ commits later, here's what I actually learned.</h1>
-      <p class="kw-page-sub">What Claude Code, GitHub, and 15 years of L&D thinking actually looks like when combined. Not the marketing version of AI-assisted development — the real one.</p>
+      <p class="kw-page-sub">How Claude Code, GitHub, and 15 years of L&D thinking turned a stale site into a live engineering showcase. What AI-assisted development actually looks like — not the marketing version.</p>
     </div>
 
-    <!-- Stats -->
+    <!-- Stats Strip -->
     <div class="kw-stat-grid">
       <div class="kw-stat">
         <div class="kw-stat-num">200+</div>
@@ -459,72 +459,140 @@
       </div>
       <div class="kw-stat">
         <div class="kw-stat-num">8</div>
-        <div class="kw-stat-label">Storyline 360 demos built and documented</div>
+        <div class="kw-stat-label">Storyline 360 demos documented</div>
       </div>
     </div>
 
-    <!-- What the commits break down to -->
+    <!-- Why from scratch and why AI -->
     <div class="kw-card">
-      <div class="kw-card-title">📊 What 200+ commits actually represents</div>
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:0.5rem;">
-        <div style="background:#f8f8f8;border:1.5px solid #e0e0e0;border-radius:12px;padding:1rem;text-align:center;">
-          <div style="font-family:'Outfit',sans-serif;font-size:1.6rem;font-weight:700;color:#151515;">~40%</div>
-          <div style="font-family:'Figtree',sans-serif;font-size:0.78rem;color:#666;margin-top:0.25rem;">Real feature work — dual views, articles, newsletter, demos</div>
-        </div>
-        <div style="background:#f8f8f8;border:1.5px solid #e0e0e0;border-radius:12px;padding:1rem;text-align:center;">
-          <div style="font-family:'Outfit',sans-serif;font-size:1.6rem;font-weight:700;color:#151515;">~30%</div>
-          <div style="font-family:'Figtree',sans-serif;font-size:0.78rem;color:#666;margin-top:0.25rem;">Fixes — mobile layouts, cross-browser issues, edge cases</div>
-        </div>
-        <div style="background:#fbbf0e;border:1.5px solid #151515;border-radius:12px;padding:1rem;text-align:center;">
-          <div style="font-family:'Outfit',sans-serif;font-size:1.6rem;font-weight:700;color:#151515;">~30%</div>
-          <div style="font-family:'Figtree',sans-serif;font-size:0.78rem;color:#333;margin-top:0.25rem;">Exploration — directions tried, understood, then abandoned</div>
+      <div class="kw-card-title">Why from scratch, and why AI</div>
+      <div style="font-family:'Figtree',sans-serif;font-size:0.9rem;color:#333;line-height:1.7;margin-bottom:1rem;">
+        <p style="margin:0 0 1rem 0;">I could have picked a template and swapped in content. That would have taken a weekend. But I wanted to understand what I was building — every layout decision, every component, every line of JavaScript. I've spent 15 years telling clients that understanding the architecture of your learning technology matters. I figured the same principle applied here.</p>
+        <p style="margin:0 0 1rem 0;">Using Claude Code as a collaborator wasn't about generating a site. It was about having a thinking partner who could hold technical context while I focused on design and content decisions. I directed the work. The AI handled the implementation speed. The combination let me build something more ambitious than I'd attempt alone in the time I had available.</p>
+        <div style="background:#1e3a5f;border-radius:12px;padding:1.25rem;color:#fff;margin-top:1.5rem;">
+          <div style="font-family:'Outfit',sans-serif;font-size:0.85rem;font-weight:700;color:#fbbf0e;margin-bottom:0.5rem;">The core insight</div>
+          <div style="font-family:'Figtree',sans-serif;font-size:0.85rem;line-height:1.6;">Understanding architecture matters. I spent years telling L&D teams this about their learning systems. Turns out it applies to building a portfolio too. The understanding came from building it from scratch. The speed came from AI handling implementation.</div>
         </div>
       </div>
     </div>
 
-    <!-- Key lessons -->
-    <div style="font-family:'Figtree',sans-serif;font-size:0.72rem;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:0.08em;">What AI-assisted development actually looks like</div>
-    <div class="kw-lessons-list">
-      <div class="kw-lesson">
-        <div class="kw-lesson-num">01</div>
-        <div>
-          <h3 class="kw-lesson-title">Context is the real work</h3>
-          <p class="kw-lesson-desc">Quality of AI output is directly proportional to quality of context. Vague prompts produce technically valid but architecturally inconsistent code. I learned this the hard way around commit 40. I started keeping a document of all design decisions — not for the AI, but for myself.</p>
-          <span class="kw-lesson-tag">Before every session</span>
+    <!-- What 200+ commits represents -->
+    <div class="kw-card">
+      <div class="kw-card-title">What 200+ commits actually represents</div>
+      <p style="font-family:'Figtree',sans-serif;font-size:0.9rem;color:#333;line-height:1.7;margin:0 0 1.5rem 0;">The number sounds impressive. It's also slightly misleading. Here's what's inside it:</p>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1.5rem;">
+        <div style="background:#f8f8f8;border:1.5px solid #e0e0e0;border-radius:12px;padding:1.25rem;">
+          <div style="font-family:'Outfit',sans-serif;font-size:2.2rem;font-weight:700;color:#151515;line-height:1;margin-bottom:0.5rem;">~40%</div>
+          <div style="font-family:'Figtree',sans-serif;font-size:0.78rem;color:#666;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.5rem;">Real feature work</div>
+          <div style="font-family:'Figtree',sans-serif;font-size:0.85rem;color:#333;line-height:1.6;">Dual editorial/visual view system, articles infrastructure, newsletter integration, contact form, Storyline 360 demos. Genuine design thinking and back-and-forth iteration.</div>
+        </div>
+        <div style="background:#f8f8f8;border:1.5px solid #e0e0e0;border-radius:12px;padding:1.25rem;">
+          <div style="font-family:'Outfit',sans-serif;font-size:2.2rem;font-weight:700;color:#151515;line-height:1;margin-bottom:0.5rem;">~30%</div>
+          <div style="font-family:'Figtree',sans-serif;font-size:0.78rem;color:#666;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.5rem;">Fix commits</div>
+          <div style="font-family:'Figtree',sans-serif;font-size:0.85rem;color:#333;line-height:1.6;">Mobile layout breaking on specific viewports. Analytics tags. Hover states in Safari. Navigation collapsing at 768px. The reality of testing against real browsers and screen sizes.</div>
+        </div>
+        <div style="background:#fbbf0e;border:1.5px solid #151515;border-radius:12px;padding:1.25rem;">
+          <div style="font-family:'Outfit',sans-serif;font-size:2.2rem;font-weight:700;color:#151515;line-height:1;margin-bottom:0.5rem;">~30%</div>
+          <div style="font-family:'Figtree',sans-serif;font-size:0.78rem;color:#333;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.5rem;">Exploration</div>
+          <div style="font-family:'Figtree',sans-serif;font-size:0.85rem;color:#333;line-height:1.6;">Directions taken, lived with for a day, then backed away from. Tried sidebar navigation. Colour schemes. JavaScript approaches I couldn't explain clearly. Not wasted work — how I understood what I actually wanted.</div>
         </div>
       </div>
-      <div class="kw-lesson">
-        <div class="kw-lesson-num">02</div>
-        <div>
-          <h3 class="kw-lesson-title">You still need to understand the code</h3>
-          <p class="kw-lesson-desc">If you don't understand what's been generated, you cannot debug it when it breaks. And it breaks — in specific, unpredictable ways. Understanding the code at even a surface level meant I could describe failures accurately enough to get real fixes rather than patches that introduced new problems.</p>
-          <span class="kw-lesson-tag">Non-negotiable</span>
+      <div style="background:#fef4e4;border:1.5px solid #fbbf0e;border-radius:12px;padding:1.25rem;font-family:'Figtree',sans-serif;font-size:0.9rem;color:#151515;line-height:1.7;">
+        <strong style="display:block;margin-bottom:0.5rem;font-family:'Outfit',sans-serif;">The lesson I didn't expect</strong>
+        AI writes code faster than you can test it. Every feature that took 10 minutes to generate took 30 minutes to test properly across devices and edge cases. The bottleneck isn't generation — it's verification.
+      </div>
+    </div>
+
+    <!-- What AI-assisted development actually looks like -->
+    <div class="kw-card">
+      <div class="kw-card-title">What AI-assisted development actually looks like</div>
+      <p style="font-family:'Figtree',sans-serif;font-size:0.9rem;color:#333;line-height:1.7;margin:0 0 1.5rem 0;">The marketing version: you describe what you want, the AI builds it, you ship it. The real version is more interesting and more effortful than that.</p>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem;">
+        <div style="background:#f8f8f8;border:1px solid #e5e5e5;border-radius:12px;padding:1.1rem;">
+          <div style="font-family:'Outfit',sans-serif;font-size:0.9rem;font-weight:700;color:#151515;margin-bottom:0.5rem;">01 · Context is the real work</div>
+          <div style="font-family:'Figtree',sans-serif;font-size:0.85rem;color:#333;line-height:1.6;">Quality of AI output is directly proportional to quality of context. Vague prompts produce technically valid but architecturally inconsistent code. Maintaining context across sessions is its own skill. I kept a running document of design decisions — not for the AI, but for myself. What pattern am I using? Why did I choose this CSS structure? What's the rule for editorial vs visual view?</div>
+        </div>
+        <div style="background:#f8f8f8;border:1px solid #e5e5e5;border-radius:12px;padding:1.1rem;">
+          <div style="font-family:'Outfit',sans-serif;font-size:0.9rem;font-weight:700;color:#151515;margin-bottom:0.5rem;">02 · You still need to understand the code</div>
+          <div style="font-family:'Figtree',sans-serif;font-size:0.85rem;color:#333;line-height:1.6;">If you don't understand what's been generated, you cannot debug it when it breaks. There were moments where I shipped something that looked right, then watched it fail in a specific browser or screen size. Understanding what the code was doing — even at a surface level — meant I could describe the failure accurately enough to get a real fix rather than a patch that created a new problem.</div>
+        </div>
+        <div style="background:#f8f8f8;border:1px solid #e5e5e5;border-radius:12px;padding:1.1rem;">
+          <div style="font-family:'Outfit',sans-serif;font-size:0.9rem;font-weight:700;color:#151515;margin-bottom:0.5rem;">03 · Generation is fast. Testing is the bottleneck.</div>
+          <div style="font-family:'Figtree',sans-serif;font-size:0.85rem;color:#333;line-height:1.6;">AI writes code faster than you can test it. Every feature that took 10 minutes to generate took 30 minutes to test properly across devices and edge cases. The filter for hallucinations is always: test it. Not just in preview. In the real environment, on mobile, in Safari, with a slow connection. Hallucinations that survive testing don't matter.</div>
+        </div>
+        <div style="background:#f8f8f8;border:1px solid #e5e5e5;border-radius:12px;padding:1.1rem;">
+          <div style="font-family:'Outfit',sans-serif;font-size:0.9rem;font-weight:700;color:#151515;margin-bottom:0.5rem;">04 · Domain expertise is an advantage</div>
+          <div style="font-family:'Figtree',sans-serif;font-size:0.85rem;color:#333;line-height:1.6;">15 years of L&D thinking made every information architecture decision faster and more confident. AI knows more about code than I do. But knowing what you're building, who it's for, and what it needs to communicate gives you the judgment to direct the work well and to reject output that's technically correct but wrong for the context.</div>
         </div>
       </div>
-      <div class="kw-lesson">
-        <div class="kw-lesson-num">03</div>
-        <div>
-          <h3 class="kw-lesson-title">Generation is fast. Testing is the bottleneck.</h3>
-          <p class="kw-lesson-desc">AI writes code faster than you can test it. Every feature that took 10 minutes to generate took 30 minutes to test properly across devices and edge cases. The constraint isn't creativity or speed — it's your ability to verify output against reality.</p>
-          <span class="kw-lesson-tag">The hidden cost</span>
-        </div>
+
+      <div style="background:#1e3a5f;border-radius:12px;padding:1.25rem;color:#fff;">
+        <div style="font-family:'Outfit',sans-serif;font-size:0.85rem;font-weight:700;color:#fbbf0e;margin-bottom:0.5rem;">The collaboration pattern</div>
+        <div style="font-family:'Figtree',sans-serif;font-size:0.85rem;line-height:1.6;">You provide context and decisions → AI generates code fast → You test in real environments → Ship or loop back and update context. The engineers I've worked with for 15 years recognise this immediately. AI is a very capable junior developer. It writes fast, never gets tired, and has broad knowledge. But it needs direction, review, and someone who understands the system well enough to catch what it gets wrong.</div>
       </div>
-      <div class="kw-lesson">
-        <div class="kw-lesson-num">04</div>
-        <div>
-          <h3 class="kw-lesson-title">Domain expertise is an advantage, not a given</h3>
-          <p class="kw-lesson-desc">15 years of L&D thinking made every architecture decision faster. AI knows more about code than I do. But knowing what you're building, who it's for, and what it needs to communicate gives you the judgment to direct the work well and to reject output that's technically correct but wrong for the context.</p>
-          <span class="kw-lesson-tag">Unexpected finding</span>
+    </div>
+
+    <!-- What I built that I'm proud of -->
+    <div class="kw-card">
+      <div class="kw-card-title">What I built that I'm actually proud of</div>
+
+      <div style="margin-bottom:1.5rem;">
+        <div style="font-family:'Outfit',sans-serif;font-size:0.9rem;font-weight:700;color:#151515;margin-bottom:0.75rem;">The dual-view system</div>
+        <div style="font-family:'Figtree',sans-serif;font-size:0.9rem;color:#333;line-height:1.7;">Every page exists in two forms — editorial (dark navy hero, serif typography, deep copy) and visual (bright, bold, kawe.ski-inspired, card-based). A fixed pill switcher in the corner lets you move between them. Session storage remembers your preference. This wasn't a vanity feature. It's a real capability: the same content serving different audience expectations without duplicating content. That's an instructional design principle applied to a portfolio. Recruiters care about aesthetics? They see the visual view. Engineers and L&D practitioners? They see the editorial.</div>
+      </div>
+
+      <div style="margin-bottom:1.5rem;">
+        <div style="font-family:'Outfit',sans-serif;font-size:0.9rem;font-weight:700;color:#151515;margin-bottom:0.75rem;">The articles infrastructure</div>
+        <div style="font-family:'Figtree',sans-serif;font-size:0.9rem;color:#333;line-height:1.7;">This newsletter you're reading exists as a proper editorial system now — not just LinkedIn posts, but dedicated article pages with full content, code blocks, SVG diagrams, and callout boxes. Each article is also mirrored in the visual view. It took longer to build than expected and is more useful than expected.</div>
+      </div>
+
+      <div>
+        <div style="font-family:'Outfit',sans-serif;font-size:0.9rem;font-weight:700;color:#151515;margin-bottom:0.75rem;">The Storyline 360 demo toolkit</div>
+        <div style="font-family:'Figtree',sans-serif;font-size:0.9rem;color:#333;line-height:1.7;">Eight interactive demos, each documented with a dedicated case study. Custom notepad component, theme switcher, progress bar, video compliance tracker, speech-to-text, guided tour, PDF certificate generator, zoom and pan. Built inside the portfolio itself, not as separate links to external platforms.</div>
+      </div>
+    </div>
+
+    <!-- What doesn't change -->
+    <div class="kw-card">
+      <div class="kw-card-title">What doesn't change (what AI can't do)</div>
+      <p style="font-family:'Figtree',sans-serif;font-size:0.9rem;color:#333;line-height:1.7;margin:0 0 1.5rem 0;">This is important. AI accelerated a lot. But the things that make a portfolio actually work — judgment, taste, knowing what to cut — remained entirely human work.</p>
+
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;">
+        <div style="background:#f8f8f8;border:1px solid #e5e5e5;border-radius:12px;padding:1.1rem;">
+          <div style="font-family:'Outfit',sans-serif;font-size:0.95rem;font-weight:700;color:#151515;margin-bottom:0.75rem;">Judgment</div>
+          <div style="font-family:'Figtree',sans-serif;font-size:0.85rem;color:#333;line-height:1.6;">Which of my 15 years of work actually matters for this audience? What's worth showing? What's just noise? AI can help you build quickly, but it can't make that call for you. You have to decide what your portfolio is actually for, and ruthlessly filter to that.</div>
+        </div>
+        <div style="background:#f8f8f8;border:1px solid #e5e5e5;border-radius:12px;padding:1.1rem;">
+          <div style="font-family:'Outfit',sans-serif;font-size:0.95rem;font-weight:700;color:#151515;margin-bottom:0.75rem;">Taste</div>
+          <div style="font-family:'Figtree',sans-serif;font-size:0.85rem;color:#333;line-height:1.6;">A colour scheme you like at 11pm but don't like at 9am. A sidebar navigation that's architecturally sound but feels wrong. The spacing that makes text actually readable rather than just technically formatted. That's taste. AI doesn't have it. You do, if you slow down enough to notice.</div>
+        </div>
+        <div style="background:#f8f8f8;border:1px solid #e5e5e5;border-radius:12px;padding:1.1rem;">
+          <div style="font-family:'Outfit',sans-serif;font-size:0.95rem;font-weight:700;color:#151515;margin-bottom:0.75rem;">Knowing what to cut</div>
+          <div style="font-family:'Figtree',sans-serif;font-size:0.85rem;color:#333;line-height:1.6;">I ended up throwing away probably 30% of what I built. Not because it was wrong — it just didn't belong. A feature that seemed useful at implementation time but clawed at space that should have been empty. That's a judgment call. It comes from having a point of view about what matters.</div>
         </div>
       </div>
     </div>
 
-    <!-- CTA -->
+    <!-- Closing reflection -->
+    <div class="kw-card">
+      <div class="kw-card-title">What 15 years of L&D actually added</div>
+      <p style="font-family:'Figtree',sans-serif;font-size:0.9rem;color:#333;line-height:1.7;margin:0 0 1rem 0;">Here's the thing I didn't expect: domain expertise is a significant advantage in AI-assisted development. Not because AI knows less about code — it knows more. But because knowing what you're building, who it's for, and what it needs to communicate gives you the judgment to direct the work well and to reject output that's technically correct but wrong for the context.</p>
+
+      <p style="font-family:'Figtree',sans-serif;font-size:0.9rem;color:#333;line-height:1.7;margin:0 0 1rem 0;">Every decision about information architecture — what goes where, how navigation should work, what a case study needs to contain — was faster and more confident because of 15 years of thinking about how people process information. The AI could implement. I knew what to implement.</p>
+
+      <div style="background:#1e3a5f;border-radius:12px;padding:1.25rem;color:#fff;">
+        <div style="font-family:'Figtree',sans-serif;font-size:0.9rem;line-height:1.7;">If you're thinking about rebuilding your portfolio and wondering whether to use AI — the answer is probably yes, but not in the way the demos make it look. The real version is slower, more iterative, more demanding of your judgment. And much more honest about what actually happened.</div>
+      </div>
+    </div>
+
+    <!-- CTA Strip -->
     <div class="kw-cta-strip">
       <h2 class="kw-cta-strip-headline">Thinking about a portfolio rebuild?</h2>
       <a href="https://linkedin.com/in/trivedi-abhishek" target="_blank" class="kw-btn kw-btn--dark">Let's talk →</a>
     </div>
 
+    <!-- Footer -->
     <div class="kw-footer">
       <div class="kw-footer-copy">© 2026 Abhishek Trivedi · Learning Experience Technologist</div>
       <div class="kw-footer-links">

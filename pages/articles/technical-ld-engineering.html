@@ -458,6 +458,7 @@
 <!-- VISUAL VIEW -->
 <div id="view-visual">
   <div class="kw-page">
+    <!-- HERO SECTION -->
     <div class="kw-page-hero">
       <a href="../articles.html?view=visual" class="kw-back-link">← Back to Articles</a>
       <div class="kw-article-meta">
@@ -469,60 +470,133 @@
       <p class="kw-page-sub">What engineering teams actually need from L&D — and what most teams deliver instead. The gap is wider than most L&D professionals want to admit.</p>
     </div>
 
-    <!-- The gap: what they want vs what they get -->
+    <!-- SECTION 1: WHAT ENGINEERS NEED -->
     <div class="kw-card">
-      <div class="kw-card-title">🔍 The gap, made visible</div>
-      <div class="kw-vs-grid">
-        <div class="kw-vs-col kw-vs-col--want">
-          <div class="kw-vs-col-title">What engineers actually need</div>
-          <div class="kw-vs-item">✓ Technical accuracy — zero tolerance for errors</div>
-          <div class="kw-vs-item">✓ Practical tools, not conceptual frameworks</div>
-          <div class="kw-vs-item">✓ Peer learning as the primary mode</div>
-          <div class="kw-vs-item">✓ Async-first — no interruption to flow state</div>
-          <div class="kw-vs-item">✓ Context-specific: your stack, your constraints</div>
+      <div class="kw-card-title">What engineers need from L&D</div>
+      <p style="font-family:'Figtree',sans-serif;font-size:0.9rem;color:#555;margin-bottom:1.5rem;line-height:1.7;">Engineers stop trusting learning immediately when it fails them. The four non-negotiable needs that define technical L&D:</p>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;">
+        <!-- Theme 1: Accuracy -->
+        <div style="background:#f8f8f8;border:1px solid #e0e0e0;border-radius:12px;padding:1rem;">
+          <h4 style="font-family:'Outfit',sans-serif;font-size:0.92rem;font-weight:700;color:#151515;margin-bottom:0.5rem;">Technical accuracy above everything</h4>
+          <p style="font-family:'Figtree',sans-serif;font-size:0.85rem;color:#333;line-height:1.6;margin:0;">The threshold for acceptable accuracy is essentially zero errors. One wrong variable name in a code example. One outdated API call. One statement that doesn't match how your system actually behaves. That's enough to lose the team's trust entirely.</p>
         </div>
-        <div class="kw-vs-col kw-vs-col--get">
-          <div class="kw-vs-col-title">What L&D typically delivers</div>
-          <div class="kw-vs-item">✗ Generic vendor courses with a technical veneer</div>
-          <div class="kw-vs-item">✗ Synchronous sessions that interrupt deep work</div>
-          <div class="kw-vs-item">✗ Compliance-shaped design applied to real skills</div>
-          <div class="kw-vs-item">✗ Content built for a generic audience, not your team</div>
-          <div class="kw-vs-item">✗ Metrics (completion, satisfaction) engineering doesn't care about</div>
+
+        <!-- Theme 2: Practical tools -->
+        <div style="background:#f8f8f8;border:1px solid #e0e0e0;border-radius:12px;padding:1rem;">
+          <h4 style="font-family:'Outfit',sans-serif;font-size:0.92rem;font-weight:700;color:#151515;margin-bottom:0.5rem;">Practical tools, not frameworks</h4>
+          <p style="font-family:'Figtree',sans-serif;font-size:0.85rem;color:#333;line-height:1.6;margin:0;">Engineers primarily learn by doing — not by watching videos or reading about principles. The most effective interventions are hands-on labs, sandbox environments, documented runbooks, peer tech talks, and code review as teaching. Build scaffolding around real work, not simulation.</p>
+        </div>
+
+        <!-- Theme 3: Peer learning -->
+        <div style="background:#f8f8f8;border:1px solid #e0e0e0;border-radius:12px;padding:1rem;">
+          <h4 style="font-family:'Outfit',sans-serif;font-size:0.92rem;font-weight:700;color:#151515;margin-bottom:0.5rem;">Peer learning is the default</h4>
+          <p style="font-family:'Figtree',sans-serif;font-size:0.85rem;color:#333;line-height:1.6;margin:0;">In most engineering organizations, peer learning already dominates through code review, Slack threads, architecture reviews, and informal knowledge transfer. L&D's mistake is trying to compete with these channels. The real opportunity is strengthening them — better documentation processes, internal tech talks, structured onboarding.</p>
+        </div>
+
+        <!-- Theme 4: Async-first -->
+        <div style="background:#f8f8f8;border:1px solid #e0e0e0;border-radius:12px;padding:1rem;">
+          <h4 style="font-family:'Outfit',sans-serif;font-size:0.92rem;font-weight:700;color:#151515;margin-bottom:0.5rem;">Async-first design</h4>
+          <p style="font-family:'Figtree',sans-serif;font-size:0.85rem;color:#333;line-height:1.6;margin:0;">A two-hour synchronous session isn't just two hours — it's the cognitive switching cost plus time to re-enter flow state. Engineers need content they consume on their schedule, reference documentation they return to when needed, and just-in-time resources at the moment of application, not batched training at arbitrary intervals.</p>
+        </div>
+      </div>
+
+      <!-- Credibility threshold callout -->
+      <div style="background:#fee2e2;border:1.5px solid #c0392b;border-radius:12px;padding:1.25rem;font-family:'Figtree',sans-serif;font-size:0.9rem;color:#333;">
+        <strong style="color:#c0392b;">The credibility threshold is very low.</strong> One wrong variable name in a code example, one outdated API call, one statement about how a system behaves that doesn't match reality. That's enough. Engineers will share the error, the team will hear about it, and your content will be labelled unreliable.
+      </div>
+    </div>
+
+    <!-- SECTION 2: WHAT L&D DELIVERS -->
+    <div class="kw-card">
+      <div class="kw-card-title">What most L&D teams actually deliver</div>
+      <p style="font-family:'Figtree',sans-serif;font-size:0.9rem;color:#555;margin-bottom:1.5rem;line-height:1.7;">The mismatch between what engineering needs and what L&D provides creates the gap. Two primary failure patterns:</p>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+        <!-- Left: Generic content -->
+        <div style="background:#f8f8f8;border:1px solid #e0e0e0;border-radius:12px;padding:1rem;">
+          <h4 style="font-family:'Outfit',sans-serif;font-size:0.92rem;font-weight:700;color:#151515;margin-bottom:0.75rem;">Generic content with technical veneer</h4>
+          <p style="font-family:'Figtree',sans-serif;font-size:0.85rem;color:#333;line-height:1.6;margin:0;">Off-the-shelf vendor courses have the right keywords — "Python fundamentals," "cloud architecture," "DevOps practices" — but miss the specifics that matter in your environment. An engineer who knows your codebase, your deployment pipeline, and your incident response needs completely different learning content from a course built for a generic audience.</p>
+        </div>
+
+        <!-- Right: Compliance pattern -->
+        <div style="background:#f8f8f8;border:1px solid #e0e0e0;border-radius:12px;padding:1rem;">
+          <h4 style="font-family:'Outfit',sans-serif;font-size:0.92rem;font-weight:700;color:#151515;margin-bottom:0.75rem;">Compliance-shaped learning</h4>
+          <p style="font-family:'Figtree',sans-serif;font-size:0.85rem;color:#333;line-height:1.6;margin:0;">Much compliance training is designed to satisfy a checkbox, not change behavior — passive content, completion tracking, minimal interaction. This pattern is fine for compliance, but when applied to technical capability-building, it fails. Engineers know it's designed to be clicked through. Using compliance design for real skill-building produces friction and poor outcomes.</p>
+        </div>
+      </div>
+
+      <!-- Engineers have opinions callout -->
+      <div style="background:#fbbf0e;border:1.5px solid #151515;border-radius:12px;padding:1.25rem;font-family:'Figtree',sans-serif;font-size:0.9rem;color:#151515;margin-top:1rem;">
+        <strong>Engineers often have strong opinions about their own learning needs.</strong> These opinions are usually correct — they know what skills the work requires. The instinct to treat engineers as learners who need guidance, rather than professionals with valid self-knowledge about their development, tends to produce friction.
+      </div>
+    </div>
+
+    <!-- SECTION 3: WHY THE GAP EXISTS -->
+    <div class="kw-card">
+      <div class="kw-card-title">Why the gap exists</div>
+      <p style="font-family:'Figtree',sans-serif;font-size:0.9rem;color:#555;margin-bottom:1.5rem;line-height:1.7;">Several reasons, most of which are structural rather than individual failures:</p>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;">
+        <!-- Reason 1: Wrong skill set -->
+        <div style="background:#1e3a5f;border:1.5px solid #151515;border-radius:16px;padding:1.25rem;">
+          <h4 style="font-family:'Outfit',sans-serif;font-size:0.9rem;font-weight:700;color:#fff;margin-bottom:0.75rem;">01 · Wrong skill set</h4>
+          <p style="font-family:'Figtree',sans-serif;font-size:0.85rem;color:#ccc;line-height:1.6;margin:0;">L&D teams are often built for behavioural training — customer service, sales, compliance. These instincts transfer poorly to technical domains. Building a course on difficult conversations is fundamentally different from building content about distributed systems architecture. The hiring and development pipeline reflects this mismatch.</p>
+        </div>
+
+        <!-- Reason 2: No technical fluency -->
+        <div style="background:#1e3a5f;border:1.5px solid #c0392b;border-radius:16px;padding:1.25rem;">
+          <h4 style="font-family:'Outfit',sans-serif;font-size:0.9rem;font-weight:700;color:#fff;margin-bottom:0.75rem;">02 · No technical fluency</h4>
+          <p style="font-family:'Figtree',sans-serif;font-size:0.85rem;color:#ccc;line-height:1.6;margin:0;">L&D practitioners frequently lack the technical fluency to be genuine partners with engineering. This isn't a personal failing — it's a hiring and development gap. Many L&D functions don't include technical learning experience designers who can hold their own in a conversation about code, systems design, or engineering practice.</p>
+        </div>
+
+        <!-- Reason 3: Misaligned metrics -->
+        <div style="background:#1e3a5f;border:1.5px solid #151515;border-radius:16px;padding:1.25rem;">
+          <h4 style="font-family:'Outfit',sans-serif;font-size:0.9rem;font-weight:700;color:#fff;margin-bottom:0.75rem;">03 · Misaligned metrics</h4>
+          <p style="font-family:'Figtree',sans-serif;font-size:0.85rem;color:#ccc;line-height:1.6;margin:0;">L&D measures completion rates, satisfaction scores, and cost per learner. Engineering teams measure delivery velocity, system reliability, and code quality. These metrics don't connect. If L&D cannot show a direct line from its work to outcomes engineering leaders care about, L&D becomes something engineering tolerates rather than values.</p>
         </div>
       </div>
     </div>
 
-    <!-- 4 principles -->
-    <div style="font-family:'Figtree',sans-serif;font-size:0.72rem;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:0.08em;">4 things to do differently</div>
-    <div class="kw-principle-grid">
-      <div class="kw-principle">
-        <div class="kw-principle-icon">🔧</div>
-        <h3 class="kw-principle-title">Embed before you build</h3>
-        <p class="kw-principle-desc">Get into engineering team rituals before building content. Attend sprint retros. Read post-incident reviews. Content built from that understanding is fundamentally different from content built from stakeholder interviews.</p>
-      </div>
-      <div class="kw-principle">
-        <div class="kw-principle-icon">💻</div>
-        <h3 class="kw-principle-title">Build technical credibility first</h3>
-        <p class="kw-principle-desc">Learn to read code. Complete the same onboarding new engineers do. Engineers have strong instincts for when someone is pretending to understand technical topics. Don't build content in a domain you can't navigate.</p>
-      </div>
-      <div class="kw-principle">
-        <div class="kw-principle-icon">👥</div>
-        <h3 class="kw-principle-title">Partner with tech leads, not managers</h3>
-        <p class="kw-principle-desc">Senior ICs and tech leads field the same questions repeatedly and review the same patterns in code. They know what's actually needed. Managers often don't have that day-to-day visibility into knowledge gaps.</p>
-      </div>
-      <div class="kw-principle">
-        <div class="kw-principle-icon">📊</div>
-        <h3 class="kw-principle-title">Measure what engineering measures</h3>
-        <p class="kw-principle-desc">Time to first meaningful contribution. Reduction in repeat incidents. Code review cycle times. If you can't connect your work to these outcomes, you're probably building the wrong things — or the right things measured wrong.</p>
+    <!-- SECTION 4: WHAT TO DO DIFFERENTLY -->
+    <div class="kw-card">
+      <div class="kw-card-title">What to do differently</div>
+      <p style="font-family:'Figtree',sans-serif;font-size:0.9rem;color:#555;margin-bottom:1.5rem;line-height:1.7;">Four recommendations that change the relationship with engineering. All four require sustained effort — none are one-time actions:</p>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+        <!-- Recommendation 1: Embed early -->
+        <div style="background:#f8f8f8;border:1px solid #e0e0e0;border-radius:12px;padding:1rem;">
+          <h4 style="font-family:'Outfit',sans-serif;font-size:0.92rem;font-weight:700;color:#151515;margin-bottom:0.75rem;">1. Embed early</h4>
+          <p style="font-family:'Figtree',sans-serif;font-size:0.85rem;color:#333;line-height:1.6;margin:0;">Get into engineering team rituals before you're asked to build content. Attend sprint retrospectives. Read post-incident reviews. Understand what actually goes wrong and why. Content built from that understanding is fundamentally different from content built from stakeholder interviews alone.</p>
+        </div>
+
+        <!-- Recommendation 2: Build credibility -->
+        <div style="background:#f8f8f8;border:1px solid #e0e0e0;border-radius:12px;padding:1rem;">
+          <h4 style="font-family:'Outfit',sans-serif;font-size:0.92rem;font-weight:700;color:#151515;margin-bottom:0.75rem;">2. Build technical credibility first</h4>
+          <p style="font-family:'Figtree',sans-serif;font-size:0.85rem;color:#333;line-height:1.6;margin:0;">Learn to read code in the primary language your teams use. Complete the same onboarding new engineers complete. Never pretend to understand technical topics. Engineers have strong instincts for bullshitting. Your technical credibility precedes and enables the content you build.</p>
+        </div>
+
+        <!-- Recommendation 3: Partner with tech leads -->
+        <div style="background:#f8f8f8;border:1px solid #e0e0e0;border-radius:12px;padding:1rem;">
+          <h4 style="font-family:'Outfit',sans-serif;font-size:0.92rem;font-weight:700;color:#151515;margin-bottom:0.75rem;">3. Partner with tech leads, not managers</h4>
+          <p style="font-family:'Figtree',sans-serif;font-size:0.85rem;color:#333;line-height:1.6;margin:0;">Engineering managers often have less insight into day-to-day knowledge gaps than senior individual contributors and tech leads. The people who review code, mentor junior engineers, and field the same questions repeatedly are the people who know what's actually needed. Build partnerships there first.</p>
+        </div>
+
+        <!-- Recommendation 4: Measure what engineering measures -->
+        <div style="background:#f8f8f8;border:1px solid #e0e0e0;border-radius:12px;padding:1rem;">
+          <h4 style="font-family:'Outfit',sans-serif;font-size:0.92rem;font-weight:700;color:#151515;margin-bottom:0.75rem;">4. Measure what engineering measures</h4>
+          <p style="font-family:'Figtree',sans-serif;font-size:0.85rem;color:#333;line-height:1.6;margin:0;">Track time to first meaningful contribution for new hires. Reduction in repeat incidents linked to the same knowledge gap. Code review cycle times. If you can't connect your learning interventions to these outcomes, you're probably building the wrong things — or the right things measured wrong.</p>
+        </div>
       </div>
     </div>
 
-    <!-- CTA -->
+    <!-- CTA STRIP -->
     <div class="kw-cta-strip">
       <h2 class="kw-cta-strip-headline">Working in technical L&D and want to talk?</h2>
       <a href="https://linkedin.com/in/trivedi-abhishek" target="_blank" class="kw-btn kw-btn--dark">Connect on LinkedIn →</a>
     </div>
 
+    <!-- FOOTER -->
     <div class="kw-footer">
       <div class="kw-footer-copy">© 2026 Abhishek Trivedi · Learning Experience Technologist</div>
       <div class="kw-footer-links">

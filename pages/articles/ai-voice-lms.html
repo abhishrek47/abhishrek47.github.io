@@ -573,87 +573,251 @@ fetchSpeech();</code></pre>
 <div id="view-visual">
   <div class="kw-page">
 
+    <!-- BACK LINK -->
+    <a href="../articles.html?view=visual" class="kw-back-link">← Back to Articles</a>
+
     <!-- HERO CARD -->
     <div class="kw-page-hero">
-      <a href="../articles.html?view=visual" class="kw-back-link">← Back to Articles</a>
       <div class="kw-article-meta">
         <span class="kw-tag kw-tag--yellow">AI Integration</span>
-        <span class="kw-tag kw-tag--blue">Storyline 360</span>
-        <span style="font-family:'Figtree',sans-serif;font-size:0.78rem;color:#888;align-self:center;">March 2026</span>
+        <span class="kw-tag kw-tag--blue">Voice Personalization</span>
+        <span style="font-family:'Figtree',sans-serif;font-size:0.78rem;color:#888;align-self:center;">March 2026 · Issue #1</span>
       </div>
       <h1 class="kw-page-title">I made an enterprise LMS speak my learner's name using a live AI voice API.</h1>
-      <p class="kw-page-sub">CORS for a week, a name that came back reversed, an API key in plain JS — what it actually took to ship real-time AI personalisation inside a SCORM course.</p>
+      <p class="kw-page-sub">CORS for a week, a name that came back reversed, an API key sitting in plain JavaScript — what it actually took to ship real-time AI personalisation inside a SCORM course.</p>
     </div>
 
-    <!-- ARCHITECTURE CARD -->
-    <div class="kw-arch-card">
-      <div class="kw-arch-title">⚙️ The Architecture</div>
-      <div class="kw-arch-flow">
-        <div class="kw-arch-node">Enterprise LMS<span class="kw-arch-node-sub">cmi.core.student_name</span></div>
-        <div class="kw-arch-arrow">→</div>
-        <div class="kw-arch-node">JS Trigger<span class="kw-arch-node-sub">Storyline 360</span></div>
-        <div class="kw-arch-arrow">→</div>
-        <div class="kw-arch-node">AI Voice API<span class="kw-arch-node-sub">fetch() → audioFile</span></div>
-        <div class="kw-arch-arrow">→</div>
-        <div class="kw-arch-node" style="background:#fbbf0e;">🔊 Spoken greeting<span class="kw-arch-node-sub">Hello [First Name]</span></div>
-      </div>
-      <p style="font-family:'Figtree',sans-serif;font-size:0.82rem;color:#666;margin:1rem 0 0;line-height:1.6;">No server. No middleware. One JavaScript trigger on slide load — reads the SCORM API, sends to AI voice, plays back a personalised greeting in real time for every learner.</p>
-    </div>
-
-    <!-- 4 WALLS GRID -->
-    <div style="font-family:'Figtree',sans-serif;font-size:0.72rem;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:0.08em;">4 Walls I Hit</div>
-    <div class="kw-walls-grid">
-      <div class="kw-wall-card">
-        <div class="kw-wall-num">01</div>
-        <h3 class="kw-wall-title">CORS — a week in the wrong place</h3>
-        <p class="kw-wall-desc">The fetch call failed silently on first run. Spent almost a week checking proxy settings and network configs — none of it was the problem.</p>
-        <div class="kw-wall-fix">✓ Fix lived on API provider's side — they whitelisted the LMS domain.</div>
-      </div>
-      <div class="kw-wall-card">
-        <div class="kw-wall-num">02</div>
-        <h3 class="kw-wall-title">The name came back as "Last, First"</h3>
-        <p class="kw-wall-desc">Enterprise LMSs store names in Lastname, Firstname format — a legacy SCORM structure. Only surfaces with a real learner account, not SCORM Cloud.</p>
-        <div class="kw-wall-fix" style="font-family:'JetBrains Mono',monospace;font-size:0.72rem;">name.split(", ").reverse()[0]</div>
-      </div>
-      <div class="kw-wall-card">
-        <div class="kw-wall-num">03</div>
-        <h3 class="kw-wall-title">API key in plain JavaScript</h3>
-        <p class="kw-wall-desc">No clean solution in a purely client-side architecture. Anyone with DevTools can read it. Acceptable for internal SSO deployments; a real vulnerability for external audiences.</p>
-        <div class="kw-wall-fix">✓ Risk is context-dependent — internal = acceptable; external = needs backend proxy.</div>
-      </div>
-      <div class="kw-wall-card">
-        <div class="kw-wall-num">04</div>
-        <h3 class="kw-wall-title">Names the AI can't pronounce</h3>
-        <p class="kw-wall-desc">AI voice models struggle with unusual names, non-Latin-script transliterations, and unexpected stress patterns. Global deployments need phonetic overrides.</p>
-        <div class="kw-wall-fix">✓ Use phonetic input + pronunciation hint lookup table for global rollout.</div>
+    <!-- THE GOAL -->
+    <div style="font-family:'Figtree',sans-serif;font-size:0.72rem;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:0.08em;">What I Was Trying to Build</div>
+    <div class="kw-card">
+      <div class="kw-card-title">🎯 The Goal: Real-Time AI Voice Personalization</div>
+      <p style="font-family:'Figtree',sans-serif;font-size:0.88rem;color:#333;line-height:1.6;margin:0;">When the course launches, greet the learner by their first name — <strong>spoken aloud by an AI voice, generated in real time</strong>. No pre-recorded audio. No manually authored variations. The name is pulled from the LMS at runtime, sent to the voice API, and played back within seconds of course opening.</p>
+      <div style="margin-top:1.25rem;padding-top:1.25rem;border-top:1px solid rgba(21,21,21,0.1);">
+        <div style="font-family:'Figtree',sans-serif;font-size:0.75rem;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.75rem;">Key constraint:</div>
+        <p style="font-family:'Figtree',sans-serif;font-size:0.88rem;color:#333;line-height:1.6;margin:0;"><strong>All of this had to live inside a single JavaScript trigger in Storyline 360.</strong> No server. No middleware. One script, firing on slide load.</p>
       </div>
     </div>
 
-    <!-- KEY TAKEAWAYS -->
-    <div class="kw-takeaways-card">
-      <div class="kw-takeaways-title">🔑 What this actually takes</div>
-      <div class="kw-takeaway-item"><div class="kw-takeaway-bullet">1</div><span>Access to a real enterprise LMS to test against — SCORM Cloud doesn't replicate enterprise LMS behaviour accurately</span></div>
-      <div class="kw-takeaway-item"><div class="kw-takeaway-bullet">2</div><span>A conversation with the API provider's technical team to resolve CORS at their end</span></div>
-      <div class="kw-takeaway-item"><div class="kw-takeaway-bullet">3</div><span>Multiple JS iterations to handle different LMS API versions, name formats, and failure states</span></div>
-      <div class="kw-takeaway-item"><div class="kw-takeaway-bullet">4</div><span>A clear-eyed view of the API key security tradeoff and why it was acceptable in this specific context</span></div>
-      <p style="font-family:'Figtree',sans-serif;font-size:0.85rem;color:#444;line-height:1.7;margin:1rem 0 0;padding-top:1rem;border-top:1px solid rgba(21,21,21,0.1);">The code is not the hard part. The environment is the hard part. That's true of almost all AI integration in L&D — the gap between "this works in a demo" and "this works in your LMS" is where the real engineering lives.</p>
+    <!-- THE ARCHITECTURE -->
+    <div style="font-family:'Figtree',sans-serif;font-size:0.72rem;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:0.08em;">System Design</div>
+    <div class="kw-card">
+      <div class="kw-card-title">⚙️ The Architecture: Three Moving Parts</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;margin-bottom:1.5rem;">
+        <div style="background:#1e3a5f;border-radius:12px;padding:1.25rem;font-family:'Figtree',sans-serif;">
+          <div style="font-size:0.72rem;font-weight:600;color:#bfdbfe;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.5rem;">Part 1</div>
+          <div style="font-size:1rem;font-weight:700;color:#fff;margin-bottom:0.5rem;">Enterprise LMS</div>
+          <div style="font-size:0.78rem;color:#94a3b8;line-height:1.5;">Stores learner's name as part of SCORM data model. Exposes via <code style="background:rgba(255,255,255,0.1);padding:0.15em 0.3em;border-radius:3px;">cmi.core.student_name</code></div>
+        </div>
+        <div style="background:#1e3a5f;border-radius:12px;padding:1.25rem;font-family:'Figtree',sans-serif;">
+          <div style="font-size:0.72rem;font-weight:600;color:#bfdbfe;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.5rem;">Part 2</div>
+          <div style="font-size:1rem;font-weight:700;color:#fff;margin-bottom:0.5rem;">JS Trigger</div>
+          <div style="font-size:0.78rem;color:#94a3b8;line-height:1.5;">Runs on course launch in Storyline 360. Reads SCORM API and orchestrates the voice generation workflow.</div>
+        </div>
+        <div style="background:#1e3a5f;border-radius:12px;padding:1.25rem;font-family:'Figtree',sans-serif;">
+          <div style="font-size:0.72rem;font-weight:600;color:#bfdbfe;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.5rem;">Part 3</div>
+          <div style="font-size:1rem;font-weight:700;color:#fff;margin-bottom:0.5rem;">AI Voice API</div>
+          <div style="font-size:0.78rem;color:#94a3b8;line-height:1.5;">Accepts text, converts to speech in real time. Returns audio URL that gets played on slide load.</div>
+        </div>
+      </div>
+      <div style="background:#f8f8f8;border:1.5px solid #e0e0e0;border-radius:12px;padding:1.25rem;font-family:'Figtree',sans-serif;">
+        <div style="font-size:0.75rem;font-weight:600;color:#666;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.75rem;">The flow:</div>
+        <div style="font-size:0.88rem;color:#333;line-height:1.7;"><strong>LMS passes name →</strong> JS trigger reads SCORM API <strong>→</strong> Sends <code style="background:#fff;border:1px solid #ddd;padding:0.15em 0.3em;border-radius:3px;font-family:'JetBrains Mono',monospace;font-size:0.75rem;">fetch()</code> to voice API <strong>→</strong> API returns audioFile URL <strong>→</strong> Audio plays on course launch.</div>
+      </div>
+    </div>
+
+    <!-- CORE CODE SNIPPET -->
+    <div style="font-family:'Figtree',sans-serif;font-size:0.72rem;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:0.08em;">Implementation</div>
+    <div class="kw-card">
+      <div class="kw-card-title">💾 The Core Logic (Simplified)</div>
+      <div style="background:#1e3a5f;border:1.5px solid #151515;border-radius:12px;padding:1.25rem;font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:#f5f0eb;line-height:1.7;overflow-x:auto;">
+<pre style="margin:0;color:#f5f0eb;">var userName = "Learner"; // Default fallback
+
+function getSCORMLearnerName() {
+  var api = null;
+  function findAPI(win) {
+    if (win.API) return win.API;              // SCORM 1.2
+    if (win.API_1484_11) return win.API_1484_11; // SCORM 2004
+    if (win.parent && win.parent !== win) return findAPI(win.parent);
+    return null;
+  }
+  api = findAPI(window);
+  if (api) {
+    var name = (api.LMSGetValue)
+      ? api.LMSGetValue("cmi.core.student_name")
+      : api.GetValue("cmi.learner_name");
+    if (name) return name.split(", ").reverse()[0]; // Extract first name
+  }
+  return "Learner"; // Fallback
+}
+
+userName = getSCORMLearnerName();
+var message = "Hello " + userName + ", welcome to eLearning!";
+
+fetch("https://[api-endpoint]/v1/speech/generate", {
+  method: "POST",
+  headers: { "api-key": "YOUR_KEY", "Content-Type": "application/json" },
+  body: JSON.stringify({ voiceId: "en-UK-[voice]", text: message })
+})
+.then(r => r.json())
+.then(data => { if (data.audioFile) new Audio(data.audioFile).play(); })
+.catch(err => console.error("Error:", err));</pre>
+      </div>
+      <p style="font-family:'Figtree',sans-serif;font-size:0.78rem;color:#666;margin:1rem 0 0;line-height:1.6;">This is the skeleton. The real implementation includes error handling, fallback logic, and adaptations for different SCORM API versions.</p>
+    </div>
+
+    <!-- THE 4 WALLS -->
+    <div style="font-family:'Figtree',sans-serif;font-size:0.72rem;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:0.08em;">Obstacles Encountered</div>
+    <div style="font-family:'Figtree',sans-serif;font-size:0.72rem;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.75rem;">4 Walls I Hit (and How I Solved Them)</div>
+
+    <!-- Wall 1: CORS -->
+    <div class="kw-card">
+      <div class="kw-card-title">🚧 Wall 1: CORS — A Week in the Wrong Place</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;">
+        <div>
+          <div style="font-family:'Figtree',sans-serif;font-size:0.78rem;font-weight:600;color:#151515;margin-bottom:0.5rem;">The problem:</div>
+          <p style="font-family:'Figtree',sans-serif;font-size:0.88rem;color:#333;line-height:1.6;margin:0;margin-bottom:1rem;">The fetch call failed silently when I ran it in the real LMS environment. Browser console showed a CORS error — the AI voice API was blocking requests from the LMS domain.</p>
+          <div style="font-family:'Figtree',sans-serif;font-size:0.78rem;font-weight:600;color:#151515;margin-bottom:0.5rem;">Where I looked first:</div>
+          <ul style="font-family:'Figtree',sans-serif;font-size:0.88rem;color:#333;line-height:1.6;margin:0;padding-left:1.25rem;">
+            <li>Network proxy settings (nope)</li>
+            <li>Firewall rules (nope)</li>
+            <li>Internal middleware (nope)</li>
+            <li>SCORM API configuration (nope)</li>
+          </ul>
+        </div>
+        <div style="background:#fbbf0e;border:1.5px solid #151515;border-radius:12px;padding:1.25rem;">
+          <div style="font-family:'Figtree',sans-serif;font-size:0.78rem;font-weight:600;color:#151515;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.75rem;">✓ The actual fix</div>
+          <p style="font-family:'Figtree',sans-serif;font-size:0.88rem;color:#151515;line-height:1.6;margin:0;margin-bottom:0.75rem;">Lived on the <strong>API provider's side</strong>. Their endpoint needed to explicitly whitelist the LMS domain — the specific URL from which the course was being served.</p>
+          <p style="font-family:'Figtree',sans-serif;font-size:0.78rem;color:#151515;line-height:1.5;margin:0;"><strong>Key lesson:</strong> CORS errors in enterprise are almost always a cross-team problem. You diagnose them but rarely resolve them alone.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Wall 2: Name Format -->
+    <div class="kw-card">
+      <div class="kw-card-title">🚧 Wall 2: The Name Came Back as "Last, First"</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;">
+        <div>
+          <div style="font-family:'Figtree',sans-serif;font-size:0.78rem;font-weight:600;color:#151515;margin-bottom:0.5rem;">The problem:</div>
+          <p style="font-family:'Figtree',sans-serif;font-size:0.88rem;color:#333;line-height:1.6;margin:0;margin-bottom:1rem;">Once the API call started working, the greeting sounded wrong. The LMS was returning the learner's name in <code style="background:rgba(30,58,95,0.12);padding:0.15em 0.4em;border-radius:3px;font-family:'JetBrains Mono',monospace;font-size:0.85em;color:#1e3a5f;">Lastname, Firstname</code> format — a legacy data structure common in enterprise SCORM implementations.</p>
+          <div style="font-family:'Figtree',sans-serif;font-size:0.78rem;font-weight:600;color:#151515;margin-bottom:0.5rem;">Why it only surfaced now:</div>
+          <ul style="font-family:'Figtree',sans-serif;font-size:0.88rem;color:#333;line-height:1.6;margin:0;padding-left:1.25rem;">
+            <li>Local previews don't have real LMS data</li>
+            <li>SCORM Cloud uses different name formats</li>
+            <li>Only manifests with actual learner accounts</li>
+          </ul>
+        </div>
+        <div style="background:#1e3a5f;border:1.5px solid #151515;border-radius:12px;padding:1.25rem;">
+          <div style="font-family:'Figtree',sans-serif;font-size:0.78rem;font-weight:600;color:#bfdbfe;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.75rem;">✓ One-line fix</div>
+          <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.2);border-radius:8px;padding:1rem;margin-bottom:0.75rem;font-family:'JetBrains Mono',monospace;font-size:0.85rem;color:#f5f0eb;">name.split(", ").reverse()[0]</div>
+          <p style="font-family:'Figtree',sans-serif;font-size:0.78rem;color:#bfdbfe;line-height:1.5;margin:0;">Split on comma-space, reverse the array, take the first element. That's it.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Wall 3: API Key Security -->
+    <div class="kw-card">
+      <div class="kw-card-title">🚧 Wall 3: The API Key Sitting in Plain JavaScript</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;">
+        <div>
+          <div style="font-family:'Figtree',sans-serif;font-size:0.78rem;font-weight:600;color:#151515;margin-bottom:0.5rem;">The problem:</div>
+          <p style="font-family:'Figtree',sans-serif;font-size:0.88rem;color:#333;line-height:1.6;margin:0;">There's no clean solution in a purely client-side architecture. The API key lives in the JavaScript, which means anyone who opens DevTools during course runtime can read it.</p>
+          <div style="font-family:'Figtree',sans-serif;font-size:0.78rem;font-weight:600;color:#151515;margin:1rem 0 0.5rem;margin-top:1rem;">Why this isn't simple:</div>
+          <ul style="font-family:'Figtree',sans-serif;font-size:0.88rem;color:#333;line-height:1.6;margin:0;padding-left:1.25rem;">
+            <li>No server-side proxy available</li>
+            <li>Minification only obscures, doesn't protect</li>
+            <li>SCORM courses run in learner's browser</li>
+          </ul>
+        </div>
+        <div style="background:#fbbf0e;border:1.5px solid #151515;border-radius:12px;padding:1.25rem;">
+          <div style="font-family:'Figtree',sans-serif;font-size:0.78rem;font-weight:600;color:#151515;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.75rem;">✓ Risk is context-dependent</div>
+          <div style="font-family:'Figtree',sans-serif;font-size:0.88rem;color:#151515;line-height:1.6;margin:0;">
+            <strong>Internal SSO deployment:</strong> Acceptable. Exposure surface is limited to employees behind SSO.<br/><br/>
+            <strong>External/public audience:</strong> Genuine vulnerability. Requires backend proxy to solve properly.<br/><br/>
+            <strong>Decision made here:</strong> Internal nature of this audience made it an acceptable tradeoff — but only after explicitly examining the risk.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Wall 4: Pronunciation -->
+    <div class="kw-card">
+      <div class="kw-card-title">🚧 Wall 4: Names the AI Can't Pronounce</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;">
+        <div>
+          <div style="font-family:'Figtree',sans-serif;font-size:0.78rem;font-weight:600;color:#151515;margin-bottom:0.5rem;">The problem:</div>
+          <p style="font-family:'Figtree',sans-serif;font-size:0.88rem;color:#333;line-height:1.6;margin:0;margin-bottom:1rem;">AI voice models are trained primarily on common Western names. Unusual names, non-Latin-script names transliterated into English, or names with unexpected stress patterns will be mispronounced.</p>
+          <div style="font-family:'Figtree',sans-serif;font-size:0.78rem;font-weight:600;color:#151515;margin-bottom:0.5rem;">Examples that fail:</div>
+          <ul style="font-family:'Figtree',sans-serif;font-size:0.88rem;color:#333;line-height:1.6;margin:0;padding-left:1.25rem;">
+            <li>Non-Latin scripts transliterated</li>
+            <li>Names with unexpected syllable stress</li>
+            <li>Regional variations (e.g., Icelandic, Irish)</li>
+          </ul>
+        </div>
+        <div style="background:#1e3a5f;border:1.5px solid #151515;border-radius:12px;padding:1.25rem;">
+          <div style="font-family:'Figtree',sans-serif;font-size:0.78rem;font-weight:600;color:#bfdbfe;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.75rem;">✓ For global deployments</div>
+          <p style="font-family:'Figtree',sans-serif;font-size:0.88rem;color:#f5f0eb;line-height:1.6;margin:0;margin-bottom:0.75rem;"><strong>Most voice APIs support phonetic input.</strong> Pass a pronunciation hint alongside the name.</p>
+          <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.2);border-radius:8px;padding:1rem;margin-bottom:0.75rem;font-family:'Figtree',sans-serif;font-size:0.78rem;color:#bfdbfe;">
+            Requires: lookup table or override mechanism for your global learner population.
+          </div>
+          <p style="font-family:'Figtree',sans-serif;font-size:0.75rem;color:#94a3b8;margin:0;">Adds complexity. Worth the cost for international rollout.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- WHAT THE LEARNER EXPERIENCED -->
+    <div style="font-family:'Figtree',sans-serif;font-size:0.72rem;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:0.08em;">Outcome</div>
+    <div class="kw-card">
+      <div class="kw-card-title">👂 What the Learner Actually Experienced</div>
+      <p style="font-family:'Figtree',sans-serif;font-size:0.88rem;color:#333;line-height:1.6;margin:0;margin-bottom:1.25rem;">On course launch, before any content appeared, the course played:</p>
+      <div style="background:#f8f8f8;border-left:4px solid #c0392b;border-radius:0 6px 6px 0;padding:1.25rem;margin-bottom:1.25rem;">
+        <div style="font-family:'Figtree',sans-serif;font-size:0.88rem;color:#333;line-height:1.6;font-style:italic;margin:0;">"Hello [First Name], welcome to this eLearning course"</div>
+      </div>
+      <p style="font-family:'Figtree',sans-serif;font-size:0.88rem;color:#333;line-height:1.6;margin:0;"><strong>Spoken in a natural AI voice, using the actual name pulled from the LMS in real time.</strong> No pre-recording. No manual variations. The audio was generated fresh on every launch, for every learner — personalised immediately without any human touch.</p>
+    </div>
+
+    <!-- WHAT THIS TOOK -->
+    <div style="font-family:'Figtree',sans-serif;font-size:0.72rem;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:0.08em;">Behind the Scenes</div>
+    <div class="kw-card">
+      <div class="kw-card-title">🛠️ What This Actually Took (Most Tutorials Skip This)</div>
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;">
+        <div style="background:#f3e8ff;border:1.5px solid #151515;border-radius:12px;padding:1.25rem;">
+          <div style="font-family:'Figtree',sans-serif;font-size:0.75rem;font-weight:600;color:#151515;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.75rem;">✓ Real LMS access</div>
+          <p style="font-family:'Figtree',sans-serif;font-size:0.88rem;color:#333;line-height:1.6;margin:0;">Access to a real enterprise LMS environment — not SCORM Cloud. SCORM Cloud doesn't replicate how an actual enterprise LMS structures its data and exposes the SCORM API.</p>
+        </div>
+        <div style="background:#f3e8ff;border:1.5px solid #151515;border-radius:12px;padding:1.25rem;">
+          <div style="font-family:'Figtree',sans-serif;font-size:0.75rem;font-weight:600;color:#151515;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.75rem;">✓ Cross-team coordination</div>
+          <p style="font-family:'Figtree',sans-serif;font-size:0.88rem;color:#333;line-height:1.6;margin:0;">A conversation with the API provider's technical team to resolve CORS at their end. This isn't something you can fix in your own code.</p>
+        </div>
+        <div style="background:#f3e8ff;border:1.5px solid #151515;border-radius:12px;padding:1.25rem;">
+          <div style="font-family:'Figtree',sans-serif;font-size:0.75rem;font-weight:600;color:#151515;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.75rem;">✓ Iterative development</div>
+          <p style="font-family:'Figtree',sans-serif;font-size:0.88rem;color:#333;line-height:1.6;margin:0;">Multiple iterations of the JavaScript to handle different LMS API versions, name formats, edge cases, and failure states. Not one-and-done code.</p>
+        </div>
+        <div style="background:#f3e8ff;border:1.5px solid #151515;border-radius:12px;padding:1.25rem;">
+          <div style="font-family:'Figtree',sans-serif;font-size:0.75rem;font-weight:600;color:#151515;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.75rem;">✓ Security thinking</div>
+          <p style="font-family:'Figtree',sans-serif;font-size:0.88rem;color:#333;line-height:1.6;margin:0;">A clear-eyed view of the API key tradeoff and why it was acceptable in this context. Not ignoring the vulnerability, but consciously deciding to accept it.</p>
+        </div>
+      </div>
+      <div style="margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid rgba(21,21,21,0.1);">
+        <p style="font-family:'Figtree',sans-serif;font-size:0.88rem;color:#333;line-height:1.7;margin:0;"><strong>The code itself is not the hard part. The environment is the hard part.</strong> That's true of almost all AI integration work in L&D — the gap between "this works in a demo" and "this works in your LMS, on your network, for your learners" is where the real engineering lives.</p>
+      </div>
     </div>
 
     <!-- CTA -->
     <div class="kw-cta-strip">
       <h2 class="kw-cta-strip-headline">Working on something similar?</h2>
-      <a href="https://linkedin.com/in/trivedi-abhishek" target="_blank" rel="noopener" class="kw-btn kw-btn--dark">Connect on LinkedIn</a>
+      <a href="https://linkedin.com/in/trivedi-abhishek" target="_blank" rel="noopener" class="kw-btn kw-btn--dark">Connect on LinkedIn →</a>
     </div>
 
+    <!-- FOOTER -->
     <div class="kw-footer">
       <div class="kw-footer-copy">© 2026 Abhishek Trivedi · Learning Experience Technologist</div>
-      <span class="kw-footer-credit">Visual design inspired by <a href="https://kawe.ski" target="_blank" rel="noopener" class="kw-footer-credit-link">kawe.ski ↗</a></span>
       <div class="kw-footer-links">
         <a href="https://www.linkedin.com/in/trivedi-abhishek/" target="_blank" class="kw-footer-link">LinkedIn</a>
+        <a href="../contact.html?view=visual" class="kw-footer-link">Contact</a>
         <a href="../articles.html?view=visual" class="kw-footer-link">Articles</a>
-        <a href="../../index.html" class="kw-footer-link">Home</a>
       </div>
     </div>
+
   </div>
 </div>
 

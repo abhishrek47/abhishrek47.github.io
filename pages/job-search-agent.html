@@ -24,7 +24,7 @@
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;1,700;1,800&family=DM+Sans:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;1,700;1,800&family=DM+Sans:wght@400;500&family=JetBrains+Mono:wght@400;500&family=Outfit:wght@400;500;600;700&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root {
   --bg: #f5f0eb;
@@ -466,9 +466,105 @@ code { font-family: var(--mono); font-size: 0.84em; background: rgba(30,58,95,0.
   .nav-logo { font-size: 1rem; }
   .site-nav::after { content: 'AT.'; font-family: var(--mono); font-size: 0.72rem; color: var(--muted); display: none; }
 }
+
+/* ── VIEW SYSTEM ── */
+#view-editorial, #view-visual { display: none; }
+#view-editorial.view-active, #view-visual.view-active { display: block; }
+
+/* ── VIEW SWITCHER ── */
+#view-switcher {
+  position: fixed; bottom: 2rem; right: 2rem; z-index: 900;
+  display: flex; background: #0f0f0f;
+  border: 1px solid rgba(255,255,255,0.12); border-radius: 100px;
+  padding: 4px; gap: 3px; box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+}
+.vsw-btn {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; font-weight: 500;
+  letter-spacing: 0.06em; text-transform: uppercase; color: rgba(255,255,255,0.4);
+  background: none; border: none; border-radius: 100px; padding: 0.45rem 1rem;
+  cursor: pointer; transition: all 0.2s;
+}
+.vsw-btn:hover:not(.vsw-active) { color: rgba(255,255,255,0.75); }
+#btn-editorial.vsw-active { background: #c84b2f; color: #fff; font-weight: 700; }
+#btn-visual.vsw-active { background: #7c3aed; color: #fff; font-weight: 700; }
+
+/* ── YELLOW NAV (visual view) ── */
+#td-nav {
+  position: sticky; top: 0; z-index: 200; background: #fbbf0e;
+  border-bottom: 1.5px solid #151515; display: none;
+  align-items: center; justify-content: space-between;
+  padding: 0 2.5rem; height: 58px; gap: 2rem;
+}
+#td-nav .n-logo { font-family: 'Outfit', sans-serif; font-size: 1rem; font-weight: 700; color: #151515; text-decoration: none; letter-spacing: -0.02em; }
+#td-nav .n-links { display: flex; gap: 0.35rem; list-style: none; align-items: center; padding: 0; margin: 0; }
+#td-nav .n-links a { font-family: 'Outfit', sans-serif; font-size: 0.9rem; font-weight: 400; color: #151515; text-decoration: none; padding: 0.5rem 0.85rem; border: 1.5px solid #151515; border-radius: 8px; background: #ffffff; box-shadow: rgba(0,0,0,0.15) 3px 3px 0 0; transition: box-shadow 0.12s, transform 0.12s; white-space: nowrap; }
+#td-nav .n-links a:hover { box-shadow: rgba(0,0,0,0.18) 2px 2px 0 0; transform: translate(1px,1px); }
+#td-nav .n-links a.kw-active { background: #151515; color: #fbbf0e; box-shadow: none; }
+#td-nav .n-ham { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; padding: 4px; }
+#td-nav .n-ham span { display: block; width: 22px; height: 2px; background: #151515; border-radius: 2px; transition: all 0.3s; }
+#td-drawer { display: none; position: fixed; top: 58px; left: 0; right: 0; background: #fbbf0e; border-bottom: 1.5px solid #151515; padding: 1rem 1.5rem; flex-direction: column; gap: 0.5rem; list-style: none; z-index: 199; margin: 0; }
+#td-drawer.open { display: flex; }
+#td-drawer a { font-family: 'Figtree', sans-serif; font-size: 0.9rem; font-weight: 500; color: #151515; text-decoration: none; padding: 0.55rem 0; border-bottom: 1px solid rgba(21,21,21,0.15); }
+#td-drawer a:last-child { border-bottom: none; }
+
+/* ── KW PAGE SHELL (visual view) ── */
+#view-visual { background: #f8f9ff; min-height: 100vh; }
+.kw-page { max-width: 1140px; margin: 0 auto; padding: 2.5rem 2rem; display: flex; flex-direction: column; gap: 1.75rem; }
+.kw-page-hero { padding: 2.5rem; background: #ffffff; border: 1.5px solid #151515; border-radius: 16px; }
+.kw-page-title { font-family: 'Outfit',sans-serif; font-size: clamp(1.6rem,3.5vw,2.5rem); font-weight: 700; color: #151515; margin: 0 0 1rem; letter-spacing: -0.025em; line-height: 1.2; }
+.kw-page-sub { font-family: 'Figtree',sans-serif; font-size: 0.97rem; line-height: 1.7; color: #444; margin: 0; }
+.kw-tag { display: inline-flex; align-items: center; font-family: 'Figtree',sans-serif; font-size: 0.76rem; font-weight: 600; padding: 0.35rem 0.85rem; border: 1.5px solid #151515; border-radius: 6px; line-height: 1; white-space: nowrap; }
+.kw-tag--yellow { background: #fbbf0e; color: #151515; }
+.kw-tag--blue { background: #bfdbfe; color: #151515; }
+.kw-tag--green { background: #bbf7d0; color: #151515; }
+.kw-btn { font-family: 'Figtree',sans-serif; font-size: 0.88rem; font-weight: 600; padding: 0.65rem 1.5rem; border-radius: 100px; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 0.4rem; transition: transform 0.15s, box-shadow 0.15s; border: 1.5px solid #151515; }
+.kw-btn:hover { transform: translateY(-2px); box-shadow: 3px 3px 0 #151515; }
+.kw-btn--dark { background: #151515; color: #fbbf0e; }
+.kw-card { background: #fff; border: 1.5px solid #151515; border-radius: 16px; padding: 1.5rem; }
+.kw-card-title { font-family: 'Outfit',sans-serif; font-size: 1rem; font-weight: 700; color: #151515; margin: 0 0 1rem; }
+.kw-back-link { font-family:'Figtree',sans-serif;font-size:0.82rem;color:#666;text-decoration:none;display:inline-flex;align-items:center;gap:0.4rem;margin-bottom:0.5rem;transition:color 0.15s; }
+.kw-back-link:hover { color:#151515; }
+.kw-article-meta { display:flex;flex-wrap:wrap;gap:0.5rem;margin-bottom:1rem; }
+.kw-cta-strip { display:flex;align-items:center;justify-content:space-between;padding:2.5rem;gap:2rem;flex-wrap:wrap;background:#fbbf0e;border:1.5px solid #151515;border-radius:16px; }
+.kw-cta-strip-headline { font-family:'Outfit',sans-serif;font-size:clamp(1.4rem,2.5vw,2rem);font-weight:700;color:#151515;margin:0;letter-spacing:-0.02em;line-height:1.25; }
+.kw-footer { display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;padding:1.5rem 0 2.5rem;border-top:1.5px solid rgba(21,21,21,0.2);margin-top:0.5rem; }
+.kw-footer-copy { font-family:'Figtree',sans-serif;font-size:0.78rem;color:#888; }
+.kw-footer-links { display:flex;gap:0.5rem;flex-wrap:wrap; }
+.kw-footer-link { font-family:'Figtree',sans-serif;font-size:0.78rem;font-weight:500;color:#151515;text-decoration:none;padding:0.35rem 1rem;border:1.5px solid #151515;border-radius:100px;transition:background 0.15s; }
+.kw-footer-link:hover { background:#fbbf0e; }
+
+@media(max-width:900px){#td-nav .n-links{display:none}#td-nav .n-ham{display:flex}}
+@media(max-width:600px){
+  .kw-page{padding:1.25rem 1rem;gap:1.25rem}
+  .kw-page-hero{padding:1.5rem}
+  .kw-cta-strip{padding:1.5rem;flex-direction:column;align-items:stretch}
+}
 </style>
 </head>
 <body class="os-mac">
+
+<!-- Yellow nav (visual view only) -->
+<div id="td-nav">
+  <a href="../index.html" class="n-logo">AT.</a>
+  <ul class="n-links">
+    <li><a href="../pages/work.html">Work</a></li>
+    <li><a href="../pages/about.html">About</a></li>
+    <li><a href="../pages/articles.html?view=visual" class="kw-active">Articles</a></li>
+    <li><a href="../index.html#contact" class="n-cta">Let's Talk</a></li>
+  </ul>
+  <button class="n-ham" id="td-ham" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</div>
+<ul id="td-drawer">
+  <a href="../pages/work.html">Work</a>
+  <a href="../pages/about.html">About</a>
+  <a href="../pages/articles.html?view=visual">Articles</a>
+  <a href="../index.html#contact">Let's Talk</a>
+</ul>
+
+<!-- ── EDITORIAL VIEW ── -->
+<div id="view-editorial" class="view-active">
 
 <nav class="site-nav">
   <a href="../index.html" class="nav-logo">AT.</a>
@@ -1807,5 +1903,335 @@ document.addEventListener('keydown', function(e) {
   if (e.key === 'Escape') closeNewsletter(false);
 });
 </script>
+
+</div><!-- /view-editorial -->
+
+<!-- ── VISUAL VIEW ── -->
+<div id="view-visual">
+  <div class="kw-page">
+
+    <!-- BACK LINK -->
+    <a href="../articles.html?view=visual" class="kw-back-link">← Back to Articles</a>
+
+    <!-- HERO CARD -->
+    <div class="kw-page-hero">
+      <div class="kw-article-meta">
+        <span class="kw-tag kw-tag--yellow">Claude Cowork</span>
+        <span class="kw-tag kw-tag--blue">Gmail MCP</span>
+        <span class="kw-tag kw-tag--green">Scheduled Task</span>
+        <span style="font-family:'Figtree',sans-serif;font-size:0.78rem;color:#888;align-self:center;">2026 · Issue #3</span>
+      </div>
+      <h1 class="kw-page-title">Build a Job Search Agent That Runs While You Sleep</h1>
+      <p class="kw-page-sub">A step-by-step guide to creating an autonomous agent in Claude Cowork that searches 9 job boards, applies your filters, and emails you a daily digest. Zero code. 45 minutes to setup.</p>
+    </div>
+
+    <!-- STATS CARD -->
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;">
+      <div class="kw-card" style="text-align:center;padding:1.75rem;">
+        <div style="font-family:'Outfit',sans-serif;font-size:2rem;font-weight:700;color:#7c3aed;line-height:1;">0</div>
+        <div style="font-family:'Figtree',sans-serif;font-size:0.75rem;font-weight:600;color:#666;text-transform:uppercase;letter-spacing:0.05em;margin-top:0.5rem;">Lines of Code</div>
+      </div>
+      <div class="kw-card" style="text-align:center;padding:1.75rem;">
+        <div style="font-family:'Outfit',sans-serif;font-size:2rem;font-weight:700;color:#7c3aed;line-height:1;">~45</div>
+        <div style="font-family:'Figtree',sans-serif;font-size:0.75rem;font-weight:600;color:#666;text-transform:uppercase;letter-spacing:0.05em;margin-top:0.5rem;">Minutes Setup</div>
+      </div>
+      <div class="kw-card" style="text-align:center;padding:1.75rem;">
+        <div style="font-family:'Outfit',sans-serif;font-size:2rem;font-weight:700;color:#7c3aed;line-height:1;">9</div>
+        <div style="font-family:'Figtree',sans-serif;font-size:0.75rem;font-weight:600;color:#666;text-transform:uppercase;letter-spacing:0.05em;margin-top:0.5rem;">Job Boards</div>
+      </div>
+      <div class="kw-card" style="text-align:center;padding:1.75rem;">
+        <div style="font-family:'Outfit',sans-serif;font-size:2rem;font-weight:700;color:#7c3aed;line-height:1;">12</div>
+        <div style="font-family:'Figtree',sans-serif;font-size:0.75rem;font-weight:600;color:#666;text-transform:uppercase;letter-spacing:0.05em;margin-top:0.5rem;">Guide Sections</div>
+      </div>
+    </div>
+
+    <!-- BEFORE VS AFTER -->
+    <div style="font-family:'Figtree',sans-serif;font-size:0.72rem;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:0.08em;">The Difference</div>
+    <div class="kw-card">
+      <div class="kw-card-title">Before vs. After: What Changes</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;">
+        <div>
+          <div style="font-family:'Figtree',sans-serif;font-size:0.78rem;font-weight:600;color:#c0392b;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.75rem;">❌ Before (Manual)</div>
+          <ul style="font-family:'Figtree',sans-serif;font-size:0.88rem;color:#333;line-height:1.7;margin:0;padding-left:1.25rem;list-style:none;">
+            <li style="position:relative;padding-left:1rem;margin-bottom:0.5rem;"><span style="position:absolute;left:0;">–</span>Spend 3 hours/day on job sites</li>
+            <li style="position:relative;padding-left:1rem;margin-bottom:0.5rem;"><span style="position:absolute;left:0;">–</span>Manual filtering by role, salary, location</li>
+            <li style="position:relative;padding-left:1rem;margin-bottom:0.5rem;"><span style="position:absolute;left:0;">–</span>Repeat every single day</li>
+            <li style="position:relative;padding-left:1rem;margin-bottom:0.5rem;"><span style="position:absolute;left:0;">–</span>Miss opportunities while sleeping</li>
+            <li style="position:relative;padding-left:1rem;"><span style="position:absolute;left:0;">–</span>Burn out from repetition</li>
+          </ul>
+        </div>
+        <div>
+          <div style="font-family:'Figtree',sans-serif;font-size:0.78rem;font-weight:600;color:#2ecc71;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.75rem;">✓ After (Automated)</div>
+          <ul style="font-family:'Figtree',sans-serif;font-size:0.88rem;color:#333;line-height:1.7;margin:0;padding-left:1.25rem;list-style:none;">
+            <li style="position:relative;padding-left:1rem;margin-bottom:0.5rem;"><span style="position:absolute;left:0;">+</span>Agent works 24/7 while you sleep</li>
+            <li style="position:relative;padding-left:1rem;margin-bottom:0.5rem;"><span style="position:absolute;left:0;">+</span>5 smart filters applied automatically</li>
+            <li style="position:relative;padding-left:1rem;margin-bottom:0.5rem;"><span style="position:absolute;left:0;">+</span>Daily digest in your email</li>
+            <li style="position:relative;padding-left:1rem;margin-bottom:0.5rem;"><span style="position:absolute;left:0;">+</span>Never miss an opportunity</li>
+            <li style="position:relative;padding-left:1rem;"><span style="position:absolute;left:0;">+</span>Focus on what you do best</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- HOW IT WORKS -->
+    <div style="font-family:'Figtree',sans-serif;font-size:0.72rem;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:0.08em;margin-top:1rem;">How the System Works</div>
+    <div class="kw-card">
+      <div class="kw-card-title">⚙️ The Pipeline: 5 Steps Each Morning</div>
+      <div style="display:flex;flex-direction:column;gap:0.75rem;">
+        <div style="display:flex;align-items:center;gap:1rem;padding:1rem;background:#f8f8f8;border-radius:10px;">
+          <div style="font-family:'Outfit',sans-serif;font-size:0.75rem;font-weight:700;color:#fff;background:#7c3aed;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">1</div>
+          <div style="font-family:'Figtree',sans-serif;font-size:0.88rem;color:#333;"><strong>Agent wakes up</strong> and reads your SKILL.md file (your filters + search keywords)</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:1rem;padding:1rem;background:#f8f8f8;border-radius:10px;">
+          <div style="font-family:'Outfit',sans-serif;font-size:0.75rem;font-weight:700;color:#fff;background:#7c3aed;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">2</div>
+          <div style="font-family:'Figtree',sans-serif;font-size:0.88rem;color:#333;"><strong>Searches 9 job boards</strong> using your keywords (LinkedIn, Indeed, Greenhouse, etc.)</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:1rem;padding:1rem;background:#f8f8f8;border-radius:10px;">
+          <div style="font-family:'Outfit',sans-serif;font-size:0.75rem;font-weight:700;color:#fff;background:#7c3aed;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">3</div>
+          <div style="font-family:'Figtree',sans-serif;font-size:0.88rem;color:#333;"><strong>Applies 5 filters</strong> to each result (salary, remote, role match, company type, size)</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:1rem;padding:1rem;background:#f8f8f8;border-radius:10px;">
+          <div style="font-family:'Outfit',sans-serif;font-size:0.75rem;font-weight:700;color:#fff;background:#7c3aed;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">4</div>
+          <div style="font-family:'Figtree',sans-serif;font-size:0.88rem;color:#333;"><strong>Checks your Gmail</strong> for rejections, patterns, and recent application updates</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:1rem;padding:1rem;background:#f8f8f8;border-radius:10px;">
+          <div style="font-family:'Outfit',sans-serif;font-size:0.75rem;font-weight:700;color:#fff;background:#7c3aed;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">5</div>
+          <div style="font-family:'Figtree',sans-serif;font-size:0.88rem;color:#333;"><strong>Sends you a digest</strong> email with new roles, filtered results, and action items</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- THE 5 FILTERS -->
+    <div style="font-family:'Figtree',sans-serif;font-size:0.72rem;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:0.08em;margin-top:1rem;">Smart Filtering</div>
+    <div class="kw-card">
+      <div class="kw-card-title">🎯 The 5 Filters That Eliminate Noise</div>
+      <div style="display:flex;flex-direction:column;gap:0;border:1.5px solid #e5e5e5;border-radius:12px;overflow:hidden;">
+        <div style="display:flex;align-items:flex-start;gap:0.75rem;padding:1rem;border-bottom:1px solid #e5e5e5;font-family:'Figtree',sans-serif;">
+          <div style="font-family:'Outfit',sans-serif;font-size:0.7rem;font-weight:700;color:#fbbf0e;background:#151515;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;">1</div>
+          <div><div style="font-weight:600;color:#151515;font-size:0.88rem;margin-bottom:0.25rem;">Role Relevance</div><div style="color:#666;font-size:0.8rem;">Matches titles and descriptions against your resume keywords</div></div>
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:0.75rem;padding:1rem;border-bottom:1px solid #e5e5e5;font-family:'Figtree',sans-serif;">
+          <div style="font-family:'Outfit',sans-serif;font-size:0.7rem;font-weight:700;color:#fbbf0e;background:#151515;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;">2</div>
+          <div><div style="font-weight:600;color:#151515;font-size:0.88rem;margin-bottom:0.25rem;">Salary Range</div><div style="color:#666;font-size:0.8rem;">Skips postings below your minimum threshold</div></div>
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:0.75rem;padding:1rem;border-bottom:1px solid #e5e5e5;font-family:'Figtree',sans-serif;">
+          <div style="font-family:'Outfit',sans-serif;font-size:0.7rem;font-weight:700;color:#fbbf0e;background:#151515;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;">3</div>
+          <div><div style="font-weight:600;color:#151515;font-size:0.88rem;margin-bottom:0.25rem;">Remote Eligibility</div><div style="color:#666;font-size:0.8rem;">Filters out on-site or hybrid roles if you require remote</div></div>
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:0.75rem;padding:1rem;border-bottom:1px solid #e5e5e5;font-family:'Figtree',sans-serif;background:#fbbf0e33;">
+          <div style="font-family:'Outfit',sans-serif;font-size:0.7rem;font-weight:700;color:#fbbf0e;background:#151515;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;">4</div>
+          <div><div style="font-weight:600;color:#151515;font-size:0.88rem;margin-bottom:0.25rem;">Internal L&amp;D Only — No Agencies</div><div style="color:#333;font-size:0.8rem;font-weight:500;">🔑 Most important. Eliminates staffing agency postings. Only surfaces roles where L&amp;D is the internal function.</div></div>
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:0.75rem;padding:1rem;font-family:'Figtree',sans-serif;">
+          <div style="font-family:'Outfit',sans-serif;font-size:0.7rem;font-weight:700;color:#fbbf0e;background:#151515;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;">5</div>
+          <div><div style="font-weight:600;color:#151515;font-size:0.88rem;margin-bottom:0.25rem;">Company Stage &amp; Size</div><div style="color:#666;font-size:0.8rem;">Prioritize Series A-C startups, avoid early-stage, set minimum employee count</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SETUP STEPS -->
+    <div style="font-family:'Figtree',sans-serif;font-size:0.72rem;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:0.08em;margin-top:1rem;">Setup Steps (12 Total)</div>
+
+    <!-- GMAIL & CREDENTIALS -->
+    <div class="kw-card">
+      <div class="kw-card-title">📧 Gmail &amp; Credentials (Sections 03-04)</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;">
+        <div>
+          <div style="font-family:'Figtree',sans-serif;font-size:0.78rem;font-weight:600;color:#151515;margin-bottom:0.75rem;">What you need:</div>
+          <ul style="font-family:'Figtree',sans-serif;font-size:0.88rem;color:#333;line-height:1.6;margin:0;padding-left:1.25rem;">
+            <li>Gmail account with 2-step verification enabled</li>
+            <li>App password (16-character, generated by Google)</li>
+            <li>Email address to send digests to</li>
+          </ul>
+        </div>
+        <div style="background:#f3e8ff;border:1.5px solid #151515;border-radius:12px;padding:1.25rem;">
+          <div style="font-family:'Figtree',sans-serif;font-size:0.78rem;font-weight:600;color:#151515;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.75rem;">How to get the app password:</div>
+          <ol style="font-family:'Figtree',sans-serif;font-size:0.88rem;color:#333;line-height:1.6;margin:0;padding-left:1.25rem;">
+            <li>Security settings (myaccount.google.com/security)</li>
+            <li>Enable 2-step verification (if needed)</li>
+            <li>Scroll to "App passwords"</li>
+            <li>Select "Mail" + your OS</li>
+            <li>Copy the 16-char password</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <!-- COWORK & GMAIL MCP -->
+    <div class="kw-card">
+      <div class="kw-card-title">🔗 Cowork + Gmail MCP (Sections 05-06)</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;">
+        <div style="background:#e8f5ff;border:1.5px solid #151515;border-radius:12px;padding:1.25rem;">
+          <div style="font-family:'Figtree',sans-serif;font-size:0.78rem;font-weight:600;color:#151515;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.75rem;">What is Claude Cowork?</div>
+          <p style="font-family:'Figtree',sans-serif;font-size:0.88rem;color:#333;line-height:1.6;margin:0;">Anthropic's personal AI assistant for long-lived tasks. Runs on your machine, stays local, executes scheduled jobs 24/7.</p>
+        </div>
+        <div style="background:#e8f5ff;border:1.5px solid #151515;border-radius:12px;padding:1.25rem;">
+          <div style="font-family:'Figtree',sans-serif;font-size:0.78rem;font-weight:600;color:#151515;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.75rem;">What Gmail MCP enables:</div>
+          <ul style="font-family:'Figtree',sans-serif;font-size:0.88rem;color:#333;line-height:1.6;margin:0;padding-left:1.25rem;">
+            <li>Read recent emails</li>
+            <li>Send emails</li>
+            <li>Search inbox</li>
+            <li>Access only email — no Drive, Calendar, etc.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- SKILL.MD -->
+    <div class="kw-card">
+      <div class="kw-card-title">🧠 SKILL.md — The Agent's Brain (Section 07)</div>
+      <p style="font-family:'Figtree',sans-serif;font-size:0.9rem;color:#333;line-height:1.7;margin:0 0 1.25rem;">This is the most important file. A Markdown document living in your Cowork workspace that Claude reads cold on every run. Everything the agent needs to know lives here.</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+        <div style="background:#f8f8f8;border:1px solid #e0e0e0;border-radius:10px;padding:1rem;">
+          <div style="font-family:'Figtree',sans-serif;font-size:0.78rem;font-weight:600;color:#333;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.5rem;">Profile section</div>
+          <p style="font-family:'Figtree',sans-serif;font-size:0.8rem;color:#666;margin:0;line-height:1.5;">Who you are and what you're looking for. Your title, experience, and job preferences.</p>
+        </div>
+        <div style="background:#f8f8f8;border:1px solid #e0e0e0;border-radius:10px;padding:1rem;">
+          <div style="font-family:'Figtree',sans-serif;font-size:0.78rem;font-weight:600;color:#333;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.5rem;">Hard filters</div>
+          <p style="font-family:'Figtree',sans-serif;font-size:0.8rem;color:#666;margin:0;line-height:1.5;">Non-negotiable criteria: salary floor, remote requirement, company type, excluded companies.</p>
+        </div>
+        <div style="background:#f8f8f8;border:1px solid #e0e0e0;border-radius:10px;padding:1rem;">
+          <div style="font-family:'Figtree',sans-serif;font-size:0.78rem;font-weight:600;color:#333;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.5rem;">Search instructions</div>
+          <p style="font-family:'Figtree',sans-serif;font-size:0.8rem;color:#666;margin:0;line-height:1.5;">Exactly which 9 boards to search and what keywords to use.</p>
+        </div>
+        <div style="background:#f8f8f8;border:1px solid #e0e0e0;border-radius:10px;padding:1rem;">
+          <div style="font-family:'Figtree',sans-serif;font-size:0.78rem;font-weight:600;color:#333;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.5rem;">Gmail check</div>
+          <p style="font-family:'Figtree',sans-serif;font-size:0.8rem;color:#666;margin:0;line-height:1.5;">How to scan for rejections, patterns, and include feedback in the digest.</p>
+        </div>
+        <div style="background:#f8f8f8;border:1px solid #e0e0e0;border-radius:10px;padding:1rem;">
+          <div style="font-family:'Figtree',sans-serif;font-size:0.78rem;font-weight:600;color:#333;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.5rem;">Email format</div>
+          <p style="font-family:'Figtree',sans-serif;font-size:0.8rem;color:#666;margin:0;line-height:1.5;">How to structure the digest email: sections, headers, content.</p>
+        </div>
+        <div style="background:#f8f8f8;border:1px solid #e0e0e0;border-radius:10px;padding:1rem;">
+          <div style="font-family:'Figtree',sans-serif;font-size:0.78rem;font-weight:600;color:#333;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.5rem;">Failure handling</div>
+          <p style="font-family:'Figtree',sans-serif;font-size:0.8rem;color:#666;margin:0;line-height:1.5;">What to do if a board is down, Gmail fails, or no roles are found.</p>
+        </div>
+      </div>
+      <div style="margin-top:1.25rem;padding-top:1.25rem;border-top:1px solid #e5e5e5;">
+        <div style="background:#fbbf0e;border:1.5px solid #151515;border-radius:12px;padding:1.25rem;font-family:'Figtree',sans-serif;font-size:0.88rem;color:#151515;line-height:1.7;">
+          <strong>Key insight:</strong> Everything the agent needs must be in this file. Claude reads it cold on every run — no training, no memory, just instructions. Edit SKILL.md to change how the agent behaves. Next run picks it up automatically.
+        </div>
+      </div>
+    </div>
+
+    <!-- SCHEDULING -->
+    <div class="kw-card">
+      <div class="kw-card-title">⏰ Scheduling + System Sleep (Sections 08-09)</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;">
+        <div>
+          <div style="font-family:'Figtree',sans-serif;font-size:0.78rem;font-weight:600;color:#151515;margin-bottom:0.75rem;">In Cowork:</div>
+          <p style="font-family:'Figtree',sans-serif;font-size:0.88rem;color:#333;line-height:1.6;margin:0;">Create a scheduled task. Tell it when to run (cron expression: <code style="background:rgba(30,58,95,0.12);padding:0.1em 0.3em;border-radius:3px;font-family:'JetBrains Mono',monospace;font-size:0.8em;">0 9 * * 1-5</code> = 9 AM weekdays). Fires automatically.</p>
+        </div>
+        <div style="background:#1e3a5f;border:1.5px solid #151515;border-radius:12px;padding:1.25rem;">
+          <div style="font-family:'Figtree',sans-serif;font-size:0.78rem;font-weight:600;color:#bfdbfe;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.75rem;">Keep computer awake:</div>
+          <div style="font-family:'Figtree',sans-serif;font-size:0.88rem;color:#f5f0eb;line-height:1.6;margin:0;">
+            <strong>Mac:</strong> System Settings → Energy Saver → "Prevent automatic sleep when display is off"<br/>
+            <strong>Windows:</strong> Settings → Power → "Never sleep" when plugged in
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FIRST RUN -->
+    <div class="kw-card">
+      <div class="kw-card-title">🚀 First Run &amp; Email Output (Sections 10-11)</div>
+      <div style="margin-bottom:1.25rem;">
+        <div style="font-family:'Figtree',sans-serif;font-size:0.78rem;font-weight:600;color:#151515;margin-bottom:0.5rem;">First run duration: 8-15 minutes</div>
+        <div style="background:#f8f8f8;border-radius:10px;padding:1rem;font-family:'Figtree',sans-serif;font-size:0.88rem;color:#333;line-height:1.6;">
+          Searching 9 boards (2-3 min ea) → Parsing &amp; filtering (2-3 min) → Gmail check (1-2 min) → Compose email (1 min)
+        </div>
+      </div>
+      <div style="font-family:'Figtree',sans-serif;font-size:0.78rem;font-weight:600;color:#151515;margin-bottom:0.5rem;">The digest email includes:</div>
+      <div style="background:#1e3a5f;border-radius:12px;padding:1.25rem;font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:#dde6f0;line-height:1.8;">
+        📊 APPLICATION UPDATES<br/>
+        🎯 NEW ROLES FOUND (top 5)<br/>
+        ⏭️ FILTERED OUT (why)<br/>
+        💡 RECOMMENDED TO APPLY TODAY<br/>
+        <br/>
+        [Direct links + one-line match reasons]
+      </div>
+    </div>
+
+    <!-- TROUBLESHOOTING -->
+    <div class="kw-card">
+      <div class="kw-card-title">🔧 Troubleshooting (Section 12)</div>
+      <div style="display:flex;flex-direction:column;gap:0.75rem;">
+        <div>
+          <div style="font-family:'Figtree',sans-serif;font-size:0.88rem;font-weight:600;color:#151515;">Agent isn't running at scheduled time?</div>
+          <p style="font-family:'Figtree',sans-serif;font-size:0.8rem;color:#666;margin:0;margin-top:0.25rem;">Check: Computer asleep? Cowork running in background? On Mac, set "Allow in the Background" in Login Items.</p>
+        </div>
+        <div>
+          <div style="font-family:'Figtree',sans-serif;font-size:0.88rem;font-weight:600;color:#151515;">Getting duplicate roles?</div>
+          <p style="font-family:'Figtree',sans-serif;font-size:0.8rem;color:#666;margin:0;margin-top:0.25rem;">Agent caches results locally. Don't clear the cache manually or you'll re-surface old roles. Wait a few days and duplicates will age out.</p>
+        </div>
+        <div>
+          <div style="font-family:'Figtree',sans-serif;font-size:0.88rem;font-weight:600;color:#151515;">Gmail integration not working?</div>
+          <p style="font-family:'Figtree',sans-serif;font-size:0.8rem;color:#666;margin:0;margin-top:0.25rem;">Verify: 16-char app password (no spaces)? 2FA enabled? Gmail MCP connected in Cowork? Try re-connecting the MCP.</p>
+        </div>
+        <div>
+          <div style="font-family:'Figtree',sans-serif;font-size:0.88rem;font-weight:600;color:#151515;">Digest email not being sent?</div>
+          <p style="font-family:'Figtree',sans-serif;font-size:0.8rem;color:#666;margin:0;margin-top:0.25rem;">Check email config file location + correct "send to" address. Look at Cowork logs to see what error the agent hit.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="kw-cta-strip">
+      <h2 class="kw-cta-strip-headline">Ready to automate your job search?</h2>
+      <a href="?view=editorial" class="kw-btn kw-btn--dark">Read the full guide →</a>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="kw-footer">
+      <div class="kw-footer-copy">© 2026 Abhishek Trivedi · Learning Experience Technologist</div>
+      <div class="kw-footer-links">
+        <a href="https://www.linkedin.com/in/trivedi-abhishek/" target="_blank" class="kw-footer-link">LinkedIn</a>
+        <a href="../contact.html" class="kw-footer-link">Contact</a>
+        <a href="../articles.html?view=visual" class="kw-footer-link">Articles</a>
+      </div>
+    </div>
+
+  </div>
+</div><!-- /view-visual -->
+
+<!-- ── VIEW SWITCHER ── -->
+<div id="view-switcher">
+  <button class="vsw-btn vsw-active" id="btn-editorial">Guide</button>
+  <button class="vsw-btn" id="btn-visual">Visual</button>
+</div>
+
+<!-- ── VIEW SWITCH JS ── -->
+<script>
+let currentView = 'editorial';
+function switchView(view) {
+  if (view === currentView) return;
+  currentView = view;
+  document.getElementById('view-editorial').classList.toggle('view-active', view === 'editorial');
+  document.getElementById('view-visual').classList.toggle('view-active', view === 'visual');
+  document.getElementById('td-nav').style.display = view === 'visual' ? 'flex' : 'none';
+  document.getElementById('btn-editorial').classList.toggle('vsw-active', view === 'editorial');
+  document.getElementById('btn-visual').classList.toggle('vsw-active', view === 'visual');
+  const url = view === 'visual' ? '?view=visual' : window.location.pathname;
+  history.pushState({ view }, '', url);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+(function() {
+  const params = new URLSearchParams(window.location.search);
+  var initView = params.get('view') === 'visual' ? 'visual' : 'editorial';
+  document.getElementById('view-editorial').classList.toggle('view-active', initView === 'editorial');
+  document.getElementById('view-visual').classList.toggle('view-active', initView === 'visual');
+  currentView = initView;
+  document.getElementById('btn-editorial').classList.toggle('vsw-active', initView === 'editorial');
+  document.getElementById('btn-visual').classList.toggle('vsw-active', initView === 'visual');
+  if (initView === 'visual') document.getElementById('td-nav').style.display = 'flex';
+})();
+window.addEventListener('popstate', function(e) { switchView((e.state && e.state.view) || 'editorial'); });
+const _ham = document.getElementById('td-ham');
+const _drawer = document.getElementById('td-drawer');
+if (_ham && _drawer) { _ham.addEventListener('click', () => { _ham.classList.toggle('open'); _drawer.classList.toggle('open'); }); }
+document.getElementById('btn-editorial').addEventListener('click', () => switchView('editorial'));
+document.getElementById('btn-visual').addEventListener('click', () => switchView('visual'));
+</script>
+
 </body>
 </html>
