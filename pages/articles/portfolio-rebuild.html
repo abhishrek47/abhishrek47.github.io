@@ -29,23 +29,6 @@
     #view-editorial, #view-visual { display: none; }
     #view-editorial.view-active, #view-visual.view-active { display: block; }
 
-    /* VIEW SWITCHER */
-    #view-switcher {
-      position: fixed; bottom: 2rem; right: 2rem; z-index: 900;
-      display: flex; background: #0f0f0f;
-      border: 1px solid rgba(255,255,255,0.12); border-radius: 100px;
-      padding: 4px; gap: 3px; box-shadow: 0 4px 20px rgba(0,0,0,0.4);
-    }
-    .vsw-btn {
-      font-family: var(--mono); font-size: 0.7rem; font-weight: 500;
-      letter-spacing: 0.06em; text-transform: uppercase; color: rgba(255,255,255,0.4);
-      background: none; border: none; border-radius: 100px; padding: 0.45rem 1rem;
-      cursor: pointer; transition: all 0.2s; position: relative; overflow: hidden;
-    }
-    .vsw-btn:hover:not(.vsw-active) { color: rgba(255,255,255,0.75); }
-    #btn-editorial.vsw-active { background: #c84b2f; color: #fff; font-weight: 700; }
-    #btn-visual.vsw-active { background: #7c3aed; color: #fff; font-weight: 700; }
-    html[data-at-style] #view-switcher { display: none !important; }
     html[data-at-style="visual"] #view-editorial { display: none !important; }
     html[data-at-style="visual"] #view-visual { display: block !important; }
     html[data-at-style="visual"] #td-nav { display: flex !important; }
@@ -604,35 +587,25 @@
   </div>
 </div>
 
-<!-- VIEW SWITCHER -->
-<div id="view-switcher">
-  <button class="vsw-btn vsw-active" id="btn-editorial">Editorial</button>
-  <button class="vsw-btn" id="btn-visual">Visual</button>
-</div>
 
 <script>
 (function(){
   var ed=document.getElementById('view-editorial');
   var vi=document.getElementById('view-visual');
   var nav=document.getElementById('td-nav');
-  var sw=document.getElementById('view-switcher');
-  var be=document.getElementById('btn-editorial');
-  var bv=document.getElementById('btn-visual');
   function show(mode){
     if(mode==='visual'){
       ed.classList.remove('view-active');vi.classList.add('view-active');
-      nav.style.display='flex';be.classList.remove('vsw-active');bv.classList.add('vsw-active');
+      nav.style.display='flex';
     } else {
       vi.classList.remove('view-active');ed.classList.add('view-active');
-      nav.style.display='none';bv.classList.remove('vsw-active');be.classList.add('vsw-active');
+      nav.style.display='none';
     }
     try{sessionStorage.setItem('at-style-choice',mode);}catch(e){}
   }
   var saved=null;try{saved=sessionStorage.getItem('at-style-choice');}catch(e){}
   var url=new URLSearchParams(location.search).get('view');
   if(url==='visual'||saved==='visual') show('visual');
-  be.addEventListener('click',function(){show('editorial');});
-  bv.addEventListener('click',function(){show('visual');});
   // Ham menu
   var ham=document.getElementById('td-ham');var drawer=document.getElementById('td-drawer');
   if(ham)ham.addEventListener('click',function(){drawer.classList.toggle('open');ham.classList.toggle('open');});

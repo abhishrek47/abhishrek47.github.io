@@ -37,20 +37,6 @@
     #view-editorial, #view-visual { display: none; }
     #view-editorial.view-active, #view-visual.view-active { display: block; }
 
-    /* ── VIEW SWITCHER ── */
-    #view-switcher {
-      position: fixed; bottom: 2rem; right: 2rem; z-index: 900;
-      display: flex; background: #0f0f0f;
-      border: 1px solid rgba(255,255,255,0.12); border-radius: 100px;
-      padding: 4px; gap: 3px; box-shadow: 0 4px 20px rgba(0,0,0,0.4);
-    }
-    .vsw-btn {
-      font-family: 'DM Sans', sans-serif; font-size: 0.7rem; font-weight: 500;
-      letter-spacing: 0.06em; text-transform: uppercase; color: rgba(255,255,255,0.4);
-      background: none; border: none; border-radius: 100px; padding: 0.45rem 1rem;
-      cursor: pointer; transition: all 0.2s;
-    }
-    .vsw-btn:hover:not(.vsw-active) { color: rgba(255,255,255,0.75); }
 
     /* ── YELLOW NAV ── */
     #td-nav {
@@ -269,26 +255,6 @@
     #ub-visual .ub-icon { font-size: 0.85rem; }
     #ub-visual .ub-close { color: #151515; }
   
-  /* ════ TOGGLE PILL — brand-split active states ════ */
-  .vsw-btn { position: relative; overflow: hidden; }
-  #btn-editorial.vsw-active { background: #c84b2f; color: #ffffff; font-weight: 700; }
-  #btn-visual.vsw-active { background: #7c3aed; color: #ffffff; font-weight: 700; }
-  /* Wave sweep overlay */
-  .vsw-wave {
-    position: absolute; top: 0; left: 0;
-    width: 100%; height: 100%;
-    border-radius: inherit; pointer-events: none;
-    opacity: 0; transform: translateX(-100%);
-  }
-  #btn-editorial .vsw-wave {
-    background: linear-gradient(90deg, transparent 0%, rgba(200,75,47,0.55) 50%, rgba(245,242,235,0.25) 100%);
-  }
-  #btn-visual .vsw-wave {
-    background: linear-gradient(90deg, transparent 0%, rgba(124,58,237,0.55) 50%, rgba(196,181,253,0.25) 100%);
-  }
-
-  /* ── Style persistence — hide switcher when style already chosen ── */
-  html[data-at-style] #view-switcher { display: none !important; }
   /* Synchronously show correct view on return visits — prevents blank page flash */
   html[data-at-style="visual"] #view-editorial { display: none !important; }
   html[data-at-style="visual"] #view-visual   { display: block !important; }
@@ -828,20 +794,9 @@ function switchView(view) {
   if (view === currentView) return;
   currentView = view;
 
-  // GSAP wave sweep animation on the activated button
-  var _btn = view === 'visual' ? document.getElementById('btn-visual') : document.getElementById('btn-editorial');
-  var _wave = _btn ? _btn.querySelector('.vsw-wave') : null;
-  if (typeof gsap !== 'undefined' && _wave) {
-    gsap.fromTo(_wave,
-      { xPercent: -100, opacity: 0.9 },
-      { xPercent: 100, opacity: 0, duration: 0.5, ease: 'power2.inOut' }
-    );
-  }
   document.getElementById('view-editorial').classList.toggle('view-active', view === 'editorial');
   document.getElementById('view-visual').classList.toggle('view-active', view === 'visual');
   document.getElementById('td-nav').style.display = view === 'visual' ? 'flex' : 'none';
-  document.getElementById('btn-editorial').classList.toggle('vsw-active', view === 'editorial');
-  document.getElementById('btn-visual').classList.toggle('vsw-active', view === 'visual');
   const url = view === 'visual' ? '?view=visual' : window.location.pathname;
   history.pushState({ view }, '', url);
   window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -850,10 +805,7 @@ function switchView(view) {
   const params = new URLSearchParams(window.location.search);
     // ── Restore saved style from sessionStorage ──
   var _savedStyle = (function(){try{return sessionStorage.getItem('at-style-choice');}catch(e){return null;}})();
-  var _sw = document.getElementById('view-switcher');
   if (_savedStyle) {
-    // Hide the floating switcher pill
-    if (_sw) _sw.style.display = 'none';
     // Remove flash-prevention opacity
     document.documentElement.classList.remove('at-visual-preload');
   }
@@ -861,15 +813,12 @@ function switchView(view) {
   document.getElementById('view-editorial').classList.toggle('view-active', initView === 'editorial');
   document.getElementById('view-visual').classList.toggle('view-active', initView === 'visual');
   currentView = initView;
-  document.getElementById('btn-' + initView).classList.add('vsw-active');
   if (initView === 'visual') document.getElementById('td-nav').style.display = 'flex';
 })();
 window.addEventListener('popstate', (e) => { switchView((e.state && e.state.view) || 'editorial'); });
 const ham = document.getElementById('td-ham');
 const drawer = document.getElementById('td-drawer');
 if (ham && drawer) { ham.addEventListener('click', () => { ham.classList.toggle('open'); drawer.classList.toggle('open'); }); }
-document.getElementById('btn-editorial').addEventListener('click', () => switchView('editorial'));
-document.getElementById('btn-visual').addEventListener('click', () => switchView('visual'));
 
 // __ EDITORIAL NAV HAMBURGER __
 (function() {

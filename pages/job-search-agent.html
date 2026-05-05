@@ -471,22 +471,6 @@ code { font-family: var(--mono); font-size: 0.84em; background: rgba(30,58,95,0.
 #view-editorial, #view-visual { display: none; }
 #view-editorial.view-active, #view-visual.view-active { display: block; }
 
-/* ── VIEW SWITCHER ── */
-#view-switcher {
-  position: fixed; bottom: 2rem; right: 2rem; z-index: 900;
-  display: flex; background: #0f0f0f;
-  border: 1px solid rgba(255,255,255,0.12); border-radius: 100px;
-  padding: 4px; gap: 3px; box-shadow: 0 4px 20px rgba(0,0,0,0.4);
-}
-.vsw-btn {
-  font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; font-weight: 500;
-  letter-spacing: 0.06em; text-transform: uppercase; color: rgba(255,255,255,0.4);
-  background: none; border: none; border-radius: 100px; padding: 0.45rem 1rem;
-  cursor: pointer; transition: all 0.2s;
-}
-.vsw-btn:hover:not(.vsw-active) { color: rgba(255,255,255,0.75); }
-#btn-editorial.vsw-active { background: #c84b2f; color: #fff; font-weight: 700; }
-#btn-visual.vsw-active { background: #7c3aed; color: #fff; font-weight: 700; }
 
 /* ── YELLOW NAV (visual view) ── */
 #td-nav {
@@ -2194,12 +2178,6 @@ document.addEventListener('keydown', function(e) {
   </div>
 </div><!-- /view-visual -->
 
-<!-- ── VIEW SWITCHER ── -->
-<div id="view-switcher">
-  <button class="vsw-btn vsw-active" id="btn-editorial">Guide</button>
-  <button class="vsw-btn" id="btn-visual">Visual</button>
-</div>
-
 <!-- ── VIEW SWITCH JS ── -->
 <script>
 let currentView = 'editorial';
@@ -2209,8 +2187,6 @@ function switchView(view) {
   document.getElementById('view-editorial').classList.toggle('view-active', view === 'editorial');
   document.getElementById('view-visual').classList.toggle('view-active', view === 'visual');
   document.getElementById('td-nav').style.display = view === 'visual' ? 'flex' : 'none';
-  document.getElementById('btn-editorial').classList.toggle('vsw-active', view === 'editorial');
-  document.getElementById('btn-visual').classList.toggle('vsw-active', view === 'visual');
   const url = view === 'visual' ? '?view=visual' : window.location.pathname;
   history.pushState({ view }, '', url);
   window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -2221,16 +2197,12 @@ function switchView(view) {
   document.getElementById('view-editorial').classList.toggle('view-active', initView === 'editorial');
   document.getElementById('view-visual').classList.toggle('view-active', initView === 'visual');
   currentView = initView;
-  document.getElementById('btn-editorial').classList.toggle('vsw-active', initView === 'editorial');
-  document.getElementById('btn-visual').classList.toggle('vsw-active', initView === 'visual');
   if (initView === 'visual') document.getElementById('td-nav').style.display = 'flex';
 })();
 window.addEventListener('popstate', function(e) { switchView((e.state && e.state.view) || 'editorial'); });
 const _ham = document.getElementById('td-ham');
 const _drawer = document.getElementById('td-drawer');
 if (_ham && _drawer) { _ham.addEventListener('click', () => { _ham.classList.toggle('open'); _drawer.classList.toggle('open'); }); }
-document.getElementById('btn-editorial').addEventListener('click', () => switchView('editorial'));
-document.getElementById('btn-visual').addEventListener('click', () => switchView('visual'));
 </script>
 
 </body>
