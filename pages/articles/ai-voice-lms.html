@@ -553,6 +553,41 @@ fetchSpeech();</code></pre>
       <p class="kw-page-sub">CORS for a week, a name that came back reversed, an API key sitting in plain JavaScript — what it actually took to ship real-time AI personalisation inside a SCORM course.</p>
     </div>
 
+    <!-- COVER VISUAL — AI Voice Pipeline -->
+    <div style="border:1.5px solid #151515;border-radius:16px;overflow:hidden;">
+      <svg viewBox="0 0 1000 300" xmlns="http://www.w3.org/2000/svg" width="100%" style="display:block;">
+        <rect width="1000" height="300" fill="#fbbf0e"/>
+        <!-- LMS Box -->
+        <rect x="65" y="90" width="210" height="140" rx="14" fill="#151515"/>
+        <text x="170" y="136" text-anchor="middle" font-family="Outfit,Helvetica,sans-serif" font-size="10" font-weight="600" fill="rgba(255,255,255,0.4)" letter-spacing="3">ENTERPRISE</text>
+        <text x="170" y="163" text-anchor="middle" font-family="Outfit,Helvetica,sans-serif" font-size="34" font-weight="700" fill="#fbbf0e">LMS</text>
+        <text x="170" y="188" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8.5" fill="rgba(255,255,255,0.3)">cmi.core.student_name</text>
+        <!-- Arrow 1 -->
+        <line x1="277" y1="160" x2="324" y2="160" stroke="#151515" stroke-width="3.5" stroke-linecap="round"/>
+        <polygon points="318,152 338,160 318,168" fill="#151515"/>
+        <!-- JS Trigger (center, white-bordered highlight) -->
+        <rect x="336" y="62" width="328" height="196" rx="16" fill="#151515" stroke="#ffffff" stroke-width="4.5"/>
+        <text x="500" y="112" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9.5" fill="rgba(255,255,255,0.35)" letter-spacing="3">STORYLINE 360</text>
+        <text x="500" y="147" text-anchor="middle" font-family="Outfit,Helvetica,sans-serif" font-size="28" font-weight="700" fill="#fbbf0e">JS TRIGGER</text>
+        <rect x="372" y="160" width="68" height="5" rx="2.5" fill="#fbbf0e" opacity="0.5"/>
+        <rect x="372" y="172" width="100" height="5" rx="2.5" fill="#fbbf0e" opacity="0.3"/>
+        <rect x="372" y="184" width="84" height="5" rx="2.5" fill="#fbbf0e" opacity="0.4"/>
+        <rect x="372" y="196" width="56" height="5" rx="2.5" fill="#fbbf0e" opacity="0.2"/>
+        <text x="500" y="230" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8.5" fill="rgba(255,255,255,0.2)">fetch() · parse() · play()</text>
+        <!-- Arrow 2 -->
+        <line x1="666" y1="160" x2="710" y2="160" stroke="#151515" stroke-width="3.5" stroke-linecap="round"/>
+        <polygon points="704,152 724,160 704,168" fill="#151515"/>
+        <!-- AI Voice API Box -->
+        <rect x="722" y="90" width="213" height="140" rx="14" fill="#151515"/>
+        <text x="828" y="136" text-anchor="middle" font-family="Outfit,Helvetica,sans-serif" font-size="11" font-weight="600" fill="rgba(255,255,255,0.4)" letter-spacing="2">AI VOICE</text>
+        <text x="828" y="163" text-anchor="middle" font-family="Outfit,Helvetica,sans-serif" font-size="34" font-weight="700" fill="#fbbf0e">API</text>
+        <text x="828" y="188" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8.5" fill="rgba(255,255,255,0.3)">→ audioFile URL</text>
+        <!-- Output -->
+        <text x="500" y="268" text-anchor="middle" font-family="Figtree,Helvetica,sans-serif" font-size="15" font-weight="700" fill="#151515">"Hello, Abhishek — welcome to your course."</text>
+        <text x="500" y="290" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="rgba(0,0,0,0.38)">real-time · no pre-recording · personalised on every launch · every learner</text>
+      </svg>
+    </div>
+
     <!-- THE GOAL -->
     <div style="font-family:'Figtree',sans-serif;font-size:0.72rem;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:0.08em;">What I Was Trying to Build</div>
     <div class="kw-card">
@@ -634,6 +669,45 @@ fetch("https://[api-endpoint]/v1/speech/generate", {
     <!-- THE 4 WALLS -->
     <div style="font-family:'Figtree',sans-serif;font-size:0.72rem;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:0.08em;">Obstacles Encountered</div>
     <div style="font-family:'Figtree',sans-serif;font-size:0.72rem;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.75rem;">4 Walls I Hit (and How I Solved Them)</div>
+
+    <!-- WALLS AT A GLANCE SVG -->
+    <div style="border:1.5px solid #151515;border-radius:16px;overflow:hidden;margin-bottom:1.25rem;">
+      <svg viewBox="0 0 1000 160" xmlns="http://www.w3.org/2000/svg" width="100%" style="display:block;">
+        <rect width="1000" height="160" fill="#151515"/>
+        <!-- Wall 01: CORS -->
+        <rect x="20" y="18" width="222" height="124" rx="12" fill="#1e1e1e" stroke="#fbbf0e" stroke-width="1.5"/>
+        <text x="36" y="46" font-family="JetBrains Mono,monospace" font-size="10" font-weight="700" fill="#fbbf0e" letter-spacing="2">01</text>
+        <text x="80" y="46" font-family="Outfit,Helvetica,sans-serif" font-size="10" font-weight="700" fill="rgba(255,255,255,0.4)" letter-spacing="1">CORS</text>
+        <text x="36" y="74" font-family="Figtree,Helvetica,sans-serif" font-size="12.5" font-weight="700" fill="#ffffff">Wrong proxy.</text>
+        <text x="36" y="92" font-family="Figtree,Helvetica,sans-serif" font-size="12.5" font-weight="700" fill="#ffffff">Wrong headers.</text>
+        <text x="36" y="110" font-family="Figtree,Helvetica,sans-serif" font-size="12.5" font-weight="700" fill="#ffffff">One week lost.</text>
+        <text x="36" y="132" font-family="JetBrains Mono,monospace" font-size="9" fill="#fbbf0e">→ Cloudflare Worker</text>
+        <!-- Wall 02: Name Format -->
+        <rect x="260" y="18" width="222" height="124" rx="12" fill="#1e1e1e" stroke="#fbbf0e" stroke-width="1.5"/>
+        <text x="276" y="46" font-family="JetBrains Mono,monospace" font-size="10" font-weight="700" fill="#fbbf0e" letter-spacing="2">02</text>
+        <text x="320" y="46" font-family="Outfit,Helvetica,sans-serif" font-size="10" font-weight="700" fill="rgba(255,255,255,0.4)" letter-spacing="1">NAME FORMAT</text>
+        <text x="276" y="74" font-family="Figtree,Helvetica,sans-serif" font-size="12.5" font-weight="700" fill="#ffffff">LMS returns</text>
+        <text x="276" y="92" font-family="JetBrains Mono,monospace" font-size="11" fill="rgba(251,191,14,0.7)">"TRIVEDI, A"</text>
+        <text x="276" y="112" font-family="Figtree,Helvetica,sans-serif" font-size="12.5" font-weight="700" fill="#ffffff">not "Abhishek"</text>
+        <text x="276" y="132" font-family="JetBrains Mono,monospace" font-size="9" fill="#fbbf0e">→ JS name parser</text>
+        <!-- Wall 03: API Key -->
+        <rect x="500" y="18" width="222" height="124" rx="12" fill="#1e1e1e" stroke="#fbbf0e" stroke-width="1.5"/>
+        <text x="516" y="46" font-family="JetBrains Mono,monospace" font-size="10" font-weight="700" fill="#fbbf0e" letter-spacing="2">03</text>
+        <text x="560" y="46" font-family="Outfit,Helvetica,sans-serif" font-size="10" font-weight="700" fill="rgba(255,255,255,0.4)" letter-spacing="1">API KEY</text>
+        <text x="516" y="74" font-family="Figtree,Helvetica,sans-serif" font-size="12.5" font-weight="700" fill="#ffffff">Key in client JS</text>
+        <text x="516" y="92" font-family="Figtree,Helvetica,sans-serif" font-size="12.5" font-weight="700" fill="#ffffff">= exposed key.</text>
+        <text x="516" y="110" font-family="Figtree,Helvetica,sans-serif" font-size="12.5" font-weight="700" fill="#ffffff">Bad idea.</text>
+        <text x="516" y="132" font-family="JetBrains Mono,monospace" font-size="9" fill="#fbbf0e">→ Server-side proxy</text>
+        <!-- Wall 04: Pronunciation -->
+        <rect x="740" y="18" width="240" height="124" rx="12" fill="#1e1e1e" stroke="#fbbf0e" stroke-width="1.5"/>
+        <text x="756" y="46" font-family="JetBrains Mono,monospace" font-size="10" font-weight="700" fill="#fbbf0e" letter-spacing="2">04</text>
+        <text x="800" y="46" font-family="Outfit,Helvetica,sans-serif" font-size="10" font-weight="700" fill="rgba(255,255,255,0.4)" letter-spacing="1">PRONUNCIATION</text>
+        <text x="756" y="74" font-family="Figtree,Helvetica,sans-serif" font-size="12.5" font-weight="700" fill="#ffffff">AI said</text>
+        <text x="756" y="92" font-family="JetBrains Mono,monospace" font-size="11" fill="rgba(251,191,14,0.7)">"Ab-HISH-ek"</text>
+        <text x="756" y="112" font-family="Figtree,Helvetica,sans-serif" font-size="12.5" font-weight="700" fill="#ffffff">not "Ub-hee-shek"</text>
+        <text x="756" y="132" font-family="JetBrains Mono,monospace" font-size="9" fill="#fbbf0e">→ Phonetic override</text>
+      </svg>
+    </div>
 
     <!-- Wall 1: CORS -->
     <div class="kw-card">
