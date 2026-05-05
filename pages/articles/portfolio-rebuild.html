@@ -277,6 +277,34 @@
   <h2>What 200+ commits actually represents</h2>
   <p>The number sounds impressive. It's also slightly misleading. Let me break down what's inside it:</p>
 
+  <div style="margin: 1.5rem 0; border-radius: 8px; overflow: hidden; border-left: 3px solid var(--accent);">
+    <svg width="100%" viewBox="0 0 680 160" xmlns="http://www.w3.org/2000/svg">
+      <rect width="680" height="160" fill="#162d4a"/>
+      <g opacity="0.06" stroke="#f5f0eb" stroke-width="0.5">
+        <line x1="0" y1="40" x2="680" y2="40"/><line x1="0" y1="80" x2="680" y2="80"/><line x1="0" y1="120" x2="680" y2="120"/>
+      </g>
+      <!-- Label -->
+      <text x="24" y="28" font-family="JetBrains Mono,monospace" font-size="9" fill="rgba(245,240,235,0.5)">200+ COMMITS — WHERE THEY WENT</text>
+      <!-- Bar 1: Feature work ~40% -->
+      <rect x="24" y="40" width="265" height="72" rx="4" fill="#1e3a5f" stroke="#4a7aaa" stroke-width="0.75"/>
+      <text x="156" y="73" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" font-weight="bold" fill="#f5f0eb">~40%</text>
+      <text x="156" y="89" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="#4a7aaa">Real feature work</text>
+      <text x="156" y="101" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="rgba(245,240,235,0.35)">dual views · articles · newsletter · demos</text>
+      <!-- Bar 2: Fixes ~30% -->
+      <rect x="299" y="40" width="185" height="72" rx="4" fill="#1e3a5f" stroke="#c0392b" stroke-width="0.75"/>
+      <text x="391" y="73" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" font-weight="bold" fill="#c0392b">~30%</text>
+      <text x="391" y="89" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="rgba(245,240,235,0.6)">Fix commits</text>
+      <text x="391" y="101" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="rgba(245,240,235,0.35)">mobile · cross-browser · edge cases</text>
+      <!-- Bar 3: Exploration ~30% -->
+      <rect x="494" y="40" width="162" height="72" rx="4" fill="#c0392b" opacity="0.2" stroke="#c0392b" stroke-width="0.75"/>
+      <text x="575" y="73" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" font-weight="bold" fill="#f5f0eb">~30%</text>
+      <text x="575" y="89" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="rgba(245,240,235,0.6)">Exploration</text>
+      <text x="575" y="101" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="rgba(245,240,235,0.35)">tried · learned · abandoned</text>
+      <!-- Bottom note -->
+      <text x="340" y="148" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7.5" fill="rgba(245,240,235,0.3)">exploration commits are not wasted work — they're how you understand what you actually want</text>
+    </svg>
+  </div>
+
   <h3>The real commits</h3>
   <p>Probably 40% of those commits are genuine feature work — building the dual editorial/visual view system, the articles infrastructure, the newsletter integration, the contact form, the Storyline 360 demo pages. Things that required actual design thinking and back-and-forth iteration.</p>
 
@@ -312,6 +340,61 @@
   <p>The filter for this is always: test it. Not just in the preview. In the real environment, on mobile, in Safari, with a slow connection. Hallucinations that survive that filter don't matter. The ones that don't survive are your problem to catch, and you can only catch them if you're actually testing.</p>
 
   <h2>What I built that I'm actually proud of</h2>
+
+  <div style="margin: 1.5rem 0; border-radius: 8px; overflow: hidden; border-left: 3px solid var(--navy);">
+    <svg width="100%" viewBox="0 0 680 170" xmlns="http://www.w3.org/2000/svg">
+      <rect width="680" height="170" fill="#162d4a"/>
+      <g opacity="0.06" stroke="#f5f0eb" stroke-width="0.5">
+        <line x1="0" y1="40" x2="680" y2="40"/><line x1="0" y1="85" x2="680" y2="85"/><line x1="0" y1="130" x2="680" y2="130"/>
+        <line x1="170" y1="0" x2="170" y2="170"/><line x1="340" y1="0" x2="340" y2="170"/><line x1="510" y1="0" x2="510" y2="170"/>
+      </g>
+      <!-- Title -->
+      <text x="24" y="26" font-family="JetBrains Mono,monospace" font-size="9" fill="rgba(245,240,235,0.5)">AI COLLABORATION LOOP — HOW A SESSION ACTUALLY WORKS</text>
+      <!-- Step 1 -->
+      <rect x="20" y="38" width="140" height="110" rx="4" fill="#1e3a5f" stroke="#4a7aaa" stroke-width="0.75"/>
+      <text x="90" y="60" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="#4a7aaa">01 · YOU</text>
+      <text x="90" y="76" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#f5f0eb">Provide</text>
+      <text x="90" y="89" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#f5f0eb">context</text>
+      <text x="90" y="108" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="rgba(245,240,235,0.4)">what to build</text>
+      <text x="90" y="120" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="rgba(245,240,235,0.4)">constraints</text>
+      <text x="90" y="132" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="rgba(245,240,235,0.4)">past decisions</text>
+      <!-- Arrow -->
+      <line x1="160" y1="93" x2="175" y2="93" stroke="#c0392b" stroke-width="1.5"/>
+      <polygon points="175,90 180,93 175,96" fill="#c0392b"/>
+      <!-- Step 2 -->
+      <rect x="180" y="38" width="140" height="110" rx="4" fill="#1e3a5f" stroke="#c0392b" stroke-width="1"/>
+      <text x="250" y="60" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="#c0392b">02 · AI</text>
+      <text x="250" y="76" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#f5f0eb">Generate</text>
+      <text x="250" y="89" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#f5f0eb">code</text>
+      <text x="250" y="108" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="rgba(245,240,235,0.4)">fast implementation</text>
+      <text x="250" y="120" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="rgba(245,240,235,0.4)">broad knowledge</text>
+      <text x="250" y="132" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="rgba(245,240,235,0.4)">never gets tired</text>
+      <!-- Arrow -->
+      <line x1="320" y1="93" x2="335" y2="93" stroke="#4a7aaa" stroke-width="1.5"/>
+      <polygon points="335,90 340,93 335,96" fill="#4a7aaa"/>
+      <!-- Step 3 -->
+      <rect x="340" y="38" width="140" height="110" rx="4" fill="#1e3a5f" stroke="#4a7aaa" stroke-width="0.75"/>
+      <text x="410" y="60" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="#4a7aaa">03 · YOU</text>
+      <text x="410" y="76" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#f5f0eb">Test &amp;</text>
+      <text x="410" y="89" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#f5f0eb">verify</text>
+      <text x="410" y="108" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="rgba(245,240,235,0.4)">real browser</text>
+      <text x="410" y="120" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="rgba(245,240,235,0.4)">mobile devices</text>
+      <text x="410" y="132" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="rgba(245,240,235,0.4)">edge cases</text>
+      <!-- Arrow -->
+      <line x1="480" y1="93" x2="495" y2="93" stroke="#c0392b" stroke-width="1.5" stroke-dasharray="4 2"/>
+      <polygon points="495,90 500,93 495,96" fill="#c0392b" opacity="0.5"/>
+      <!-- Step 4 -->
+      <rect x="500" y="38" width="160" height="110" rx="4" fill="rgba(192,57,43,0.12)" stroke="#c0392b" stroke-width="0.75"/>
+      <text x="580" y="60" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="#c0392b">04 · COMMIT</text>
+      <text x="580" y="76" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#f5f0eb">or loop</text>
+      <text x="580" y="89" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#f5f0eb">back</text>
+      <text x="580" y="108" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="rgba(245,240,235,0.4)">ship or debug</text>
+      <text x="580" y="120" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="rgba(245,240,235,0.4)">update context</text>
+      <text x="580" y="132" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="rgba(245,240,235,0.4)">repeat</text>
+      <!-- Bottom note -->
+      <text x="340" y="158" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7.5" fill="rgba(245,240,235,0.3)">the bottleneck is always step 03 — generation is fast, verification takes time</text>
+    </svg>
+  </div>
 
   <h3>The dual-view system</h3>
   <p>Every page on the site exists in two forms — an editorial view (dark navy hero, linen body, serif typography) and a visual view (inspired by the kawe.ski design system, bright and bold). A fixed pill switcher in the corner lets you move between them. Session storage remembers your preference across pages.</p>
