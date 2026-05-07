@@ -816,6 +816,9 @@ a{color:inherit;text-decoration:none;}
 ════════════════════════════════════════ */
 .sb-recent-item{font-size:.77rem!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--muted)!important;padding-left:8px!important;}
 .sb-recent-item:hover{color:var(--ink)!important;}
+.sb-heading-row{display:flex;align-items:center;justify-content:space-between;padding-right:10px;}
+.sb-clear-btn{background:none;border:none;cursor:pointer;font-size:.7rem;color:var(--muted);padding:0 2px;line-height:1;border-radius:3px;transition:color .15s;}
+.sb-clear-btn:hover{color:var(--acc);}
 
 /* ════════════════════════════════════════
    SURPRISE ME · j/k FOCUS · 3D TILT
@@ -8769,10 +8772,15 @@ function renderSidebarDynamic(){
     else {
       recentEl.style.display="";
       const snips = recent.map(id=>SNIPPETS.find(s=>s.id===id)).filter(Boolean);
-      recentEl.innerHTML = `<div class="sb-heading">🕐 Recent</div>`
+      recentEl.innerHTML = `<div class="sb-heading sb-heading-row">🕐 Recent<button class="sb-clear-btn" onclick="clearRecent()" title="Clear history">✕</button></div>`
         + snips.map(s=>`<button class="sb-item sb-recent-item" onclick="goSnippet(${s.id})" title="${esc(s.title)}">${esc(s.title)}</button>`).join("");
     }
   }
+}
+
+function clearRecent(){
+  sessionStorage.removeItem("sl_recent");
+  renderSidebarDynamic();
 }
 
 // ── Surprise Me ───────────────────────────────────────────────
