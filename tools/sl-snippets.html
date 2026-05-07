@@ -8159,7 +8159,7 @@ function renderList(){
   <div class="row-right">
     <div class="row-badges">
       <span class="badge-free">Free</span>
-      ${_DEMO_LIVE_CATS.has(s.category)?'<span class="badge-preview">Preview</span>':''}
+      ${_getDemoType(s)==="auto"?'<span class="badge-preview">Preview</span>':''}
       <div class="diff-dot ${s.difficulty}" title="${dc}"></div>
     </div>
     <button class="row-star${isFav(s.id)?' starred':''}" data-id="${s.id}"
@@ -8845,6 +8845,9 @@ const DEMO_VARS = {
 const _DEMO_LIVE_CATS = new Set(["effects","engagement","navigation"]);
 
 function _getDemoType(s){
+  // Navigation snippets 1-140 target Storyline's built-in player buttons — no browser demo possible.
+  // Only 141+ use injected mock nav elements.
+  if(s.category === "navigation" && s.id < 141) return "none";
   return _DEMO_LIVE_CATS.has(s.category) ? "auto" : "none";
 }
 
