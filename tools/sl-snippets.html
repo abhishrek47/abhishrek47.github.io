@@ -6306,7 +6306,521 @@ const SNIPPETS_121_140 = [
 ]; // end SNIPPETS_121_140
 
 
-const SNIPPETS = [...SNIPPETS_1_50, ...SNIPPETS_51_100, ...SNIPPETS_101_120, ...SNIPPETS_121_140];
+// ============================================================
+// SLSnippets — Part 7: Snippets 141–150
+// Category: navigation (button styling, locking, custom controls)
+// ============================================================
+
+const SNIPPETS_141_150 = [
+
+// ── 141: Pulse Next Button ────────────────────────────────────
+{
+  id: 141, category: "navigation", difficulty: "beginner",
+  title: "Pulse Next Button (Attention Prompt)",
+  description: "Adds a repeating pulse animation to the Next button after a set delay — guides learners who miss the button at the end of a slide.",
+  tags: ["next", "pulse", "animation", "attention", "CSS", "navigation"],
+  setup: "No variables needed.",
+  howToAdd: "Add an Execute JavaScript trigger 'When timeline ends' on any slide.",
+  promptContext: "Targets the Storyline Next button by data-acc-text selector and applies a CSS keyframe pulse.",
+  code: `(function(){
+  // Robust Next button finder — covers multiple Storyline output versions
+  function findNext(){
+    return document.querySelector('[data-acc-text="Next Slide"]') ||
+           document.querySelector('[aria-label*="Next"]') ||
+           document.querySelector('[title*="Next"]') ||
+           document.querySelector('.sl-mock-nav-next');
+  }
+
+  if(!document.getElementById("_slPulseNavStyle")){
+    var s = document.createElement("style");
+    s.id  = "_slPulseNavStyle";
+    s.textContent = [
+      "@keyframes _slNavPulse{",
+      "  0%,100%{transform:scale(1);box-shadow:0 0 0 0 rgba(22,163,74,0.5)}",
+      "  50%{transform:scale(1.07);box-shadow:0 0 0 10px rgba(22,163,74,0)}",
+      "}"
+    ].join("");
+    document.head.appendChild(s);
+  }
+
+  var btn = findNext();
+  if(!btn) return;
+  btn.style.animation = "_slNavPulse 1.2s ease-in-out infinite";
+  btn.style.borderRadius = btn.style.borderRadius || "4px";
+
+  // Stop pulsing when clicked
+  btn.addEventListener("click", function once(){
+    btn.style.animation = "";
+    btn.removeEventListener("click", once);
+  }, { once: true });
+})();`
+},
+
+// ── 142: Glow and Recolor Next Button ────────────────────────
+{
+  id: 142, category: "navigation", difficulty: "beginner",
+  title: "Recolor and Glow Next Button",
+  description: "Changes the Next button to any brand color with a soft glow — makes it visually distinct and on-brand without editing the Storyline theme.",
+  tags: ["next", "color", "glow", "brand", "CSS", "styling"],
+  setup: "No variables needed. Customise the color values in the code.",
+  howToAdd: "Add an Execute JavaScript trigger 'When timeline starts' on the slide.",
+  promptContext: "Applies inline style overrides (background, border, box-shadow) to the Storyline Next button.",
+  code: `(function(){
+  // ── Config ──────────────────────────────────────────────────
+  var bgColor   = "#16a34a";           // button background
+  var textColor = "#ffffff";           // button label colour
+  var glowColor = "rgba(22,163,74,.45)"; // glow halo
+  // ────────────────────────────────────────────────────────────
+
+  function findNext(){
+    return document.querySelector('[data-acc-text="Next Slide"]') ||
+           document.querySelector('[aria-label*="Next"]') ||
+           document.querySelector('[title*="Next"]') ||
+           document.querySelector('.sl-mock-nav-next');
+  }
+
+  function applyStyle(){
+    var btn = findNext();
+    if(!btn) return false;
+    btn.style.cssText += [
+      ";background:" + bgColor,
+      "color:" + textColor,
+      "border-color:" + bgColor,
+      "box-shadow:0 0 14px " + glowColor,
+      "transition:all 0.35s ease"
+    ].join(";");
+    return true;
+  }
+
+  // Retry up to ~1s for late-rendered buttons
+  if(!applyStyle()){
+    var attempts = 0;
+    var t = setInterval(function(){
+      if(applyStyle() || ++attempts > 20) clearInterval(t);
+    }, 50);
+  }
+})();`
+},
+
+// ── 143: Lock Next Until Variable is True ────────────────────
+{
+  id: 143, category: "navigation", difficulty: "intermediate",
+  title: "Lock Next Until Variable is True",
+  description: "Disables and greys out the Next button until a Storyline variable (e.g. 'VideoWatched') is set to 'true'. Useful for enforcing video completion, hotspot visits, or reflection responses.",
+  tags: ["lock", "disable", "next", "variable", "gate", "enforce"],
+  setup: "Create a True/False or Text variable (e.g. 'VideoWatched', default 'false'). Set it to 'true' via a trigger when the condition is met (video end, all hotspots clicked, etc.).",
+  howToAdd: "Add an Execute JavaScript trigger 'When timeline starts'. The button re-enables automatically when the variable changes.",
+  promptContext: "Polls a Storyline variable every 400ms. Disables Next until it returns 'true'. Adds a tooltip to explain why it's locked.",
+  code: `(function(){
+  var player  = GetPlayer();
+  var gateVar = "VideoWatched";    // ← variable name to watch
+  var gateVal = "true";            // ← value that unlocks Next
+
+  function findNext(){
+    return document.querySelector('[data-acc-text="Next Slide"]') ||
+           document.querySelector('[aria-label*="Next"]') ||
+           document.querySelector('.sl-mock-nav-next');
+  }
+
+  function setLocked(locked){
+    var btn = findNext();
+    if(!btn) return;
+    btn.disabled      = locked;
+    btn.style.opacity = locked ? "0.35" : "1";
+    btn.style.pointerEvents = locked ? "none" : "";
+    btn.style.cursor  = locked ? "not-allowed" : "";
+    btn.title         = locked ? "Complete the activity above to continue" : "";
+  }
+
+  // Apply locked state immediately
+  setLocked(true);
+
+  // Poll until unlocked
+  var poll = setInterval(function(){
+    var val = String(player.GetVar(gateVar));
+    if(val === gateVal){
+      setLocked(false);
+      clearInterval(poll);
+    }
+  }, 400);
+
+  // Safety: auto-unlock after 5 minutes
+  setTimeout(function(){ setLocked(false); clearInterval(poll); }, 300000);
+})();`
+},
+
+// ── 144: Auto-Advance Countdown ──────────────────────────────
+{
+  id: 144, category: "navigation", difficulty: "intermediate",
+  title: "Auto-Advance with Countdown",
+  description: "Shows a floating 'Continuing in 5...' countdown overlay and automatically advances to the next slide when it hits zero. Learner can click to dismiss early.",
+  tags: ["auto-advance", "countdown", "timer", "next", "DOM", "overlay"],
+  setup: "No variables needed. Set the delay in the code.",
+  howToAdd: "Add an Execute JavaScript trigger 'When timeline ends' on any slide where you want auto-advance.",
+  promptContext: "Creates a floating countdown pill and calls GetPlayer().GotoSlide(currentSlide + 1) on completion.",
+  code: `(function(){
+  if(document.getElementById("_slAutoAdv")) return;
+
+  var seconds = 5;    // ← countdown duration
+  var label   = "Continuing";
+
+  if(!document.getElementById("_slAutoAdvStyle")){
+    var s = document.createElement("style");
+    s.id  = "_slAutoAdvStyle";
+    s.textContent = [
+      "@keyframes _slAdvBar{from{width:100%}to{width:0%}}",
+      "#_slAutoAdv{position:fixed;bottom:72px;left:50%;transform:translateX(-50%);",
+      "  background:#1e3a5f;color:#fff;padding:10px 20px;border-radius:24px;",
+      "  font-family:Inter,sans-serif;font-size:0.9rem;white-space:nowrap;",
+      "  box-shadow:0 4px 20px rgba(0,0,0,.3);z-index:9999;cursor:pointer;",
+      "  display:flex;align-items:center;gap:10px;overflow:hidden;}",
+      "#_slAdvProgress{position:absolute;bottom:0;left:0;height:3px;background:#16a34a;",
+      "  animation:_slAdvBar "+seconds+"s linear forwards;}"
+    ].join("");
+    document.head.appendChild(s);
+  }
+
+  var wrap = document.createElement("div");
+  wrap.id  = "_slAutoAdv";
+  wrap.innerHTML = '<span id="_slAdvText">'+label+' in <strong>'+seconds+'</strong>...</span>'
+                 + '<span style="opacity:.65;font-size:.8rem">Click to skip</span>'
+                 + '<div id="_slAdvProgress"></div>';
+  document.body.appendChild(wrap);
+
+  var p = GetPlayer();
+  var remaining = seconds;
+
+  var tick = setInterval(function(){
+    remaining--;
+    var textEl = document.getElementById("_slAdvText");
+    if(textEl) textEl.innerHTML = label+' in <strong>'+remaining+'</strong>...';
+    if(remaining <= 0){
+      clearInterval(tick);
+      if(wrap.parentNode) wrap.parentNode.removeChild(wrap);
+      p.GotoSlide(p.GetCurrentSlide() + 1);
+    }
+  }, 1000);
+
+  wrap.addEventListener("click", function(){
+    clearInterval(tick);
+    if(wrap.parentNode) wrap.parentNode.removeChild(wrap);
+    p.GotoSlide(p.GetCurrentSlide() + 1);
+  });
+})();`
+},
+
+// ── 145: Replace Next / Prev Button Text ─────────────────────
+{
+  id: 145, category: "navigation", difficulty: "beginner",
+  title: "Replace Next / Prev Button Label",
+  description: "Changes the text label on the Next or Prev button to anything you want — 'Continue →', 'Show Results', 'Start Activity', 'Go Back'. Zero Storyline theme editing required.",
+  tags: ["next", "prev", "label", "text", "rename", "custom"],
+  setup: "No variables needed. Update the label strings in the code.",
+  howToAdd: "Add an Execute JavaScript trigger 'When timeline starts' on the slide where you want the custom label.",
+  promptContext: "Finds the text node inside the Next/Prev button and replaces it. Also updates aria attributes for accessibility.",
+  code: `(function(){
+  // ── Config ──────────────────────────────────────────────────
+  var nextLabel = "Continue →";   // Set null to leave unchanged
+  var prevLabel = null;           // Set null to leave unchanged
+  // ────────────────────────────────────────────────────────────
+
+  function relabel(selector, newText){
+    if(!newText) return;
+    var btn = document.querySelector(selector) ||
+              document.querySelector(selector.replace('Slide','').trim());
+    if(!btn) return;
+
+    // Find the visible text span inside the button
+    var textEl = btn.querySelector("span:not([class*='icon']):not([class*='arrow'])") ||
+                 btn.querySelector(".player-nav-label") ||
+                 btn.querySelector("[data-acc-text]") ||
+                 btn;
+
+    // If it's the button itself, update its direct text node
+    var nodes = btn.childNodes;
+    for(var i=0;i<nodes.length;i++){
+      if(nodes[i].nodeType===3 && nodes[i].textContent.trim()){
+        nodes[i].textContent = " " + newText + " ";
+        return;
+      }
+    }
+    // Fallback: update the element's text content
+    if(textEl !== btn) textEl.textContent = newText;
+    else btn.setAttribute("aria-label", newText);
+  }
+
+  function applyLabels(){
+    relabel('[data-acc-text="Next Slide"]', nextLabel);
+    relabel('[data-acc-text="Previous Slide"]', prevLabel);
+    // Also target mock buttons in demo
+    var mn = document.querySelector('.sl-mock-nav-next');
+    var mp = document.querySelector('.sl-mock-nav-prev');
+    if(mn && nextLabel) mn.textContent = nextLabel;
+    if(mp && prevLabel) mp.textContent = prevLabel;
+  }
+
+  // Retry briefly for late-rendered buttons
+  applyLabels();
+  var t = setInterval(applyLabels, 50);
+  setTimeout(function(){ clearInterval(t); }, 800);
+})();`
+},
+
+// ── 146: Lock / Hide Previous Button ─────────────────────────
+{
+  id: 146, category: "navigation", difficulty: "beginner",
+  title: "Lock Previous Button (No Going Back)",
+  description: "Disables or visually hides the Prev button on any slide — useful for enforcing linear progression through mandatory content, assessments, or timed sections.",
+  tags: ["prev", "lock", "disable", "hide", "linear", "navigation"],
+  setup: "No variables needed.",
+  howToAdd: "Add an Execute JavaScript trigger 'When timeline starts'. The button is locked for the duration of the slide.",
+  promptContext: "Finds the Storyline Previous button and sets disabled + opacity. Does not remove it from the DOM.",
+  code: `(function(){
+  // ── Config ──────────────────────────────────────────────────
+  var hideCompletely = false; // true = invisible, false = visible but greyed out
+  // ────────────────────────────────────────────────────────────
+
+  function findPrev(){
+    return document.querySelector('[data-acc-text="Previous Slide"]') ||
+           document.querySelector('[aria-label*="Prev"]') ||
+           document.querySelector('[title*="Previous"]') ||
+           document.querySelector('.sl-mock-nav-prev');
+  }
+
+  function applyLock(){
+    var btn = findPrev();
+    if(!btn) return false;
+    btn.disabled = true;
+    btn.style.pointerEvents = "none";
+    btn.style.cursor = "default";
+    btn.setAttribute("aria-disabled","true");
+    if(hideCompletely){
+      btn.style.visibility = "hidden";
+    } else {
+      btn.style.opacity = "0.2";
+    }
+    return true;
+  }
+
+  if(!applyLock()){
+    var attempts = 0;
+    var t = setInterval(function(){
+      if(applyLock() || ++attempts > 20) clearInterval(t);
+    }, 50);
+  }
+})();`
+},
+
+// ── 147: Custom Floating CTA Button ──────────────────────────
+{
+  id: 147, category: "navigation", difficulty: "intermediate",
+  title: "Custom Floating CTA Button",
+  description: "Injects a fully styled floating action button anywhere on the slide that navigates forward. Lets you replace the default nav visually while keeping Storyline's trigger system intact.",
+  tags: ["CTA", "custom", "button", "floating", "next", "brand", "DOM"],
+  setup: "No variables needed. Customise label, position, and colors in the config block.",
+  howToAdd: "Add an Execute JavaScript trigger 'When timeline starts'. Remove or hide the default Next button via a separate trigger if you want a full replacement.",
+  promptContext: "Creates a fixed-position DOM button that calls GetPlayer().GotoSlide(currentSlide + 1) on click.",
+  code: `(function(){
+  if(document.getElementById("sl-cta-btn")) return;
+
+  // ── Config ──────────────────────────────────────────────────
+  var label    = "Continue →";
+  var bg       = "#c0392b";       // button background (brand red)
+  var fg       = "#ffffff";       // text colour
+  var position = "bottom-right";  // "bottom-right" | "bottom-center" | "bottom-left"
+  // ────────────────────────────────────────────────────────────
+
+  var posStyles = {
+    "bottom-right":  "bottom:28px;right:32px;",
+    "bottom-center": "bottom:28px;left:50%;transform:translateX(-50%);",
+    "bottom-left":   "bottom:28px;left:32px;"
+  };
+
+  var btn = document.createElement("button");
+  btn.id  = "sl-cta-btn";
+  btn.textContent = label;
+  btn.style.cssText = [
+    "position:fixed",
+    posStyles[position] || posStyles["bottom-right"],
+    "background:" + bg,
+    "color:" + fg,
+    "border:none",
+    "border-radius:6px",
+    "padding:12px 28px",
+    "font-family:Inter,sans-serif",
+    "font-size:1rem",
+    "font-weight:600",
+    "letter-spacing:0.02em",
+    "cursor:pointer",
+    "z-index:9500",
+    "box-shadow:0 4px 16px rgba(0,0,0,.25)",
+    "transition:transform 0.15s,box-shadow 0.15s"
+  ].join(";");
+
+  btn.addEventListener("mouseover",  function(){ btn.style.transform="scale(1.04)"; btn.style.boxShadow="0 6px 22px rgba(0,0,0,.3)"; });
+  btn.addEventListener("mouseout",   function(){ btn.style.transform=""; btn.style.boxShadow="0 4px 16px rgba(0,0,0,.25)"; });
+  btn.addEventListener("click", function(){
+    var p = GetPlayer();
+    p.GotoSlide(p.GetCurrentSlide() + 1);
+  });
+
+  document.body.appendChild(btn);
+})();`
+},
+
+// ── 148: Reveal Next Button with Delay ───────────────────────
+{
+  id: 148, category: "navigation", difficulty: "intermediate",
+  title: "Reveal Next Button After Delay",
+  description: "Hides the Next button on slide load, then smoothly reveals it after a set number of seconds. Enforces dwell time without a hard lock — learners know it's coming.",
+  tags: ["reveal", "delay", "next", "dwell", "lock", "animation"],
+  setup: "No variables needed. Set the delay in seconds in the code.",
+  howToAdd: "Add an Execute JavaScript trigger 'When timeline starts'. The button fades in after the delay.",
+  promptContext: "Sets Next button opacity to 0 and pointer-events none immediately, then transitions to full opacity after delay.",
+  code: `(function(){
+  var delay = 8;   // seconds before Next appears
+  var showToast = true; // show a subtle "Available in X seconds" hint
+
+  function findNext(){
+    return document.querySelector('[data-acc-text="Next Slide"]') ||
+           document.querySelector('[aria-label*="Next"]') ||
+           document.querySelector('.sl-mock-nav-next');
+  }
+
+  function applyHide(){
+    var btn = findNext();
+    if(!btn) return false;
+    btn.style.opacity        = "0";
+    btn.style.pointerEvents  = "none";
+    btn.style.transition     = "opacity 0.6s ease, transform 0.6s ease";
+    btn.style.transform      = "scale(0.85)";
+    return true;
+  }
+
+  function applyReveal(){
+    var btn = findNext();
+    if(!btn) return;
+    btn.style.opacity       = "1";
+    btn.style.pointerEvents = "";
+    btn.style.transform     = "scale(1)";
+    var hint = document.getElementById("_slRevealHint");
+    if(hint){ hint.style.opacity="0"; setTimeout(function(){ hint.parentNode&&hint.parentNode.removeChild(hint); },400); }
+  }
+
+  if(!applyHide()){
+    var t0 = setInterval(function(){ if(applyHide()) clearInterval(t0); }, 50);
+  }
+
+  if(showToast){
+    var remaining = delay;
+    var hint = document.createElement("div");
+    hint.id  = "_slRevealHint";
+    hint.style.cssText = "position:fixed;bottom:22px;right:16px;font-family:Inter,sans-serif;font-size:0.78rem;color:rgba(255,255,255,.55);pointer-events:none;z-index:9999;transition:opacity 0.4s;";
+    hint.textContent   = "Next available in " + remaining + "s";
+    document.body.appendChild(hint);
+    var tick = setInterval(function(){
+      remaining--;
+      if(hint.parentNode) hint.textContent = "Next available in " + remaining + "s";
+      if(remaining <= 0) clearInterval(tick);
+    }, 1000);
+  }
+
+  setTimeout(applyReveal, delay * 1000);
+})();`
+},
+
+// ── 149: Slide Progress Counter Overlay ──────────────────────
+{
+  id: 149, category: "navigation", difficulty: "beginner",
+  title: "Slide Progress Counter (X of Y)",
+  description: "Injects a small 'Slide 3 of 10' counter near the nav bar. Reads current slide position from a Storyline variable or falls back to GetCurrentSlide(). Helps learners gauge how far along they are.",
+  tags: ["counter", "progress", "slide", "X of Y", "navigation", "DOM"],
+  setup: "Create a Number variable 'TotalSlides' set to your course's total slide count. Optionally create 'CurrentSlideNum' and increment it via trigger each slide's timeline start.",
+  howToAdd: "Add an Execute JavaScript trigger 'When timeline starts' on each slide (or a master slide trigger).",
+  promptContext: "Creates a fixed-position slide counter pill. Reads TotalSlides and CurrentSlideNum variables from the mock player.",
+  code: `(function(){
+  var p        = GetPlayer();
+  var current  = parseInt(p.GetVar("CurrentSlideNum"),10) || p.GetCurrentSlide() || 1;
+  var total    = parseInt(p.GetVar("TotalSlides"),10)    || 10;
+  var existing = document.getElementById("sl-slide-counter");
+
+  // Update if already on page, create if not
+  if(existing){
+    existing.querySelector("span").textContent = current + " / " + total;
+    return;
+  }
+
+  if(!document.getElementById("_slCounterStyle")){
+    var s = document.createElement("style");
+    s.id  = "_slCounterStyle";
+    s.textContent = "#sl-slide-counter{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);background:rgba(30,58,95,.85);color:#fff;padding:5px 14px;border-radius:16px;font-family:Inter,sans-serif;font-size:0.78rem;font-weight:500;letter-spacing:0.04em;pointer-events:none;z-index:8900;backdrop-filter:blur(4px);}";
+    document.head.appendChild(s);
+  }
+
+  var pill = document.createElement("div");
+  pill.id  = "sl-slide-counter";
+  pill.innerHTML = '<span>' + current + ' / ' + total + '</span>';
+  document.body.appendChild(pill);
+})();`
+},
+
+// ── 150: Swipe to Navigate (Mobile) ──────────────────────────
+{
+  id: 150, category: "navigation", difficulty: "intermediate",
+  title: "Swipe to Navigate (Mobile)",
+  description: "Adds left/right swipe gesture support to navigate between slides on touch devices. Swipe left = Next, Swipe right = Previous. A minimum swipe distance prevents accidental triggers during scrolling.",
+  tags: ["swipe", "touch", "mobile", "gesture", "navigation", "responsive"],
+  setup: "No variables needed.",
+  howToAdd: "Add an Execute JavaScript trigger 'When timeline starts' on any slide. For course-wide swipe, add it to a slide master via a 'When timeline starts on master' trigger.",
+  promptContext: "Attaches touchstart and touchend listeners to document.body. Threshold of 60px prevents scroll interference.",
+  code: `(function(){
+  if(window._slSwipeActive) return;
+  window._slSwipeActive = true;
+
+  var threshold = 60;   // minimum px swipe to trigger
+  var startX    = 0;
+  var startY    = 0;
+  var p         = GetPlayer();
+
+  function onStart(e){
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
+  }
+
+  function onEnd(e){
+    var dx = e.changedTouches[0].clientX - startX;
+    var dy = e.changedTouches[0].clientY - startY;
+
+    // Ignore if vertical scroll is dominant
+    if(Math.abs(dy) > Math.abs(dx)) return;
+    if(Math.abs(dx) < threshold) return;
+
+    if(dx < 0){
+      // Swipe left → Next
+      p.GotoSlide(p.GetCurrentSlide() + 1);
+    } else {
+      // Swipe right → Prev
+      var prev = p.GetCurrentSlide() - 1;
+      if(prev >= 1) p.GotoSlide(prev);
+    }
+  }
+
+  document.body.addEventListener("touchstart", onStart, { passive: true });
+  document.body.addEventListener("touchend",   onEnd,   { passive: true });
+
+  // Clean up after 60 minutes (prevent accumulating listeners on long courses)
+  setTimeout(function(){
+    window._slSwipeActive = false;
+    document.body.removeEventListener("touchstart", onStart);
+    document.body.removeEventListener("touchend",   onEnd);
+  }, 3600000);
+})();`
+}
+
+]; // end SNIPPETS_141_150
+
+
+const SNIPPETS = [...SNIPPETS_1_50, ...SNIPPETS_51_100, ...SNIPPETS_101_120, ...SNIPPETS_121_140, ...SNIPPETS_141_150];
 // ============================================================
 // SLSnippets — Part 2b: SNIPPET_EXTRA context data
 // "In plain English" + "Real-world example" for all 140 snippets
@@ -7883,11 +8397,13 @@ const DEMO_VARS = {
   AnnotationMode:"true", ReadingProgress:0, ReadingComplete:"false",
   KCCorrect:6, KCTotal:8, KCStreak:4, StopwatchResult:"",
   TimerDone:"false", TimerExpired:"false",
+  // Navigation
+  ReadyToAdvance:"true", CurrentSlideNum:3, TotalSlides:10,
 };
 
 // Categories that run cleanly with a mock player
 // Only effects + engagement inject real DOM elements — everything else is Storyline variable logic
-const _DEMO_LIVE_CATS = new Set(["effects","engagement"]);
+const _DEMO_LIVE_CATS = new Set(["effects","engagement","navigation"]);
 
 function _getDemoType(s){
   return _DEMO_LIVE_CATS.has(s.category) ? "auto" : "none";
@@ -7909,7 +8425,9 @@ const _DEMO_IDS = [
   "sl-annot-toolbar","sl-read-bar","sl-spotlight","sl-magnifier",
   "sl-combo-badge","sl-badge",
   // Mock scaffolding injected by runDemo()
-  "sl-mock-choices","sl-mock-highlight",
+  "sl-mock-choices","sl-mock-highlight","sl-mock-nav",
+  // Navigation snippets (141-150)
+  "sl-cta-btn","sl-slide-counter","_slAutoAdv","_slRevealHint","_slAdvProgress",
 ];
 
 function stopDemo(){
@@ -8018,6 +8536,30 @@ function runDemo(){
   }
 
   // Snippet-specific mock DOM scaffolding
+  // Navigation-category snippets need a mock Next/Prev nav bar to operate on
+  if(s.category === "navigation" && s.id >= 141 && !document.getElementById("sl-mock-nav")){
+    const mnav = document.createElement("div");
+    mnav.id = "sl-mock-nav";
+    mnav.style.cssText = "position:fixed;bottom:0;left:0;right:0;height:52px;background:#1e3a5f;display:flex;align-items:center;justify-content:flex-end;padding:0 24px;gap:10px;z-index:10;box-shadow:0 -2px 12px rgba(0,0,0,.3);";
+    const prevBtn = document.createElement("button");
+    prevBtn.className = "sl-mock-nav-prev";
+    prevBtn.setAttribute("data-acc-text","Previous Slide");
+    prevBtn.setAttribute("aria-label","Previous Slide");
+    prevBtn.textContent = "← Prev";
+    prevBtn.style.cssText = "background:rgba(255,255,255,.12);color:#fff;border:none;padding:8px 18px;border-radius:4px;font-family:Inter,sans-serif;font-size:0.875rem;cursor:pointer;transition:all 0.3s;";
+    const nextBtn = document.createElement("button");
+    nextBtn.className = "sl-mock-nav-next";
+    nextBtn.setAttribute("data-acc-text","Next Slide");
+    nextBtn.setAttribute("aria-label","Next Slide");
+    nextBtn.textContent = "Next →";
+    nextBtn.style.cssText = "background:rgba(255,255,255,.18);color:#fff;border:none;padding:8px 18px;border-radius:4px;font-family:Inter,sans-serif;font-size:0.875rem;cursor:pointer;transition:all 0.3s;";
+    const label = document.createElement("span");
+    label.style.cssText = "color:rgba(255,255,255,.4);font-size:0.75rem;margin-right:auto;margin-left:4px;font-family:Inter,sans-serif;";
+    label.textContent = "Mock Storyline navigation";
+    mnav.appendChild(label); mnav.appendChild(prevBtn); mnav.appendChild(nextBtn);
+    document.body.appendChild(mnav);
+  }
+
   if(s.id === 112 && !document.getElementById("sl-mock-choices")){
     // Lock-and-fade snippet needs quiz choice elements to operate on
     const wrap = document.createElement("div");
