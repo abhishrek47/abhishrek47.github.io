@@ -7942,10 +7942,11 @@ function renderList(){
     return;
   }
 
-  container.innerHTML = list.map(s=>{
+  container.innerHTML = list.map((s,i)=>{
     const m     = CAT_META[s.category]||{icon:"📄",color:"#475569"};
     const dc    = s.difficulty.charAt(0).toUpperCase()+s.difficulty.slice(1);
-    const idStr = "#" + String(s.id).padStart(3,"0");
+    // Show position within the current filtered/sorted view, not the raw internal ID
+    const idStr = "#" + String(i+1).padStart(3,"0");
 
     return `
 <div class="snippet-row"
