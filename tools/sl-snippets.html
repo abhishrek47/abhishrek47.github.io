@@ -8772,10 +8772,14 @@ document.addEventListener('keydown', function(e){
 
 </script>
 <script>
-/* ── 5-min coffee toast (session-once) ── */
+/* ── 5-min coffee toast (session-once, refresh-safe) ── */
 (function(){
-  if(sessionStorage.getItem('sct_dismissed')) return;
   var DELAY = 5 * 60 * 1000;
+  if(sessionStorage.getItem('sct_dismissed')) return;
+  // Record first-visit timestamp so refreshes don't reset the clock
+  var first = parseInt(sessionStorage.getItem('sct_first') || '0', 10);
+  if(!first){ first = Date.now(); sessionStorage.setItem('sct_first', first); }
+  var remaining = Math.max(0, DELAY - (Date.now() - first));
   function showToast(){
     if(sessionStorage.getItem('sct_dismissed')) return;
     var t = document.getElementById('sl-coffee-toast');
@@ -8788,7 +8792,7 @@ document.addEventListener('keydown', function(e){
     t.classList.add('sct-hiding');
     setTimeout(function(){ t.style.display='none'; }, 260);
   }
-  setTimeout(showToast, DELAY);
+  if(remaining === 0){ showToast(); } else { setTimeout(showToast, remaining); }
   var btn = document.getElementById('sctDismiss');
   if(btn) btn.addEventListener('click', dismiss);
   var lnk = document.getElementById('sctLink');
