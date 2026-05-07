@@ -662,7 +662,66 @@ a{color:inherit;text-decoration:none;}
   font-family:'Inter',sans-serif;white-space:nowrap;transition:background .15s;
 }
 #demaBannerStop:hover{ background:var(--acc-h); }
+
+/* ── REQUEST MODAL ─────────────────────────────────────── */
+.req-overlay{
+  position:fixed;inset:0;background:rgba(10,12,18,.6);backdrop-filter:blur(4px);
+  z-index:2000;display:flex;align-items:center;justify-content:center;
+  opacity:0;pointer-events:none;transition:opacity .2s;
+}
+.req-overlay.open{opacity:1;pointer-events:all;}
+.req-modal{
+  background:#fff;border-radius:14px;width:min(520px,92vw);padding:32px 32px 28px;
+  box-shadow:0 24px 64px rgba(0,0,0,.18);
+  transform:translateY(14px) scale(.97);transition:transform .22s cubic-bezier(.34,1.56,.64,1);
+  position:relative;
+}
+.req-overlay.open .req-modal{transform:translateY(0) scale(1);}
+.req-close{
+  position:absolute;top:14px;right:14px;width:28px;height:28px;border-radius:50%;
+  background:var(--bg);border:none;cursor:pointer;font-size:1rem;
+  display:flex;align-items:center;justify-content:center;color:var(--muted);transition:background .15s;
+}
+.req-close:hover{background:var(--border2);}
+.req-eyebrow{font-size:.72rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--acc);margin-bottom:8px;}
+.req-title{font-size:1.2rem;font-weight:800;color:var(--ink);margin-bottom:4px;
+  font-family:'Inter',sans-serif;}
+.req-sub{font-size:.82rem;color:var(--muted);line-height:1.5;margin-bottom:20px;}
+.req-field{margin-bottom:14px;}
+.req-field label{display:block;font-size:.75rem;font-weight:700;color:var(--ink2);
+  margin-bottom:5px;letter-spacing:.04em;}
+.req-field input,.req-field textarea{
+  width:100%;padding:9px 12px;border:1.5px solid var(--border2);border-radius:8px;
+  font-size:.88rem;font-family:'Inter',sans-serif;color:var(--ink);background:#fafafa;
+  outline:none;transition:border-color .15s;resize:vertical;
+}
+.req-field input:focus,.req-field textarea:focus{border-color:var(--acc);background:#fff;}
+.req-field textarea{min-height:100px;}
+.req-hint{font-size:.72rem;color:var(--muted);margin-top:4px;line-height:1.4;}
+.req-actions{display:flex;align-items:center;gap:10px;margin-top:6px;}
+.req-submit{
+  flex:1;padding:10px 20px;background:var(--acc);color:#fff;border:none;border-radius:8px;
+  font-size:.88rem;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;transition:background .15s;
+}
+.req-submit:hover{background:var(--acc-h);}
+.req-submit:disabled{background:var(--muted);cursor:not-allowed;}
+.req-cancel{padding:10px 16px;background:none;border:1.5px solid var(--border2);border-radius:8px;
+  font-size:.85rem;font-weight:600;font-family:'Inter',sans-serif;color:var(--muted);cursor:pointer;transition:border-color .15s;}
+.req-cancel:hover{border-color:var(--ink2);}
+.req-status{font-size:.82rem;font-weight:600;margin-top:12px;min-height:20px;text-align:center;}
+.req-status.ok{color:#16a34a;}
+.req-status.err{color:var(--acc);}
+/* nav request button */
+.btn-request{
+  display:flex;align-items:center;gap:6px;padding:6px 13px;border-radius:7px;
+  background:transparent;border:1.5px solid var(--border2);cursor:pointer;
+  font-size:.78rem;font-weight:700;font-family:'Inter',sans-serif;color:var(--ink2);
+  transition:border-color .15s,color .15s;white-space:nowrap;
+}
+.btn-request:hover{border-color:var(--acc);color:var(--acc);}
 </style>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 </head>
 <body>
 <div id="liveRegion" aria-live="polite" aria-atomic="true"></div>
@@ -681,6 +740,10 @@ a{color:inherit;text-decoration:none;}
   <div class="nav-right">
     <span id="unlockBadge" class="unlock-badge" style="display:none"></span>
     <button class="btn btn-outline btn-sm" id="navUnlockBtn" style="display:none"></button>
+    <button class="btn-request" onclick="openRequestModal()" aria-label="Request a snippet">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+      Request a snippet
+    </button>
   </div>
 </nav>
 
@@ -854,6 +917,36 @@ a{color:inherit;text-decoration:none;}
 <div id="demoBanner" role="status" aria-live="polite">
   <span id="demoBannerLabel">🎬 Demo running — Storyline calls are simulated. Works best for effects &amp; engagement snippets.</span>
   <button id="demaBannerStop" onclick="stopDemo()">■ Stop Preview</button>
+</div>
+
+<!-- ── REQUEST MODAL ── -->
+<div class="req-overlay" id="reqOverlay" role="dialog" aria-modal="true" aria-labelledby="reqTitle">
+  <div class="req-modal">
+    <button class="req-close" onclick="closeRequestModal()" aria-label="Close">✕</button>
+    <div class="req-eyebrow">Community Request</div>
+    <div class="req-title" id="reqTitle">Request a snippet</div>
+    <div class="req-sub">Something missing from the library? Describe the JavaScript behaviour you need and I will build it if it fits.</div>
+    <form id="reqForm" onsubmit="submitRequest(event)">
+      <div class="req-field">
+        <label for="reqName">Your name</label>
+        <input type="text" id="reqName" name="reqName" placeholder="e.g. Sarah Ahmed" required autocomplete="name">
+      </div>
+      <div class="req-field">
+        <label for="reqEmail">Email address</label>
+        <input type="email" id="reqEmail" name="reqEmail" placeholder="e.g. sarah@company.com" required autocomplete="email">
+      </div>
+      <div class="req-field">
+        <label for="reqDesc">What do you need?</label>
+        <textarea id="reqDesc" name="reqDesc" placeholder="e.g. A snippet that reads the current slide number and stores it in a Storyline variable called 'LastSlide'" required></textarea>
+        <div class="req-hint">Be specific — the more detail you give, the better the snippet will match what you actually need.</div>
+      </div>
+      <div class="req-actions">
+        <button type="button" class="req-cancel" onclick="closeRequestModal()">Cancel</button>
+        <button type="submit" class="req-submit" id="reqSubmitBtn">Send request →</button>
+      </div>
+      <div class="req-status" id="reqStatus"></div>
+    </form>
+  </div>
 </div>
 
 <!-- ── KO-FI FLOAT (home + browse only) ── -->
@@ -7928,6 +8021,97 @@ document.addEventListener("DOMContentLoaded",function(){
 window.addEventListener("hashchange",function(){
   stopDemo(); // clean up any running demo on navigation
   handleRoute();
+});
+
+// ── REQUEST MODAL ──────────────────────────────────────────────────────────
+const _EJS = {
+  serviceId:  'service_7f0oy0j',
+  templateId: 'template_wots65r',
+  publicKey:  'MODruKIN9wiNDF2-x',
+};
+
+function openRequestModal(){
+  const overlay = document.getElementById('reqOverlay');
+  if(!overlay) return;
+  overlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  setTimeout(()=>{ const n = document.getElementById('reqName'); if(n) n.focus(); }, 120);
+}
+
+function closeRequestModal(){
+  const overlay = document.getElementById('reqOverlay');
+  if(!overlay) return;
+  overlay.classList.remove('open');
+  document.body.style.overflow = '';
+  // Reset form state
+  const form = document.getElementById('reqForm');
+  if(form){ form.reset(); }
+  const status = document.getElementById('reqStatus');
+  if(status){ status.textContent=''; status.className='req-status'; }
+  const btn = document.getElementById('reqSubmitBtn');
+  if(btn){ btn.disabled=false; btn.textContent='Send request →'; }
+}
+
+function submitRequest(e){
+  e.preventDefault();
+  const name  = document.getElementById('reqName').value.trim();
+  const email = document.getElementById('reqEmail').value.trim();
+  const desc  = document.getElementById('reqDesc').value.trim();
+  const btn   = document.getElementById('reqSubmitBtn');
+  const status= document.getElementById('reqStatus');
+
+  if(!name || !email || !desc) return;
+
+  btn.disabled = true;
+  btn.textContent = 'Sending…';
+  status.textContent = '';
+  status.className = 'req-status';
+
+  if(typeof emailjs === 'undefined'){
+    status.textContent = 'Could not connect to email service. Please try again.';
+    status.className = 'req-status err';
+    btn.disabled = false;
+    btn.textContent = 'Send request →';
+    return;
+  }
+
+  emailjs.send(_EJS.serviceId, _EJS.templateId, {
+    visitor_name:  name,
+    from_email:    email,
+    message:       '[SLSnippets Request]\n\nFrom: ' + name + ' <' + email + '>\n\n' + desc,
+    dwell_time:    'Snippet request submission',
+    scroll_depth:  'n/a',
+    timestamp:     new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }),
+    page_url:      window.location.href,
+    trigger:       'snippet_request',
+  }, _EJS.publicKey).then(()=>{
+    status.textContent = '✓ Request sent! I will review it and reach out if I build it.';
+    status.className = 'req-status ok';
+    btn.textContent = 'Sent ✓';
+    // Auto-close after 3s
+    setTimeout(closeRequestModal, 3200);
+  }).catch(()=>{
+    status.textContent = 'Something went wrong. Email me directly: work.abhishektrivedi@gmail.com';
+    status.className = 'req-status err';
+    btn.disabled = false;
+    btn.textContent = 'Send request →';
+  });
+}
+
+// Close on overlay click (outside modal)
+document.addEventListener('DOMContentLoaded', function(){
+  const overlay = document.getElementById('reqOverlay');
+  if(overlay) overlay.addEventListener('click', function(e){
+    if(e.target === overlay) closeRequestModal();
+  });
+});
+
+// Close on Escape
+document.addEventListener('keydown', function(e){
+  if(e.key === 'Escape'){
+    const overlay = document.getElementById('reqOverlay');
+    if(overlay && overlay.classList.contains('open')) closeRequestModal();
+  }
 });
 
 </script>
