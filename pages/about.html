@@ -1230,7 +1230,6 @@
 
   let dwell = 0, stmtN = 0, ticker = null;
   let visitorName = '';
-  let fiveMinFired = false;
 
   // ── EmailJS config ──
   const EJS = {
@@ -1315,21 +1314,8 @@
         setTimeout(()=>{ xStatus.innerHTML='<span class="xapi-dot-sm"></span> Streaming to LRS'; },900);
       }
 
-      // Fire 5-min email (300s) — once only
-      if(dwell === 300 && !fiveMinFired){
-        fiveMinFired = true;
-        sendEmail('5 minutes dwell on About page');
-      }
     },1000);
   }
-
-  // 5-min timer fires even without name entry
-  setTimeout(() => {
-    if (!fiveMinFired) {
-      fiveMinFired = true;
-      sendEmail('5 minutes dwell on About page (no name entered)');
-    }
-  }, 300000);
 
   window.addEventListener('scroll',()=>{
     const sd=depth();

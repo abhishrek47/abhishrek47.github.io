@@ -8076,11 +8076,9 @@ function submitRequest(e){
   }
 
   emailjs.send(_EJS.serviceId, _EJS.templateId, {
-    visitor_name:  name,
-    from_email:    email,
-    message:       '[SLSnippets Request]\n\nFrom: ' + name + ' <' + email + '>\n\n' + desc,
-    dwell_time:    'Snippet request submission',
-    scroll_depth:  'n/a',
+    visitor_name:  name + ' (' + email + ')',  // → "Name" field in email
+    dwell_time:    desc,                        // → "Time on page" field — shows actual request text
+    scroll_depth:  'snippet_request',
     timestamp:     new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }),
     page_url:      window.location.href,
     trigger:       'snippet_request',
