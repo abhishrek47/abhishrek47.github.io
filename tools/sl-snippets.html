@@ -634,6 +634,35 @@ a{color:inherit;text-decoration:none;}
 }
 .kofi-popup-btn:hover{background:var(--acc-h);}
 
+/* ── 5-min coffee toast ── */
+@keyframes sct-in{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@keyframes sct-out{from{opacity:1;transform:translateY(0)}to{opacity:0;transform:translateY(10px)}}
+#sl-coffee-toast{
+  position:fixed;bottom:74px;right:24px;width:288px;
+  background:#0f1e32;border:1px solid rgba(255,255,255,.07);
+  border-left:3px solid var(--acc);
+  border-radius:10px;padding:16px 16px 14px;
+  box-shadow:0 8px 32px rgba(0,0,0,.45);
+  z-index:9999;font-family:'Inter',sans-serif;
+  animation:sct-in .38s cubic-bezier(.16,1,.3,1) forwards;
+}
+#sl-coffee-toast.sct-hiding{animation:sct-out .25s ease forwards;}
+.sct-row{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;}
+.sct-body{flex:1;min-width:0;}
+.sct-label{font-size:.72rem;font-weight:600;letter-spacing:.07em;text-transform:uppercase;
+  color:var(--acc);margin-bottom:5px;}
+.sct-msg{font-size:.8rem;color:#94a3b8;line-height:1.58;}
+.sct-x{background:none;border:none;color:#475569;cursor:pointer;font-size:1.05rem;
+  line-height:1;padding:0;flex-shrink:0;margin-top:-1px;transition:color .15s;}
+.sct-x:hover{color:#94a3b8;}
+.sct-link{
+  display:inline-flex;align-items:center;gap:5px;margin-top:12px;
+  color:var(--acc);font-size:.78rem;font-weight:600;text-decoration:none;
+  border-bottom:1px solid rgba(192,57,43,.3);padding-bottom:1px;
+  transition:border-color .15s,color .15s;
+}
+.sct-link:hover{color:#e74c3c;border-color:rgba(231,76,60,.5);}
+
 /* ── Related snippets ── */
 .related-section{padding:28px 0 8px;}
 .related-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px;}
@@ -949,6 +978,18 @@ a{color:inherit;text-decoration:none;}
       <div class="req-status" id="reqStatus"></div>
     </form>
   </div>
+</div>
+
+<!-- ── 5-MIN COFFEE TOAST (all pages, session-once) ── -->
+<div id="sl-coffee-toast" style="display:none" role="note" aria-label="Support SLSnippets">
+  <div class="sct-row">
+    <div class="sct-body">
+      <div class="sct-label">☕ Still here?</div>
+      <div class="sct-msg">150 free snippets, no paywall. If one saved you time on a real project, a coffee keeps this going.</div>
+    </div>
+    <button class="sct-x" id="sctDismiss" aria-label="Dismiss">×</button>
+  </div>
+  <a class="sct-link" href="https://ko-fi.com/abhishektrivedi" target="_blank" rel="noopener" id="sctLink">Buy me a coffee →</a>
 </div>
 
 <!-- ── KO-FI FLOAT (home + browse only) ── -->
@@ -8724,6 +8765,30 @@ document.addEventListener('keydown', function(e){
   }
 });
 
+</script>
+<script>
+/* ── 5-min coffee toast (session-once) ── */
+(function(){
+  if(sessionStorage.getItem('sct_dismissed')) return;
+  var DELAY = 5 * 60 * 1000;
+  function showToast(){
+    if(sessionStorage.getItem('sct_dismissed')) return;
+    var t = document.getElementById('sl-coffee-toast');
+    if(t){ t.style.display=''; }
+  }
+  function dismiss(){
+    sessionStorage.setItem('sct_dismissed','1');
+    var t = document.getElementById('sl-coffee-toast');
+    if(!t) return;
+    t.classList.add('sct-hiding');
+    setTimeout(function(){ t.style.display='none'; }, 260);
+  }
+  setTimeout(showToast, DELAY);
+  var btn = document.getElementById('sctDismiss');
+  if(btn) btn.addEventListener('click', dismiss);
+  var lnk = document.getElementById('sctLink');
+  if(lnk) lnk.addEventListener('click', function(){ setTimeout(dismiss, 800); });
+})();
 </script>
 </body>
 </html>
