@@ -6469,7 +6469,7 @@ const SNIPPETS_141_150 = [
     s.id  = "_slAutoAdvStyle";
     s.textContent = [
       "@keyframes _slAdvBar{from{width:100%}to{width:0%}}",
-      "#_slAutoAdv{position:fixed;bottom:72px;left:50%;transform:translateX(-50%);",
+      "#_slAutoAdv{position:fixed;bottom:120px;left:50%;transform:translateX(-50%);",
       "  background:#1e3a5f;color:#fff;padding:10px 20px;border-radius:24px;",
       "  font-family:Inter,sans-serif;font-size:0.9rem;white-space:nowrap;",
       "  box-shadow:0 4px 20px rgba(0,0,0,.3);z-index:9999;cursor:pointer;",
@@ -6631,9 +6631,9 @@ const SNIPPETS_141_150 = [
   // ────────────────────────────────────────────────────────────
 
   var posStyles = {
-    "bottom-right":  "bottom:28px;right:32px;",
-    "bottom-center": "bottom:28px;left:50%;transform:translateX(-50%);",
-    "bottom-left":   "bottom:28px;left:32px;"
+    "bottom-right":  "bottom:120px;right:32px;",
+    "bottom-center": "bottom:120px;left:50%;transform:translateX(-50%);",
+    "bottom-left":   "bottom:120px;left:32px;"
   };
 
   var btn = document.createElement("button");
@@ -6715,7 +6715,7 @@ const SNIPPETS_141_150 = [
     var remaining = delay;
     var hint = document.createElement("div");
     hint.id  = "_slRevealHint";
-    hint.style.cssText = "position:fixed;bottom:22px;right:16px;font-family:Inter,sans-serif;font-size:0.78rem;color:rgba(255,255,255,.55);pointer-events:none;z-index:9999;transition:opacity 0.4s;";
+    hint.style.cssText = "position:fixed;bottom:112px;right:16px;font-family:Inter,sans-serif;font-size:0.78rem;color:rgba(255,255,255,.55);pointer-events:none;z-index:9999;transition:opacity 0.4s;";
     hint.textContent   = "Next available in " + remaining + "s";
     document.body.appendChild(hint);
     var tick = setInterval(function(){
@@ -6753,7 +6753,7 @@ const SNIPPETS_141_150 = [
   if(!document.getElementById("_slCounterStyle")){
     var s = document.createElement("style");
     s.id  = "_slCounterStyle";
-    s.textContent = "#sl-slide-counter{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);background:rgba(30,58,95,.85);color:#fff;padding:5px 14px;border-radius:16px;font-family:Inter,sans-serif;font-size:0.78rem;font-weight:500;letter-spacing:0.04em;pointer-events:none;z-index:8900;backdrop-filter:blur(4px);}";
+    s.textContent = "#sl-slide-counter{position:fixed;bottom:112px;left:50%;transform:translateX(-50%);background:rgba(30,58,95,.85);color:#fff;padding:5px 14px;border-radius:16px;font-family:Inter,sans-serif;font-size:0.78rem;font-weight:500;letter-spacing:0.04em;pointer-events:none;z-index:8900;backdrop-filter:blur(4px);}";
     document.head.appendChild(s);
   }
 
@@ -8541,7 +8541,7 @@ function runDemo(){
   if(s.category === "navigation" && s.id >= 141 && !document.getElementById("sl-mock-nav")){
     const mnav = document.createElement("div");
     mnav.id = "sl-mock-nav";
-    mnav.style.cssText = "position:fixed;bottom:0;left:0;right:0;height:52px;background:#1e3a5f;display:flex;align-items:center;justify-content:flex-end;padding:0 24px;gap:10px;z-index:10;box-shadow:0 -2px 12px rgba(0,0,0,.3);";
+    mnav.style.cssText = "position:fixed;bottom:54px;left:0;right:0;height:52px;background:#1e3a5f;display:flex;align-items:center;justify-content:flex-end;padding:0 24px;gap:10px;z-index:9990;box-shadow:0 -2px 12px rgba(0,0,0,.3);";
     const prevBtn = document.createElement("button");
     prevBtn.className = "sl-mock-nav-prev";
     prevBtn.setAttribute("data-acc-text","Previous Slide");
