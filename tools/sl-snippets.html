@@ -756,10 +756,95 @@ a{color:inherit;text-decoration:none;}
   transition:border-color .15s,color .15s;white-space:nowrap;
 }
 .btn-request:hover{border-color:var(--acc);color:var(--acc);}
+
+/* ════════════════════════════════════════
+   AURORA HERO BACKGROUND
+════════════════════════════════════════ */
+@keyframes aurora1{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(50px,-40px) scale(1.14);}}
+@keyframes aurora2{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(-40px,28px) scale(1.1);}}
+@keyframes aurora3{0%,100%{transform:translate(-50%,-50%) scale(1);}50%{transform:translate(-48%,-52%) scale(1.12);}}
+.hero-aurora{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0;}
+.hero-aurora span{position:absolute;border-radius:50%;filter:blur(72px);opacity:.25;}
+.hero-aurora span:nth-child(1){width:440px;height:440px;background:#c0392b;top:-130px;right:-90px;animation:aurora1 9s ease-in-out infinite;}
+.hero-aurora span:nth-child(2){width:380px;height:380px;background:#0369a1;bottom:-110px;left:-80px;animation:aurora2 11s ease-in-out infinite;}
+.hero-aurora span:nth-child(3){width:300px;height:300px;background:#6d28d9;top:50%;left:50%;transform:translate(-50%,-50%);animation:aurora3 13s ease-in-out infinite;}
+
+/* ════════════════════════════════════════
+   SCROLL PROGRESS BAR
+════════════════════════════════════════ */
+#readProgress{position:fixed;top:0;left:0;height:2px;background:var(--acc);z-index:10000;width:0%;transition:width .08s linear;pointer-events:none;box-shadow:0 0 6px rgba(192,57,43,.6);}
+
+/* ════════════════════════════════════════
+   COMMAND PALETTE
+════════════════════════════════════════ */
+.cmd-overlay{position:fixed;inset:0;background:rgba(8,12,20,.76);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);z-index:5000;display:none;align-items:flex-start;justify-content:center;padding-top:13vh;}
+.cmd-overlay.open{display:flex;}
+.cmd-palette{width:100%;max-width:560px;margin:0 16px;background:#0d1b2e;border:1px solid rgba(255,255,255,.14);border-radius:16px;box-shadow:0 32px 80px rgba(0,0,0,.72),0 0 0 1px rgba(255,255,255,.03);overflow:hidden;}
+.cmd-search-row{display:flex;align-items:center;gap:12px;padding:16px 18px;border-bottom:1px solid rgba(255,255,255,.07);}
+.cmd-search-icon{color:rgba(255,255,255,.26);flex-shrink:0;}
+#cmdInput{flex:1;background:none;border:none;outline:none;font-family:'Inter',sans-serif;font-size:1rem;color:#fff;font-weight:500;caret-color:var(--acc);}
+#cmdInput::placeholder{color:rgba(255,255,255,.2);}
+.cmd-esc-hint{background:rgba(255,255,255,.06);color:rgba(255,255,255,.26);border:1px solid rgba(255,255,255,.09);border-radius:5px;padding:2px 8px;font-size:.7rem;font-family:'JetBrains Mono',monospace;flex-shrink:0;}
+.cmd-results{max-height:340px;overflow-y:auto;padding:4px 0;}
+.cmd-item{display:flex;align-items:center;gap:12px;padding:10px 18px;cursor:pointer;transition:background .08s;}
+.cmd-item.cmd-active,.cmd-item:hover{background:rgba(255,255,255,.07);}
+.cmd-item-icon{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:.88rem;flex-shrink:0;}
+.cmd-item-body{flex:1;min-width:0;}
+.cmd-item-title{font-size:.88rem;font-weight:600;color:#f0f0f0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.cmd-item-meta{font-size:.72rem;color:rgba(255,255,255,.3);margin-top:2px;}
+.cmd-item-tag{font-size:.67rem;font-weight:600;padding:2px 8px;border-radius:100px;background:rgba(255,255,255,.07);color:rgba(255,255,255,.32);white-space:nowrap;flex-shrink:0;text-transform:capitalize;}
+.cmd-empty{padding:36px 18px;text-align:center;color:rgba(255,255,255,.24);font-size:.88rem;}
+.cmd-footer{display:flex;gap:16px;padding:9px 18px;border-top:1px solid rgba(255,255,255,.06);background:rgba(0,0,0,.22);}
+.cmd-footer span{font-size:.7rem;color:rgba(255,255,255,.22);display:flex;align-items:center;gap:5px;}
+.cmd-footer kbd{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:4px;padding:1px 6px;font-family:'JetBrains Mono',monospace;font-size:.67rem;color:rgba(255,255,255,.3);}
+.cmd-k-badge{display:inline-flex;align-items:center;gap:5px;background:rgba(0,0,0,.06);border:1px solid var(--border2);border-radius:7px;padding:5px 10px;font-size:.72rem;color:var(--muted);font-family:'JetBrains Mono',monospace;cursor:pointer;transition:all .15s;white-space:nowrap;flex-shrink:0;}
+.cmd-k-badge:hover{border-color:var(--acc);color:var(--acc);}
+@media(max-width:720px){.cmd-k-badge{display:none;}}
+
+/* ════════════════════════════════════════
+   FAVORITES — STAR BUTTONS
+════════════════════════════════════════ */
+.row-star{background:none;border:none;cursor:pointer;padding:5px 5px;border-radius:6px;color:rgba(120,120,120,.4);transition:all .15s;line-height:1;flex-shrink:0;font-size:.9rem;}
+.row-star:hover{color:#fbbf24;background:rgba(251,191,36,.1);}
+.row-star.starred{color:#fbbf24;opacity:1;}
+.snip-star-btn{background:none;border:1.5px solid var(--border);border-radius:8px;padding:6px 12px;cursor:pointer;font-family:'Inter',sans-serif;font-size:.78rem;font-weight:600;display:inline-flex;align-items:center;gap:5px;transition:all .15s;color:var(--muted);}
+.snip-star-btn:hover{border-color:#fbbf24;color:#fbbf24;}
+.snip-star-btn.starred{border-color:#fbbf24;color:#fbbf24;background:rgba(251,191,36,.07);}
+
+/* ════════════════════════════════════════
+   SIDEBAR — RECENT + STARRED
+════════════════════════════════════════ */
+.sb-recent-item{font-size:.77rem!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--muted)!important;padding-left:8px!important;}
+.sb-recent-item:hover{color:var(--ink)!important;}
+
+/* ════════════════════════════════════════
+   SURPRISE ME · j/k FOCUS · 3D TILT
+════════════════════════════════════════ */
+.surprise-btn{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);border-radius:100px;padding:7px 18px;font-size:.8rem;font-weight:600;color:rgba(255,255,255,.55);cursor:pointer;transition:all .22s;font-family:'Inter',sans-serif;}
+.surprise-btn:hover{background:rgba(255,255,255,.15);color:#fff;transform:scale(1.04);}
+.hero-actions{display:flex;align-items:center;justify-content:center;gap:12px;margin-top:22px;flex-wrap:wrap;}
+.snippet-row{will-change:transform;transition:transform .18s ease,box-shadow .18s ease!important;}
+.snippet-row[data-focused="1"]{outline:2px solid var(--acc)!important;outline-offset:-2px;}
+
+/* ════════════════════════════════════════
+   KEYBOARD SHORTCUTS MODAL
+════════════════════════════════════════ */
+.kb-overlay{position:fixed;inset:0;background:rgba(8,12,20,.65);backdrop-filter:blur(6px);z-index:4000;display:none;align-items:center;justify-content:center;}
+.kb-overlay.open{display:flex;}
+.kb-modal{background:#0d1b2e;border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:28px 30px;max-width:400px;width:calc(100% - 32px);box-shadow:0 24px 80px rgba(0,0,0,.65);}
+.kb-modal h3{font-size:.92rem;font-weight:700;color:#fff;margin-bottom:18px;letter-spacing:.06em;text-transform:uppercase;}
+.kb-row{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.05);}
+.kb-row:last-child{border-bottom:none;}
+.kb-desc{font-size:.8rem;color:rgba(255,255,255,.42);}
+.kb-keys{display:flex;gap:4px;flex-shrink:0;}
+.kb-key{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.13);border-radius:5px;padding:3px 8px;font-size:.7rem;font-family:'JetBrains Mono',monospace;color:rgba(255,255,255,.5);}
+.kb-close-btn{margin-top:20px;width:100%;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:9px;color:rgba(255,255,255,.42);font-family:'Inter',sans-serif;font-size:.82rem;cursor:pointer;transition:background .15s;}
+.kb-close-btn:hover{background:rgba(255,255,255,.11);}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 </head>
 <body>
+<div id="readProgress"></div>
 <div id="liveRegion" aria-live="polite" aria-atomic="true"></div>
 
 <!-- ── NAV ── -->
@@ -776,6 +861,10 @@ a{color:inherit;text-decoration:none;}
   <div class="nav-right">
     <span id="unlockBadge" class="unlock-badge" style="display:none"></span>
     <button class="btn btn-outline btn-sm" id="navUnlockBtn" style="display:none"></button>
+    <button class="cmd-k-badge" onclick="openCmdPalette()" aria-label="Open command palette" id="cmdKBadge">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <span id="cmdKLabel">⌘K</span>
+    </button>
     <button class="btn-request" onclick="openRequestModal()" aria-label="Request a snippet">
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
       Request a snippet
@@ -785,14 +874,18 @@ a{color:inherit;text-decoration:none;}
 
 <!-- ── HERO ── -->
 <section class="hero" id="siteHero">
+  <div class="hero-aurora" aria-hidden="true"><span></span><span></span><span></span></div>
   <div class="hero-inner">
     <div class="hero-eyebrow"><span class="hero-eyebrow-dot"></span>Articulate Storyline 360 · JavaScript Library</div>
     <h1>Storyline JavaScript,<br><em>solved</em> and ready to copy.</h1>
-    <p class="hero-sub">140 tested snippets for Storyline 360. Navigation, variables, xAPI, celebrations, text effects — stop Googling, start building.</p>
+    <p class="hero-sub">150 tested snippets for Storyline 360. Navigation, variables, xAPI, celebrations, text effects — stop Googling, start building.</p>
     <div class="hero-stats">
-      <div class="hero-stat"><span class="stat-num" id="statTotal">140</span><span class="stat-lbl">Snippets</span></div>
+      <div class="hero-stat"><span class="stat-num" id="statTotal">150</span><span class="stat-lbl">Snippets</span></div>
       <div class="hero-stat"><span class="stat-num" id="statFree" style="color:var(--green)">All</span><span class="stat-lbl">Free</span></div>
       <div class="hero-stat"><span class="stat-num" id="statCats">12</span><span class="stat-lbl">Categories</span></div>
+    </div>
+    <div class="hero-actions">
+      <button class="surprise-btn" onclick="surpriseMe()" aria-label="Open a random snippet">🎲 Surprise me</button>
     </div>
   </div>
 </section>
@@ -853,6 +946,7 @@ a{color:inherit;text-decoration:none;}
     </button>
     <div class="snip-breadcrumb" id="snipBreadcrumb"></div>
     <div class="snip-pagination-top">
+      <button class="snip-star-btn" id="snipStarBtn" onclick="toggleFav(state.openId)" title="Star this snippet">☆ Star</button>
       <button class="snip-nav-btn" id="copyLinkBtn" onclick="copySnipLink()" title="Copy shareable link to this snippet">🔗 Share</button>
       <button class="snip-nav-btn" id="prevBtn">← Prev</button>
       <span class="snip-counter" id="snipCounter"></span>
@@ -982,6 +1076,40 @@ a{color:inherit;text-decoration:none;}
       </div>
       <div class="req-status" id="reqStatus"></div>
     </form>
+  </div>
+</div>
+
+<!-- ── COMMAND PALETTE ── -->
+<div id="cmdOverlay" class="cmd-overlay" role="dialog" aria-modal="true" aria-label="Command palette" onclick="closeCmdPalette()">
+  <div class="cmd-palette" onclick="event.stopPropagation()">
+    <div class="cmd-search-row">
+      <svg class="cmd-search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input type="text" id="cmdInput" placeholder="Search snippets, categories…" autocomplete="off" spellcheck="false" oninput="renderCmdResults()">
+      <kbd class="cmd-esc-hint">ESC</kbd>
+    </div>
+    <div class="cmd-results" id="cmdResults"></div>
+    <div class="cmd-footer">
+      <span><kbd>↑</kbd><kbd>↓</kbd> navigate</span>
+      <span><kbd>↵</kbd> open</span>
+      <span><kbd>ESC</kbd> close</span>
+    </div>
+  </div>
+</div>
+
+<!-- ── KEYBOARD SHORTCUTS MODAL ── -->
+<div id="kbOverlay" class="kb-overlay" onclick="closeShortcutsModal()">
+  <div class="kb-modal" onclick="event.stopPropagation()">
+    <h3>Keyboard Shortcuts</h3>
+    <div class="kb-row"><span class="kb-desc">Open command palette</span><span class="kb-keys"><kbd class="kb-key" id="kbCmdKey">⌘K</kbd></span></div>
+    <div class="kb-row"><span class="kb-desc">Search snippets</span><span class="kb-keys"><kbd class="kb-key">/</kbd></span></div>
+    <div class="kb-row"><span class="kb-desc">Navigate list</span><span class="kb-keys"><kbd class="kb-key">j</kbd><kbd class="kb-key">k</kbd></span></div>
+    <div class="kb-row"><span class="kb-desc">Open focused snippet</span><span class="kb-keys"><kbd class="kb-key">↵</kbd></span></div>
+    <div class="kb-row"><span class="kb-desc">Go back</span><span class="kb-keys"><kbd class="kb-key">ESC</kbd></span></div>
+    <div class="kb-row"><span class="kb-desc">Copy code (snippet page)</span><span class="kb-keys"><kbd class="kb-key">c</kbd></span></div>
+    <div class="kb-row"><span class="kb-desc">Star / unstar</span><span class="kb-keys"><kbd class="kb-key">f</kbd></span></div>
+    <div class="kb-row"><span class="kb-desc">Prev / Next snippet</span><span class="kb-keys"><kbd class="kb-key">←</kbd><kbd class="kb-key">→</kbd></span></div>
+    <div class="kb-row"><span class="kb-desc">This modal</span><span class="kb-keys"><kbd class="kb-key">?</kbd></span></div>
+    <button class="kb-close-btn" onclick="closeShortcutsModal()">Close</button>
   </div>
 </div>
 
@@ -7947,11 +8075,28 @@ function renderSidebar(){
   }).join("")}
 </div>`;
 
-  inner.innerHTML = html;
+  // Prepend starred + recent container divs
+  const prefix = `<div id="sbStarred" style="display:none"></div><div id="sbRecent" style="display:none"></div>`;
+  inner.innerHTML = prefix + html;
+
+  // Populate starred + recent
+  renderSidebarDynamic();
 
   // Hide pro strip — all snippets are free
   const strip = document.getElementById("sbProStrip");
   if(strip) strip.style.display = "none";
+}
+
+// ── goSnippet helper (used by starred/recent sidebar links) ───
+function goSnippet(id){
+  if(state.view==="browse"||state.view==="cat"){
+    state.navList   = getFiltered();
+    state.navSource = state.activeCat==="all" ? "#browse" : "#c/"+state.activeCat;
+  } else {
+    state.navList = SNIPPETS.slice();
+    state.navSource = "#";
+  }
+  navTo("#s/"+id);
 }
 
 // ── Filter + Sort ─────────────────────────────────────────────
@@ -8017,10 +8162,27 @@ function renderList(){
       ${_DEMO_LIVE_CATS.has(s.category)?'<span class="badge-preview">Preview</span>':''}
       <div class="diff-dot ${s.difficulty}" title="${dc}"></div>
     </div>
+    <button class="row-star${isFav(s.id)?' starred':''}" data-id="${s.id}"
+      onclick="event.stopPropagation();toggleFav(${s.id})"
+      title="${isFav(s.id)?'Starred':'Star this snippet'}"
+      aria-label="${isFav(s.id)?'Remove star':'Star snippet'}">${isFav(s.id)?'★':'☆'}</button>
     <span class="row-arrow">→</span>
   </div>
 </div>`;
   }).join("");
+
+  // 3D card tilt on mouse move
+  container.querySelectorAll(".snippet-row").forEach(row=>{
+    row.addEventListener("mousemove",function(e){
+      const r = this.getBoundingClientRect();
+      const x = (e.clientX - r.left) / r.width  - 0.5;
+      const y = (e.clientY - r.top)  / r.height - 0.5;
+      this.style.transform = `perspective(700px) rotateY(${x*5}deg) rotateX(${-y*3}deg) translateZ(2px)`;
+    });
+    row.addEventListener("mouseleave",function(){
+      this.style.transform = "";
+    });
+  });
 
   // Restore scroll position when returning from a snippet page via goBack()
   if(state.scrollToId !== null){
@@ -8065,6 +8227,7 @@ function _openSnippetPage(id){
 
   stopDemo(); // clean up any running demo before switching snippet
   state.openId = id;
+  _pushRecent(id);
   const m  = CAT_META[s.category]||{icon:"📄",color:"#475569"};
   const dc = s.difficulty.charAt(0).toUpperCase()+s.difficulty.slice(1);
 
@@ -8165,6 +8328,17 @@ function _openSnippetPage(id){
     const catLabel = state.activeCat !== "all" ? (state.activeCat.charAt(0).toUpperCase()+state.activeCat.slice(1)) : "Browse";
     backBtn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> ${catLabel}`;
   }
+
+  // Star button
+  const sb = document.getElementById("snipStarBtn");
+  if(sb){
+    const starred = isFav(id);
+    sb.textContent = starred ? "★ Starred" : "☆ Star";
+    sb.classList.toggle("starred", starred);
+  }
+
+  // Reset scroll progress
+  _updateScrollProgress();
 
   // Prev / Next
   _updatePrevNext(id);
@@ -8385,23 +8559,241 @@ function wireSort(){
 }
 function wireModal(){ /* no-op — modal removed */ }
 function wireKeyboard(){
+  // Fix ⌘K vs Ctrl+K label based on platform
+  const kbCmdKey = document.getElementById("kbCmdKey");
+  const cmdKLabel = document.getElementById("cmdKLabel");
+  const isMac = /Mac|iPhone|iPad|iPod/.test(navigator.platform||"");
+  const cmdLabel = isMac ? "⌘K" : "Ctrl+K";
+  if(kbCmdKey) kbCmdKey.textContent = cmdLabel;
+  if(cmdKLabel) cmdKLabel.textContent = cmdLabel;
+
   document.addEventListener("keydown",function(e){
-    if(e.key==="Escape"){
-      const m=document.getElementById("unlockModal");
-      if(m&&m.classList.contains("open")){ closeUnlock(); return; }
-      if(state.view==="snippet"){ goBack(); return; }
-      if(state.view==="browse"){ navTo("#"); return; }
-    }
-    if(e.key==="/"&&!["INPUT","TEXTAREA"].includes(document.activeElement.tagName)){
+    // ── ⌘K / Ctrl+K → command palette ──
+    if((e.metaKey||e.ctrlKey) && e.key==="k"){
       e.preventDefault();
-      const inp=document.getElementById("searchInput"); if(inp) inp.focus();
+      const ov = document.getElementById("cmdOverlay");
+      if(ov && ov.classList.contains("open")) closeCmdPalette();
+      else openCmdPalette();
+      return;
     }
+    // ── Command palette open: handle navigation ──
+    const cmdOv = document.getElementById("cmdOverlay");
+    if(cmdOv && cmdOv.classList.contains("open")){
+      if(e.key==="ArrowDown"){ e.preventDefault(); _cmdNav(1); }
+      else if(e.key==="ArrowUp"){ e.preventDefault(); _cmdNav(-1); }
+      else if(e.key==="Enter"){
+        const active = document.querySelector(".cmd-item.cmd-active");
+        if(active) cmdOpen(parseInt(active.dataset.id));
+      }
+      else if(e.key==="Escape") closeCmdPalette();
+      return;
+    }
+    // ── Shortcuts modal: close on Esc ──
+    const kbOv = document.getElementById("kbOverlay");
+    if(kbOv && kbOv.classList.contains("open")){
+      if(e.key==="Escape") closeShortcutsModal();
+      return;
+    }
+    // ── Escape: context-sensitive back ──
+    if(e.key==="Escape"){
+      if(state.view==="snippet"){ goBack(); return; }
+      if(state.view==="browse"||state.view==="cat"){ navTo("#"); return; }
+    }
+    // ── Ignore shortcuts when typing in an input ──
+    const tag = document.activeElement.tagName;
+    const inInput = tag==="INPUT"||tag==="TEXTAREA"||tag==="SELECT";
+    if(inInput) return;
+    // ── / : focus search ──
+    if(e.key==="/"){ e.preventDefault(); const inp=document.getElementById("searchInput"); if(inp) inp.focus(); return; }
+    // ── ? : shortcuts modal ──
+    if(e.key==="?"){ showShortcutsModal(); return; }
+    // ── Snippet page shortcuts ──
     if(state.view==="snippet"){
-      if(e.key==="ArrowLeft") { e.preventDefault(); prevSnippet(); }
-      if(e.key==="ArrowRight"){ e.preventDefault(); nextSnippet(); }
+      if(e.key==="ArrowLeft") { e.preventDefault(); prevSnippet(); return; }
+      if(e.key==="ArrowRight"){ e.preventDefault(); nextSnippet(); return; }
+      if(e.key==="c"){ copyCode(); return; }
+      if(e.key==="f"){ toggleFav(state.openId); return; }
+    }
+    // ── Browse/cat view: j/k navigation ──
+    if((e.key==="j"||e.key==="k") && (state.view==="browse"||state.view==="cat")){
+      e.preventDefault();
+      const rows = Array.from(document.querySelectorAll(".snippet-row"));
+      if(!rows.length) return;
+      let idx = rows.findIndex(r=>r.dataset.focused==="1");
+      rows.forEach(r=>r.removeAttribute("data-focused"));
+      if(e.key==="j") idx = Math.min(idx+1, rows.length-1);
+      else idx = Math.max(idx-1, 0);
+      if(idx<0) idx=0;
+      rows[idx].setAttribute("data-focused","1");
+      rows[idx].scrollIntoView({block:"nearest",behavior:"smooth"});
+      return;
+    }
+    if(e.key==="Enter" && (state.view==="browse"||state.view==="cat")){
+      const focused = document.querySelector(".snippet-row[data-focused='1']");
+      if(focused) focused.click();
+      return;
     }
   });
 }
+
+// ── Command Palette ───────────────────────────────────────────
+let _cmdIdx = 0;
+function openCmdPalette(){
+  const ov = document.getElementById("cmdOverlay");
+  if(!ov) return;
+  ov.classList.add("open");
+  const inp = document.getElementById("cmdInput");
+  if(inp){ inp.value=""; inp.focus(); }
+  _cmdIdx = 0;
+  renderCmdResults();
+}
+function closeCmdPalette(){
+  const ov = document.getElementById("cmdOverlay");
+  if(ov) ov.classList.remove("open");
+}
+function renderCmdResults(){
+  const inp = document.getElementById("cmdInput");
+  const q = inp ? inp.value.trim().toLowerCase() : "";
+  const hits = q
+    ? SNIPPETS.filter(s=>
+        s.title.toLowerCase().includes(q) ||
+        s.category.toLowerCase().includes(q) ||
+        (s.tags||[]).some(t=>t.toLowerCase().includes(q)) ||
+        (s.description||"").toLowerCase().includes(q)
+      ).slice(0,14)
+    : SNIPPETS.slice(0,14);
+  _cmdIdx = 0;
+  const el = document.getElementById("cmdResults");
+  if(!el) return;
+  if(!hits.length){
+    el.innerHTML=`<div class="cmd-empty">No snippets found for "${esc(q)}"</div>`;
+    return;
+  }
+  el.innerHTML = hits.map((s,i)=>{
+    const m = CAT_META[s.category]||{icon:"📄",color:"#475569"};
+    return `<div class="cmd-item${i===0?" cmd-active":""}" data-id="${s.id}" onclick="cmdOpen(${s.id})">
+      <div class="cmd-item-icon" style="background:${m.color}20;color:${m.color};">${m.icon}</div>
+      <div class="cmd-item-body">
+        <div class="cmd-item-title">${esc(s.title)}</div>
+        <div class="cmd-item-meta">${esc(s.category)} · #${String(s.id).padStart(3,"0")}</div>
+      </div>
+      <div class="cmd-item-tag">${esc(s.difficulty||"")}</div>
+    </div>`;
+  }).join("");
+}
+function cmdOpen(id){
+  closeCmdPalette();
+  if(state.view==="browse"||state.view==="cat"){
+    state.navList = getFiltered();
+    state.navSource = state.activeCat==="all" ? "#browse" : "#c/"+state.activeCat;
+  } else {
+    state.navList = SNIPPETS.slice();
+    state.navSource = "#";
+  }
+  navTo("#s/"+id);
+}
+function _cmdNav(dir){
+  const items = Array.from(document.querySelectorAll(".cmd-item"));
+  if(!items.length) return;
+  items[_cmdIdx].classList.remove("cmd-active");
+  _cmdIdx = (_cmdIdx+dir+items.length)%items.length;
+  items[_cmdIdx].classList.add("cmd-active");
+  items[_cmdIdx].scrollIntoView({block:"nearest"});
+}
+
+// ── Keyboard Shortcuts Modal ──────────────────────────────────
+function showShortcutsModal(){
+  const ov = document.getElementById("kbOverlay");
+  if(ov) ov.classList.add("open");
+}
+function closeShortcutsModal(){
+  const ov = document.getElementById("kbOverlay");
+  if(ov) ov.classList.remove("open");
+}
+
+// ── Favorites ─────────────────────────────────────────────────
+function _getFavs(){ try{ return JSON.parse(localStorage.getItem("sl_favs")||"[]"); }catch(e){ return []; } }
+function _saveFavs(arr){ localStorage.setItem("sl_favs", JSON.stringify(arr)); }
+function isFav(id){ return _getFavs().includes(id); }
+function toggleFav(id){
+  if(!id) return;
+  const favs = _getFavs();
+  const idx  = favs.indexOf(id);
+  if(idx===-1) favs.push(id); else favs.splice(idx,1);
+  _saveFavs(favs);
+  const isStarred = favs.includes(id);
+  // Update all star buttons for this id
+  document.querySelectorAll(`.row-star[data-id="${id}"]`).forEach(btn=>{
+    btn.textContent = isStarred ? "★" : "☆";
+    btn.classList.toggle("starred", isStarred);
+    btn.title = isStarred ? "Starred" : "Star this snippet";
+  });
+  // Update snippet detail star button
+  const sb = document.getElementById("snipStarBtn");
+  if(sb && state.openId===id){
+    sb.textContent = isStarred ? "★ Starred" : "☆ Star";
+    sb.classList.toggle("starred", isStarred);
+  }
+  // Re-render sidebar starred section
+  renderSidebarDynamic();
+  showToast(isStarred ? "⭐ Snippet starred" : "Removed from starred");
+}
+
+// ── Recently Viewed ───────────────────────────────────────────
+function _getRecent(){ try{ return JSON.parse(sessionStorage.getItem("sl_recent")||"[]"); }catch(e){ return []; } }
+function _pushRecent(id){
+  let arr = _getRecent().filter(x=>x!==id);
+  arr.unshift(id);
+  arr = arr.slice(0,5);
+  sessionStorage.setItem("sl_recent", JSON.stringify(arr));
+}
+
+// ── Sidebar dynamic sections (starred + recent) ───────────────
+function renderSidebarDynamic(){
+  const starEl   = document.getElementById("sbStarred");
+  const recentEl = document.getElementById("sbRecent");
+  const favs   = _getFavs();
+  const recent = _getRecent();
+
+  if(starEl){
+    if(!favs.length){ starEl.style.display="none"; starEl.innerHTML=""; }
+    else {
+      starEl.style.display="";
+      const snips = favs.map(id=>SNIPPETS.find(s=>s.id===id)).filter(Boolean);
+      starEl.innerHTML = `<div class="sb-heading">⭐ Starred</div>`
+        + snips.map(s=>`<button class="sb-item sb-recent-item" onclick="goSnippet(${s.id})" title="${esc(s.title)}">${esc(s.title)}</button>`).join("");
+    }
+  }
+  if(recentEl){
+    if(!recent.length){ recentEl.style.display="none"; recentEl.innerHTML=""; }
+    else {
+      recentEl.style.display="";
+      const snips = recent.map(id=>SNIPPETS.find(s=>s.id===id)).filter(Boolean);
+      recentEl.innerHTML = `<div class="sb-heading">🕐 Recent</div>`
+        + snips.map(s=>`<button class="sb-item sb-recent-item" onclick="goSnippet(${s.id})" title="${esc(s.title)}">${esc(s.title)}</button>`).join("");
+    }
+  }
+}
+
+// ── Surprise Me ───────────────────────────────────────────────
+function surpriseMe(){
+  const s = SNIPPETS[Math.floor(Math.random()*SNIPPETS.length)];
+  state.navList = SNIPPETS.slice();
+  state.navSource = "#";
+  navTo("#s/"+s.id);
+}
+
+// ── Scroll Progress Bar ───────────────────────────────────────
+function _updateScrollProgress(){
+  const bar = document.getElementById("readProgress");
+  if(!bar) return;
+  if(state.view!=="snippet"){ bar.style.width="0%"; return; }
+  const scrollTop = window.scrollY||document.documentElement.scrollTop;
+  const docH = document.documentElement.scrollHeight - window.innerHeight;
+  const pct = docH>0 ? Math.min(100,(scrollTop/docH)*100) : 0;
+  bar.style.width = pct+"%";
+}
+window.addEventListener("scroll", _updateScrollProgress, {passive:true});
 
 // ── Branding ──────────────────────────────────────────────────
 (function brandConsole(){
