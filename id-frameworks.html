@@ -942,7 +942,647 @@
   </div><!-- #view-editorial -->
 
   <div id="view-visual">
-    <div class="kw-page">
+  <style>
+    .idf-root{background:#f0f0f0;min-height:100vh;}
+    .idf-hero{background:#151515;padding:3.5rem 2rem 3rem;}
+    .idf-hero-inner{max-width:860px;margin:0 auto;}
+    .idf-hero-label{font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:#fbbf0e;letter-spacing:.16em;text-transform:uppercase;margin-bottom:1rem;}
+    .idf-h1{font-family:'Outfit',sans-serif;font-size:clamp(2.8rem,6vw,5rem);font-weight:800;line-height:1.02;letter-spacing:-.035em;color:#fff;margin:0 0 .85rem;}
+    .idf-h1 span{color:#fbbf0e;}
+    .idf-hero-sub{font-family:'Figtree',sans-serif;font-size:1rem;color:rgba(255,255,255,.55);margin:0 0 1.5rem;line-height:1.65;max-width:600px;}
+    .idf-ex-pill{display:inline-flex;align-items:center;gap:.6rem;background:#1e1e1e;border:1px solid rgba(251,191,14,.3);border-radius:100px;padding:.55rem 1.2rem;flex-wrap:wrap;}
+    .idf-ex-label{font-family:'Figtree',sans-serif;font-size:.68rem;font-weight:700;color:#fbbf0e;text-transform:uppercase;letter-spacing:.06em;white-space:nowrap;}
+    .idf-ex-text{font-family:'Figtree',sans-serif;font-size:.82rem;color:rgba(255,255,255,.72);}
+
+    .idf-filter{background:#151515;border-bottom:2.5px solid #fbbf0e;display:flex;align-items:center;gap:.5rem;padding:.65rem 2rem;position:sticky;top:58px;z-index:150;}
+    .idf-fbtn{font-family:'Figtree',sans-serif;font-size:.8rem;font-weight:600;padding:.4rem 1rem;border-radius:100px;border:1.5px solid rgba(255,255,255,.18);background:transparent;color:rgba(255,255,255,.55);cursor:pointer;transition:all .15s;}
+    .idf-fbtn.active,.idf-fbtn:hover{background:#fbbf0e;color:#151515;border-color:#fbbf0e;}
+
+    .idf-wrap{max-width:1120px;margin:0 auto;padding:0 1.5rem;}
+    .idf-sec-label{font-family:'Figtree',sans-serif;font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#888;margin:2rem 0 .75rem;display:flex;align-items:center;gap:.75rem;}
+    .idf-sec-label::after{content:'';flex:1;height:1px;background:#d0d0d0;}
+
+    .idf-grid{display:grid;gap:1rem;margin-bottom:.5rem;}
+    .idf-g3{grid-template-columns:repeat(3,1fr);}
+    .idf-g4{grid-template-columns:repeat(4,1fr);}
+    @media(max-width:900px){.idf-g3{grid-template-columns:1fr 1fr}.idf-g4{grid-template-columns:1fr 1fr}}
+    @media(max-width:580px){.idf-g3,.idf-g4{grid-template-columns:1fr}}
+
+    .idf-card{background:#fff;border:2px solid #151515;border-radius:16px;overflow:hidden;cursor:pointer;transition:transform .2s,box-shadow .2s;transform-style:preserve-3d;will-change:transform;}
+    .idf-card:hover:not(.expanded){box-shadow:4px 4px 0 #151515;transform:translateY(-3px);}
+    .idf-card.expanded{box-shadow:0 12px 48px rgba(0,0,0,.18);cursor:default;}
+
+    .idf-ctop{padding:1.4rem 1.4rem 1rem;}
+    .idf-ctype{font-family:'Figtree',sans-serif;font-size:.63rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#888;margin-bottom:.35rem;}
+    .idf-cname{font-family:'Outfit',sans-serif;font-size:2.1rem;font-weight:800;letter-spacing:-.03em;line-height:1;margin:0 0 .3rem;}
+    .idf-cwhat{font-family:'Figtree',sans-serif;font-size:.8rem;color:#666;font-style:italic;margin:0 0 .9rem;}
+    .idf-cphases{display:flex;flex-wrap:wrap;gap:.3rem;margin-bottom:.9rem;}
+    .idf-cp{font-family:'Figtree',sans-serif;font-size:.7rem;font-weight:600;padding:.22rem .6rem;border-radius:100px;border:1.5px solid #151515;}
+    .idf-cmantra{font-family:'Figtree',sans-serif;font-size:.84rem;color:#151515;font-style:italic;padding:.6rem .8rem;border-radius:8px;background:#f4f4f4;border-left:3px solid #151515;}
+
+    .idf-hint{font-family:'Figtree',sans-serif;font-size:.7rem;color:#aaa;padding:.45rem 1.4rem .7rem;display:flex;align-items:center;justify-content:flex-end;gap:.35rem;user-select:none;}
+    .idf-hint .arr{transition:transform .3s;}
+    .idf-card.expanded .idf-hint .arr{transform:rotate(180deg);}
+
+    .idf-detail{max-height:0;overflow:hidden;transition:max-height .55s cubic-bezier(.4,0,.2,1);}
+    .idf-card.expanded .idf-detail{max-height:1100px;}
+    .idf-din{padding:1.4rem;border-top:2px solid #151515;}
+
+    .idf-diagram{border:1.5px solid #ddd;border-radius:12px;overflow:hidden;margin-bottom:1.1rem;background:#fafafa;}
+    .idf-row2{display:grid;grid-template-columns:1fr 1fr;gap:.9rem;margin-bottom:.9rem;}
+    @media(max-width:580px){.idf-row2{grid-template-columns:1fr}}
+    .idf-box{background:#f6f6f6;border:1.5px solid #e0e0e0;border-radius:10px;padding:.9rem 1rem;}
+    .idf-box.hl{background:#fbbf0e;border-color:#151515;}
+    .idf-blabel{font-family:'Figtree',sans-serif;font-size:.63rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#888;margin-bottom:.35rem;}
+    .idf-box.hl .idf-blabel{color:rgba(0,0,0,.5);}
+    .idf-btext{font-family:'Figtree',sans-serif;font-size:.84rem;color:#151515;line-height:1.6;}
+
+    .idf-mem{background:#151515;border-radius:10px;padding:1rem 1.2rem;display:flex;gap:.9rem;align-items:flex-start;margin-bottom:.9rem;}
+    .idf-mem-icon{font-size:1.4rem;flex-shrink:0;margin-top:.1rem;}
+    .idf-mlabel{font-family:'Figtree',sans-serif;font-size:.63rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#fbbf0e;margin-bottom:.3rem;}
+    .idf-mtext{font-family:'Figtree',sans-serif;font-size:.84rem;color:rgba(255,255,255,.78);line-height:1.6;}
+    .idf-mtext strong{color:#fbbf0e;}
+
+    .idf-notfor{background:#fff0f0;border:1.5px solid #fcc;border-radius:10px;padding:.75rem 1rem;}
+    .idf-nflabel{font-family:'Figtree',sans-serif;font-size:.63rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#b91c1c;margin-bottom:.25rem;}
+    .idf-nftext{font-family:'Figtree',sans-serif;font-size:.82rem;color:#444;line-height:1.55;}
+
+    .idf-decide{padding:2.5rem 0 0;}
+    .idf-dtitle{font-family:'Outfit',sans-serif;font-size:1.7rem;font-weight:700;letter-spacing:-.02em;color:#151515;margin-bottom:1.1rem;}
+    .idf-dgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:.75rem;}
+    .idf-dcard{background:#fff;border:1.5px solid #ddd;border-radius:12px;padding:1rem 1.2rem;}
+    .idf-dq{font-family:'Figtree',sans-serif;font-size:.88rem;color:#555;font-style:italic;margin-bottom:.45rem;line-height:1.45;}
+    .idf-da{font-family:'Figtree',sans-serif;font-size:.88rem;color:#151515;font-weight:600;line-height:1.5;}
+    .idf-da em{background:#fbbf0e;border-radius:4px;padding:0 .3em;font-style:normal;}
+
+    .idf-cta-wrap{padding:2rem 0 1rem;}
+    .idf-cta-inner{background:#fbbf0e;border:2px solid #151515;border-radius:16px;padding:2rem 2.5rem;display:flex;align-items:center;justify-content:space-between;gap:2rem;flex-wrap:wrap;}
+    .idf-cta-title{font-family:'Outfit',sans-serif;font-size:1.5rem;font-weight:700;letter-spacing:-.02em;color:#151515;margin:0;}
+    .idf-cta-btn{font-family:'Figtree',sans-serif;font-size:.88rem;font-weight:700;padding:.75rem 1.75rem;background:#151515;color:#fbbf0e;border:none;border-radius:100px;cursor:pointer;text-decoration:none;transition:transform .15s,box-shadow .15s;white-space:nowrap;}
+    .idf-cta-btn:hover{transform:translateY(-2px);box-shadow:3px 3px 0 rgba(0,0,0,.35);}
+
+    .idf-foot{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;padding:1.25rem 0 3rem;border-top:1.5px solid rgba(21,21,21,.15);margin-top:.5rem;}
+    .idf-fcopy{font-family:'Figtree',sans-serif;font-size:.78rem;color:#888;}
+    .idf-flinks{display:flex;gap:.5rem;}
+    .idf-flink{font-family:'Figtree',sans-serif;font-size:.78rem;font-weight:500;color:#151515;text-decoration:none;padding:.3rem .9rem;border:1.5px solid #151515;border-radius:100px;transition:background .15s;}
+    .idf-flink:hover{background:#fbbf0e;}
+    .idf-card.idf-hidden{display:none;}
+  </style>
+
+  <!-- HERO -->
+  <div class="idf-root">
+  <div class="idf-hero">
+    <div class="idf-hero-inner">
+      <div class="idf-hero-label">ID Cheat Sheet · Interview Edition</div>
+      <h1 class="idf-h1">7 tools.<br><span>Know them cold.</span></h1>
+      <p class="idf-hero-sub">3 give you a design process. 4 give you a lens to think through. Click any card — the same example runs through all of them.</p>
+      <div class="idf-ex-pill">
+        <span class="idf-ex-label">Running example →</span>
+        <span class="idf-ex-text">Sales objection-handling course · 50 new B2B reps · ships next month</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- FILTER BAR -->
+  <div class="idf-filter">
+    <button class="idf-fbtn active" onclick="idfFilter('all',this)">All 7</button>
+    <button class="idf-fbtn" onclick="idfFilter('model',this)">3 Models</button>
+    <button class="idf-fbtn" onclick="idfFilter('framework',this)">4 Frameworks</button>
+  </div>
+
+  <div class="idf-wrap">
+
+    <!-- MODELS -->
+    <div class="idf-sec-label" id="sec-models">The 3 True ID Models — give you a design process</div>
+    <div class="idf-grid idf-g3">
+
+      <!-- ── ADDIE ── -->
+      <div class="idf-card" data-type="model" onclick="idfToggle(this)">
+        <div class="idf-ctop" style="border-top:4px solid #fbbf0e;">
+          <div class="idf-ctype">ID Model · Sequential Process</div>
+          <div class="idf-cname" style="color:#151515;">ADDIE</div>
+          <div class="idf-cwhat">The classic linear design model</div>
+          <div class="idf-cphases">
+            <span class="idf-cp" style="background:#fbbf0e;">Analyze</span>
+            <span class="idf-cp" style="background:#fef3c7;">Design</span>
+            <span class="idf-cp" style="background:#fef3c7;">Develop</span>
+            <span class="idf-cp" style="background:#fef3c7;">Implement</span>
+            <span class="idf-cp" style="background:#fef3c7;">Evaluate</span>
+          </div>
+          <div class="idf-cmantra">"Blueprint before you build."</div>
+        </div>
+        <div class="idf-hint">Tap to expand <span class="arr">↓</span></div>
+        <div class="idf-detail"><div class="idf-din">
+          <div class="idf-diagram">
+            <svg viewBox="0 0 860 130" xmlns="http://www.w3.org/2000/svg" width="100%" style="display:block;">
+              <rect width="860" height="130" fill="#fafafa"/>
+              <rect x="12" y="20" width="148" height="90" rx="10" fill="#fbbf0e" stroke="#151515" stroke-width="2"/>
+              <text x="86" y="52" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8.5" fill="rgba(0,0,0,.45)" letter-spacing="2">01</text>
+              <text x="86" y="76" text-anchor="middle" font-family="Outfit,Helvetica,sans-serif" font-size="19" font-weight="800" fill="#151515">ANALYZE</text>
+              <text x="86" y="97" text-anchor="middle" font-family="Figtree,Helvetica,sans-serif" font-size="9" fill="rgba(0,0,0,.5)">Define the problem</text>
+              <line x1="161" y1="65" x2="183" y2="65" stroke="#151515" stroke-width="2"/><polygon points="180,59 193,65 180,71" fill="#151515"/>
+              <rect x="193" y="20" width="130" height="90" rx="10" fill="#fff" stroke="#151515" stroke-width="1.5"/>
+              <text x="258" y="52" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8.5" fill="#aaa" letter-spacing="2">02</text>
+              <text x="258" y="76" text-anchor="middle" font-family="Outfit,Helvetica,sans-serif" font-size="19" font-weight="800" fill="#151515">DESIGN</text>
+              <text x="258" y="97" text-anchor="middle" font-family="Figtree,Helvetica,sans-serif" font-size="9" fill="#888">Blueprint the course</text>
+              <line x1="324" y1="65" x2="346" y2="65" stroke="#151515" stroke-width="2"/><polygon points="343,59 356,65 343,71" fill="#151515"/>
+              <rect x="356" y="20" width="130" height="90" rx="10" fill="#fff" stroke="#151515" stroke-width="1.5"/>
+              <text x="421" y="52" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8.5" fill="#aaa" letter-spacing="2">03</text>
+              <text x="421" y="76" text-anchor="middle" font-family="Outfit,Helvetica,sans-serif" font-size="18" font-weight="800" fill="#151515">DEVELOP</text>
+              <text x="421" y="97" text-anchor="middle" font-family="Figtree,Helvetica,sans-serif" font-size="9" fill="#888">Build materials</text>
+              <line x1="487" y1="65" x2="509" y2="65" stroke="#151515" stroke-width="2"/><polygon points="506,59 519,65 506,71" fill="#151515"/>
+              <rect x="519" y="20" width="150" height="90" rx="10" fill="#fff" stroke="#151515" stroke-width="1.5"/>
+              <text x="594" y="52" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8.5" fill="#aaa" letter-spacing="2">04</text>
+              <text x="594" y="74" text-anchor="middle" font-family="Outfit,Helvetica,sans-serif" font-size="16" font-weight="800" fill="#151515">IMPLEMENT</text>
+              <text x="594" y="97" text-anchor="middle" font-family="Figtree,Helvetica,sans-serif" font-size="9" fill="#888">Launch the course</text>
+              <line x1="670" y1="65" x2="692" y2="65" stroke="#151515" stroke-width="2"/><polygon points="689,59 702,65 689,71" fill="#151515"/>
+              <rect x="702" y="20" width="146" height="90" rx="10" fill="#fff" stroke="#151515" stroke-width="1.5"/>
+              <text x="775" y="52" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8.5" fill="#aaa" letter-spacing="2">05</text>
+              <text x="775" y="74" text-anchor="middle" font-family="Outfit,Helvetica,sans-serif" font-size="16" font-weight="800" fill="#151515">EVALUATE</text>
+              <text x="775" y="97" text-anchor="middle" font-family="Figtree,Helvetica,sans-serif" font-size="9" fill="#888">Did it work?</text>
+            </svg>
+          </div>
+          <div class="idf-row2">
+            <div class="idf-box hl">
+              <div class="idf-blabel">In our example</div>
+              <div class="idf-btext">Before touching a slide, <strong>Analyze first.</strong> Interview the sales manager. Are reps failing on objections — or is it actually product knowledge? You might be building the wrong course entirely.</div>
+            </div>
+            <div class="idf-box">
+              <div class="idf-blabel">Use when</div>
+              <div class="idf-btext">Clear scope. Waterfall delivery. Defined stakeholder handoffs. Client hands you a brief and expects a finished product.</div>
+            </div>
+          </div>
+          <div class="idf-mem">
+            <div class="idf-mem-icon">🏗️</div>
+            <div>
+              <div class="idf-mlabel">Memory device</div>
+              <div class="idf-mtext"><strong>The architect analogy.</strong> No architect pours concrete before drawing plans. ADDIE is your drawing phase. Skipping Analyze = building the wrong building. The A is the most important letter.</div>
+            </div>
+          </div>
+          <div class="idf-notfor">
+            <div class="idf-nflabel">Not for</div>
+            <div class="idf-nftext">Fast-moving projects where requirements will shift. If SMEs keep changing direction, switch to SAM.</div>
+          </div>
+        </div></div>
+      </div>
+
+      <!-- ── SAM ── -->
+      <div class="idf-card" data-type="model" onclick="idfToggle(this)">
+        <div class="idf-ctop" style="border-top:4px solid #b994e0;">
+          <div class="idf-ctype">ID Model · Agile / Iterative</div>
+          <div class="idf-cname" style="color:#7c3aed;">SAM</div>
+          <div class="idf-cwhat">Successive Approximation Model</div>
+          <div class="idf-cphases">
+            <span class="idf-cp" style="background:#b994e0;color:#fff;">Preparation</span>
+            <span class="idf-cp" style="background:#ede9fe;">Iterative Design</span>
+            <span class="idf-cp" style="background:#ede9fe;">Iterative Dev</span>
+          </div>
+          <div class="idf-cmantra">"Show rough early. Fix cheap."</div>
+        </div>
+        <div class="idf-hint">Tap to expand <span class="arr">↓</span></div>
+        <div class="idf-detail"><div class="idf-din">
+          <div class="idf-diagram">
+            <svg viewBox="0 0 860 150" xmlns="http://www.w3.org/2000/svg" width="100%" style="display:block;">
+              <rect width="860" height="150" fill="#fafafa"/>
+              <rect x="14" y="30" width="170" height="90" rx="12" fill="#b994e0" stroke="#151515" stroke-width="2"/>
+              <text x="99" y="62" text-anchor="middle" font-family="Figtree,Helvetica,sans-serif" font-size="9" fill="rgba(0,0,0,.45)" font-weight="600" letter-spacing="1">PHASE 1</text>
+              <text x="99" y="86" text-anchor="middle" font-family="Outfit,Helvetica,sans-serif" font-size="16" font-weight="800" fill="#fff">PREP</text>
+              <text x="99" y="108" text-anchor="middle" font-family="Figtree,Helvetica,sans-serif" font-size="9" fill="rgba(255,255,255,.65)">Gather · Align · Start</text>
+              <line x1="185" y1="75" x2="215" y2="75" stroke="#151515" stroke-width="2"/><polygon points="212,69 225,75 212,81" fill="#151515"/>
+              <rect x="226" y="15" width="200" height="120" rx="12" fill="#151515" stroke="#b994e0" stroke-width="2.5"/>
+              <text x="326" y="53" text-anchor="middle" font-family="Figtree,Helvetica,sans-serif" font-size="9" fill="#b994e0" font-weight="700" letter-spacing="1">PHASE 2 · LOOPS</text>
+              <text x="326" y="78" text-anchor="middle" font-family="Outfit,Helvetica,sans-serif" font-size="15" font-weight="800" fill="#fff">ITERATIVE</text>
+              <text x="326" y="98" text-anchor="middle" font-family="Outfit,Helvetica,sans-serif" font-size="15" font-weight="800" fill="#b994e0">DESIGN</text>
+              <text x="326" y="120" text-anchor="middle" font-family="Figtree,Helvetica,sans-serif" font-size="9" fill="rgba(255,255,255,.45)">Prototype → Review → Repeat</text>
+              <line x1="427" y1="75" x2="457" y2="75" stroke="#151515" stroke-width="2"/><polygon points="454,69 467,75 454,81" fill="#151515"/>
+              <rect x="468" y="15" width="200" height="120" rx="12" fill="#151515" stroke="#b994e0" stroke-width="2.5"/>
+              <text x="568" y="53" text-anchor="middle" font-family="Figtree,Helvetica,sans-serif" font-size="9" fill="#b994e0" font-weight="700" letter-spacing="1">PHASE 3 · LOOPS</text>
+              <text x="568" y="78" text-anchor="middle" font-family="Outfit,Helvetica,sans-serif" font-size="15" font-weight="800" fill="#fff">ITERATIVE</text>
+              <text x="568" y="98" text-anchor="middle" font-family="Outfit,Helvetica,sans-serif" font-size="14" font-weight="800" fill="#b994e0">DEVELOPMENT</text>
+              <text x="568" y="120" text-anchor="middle" font-family="Figtree,Helvetica,sans-serif" font-size="9" fill="rgba(255,255,255,.45)">Build → Test → Refine</text>
+              <path d="M 668 80 Q 790 148 668 138 Q 540 128 430 136 Q 300 144 226 128" fill="none" stroke="#b994e0" stroke-width="1.5" stroke-dasharray="5,4"/>
+              <polygon points="230,133 218,124 236,122" fill="#b994e0"/>
+              <text x="740" y="145" font-family="Figtree,Helvetica,sans-serif" font-size="9" fill="#b994e0">loop back</text>
+            </svg>
+          </div>
+          <div class="idf-row2">
+            <div class="idf-box hl">
+              <div class="idf-blabel">In our example</div>
+              <div class="idf-btext">By Day 5, show 3 sales reps a rough scenario — not a storyboard. A real prototype. Their reaction reshapes everything before you've built 90% of the course.</div>
+            </div>
+            <div class="idf-box">
+              <div class="idf-blabel">Use when</div>
+              <div class="idf-btext">SMEs are available and willing to give iterative feedback. You have room to pivot after early reactions.</div>
+            </div>
+          </div>
+          <div class="idf-mem">
+            <div class="idf-mem-icon">🔄</div>
+            <div>
+              <div class="idf-mlabel">Memory device</div>
+              <div class="idf-mtext"><strong>SAM = Show, Adjust, Make.</strong> Not show-when-perfect. Show rough, get feedback, adjust, make the next version. The value is in the loop — not the final launch.</div>
+            </div>
+          </div>
+          <div class="idf-notfor">
+            <div class="idf-nflabel">Not for</div>
+            <div class="idf-nftext">Projects where SMEs are unavailable or where feedback turnaround is too slow to make iteration worthwhile.</div>
+          </div>
+        </div></div>
+      </div>
+
+      <!-- ── 4C/ID ── -->
+      <div class="idf-card" data-type="model" onclick="idfToggle(this)">
+        <div class="idf-ctop" style="border-top:4px solid #5fc39c;">
+          <div class="idf-ctype">ID Model · Complex Skills</div>
+          <div class="idf-cname" style="color:#15803d;">4C/ID</div>
+          <div class="idf-cwhat">Four-Component Instructional Design</div>
+          <div class="idf-cphases">
+            <span class="idf-cp" style="background:#5fc39c;color:#fff;">Learning Tasks</span>
+            <span class="idf-cp" style="background:#d1fae5;">Supportive Info</span>
+            <span class="idf-cp" style="background:#d1fae5;">Procedural Info</span>
+            <span class="idf-cp" style="background:#d1fae5;">Part-task Practice</span>
+          </div>
+          <div class="idf-cmantra">"Train the whole task under real pressure."</div>
+        </div>
+        <div class="idf-hint">Tap to expand <span class="arr">↓</span></div>
+        <div class="idf-detail"><div class="idf-din">
+          <div class="idf-diagram">
+            <svg viewBox="0 0 860 170" xmlns="http://www.w3.org/2000/svg" width="100%" style="display:block;">
+              <rect width="860" height="170" fill="#fafafa"/>
+              <text x="430" y="18" text-anchor="middle" font-family="Figtree,Helvetica,sans-serif" font-size="9.5" font-weight="700" fill="#888" letter-spacing="2">ALL FOUR COMPONENTS COEXIST — REMOVE ONE AND IT COLLAPSES</text>
+              <rect x="12" y="28" width="415" height="62" rx="10" fill="#5fc39c" stroke="#151515" stroke-width="2"/>
+              <text x="22" y="50" font-family="JetBrains Mono,monospace" font-size="8.5" fill="rgba(0,0,0,.45)" font-weight="600">C1</text>
+              <text x="219" y="56" text-anchor="middle" font-family="Outfit,Helvetica,sans-serif" font-size="17" font-weight="800" fill="#151515">LEARNING TASKS</text>
+              <text x="219" y="78" text-anchor="middle" font-family="Figtree,Helvetica,sans-serif" font-size="9.5" fill="rgba(0,0,0,.6)">Whole, real-world tasks · increasing difficulty · full performance from day one</text>
+              <rect x="443" y="28" width="415" height="62" rx="10" fill="#fff" stroke="#151515" stroke-width="1.5"/>
+              <text x="453" y="50" font-family="JetBrains Mono,monospace" font-size="8.5" fill="#aaa" font-weight="600">C2</text>
+              <text x="650" y="56" text-anchor="middle" font-family="Outfit,Helvetica,sans-serif" font-size="17" font-weight="800" fill="#151515">SUPPORTIVE INFO</text>
+              <text x="650" y="78" text-anchor="middle" font-family="Figtree,Helvetica,sans-serif" font-size="9.5" fill="#888">Mental models, theory, cases — explains WHY</text>
+              <rect x="12" y="100" width="415" height="60" rx="10" fill="#fff" stroke="#151515" stroke-width="1.5"/>
+              <text x="22" y="122" font-family="JetBrains Mono,monospace" font-size="8.5" fill="#aaa" font-weight="600">C3</text>
+              <text x="219" y="130" text-anchor="middle" font-family="Outfit,Helvetica,sans-serif" font-size="17" font-weight="800" fill="#151515">PROCEDURAL INFO</text>
+              <text x="219" y="150" text-anchor="middle" font-family="Figtree,Helvetica,sans-serif" font-size="9.5" fill="#888">Step-by-step rules · just-in-time · explains HOW</text>
+              <rect x="443" y="100" width="415" height="60" rx="10" fill="#fff" stroke="#151515" stroke-width="1.5"/>
+              <text x="453" y="122" font-family="JetBrains Mono,monospace" font-size="8.5" fill="#aaa" font-weight="600">C4</text>
+              <text x="650" y="130" text-anchor="middle" font-family="Outfit,Helvetica,sans-serif" font-size="17" font-weight="800" fill="#151515">PART-TASK PRACTICE</text>
+              <text x="650" y="150" text-anchor="middle" font-family="Figtree,Helvetica,sans-serif" font-size="9.5" fill="#888">Drilling specific sub-skills to automaticity</text>
+            </svg>
+          </div>
+          <div class="idf-row2">
+            <div class="idf-box hl">
+              <div class="idf-blabel">In our example</div>
+              <div class="idf-btext">Objection handling is a whole-task skill. Reps must handle a live objection under pressure — not recite the LAER steps. The course puts them in full role-plays from session one.</div>
+            </div>
+            <div class="idf-box">
+              <div class="idf-blabel">Use when</div>
+              <div class="idf-btext">Complex job where training parts in isolation fails: clinical, technical, leadership, legal. The whole task must be trained — not just the components.</div>
+            </div>
+          </div>
+          <div class="idf-mem">
+            <div class="idf-mem-icon">🏛️</div>
+            <div>
+              <div class="idf-mlabel">Memory device</div>
+              <div class="idf-mtext"><strong>A table with 4 legs.</strong> Remove any one leg and the whole thing collapses. You can't skip Supportive Info or Part-task Practice and expect learners to perform the real skill.</div>
+            </div>
+          </div>
+          <div class="idf-notfor">
+            <div class="idf-nflabel">Not for</div>
+            <div class="idf-nftext">Most corporate eLearning. It's the most demanding of the three models — overkill for awareness training or simple process walkthroughs.</div>
+          </div>
+        </div></div>
+      </div>
+
+    </div><!-- /models grid -->
+
+    <!-- FRAMEWORKS -->
+    <div class="idf-sec-label" id="sec-fw">The 4 Frameworks, Taxonomies &amp; Principles — give you a lens</div>
+    <div class="idf-grid idf-g4">
+
+      <!-- ── BLOOM'S ── -->
+      <div class="idf-card" data-type="framework" onclick="idfToggle(this)">
+        <div class="idf-ctop" style="border-top:4px solid #7f9bc8;">
+          <div class="idf-ctype">Taxonomy · Cognitive Levels</div>
+          <div class="idf-cname" style="color:#1d4ed8;">Bloom's</div>
+          <div class="idf-cwhat">6-level classification of learning</div>
+          <div class="idf-cphases">
+            <span class="idf-cp" style="background:#dbeafe;">Remember</span>
+            <span class="idf-cp" style="background:#93c5fd;">Apply</span>
+            <span class="idf-cp" style="background:#1d4ed8;color:#fff;border-color:#1d4ed8;">Create</span>
+          </div>
+          <div class="idf-cmantra">"Name the verb — then write the objective."</div>
+        </div>
+        <div class="idf-hint">Tap to expand <span class="arr">↓</span></div>
+        <div class="idf-detail"><div class="idf-din">
+          <div class="idf-diagram">
+            <svg viewBox="0 0 860 170" xmlns="http://www.w3.org/2000/svg" width="100%" style="display:block;">
+              <rect width="860" height="170" fill="#fafafa"/>
+              <rect x="14" y="138" width="832" height="26" fill="#dbeafe" stroke="#1d4ed8" stroke-width="1.5"/>
+              <text x="430" y="156" text-anchor="middle" font-family="Outfit,Helvetica,sans-serif" font-size="12" font-weight="700" fill="#1d4ed8">REMEMBER — recall, list, name, define, identify</text>
+              <rect x="130" y="112" width="600" height="26" fill="#bfdbfe" stroke="#1d4ed8" stroke-width="1.5"/>
+              <text x="430" y="130" text-anchor="middle" font-family="Outfit,Helvetica,sans-serif" font-size="12" font-weight="700" fill="#1d4ed8">UNDERSTAND — explain, summarise, classify, describe</text>
+              <rect x="248" y="86" width="364" height="26" fill="#93c5fd" stroke="#1d4ed8" stroke-width="1.5"/>
+              <text x="430" y="104" text-anchor="middle" font-family="Outfit,Helvetica,sans-serif" font-size="12" font-weight="700" fill="#1e3a8a">APPLY — use, demonstrate, solve, execute</text>
+              <rect x="348" y="60" width="164" height="26" fill="#60a5fa" stroke="#151515" stroke-width="1.5"/>
+              <text x="430" y="78" text-anchor="middle" font-family="Outfit,Helvetica,sans-serif" font-size="11" font-weight="700" fill="#fff">ANALYZE — compare, examine</text>
+              <rect x="388" y="34" width="84" height="26" fill="#3b82f6" stroke="#151515" stroke-width="1.5"/>
+              <text x="430" y="52" text-anchor="middle" font-family="Outfit,Helvetica,sans-serif" font-size="10" font-weight="700" fill="#fff">EVALUATE</text>
+              <rect x="400" y="8" width="60" height="26" fill="#1d4ed8" stroke="#151515" stroke-width="1.5"/>
+              <text x="430" y="26" text-anchor="middle" font-family="Outfit,Helvetica,sans-serif" font-size="10" font-weight="800" fill="#fbbf0e">CREATE</text>
+              <line x1="28" y1="135" x2="28" y2="15" stroke="#1d4ed8" stroke-width="1.5" stroke-dasharray="4,3"/><polygon points="22,19 28,6 34,19" fill="#1d4ed8"/>
+              <text x="16" y="78" font-family="Figtree,Helvetica,sans-serif" font-size="8.5" fill="#1d4ed8" transform="rotate(-90,16,78)">COGNITIVE COMPLEXITY ↑</text>
+            </svg>
+          </div>
+          <div class="idf-row2">
+            <div class="idf-box hl">
+              <div class="idf-blabel">In our example</div>
+              <div class="idf-btext">"Understand objection handling" ✗ — too vague, untestable. "Handle the top 5 objections using LAER in a live role-play" ✓ — Apply level. Now you can design an actual assessment.</div>
+            </div>
+            <div class="idf-box">
+              <div class="idf-blabel">Use for</div>
+              <div class="idf-btext">Writing measurable objectives. Pick the verb first, from the right level. "Understand" is never a Bloom's verb — it's a hedge.</div>
+            </div>
+          </div>
+          <div class="idf-mem">
+            <div class="idf-mem-icon">🪜</div>
+            <div>
+              <div class="idf-mlabel">Memory device</div>
+              <div class="idf-mtext"><strong>Start from the top, work down.</strong> Ask "what should they DO with this?" first — that lands you at Apply or higher. Then design everything below it to support that goal. Most IDs start at Remember and never climb.</div>
+            </div>
+          </div>
+          <div class="idf-notfor">
+            <div class="idf-nflabel">Common mistake</div>
+            <div class="idf-nftext">Bloom's is NOT a design process. It's a vocabulary for writing objectives. Don't use it to sequence a course.</div>
+          </div>
+        </div></div>
+      </div>
+
+      <!-- ── GAGNÉ'S 9 ── -->
+      <div class="idf-card" data-type="framework" onclick="idfToggle(this)">
+        <div class="idf-ctop" style="border-top:4px solid #ef8c8f;">
+          <div class="idf-ctype">Principles · Instruction</div>
+          <div class="idf-cname" style="color:#b91c1c;">Gagné's 9</div>
+          <div class="idf-cwhat">9 Events of Instruction</div>
+          <div class="idf-cphases">
+            <span class="idf-cp" style="background:#fee2e2;">1–5: Setup</span>
+            <span class="idf-cp" style="background:#ef8c8f;color:#fff;border-color:#ef8c8f;">6: Practice ← skipped</span>
+            <span class="idf-cp" style="background:#fee2e2;">7–9: Confirm</span>
+          </div>
+          <div class="idf-cmantra">"Did they attempt it before seeing the answer?"</div>
+        </div>
+        <div class="idf-hint">Tap to expand <span class="arr">↓</span></div>
+        <div class="idf-detail"><div class="idf-din">
+          <div class="idf-diagram">
+            <svg viewBox="0 0 860 170" xmlns="http://www.w3.org/2000/svg" width="100%" style="display:block;">
+              <rect width="860" height="170" fill="#fafafa"/>
+              <!-- Row 1 -->
+              <rect x="10" y="10" width="260" height="46" rx="8" fill="#fff" stroke="#ddd" stroke-width="1.5"/>
+              <text x="140" y="30" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8.5" fill="#b91c1c">EVENT 1</text>
+              <text x="140" y="48" text-anchor="middle" font-family="Outfit,Helvetica,sans-serif" font-size="13" font-weight="700" fill="#151515">Gain Attention</text>
+              <rect x="300" y="10" width="260" height="46" rx="8" fill="#fff" stroke="#ddd" stroke-width="1.5"/>
+              <text x="430" y="30" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8.5" fill="#b91c1c">EVENT 2</text>
+              <text x="430" y="48" text-anchor="middle" font-family="Outfit,Helvetica,sans-serif" font-size="13" font-weight="700" fill="#151515">State Objectives</text>
+              <rect x="590" y="10" width="260" height="46" rx="8" fill="#fff" stroke="#ddd" stroke-width="1.5"/>
+              <text x="720" y="30" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8.5" fill="#b91c1c">EVENT 3</text>
+              <text x="720" y="48" text-anchor="middle" font-family="Outfit,Helvetica,sans-serif" font-size="13" font-weight="700" fill="#151515">Recall Prior Knowledge</text>
+              <!-- Row 2 -->
+              <rect x="10" y="63" width="260" height="46" rx="8" fill="#fff" stroke="#ddd" stroke-width="1.5"/>
+              <text x="140" y="83" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8.5" fill="#b91c1c">EVENT 4</text>
+              <text x="140" y="101" text-anchor="middle" font-family="Outfit,Helvetica,sans-serif" font-size="13" font-weight="700" fill="#151515">Present Content</text>
+              <rect x="300" y="63" width="260" height="46" rx="8" fill="#fff" stroke="#ddd" stroke-width="1.5"/>
+              <text x="430" y="83" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8.5" fill="#b91c1c">EVENT 5</text>
+              <text x="430" y="101" text-anchor="middle" font-family="Outfit,Helvetica,sans-serif" font-size="13" font-weight="700" fill="#151515">Provide Guidance</text>
+              <!-- EVENT 6 HIGHLIGHTED -->
+              <rect x="590" y="53" width="260" height="66" rx="8" fill="#ef8c8f" stroke="#151515" stroke-width="2"/>
+              <text x="720" y="76" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="rgba(0,0,0,.5)">EVENT 6 · THE ONE SKIPPED</text>
+              <text x="720" y="98" text-anchor="middle" font-family="Outfit,Helvetica,sans-serif" font-size="14" font-weight="800" fill="#151515">Elicit Performance</text>
+              <text x="720" y="114" text-anchor="middle" font-family="Figtree,Helvetica,sans-serif" font-size="9" fill="rgba(0,0,0,.55)">make them TRY before feedback</text>
+              <!-- Row 3 -->
+              <rect x="10" y="116" width="260" height="46" rx="8" fill="#fff" stroke="#ddd" stroke-width="1.5"/>
+              <text x="140" y="136" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8.5" fill="#b91c1c">EVENT 7</text>
+              <text x="140" y="154" text-anchor="middle" font-family="Outfit,Helvetica,sans-serif" font-size="13" font-weight="700" fill="#151515">Provide Feedback</text>
+              <rect x="300" y="116" width="260" height="46" rx="8" fill="#fff" stroke="#ddd" stroke-width="1.5"/>
+              <text x="430" y="136" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8.5" fill="#b91c1c">EVENT 8</text>
+              <text x="430" y="154" text-anchor="middle" font-family="Outfit,Helvetica,sans-serif" font-size="13" font-weight="700" fill="#151515">Assess Performance</text>
+              <rect x="590" y="126" width="260" height="36" rx="8" fill="#fff" stroke="#ddd" stroke-width="1.5"/>
+              <text x="720" y="142" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8.5" fill="#b91c1c">EVENT 9</text>
+              <text x="720" y="157" text-anchor="middle" font-family="Outfit,Helvetica,sans-serif" font-size="12" font-weight="700" fill="#151515">Retention &amp; Transfer</text>
+            </svg>
+          </div>
+          <div class="idf-row2">
+            <div class="idf-box hl">
+              <div class="idf-blabel">In our example</div>
+              <div class="idf-btext">Event 6 (Elicit Performance): before showing reps the ideal objection response, make them handle it first. Their attempt reveals the gap. Most designers skip from Event 5 straight to Event 7.</div>
+            </div>
+            <div class="idf-box">
+              <div class="idf-blabel">Use for</div>
+              <div class="idf-btext">Auditing a course that feels incomplete. Map your existing sequence against the 9 events — missing events explain why learners feel unsupported.</div>
+            </div>
+          </div>
+          <div class="idf-mem">
+            <div class="idf-mem-icon">🎯</div>
+            <div>
+              <div class="idf-mlabel">Memory device</div>
+              <div class="idf-mtext"><strong>The missing step is Event 6.</strong> Most designs go Content (4) → Guidance (5) → Feedback (7). They skip the attempt. Gagné's core insight: <strong>learners must perform before receiving feedback</strong> — not after watching content.</div>
+            </div>
+          </div>
+          <div class="idf-notfor">
+            <div class="idf-nflabel">Common mistake</div>
+            <div class="idf-nftext">Treating it as a rigid 9-step checklist. It's a sequencing lens. Events can combine, split, or compress — what matters is the logic, not the count.</div>
+          </div>
+        </div></div>
+      </div>
+
+      <!-- ── MERRILL'S ── -->
+      <div class="idf-card" data-type="framework" onclick="idfToggle(this)">
+        <div class="idf-ctop" style="border-top:4px solid #f59e42;">
+          <div class="idf-ctype">Principles · Instruction</div>
+          <div class="idf-cname" style="color:#b45309;">Merrill's</div>
+          <div class="idf-cwhat">First Principles of Instruction</div>
+          <div class="idf-cphases">
+            <span class="idf-cp" style="background:#f59e42;color:#fff;border-color:#f59e42;">Problem-centred</span>
+            <span class="idf-cp" style="background:#fde68a;">Activation</span>
+            <span class="idf-cp" style="background:#fde68a;">Demonstration</span>
+            <span class="idf-cp" style="background:#fde68a;">Application</span>
+            <span class="idf-cp" style="background:#fde68a;">Integration</span>
+          </div>
+          <div class="idf-cmantra">"Start with the real problem. End with real application."</div>
+        </div>
+        <div class="idf-hint">Tap to expand <span class="arr">↓</span></div>
+        <div class="idf-detail"><div class="idf-din">
+          <div class="idf-diagram">
+            <svg viewBox="0 0 860 140" xmlns="http://www.w3.org/2000/svg" width="100%" style="display:block;">
+              <rect width="860" height="140" fill="#fafafa"/>
+              <ellipse cx="430" cy="70" rx="88" ry="55" fill="#f59e42" stroke="#151515" stroke-width="2.5"/>
+              <text x="430" y="60" text-anchor="middle" font-family="Figtree,Helvetica,sans-serif" font-size="9" font-weight="700" fill="rgba(0,0,0,.5)" letter-spacing="1">ANCHOR</text>
+              <text x="430" y="78" text-anchor="middle" font-family="Outfit,Helvetica,sans-serif" font-size="13" font-weight="800" fill="#151515">PROBLEM-</text>
+              <text x="430" y="94" text-anchor="middle" font-family="Outfit,Helvetica,sans-serif" font-size="13" font-weight="800" fill="#151515">CENTRED</text>
+              <rect x="10" y="38" width="144" height="52" rx="10" fill="#fde68a" stroke="#151515" stroke-width="1.5"/>
+              <text x="82" y="60" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8.5" fill="#92400e">P1</text>
+              <text x="82" y="78" text-anchor="middle" font-family="Outfit,Helvetica,sans-serif" font-size="13" font-weight="700" fill="#151515">ACTIVATION</text>
+              <line x1="155" y1="64" x2="338" y2="68" stroke="#b45309" stroke-width="1.5" stroke-dasharray="4,3"/>
+              <rect x="218" y="8" width="160" height="50" rx="10" fill="#fde68a" stroke="#151515" stroke-width="1.5"/>
+              <text x="298" y="30" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8.5" fill="#92400e">P2</text>
+              <text x="298" y="48" text-anchor="middle" font-family="Outfit,Helvetica,sans-serif" font-size="12" font-weight="700" fill="#151515">DEMONSTRATION</text>
+              <line x1="330" y1="43" x2="374" y2="56" stroke="#b45309" stroke-width="1.5" stroke-dasharray="4,3"/>
+              <rect x="482" y="8" width="160" height="50" rx="10" fill="#fde68a" stroke="#151515" stroke-width="1.5"/>
+              <text x="562" y="30" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8.5" fill="#92400e">P3</text>
+              <text x="562" y="48" text-anchor="middle" font-family="Outfit,Helvetica,sans-serif" font-size="12" font-weight="700" fill="#151515">APPLICATION</text>
+              <line x1="487" y1="43" x2="510" y2="56" stroke="#b45309" stroke-width="1.5" stroke-dasharray="4,3"/>
+              <rect x="706" y="38" width="144" height="52" rx="10" fill="#fde68a" stroke="#151515" stroke-width="1.5"/>
+              <text x="778" y="60" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8.5" fill="#92400e">P4</text>
+              <text x="778" y="78" text-anchor="middle" font-family="Outfit,Helvetica,sans-serif" font-size="13" font-weight="700" fill="#151515">INTEGRATION</text>
+              <line x1="519" y1="70" x2="705" y2="68" stroke="#b45309" stroke-width="1.5" stroke-dasharray="4,3"/>
+              <text x="430" y="128" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#b45309" letter-spacing="1">P-A-D-A-I → PROBLEM IS ALWAYS THE ANCHOR</text>
+            </svg>
+          </div>
+          <div class="idf-row2">
+            <div class="idf-box hl">
+              <div class="idf-blabel">In our example</div>
+              <div class="idf-btext">Open with a recording of a real failed objection call — no slides. Let reps feel the problem (Activation: "what did you try last time?"). Then demonstrate the expert model. Problem always comes first.</div>
+            </div>
+            <div class="idf-box">
+              <div class="idf-blabel">Use for</div>
+              <div class="idf-btext">Applied, problem-centred learning. If learners do more than watch in your course, you're probably already applying Merrill's — just not naming it.</div>
+            </div>
+          </div>
+          <div class="idf-mem">
+            <div class="idf-mem-icon">🥪</div>
+            <div>
+              <div class="idf-mlabel">Memory device</div>
+              <div class="idf-mtext"><strong>P-A-D-A-I.</strong> Problem, Activation, Demonstration, Application, Integration. The key is the first and last: if there's no real problem at the start and no real application at the end, it's a presentation — not instruction.</div>
+            </div>
+          </div>
+          <div class="idf-notfor">
+            <div class="idf-nflabel">Common mistake</div>
+            <div class="idf-nftext">Treating Demonstration (P2) as lecturing. Merrill means showing the expert performing the task — not explaining slides about it.</div>
+          </div>
+        </div></div>
+      </div>
+
+      <!-- ── KIRKPATRICK ── -->
+      <div class="idf-card" data-type="framework" onclick="idfToggle(this)">
+        <div class="idf-ctop" style="border-top:4px solid #5ecdc8;">
+          <div class="idf-ctype">Framework · Evaluation</div>
+          <div class="idf-cname" style="color:#0f766e;">Kirkpatrick</div>
+          <div class="idf-cwhat">4-Level Training Evaluation</div>
+          <div class="idf-cphases">
+            <span class="idf-cp" style="background:#ccfbf1;">L1 Reaction</span>
+            <span class="idf-cp" style="background:#5ecdc8;color:#fff;border-color:#5ecdc8;">L3 Behavior</span>
+            <span class="idf-cp" style="background:#0f766e;color:#fff;border-color:#0f766e;">L4 Results</span>
+          </div>
+          <div class="idf-cmantra">"Agree on what success looks like before you build."</div>
+        </div>
+        <div class="idf-hint">Tap to expand <span class="arr">↓</span></div>
+        <div class="idf-detail"><div class="idf-din">
+          <div class="idf-diagram">
+            <svg viewBox="0 0 860 176" xmlns="http://www.w3.org/2000/svg" width="100%" style="display:block;">
+              <rect width="860" height="176" fill="#fafafa"/>
+              <rect x="12" y="142" width="836" height="30" fill="#ccfbf1" stroke="#0f766e" stroke-width="1.5"/>
+              <text x="430" y="162" text-anchor="middle" font-family="Outfit,Helvetica,sans-serif" font-size="13" font-weight="700" fill="#0f766e">L1: REACTION — "Did they like it?" · Smile sheets · Survey</text>
+              <text x="28" y="174" font-family="JetBrains Mono,monospace" font-size="8" fill="#999">EASIEST TO MEASURE · WHERE ALMOST EVERYONE STOPS</text>
+              <rect x="100" y="100" width="660" height="38" fill="#99f6e4" stroke="#0f766e" stroke-width="1.5"/>
+              <text x="430" y="123" text-anchor="middle" font-family="Outfit,Helvetica,sans-serif" font-size="13" font-weight="700" fill="#0f766e">L2: LEARNING — "Did they learn it?" · Quiz · Assessment</text>
+              <text x="116" y="135" font-family="JetBrains Mono,monospace" font-size="8" fill="#777">MEASURABLE BUT DOESN'T PROVE BEHAVIOUR CHANGE</text>
+              <rect x="200" y="52" width="460" height="44" fill="#5ecdc8" stroke="#151515" stroke-width="2"/>
+              <text x="430" y="73" text-anchor="middle" font-family="Outfit,Helvetica,sans-serif" font-size="13" font-weight="700" fill="#fff">L3: BEHAVIOR — "Did they use it on the job?"</text>
+              <text x="430" y="89" text-anchor="middle" font-family="Figtree,Helvetica,sans-serif" font-size="9.5" fill="rgba(255,255,255,.75)">Manager observation · 30/60/90-day follow-up · performance review</text>
+              <rect x="320" y="8" width="220" height="40" fill="#0f766e" stroke="#151515" stroke-width="2"/>
+              <text x="430" y="28" text-anchor="middle" font-family="Outfit,Helvetica,sans-serif" font-size="13" font-weight="700" fill="#fbbf0e">L4: RESULTS — "Did it matter?"</text>
+              <text x="430" y="44" text-anchor="middle" font-family="Figtree,Helvetica,sans-serif" font-size="9" fill="rgba(255,255,255,.65)">Close rates · Revenue · Error reduction</text>
+              <text x="12" y="105" font-family="Figtree,Helvetica,sans-serif" font-size="8.5" fill="#0f766e" transform="rotate(-90,12,72)">MORE VALUABLE ↑</text>
+            </svg>
+          </div>
+          <div class="idf-row2">
+            <div class="idf-box hl">
+              <div class="idf-blabel">In our example</div>
+              <div class="idf-btext">L1: did reps find it useful? L2: can they name LAER? L3: did call quality scores rise in month 1? L4: did close rates move? <strong>Only L3 and L4 prove it actually worked.</strong></div>
+            </div>
+            <div class="idf-box">
+              <div class="idf-blabel">Use for</div>
+              <div class="idf-btext">Pre-build stakeholder conversations. Define L3 and L4 metrics before you design anything — not after. If you can't measure it, you can't prove ROI.</div>
+            </div>
+          </div>
+          <div class="idf-mem">
+            <div class="idf-mem-icon">📏</div>
+            <div>
+              <div class="idf-mlabel">Memory device</div>
+              <div class="idf-mtext"><strong>Like it? Learn it? Do it? Did it matter?</strong> L1 → L4. Work backwards: define L4 first (what business result matters?), then figure out what L3 behaviour change would produce that result. Most orgs never leave L1.</div>
+            </div>
+          </div>
+          <div class="idf-notfor">
+            <div class="idf-nflabel">Common mistake</div>
+            <div class="idf-nftext">Kirkpatrick is NOT a design model. It tells you how to measure impact — not how to build better learning. Use it during scoping, not development.</div>
+          </div>
+        </div></div>
+      </div>
+
+    </div><!-- /fw grid -->
+
+    <!-- DECISION GUIDE -->
+    <div class="idf-decide">
+      <div class="idf-dtitle">Which one do I reach for?</div>
+      <div class="idf-dgrid">
+        <div class="idf-dcard"><div class="idf-dq">"What's my design process for this project?"</div><div class="idf-da">→ <em>ADDIE</em> if waterfall &nbsp;·&nbsp; <em>SAM</em> if iterative</div></div>
+        <div class="idf-dcard"><div class="idf-dq">"Is the skill complex — whole-task, high-stakes?"</div><div class="idf-da">→ <em>4C/ID</em>. Otherwise ADDIE or SAM is enough.</div></div>
+        <div class="idf-dcard"><div class="idf-dq">"Are my learning objectives actually measurable?"</div><div class="idf-da">→ Check against <em>Bloom's</em> — fix the verb if it's vague.</div></div>
+        <div class="idf-dcard"><div class="idf-dq">"Does my course feel thin or rushed?"</div><div class="idf-da">→ Map it against <em>Gagné's 9</em> — find the missing event.</div></div>
+        <div class="idf-dcard"><div class="idf-dq">"Are learners just watching, not doing?"</div><div class="idf-da">→ Apply <em>Merrill's</em> — put the real problem first.</div></div>
+        <div class="idf-dcard"><div class="idf-dq">"How will I prove this training worked?"</div><div class="idf-da">→ Define <em>Kirkpatrick</em> L3/L4 with the stakeholder before you build.</div></div>
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="idf-cta-wrap">
+      <div class="idf-cta-inner">
+        <h2 class="idf-cta-title">Not sure which model fits your project?</h2>
+        <a href="tools/id-model-selector.html" target="_blank" rel="noopener" class="idf-cta-btn">Try the ID Model Selector ↗</a>
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="idf-foot">
+      <div class="idf-fcopy">© 2026 Abhishek Trivedi · Learning Experience Technologist</div>
+      <div class="idf-flinks">
+        <a href="https://www.linkedin.com/in/trivedi-abhishek/" target="_blank" class="idf-flink">LinkedIn</a>
+        <a href="pages/contact.html?view=visual" class="idf-flink">Contact</a>
+        <a href="index.html" class="idf-flink">Home</a>
+      </div>
+    </div>
+
+  </div><!-- .idf-wrap -->
+  </div><!-- .idf-root -->
+
+  <script>
+    function idfToggle(card) {
+      var wasOpen = card.classList.contains('expanded');
+      document.querySelectorAll('.idf-card.expanded').forEach(function(c){ c.classList.remove('expanded'); });
+      if (!wasOpen) card.classList.add('expanded');
+    }
+    function idfFilter(type, btn) {
+      document.querySelectorAll('.idf-fbtn').forEach(function(b){ b.classList.remove('active'); });
+      btn.classList.add('active');
+      document.querySelectorAll('.idf-card').forEach(function(card){
+        if (type === 'all' || card.dataset.type === type) card.classList.remove('idf-hidden');
+        else { card.classList.add('idf-hidden'); card.classList.remove('expanded'); }
+      });
+      document.getElementById('sec-models').style.display = (type === 'framework') ? 'none' : '';
+      document.getElementById('sec-fw').style.display = (type === 'model') ? 'none' : '';
+    }
+    // 3D tilt on hover
+    document.querySelectorAll('.idf-card').forEach(function(card){
+      card.addEventListener('mousemove', function(e){
+        if (card.classList.contains('expanded')) return;
+        var r = card.getBoundingClientRect();
+        var x = (e.clientX - r.left) / r.width - 0.5;
+        var y = (e.clientY - r.top) / r.height - 0.5;
+        card.style.transform = 'perspective(900px) rotateY('+(x*10)+'deg) rotateX('+(-y*6)+'deg) translateY(-3px)';
+      });
+      card.addEventListener('mouseleave', function(){
+        card.style.transform = '';
+      });
+    });
+  </script>
+
+  <div style="display:none"><!-- old kw-page removed -->
 
       <div class="kw-page-hero">
         <div class="kw-page-eyebrow">Cheat Sheet</div>
