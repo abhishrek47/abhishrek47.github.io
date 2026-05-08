@@ -6024,7 +6024,8 @@ var _scrollToId  = null;    // card to scroll back to when returning
 var _cmdFocusIdx = -1;
 var _cmdItems    = [];
 var _currentChartInst = null;
-var _demoRunning = false;
+var _demoRunning     = false;
+var _demoBannerTimer = null;
 
 /* ==============================================================
    ROUTING
@@ -6112,7 +6113,7 @@ window._currentCat = _currentCat; // expose for breadcrumb
 /* ==============================================================
    BROWSE RENDER
    ============================================================== */
-function renderBrowse(){
+window.renderBrowse = function renderBrowse(){
   var snips = window._ANIMSL_SNIPS || [];
 
   /* Read sort from dropdown */
@@ -6482,10 +6483,18 @@ window.runSnippetDemo = function(){
   } catch(e){
     wrap.innerHTML = '<div class="demo-info">⚠ Demo error: ' + e.message + '</div>';
   }
+
+  /* Auto-dismiss banner — use snippet's demoDuration if set, else 4 s */
+  clearTimeout(_demoBannerTimer);
+  var autoDur = (s.demoDuration && typeof s.demoDuration === 'number') ? s.demoDuration : 4000;
+  _demoBannerTimer = setTimeout(function(){
+    if(banner) banner.classList.remove('show');
+  }, autoDur);
 };
 
 window.resetSnippetDemo = function(){
   _demoRunning = false;
+  clearTimeout(_demoBannerTimer);
   var banner = document.getElementById('asl-demo-banner');
   if(banner) banner.classList.remove('show');
   if(_currentChartInst){ _currentChartInst.destroy(); _currentChartInst = null; }
