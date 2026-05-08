@@ -6080,6 +6080,9 @@ function _showView(v){
   if(v !== 'snippet') _updateScrollProgress(0);
   _setKofiFloat(v !== 'snippet');
   _syncNavCats();
+  /* Clear search input on every navigation to avoid stale query showing */
+  var ns = document.getElementById('navSearchInput');
+  if(ns && ns.value) ns.value = '';
 }
 
 function _syncNavCats(){
@@ -6419,13 +6422,18 @@ function _announce(msg){
 window.copySnipLink = function(){
   var url = location.origin + location.pathname + '#s/' + _currentId;
   var btn = document.getElementById('snipShareBtn');
-  navigator.clipboard.writeText(url).then(function(){
+  function _onCopied(){
     if(btn){ var orig = btn.innerHTML; btn.innerHTML = '✓ Copied!'; btn.style.color = 'var(--acc)';
       setTimeout(function(){ btn.innerHTML = orig; btn.style.color = ''; }, 1800); }
-  }).catch(function(){
-    if(btn){ btn.innerHTML = '✓ Copied!'; setTimeout(function(){ btn.innerHTML = '🔗 Share'; }, 1600); }
-  });
-  _showToast('Link copied to clipboard');
+    _showToast('Link copied to clipboard');
+  }
+  if(navigator.clipboard){
+    navigator.clipboard.writeText(url).then(_onCopied).catch(function(){
+      _copyText(url); _onCopied();
+    });
+  } else {
+    _copyText(url); _onCopied();
+  }
 };
 
 /* ==============================================================
@@ -6697,8 +6705,9 @@ function _wireKeyboard(){
       case 'h': case 'H': goHome(); break;
       case 'b': case 'B': goBrowse(); break;
       case 'Escape':
-        if(_currentView==='snippet') goCategory(_currentCat||'');
-        else if(_currentView==='browse') goHome();
+        if(_currentView==='snippet'){
+          if(_currentCat) goCategory(_currentCat); else goBrowse();
+        } else if(_currentView==='browse') goHome();
         break;
     }
 
@@ -6727,40 +6736,82 @@ function _wireKeyboard(){
    SEARCH (nav bar)
    ============================================================== */
 window.onNavSearch = function(q){
-  if(!q.trim()){ return; }
-  /* If in browse view, filter inline — multi-word: every term must match */
-  if(_currentView==='browse'){
-    var snips = window._ANIMSL_SNIPS || [];
-    var terms = q.trim().toLowerCase().split(/\s+/).filter(Boolean);
-    var matches = snips.filter(function(s){
-      if(_filterCat && s.cat !== _filterCat) return false;
-      var hay = [s.title, s.desc||'', s.cat, (s.tags||[]).join(' ')].join(' ').toLowerCase();
-      return terms.every(function(t){ return hay.includes(t); });
-    });
-    _renderSearchResults(matches);
-  }
-};
-window.onNavSearchKey = function(e){
-  if(e.key==='Escape'){ e.target.value=''; if(_currentView==='browse') renderBrowse(); }
-  if(e.key==='Enter'){
-    if(_currentView!=='browse'){ goBrowse(); }
-  }
-};
-function _renderSearchResults(list){
-  var grid = document.getElementById('snippetsGrid');
-  if(!grid) return;
-  if(!list.length){
-    grid.innerHTML = '<div class="no-results"><span class="no-results-icon">◌</span><div class="no-results-title">No results</div><div class="no-results-sub"><span style="color:var(--acc);cursor:pointer" onclick="goBrowse()">Clear search</span></div></div>';
+  /* Empty query — restore full browse */
+  if(!q.trim()){
+    if(_currentView === 'browse') renderBrowse();
     return;
   }
-  /* Re-use the browse render with a filtered set */
-  var saved = window._ANIMSL_SNIPS;
-  window._ANIMSL_SNIPS = list;
-  var savedCat = _filterCat; _filterCat = '';
-  var savedDiff = _filterDiff; _filterDiff = 0;
-  renderBrowse();
-  window._ANIMSL_SNIPS = saved;
-  _filterCat = savedCat; _filterDiff = savedDiff;
+  /* Not in browse yet — navigate there first, then render */
+  if(_currentView !== 'browse'){
+    _filterCat = ''; _filterDiff = 0;
+    _showView('browse');
+    history.pushState(null, '', '#browse');
+  }
+  var snips = window._ANIMSL_SNIPS || [];
+  var terms = q.trim().toLowerCase().split(/\s+/).filter(Boolean);
+  var matches = snips.filter(function(s){
+    if(_filterCat && s.cat !== _filterCat) return false;
+    var hay = [s.title, s.desc||'', s.cat, (s.tags||[]).join(' ')].join(' ').toLowerCase();
+    return terms.every(function(t){ return hay.includes(t); });
+  });
+  _renderSearchResults(matches, q);
+};
+window.onNavSearchKey = function(e){
+  if(e.key === 'Escape'){
+    e.target.value = '';
+    if(_currentView === 'browse') renderBrowse();
+  }
+};
+function _renderSearchResults(list, q){
+  var grid = document.getElementById('snippetsGrid');
+  if(!grid) return;
+
+  /* Update results count */
+  var countEl = document.getElementById('resultsCount');
+  if(countEl) countEl.innerHTML = '<strong>' + list.length + '</strong> result' + (list.length !== 1 ? 's' : '') + ' for <em style="color:var(--acc)">' + _esc(q||'') + '</em>';
+
+  if(!list.length){
+    grid.innerHTML = '<div class="no-results"><span class="no-results-icon">◌</span><div class="no-results-title">No results for "' + _esc(q||'') + '"</div><div class="no-results-sub"><span style="color:var(--acc);cursor:pointer" onclick="goBrowse()">Clear search</span></div></div>';
+    return;
+  }
+
+  /* Render cards directly — no global state mutation */
+  var html = '';
+  list.forEach(function(s){
+    var diffDots = '';
+    for(var d=1;d<=3;d++) diffDots += '<div class="snip-diff-dot' + (d<=s.difficulty?' on':'') + '"></div>';
+    var tags = (s.tags||[]).slice(0,4).map(function(t){ return '<span class="snip-tag">' + t + '</span>'; }).join('');
+    var isFaved = _isFav(s.id);
+    html += '<div class="snip-card" data-cat="' + s.cat + '" data-id="' + s.id + '" onclick="goSnippet(' + s.id + ')">' +
+      '<div class="snip-card-top">' +
+        '<span class="snip-cat-badge ' + s.cat + '">' + (CAT_META[s.cat]||{}).label + '</span>' +
+        '<div class="snip-diff">' + diffDots + '</div>' +
+        '<button class="snip-star-btn' + (isFaved?' starred':'') + '" onclick="event.stopPropagation();_quickFav(' + s.id + ',this)" title="Favourite">' + (isFaved?'★':'☆') + '</button>' +
+      '</div>' +
+      '<div class="snip-card-title">' + _esc(s.title) + '</div>' +
+      '<div class="snip-card-desc">' + _esc(s.desc) + '</div>' +
+      '<div class="snip-card-tags">' + tags + '</div>' +
+      '<div class="snip-card-footer">' +
+        '<span class="snip-id">#' + String(s.id).padStart(3,'0') + '</span>' +
+        '<div class="snip-card-btns">' +
+          '<button class="snip-quick-copy" onclick="event.stopPropagation();_quickCopy(' + s.id + ',this)">Copy</button>' +
+          '<button class="snip-view-btn" onclick="event.stopPropagation();goSnippet(' + s.id + ')">View →</button>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+  });
+  grid.innerHTML = html;
+
+  /* Re-attach tilt listeners */
+  grid.querySelectorAll('.snip-card').forEach(function(card){
+    card.addEventListener('mousemove', function(e){
+      var r = card.getBoundingClientRect();
+      var xPct = (e.clientX - r.left) / r.width  - 0.5;
+      var yPct = (e.clientY - r.top)  / r.height - 0.5;
+      card.style.transform = 'translateY(-2px) perspective(600px) rotateY(' + (xPct*8) + 'deg) rotateX(' + (-yPct*5) + 'deg)';
+    });
+    card.addEventListener('mouseleave', function(){ card.style.transform = ''; });
+  });
 }
 
 /* ==============================================================
