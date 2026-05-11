@@ -1252,16 +1252,14 @@ const SNIPPETS_1_50 = [
     description: "Prevent learners from advancing to the next slide until your condition is met. Uses a Storyline variable for reliable cross-version compatibility — no fragile DOM selectors.",
     tags: ["next button","lock","disable","navigation","variable"],
     setup: "Create a True/False variable named AllowNext (default: False).\nAdd a Storyline trigger: Change state of [Next] button to Disabled when AllowNext = False (on slide timeline start).",
-    code: `var player = GetPlayer();
-
-// LOCK — call this to prevent advancing
+    code: `// LOCK — call this to prevent advancing
 function lockNext() {
-    player.SetVar("AllowNext", false);
+    setVar("AllowNext", false);
 }
 
 // UNLOCK — call this when condition is met
 function unlockNext() {
-    player.SetVar("AllowNext", true);
+    setVar("AllowNext", true);
 }
 
 // Run on slide load — starts locked
@@ -1279,10 +1277,8 @@ lockNext();`,
     description: "Automatically unlocks the Next button only after the full slide timeline has played. Prevents learners from skipping narration by clicking Next too early.",
     tags: ["next button","unlock","timeline","narration","auto"],
     setup: "Create a True/False variable named AllowNext (default: False).\nAdd trigger: Change state of [Next] to Disabled when AllowNext = False.\nAdd trigger: Change state of [Next] to Normal when AllowNext = True.",
-    code: `var player = GetPlayer();
-
-// Lock immediately on load
-player.SetVar("AllowNext", false);
+    code: `// Lock immediately on load
+setVar("AllowNext", false);
 
 // Storyline fires timeline.complete on this slide's timeline end.
 // Use a Storyline trigger instead: "Set AllowNext = True when timeline ends on this slide"
@@ -1291,7 +1287,7 @@ player.SetVar("AllowNext", false);
 var slideDuration = 30000; // 30 seconds — adjust to match your timeline
 
 setTimeout(function() {
-    player.SetVar("AllowNext", true);
+    setVar("AllowNext", true);
 }, slideDuration);`,
     howToAdd: `1. Create variable AllowNext (True/False, default: False)
 2. Add trigger: Change state of [Next] to Disabled — when AllowNext = False
@@ -1369,15 +1365,13 @@ if (path === "advanced") {
     description: "Automatically moves the learner to the next slide after a set number of seconds. Good for splash screens, transition slides, or timed content.",
     tags: ["auto-advance","timer","next slide","automatic","delay"],
     setup: "No variable setup required.",
-    code: `var player = GetPlayer();
-
-// Delay in milliseconds (5000 = 5 seconds)
+    code: `// Delay in milliseconds (5000 = 5 seconds)
 var delay = 5000;
 
 setTimeout(function() {
     // Get current slide and go to next
     // Storyline's GotoNextSlide is not standard — use variable trigger or:
-    player.SetVar("AutoAdvance", true);
+    setVar("AutoAdvance", true);
 }, delay);
 
 // In Storyline: add trigger — Jump to next slide when AutoAdvance = True`,
@@ -1408,17 +1402,15 @@ NOTE: Some LMS environments may block popups. Warn learners if needed.`,
     description: "Forces learners to visit a specific set of slides (or all slides in a section) before the Next button on the summary slide is unlocked. Ensures content coverage.",
     tags: ["visited","all slides","track","unlock","compliance"],
     setup: "Create numeric variable: SlidesVisited (default: 0)\nCreate numeric variable: SlidesRequired (default: 3 — set to your count)\nCreate T/F variable: AllowNext (default: False)",
-    code: `var player = GetPlayer();
-
-// Call this snippet on each required slide's timeline start
-player.SetVar("SlidesVisited", player.GetVar("SlidesVisited") + 1);
+    code: `// Call this snippet on each required slide's timeline start
+setVar("SlidesVisited", getVar("SlidesVisited") + 1);
 
 // Check if all required slides have been seen
-var visited = player.GetVar("SlidesVisited");
-var required = player.GetVar("SlidesRequired");
+var visited = getVar("SlidesVisited");
+var required = getVar("SlidesRequired");
 
 if (visited >= required) {
-    player.SetVar("AllowNext", true);
+    setVar("AllowNext", true);
 }`,
     howToAdd: `1. Create the 3 variables listed in setup
 2. Set SlidesRequired to however many slides must be visited
@@ -1432,13 +1424,11 @@ if (visited >= required) {
     description: "Prevents learners from going back to previous slides. Useful for compliance courses that require linear completion.",
     tags: ["previous button","disable","linear","back","navigation"],
     setup: "Create T/F variable: AllowPrev (default: False)\nAdd trigger: Change state of [Prev] button to Disabled when AllowPrev = False",
-    code: `var player = GetPlayer();
-
-// Disable the Prev button on this slide
-player.SetVar("AllowPrev", false);
+    code: `// Disable the Prev button on this slide
+setVar("AllowPrev", false);
 
 // To re-enable on specific slides:
-// player.SetVar("AllowPrev", true);`,
+// setVar("AllowPrev", true);`,
     howToAdd: `1. Create AllowPrev (T/F, default: False)
 2. Add trigger: Change state of [Prev] to Disabled when AllowPrev = False (on timeline start)
 3. Add Execute JavaScript on timeline start to call this on every slide
@@ -1451,14 +1441,12 @@ player.SetVar("AllowPrev", false);
     description: "Saves the current slide number to a variable so learners can be sent back to exactly where they left off from a menu or return screen.",
     tags: ["last slide","resume","bookmark","variable","return"],
     setup: "Create numeric variable: LastSlide (default: 0)",
-    code: `var player = GetPlayer();
-
-// Save current slide index to variable
+    code: `// Save current slide index to variable
 // Note: GetCurrentSlide() returns the slide index (may vary by version)
 // We store it manually on each slide you want to bookmark
 
 var currentSlide = 5; // Replace with this slide's actual number
-player.SetVar("LastSlide", currentSlide);`,
+setVar("LastSlide", currentSlide);`,
     howToAdd: `1. Create numeric variable LastSlide (default: 0)
 2. Add Execute JavaScript on each slide's timeline start — update currentSlide to match that slide's number
 3. On your menu/return button, add Execute JavaScript: player.GotoSlide(player.GetVar("LastSlide"))
@@ -1519,10 +1507,8 @@ if (score >= passMark) {
     description: "Reads the current value of any Storyline variable into JavaScript. The starting point for almost every advanced snippet — once you can read a variable, you can act on it.",
     tags: ["get","variable","read","GetVar","value"],
     setup: "Any Storyline variable must exist before you can read it. Create it in the Variables panel (Home tab).",
-    code: `var player = GetPlayer();
-
-// Read a variable — works for Text, Number, or True/False
-var myValue = player.GetVar("YourVariableName");
+    code: `// Read a variable — works for Text, Number, or True/False
+var myValue = getVar("YourVariableName");
 
 // Log to browser console for debugging
 console.log("Variable value:", myValue);
@@ -1549,20 +1535,18 @@ if (myValue === true) {
     description: "Sets any Storyline variable to a specific value from JavaScript. Triggers any Storyline triggers that listen to that variable — the core mechanism for JS↔Storyline communication.",
     tags: ["set","variable","SetVar","assign","write"],
     setup: "The variable must already exist in Storyline's Variables panel before you can set it.",
-    code: `var player = GetPlayer();
-
-// Set a Text variable
-player.SetVar("UserName", "Abhishek");
+    code: `// Set a Text variable
+setVar("UserName", "Abhishek");
 
 // Set a Numeric variable
-player.SetVar("CurrentScore", 85);
+setVar("CurrentScore", 85);
 
 // Set a True/False variable
-player.SetVar("ModuleComplete", true);
+setVar("ModuleComplete", true);
 
 // Set using a calculated value
-var current = player.GetVar("Score");
-player.SetVar("Score", current + 10);`,
+var current = getVar("Score");
+setVar("Score", current + 10);`,
     howToAdd: `1. Create your variable in Storyline (Home → Variables) with matching type
 2. Add Execute JavaScript trigger at the moment you want to set the value
 3. Paste code and replace variable names and values with your own
@@ -1575,11 +1559,9 @@ player.SetVar("Score", current + 10);`,
     description: "Adds 1 to a numeric variable each time the code runs. Use for click counters, attempt trackers, visit counts, or any cumulative tally.",
     tags: ["increment","counter","add","plus one","count"],
     setup: "Create a Number variable (e.g. ClickCount) with default value 0.",
-    code: `var player = GetPlayer();
-
-// Read current value, add 1, write it back
-var current = player.GetVar("ClickCount");
-player.SetVar("ClickCount", current + 1);
+    code: `// Read current value, add 1, write it back
+var current = getVar("ClickCount");
+setVar("ClickCount", current + 1);
 
 // Optional: log current count
 console.log("Count is now:", current + 1);`,
@@ -1595,18 +1577,16 @@ console.log("Count is now:", current + 1);`,
     description: "Subtracts 1 from a counter variable but never lets it go below zero. Perfect for lives remaining, attempts left, or any countdown that shouldn't go negative.",
     tags: ["decrement","counter","subtract","lives","floor"],
     setup: "Create a Number variable (e.g. LivesLeft) with a starting value (e.g. 3).",
-    code: `var player = GetPlayer();
-
-var current = player.GetVar("LivesLeft");
+    code: `var current = getVar("LivesLeft");
 
 // Subtract 1 but stop at 0
 if (current > 0) {
-    player.SetVar("LivesLeft", current - 1);
+    setVar("LivesLeft", current - 1);
 }
 
 // Check if all lives are gone
-if (player.GetVar("LivesLeft") === 0) {
-    player.SetVar("GameOver", true);
+if (getVar("LivesLeft") === 0) {
+    setVar("GameOver", true);
 }`,
     howToAdd: `1. Create numeric variable LivesLeft (default: 3 or your starting count)
 2. Create T/F variable GameOver (default: False)
@@ -1620,14 +1600,12 @@ if (player.GetVar("LivesLeft") === 0) {
     description: "Adds new text onto the end of an existing text variable. Useful for building a log of learner responses, creating a running list, or concatenating dynamic messages.",
     tags: ["append","text","string","concatenate","log"],
     setup: "Create a Text variable (e.g. ResponseLog) with default value empty.",
-    code: `var player = GetPlayer();
-
-var newEntry = "Completed Module 2"; // Replace with your text or another variable
-var existing = player.GetVar("ResponseLog");
+    code: `var newEntry = "Completed Module 2"; // Replace with your text or another variable
+var existing = getVar("ResponseLog");
 
 // Append new text with a separator
 var updated = existing + (existing ? "\\n" : "") + newEntry;
-player.SetVar("ResponseLog", updated);`,
+setVar("ResponseLog", updated);`,
     howToAdd: `1. Create Text variable ResponseLog (default: empty string)
 2. Replace newEntry with your dynamic text or another player.GetVar() call
 3. Add Execute JavaScript trigger whenever you want to add to the log
@@ -1640,15 +1618,13 @@ player.SetVar("ResponseLog", updated);`,
     description: "Resets a batch of Storyline variables back to their default values in a single JavaScript block. Much faster than adding 10 individual Storyline reset triggers.",
     tags: ["reset","clear","default","multiple","variables"],
     setup: "All variables listed must already exist in Storyline's Variables panel.",
-    code: `var player = GetPlayer();
-
-// Reset all tracking variables to defaults
-player.SetVar("Score", 0);
-player.SetVar("Attempts", 0);
-player.SetVar("ModuleComplete", false);
-player.SetVar("AllowNext", false);
-player.SetVar("UserPath", "");
-player.SetVar("SlideVisited", false);
+    code: `// Reset all tracking variables to defaults
+setVar("Score", 0);
+setVar("Attempts", 0);
+setVar("ModuleComplete", false);
+setVar("AllowNext", false);
+setVar("UserPath", "");
+setVar("SlideVisited", false);
 
 console.log("All variables reset to defaults.");`,
     howToAdd: `1. Add your variables to the list — match names and types exactly
@@ -1663,16 +1639,14 @@ console.log("All variables reset to defaults.");`,
     description: "Reads one variable and writes its value to another. Useful for saving a 'snapshot' of a score before resetting, or syncing two displays of the same value.",
     tags: ["copy","transfer","variable","snapshot","sync"],
     setup: "Both source and destination variables must exist in Storyline.",
-    code: `var player = GetPlayer();
-
-// Copy value from SourceVar into DestinationVar
-var value = player.GetVar("SourceVar");
-player.SetVar("DestinationVar", value);
+    code: `// Copy value from SourceVar into DestinationVar
+var value = getVar("SourceVar");
+setVar("DestinationVar", value);
 
 // Example: Save current score before resetting
-// var saved = player.GetVar("CurrentScore");
-// player.SetVar("SavedScore", saved);
-// player.SetVar("CurrentScore", 0);`,
+// var saved = getVar("CurrentScore");
+// setVar("SavedScore", saved);
+// setVar("CurrentScore", 0);`,
     howToAdd: `1. Create both variables in Storyline
 2. Replace SourceVar and DestinationVar with your actual variable names
 3. Add Execute JavaScript trigger at the point where you need to copy the value`,
@@ -1684,9 +1658,7 @@ player.SetVar("DestinationVar", value);
     description: "Gets the current date and stores it in a Storyline text variable. Display it on-slide for date-stamped certificates, completion records, or dynamic content.",
     tags: ["date","timestamp","formatted","certificate","today"],
     setup: "Create a Text variable named TodayDate (default: empty).",
-    code: `var player = GetPlayer();
-
-var now = new Date();
+    code: `var now = new Date();
 
 // Format: DD/MM/YYYY
 var day   = String(now.getDate()).padStart(2, "0");
@@ -1694,7 +1666,7 @@ var month = String(now.getMonth() + 1).padStart(2, "0");
 var year  = now.getFullYear();
 
 var formatted = day + "/" + month + "/" + year;
-player.SetVar("TodayDate", formatted);
+setVar("TodayDate", formatted);
 
 // For MM/DD/YYYY: var formatted = month + "/" + day + "/" + year;
 // For YYYY-MM-DD: var formatted = year + "-" + month + "-" + day;`,
@@ -1709,9 +1681,7 @@ player.SetVar("TodayDate", formatted);
     description: "Gets the current time (HH:MM or HH:MM:SS) and stores it in a Storyline variable. Useful for time-stamping completions or showing session start/end times.",
     tags: ["time","clock","timestamp","HH:MM","formatted"],
     setup: "Create a Text variable named CurrentTime (default: empty).",
-    code: `var player = GetPlayer();
-
-var now = new Date();
+    code: `var now = new Date();
 
 var hours   = String(now.getHours()).padStart(2, "0");
 var minutes = String(now.getMinutes()).padStart(2, "0");
@@ -1722,7 +1692,7 @@ var formatted = hours + ":" + minutes;
 
 // For HH:MM:SS: var formatted = hours + ":" + minutes + ":" + seconds;
 
-player.SetVar("CurrentTime", formatted);`,
+setVar("CurrentTime", formatted);`,
     howToAdd: `1. Create Text variable CurrentTime (default: empty)
 2. Add Execute JavaScript trigger where you need the time
 3. Display with %CurrentTime% in a text box`,
@@ -1734,21 +1704,19 @@ player.SetVar("CurrentTime", formatted);`,
     description: "Reads two Storyline variables, compares them, and sets a result variable. Useful for checking if an answer matches a target, or if a score matches a stored high score.",
     tags: ["compare","equality","match","condition","logic"],
     setup: "Create the variables you want to compare. Create a result variable (e.g. IsMatch as True/False).",
-    code: `var player = GetPlayer();
-
-var valueA = player.GetVar("UserAnswer");
-var valueB = player.GetVar("CorrectAnswer");
+    code: `var valueA = getVar("UserAnswer");
+var valueB = getVar("CorrectAnswer");
 
 if (valueA === valueB) {
-    player.SetVar("IsMatch", true);
+    setVar("IsMatch", true);
     console.log("Match! Both values:", valueA);
 } else {
-    player.SetVar("IsMatch", false);
+    setVar("IsMatch", false);
     console.log("No match. A:", valueA, "B:", valueB);
 }
 
 // For numeric greater-than:
-// if (player.GetVar("Score") > player.GetVar("HighScore")) { ... }`,
+// if (getVar("Score") > getVar("HighScore")) { ... }`,
     howToAdd: `1. Create your source variables and result variable
 2. Replace variable names to match your setup
 3. Add Execute JavaScript trigger at the moment of comparison
@@ -1763,22 +1731,20 @@ if (valueA === valueB) {
     description: "Detects when the HTML5 video on the slide finishes playing and automatically unlocks the Next button. The most reliable way to ensure learners watch the full video.",
     tags: ["video","lock next","ended","watch","media"],
     setup: "Create a True/False variable AllowNext (default: False).\nAdd trigger: Change state of [Next] to Disabled when AllowNext = False.\nAdd trigger: Change state of [Next] to Normal when AllowNext = True.",
-    code: `var player = GetPlayer();
-
-// Lock Next on load
-player.SetVar("AllowNext", false);
+    code: `// Lock Next on load
+setVar("AllowNext", false);
 
 // Find the video element in the slide
 var video = document.querySelector("video");
 
 if (video) {
     video.addEventListener("ended", function() {
-        player.SetVar("AllowNext", true);
+        setVar("AllowNext", true);
     }, { once: true }); // { once: true } auto-removes listener after firing
 } else {
     // No video found — unlock anyway to avoid trapping learner
     console.warn("SLSnippets: No video element found on this slide.");
-    player.SetVar("AllowNext", true);
+    setVar("AllowNext", true);
 }`,
     howToAdd: `1. Insert your video into the Storyline slide (Insert → Video)
 2. Create AllowNext variable (T/F, default: False)
@@ -1793,8 +1759,7 @@ if (video) {
     description: "Tracks completion of multiple videos on the same slide. Next only unlocks when every video has been watched to the end. Works with any number of videos — just change the count.",
     tags: ["two videos","multiple","both","lock next","complete"],
     setup: "Create True/False variable AllowNext (default: False).\nAdd trigger: Change state of [Next] to Normal when AllowNext = True.",
-    code: `var player = GetPlayer();
-player.SetVar("AllowNext", false);
+    code: `setVar("AllowNext", false);
 
 var videos = document.querySelectorAll("video");
 var totalRequired = videos.length; // auto-detects all videos
@@ -1802,7 +1767,7 @@ var completedCount = 0;
 
 if (totalRequired === 0) {
     console.warn("SLSnippets: No videos found.");
-    player.SetVar("AllowNext", true);
+    setVar("AllowNext", true);
 }
 
 videos.forEach(function(video, index) {
@@ -1811,7 +1776,7 @@ videos.forEach(function(video, index) {
         console.log("Video " + (index + 1) + " done. " + completedCount + "/" + totalRequired);
 
         if (completedCount >= totalRequired) {
-            player.SetVar("AllowNext", true);
+            setVar("AllowNext", true);
         }
     }, { once: true });
 });`,
@@ -1857,19 +1822,18 @@ NOTE: This is a deterrent, not a hard block. Determined users can open DevTools.
     description: "Monitors how much of a video the learner has watched and stores the percentage in a Storyline variable. Unlock content or trigger events at custom percentage thresholds.",
     tags: ["percentage","watched","progress","video","threshold"],
     setup: "Create a Number variable named VideoProgress (default: 0).",
-    code: `var player = GetPlayer();
-var video = document.querySelector("video");
+    code: `var video = document.querySelector("video");
 
 if (video) {
     video.addEventListener("timeupdate", function() {
         if (video.duration > 0) {
             var percent = Math.round((video.currentTime / video.duration) * 100);
-            player.SetVar("VideoProgress", percent);
+            setVar("VideoProgress", percent);
 
             // Trigger action at 80% watched
             if (percent >= 80 && !video._triggered80) {
                 video._triggered80 = true;
-                player.SetVar("Video80Watched", true);
+                setVar("Video80Watched", true);
                 console.log("80% of video watched.");
             }
         }
@@ -1888,13 +1852,12 @@ if (video) {
     description: "Displays a specific Storyline layer immediately when the video finishes. Use for post-video feedback, reveal content, or call-to-action layers.",
     tags: ["layer","video ended","show","reveal","trigger"],
     setup: "Create T/F variable ShowFeedbackLayer (default: False).\nAdd Storyline trigger: Show layer [FeedbackLayer] when ShowFeedbackLayer = True.",
-    code: `var player = GetPlayer();
-var video = document.querySelector("video");
+    code: `var video = document.querySelector("video");
 
 if (video) {
     video.addEventListener("ended", function() {
         // Set variable — Storyline trigger shows the layer
-        player.SetVar("ShowFeedbackLayer", true);
+        setVar("ShowFeedbackLayer", true);
     }, { once: true });
 }`,
     howToAdd: `1. Create your layer in Storyline (right-click slide → New Layer)
@@ -1909,8 +1872,7 @@ if (video) {
     description: "Reads the current timestamp of the video (in seconds) and stores it in a Storyline variable. Useful for synchronising other content with video playback position.",
     tags: ["currentTime","timestamp","position","video","seconds"],
     setup: "Create a Number variable named VideoTime (default: 0).",
-    code: `var player = GetPlayer();
-var video = document.querySelector("video");
+    code: `var video = document.querySelector("video");
 
 if (video) {
     // Clear any prior interval (prevents duplicate intervals on slide revisit)
@@ -1920,7 +1882,7 @@ if (video) {
     // Update the variable every second
     window._slVideoTimeInterval = setInterval(function() {
         var t = Math.floor(video.currentTime);
-        player.SetVar("VideoTime", t);
+        setVar("VideoTime", t);
         // Auto-clear when video ends
         if (video.ended) {
             clearInterval(window._slVideoTimeInterval);
@@ -1959,21 +1921,20 @@ NOTE: video.play() may be blocked by browser autoplay policies if not triggered 
     description: "Sets different Storyline variables depending on whether the video is currently playing, paused, or has ended. Drive visual state changes, button reveals, or branching from video state.",
     tags: ["play","pause","ended","event","detect","state"],
     setup: "Create Text variable VideoState (default: empty).",
-    code: `var player = GetPlayer();
-var video = document.querySelector("video");
+    code: `var video = document.querySelector("video");
 
 if (video) {
     video.addEventListener("play", function() {
-        player.SetVar("VideoState", "playing");
+        setVar("VideoState", "playing");
     });
     video.addEventListener("pause", function() {
         // Don't mark as paused if it's ended
         if (!video.ended) {
-            player.SetVar("VideoState", "paused");
+            setVar("VideoState", "paused");
         }
     });
     video.addEventListener("ended", function() {
-        player.SetVar("VideoState", "ended");
+        setVar("VideoState", "ended");
     });
 }`,
     howToAdd: `1. Create Text variable VideoState (default: empty)
@@ -2009,8 +1970,7 @@ NOTE: Chrome and Firefox block autoplay with sound. Muting the video first remov
     description: "Watches the video's current time and fires a Storyline variable change at a precise timestamp. Use to reveal annotations, highlight text, or show layers in sync with video narration.",
     tags: ["timestamp","sync","reveal","cue","video","timeupdate"],
     setup: "Create T/F variable ShowAnnotation (default: False). Create Storyline trigger to show your element when ShowAnnotation = True.",
-    code: `var player = GetPlayer();
-var video = document.querySelector("video");
+    code: `var video = document.querySelector("video");
 var cues = [
     { time: 10, variable: "ShowAnnotation1", value: true },
     { time: 25, variable: "ShowAnnotation2", value: true },
@@ -2023,7 +1983,7 @@ if (video) {
         cues.forEach(function(cue) {
             if (!fired[cue.variable] && video.currentTime >= cue.time) {
                 fired[cue.variable] = true;
-                player.SetVar(cue.variable, cue.value);
+                setVar(cue.variable, cue.value);
             }
         });
     });
@@ -2043,16 +2003,14 @@ if (video) {
     description: "The most reliable way to show a Storyline layer from JavaScript. Sets a variable that a Storyline trigger listens to — no undocumented APIs, no DOM hacks, works across all SL360 builds.",
     tags: ["show layer","variable","trigger","reveal","JavaScript"],
     setup: "Create T/F variable ShowWelcomeLayer (default: False).\nCreate a layer named 'WelcomeLayer' on your slide.\nAdd trigger: Show layer [WelcomeLayer] when ShowWelcomeLayer = True.",
-    code: `var player = GetPlayer();
-
-// Show a layer by setting its control variable
+    code: `// Show a layer by setting its control variable
 function showLayer(varName) {
-    player.SetVar(varName, true);
+    setVar(varName, true);
 }
 
 // Hide a layer by resetting its control variable
 function hideLayer(varName) {
-    player.SetVar(varName, false);
+    setVar(varName, false);
 }
 
 // Usage:
@@ -2070,16 +2028,14 @@ showLayer("ShowWelcomeLayer");`,
     description: "Displays a layer for a set duration and then automatically hides it. Great for toast notifications, brief feedback messages, or timed hint overlays.",
     tags: ["auto close","layer","timer","hide","notification"],
     setup: "Create T/F variable ShowNotifLayer (default: False).\nAdd Storyline trigger: Show layer when ShowNotifLayer = True.\nAdd Storyline trigger: Hide layer when ShowNotifLayer = False.",
-    code: `var player = GetPlayer();
-
-// Show the layer
-player.SetVar("ShowNotifLayer", true);
+    code: `// Show the layer
+setVar("ShowNotifLayer", true);
 
 // Auto-close after 3 seconds (3000ms)
 var displayDuration = 3000;
 
 setTimeout(function() {
-    player.SetVar("ShowNotifLayer", false);
+    setVar("ShowNotifLayer", false);
 }, displayDuration);`,
     howToAdd: `1. Create your notification layer with your message
 2. Create T/F variable ShowNotifLayer (default: False)
@@ -2094,13 +2050,11 @@ setTimeout(function() {
     description: "Waits a set number of seconds after the slide loads, then shows a layer. Useful for progressive reveals, delayed hints, or showing content after a pause.",
     tags: ["delay","layer","setTimeout","wait","reveal"],
     setup: "Create T/F variable ShowHintLayer (default: False).\nAdd Storyline trigger: Show layer when ShowHintLayer = True.",
-    code: `var player = GetPlayer();
-
-// Wait 5 seconds, then show the layer
+    code: `// Wait 5 seconds, then show the layer
 var delayMs = 5000; // 5 seconds
 
 setTimeout(function() {
-    player.SetVar("ShowHintLayer", true);
+    setVar("ShowHintLayer", true);
 }, delayMs);`,
     howToAdd: `1. Create your layer and the control variable
 2. Add Storyline trigger: Show layer when variable = True
@@ -2114,8 +2068,7 @@ setTimeout(function() {
     description: "Reads a variable and shows one of several layers depending on the value. Perfect for personalised feedback, role-based content, or score-based result layers.",
     tags: ["conditional","variable","layer","switch","role"],
     setup: "Create Text variable UserRole (default: empty).\nCreate layers: ManagerLayer, StaffLayer, GuestLayer.\nCreate T/F variables for each layer's control.",
-    code: `var player = GetPlayer();
-var role = player.GetVar("UserRole");
+    code: `var role = getVar("UserRole");
 
 // Map role to layer control variable
 var layerMap = {
@@ -2127,10 +2080,10 @@ var layerMap = {
 var targetVar = layerMap[role.toLowerCase()];
 
 if (targetVar) {
-    player.SetVar(targetVar, true);
+    setVar(targetVar, true);
 } else {
     // Fallback: show default layer
-    player.SetVar("ShowGuestLayer", true);
+    setVar("ShowGuestLayer", true);
     console.log("Unknown role:", role, "— showing guest layer.");
 }`,
     howToAdd: `1. Create layers for each role/scenario
@@ -2146,19 +2099,17 @@ if (targetVar) {
     description: "Sets a variable to True the first time a layer is opened. Use to check if a learner has seen a required layer before allowing them to proceed.",
     tags: ["visited","layer","track","required","check"],
     setup: "Create T/F variable HintLayerVisited (default: False).\nCreate T/F variable ShowHintLayer (default: False).",
-    code: `var player = GetPlayer();
-
-// Mark this layer as visited on its own timeline start
+    code: `// Mark this layer as visited on its own timeline start
 // (Place this trigger on the LAYER itself, not the base slide)
-player.SetVar("HintLayerVisited", true);
+setVar("HintLayerVisited", true);
 console.log("Hint layer visited — tracked.");
 
 // Optional: check if all required layers visited
-var hint = player.GetVar("HintLayerVisited");
-var resources = player.GetVar("ResourceLayerVisited");
+var hint = getVar("HintLayerVisited");
+var resources = getVar("ResourceLayerVisited");
 
 if (hint && resources) {
-    player.SetVar("AllLayersVisited", true);
+    setVar("AllLayersVisited", true);
 }`,
     howToAdd: `1. On the LAYER (not base slide), add Execute JavaScript trigger on layer timeline start
 2. Set the HintLayerVisited variable to true
@@ -2172,21 +2123,19 @@ if (hint && resources) {
     description: "Monitors a set of layers and unlocks Next only when every required layer has been visited. Ideal for interactive infographics where each tab/hotspot must be explored.",
     tags: ["all layers","visited","complete","unlock","hotspot"],
     setup: "Create T/F variables: Layer1Visited, Layer2Visited, Layer3Visited (default: False).\nCreate T/F variable AllLayersVisited (default: False).",
-    code: `var player = GetPlayer();
-
-// Call this from each layer's timeline start
+    code: `// Call this from each layer's timeline start
 // Replace "Layer1Visited" with that layer's tracking variable
-player.SetVar("Layer1Visited", true);
+setVar("Layer1Visited", true);
 
 // Then check if all are done
 function checkAllLayersVisited() {
-    var l1 = player.GetVar("Layer1Visited");
-    var l2 = player.GetVar("Layer2Visited");
-    var l3 = player.GetVar("Layer3Visited");
+    var l1 = getVar("Layer1Visited");
+    var l2 = getVar("Layer2Visited");
+    var l3 = getVar("Layer3Visited");
 
     if (l1 && l2 && l3) {
-        player.SetVar("AllLayersVisited", true);
-        player.SetVar("AllowNext", true);
+        setVar("AllLayersVisited", true);
+        setVar("AllowNext", true);
     }
 }
 
@@ -2203,16 +2152,14 @@ checkAllLayersVisited();`,
     description: "Randomly selects one of several layers to show each time. Use for varied feedback, random scenario branching, or surprise content reveals.",
     tags: ["random","layer","variety","surprise","randomise"],
     setup: "Create T/F variables: ShowLayer1, ShowLayer2, ShowLayer3 (default: False). Add Storyline triggers for each to show their respective layer.",
-    code: `var player = GetPlayer();
-
-// List of layer control variables
+    code: `// List of layer control variables
 var layers = ["ShowLayer1", "ShowLayer2", "ShowLayer3"];
 
 // Pick one at random
 var randomIndex = Math.floor(Math.random() * layers.length);
 var chosen = layers[randomIndex];
 
-player.SetVar(chosen, true);
+setVar(chosen, true);
 console.log("Showing random layer:", chosen);`,
     howToAdd: `1. Create layers and their T/F control variables
 2. Add Storyline trigger for each: Show [layer] when [variable] = True
@@ -2225,18 +2172,16 @@ console.log("Showing random layer:", chosen);`,
     description: "Increments a counter each time a layer is opened. Use to limit repeated hints, track engagement, or change behaviour after a threshold.",
     tags: ["count","layer","visits","limit","threshold"],
     setup: "Create Number variable LayerOpenCount (default: 0). Place this JS on the LAYER's timeline start.",
-    code: `var player = GetPlayer();
-
-// Increment layer open count
-var count = player.GetVar("LayerOpenCount");
+    code: `// Increment layer open count
+var count = getVar("LayerOpenCount");
 count++;
-player.SetVar("LayerOpenCount", count);
+setVar("LayerOpenCount", count);
 
 console.log("Layer opened", count, "time(s).");
 
 // Limit: hide the hint button after 3 views
 if (count >= 3) {
-    player.SetVar("HideHintButton", true);
+    setVar("HideHintButton", true);
     console.log("Hint limit reached.");
 }`,
     howToAdd: `1. Create Number variable LayerOpenCount (default: 0)
@@ -2252,20 +2197,18 @@ if (count >= 3) {
     description: "Tracks the visit number for a slide and shows a different layer each time the learner arrives. Useful for progressive disclosure across multiple returns to the same slide.",
     tags: ["visit count","progressive","reveal","different","each time"],
     setup: "Create Number variable SlideVisitCount (default: 0). Create T/F variables for each layer: ShowLayer1, ShowLayer2, ShowLayer3.",
-    code: `var player = GetPlayer();
-
-// Increment visit counter on each arrival
-var visits = player.GetVar("SlideVisitCount") + 1;
-player.SetVar("SlideVisitCount", visits);
+    code: `// Increment visit counter on each arrival
+var visits = getVar("SlideVisitCount") + 1;
+setVar("SlideVisitCount", visits);
 
 // Show a different layer based on visit number
 if (visits === 1) {
-    player.SetVar("ShowLayer1", true);
+    setVar("ShowLayer1", true);
 } else if (visits === 2) {
-    player.SetVar("ShowLayer2", true);
+    setVar("ShowLayer2", true);
 } else {
     // After 3rd visit, always show Layer3
-    player.SetVar("ShowLayer3", true);
+    setVar("ShowLayer3", true);
 }
 
 console.log("Visit number:", visits);`,
@@ -2281,9 +2224,7 @@ console.log("Visit number:", visits);`,
     description: "Resets all layer control variables to False at once, causing Storyline triggers to hide all layers simultaneously. Useful for 'Close All' buttons or modal dismissal.",
     tags: ["close all","hide","layers","reset","dismiss"],
     setup: "All your layer control variables must follow the variable bridge pattern (T/F variable → Storyline trigger).",
-    code: `var player = GetPlayer();
-
-// List all your layer control variables here
+    code: `// List all your layer control variables here
 var layerVars = [
     "ShowLayer1",
     "ShowLayer2",
@@ -2295,7 +2236,7 @@ var layerVars = [
 
 // Set all to false — triggers will hide each layer
 layerVars.forEach(function(varName) {
-    player.SetVar(varName, false);
+    setVar(varName, false);
 });
 
 console.log("All layers closed.");`,
@@ -2313,19 +2254,17 @@ console.log("All layers closed.");`,
     description: "Reads the built-in Storyline quiz result percentage and stores it in your own variable for use in custom result slides, branching logic, or display.",
     tags: ["score","percentage","result","quiz","Results.ScorePercent"],
     setup: "Your course must have a Storyline result slide. Ensure the quiz has been submitted before reading the score.",
-    code: `var player = GetPlayer();
-
-// Read the built-in Storyline result score (0–100)
+    code: `// Read the built-in Storyline result score (0–100)
 // Variable name may vary — check yours in the Variables panel
-var score = player.GetVar("Results.ScorePercent");
+var score = getVar("Results.ScorePercent");
 
 if (score === undefined || score === null) {
     // Try alternative variable name formats
-    score = player.GetVar("Result.ScorePercent") || 0;
+    score = getVar("Result.ScorePercent") || 0;
 }
 
 // Store in your own variable
-player.SetVar("MyScore", score);
+setVar("MyScore", score);
 
 console.log("Quiz score:", score + "%");`,
     howToAdd: `1. Add a result slide to your quiz (Insert → New Slide → Graded Result Slide)
@@ -2341,18 +2280,16 @@ console.log("Quiz score:", score + "%");`,
     description: "Evaluates the learner's score against a custom passing mark and sets a clear pass/fail variable. Override Storyline's built-in pass mark without touching the result slide settings.",
     tags: ["pass","fail","threshold","custom","score","check"],
     setup: "Quiz result variable must be populated (see snippet #43). Create T/F variable QuizPassed (default: False).",
-    code: `var player = GetPlayer();
-
-var score = player.GetVar("Results.ScorePercent");
+    code: `var score = getVar("Results.ScorePercent");
 var passMark = 75; // Set your custom passing percentage
 
 if (score >= passMark) {
-    player.SetVar("QuizPassed", true);
-    player.SetVar("ResultMessage", "Congratulations! You scored " + score + "%");
+    setVar("QuizPassed", true);
+    setVar("ResultMessage", "Congratulations! You scored " + score + "%");
     console.log("PASSED:", score + "%");
 } else {
-    player.SetVar("QuizPassed", false);
-    player.SetVar("ResultMessage", "You scored " + score + "%. You need " + passMark + "% to pass.");
+    setVar("QuizPassed", false);
+    setVar("ResultMessage", "You scored " + score + "%. You need " + passMark + "% to pass.");
     console.log("FAILED:", score + "%, needed:", passMark + "%");
 }`,
     howToAdd: `1. Create T/F variable QuizPassed and Text variable ResultMessage
@@ -2368,25 +2305,23 @@ if (score >= passMark) {
     description: "Tracks the number of quiz attempts and prevents further retries once the limit is reached. Shows a 'No more attempts' state after the final attempt.",
     tags: ["attempts","limit","retry","max","quiz"],
     setup: "Create Number variable AttemptCount (default: 0).\nCreate Number variable MaxAttempts (default: 3).\nCreate T/F variable AttemptsExhausted (default: False).",
-    code: `var player = GetPlayer();
-
-var count = player.GetVar("AttemptCount");
-var max   = player.GetVar("MaxAttempts");
+    code: `var count = getVar("AttemptCount");
+var max   = getVar("MaxAttempts");
 
 // Increment on each attempt
 count++;
-player.SetVar("AttemptCount", count);
+setVar("AttemptCount", count);
 
 console.log("Attempt", count, "of", max);
 
 if (count >= max) {
-    player.SetVar("AttemptsExhausted", true);
-    player.SetVar("AllowRetry", false);
+    setVar("AttemptsExhausted", true);
+    setVar("AllowRetry", false);
     console.log("Attempt limit reached.");
 } else {
-    player.SetVar("AllowRetry", true);
+    setVar("AllowRetry", true);
     var remaining = max - count;
-    player.SetVar("AttemptsLeft", remaining);
+    setVar("AttemptsLeft", remaining);
 }`,
     howToAdd: `1. Create all four variables listed in setup
 2. Add trigger: Hide Retry button when AttemptsExhausted = True
@@ -2400,17 +2335,15 @@ if (count >= max) {
     description: "Records the slide numbers of incorrectly answered questions into a text variable. Use for targeted remediation — send learners only to slides where they went wrong.",
     tags: ["wrong answers","incorrect","track","remediation","log"],
     setup: "Create Text variable WrongSlides (default: empty).\nRun this snippet on each question slide's incorrect feedback layer.",
-    code: `var player = GetPlayer();
-
-// Get current slide number — set this manually per slide
+    code: `// Get current slide number — set this manually per slide
 var currentSlide = 5; // Replace with this slide's actual number
 
-var existing = player.GetVar("WrongSlides");
+var existing = getVar("WrongSlides");
 
 // Only add if not already recorded
 if (existing.indexOf(String(currentSlide)) === -1) {
     var updated = existing + (existing ? "," : "") + currentSlide;
-    player.SetVar("WrongSlides", updated);
+    setVar("WrongSlides", updated);
     console.log("Wrong on slide:", currentSlide, "| All wrong:", updated);
 }`,
     howToAdd: `1. Create Text variable WrongSlides (default: empty)
@@ -2425,9 +2358,7 @@ if (existing.indexOf(String(currentSlide)) === -1) {
     description: "Calculates a final score where different questions carry different point values. Replaces Storyline's uniform scoring when some questions are worth more than others.",
     tags: ["weighted","score","points","custom","calculation"],
     setup: "Create numeric variables for each question's result: Q1Correct, Q2Correct, etc. (default: 0 or 1). Create Number variable WeightedScore (default: 0).",
-    code: `var player = GetPlayer();
-
-// Each question's weight (points if correct)
+    code: `// Each question's weight (points if correct)
 var weights = {
     Q1: { points: 10, var: "Q1Correct" },
     Q2: { points: 20, var: "Q2Correct" },
@@ -2442,14 +2373,14 @@ var maxPoints = 0;
 Object.keys(weights).forEach(function(q) {
     var w = weights[q];
     maxPoints += w.points;
-    if (player.GetVar(w.var) === true) {
+    if (getVar(w.var) === true) {
         totalPoints += w.points;
     }
 });
 
 var pct = Math.round((totalPoints / maxPoints) * 100);
-player.SetVar("WeightedScore", pct);
-player.SetVar("WeightedPoints", totalPoints);
+setVar("WeightedScore", pct);
+setVar("WeightedPoints", totalPoints);
 console.log("Weighted score:", pct + "% (" + totalPoints + "/" + maxPoints + " pts)");`,
     howToAdd: `1. Set each question to update its variable (Q1Correct = true/false) on answer submission
 2. Add all question variables to the weights object with their point values
@@ -2463,14 +2394,12 @@ console.log("Weighted score:", pct + "% (" + totalPoints + "/" + maxPoints + " p
     description: "Adds a bonus point value to the existing score variable. Trigger from correctly answering a bonus question, completing a task quickly, or as a gamification reward.",
     tags: ["bonus","points","add","score","reward"],
     setup: "Create Number variable TotalScore (default: 0).",
-    code: `var player = GetPlayer();
-
-var bonus = 15; // Bonus points to add
-var current = player.GetVar("TotalScore");
+    code: `var bonus = 15; // Bonus points to add
+var current = getVar("TotalScore");
 var newScore = current + bonus;
 
-player.SetVar("TotalScore", newScore);
-player.SetVar("BonusEarned", true);
+setVar("TotalScore", newScore);
+setVar("BonusEarned", true);
 
 console.log("Bonus applied! Score:", current, "→", newScore);`,
     howToAdd: `1. Create TotalScore variable and optional BonusEarned T/F variable
@@ -2485,8 +2414,7 @@ console.log("Bonus applied! Score:", current, "→", newScore);`,
     description: "Maps a score percentage to a performance tier and stores both the tier label and colour variable. Display tiered results without complex Storyline trigger stacking.",
     tags: ["tier","bronze","silver","gold","performance","badge"],
     setup: "Create Text variables: ScoreTier (default: empty) and TierColor (default: empty). Create Number variable MyScore (default: 0).",
-    code: `var player = GetPlayer();
-var score = player.GetVar("Results.ScorePercent");
+    code: `var score = getVar("Results.ScorePercent");
 
 var tier, color;
 
@@ -2504,8 +2432,8 @@ if (score >= 90) {
     color = "#EF4444";
 }
 
-player.SetVar("ScoreTier", tier);
-player.SetVar("TierColor", color);
+setVar("ScoreTier", tier);
+setVar("TierColor", color);
 console.log("Tier:", tier, "| Score:", score + "%");`,
     howToAdd: `1. Create ScoreTier (Text) and TierColor (Text) variables
 2. Add Execute JavaScript trigger on result slide timeline start
@@ -2519,20 +2447,18 @@ console.log("Tier:", tier, "| Score:", score + "%");`,
     description: "Clears all quiz-related tracking variables before a retry attempt. Ensures a clean state when learners loop back through questions — no residual data from previous attempts.",
     tags: ["reset","retry","clear","attempt","variables","quiz"],
     setup: "All variables listed must match your actual quiz variable names.",
-    code: `var player = GetPlayer();
-
-// Reset all quiz tracking variables
-player.SetVar("AttemptCount",    player.GetVar("AttemptCount")); // Keep attempt count — don't reset
-player.SetVar("QuizPassed",      false);
-player.SetVar("WrongSlides",     "");
-player.SetVar("TotalScore",      0);
-player.SetVar("Q1Correct",       false);
-player.SetVar("Q2Correct",       false);
-player.SetVar("Q3Correct",       false);
-player.SetVar("Q4Correct",       false);
-player.SetVar("Q5Correct",       false);
-player.SetVar("ResultMessage",   "");
-player.SetVar("AllowNext",       false);
+    code: `// Reset all quiz tracking variables
+setVar("AttemptCount",    getVar("AttemptCount")); // Keep attempt count — don't reset
+setVar("QuizPassed",      false);
+setVar("WrongSlides",     "");
+setVar("TotalScore",      0);
+setVar("Q1Correct",       false);
+setVar("Q2Correct",       false);
+setVar("Q3Correct",       false);
+setVar("Q4Correct",       false);
+setVar("Q5Correct",       false);
+setVar("ResultMessage",   "");
+setVar("AllowNext",       false);
 
 console.log("Quiz variables reset for retry.");`,
     howToAdd: `1. Customise the variable list to match your actual variables
@@ -2553,17 +2479,15 @@ const SNIPPETS_51_100 = [
     description: "Counts how many questions the learner answered correctly by reading individual question result variables. Use when you need a raw correct count rather than a percentage.",
     tags: ["correct","count","answers","tally","quiz"],
     setup: "Create T/F variables per question: Q1Correct, Q2Correct, etc. (set to true when answered correctly). Create Number variable CorrectCount (default: 0).",
-    code: `var player = GetPlayer();
-
-var questionVars = ["Q1Correct","Q2Correct","Q3Correct","Q4Correct","Q5Correct"];
+    code: `var questionVars = ["Q1Correct","Q2Correct","Q3Correct","Q4Correct","Q5Correct"];
 var correct = 0;
 
 questionVars.forEach(function(v) {
-    if (player.GetVar(v) === true) correct++;
+    if (getVar(v) === true) correct++;
 });
 
-player.SetVar("CorrectCount", correct);
-player.SetVar("TotalQuestions", questionVars.length);
+setVar("CorrectCount", correct);
+setVar("TotalQuestions", questionVars.length);
 console.log("Correct:", correct + "/" + questionVars.length);`,
     howToAdd: `1. Extend questionVars array to match all your question variables
 2. Set each Q#Correct variable to true on correct answer (via Storyline trigger or JS)
@@ -2576,25 +2500,23 @@ console.log("Correct:", correct + "/" + questionVars.length);`,
     description: "Checks that every question has been answered before the learner can submit. Prevents blank submissions and the resulting zero scores.",
     tags: ["validate","attempted","submit","all answered","prevent"],
     setup: "Create T/F variables per question: Q1Answered, Q2Answered, etc. Create T/F variable AllAnswered (default: False).",
-    code: `var player = GetPlayer();
-
-var required = ["Q1Answered","Q2Answered","Q3Answered","Q4Answered","Q5Answered"];
+    code: `var required = ["Q1Answered","Q2Answered","Q3Answered","Q4Answered","Q5Answered"];
 var allDone = true;
 var missing = [];
 
 required.forEach(function(v) {
-    if (!player.GetVar(v)) {
+    if (!getVar(v)) {
         allDone = false;
         missing.push(v);
     }
 });
 
 if (allDone) {
-    player.SetVar("AllAnswered", true);
+    setVar("AllAnswered", true);
     console.log("All questions answered — OK to submit.");
 } else {
-    player.SetVar("AllAnswered", false);
-    player.SetVar("MissingCount", missing.length);
+    setVar("AllAnswered", false);
+    setVar("MissingCount", missing.length);
     console.log("Unanswered questions:", missing.join(", "));
 }`,
     howToAdd: `1. Set each Q#Answered = True on question slide when learner selects an answer
@@ -2609,19 +2531,17 @@ if (allDone) {
     description: "Captures a learner's text or selected answer for a specific question and stores it for review. Use on custom quiz slides where Storyline's built-in tracking isn't enough.",
     tags: ["store","response","answer","review","capture"],
     setup: "Create Text variable Q1Response (default: empty). Works best with text entry or custom interaction slides.",
-    code: `var player = GetPlayer();
-
-// Get the learner's current text entry value
+    code: `// Get the learner's current text entry value
 // Replace "TextEntryField" with your Storyline text entry variable name
-var response = player.GetVar("TextEntryField");
+var response = getVar("TextEntryField");
 
 // Clean and store
 var cleaned = String(response).trim();
-player.SetVar("Q1Response", cleaned);
+setVar("Q1Response", cleaned);
 
 // Optional: flag as answered if not empty
 if (cleaned.length > 0) {
-    player.SetVar("Q1Answered", true);
+    setVar("Q1Answered", true);
 }
 
 console.log("Q1 response stored:", cleaned);`,
@@ -2637,22 +2557,20 @@ console.log("Q1 response stored:", cleaned);`,
     description: "Computes what percentage of the course the learner has completed based on slides visited versus total slides. Display as a progress indicator or gate final content.",
     tags: ["completion","percentage","progress","slides","course"],
     setup: "Create Number variable SlidesCompleted (default: 0).\nCreate Number variable TotalSlides (default: set to your course slide count).\nCreate Number variable CompletionPct (default: 0).",
-    code: `var player = GetPlayer();
+    code: `// Increment completed slides (call on each slide's timeline start)
+var done  = getVar("SlidesCompleted") + 1;
+var total = getVar("TotalSlides");
 
-// Increment completed slides (call on each slide's timeline start)
-var done  = player.GetVar("SlidesCompleted") + 1;
-var total = player.GetVar("TotalSlides");
-
-player.SetVar("SlidesCompleted", done);
+setVar("SlidesCompleted", done);
 
 var pct = Math.min(100, Math.round((done / total) * 100));
-player.SetVar("CompletionPct", pct);
+setVar("CompletionPct", pct);
 
 console.log("Completion:", pct + "% (" + done + "/" + total + ")");
 
 // Mark fully complete
 if (pct >= 100) {
-    player.SetVar("CourseComplete", true);
+    setVar("CourseComplete", true);
 }`,
     howToAdd: `1. Set TotalSlides variable to your course's total slide count (do this on slide 1)
 2. Add Execute JavaScript trigger on EVERY slide's timeline start
@@ -2668,8 +2586,7 @@ if (pct >= 100) {
     description: "Detects which tracking API is available in the current environment (xAPI, SCORM 2004, SCORM 1.2, or none). Essential before any tracking code — prevents errors in non-LMS previews.",
     tags: ["xapi","SCORM","detect","availability","LMS","check"],
     setup: "No variable setup required. Create Text variable TrackingType (default: empty) if you want to store the result.",
-    code: `var player = GetPlayer();
-var trackingType = "none";
+    code: `var trackingType = "none";
 
 // Check for xAPI (Tin Can)
 if (typeof ADL !== "undefined" && ADL.XAPIWrapper) {
@@ -2684,7 +2601,7 @@ else if (typeof window.API !== "undefined") {
     trackingType = "scorm12";
 }
 
-player.SetVar("TrackingType", trackingType);
+setVar("TrackingType", trackingType);
 console.log("Tracking API detected:", trackingType);
 
 // Use to conditionally run tracking code:
@@ -2701,8 +2618,7 @@ console.log("Tracking API detected:", trackingType);
     description: "Retrieves the learner's display name from the xAPI actor object and stores it in a Storyline variable. Use for personalised greetings on custom welcome screens.",
     tags: ["learner name","actor","xapi","personalise","welcome"],
     setup: "Course must be published as xAPI/Tin Can and launched from an LRS-connected LMS.\nCreate Text variable LearnerName (default: Learner).",
-    code: `var player = GetPlayer();
-var name = "Learner"; // Default fallback
+    code: `var name = "Learner"; // Default fallback
 
 try {
     // Method 1: ADL XAPIWrapper (Storyline xAPI publish)
@@ -2726,7 +2642,7 @@ try {
     console.warn("SLSnippets: Could not retrieve learner name.", e.message);
 }
 
-player.SetVar("LearnerName", name);
+setVar("LearnerName", name);
 console.log("Learner name:", name);`,
     howToAdd: `1. Publish your course as xAPI/Tin Can
 2. Create Text variable LearnerName (default: Learner)
@@ -2740,8 +2656,7 @@ console.log("Learner name:", name);`,
     description: "Retrieves the learner's unique identifier (email or account IRI) from the xAPI actor object. Useful for logging, conditional branching by user, or connecting to external data.",
     tags: ["learner ID","actor","mbox","IRI","xapi","identifier"],
     setup: "Course must be published as xAPI. Create Text variable LearnerID (default: empty).",
-    code: `var player = GetPlayer();
-var learnerId = "";
+    code: `var learnerId = "";
 
 try {
     if (typeof ADL !== "undefined" && ADL.XAPIWrapper && ADL.XAPIWrapper.lrs) {
@@ -2760,7 +2675,7 @@ try {
     console.warn("SLSnippets: Could not retrieve learner ID.", e.message);
 }
 
-player.SetVar("LearnerID", learnerId);
+setVar("LearnerID", learnerId);
 console.log("Learner ID:", learnerId);`,
     howToAdd: `1. Publish as xAPI/Tin Can
 2. Create Text variable LearnerID
@@ -2825,8 +2740,7 @@ if (typeof ADL !== "undefined" && ADL.XAPIWrapper) {
     tags: ["passed","failed","score","xapi","result","LRS"],
     setup: "Course published as xAPI. Score stored in Results.ScorePercent or your custom score variable.",
     code: `if (typeof ADL !== "undefined" && ADL.XAPIWrapper) {
-    var player = GetPlayer();
-    var score   = player.GetVar("Results.ScorePercent") / 100; // xAPI expects 0.0–1.0
+        var score   = getVar("Results.ScorePercent") / 100; // xAPI expects 0.0–1.0
     var passed  = score >= 0.75; // 75% pass mark
     var actor;
     try {
@@ -3063,13 +2977,12 @@ if (video && typeof ADL !== "undefined" && ADL.XAPIWrapper) {
 }
 
 // Usage example:
-var player = GetPlayer();
 sendQuizResponse(
     "http://example.com/quiz/q1",
     "What is the minimum PPE requirement?",
-    player.GetVar("Q1_Response"),
+    getVar("Q1_Response"),
     "hardhat-gloves",
-    player.GetVar("Q1Correct")
+    getVar("Q1Correct")
 );`,
     howToAdd: `1. Set your Q#_Response and Q#Correct variables from Storyline question interactions
 2. Replace IDs and names with your actual question data
@@ -3082,10 +2995,8 @@ sendQuizResponse(
     description: "Fires an 'attempted' statement the first time a learner enters the course. Creates an LRS record of the launch event separate from completion, useful for attendance/engagement tracking.",
     tags: ["attempted","launch","start","xapi","enrollment","tracking"],
     setup: "Course published as xAPI. Add to first slide only — use a variable to prevent re-firing on resume.",
-    code: `var player = GetPlayer();
-
-// Only fire once — not on resume
-if (!player.GetVar("AttemptedSent")) {
+    code: `// Only fire once — not on resume
+if (!getVar("AttemptedSent")) {
 
     if (typeof ADL !== "undefined" && ADL.XAPIWrapper) {
         var actor;
@@ -3113,7 +3024,7 @@ if (!player.GetVar("AttemptedSent")) {
             timestamp: new Date().toISOString()
         });
 
-        player.SetVar("AttemptedSent", true);
+        setVar("AttemptedSent", true);
         console.log("xAPI attempted statement sent.");
     }
 }`,
@@ -3128,8 +3039,7 @@ if (!player.GetVar("AttemptedSent")) {
     description: "Extracts the LRS endpoint URL from the xAPI launch URL parameters. Useful for debugging xAPI connectivity issues or passing the endpoint to a third-party JS library.",
     tags: ["LRS","endpoint","launch URL","debug","xapi","endpoint"],
     setup: "Course published as xAPI.",
-    code: `var player = GetPlayer();
-var endpoint = "";
+    code: `var endpoint = "";
 
 try {
     if (typeof ADL !== "undefined" && ADL.XAPIWrapper && ADL.XAPIWrapper.lrs) {
@@ -3145,7 +3055,7 @@ try {
     console.warn("SLSnippets: Could not retrieve LRS endpoint.", e.message);
 }
 
-player.SetVar("LRSEndpoint", endpoint);
+setVar("LRSEndpoint", endpoint);
 console.log("LRS Endpoint:", endpoint || "Not found — check xAPI publish settings.");`,
     howToAdd: `1. Create Text variable LRSEndpoint (default: empty)
 2. Add Execute JavaScript on first slide
@@ -3161,21 +3071,19 @@ console.log("LRS Endpoint:", endpoint || "Not found — check xAPI publish setti
     description: "Checks whether the learner is visiting a slide for the first time or returning to it. Run different content, show different layers, or skip intros on revisit.",
     tags: ["first visit","revisit","return","detect","conditional"],
     setup: "Create T/F variable Slide5Visited (default: False). Use a unique variable name per slide you want to track.",
-    code: `var player = GetPlayer();
-
-// Use a unique variable name for each slide (e.g. Slide5Visited, Slide8Visited)
+    code: `// Use a unique variable name for each slide (e.g. Slide5Visited, Slide8Visited)
 var visitVar = "Slide5Visited";
 
-if (player.GetVar(visitVar)) {
+if (getVar(visitVar)) {
     // This is a REVISIT
-    player.SetVar("IsFirstVisit", false);
+    setVar("IsFirstVisit", false);
     console.log("Revisit to this slide.");
-    // e.g. Skip intro animation: player.SetVar("SkipIntro", true);
+    // e.g. Skip intro animation: setVar("SkipIntro", true);
 
 } else {
     // This is the FIRST VISIT
-    player.SetVar(visitVar, true);
-    player.SetVar("IsFirstVisit", true);
+    setVar(visitVar, true);
+    setVar("IsFirstVisit", true);
     console.log("First visit to this slide.");
 }`,
     howToAdd: `1. Create Slide5Visited (T/F, default: False) — one per slide you track
@@ -3190,23 +3098,22 @@ if (player.GetVar(visitVar)) {
     description: "Creates a visible countdown timer that updates a Storyline variable every second. Display it on-slide using a text reference. Fires a variable when time runs out.",
     tags: ["countdown","timer","seconds","display","time limit"],
     setup: "Create Number variable TimerDisplay (default: 60 — your starting seconds).\nCreate T/F variable TimerExpired (default: False).",
-    code: `var player = GetPlayer();
-var seconds = player.GetVar("TimerDisplay"); // Starting value from variable
+    code: `var seconds = getVar("TimerDisplay"); // Starting value from variable
 var interval = null;
 
 function startCountdown() {
     interval = setInterval(function() {
         seconds--;
-        player.SetVar("TimerDisplay", seconds);
+        setVar("TimerDisplay", seconds);
 
         if (seconds <= 10) {
-            player.SetVar("TimerWarning", true); // Flash warning
+            setVar("TimerWarning", true); // Flash warning
         }
 
         if (seconds <= 0) {
             clearInterval(interval);
-            player.SetVar("TimerDisplay", 0);
-            player.SetVar("TimerExpired", true);
+            setVar("TimerDisplay", 0);
+            setVar("TimerExpired", true);
             console.log("Countdown expired.");
         }
     }, 1000);
@@ -3226,15 +3133,14 @@ startCountdown();`,
     description: "Counts upward from zero, recording how long a learner takes to complete an activity. Store elapsed seconds for scoring, reporting, or performance analytics.",
     tags: ["stopwatch","elapsed","time","count up","performance"],
     setup: "Create Number variable ElapsedSeconds (default: 0).\nCreate Number variable ElapsedMinutes (default: 0).",
-    code: `var player = GetPlayer();
-var elapsed = 0;
+    code: `var elapsed = 0;
 var swInterval = null;
 
 function startStopwatch() {
     swInterval = setInterval(function() {
         elapsed++;
-        player.SetVar("ElapsedSeconds", elapsed);
-        player.SetVar("ElapsedMinutes", Math.floor(elapsed / 60));
+        setVar("ElapsedSeconds", elapsed);
+        setVar("ElapsedMinutes", Math.floor(elapsed / 60));
     }, 1000);
     console.log("Stopwatch started.");
 }
@@ -3264,13 +3170,11 @@ startStopwatch();
     description: "Makes a hidden Storyline object visible after a delay. Trigger this by changing an object's state via a variable. Great for progressive reveals without complex Storyline trigger chains.",
     tags: ["delay","show","element","setTimeout","reveal"],
     setup: "Create T/F variable ShowHint (default: False).\nSet your on-slide element (button/text/image) to Hidden initial state.\nAdd Storyline trigger: Change state to Normal when ShowHint = True.",
-    code: `var player = GetPlayer();
-
-// Show element after 8 seconds
+    code: `// Show element after 8 seconds
 var delayMs = 8000;
 
 setTimeout(function() {
-    player.SetVar("ShowHint", true);
+    setVar("ShowHint", true);
     console.log("Element revealed after delay.");
 }, delayMs);`,
     howToAdd: `1. Create ShowHint (T/F, default: False)
@@ -3286,13 +3190,11 @@ setTimeout(function() {
     description: "Automatically hides a visible element after a set time. Use for temporary tooltips, intro overlays that fade away, or timed instruction text.",
     tags: ["hide","element","timeout","temporary","disappear"],
     setup: "Create T/F variable HideIntro (default: False).\nAdd Storyline trigger: Change state of [element] to Hidden when HideIntro = True.",
-    code: `var player = GetPlayer();
-
-// Hide element after 6 seconds
+    code: `// Hide element after 6 seconds
 var hideAfterMs = 6000;
 
 setTimeout(function() {
-    player.SetVar("HideIntro", true);
+    setVar("HideIntro", true);
     console.log("Element hidden after delay.");
 }, hideAfterMs);`,
     howToAdd: `1. Place your element on the slide at Normal/visible state
@@ -3307,16 +3209,15 @@ setTimeout(function() {
     description: "Combines the countdown timer with automatic slide advance. When time runs out, advances to the next slide or shows a specific layer — no manual intervention needed.",
     tags: ["auto-advance","countdown","time limit","expired","auto"],
     setup: "Create Number variable TimerDisplay (default: 30).\nCreate T/F variable TimerExpired (default: False).\nAdd Storyline trigger: Jump to next slide when TimerExpired = True.",
-    code: `var player = GetPlayer();
-var seconds = player.GetVar("TimerDisplay") || 30;
+    code: `var seconds = getVar("TimerDisplay") || 30;
 
 var interval = setInterval(function() {
     seconds--;
-    player.SetVar("TimerDisplay", Math.max(0, seconds));
+    setVar("TimerDisplay", Math.max(0, seconds));
 
     if (seconds <= 0) {
         clearInterval(interval);
-        player.SetVar("TimerExpired", true); // Storyline trigger handles navigation
+        setVar("TimerExpired", true); // Storyline trigger handles navigation
         console.log("Time up — auto-advancing.");
     }
 }, 1000);`,
@@ -3332,15 +3233,14 @@ var interval = setInterval(function() {
     description: "Watches the countdown timer variable and fires a visual warning state change when time drops below a threshold. Changes a warning text box state to draw the learner's attention.",
     tags: ["warning","timer","low","flash","visual","alert"],
     setup: "Create Number variable TimerDisplay. Create T/F variable TimerLow (default: False). Set a warning element's state to change when TimerLow = True.",
-    code: `var player = GetPlayer();
-var warningThreshold = 10; // Warn at 10 seconds remaining
+    code: `var warningThreshold = 10; // Warn at 10 seconds remaining
 var warningFired = false;
 
 var watchInterval = setInterval(function() {
-    var remaining = player.GetVar("TimerDisplay");
+    var remaining = getVar("TimerDisplay");
 
     if (!warningFired && remaining <= warningThreshold && remaining > 0) {
-        player.SetVar("TimerLow", true);
+        setVar("TimerLow", true);
         warningFired = true;
         console.log("Timer warning fired at:", remaining, "seconds.");
     }
@@ -3361,9 +3261,7 @@ var watchInterval = setInterval(function() {
     description: "Accumulates time spent across multiple slides into a total variable. Each slide start/end adds to the running total. Use for reporting total seat time.",
     tags: ["total time","seat time","cumulative","all slides","reporting"],
     setup: "Create Number variable TotalTimeSeconds (default: 0).\nCreate Number variable SlideEntryTime — use as a temp variable.",
-    code: `var player = GetPlayer();
-
-// Call this on SLIDE ENTER (timeline start)
+    code: `// Call this on SLIDE ENTER (timeline start)
 function recordSlideEntry() {
     window._slideEnterTime = Date.now();
 }
@@ -3372,13 +3270,13 @@ function recordSlideEntry() {
 function recordSlideExit() {
     if (window._slideEnterTime) {
         var spent = Math.round((Date.now() - window._slideEnterTime) / 1000);
-        var total = player.GetVar("TotalTimeSeconds") + spent;
-        player.SetVar("TotalTimeSeconds", total);
+        var total = getVar("TotalTimeSeconds") + spent;
+        setVar("TotalTimeSeconds", total);
 
         // Also store formatted version
         var mins = Math.floor(total / 60);
         var secs = total % 60;
-        player.SetVar("TotalTimeFormatted", mins + "m " + secs + "s");
+        setVar("TotalTimeFormatted", mins + "m " + secs + "s");
         console.log("Slide time:", spent + "s | Total:", total + "s");
     }
 }
@@ -3405,10 +3303,10 @@ function startCountdown(startFrom) {
     window.countdownSeconds = startFrom || window.countdownSeconds;
     window.countdownInterval = setInterval(function() {
         window.countdownSeconds--;
-        GetPlayer().SetVar("TimerDisplay", window.countdownSeconds);
+        setVar("TimerDisplay", window.countdownSeconds);
         if (window.countdownSeconds <= 0) {
             clearInterval(window.countdownInterval);
-            GetPlayer().SetVar("TimerExpired", true);
+            setVar("TimerExpired", true);
         }
     }, 1000);
 }
@@ -3440,11 +3338,11 @@ function resumeCountdown() {
     if (!window.countdownInterval && window.countdownSeconds > 0) {
         window.countdownInterval = setInterval(function() {
             window.countdownSeconds--;
-            GetPlayer().SetVar("TimerDisplay", window.countdownSeconds);
+            setVar("TimerDisplay", window.countdownSeconds);
 
             if (window.countdownSeconds <= 0) {
                 clearInterval(window.countdownInterval);
-                GetPlayer().SetVar("TimerExpired", true);
+                setVar("TimerExpired", true);
                 console.log("Timer expired after resume.");
             }
         }, 1000);
@@ -3754,19 +3652,17 @@ if (!document.getElementById("sl-focus-styles")) {
     description: "Adds a defined point value to a running score total. The foundation of any points-based gamification system in Storyline. Call from correct answers, completed tasks, or timed achievements.",
     tags: ["points","score","add","gamification","reward"],
     setup: "Create Number variable TotalScore (default: 0).",
-    code: `var player = GetPlayer();
+    code: `var pointsToAdd = 10; // Points for this action
 
-var pointsToAdd = 10; // Points for this action
-
-var current = player.GetVar("TotalScore");
+var current = getVar("TotalScore");
 var updated = current + pointsToAdd;
 
-player.SetVar("TotalScore", updated);
+setVar("TotalScore", updated);
 
 console.log("+" + pointsToAdd + " points! Total:", updated);
 
 // Optional: show a 'points earned' layer
-// player.SetVar("ShowPointsLayer", true);`,
+// setVar("ShowPointsLayer", true);`,
     howToAdd: `1. Create TotalScore variable (Number, default: 0)
 2. Add Execute JavaScript trigger on correct answer, completed task, or any reward event
 3. Change pointsToAdd for different reward values
@@ -3779,13 +3675,11 @@ console.log("+" + pointsToAdd + " points! Total:", updated);
     description: "Deducts points as a penalty for wrong answers or failed actions, but floors at zero to prevent negative scores. Keeps scoring fair and prevents confusion from negative totals.",
     tags: ["deduct","penalty","wrong","score","subtract","floor"],
     setup: "Create Number variable TotalScore (default: starting value, e.g. 100).",
-    code: `var player = GetPlayer();
-
-var penalty = 5; // Points to deduct
-var current = player.GetVar("TotalScore");
+    code: `var penalty = 5; // Points to deduct
+var current = getVar("TotalScore");
 var updated = Math.max(0, current - penalty); // Never below zero
 
-player.SetVar("TotalScore", updated);
+setVar("TotalScore", updated);
 console.log("-" + penalty + " penalty. Score:", current, "→", updated);`,
     howToAdd: `1. Add Execute JavaScript trigger on wrong answer or failure event
 2. Adjust penalty value per action severity
@@ -3798,25 +3692,23 @@ console.log("-" + penalty + " penalty. Score:", current, "→", updated);`,
     description: "Manages a lives/attempts system. Decrements the lives variable on each failure and triggers a 'game over' state when lives reach zero. Displays remaining lives on-slide.",
     tags: ["lives","attempts","game over","health","counter"],
     setup: "Create Number variable LivesRemaining (default: 3).\nCreate T/F variable GameOver (default: False).",
-    code: `var player = GetPlayer();
-
-var lives = player.GetVar("LivesRemaining");
+    code: `var lives = getVar("LivesRemaining");
 
 if (lives > 0) {
     lives--;
-    player.SetVar("LivesRemaining", lives);
+    setVar("LivesRemaining", lives);
 
     if (lives === 0) {
-        player.SetVar("GameOver", true);
-        player.SetVar("ShowGameOverLayer", true);
+        setVar("GameOver", true);
+        setVar("ShowGameOverLayer", true);
         console.log("No lives remaining — game over.");
     } else {
         console.log("Life lost. Lives remaining:", lives);
-        player.SetVar("ShowTryAgainLayer", true);
+        setVar("ShowTryAgainLayer", true);
     }
 } else {
     // Already at zero — ensure game over
-    player.SetVar("GameOver", true);
+    setVar("GameOver", true);
 }`,
     howToAdd: `1. Create LivesRemaining (Number, default: 3) and GameOver (T/F, default: False)
 2. Create ShowGameOverLayer and ShowTryAgainLayer (T/F) with layer triggers
@@ -3830,22 +3722,20 @@ if (lives > 0) {
     description: "Counts consecutive correct answers. Resets to zero on any wrong answer. Award bonus points or badges when the learner hits a streak milestone.",
     tags: ["streak","consecutive","correct","combo","bonus"],
     setup: "Create Number variable CurrentStreak (default: 0).\nCreate Number variable HighestStreak (default: 0).",
-    code: `var player = GetPlayer();
-
-// Call this on CORRECT answer
+    code: `// Call this on CORRECT answer
 function streakCorrect() {
-    var streak = player.GetVar("CurrentStreak") + 1;
-    player.SetVar("CurrentStreak", streak);
+    var streak = getVar("CurrentStreak") + 1;
+    setVar("CurrentStreak", streak);
 
     // Update highest streak
-    if (streak > player.GetVar("HighestStreak")) {
-        player.SetVar("HighestStreak", streak);
+    if (streak > getVar("HighestStreak")) {
+        setVar("HighestStreak", streak);
     }
 
     // Milestone rewards
     if (streak === 3) {
-        player.SetVar("TotalScore", player.GetVar("TotalScore") + 20);
-        player.SetVar("ShowStreakBonus", true);
+        setVar("TotalScore", getVar("TotalScore") + 20);
+        setVar("ShowStreakBonus", true);
         console.log("3-streak bonus earned!");
     }
     console.log("Streak:", streak);
@@ -3853,8 +3743,8 @@ function streakCorrect() {
 
 // Call this on WRONG answer
 function streakBroken() {
-    console.log("Streak broken at:", player.GetVar("CurrentStreak"));
-    player.SetVar("CurrentStreak", 0);
+    console.log("Streak broken at:", getVar("CurrentStreak"));
+    setVar("CurrentStreak", 0);
 }
 
 // Run the right one based on current answer result:
@@ -3871,9 +3761,7 @@ streakCorrect(); // or streakBroken()`,
     description: "Monitors the score variable and unlocks a badge by setting a variable when the learner crosses a point threshold. Display the badge on-slide by changing an object's state.",
     tags: ["badge","unlock","achievement","score","threshold","reward"],
     setup: "Create T/F variable GoldBadgeEarned (default: False). Create an object on your slide with a badge state.",
-    code: `var player = GetPlayer();
-
-var score = player.GetVar("TotalScore");
+    code: `var score = getVar("TotalScore");
 
 var badges = [
     { threshold: 50,  variable: "BronzeBadgeEarned", label: "Bronze"  },
@@ -3882,9 +3770,9 @@ var badges = [
 ];
 
 badges.forEach(function(badge) {
-    if (score >= badge.threshold && !player.GetVar(badge.variable)) {
-        player.SetVar(badge.variable, true);
-        player.SetVar("LatestBadge", badge.label);
+    if (score >= badge.threshold && !getVar(badge.variable)) {
+        setVar(badge.variable, true);
+        setVar("LatestBadge", badge.label);
         console.log("Badge unlocked:", badge.label, "at score:", score);
     }
 });`,
@@ -3900,13 +3788,11 @@ badges.forEach(function(badge) {
     description: "Computes a progress percentage from the learner's current score versus a maximum possible score. Show it in a progress bar, as a number, or use it for completion gating.",
     tags: ["progress","percentage","bar","display","score"],
     setup: "Create Number variables TotalScore, MaxScore (default: 100), and ProgressPct (default: 0).",
-    code: `var player = GetPlayer();
-
-var score = player.GetVar("TotalScore");
-var max   = player.GetVar("MaxScore") || 100;
+    code: `var score = getVar("TotalScore");
+var max   = getVar("MaxScore") || 100;
 
 var pct = Math.min(100, Math.round((score / max) * 100));
-player.SetVar("ProgressPct", pct);
+setVar("ProgressPct", pct);
 
 console.log("Progress:", pct + "% (" + score + "/" + max + " points)");
 
@@ -3924,9 +3810,7 @@ console.log("Progress:", pct + "% (" + score + "/" + max + " points)");
     description: "Saves the learner's score to the browser's localStorage so it persists between sessions on the same device. Create a returning-learner high score display without any LMS.",
     tags: ["localStorage","high score","persist","save","local","browser"],
     setup: "Create Number variable HighScore (default: 0).",
-    code: `var player = GetPlayer();
-
-var currentScore = player.GetVar("TotalScore");
+    code: `var currentScore = getVar("TotalScore");
 var storageKey   = "slsnippets_highscore_course1"; // Unique key per course
 
 try {
@@ -3934,12 +3818,12 @@ try {
 
     if (currentScore > savedHigh) {
         localStorage.setItem(storageKey, String(currentScore));
-        player.SetVar("HighScore", currentScore);
-        player.SetVar("NewHighScore", true);
+        setVar("HighScore", currentScore);
+        setVar("NewHighScore", true);
         console.log("New high score saved:", currentScore);
     } else {
-        player.SetVar("HighScore", savedHigh);
-        player.SetVar("NewHighScore", false);
+        setVar("HighScore", savedHigh);
+        setVar("NewHighScore", false);
         console.log("High score unchanged:", savedHigh);
     }
 } catch(e) {
@@ -3957,25 +3841,23 @@ try {
     description: "Retrieves a previously saved high score from localStorage when the course loads and displays it to returning learners. Companion to snippet #91.",
     tags: ["load","localStorage","high score","returning learner","retrieve"],
     setup: "Create Number variable HighScore (default: 0). Must use same storageKey as snippet #91.",
-    code: `var player = GetPlayer();
-
-var storageKey = "slsnippets_highscore_course1"; // Must match the save snippet key
+    code: `var storageKey = "slsnippets_highscore_course1"; // Must match the save snippet key
 
 try {
     var savedHigh = parseInt(localStorage.getItem(storageKey));
 
     if (!isNaN(savedHigh) && savedHigh > 0) {
-        player.SetVar("HighScore", savedHigh);
-        player.SetVar("ReturningLearner", true);
+        setVar("HighScore", savedHigh);
+        setVar("ReturningLearner", true);
         console.log("Previous high score loaded:", savedHigh);
     } else {
-        player.SetVar("HighScore", 0);
-        player.SetVar("ReturningLearner", false);
+        setVar("HighScore", 0);
+        setVar("ReturningLearner", false);
         console.log("No previous high score found.");
     }
 } catch(e) {
     console.warn("SLSnippets: localStorage not available.", e.message);
-    player.SetVar("HighScore", 0);
+    setVar("HighScore", 0);
 }`,
     howToAdd: `1. Add Execute JavaScript trigger on FIRST slide's timeline start
 2. Ensure storageKey exactly matches the one used in snippet #91
@@ -3991,9 +3873,7 @@ try {
     description: "Reads every Storyline variable you define in the debug list and logs their current values to the browser console. Fastest way to sanity-check your variable state during development.",
     tags: ["debug","console","log","variables","development","testing"],
     setup: "No setup required. Edit the variable names list to match your course.",
-    code: `var player = GetPlayer();
-
-// List all variable names you want to inspect
+    code: `// List all variable names you want to inspect
 var varsToCheck = [
     "AllowNext",
     "TotalScore",
@@ -4008,7 +3888,7 @@ var varsToCheck = [
 
 console.group("SLSnippets — Variable Debug");
 varsToCheck.forEach(function(name) {
-    var val = player.GetVar(name);
+    var val = getVar(name);
     console.log("%" + name + "%", "=", val, "(" + typeof val + ")");
 });
 console.groupEnd();`,
@@ -4024,13 +3904,11 @@ console.groupEnd();`,
     description: "Rounds a number to a specified number of decimal places and stores the formatted string in a variable. Essential for displaying scores, percentages, and averages cleanly.",
     tags: ["format","decimal","round","number","display"],
     setup: "Create Text variable FormattedScore (default: empty).",
-    code: `var player = GetPlayer();
-
-var rawNumber = player.GetVar("TotalScore"); // Your number variable
+    code: `var rawNumber = getVar("TotalScore"); // Your number variable
 var decimals  = 1; // Number of decimal places (0 for whole numbers)
 
 var formatted = Number(rawNumber).toFixed(decimals);
-player.SetVar("FormattedScore", formatted);
+setVar("FormattedScore", formatted);
 
 console.log("Formatted:", rawNumber, "→", formatted);
 
@@ -4050,9 +3928,7 @@ console.log("Formatted:", rawNumber, "→", formatted);
     description: "Generates a random whole number between a minimum and maximum value and stores it in a Storyline variable. Use for randomised scenarios, lucky dip activities, or shuffled order.",
     tags: ["random","integer","range","Math.random","randomise"],
     setup: "Create Number variable RandomNumber (default: 0).",
-    code: `var player = GetPlayer();
-
-function randomInt(min, max) {
+    code: `function randomInt(min, max) {
     // Returns a whole number between min and max (inclusive)
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
@@ -4061,7 +3937,7 @@ var min = 1;
 var max = 5;
 var result = randomInt(min, max);
 
-player.SetVar("RandomNumber", result);
+setVar("RandomNumber", result);
 console.log("Random number (" + min + "–" + max + "):", result);
 
 // Usage: show random slide, pick random scenario, random bonus
@@ -4078,9 +3954,7 @@ console.log("Random number (" + min + "–" + max + "):", result);
     description: "Detects whether the learner is on a mobile/tablet device or a desktop. Store the result to adapt content, layouts, or instructions based on the learner's device type.",
     tags: ["mobile","desktop","detect","device","responsive","screen"],
     setup: "Create Text variable DeviceType (default: empty).\nCreate T/F variable IsMobile (default: False).",
-    code: `var player = GetPlayer();
-
-// Method 1: User agent check
+    code: `// Method 1: User agent check
 var ua = navigator.userAgent.toLowerCase();
 var isMobile = /android|iphone|ipad|ipod|blackberry|windows phone/.test(ua);
 
@@ -4090,8 +3964,8 @@ if (!isMobile && window.innerWidth <= 768) {
 }
 
 var deviceType = isMobile ? "mobile" : "desktop";
-player.SetVar("DeviceType", deviceType);
-player.SetVar("IsMobile", isMobile);
+setVar("DeviceType", deviceType);
+setVar("IsMobile", isMobile);
 
 console.log("Device type:", deviceType, "| Width:", window.innerWidth + "px");`,
     howToAdd: `1. Create DeviceType (Text) and IsMobile (T/F) variables
@@ -4106,9 +3980,7 @@ console.log("Device type:", deviceType, "| Width:", window.innerWidth + "px");`,
     description: "Reads a query string parameter from the course launch URL. LMS platforms often pass learner data (name, group, branch) in the URL — this captures it for use in the course.",
     tags: ["URL parameter","launch","query string","LMS","parameter","GET"],
     setup: "Create Text variable URLParam (default: empty).",
-    code: `var player = GetPlayer();
-
-function getURLParam(name) {
+    code: `function getURLParam(name) {
     try {
         var params = new URLSearchParams(window.location.search);
         return params.get(name) || "";
@@ -4124,9 +3996,9 @@ var group = getURLParam("group");
 var userId = getURLParam("user_id");
 var lang   = getURLParam("lang");
 
-player.SetVar("URLParam", group);         // Store one param
-player.SetVar("UserIDFromURL", userId);   // Store another
-player.SetVar("LanguageCode", lang || "en"); // With fallback
+setVar("URLParam", group);         // Store one param
+setVar("UserIDFromURL", userId);   // Store another
+setVar("LanguageCode", lang || "en"); // With fallback
 
 console.log("URL params — group:", group, "user:", userId, "lang:", lang);`,
     howToAdd: `1. Create Text variables for each parameter you expect
@@ -4141,11 +4013,9 @@ console.log("URL params — group:", group, "user:", userId, "lang:", lang);`,
     description: "Stores any string value to the browser's localStorage under a specific key. Data persists between browser sessions on the same device — even after closing and reopening.",
     tags: ["localStorage","save","persist","store","browser","data"],
     setup: "No Storyline variable setup required for basic storage.",
-    code: `var player = GetPlayer();
-
-// Data to save
+    code: `// Data to save
 var key   = "sl_course1_progress"; // Unique key — change per course
-var value = player.GetVar("TotalScore") + "|" + player.GetVar("LastSlide");
+var value = getVar("TotalScore") + "|" + getVar("LastSlide");
 // Format: "score|slide" — customise the separator and fields
 
 try {
@@ -4167,9 +4037,7 @@ try {
     description: "Retrieves previously saved data from localStorage and restores Storyline variable values. Companion to snippet #98 — enables a lightweight resume/bookmark system.",
     tags: ["localStorage","load","retrieve","restore","resume","data"],
     setup: "Must use the same key as snippet #98. Create the variables being restored.",
-    code: `var player = GetPlayer();
-
-var key = "sl_course1_progress"; // Must match the key used in snippet #98
+    code: `var key = "sl_course1_progress"; // Must match the key used in snippet #98
 
 try {
     var saved = localStorage.getItem(key);
@@ -4180,18 +4048,18 @@ try {
         var score = parseInt(parts[0]) || 0;
         var slide = parseInt(parts[1]) || 1;
 
-        player.SetVar("TotalScore", score);
-        player.SetVar("LastSlide", slide);
-        player.SetVar("HasSavedProgress", true);
+        setVar("TotalScore", score);
+        setVar("LastSlide", slide);
+        setVar("HasSavedProgress", true);
 
         console.log("Loaded from localStorage:", saved);
     } else {
-        player.SetVar("HasSavedProgress", false);
+        setVar("HasSavedProgress", false);
         console.log("No saved progress found for key:", key);
     }
 } catch(e) {
     console.warn("SLSnippets: localStorage load failed.", e.message);
-    player.SetVar("HasSavedProgress", false);
+    setVar("HasSavedProgress", false);
 }`,
     howToAdd: `1. Use the same key as your save snippet
 2. Match the parsing logic to how you built the saved string (split character, field order)
@@ -4205,10 +4073,8 @@ try {
     description: "Copies a text string (or the contents of a Storyline variable) to the learner's clipboard with one click. Use for share codes, feedback summaries, or generated content.",
     tags: ["clipboard","copy","text","share","paste"],
     setup: "No variable setup required.",
-    code: `var player = GetPlayer();
-
-// Text to copy — can be a string or a variable value
-var textToCopy = player.GetVar("ResultsSummary");
+    code: `// Text to copy — can be a string or a variable value
+var textToCopy = getVar("ResultsSummary");
 // Or a static string: var textToCopy = "Your completion code: SL2025";
 
 if (!textToCopy) {
@@ -4219,7 +4085,7 @@ if (!textToCopy) {
 // Modern clipboard API (requires HTTPS or localhost)
 if (navigator.clipboard && window.isSecureContext) {
     navigator.clipboard.writeText(textToCopy).then(function() {
-        player.SetVar("CopiedToClipboard", true);
+        setVar("CopiedToClipboard", true);
         console.log("Copied to clipboard:", textToCopy);
     }).catch(function(e) {
         console.warn("Clipboard API failed:", e.message);
@@ -4233,7 +4099,7 @@ if (navigator.clipboard && window.isSecureContext) {
     textarea.select();
     document.execCommand("copy");
     document.body.removeChild(textarea);
-    player.SetVar("CopiedToClipboard", true);
+    setVar("CopiedToClipboard", true);
     console.log("Copied (fallback):", textToCopy);
 }`,
     howToAdd: `1. Create T/F variable CopiedToClipboard (default: False)
@@ -4262,9 +4128,8 @@ const SNIPPETS_101_120 = [
   howToAdd: "Add an Execute JavaScript trigger on your Results slide. Set it to fire 'When timeline starts' on that slide.",
   promptContext: "Runs on a Storyline quiz results slide. AttemptCount is incremented before this fires.",
   code: `(function(){
-  var p = GetPlayer();
-  var attempts = p.GetVar("AttemptCount");
-  var passed   = p.GetVar("Results.PassPoints") >= p.GetVar("Results.PassPercent") / 100 * p.GetVar("Results.PointsPossible");
+    var attempts = getVar("AttemptCount");
+  var passed   = getVar("Results.PassPoints") >= getVar("Results.PassPercent") / 100 * getVar("Results.PointsPossible");
 
   // Only celebrate on first attempt pass
   if(attempts !== 1 || !passed) return;
@@ -5006,17 +4871,16 @@ const SNIPPETS_101_120 = [
   howToAdd: "Add an Execute JavaScript trigger 'When timeline starts' on the slide, or on a button click.",
   promptContext: "Updates a Storyline variable character by character using setInterval.",
   code: `(function(){
-  var player  = GetPlayer();
-  var message = "Well done! You've completed this module. Time to put your new skills into practice.";
+    var message = "Well done! You've completed this module. Time to put your new skills into practice.";
   var varName = "TypedText";  // ← your Storyline text variable name
   var speed   = 45;           // ms per character
 
   var i = 0;
-  player.SetVar(varName, "");
+  setVar(varName, "");
 
   var timer = setInterval(function(){
     if(i < message.length){
-      player.SetVar(varName, message.substring(0, i + 1));
+      setVar(varName, message.substring(0, i + 1));
       i++;
     } else {
       clearInterval(timer);
@@ -5087,11 +4951,10 @@ const SNIPPETS_101_120 = [
   howToAdd: "Add an Execute JavaScript trigger 'When timeline starts' on the results or summary slide.",
   promptContext: "Animates a Storyline Number variable from 0 to its target value.",
   code: `(function(){
-  var player     = GetPlayer();
-  var sourceVar  = "FinalScore";   // variable holding the target number
+    var sourceVar  = "FinalScore";   // variable holding the target number
   var displayVar = "DisplayScore"; // variable bound to a text box
   var duration   = 1800;           // total animation time in ms
-  var target     = parseInt(player.GetVar(sourceVar), 10) || 0;
+  var target     = parseInt(getVar(sourceVar), 10) || 0;
 
   var start     = null;
   var startVal  = 0;
@@ -5103,7 +4966,7 @@ const SNIPPETS_101_120 = [
     var elapsed  = ts - start;
     var progress = Math.min(elapsed / duration, 1);
     var current  = Math.round(startVal + (target - startVal) * easeOut(progress));
-    player.SetVar(displayVar, current);
+    setVar(displayVar, current);
     if(progress < 1) requestAnimationFrame(step);
   }
 
@@ -5267,8 +5130,7 @@ const SNIPPETS_101_120 = [
   howToAdd: "Add an Execute JavaScript trigger on a correct-answer or button-click event. Customise the points and colour.",
   promptContext: "DOM floating score label animation — no canvas needed.",
   code: `(function(){
-  var player  = GetPlayer();
-  var points  = 10;           // ← points to show (+10, +25, etc.)
+    var points  = 10;           // ← points to show (+10, +25, etc.)
   var color   = "#16a34a";    // ← label colour (green = good, red = penalty)
   var label   = "+" + points + " pts";
 
@@ -5326,8 +5188,7 @@ const SNIPPETS_121_140 = [
   howToAdd: "Add an Execute JavaScript trigger on your slide. Fire 'When timeline starts'. The clock self-destructs when it hits 00:00 and sets TimerDone to 'true'.",
   promptContext: "Creates a flip-card timer UI inside the Storyline player frame. Uses CSS 3D transforms for the flip animation.",
   code: `(function(){
-  var p = GetPlayer();
-  var total = parseInt(p.GetVar("CountdownSeconds"), 10) || 60;
+    var total = parseInt(getVar("CountdownSeconds"), 10) || 60;
 
   // Inject styles once
   if(!document.getElementById("sl-flip-style")){
@@ -5406,7 +5267,7 @@ const SNIPPETS_121_140 = [
       clearInterval(timer);
       var el = document.getElementById("slFlipClock");
       if(el) el.parentNode.removeChild(el);
-      p.SetVar("TimerDone","true");
+      setVar("TimerDone","true");
       return;
     }
     var m = Math.floor(remaining / 60);
@@ -5427,8 +5288,7 @@ const SNIPPETS_121_140 = [
   howToAdd: "Execute JavaScript trigger 'When timeline starts' on the target slide.",
   promptContext: "SVG-based arc timer inside Storyline player. No canvas needed. Color transitions automatically in the last 20% of time.",
   code: `(function(){
-  var p = GetPlayer();
-  var total = parseInt(p.GetVar("ArcSeconds"), 10) || 30;
+    var total = parseInt(getVar("ArcSeconds"), 10) || 30;
   var R = 44, CX = 56, CY = 56;
   var circ = 2 * Math.PI * R;
 
@@ -5467,7 +5327,7 @@ const SNIPPETS_121_140 = [
     if(remaining < 0){
       clearInterval(timer);
       svg.parentNode.removeChild(svg);
-      p.SetVar("TimerDone","true");
+      setVar("TimerDone","true");
       return;
     }
     var pct = remaining / total;
@@ -5488,8 +5348,7 @@ const SNIPPETS_121_140 = [
   howToAdd: "Execute JavaScript trigger 'When timeline starts'. Place a matching shape in your slide for visual context if desired.",
   promptContext: "Creates a top-center banner in the Storyline player. Pulses red and grows slightly when under 10 seconds.",
   code: `(function(){
-  var p = GetPlayer();
-  var total = parseInt(p.GetVar("UrgencySeconds"), 10) || 45;
+    var total = parseInt(getVar("UrgencySeconds"), 10) || 45;
 
   if(!document.getElementById("sl-urgency-style")){
     var s = document.createElement("style");
@@ -5520,7 +5379,7 @@ const SNIPPETS_121_140 = [
     if(remaining < 0){
       clearInterval(t);
       bar.parentNode && bar.parentNode.removeChild(bar);
-      p.SetVar("TimerExpired","true");
+      setVar("TimerExpired","true");
       return;
     }
     bar.textContent = "⏱ " + fmt(remaining);
@@ -5542,9 +5401,7 @@ const SNIPPETS_121_140 = [
   code: `(function(){
   if(document.getElementById("sl-stopwatch")) return; // prevent duplicates
 
-  var p = GetPlayer();
-
-  var sw = document.createElement("div");
+    var sw = document.createElement("div");
   sw.id = "sl-stopwatch";
   sw.style.cssText = [
     "position:fixed;bottom:32px;right:24px;background:#0f172a;color:#38bdf8;",
@@ -5588,7 +5445,7 @@ const SNIPPETS_121_140 = [
       sw.style.background = "#0f172a";
       var result = fmt(elapsed);
       sw.textContent = "▶ " + result;
-      p.SetVar("StopwatchResult", result);
+      setVar("StopwatchResult", result);
     }
   });
 
@@ -5606,9 +5463,8 @@ const SNIPPETS_121_140 = [
   howToAdd: "Execute JavaScript on any trigger (button click, timeline end, correct answer). Set BadgeTitle/BadgeIcon variables first.",
   promptContext: "Reads BadgeTitle and BadgeIcon Storyline variables to display a fully dynamic achievement popup.",
   code: `(function(){
-  var p = GetPlayer();
-  var title = p.GetVar("BadgeTitle") || "Achievement Unlocked!";
-  var icon  = p.GetVar("BadgeIcon")  || "🏆";
+    var title = getVar("BadgeTitle") || "Achievement Unlocked!";
+  var icon  = getVar("BadgeIcon")  || "🏆";
 
   if(!document.getElementById("sl-badge-style")){
     var s = document.createElement("style");
@@ -5667,8 +5523,7 @@ const SNIPPETS_121_140 = [
   howToAdd: "Execute JavaScript trigger on the event that completes a level (quiz pass, section complete, etc.).",
   promptContext: "Cinematic full-screen overlay. Reads CurrentLevel variable from Storyline.",
   code: `(function(){
-  var p = GetPlayer();
-  var level = parseInt(p.GetVar("CurrentLevel"), 10) || 1;
+    var level = parseInt(getVar("CurrentLevel"), 10) || 1;
 
   var overlay = document.createElement("div");
   overlay.style.cssText = [
@@ -5730,9 +5585,8 @@ const SNIPPETS_121_140 = [
   howToAdd: "Execute JavaScript trigger on slide start AND on any event that costs a life. The snippet re-renders on each call.",
   promptContext: "Renders or updates a hearts display in the top-left corner. Reads LivesRemaining and MaxLives from Storyline.",
   code: `(function(){
-  var p = GetPlayer();
-  var max   = parseInt(p.GetVar("MaxLives"), 10) || 3;
-  var lives = parseInt(p.GetVar("LivesRemaining"), 10);
+    var max   = parseInt(getVar("MaxLives"), 10) || 3;
+  var lives = parseInt(getVar("LivesRemaining"), 10);
   if(isNaN(lives)) lives = max;
 
   var existing = document.getElementById("sl-hearts-bar");
@@ -5785,9 +5639,8 @@ const SNIPPETS_121_140 = [
   howToAdd: "Execute JavaScript on slide start, or whenever a milestone is completed. Re-call to update the display.",
   promptContext: "Renders a compact bottom progress banner. Reads MilestoneCurrent and MilestoneTotal from Storyline.",
   code: `(function(){
-  var p = GetPlayer();
-  var cur   = parseInt(p.GetVar("MilestoneCurrent"), 10) || 0;
-  var total = parseInt(p.GetVar("MilestoneTotal"),   10) || 5;
+    var cur   = parseInt(getVar("MilestoneCurrent"), 10) || 0;
+  var total = parseInt(getVar("MilestoneTotal"),   10) || 5;
   var pct   = Math.min(1, Math.max(0, cur / total));
 
   var existing = document.getElementById("sl-milestone-bar");
@@ -5832,8 +5685,7 @@ const SNIPPETS_121_140 = [
   howToAdd: "Execute JavaScript on a button click or correct answer trigger. Set SlotReveal to the word to land on.",
   promptContext: "Reads SlotReveal variable and spins a slot machine that lands on that exact word.",
   code: `(function(){
-  var p = GetPlayer();
-  var word = (p.GetVar("SlotReveal") || "WIN").toUpperCase().substring(0,8);
+    var word = (getVar("SlotReveal") || "WIN").toUpperCase().substring(0,8);
   var chars = word.split("");
   var POOL = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!?#@";
 
@@ -5910,8 +5762,7 @@ const SNIPPETS_121_140 = [
   howToAdd: "Execute JavaScript on correct and incorrect answer layers. Call on correct to show combo, call on incorrect to reset display.",
   promptContext: "Reads ComboStreak Storyline variable. Shows a combo badge if streak >= 2. Shows a reset message if streak is 0.",
   code: `(function(){
-  var p = GetPlayer();
-  var streak = parseInt(p.GetVar("ComboStreak"), 10) || 0;
+    var streak = parseInt(getVar("ComboStreak"), 10) || 0;
 
   // Remove any existing badge
   var old = document.getElementById("sl-combo-badge");
@@ -5964,8 +5815,7 @@ const SNIPPETS_121_140 = [
   code: `(function(){
   if(document.getElementById("sl-spotlight")) return;
 
-  var p = GetPlayer();
-  var duration = parseInt(p.GetVar("SpotlightDuration"), 10) || 0;
+    var duration = parseInt(getVar("SpotlightDuration"), 10) || 0;
 
   var overlay = document.createElement("canvas");
   overlay.id = "sl-spotlight";
@@ -6082,8 +5932,7 @@ const SNIPPETS_121_140 = [
   promptContext: "Creates a draggable, editable sticky note. Reads/writes StickyNoteText Storyline variable.",
   code: `(function(){
   if(document.getElementById("sl-sticky")) return;
-  var p = GetPlayer();
-  var saved = p.GetVar("StickyNoteText") || "";
+    var saved = getVar("StickyNoteText") || "";
 
   var note = document.createElement("div");
   note.id = "sl-sticky";
@@ -6107,7 +5956,7 @@ const SNIPPETS_121_140 = [
   area.value = saved;
 
   area.addEventListener("input", function(){
-    p.SetVar("StickyNoteText", area.value);
+    setVar("StickyNoteText", area.value);
   });
 
   area.addEventListener("mousedown", function(e){ e.stopPropagation(); });
@@ -6144,13 +5993,12 @@ const SNIPPETS_121_140 = [
   howToAdd: "Execute JavaScript 'When timeline starts' on every slide. The toggle button appears in the corner. State is read from DarkMode variable.",
   promptContext: "Reads DarkMode variable. If 'true', applies dark filter to player frame. Toggle button in top-left switches modes.",
   code: `(function(){
-  var p = GetPlayer();
-  var isDark = p.GetVar("DarkMode") === "true";
+    var isDark = getVar("DarkMode") === "true";
 
   function applyMode(dark){
     var frame = document.documentElement;
     frame.style.filter = dark ? "invert(1) hue-rotate(180deg)" : "";
-    p.SetVar("DarkMode", dark ? "true" : "false");
+    setVar("DarkMode", dark ? "true" : "false");
     if(btn) btn.textContent = dark ? "☀️" : "🌙";
     btn.title = dark ? "Switch to Light Mode" : "Switch to Dark Mode";
   }
@@ -6190,15 +6038,14 @@ const SNIPPETS_121_140 = [
   promptContext: "Reads FontSizeLevel Storyline variable (1/2/3). Renders A-/A+ toggle buttons. Adjusts player zoom level.",
   code: `(function(){
   if(document.getElementById("sl-font-widget")) return;
-  var p = GetPlayer();
-  var level = parseInt(p.GetVar("FontSizeLevel"), 10) || 1;
+    var level = parseInt(getVar("FontSizeLevel"), 10) || 1;
   if(level < 1 || level > 3) level = 1;
 
   var scales = [1, 1.15, 1.3];
 
   function apply(lvl){
     document.documentElement.style.fontSize = (scales[lvl - 1] * 100) + "%";
-    p.SetVar("FontSizeLevel", lvl);
+    setVar("FontSizeLevel", lvl);
     level = lvl;
     smaller.disabled = (lvl === 1);
     larger.disabled  = (lvl === 3);
@@ -6255,9 +6102,8 @@ const SNIPPETS_121_140 = [
   var existing = document.getElementById("sl-confidence");
   if(existing) existing.parentNode.removeChild(existing);
 
-  var p = GetPlayer();
-  var max     = parseInt(p.GetVar("ConfidenceMax"), 10) || 5;
-  var current = parseInt(p.GetVar("ConfidenceRating"), 10) || 0;
+    var max     = parseInt(getVar("ConfidenceMax"), 10) || 5;
+  var current = parseInt(getVar("ConfidenceRating"), 10) || 0;
 
   if(!document.getElementById("sl-conf-style")){
     var s = document.createElement("style");
@@ -6300,11 +6146,11 @@ const SNIPPETS_121_140 = [
         starEls.forEach(function(s, idx){ s.classList.toggle("active", idx < val); });
       });
       star.addEventListener("mouseleave", function(){
-        var cur = parseInt(p.GetVar("ConfidenceRating"), 10) || 0;
+        var cur = parseInt(getVar("ConfidenceRating"), 10) || 0;
         starEls.forEach(function(s, idx){ s.classList.toggle("active", idx < cur); });
       });
       star.addEventListener("click", function(){
-        p.SetVar("ConfidenceRating", val);
+        setVar("ConfidenceRating", val);
         starEls.forEach(function(s, idx){ s.classList.toggle("active", idx < val); });
       });
       stars.appendChild(star);
@@ -6331,8 +6177,7 @@ const SNIPPETS_121_140 = [
   var existing = document.getElementById("sl-reaction-bar");
   if(existing) existing.parentNode.removeChild(existing);
 
-  var p = GetPlayer();
-  var REACTIONS = [
+    var REACTIONS = [
     { emoji: "🔥", name: "fire",     tip: "This is 🔥" },
     { emoji: "😍", name: "love",     tip: "Love it!"   },
     { emoji: "🤯", name: "wow",      tip: "Mind blown" },
@@ -6361,7 +6206,7 @@ const SNIPPETS_121_140 = [
     btn.addEventListener("mouseenter", function(){ btn.style.transform = "scale(1.4)"; });
     btn.addEventListener("mouseleave", function(){ btn.style.transform = "scale(1)"; });
     btn.addEventListener("click", function(){
-      p.SetVar("LearnerReaction", r.name);
+      setVar("LearnerReaction", r.name);
       bar.style.transition = "opacity .3s";
       bar.style.opacity = "0";
       setTimeout(function(){ bar.parentNode && bar.parentNode.removeChild(bar); }, 320);
@@ -6407,8 +6252,7 @@ const SNIPPETS_121_140 = [
   howToAdd: "Execute JavaScript 'When timeline starts' on reading/content slides. Call again to toggle the mode off.",
   promptContext: "Reads AnnotationMode variable. If 'true', enables click-drag text highlighting on all visible text. Yellow highlight with clear button.",
   code: `(function(){
-  var p = GetPlayer();
-  if(p.GetVar("AnnotationMode") !== "true") return;
+    if(getVar("AnnotationMode") !== "true") return;
   if(document.getElementById("sl-annot-toolbar")) return;
 
   if(!document.getElementById("sl-annot-style")){
@@ -6471,9 +6315,7 @@ const SNIPPETS_121_140 = [
   promptContext: "Injects a top-of-frame reading progress bar that tracks scroll depth. Writes 0-100 to ReadingProgress and 'true' to ReadingComplete when fully scrolled.",
   code: `(function(){
   if(document.getElementById("sl-read-bar")) return;
-  var p = GetPlayer();
-
-  var bar = document.createElement("div");
+    var bar = document.createElement("div");
   bar.id = "sl-read-bar";
   bar.style.cssText = [
     "position:fixed;top:0;left:0;height:3px;width:0%;z-index:9999;",
@@ -6504,10 +6346,10 @@ const SNIPPETS_121_140 = [
     var total    = (el.scrollHeight - el.clientHeight) || 1;
     var pct      = Math.min(100, Math.round((scrolled / total) * 100));
     bar.style.width = pct + "%";
-    p.SetVar("ReadingProgress", pct);
+    setVar("ReadingProgress", pct);
     if(pct >= 98 && !reported){
       reported = true;
-      p.SetVar("ReadingComplete","true");
+      setVar("ReadingComplete","true");
     }
   }
 
@@ -6527,10 +6369,9 @@ const SNIPPETS_121_140 = [
   howToAdd: "Execute JavaScript on slide start AND on any variable change event. The widget re-renders on each call with the latest values.",
   promptContext: "Reads KCCorrect, KCTotal, KCStreak variables from Storyline. Renders a score widget. Shows fire emoji streak if KCStreak >= 3.",
   code: `(function(){
-  var p = GetPlayer();
-  var correct = parseInt(p.GetVar("KCCorrect"), 10) || 0;
-  var total   = parseInt(p.GetVar("KCTotal"),   10) || 0;
-  var streak  = parseInt(p.GetVar("KCStreak"),  10) || 0;
+    var correct = parseInt(getVar("KCCorrect"), 10) || 0;
+  var total   = parseInt(getVar("KCTotal"),   10) || 0;
+  var streak  = parseInt(getVar("KCStreak"),  10) || 0;
 
   var existing = document.getElementById("sl-kc-counter");
   if(existing) existing.parentNode.removeChild(existing);
@@ -6677,8 +6518,7 @@ const SNIPPETS_141_150 = [
   howToAdd: "Add an Execute JavaScript trigger 'When timeline starts'. The button re-enables automatically when the variable changes.",
   promptContext: "Polls a Storyline variable every 400ms. Disables Next until it returns 'true'. Adds a tooltip to explain why it's locked.",
   code: `(function(){
-  var player  = GetPlayer();
-  var gateVar = "VideoWatched";    // ← variable name to watch
+    var gateVar = "VideoWatched";    // ← variable name to watch
   var gateVal = "true";            // ← value that unlocks Next
 
   function findNext(){
@@ -6702,7 +6542,7 @@ const SNIPPETS_141_150 = [
 
   // Poll until unlocked
   var poll = setInterval(function(){
-    var val = String(player.GetVar(gateVar));
+    var val = String(getVar(gateVar));
     if(val === gateVal){
       setLocked(false);
       clearInterval(poll);
@@ -7004,9 +6844,8 @@ const SNIPPETS_141_150 = [
   howToAdd: "Add an Execute JavaScript trigger 'When timeline starts' on each slide (or a master slide trigger).",
   promptContext: "Creates a fixed-position slide counter pill. Reads TotalSlides and CurrentSlideNum variables from the mock player.",
   code: `(function(){
-  var p        = GetPlayer();
-  var current  = parseInt(p.GetVar("CurrentSlideNum"),10) || p.GetCurrentSlide() || 1;
-  var total    = parseInt(p.GetVar("TotalSlides"),10)    || 10;
+    var current  = parseInt(getVar("CurrentSlideNum"),10) || p.GetCurrentSlide() || 1;
+  var total    = parseInt(getVar("TotalSlides"),10)    || 10;
   var existing = document.getElementById("sl-slide-counter");
 
   // Update if already on page, create if not
