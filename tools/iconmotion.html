@@ -2503,39 +2503,31 @@ const TOUR_STEPS = [
     title: 'Welcome to IconMotion',
     body: '2100+ icons (Lucide + Heroicons), 16 animations, 6 export formats — including Storyline JS that drops animated icons directly into your slides. Light, fast, free.',
     target: null,
-    card: { top:'50%', left:'50%', transform:'translate(-50%,-50%)' },
   },
   {
     title: '① Search & browse',
     body: 'Type to search icons instantly. Hover any icon card for a live animation preview before clicking.',
     target: '.hdr-search',
-    card: { top:'68px', left:'50%', transform:'translateX(-50%)' },
-    arrow: { cls:'up', style:'top:-10px;left:50%;transform:translateX(-50%)' },
   },
   {
     title: '② Filter by category',
     body: 'Use the category tabs to browse by type — eLearning, People, Actions, Dev, and more. The count updates live.',
     target: '.cat-bar',
-    card: { top:'108px', left:'50%', transform:'translateX(-50%)' },
-    arrow: { cls:'up', style:'top:-10px;left:50%;transform:translateX(-50%)' },
   },
   {
     title: '③ Click any icon → Studio opens',
     body: 'Click an icon to open the studio: choose animation, adjust speed/delay/loops, color layers individually, then export in any format.',
     target: null,
-    card: { top:'50%', left:'50%', transform:'translate(-50%,-50%)' },
   },
   {
     title: '④ Export anywhere',
     body: 'Copy SVG · Download SVG · Copy CSS Keyframes · PNG 2× · Storyline JS · Animated GIF. Storyline JS pastes directly into an Execute JavaScript trigger.',
     target: null,
-    card: { top:'50%', left:'50%', transform:'translate(-50%,-50%)' },
   },
   {
     title: '⑤ Shortcuts',
     body: 'R = replay · Arrow keys = navigate grid · ⌘Z / ⌘⇧Z = undo/redo colors · Esc = close drawer · 🎲 Random for quick discovery.',
     target: null,
-    card: { top:'50%', left:'50%', transform:'translate(-50%,-50%)' },
   },
 ];
 let tourStep = 0;
@@ -2566,31 +2558,52 @@ function showTourStep(idx) {
   const hl   = document.getElementById('tourHighlight');
   const card = document.getElementById('tourCard');
   card.querySelectorAll('.tour-arrow').forEach(a => a.remove());
+  card.style.cssText = '';
 
-  // Highlight target element
   if (step.target) {
     const el = document.querySelector(step.target);
     if (el) {
-      const r = el.getBoundingClientRect();
+      const r   = el.getBoundingClientRect();
+      const vpW = window.innerWidth;
+      const vpH = window.innerHeight;
+      const cW  = 268;   // card width (matches CSS)
+      const cH  = 170;   // approximate card height
+      const gap = 12;    // gap between target edge and card
+
+      // Highlight the target element
       hl.style.cssText = `left:${r.left-4}px;top:${r.top-4}px;width:${r.width+8}px;height:${r.height+8}px;display:block;`;
+
+      // Decide whether to place card below or above the target
+      const placeBelow = (vpH - r.bottom) >= cH + gap + 16;
+      const cardTop    = placeBelow ? r.bottom + gap : r.top - cH - gap;
+
+      // Horizontally center the card over the target, clamped to viewport
+      const targetCX = r.left + r.width / 2;
+      const cardLeft = Math.max(12, Math.min(vpW - cW - 12, targetCX - cW / 2));
+
+      card.style.top  = cardTop  + 'px';
+      card.style.left = cardLeft + 'px';
+
+      // Arrow points at target center X, offset relative to card left edge
+      const arrowX = Math.max(16, Math.min(cW - 26, targetCX - cardLeft));
+      const arrow  = document.createElement('div');
+      arrow.className = 'tour-arrow ' + (placeBelow ? 'up' : 'down');
+      arrow.style.cssText = `position:absolute;${placeBelow ? 'top:-10px' : 'bottom:-10px'};left:${arrowX}px;`;
+      card.appendChild(arrow);
     } else {
       hl.style.display = 'none';
+      _centerTourCard(card);
     }
   } else {
     hl.style.display = 'none';
+    _centerTourCard(card);
   }
+}
 
-  // Position card
-  card.style.cssText = '';
-  Object.assign(card.style, step.card);
-
-  // Add arrow if defined
-  if (step.arrow) {
-    const arrow = document.createElement('div');
-    arrow.className = 'tour-arrow ' + step.arrow.cls;
-    arrow.style.cssText = 'position:absolute;' + step.arrow.style;
-    card.appendChild(arrow);
-  }
+function _centerTourCard(card) {
+  card.style.top       = '50%';
+  card.style.left      = '50%';
+  card.style.transform = 'translate(-50%,-50%)';
 }
 
 function tourNext() { tourStep++; if (tourStep >= TOUR_STEPS.length) { skipTour(); return; } showTourStep(tourStep); }
