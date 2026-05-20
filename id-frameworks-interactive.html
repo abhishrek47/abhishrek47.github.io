@@ -1,0 +1,1498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ID Models & Frameworks — Interactive Explorer</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Figtree:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --yellow:  #fbbf0e;
+      --dark:    #151515;
+      --bg:      #f0f0f0;
+      --white:   #ffffff;
+      --muted:   #888888;
+      --border:  #151515;
+      --rad:     12px;
+      --rad-pill: 100px;
+      /* model palette */
+      --addie:   #fbbf0e;
+      --sam:     #b994e0;
+      --fcid:    #5fc39c;
+      --blooms:  #7f9bc8;
+      --gagne:   #ef8c8f;
+      --merrill: #f59e42;
+      --kirk:    #5ecdc8;
+    }
+
+    body {
+      font-family: 'Figtree', sans-serif;
+      background: var(--bg);
+      color: var(--dark);
+      min-height: 100vh;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      background: var(--dark);
+      border-bottom: 2.5px solid var(--yellow);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 2.5rem; height: 58px; position: sticky; top: 0; z-index: 300;
+    }
+    .nav-logo {
+      font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; font-weight: 500;
+      color: var(--yellow); text-decoration: none; letter-spacing: 0.05em;
+    }
+    .nav-links { display: flex; align-items: center; gap: 0.4rem; list-style: none; }
+    .nav-links a {
+      font-family: 'Figtree', sans-serif; font-size: 0.82rem; font-weight: 600;
+      color: rgba(255,255,255,0.65); text-decoration: none; padding: 0.4rem 0.85rem;
+      border-radius: 6px; transition: color 0.15s;
+    }
+    .nav-links a:hover { color: #fff; }
+    .nav-links a.active { color: var(--yellow); }
+    .nav-links a.nav-cta {
+      background: var(--yellow); color: var(--dark); font-weight: 700;
+      border-radius: var(--rad-pill); padding: 0.4rem 1.1rem;
+    }
+    .nav-links a.nav-cta:hover { background: #e6af0c; color: var(--dark); }
+
+    /* ─── HERO ─── */
+    .hero {
+      background: var(--dark); padding: 3.5rem 2rem 3rem;
+    }
+    .hero-inner { max-width: 900px; margin: 0 auto; }
+    .hero-label {
+      font-family: 'JetBrains Mono', monospace; font-size: 0.7rem;
+      color: var(--yellow); letter-spacing: 0.16em; text-transform: uppercase; margin-bottom: 1rem;
+    }
+    .hero h1 {
+      font-family: 'Outfit', sans-serif; font-size: clamp(2.8rem, 6vw, 5rem);
+      font-weight: 800; line-height: 1.02; letter-spacing: -0.035em; color: #fff; margin: 0 0 0.85rem;
+    }
+    .hero h1 span { color: var(--yellow); }
+    .hero-sub {
+      font-size: 1rem; color: rgba(255,255,255,0.55); margin: 0 0 1.5rem; line-height: 1.65; max-width: 600px;
+    }
+    .hero-badges { display: flex; gap: 0.6rem; flex-wrap: wrap; }
+    .badge {
+      font-family: 'Figtree', sans-serif; font-size: 0.72rem; font-weight: 700;
+      padding: 0.35rem 0.9rem; border-radius: var(--rad-pill); border: 1.5px solid currentColor;
+    }
+    .badge-yellow { background: var(--yellow); color: var(--dark); border-color: var(--yellow); }
+    .badge-dim { background: transparent; color: rgba(255,255,255,0.4); border-color: rgba(255,255,255,0.2); }
+
+    /* ─── TAB BAR ─── */
+    .tab-bar {
+      background: var(--dark); border-bottom: 2.5px solid var(--yellow);
+      display: flex; align-items: center; gap: 0.35rem; padding: 0 2rem 0;
+      position: sticky; top: 58px; z-index: 200; overflow-x: auto; scrollbar-width: none;
+    }
+    .tab-bar::-webkit-scrollbar { display: none; }
+    .tab-btn {
+      font-family: 'Figtree', sans-serif; font-size: 0.8rem; font-weight: 700;
+      padding: 0.75rem 1.2rem; border: none; background: transparent;
+      color: rgba(255,255,255,0.45); cursor: pointer; transition: all 0.15s;
+      border-bottom: 3px solid transparent; margin-bottom: -2.5px; white-space: nowrap;
+    }
+    .tab-btn:hover { color: rgba(255,255,255,0.8); }
+    .tab-btn.active { color: var(--yellow); border-bottom-color: var(--yellow); }
+
+    /* ─── MAIN CONTENT WRAPPER ─── */
+    .content { max-width: 1100px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+
+    /* ─── TAB PANELS ─── */
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* ─── SECTION LABEL ─── */
+    .sec-label {
+      font-family: 'Figtree', sans-serif; font-size: 0.68rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted);
+      margin: 2rem 0 1rem; display: flex; align-items: center; gap: 0.75rem;
+    }
+    .sec-label::after { content: ''; flex: 1; height: 1px; background: #d0d0d0; }
+
+    /* ─── PHASE STEPPER CARD ─── */
+    .stepper-card {
+      background: var(--white); border: 2px solid var(--dark); border-radius: 16px;
+      overflow: hidden; margin-bottom: 1.25rem;
+    }
+    .stepper-header {
+      display: grid; grid-template-columns: 1fr auto; gap: 1rem; align-items: start;
+      padding: 1.5rem; border-bottom: 2px solid var(--dark);
+    }
+    .stepper-meta { display: flex; flex-direction: column; gap: 0.35rem; }
+    .stepper-type {
+      font-size: 0.65rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.1em; color: var(--muted);
+    }
+    .stepper-name {
+      font-family: 'Outfit', sans-serif; font-size: 2.4rem; font-weight: 800;
+      letter-spacing: -0.03em; line-height: 1;
+    }
+    .stepper-what { font-size: 0.82rem; color: #666; font-style: italic; }
+    .stepper-mantra {
+      font-size: 0.88rem; font-style: italic; color: var(--dark); font-weight: 500;
+      padding: 0.6rem 0.9rem; border-radius: 8px; background: #f4f4f4; border-left: 3px solid var(--dark);
+      margin-top: 0.5rem; max-width: 480px;
+    }
+    .stepper-badge {
+      font-family: 'Outfit', sans-serif; font-size: 2.2rem; font-weight: 800;
+      text-align: center; line-height: 1; padding: 0.75rem 1.25rem;
+      border-radius: 10px; border: 2px solid var(--dark); white-space: nowrap;
+    }
+
+    /* phase dots */
+    .phase-dots {
+      display: flex; gap: 0.5rem; flex-wrap: wrap; padding: 1rem 1.5rem;
+      border-bottom: 1.5px solid #e8e8e8; background: #fafafa;
+    }
+    .phase-dot {
+      font-size: 0.72rem; font-weight: 600; padding: 0.3rem 0.8rem;
+      border-radius: var(--rad-pill); border: 1.5px solid #ccc; color: #999;
+      background: #fff; cursor: pointer; transition: all 0.15s; white-space: nowrap;
+    }
+    .phase-dot.active {
+      border-width: 2px; color: var(--dark); font-weight: 700; transform: translateY(-1px);
+    }
+
+    /* step content */
+    .step-content {
+      padding: 1.5rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;
+    }
+    @media (max-width: 640px) { .step-content { grid-template-columns: 1fr; } }
+    .step-main { display: flex; flex-direction: column; gap: 0.75rem; }
+    .step-num {
+      font-family: 'JetBrains Mono', monospace; font-size: 0.65rem;
+      color: var(--muted); letter-spacing: 0.15em; text-transform: uppercase;
+    }
+    .step-title {
+      font-family: 'Outfit', sans-serif; font-size: 1.6rem; font-weight: 800;
+      letter-spacing: -0.02em; line-height: 1.1;
+    }
+    .step-desc { font-size: 0.88rem; color: #444; line-height: 1.65; }
+    .step-question {
+      font-size: 0.82rem; color: var(--dark); font-weight: 600; font-style: italic;
+      padding: 0.65rem 0.85rem; background: #f0f0f0; border-radius: 8px; border-left: 3px solid var(--dark);
+    }
+
+    .step-side { display: flex; flex-direction: column; gap: 0.75rem; }
+    .step-example {
+      background: var(--yellow); border: 1.5px solid var(--dark); border-radius: 10px;
+      padding: 1rem;
+    }
+    .step-example-label {
+      font-size: 0.62rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.1em; color: rgba(0,0,0,0.5); margin-bottom: 0.4rem;
+    }
+    .step-example-text { font-size: 0.84rem; color: var(--dark); line-height: 1.6; }
+    .step-deliverable {
+      background: #f6f6f6; border: 1.5px solid #e0e0e0; border-radius: 10px; padding: 1rem;
+    }
+    .step-deliverable-label {
+      font-size: 0.62rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.1em; color: var(--muted); margin-bottom: 0.4rem;
+    }
+    .step-deliverable-text { font-size: 0.84rem; color: var(--dark); line-height: 1.6; }
+
+    /* stepper nav buttons */
+    .stepper-nav {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1rem 1.5rem; border-top: 1.5px solid #e8e8e8; background: #fafafa;
+    }
+    .sn-btn {
+      font-family: 'Figtree', sans-serif; font-size: 0.82rem; font-weight: 700;
+      padding: 0.55rem 1.3rem; border: 1.5px solid var(--dark); border-radius: var(--rad-pill);
+      background: #fff; color: var(--dark); cursor: pointer; transition: all 0.15s;
+      display: flex; align-items: center; gap: 0.35rem;
+    }
+    .sn-btn:hover { background: var(--dark); color: #fff; }
+    .sn-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+    .sn-btn:disabled:hover { background: #fff; color: var(--dark); }
+    .sn-btn.sn-primary { background: var(--dark); color: var(--yellow); border-color: var(--dark); }
+    .sn-btn.sn-primary:hover { background: #2a2a2a; }
+    .sn-progress {
+      font-family: 'JetBrains Mono', monospace; font-size: 0.72rem;
+      color: var(--muted); letter-spacing: 0.05em;
+    }
+
+    /* ─── SCENARIO DIAGNOSTIC ─── */
+    .diag-wrap { max-width: 720px; }
+    .diag-intro {
+      background: var(--dark); border-radius: 16px; padding: 2rem;
+      margin-bottom: 1.5rem; border: 2px solid var(--dark);
+    }
+    .diag-intro h2 {
+      font-family: 'Outfit', sans-serif; font-size: 1.7rem; font-weight: 800;
+      color: #fff; letter-spacing: -0.025em; margin-bottom: 0.5rem;
+    }
+    .diag-intro h2 span { color: var(--yellow); }
+    .diag-intro p { font-size: 0.88rem; color: rgba(255,255,255,0.55); line-height: 1.65; }
+
+    .diag-step { display: none; }
+    .diag-step.active { display: block; }
+
+    .diag-q-num {
+      font-family: 'JetBrains Mono', monospace; font-size: 0.68rem;
+      color: var(--muted); letter-spacing: 0.15em; text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+    .diag-q {
+      font-family: 'Outfit', sans-serif; font-size: 1.4rem; font-weight: 700;
+      letter-spacing: -0.02em; color: var(--dark); margin-bottom: 1.25rem; line-height: 1.3;
+    }
+    .diag-options { display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 1.5rem; }
+    .diag-opt {
+      background: #fff; border: 2px solid #ddd; border-radius: 10px;
+      padding: 1rem 1.25rem; cursor: pointer; transition: all 0.15s;
+      display: flex; align-items: flex-start; gap: 0.75rem;
+    }
+    .diag-opt:hover { border-color: var(--dark); box-shadow: 3px 3px 0 var(--dark); transform: translate(-1px,-1px); }
+    .diag-opt.selected { border-color: var(--dark); background: var(--yellow); box-shadow: 3px 3px 0 var(--dark); }
+    .diag-opt-key {
+      font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; font-weight: 700;
+      min-width: 24px; color: var(--muted); margin-top: 0.05rem; flex-shrink: 0;
+    }
+    .diag-opt.selected .diag-opt-key { color: var(--dark); }
+    .diag-opt-text { font-size: 0.88rem; color: var(--dark); line-height: 1.5; }
+    .diag-opt-sub { font-size: 0.78rem; color: #666; margin-top: 0.15rem; }
+    .diag-opt.selected .diag-opt-sub { color: rgba(0,0,0,0.55); }
+
+    .diag-actions { display: flex; gap: 0.75rem; }
+    .diag-btn {
+      font-family: 'Figtree', sans-serif; font-size: 0.88rem; font-weight: 700;
+      padding: 0.75rem 1.75rem; border-radius: var(--rad-pill); cursor: pointer;
+      border: 2px solid var(--dark); transition: all 0.15s;
+    }
+    .diag-btn-primary { background: var(--dark); color: var(--yellow); }
+    .diag-btn-primary:hover { background: #2a2a2a; }
+    .diag-btn-ghost { background: #fff; color: var(--dark); }
+    .diag-btn-ghost:hover { background: var(--dark); color: #fff; }
+
+    .diag-progress {
+      display: flex; gap: 0.4rem; margin-bottom: 1.5rem;
+    }
+    .diag-prog-dot {
+      height: 4px; flex: 1; background: #ddd; border-radius: 4px; transition: background 0.2s;
+    }
+    .diag-prog-dot.done { background: var(--dark); }
+    .diag-prog-dot.current { background: var(--yellow); }
+
+    /* result */
+    .diag-result { display: none; }
+    .diag-result.show { display: block; }
+    .result-card {
+      background: var(--white); border: 2px solid var(--dark); border-radius: 16px; overflow: hidden;
+    }
+    .result-header {
+      padding: 1.75rem; display: flex; align-items: flex-start; gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .result-rec {
+      flex: 1; min-width: 200px;
+    }
+    .result-label {
+      font-size: 0.65rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.12em; color: var(--muted); margin-bottom: 0.4rem;
+    }
+    .result-name {
+      font-family: 'Outfit', sans-serif; font-size: 2.5rem; font-weight: 800;
+      letter-spacing: -0.03em; margin-bottom: 0.25rem;
+    }
+    .result-type { font-size: 0.82rem; color: #666; font-style: italic; }
+    .result-why { font-size: 0.88rem; color: var(--dark); line-height: 1.65; }
+    .result-body {
+      padding: 1.5rem; border-top: 2px solid var(--dark);
+      display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;
+    }
+    @media (max-width: 580px) { .result-body { grid-template-columns: 1fr; } }
+    .result-box { background: #f6f6f6; border: 1.5px solid #e0e0e0; border-radius: 10px; padding: 1rem; }
+    .result-box.hl { background: var(--yellow); border-color: var(--dark); }
+    .result-box-label {
+      font-size: 0.62rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.1em; color: rgba(0,0,0,0.45); margin-bottom: 0.4rem;
+    }
+    .result-box-text { font-size: 0.84rem; color: var(--dark); line-height: 1.6; }
+    .result-secondary {
+      padding: 1.25rem 1.5rem; border-top: 1.5px solid #e8e8e8;
+      background: #fafafa;
+    }
+    .result-secondary-label {
+      font-size: 0.65rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.1em; color: var(--muted); margin-bottom: 0.75rem;
+    }
+    .result-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    .result-tag {
+      font-size: 0.78rem; font-weight: 600; padding: 0.3rem 0.85rem;
+      border: 1.5px solid var(--dark); border-radius: var(--rad-pill); background: #fff;
+    }
+
+    .diag-retry {
+      margin-top: 1rem; display: flex; gap: 0.75rem; align-items: center;
+    }
+    .diag-retry-btn {
+      font-family: 'Figtree', sans-serif; font-size: 0.82rem; font-weight: 600;
+      padding: 0.55rem 1.25rem; border: 1.5px solid #ccc; border-radius: var(--rad-pill);
+      background: #fff; color: var(--dark); cursor: pointer; transition: all 0.15s;
+    }
+    .diag-retry-btn:hover { border-color: var(--dark); }
+
+    /* ─── QUIZ ─── */
+    .quiz-wrap { max-width: 720px; }
+    .quiz-header {
+      background: var(--dark); border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem;
+      display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; flex-wrap: wrap;
+    }
+    .quiz-header h2 {
+      font-family: 'Outfit', sans-serif; font-size: 1.7rem; font-weight: 800;
+      color: #fff; letter-spacing: -0.025em;
+    }
+    .quiz-header h2 span { color: var(--yellow); }
+    .quiz-header p { font-size: 0.85rem; color: rgba(255,255,255,0.55); margin-top: 0.4rem; line-height: 1.6; }
+    .quiz-score-display {
+      background: var(--yellow); border: 2px solid rgba(255,255,255,0.2); border-radius: 12px;
+      padding: 0.85rem 1.25rem; text-align: center; min-width: 90px;
+    }
+    .quiz-score-num {
+      font-family: 'Outfit', sans-serif; font-size: 2rem; font-weight: 800;
+      color: var(--dark); line-height: 1;
+    }
+    .quiz-score-label { font-size: 0.65rem; font-weight: 700; color: rgba(0,0,0,0.5); text-transform: uppercase; letter-spacing: 0.08em; }
+
+    .quiz-q-card {
+      background: var(--white); border: 2px solid var(--dark); border-radius: 16px;
+      margin-bottom: 1rem; overflow: hidden; transition: all 0.2s;
+    }
+    .quiz-q-top { padding: 1.25rem 1.5rem; }
+    .quiz-q-num {
+      font-family: 'JetBrains Mono', monospace; font-size: 0.65rem;
+      color: var(--muted); letter-spacing: 0.15em; margin-bottom: 0.5rem;
+    }
+    .quiz-q-text {
+      font-family: 'Outfit', sans-serif; font-size: 1.1rem; font-weight: 700;
+      letter-spacing: -0.015em; line-height: 1.4;
+    }
+    .quiz-options { padding: 0 1.5rem 1.25rem; display: flex; flex-direction: column; gap: 0.5rem; }
+    .quiz-opt {
+      padding: 0.75rem 1rem; border: 1.5px solid #ddd; border-radius: 8px;
+      cursor: pointer; transition: all 0.15s; font-size: 0.88rem; display: flex; gap: 0.75rem; align-items: flex-start;
+      background: #fff;
+    }
+    .quiz-opt:hover:not(.answered) { border-color: var(--dark); background: #fafafa; }
+    .quiz-opt-key {
+      font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; font-weight: 700;
+      min-width: 22px; color: var(--muted); flex-shrink: 0; margin-top: 0.05rem;
+    }
+    .quiz-opt.correct { background: #d1fae5; border-color: #15803d; }
+    .quiz-opt.correct .quiz-opt-key { color: #15803d; }
+    .quiz-opt.wrong { background: #fee2e2; border-color: #b91c1c; }
+    .quiz-opt.wrong .quiz-opt-key { color: #b91c1c; }
+    .quiz-opt.reveal { background: #fefce8; border-color: #ca8a04; border-width: 2px; }
+    .quiz-feedback {
+      display: none; padding: 1rem 1.5rem; border-top: 1.5px solid #e8e8e8;
+      background: #fafafa; font-size: 0.84rem; line-height: 1.6; color: #444;
+    }
+    .quiz-feedback.show { display: block; }
+    .quiz-feedback strong { color: var(--dark); }
+
+    .quiz-final {
+      display: none; background: var(--dark); border: 2px solid var(--dark);
+      border-radius: 16px; padding: 2.5rem; text-align: center; margin-top: 1.5rem;
+    }
+    .quiz-final.show { display: block; }
+    .quiz-final-score {
+      font-family: 'Outfit', sans-serif; font-size: 4rem; font-weight: 800;
+      color: var(--yellow); line-height: 1; margin-bottom: 0.5rem;
+    }
+    .quiz-final-label { font-size: 1rem; color: rgba(255,255,255,0.6); margin-bottom: 1.5rem; }
+    .quiz-final-verdict {
+      font-family: 'Outfit', sans-serif; font-size: 1.4rem; font-weight: 700;
+      color: #fff; margin-bottom: 0.5rem; letter-spacing: -0.02em;
+    }
+    .quiz-final-sub { font-size: 0.88rem; color: rgba(255,255,255,0.55); line-height: 1.65; max-width: 420px; margin: 0 auto 1.5rem; }
+    .quiz-restart-btn {
+      font-family: 'Figtree', sans-serif; font-size: 0.88rem; font-weight: 700;
+      padding: 0.75rem 2rem; background: var(--yellow); color: var(--dark);
+      border: none; border-radius: var(--rad-pill); cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .quiz-restart-btn:hover { transform: translateY(-2px); box-shadow: 3px 3px 0 rgba(255,255,255,0.2); }
+
+    /* ─── CTA STRIP ─── */
+    .cta-strip {
+      background: var(--yellow); border: 2px solid var(--dark); border-radius: 16px;
+      padding: 2rem 2.5rem; display: flex; align-items: center; justify-content: space-between;
+      gap: 2rem; flex-wrap: wrap; margin-top: 2.5rem;
+    }
+    .cta-strip h2 {
+      font-family: 'Outfit', sans-serif; font-size: 1.5rem; font-weight: 800;
+      letter-spacing: -0.02em; color: var(--dark);
+    }
+    .cta-btn {
+      font-family: 'Figtree', sans-serif; font-size: 0.88rem; font-weight: 700;
+      padding: 0.75rem 1.75rem; background: var(--dark); color: var(--yellow);
+      border: none; border-radius: var(--rad-pill); cursor: pointer; text-decoration: none;
+      transition: transform 0.15s, box-shadow 0.15s; white-space: nowrap;
+    }
+    .cta-btn:hover { transform: translateY(-2px); box-shadow: 3px 3px 0 rgba(0,0,0,0.3); }
+
+    /* ─── FOOTER ─── */
+    footer {
+      border-top: 1.5px solid #ccc; padding: 1.5rem 2.5rem;
+      display: flex; align-items: center; justify-content: space-between;
+      font-size: 0.78rem; color: var(--muted); flex-wrap: wrap; gap: 1rem;
+    }
+    footer a { color: var(--dark); text-decoration: none; font-weight: 600; }
+    footer a:hover { color: var(--dark); text-decoration: underline; }
+    .footer-links { display: flex; gap: 0.5rem; }
+    .footer-link {
+      font-size: 0.78rem; font-weight: 500; color: var(--dark); text-decoration: none;
+      padding: 0.3rem 0.9rem; border: 1.5px solid var(--dark); border-radius: var(--rad-pill);
+      transition: background 0.15s;
+    }
+    .footer-link:hover { background: var(--yellow); }
+
+    /* ─── MOBILE ─── */
+    @media (max-width: 640px) {
+      nav { padding: 0 1.25rem; }
+      .nav-links { display: none; }
+      .hero { padding: 2.5rem 1.25rem 2rem; }
+      .content { padding: 1.5rem 1rem 3rem; }
+      .stepper-header { grid-template-columns: 1fr; }
+      .stepper-badge { display: none; }
+      .tab-bar { padding: 0 1rem; }
+      footer { padding: 1.25rem 1.25rem; }
+    }
+
+    /* ─── UTILITY ─── */
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">AT.</a>
+  <ul class="nav-links">
+    <li><a href="pages/work.html">Work</a></li>
+    <li><a href="pages/about.html">About</a></li>
+    <li><a href="id-frameworks.html">Cheat Sheet</a></li>
+    <li><a href="id-frameworks-interactive.html" class="active">Interactive</a></li>
+    <li><a href="tools/id-model-selector.html">ID Model Selector ↗</a></li>
+    <li><a href="pages/contact.html" class="nav-cta">Let's Talk</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-label">ID Models & Frameworks · Interactive Explorer</div>
+    <h1>Walk through every<br><span>one of them.</span></h1>
+    <p class="hero-sub">Step through each phase of all 7 models and frameworks. See how they work on a single scenario. Then test yourself.</p>
+    <div class="hero-badges">
+      <span class="badge badge-yellow">7 tools</span>
+      <span class="badge badge-dim">3 Models · 4 Frameworks</span>
+      <span class="badge badge-dim">Sales objection-handling course · running example</span>
+    </div>
+  </div>
+</div>
+
+<!-- TAB BAR -->
+<div class="tab-bar">
+  <button class="tab-btn active" onclick="switchTab('explorer',this)">▶ Phase Explorer</button>
+  <button class="tab-btn" onclick="switchTab('diagnostic',this)">◈ Scenario Diagnostic</button>
+  <button class="tab-btn" onclick="switchTab('quiz',this)">◎ Self-Quiz</button>
+</div>
+
+<!-- CONTENT -->
+<div class="content">
+
+  <!-- ═══════════════════════════════════════
+       TAB 1: PHASE EXPLORER
+  ═══════════════════════════════════════ -->
+  <div id="tab-explorer" class="tab-panel active">
+
+    <div class="sec-label">The 3 True ID Models — give you a design process</div>
+
+    <!-- ADDIE -->
+    <div class="stepper-card" id="card-addie">
+      <div class="stepper-header">
+        <div class="stepper-meta">
+          <span class="stepper-type">ID Model · Sequential Process</span>
+          <span class="stepper-name" style="color:#151515;">ADDIE</span>
+          <span class="stepper-what">The classic linear design model</span>
+          <span class="stepper-mantra">"Blueprint before you build."</span>
+        </div>
+        <div class="stepper-badge" style="background:var(--addie);border-color:var(--dark);">5<br><span style="font-size:0.75rem;font-weight:600;">phases</span></div>
+      </div>
+      <div class="phase-dots" id="dots-addie"></div>
+      <div class="step-content" id="content-addie"></div>
+      <div class="stepper-nav">
+        <button class="sn-btn" onclick="prevStep('addie')" id="prev-addie">← Prev</button>
+        <span class="sn-progress" id="prog-addie"></span>
+        <button class="sn-btn sn-primary" onclick="nextStep('addie')" id="next-addie">Next →</button>
+      </div>
+    </div>
+
+    <!-- SAM -->
+    <div class="stepper-card" id="card-sam">
+      <div class="stepper-header">
+        <div class="stepper-meta">
+          <span class="stepper-type">ID Model · Agile / Iterative</span>
+          <span class="stepper-name" style="color:#7c3aed;">SAM</span>
+          <span class="stepper-what">Successive Approximation Model</span>
+          <span class="stepper-mantra">"Show rough early. Fix cheap."</span>
+        </div>
+        <div class="stepper-badge" style="background:var(--sam);color:#fff;">3<br><span style="font-size:0.75rem;font-weight:600;">phases</span></div>
+      </div>
+      <div class="phase-dots" id="dots-sam"></div>
+      <div class="step-content" id="content-sam"></div>
+      <div class="stepper-nav">
+        <button class="sn-btn" onclick="prevStep('sam')" id="prev-sam">← Prev</button>
+        <span class="sn-progress" id="prog-sam"></span>
+        <button class="sn-btn sn-primary" onclick="nextStep('sam')" id="next-sam">Next →</button>
+      </div>
+    </div>
+
+    <!-- 4C/ID -->
+    <div class="stepper-card" id="card-fcid">
+      <div class="stepper-header">
+        <div class="stepper-meta">
+          <span class="stepper-type">ID Model · Complex Skills</span>
+          <span class="stepper-name" style="color:#15803d;">4C/ID</span>
+          <span class="stepper-what">Four-Component Instructional Design</span>
+          <span class="stepper-mantra">"Train the whole task under real pressure."</span>
+        </div>
+        <div class="stepper-badge" style="background:var(--fcid);color:#fff;">4<br><span style="font-size:0.75rem;font-weight:600;">components</span></div>
+      </div>
+      <div class="phase-dots" id="dots-fcid"></div>
+      <div class="step-content" id="content-fcid"></div>
+      <div class="stepper-nav">
+        <button class="sn-btn" onclick="prevStep('fcid')" id="prev-fcid">← Prev</button>
+        <span class="sn-progress" id="prog-fcid"></span>
+        <button class="sn-btn sn-primary" onclick="nextStep('fcid')" id="next-fcid">Next →</button>
+      </div>
+    </div>
+
+    <div class="sec-label">The 4 Frameworks, Taxonomies &amp; Principles — give you a lens</div>
+
+    <!-- BLOOM'S -->
+    <div class="stepper-card" id="card-blooms">
+      <div class="stepper-header">
+        <div class="stepper-meta">
+          <span class="stepper-type">Taxonomy · Cognitive Levels</span>
+          <span class="stepper-name" style="color:#1d4ed8;">Bloom's</span>
+          <span class="stepper-what">6-level classification of learning</span>
+          <span class="stepper-mantra">"Name the verb — then write the objective."</span>
+        </div>
+        <div class="stepper-badge" style="background:var(--blooms);color:#fff;">6<br><span style="font-size:0.75rem;font-weight:600;">levels</span></div>
+      </div>
+      <div class="phase-dots" id="dots-blooms"></div>
+      <div class="step-content" id="content-blooms"></div>
+      <div class="stepper-nav">
+        <button class="sn-btn" onclick="prevStep('blooms')" id="prev-blooms">← Prev</button>
+        <span class="sn-progress" id="prog-blooms"></span>
+        <button class="sn-btn sn-primary" onclick="nextStep('blooms')" id="next-blooms">Next →</button>
+      </div>
+    </div>
+
+    <!-- GAGNÉ'S 9 -->
+    <div class="stepper-card" id="card-gagne">
+      <div class="stepper-header">
+        <div class="stepper-meta">
+          <span class="stepper-type">Principles · Instruction</span>
+          <span class="stepper-name" style="color:#b91c1c;">Gagné's 9</span>
+          <span class="stepper-what">9 Events of Instruction</span>
+          <span class="stepper-mantra">"Did they attempt it before seeing the answer?"</span>
+        </div>
+        <div class="stepper-badge" style="background:var(--gagne);color:#fff;">9<br><span style="font-size:0.75rem;font-weight:600;">events</span></div>
+      </div>
+      <div class="phase-dots" id="dots-gagne"></div>
+      <div class="step-content" id="content-gagne"></div>
+      <div class="stepper-nav">
+        <button class="sn-btn" onclick="prevStep('gagne')" id="prev-gagne">← Prev</button>
+        <span class="sn-progress" id="prog-gagne"></span>
+        <button class="sn-btn sn-primary" onclick="nextStep('gagne')" id="next-gagne">Next →</button>
+      </div>
+    </div>
+
+    <!-- MERRILL'S -->
+    <div class="stepper-card" id="card-merrill">
+      <div class="stepper-header">
+        <div class="stepper-meta">
+          <span class="stepper-type">Principles · Instruction</span>
+          <span class="stepper-name" style="color:#b45309;">Merrill's</span>
+          <span class="stepper-what">First Principles of Instruction</span>
+          <span class="stepper-mantra">"Start with the real problem. End with real application."</span>
+        </div>
+        <div class="stepper-badge" style="background:var(--merrill);">5<br><span style="font-size:0.75rem;font-weight:600;">principles</span></div>
+      </div>
+      <div class="phase-dots" id="dots-merrill"></div>
+      <div class="step-content" id="content-merrill"></div>
+      <div class="stepper-nav">
+        <button class="sn-btn" onclick="prevStep('merrill')" id="prev-merrill">← Prev</button>
+        <span class="sn-progress" id="prog-merrill"></span>
+        <button class="sn-btn sn-primary" onclick="nextStep('merrill')" id="next-merrill">Next →</button>
+      </div>
+    </div>
+
+    <!-- KIRKPATRICK -->
+    <div class="stepper-card" id="card-kirk">
+      <div class="stepper-header">
+        <div class="stepper-meta">
+          <span class="stepper-type">Framework · Evaluation</span>
+          <span class="stepper-name" style="color:#0f766e;">Kirkpatrick</span>
+          <span class="stepper-what">4-Level Training Evaluation</span>
+          <span class="stepper-mantra">"Agree on what success looks like before you build."</span>
+        </div>
+        <div class="stepper-badge" style="background:var(--kirk);color:#fff;">4<br><span style="font-size:0.75rem;font-weight:600;">levels</span></div>
+      </div>
+      <div class="phase-dots" id="dots-kirk"></div>
+      <div class="step-content" id="content-kirk"></div>
+      <div class="stepper-nav">
+        <button class="sn-btn" onclick="prevStep('kirk')" id="prev-kirk">← Prev</button>
+        <span class="sn-progress" id="prog-kirk"></span>
+        <button class="sn-btn sn-primary" onclick="nextStep('kirk')" id="next-kirk">Next →</button>
+      </div>
+    </div>
+
+    <div class="cta-strip">
+      <h2>Not sure which model fits your project?</h2>
+      <a href="tools/id-model-selector.html" target="_blank" class="cta-btn">Try the ID Model Selector ↗</a>
+    </div>
+
+  </div><!-- /tab-explorer -->
+
+
+  <!-- ═══════════════════════════════════════
+       TAB 2: SCENARIO DIAGNOSTIC
+  ═══════════════════════════════════════ -->
+  <div id="tab-diagnostic" class="tab-panel">
+    <div class="diag-wrap">
+      <div class="diag-intro">
+        <h2>Find your <span>model.</span></h2>
+        <p>Answer 3 questions about your project. Takes 30 seconds. You'll get a primary recommendation and the reasoning behind it.</p>
+      </div>
+
+      <div id="diag-question-area">
+        <div class="diag-progress">
+          <div class="diag-prog-dot current" id="dp0"></div>
+          <div class="diag-prog-dot" id="dp1"></div>
+          <div class="diag-prog-dot" id="dp2"></div>
+        </div>
+
+        <!-- Q1 -->
+        <div class="diag-step active" id="diag-step-0">
+          <div class="diag-q-num">Question 1 of 3</div>
+          <div class="diag-q">What's driving this project's timeline?</div>
+          <div class="diag-options">
+            <div class="diag-opt" onclick="selectDiag(0,0,this)">
+              <span class="diag-opt-key">A</span>
+              <div><div class="diag-opt-text">Fixed deadline with defined deliverables</div><div class="diag-opt-sub">Stakeholder expects a finished product at sign-off</div></div>
+            </div>
+            <div class="diag-opt" onclick="selectDiag(0,1,this)">
+              <span class="diag-opt-key">B</span>
+              <div><div class="diag-opt-text">Iterative — SMEs can review prototypes early</div><div class="diag-opt-sub">Requirements may shift; you can pivot after feedback</div></div>
+            </div>
+            <div class="diag-opt" onclick="selectDiag(0,2,this)">
+              <span class="diag-opt-key">C</span>
+              <div><div class="diag-opt-text">Long development cycle for a high-stakes skill</div><div class="diag-opt-sub">Job requires full-task performance under real pressure</div></div>
+            </div>
+            <div class="diag-opt" onclick="selectDiag(0,3,this)">
+              <span class="diag-opt-key">D</span>
+              <div><div class="diag-opt-text">Course already built — need to audit or measure it</div><div class="diag-opt-sub">Evaluating what exists rather than designing from scratch</div></div>
+            </div>
+          </div>
+          <div class="diag-actions">
+            <button class="diag-btn diag-btn-primary" onclick="diagNext()" id="diag-next-0" disabled>Next question →</button>
+          </div>
+        </div>
+
+        <!-- Q2 -->
+        <div class="diag-step" id="diag-step-1">
+          <div class="diag-q-num">Question 2 of 3</div>
+          <div class="diag-q">What's your biggest design challenge right now?</div>
+          <div class="diag-options">
+            <div class="diag-opt" onclick="selectDiag(1,0,this)">
+              <span class="diag-opt-key">A</span>
+              <div><div class="diag-opt-text">My learning objectives feel vague or unmeasurable</div><div class="diag-opt-sub">Can't write a test question for them</div></div>
+            </div>
+            <div class="diag-opt" onclick="selectDiag(1,1,this)">
+              <span class="diag-opt-key">B</span>
+              <div><div class="diag-opt-text">My course sequence feels thin — something is missing</div><div class="diag-opt-sub">Learners complete it but don't feel supported</div></div>
+            </div>
+            <div class="diag-opt" onclick="selectDiag(1,2,this)">
+              <span class="diag-opt-key">C</span>
+              <div><div class="diag-opt-text">Learners watch but don't apply — too passive</div><div class="diag-opt-sub">Lots of content, not enough doing</div></div>
+            </div>
+            <div class="diag-opt" onclick="selectDiag(1,3,this)">
+              <span class="diag-opt-key">D</span>
+              <div><div class="diag-opt-text">I need to prove training ROI to a stakeholder</div><div class="diag-opt-sub">Completions aren't convincing anyone</div></div>
+            </div>
+          </div>
+          <div class="diag-actions">
+            <button class="diag-btn diag-btn-ghost" onclick="diagBack()">← Back</button>
+            <button class="diag-btn diag-btn-primary" onclick="diagNext()" id="diag-next-1" disabled>Next question →</button>
+          </div>
+        </div>
+
+        <!-- Q3 -->
+        <div class="diag-step" id="diag-step-2">
+          <div class="diag-q-num">Question 3 of 3</div>
+          <div class="diag-q">What does your learner's job actually require?</div>
+          <div class="diag-options">
+            <div class="diag-opt" onclick="selectDiag(2,0,this)">
+              <span class="diag-opt-key">A</span>
+              <div><div class="diag-opt-text">Recall information or follow a defined procedure</div><div class="diag-opt-sub">Compliance, onboarding, product knowledge</div></div>
+            </div>
+            <div class="diag-opt" onclick="selectDiag(2,1,this)">
+              <span class="diag-opt-key">B</span>
+              <div><div class="diag-opt-text">Apply a skill in predictable, structured situations</div><div class="diag-opt-sub">They know the context; they need the technique</div></div>
+            </div>
+            <div class="diag-opt" onclick="selectDiag(2,2,this)">
+              <span class="diag-opt-key">C</span>
+              <div><div class="diag-opt-text">Perform a complex whole-task under variable, real pressure</div><div class="diag-opt-sub">Clinical, leadership, technical troubleshooting, sales</div></div>
+            </div>
+            <div class="diag-opt" onclick="selectDiag(2,3,this)">
+              <span class="diag-opt-key">D</span>
+              <div><div class="diag-opt-text">Make decisions and judgements in ambiguous situations</div><div class="diag-opt-sub">Not a single right answer — they need frameworks</div></div>
+            </div>
+          </div>
+          <div class="diag-actions">
+            <button class="diag-btn diag-btn-ghost" onclick="diagBack()">← Back</button>
+            <button class="diag-btn diag-btn-primary" onclick="diagSubmit()" id="diag-next-2" disabled>Get my recommendation →</button>
+          </div>
+        </div>
+      </div><!-- /diag-question-area -->
+
+      <!-- RESULT -->
+      <div class="diag-result" id="diag-result">
+        <div class="result-card" id="result-card">
+          <!-- injected by JS -->
+        </div>
+        <div class="diag-retry">
+          <button class="diag-retry-btn" onclick="diagReset()">↺ Start over</button>
+          <span style="font-size:0.78rem;color:var(--muted);">Different inputs, different result.</span>
+        </div>
+      </div>
+
+    </div><!-- /diag-wrap -->
+  </div><!-- /tab-diagnostic -->
+
+
+  <!-- ═══════════════════════════════════════
+       TAB 3: SELF-QUIZ
+  ═══════════════════════════════════════ -->
+  <div id="tab-quiz" class="tab-panel">
+    <div class="quiz-wrap">
+      <div class="quiz-header">
+        <div>
+          <h2>Test yourself. <span>No cheating.</span></h2>
+          <p>8 questions. Immediate feedback. Each one targets a real distinction — not trivia.</p>
+        </div>
+        <div class="quiz-score-display">
+          <div class="quiz-score-num" id="quiz-score-display">0/8</div>
+          <div class="quiz-score-label">score</div>
+        </div>
+      </div>
+
+      <div id="quiz-questions"></div>
+
+      <div class="quiz-final" id="quiz-final">
+        <div class="quiz-final-score" id="final-score-num"></div>
+        <div class="quiz-final-label" id="final-score-label"></div>
+        <div class="quiz-final-verdict" id="final-verdict"></div>
+        <p class="quiz-final-sub" id="final-sub"></p>
+        <button class="quiz-restart-btn" onclick="quizRestart()">Retake the quiz</button>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /content -->
+
+<!-- FOOTER -->
+<footer>
+  <span>© 2026 Abhishek Trivedi · Learning Experience Technologist</span>
+  <div class="footer-links">
+    <a href="https://linkedin.com/in/trivedi-abhishek" target="_blank" class="footer-link">LinkedIn</a>
+    <a href="pages/contact.html" class="footer-link">Contact</a>
+    <a href="index.html" class="footer-link">Home</a>
+  </div>
+</footer>
+
+<script>
+/* ═══════════════════════════════════════════════════════
+   DATA
+═══════════════════════════════════════════════════════ */
+
+const MODELS = {
+  addie: {
+    color: '#fbbf0e',
+    steps: [
+      {
+        num: '01 / 05', label: 'ANALYZE', title: 'Analyze',
+        desc: 'Define the actual problem before touching a single slide. Interview SMEs, survey learners, review performance data. The question is: is this a training problem, or something else?',
+        question: '"What is causing the performance gap — and is training the right solution?"',
+        example: 'Before opening Storyline, interview the sales manager. Are reps failing on objections — or is it actually a product knowledge gap? Build the wrong course and you\'ve wasted everyone\'s time.',
+        deliverable: 'Needs Analysis Report · Learner Profile · Performance Gap Statement'
+      },
+      {
+        num: '02 / 05', label: 'DESIGN', title: 'Design',
+        desc: 'Blueprint the course. Write measurable objectives (use Bloom\'s to pick the right verb). Map out the instructional strategy, assessment approach, and sequencing before any media is produced.',
+        question: '"What will learners be able to DO — and how will I know they can do it?"',
+        example: 'Objective: "Learners will handle the top 5 price objections using the LAER model in a role-play simulation." Not "understand objection handling" — that\'s untestable.',
+        deliverable: 'Instructional Strategy Doc · Objectives List · Assessment Blueprint · Storyboard Outline'
+      },
+      {
+        num: '03 / 05', label: 'DEVELOP', title: 'Develop',
+        desc: 'Build the materials according to the design blueprint. Storyline development, scripting, media production, interactivity coding. This is where most IDs start. It shouldn\'t be.',
+        question: '"Does every interaction serve an objective — or is it decoration?"',
+        example: 'Build 3 branching scenarios — each handles a different objection type. Each branch shows the consequence of a wrong response before revealing the correct technique.',
+        deliverable: 'Course Modules · Media Assets · Storyboard Sign-off · Prototype Build'
+      },
+      {
+        num: '04 / 05', label: 'IMPLEMENT', title: 'Implement',
+        desc: 'Deploy the course — upload to LMS, configure SCORM or xAPI settings, train facilitators if blended, communicate launch to learners. The course is live.',
+        question: '"Is the delivery environment set up to capture the data we need?"',
+        example: 'Upload to LMS with xAPI tracking for scenario branching. Configure notifications. Send launch email to 50 new reps with a clear call to action and a completion deadline.',
+        deliverable: 'LMS Configuration · Launch Communication · Facilitator Guide (if applicable)'
+      },
+      {
+        num: '05 / 05', label: 'EVALUATE', title: 'Evaluate',
+        desc: 'Measure against the objectives defined in Design. L1 reaction surveys. L2 knowledge checks. L3 behaviour observation. Use xAPI data to identify where learners fail and iterate.',
+        question: '"Did the training change behaviour on the job — and how do we know?"',
+        example: 'Check xAPI data after 2 weeks: which scenario branches are failing most? Survey managers: are reps actually using LAER on calls? Close rate data at 90 days.',
+        deliverable: 'Evaluation Report · xAPI Analytics · Kirkpatrick L1–L3 Findings · Revision List'
+      }
+    ]
+  },
+  sam: {
+    color: '#b994e0',
+    steps: [
+      {
+        num: '01 / 03', label: 'PREPARATION', title: 'Preparation',
+        desc: 'Gather what exists. Bring the whole team into one room: IDs, SMEs, stakeholders. Rapid information gathering — existing content, performance data, past training attempts. Set the scope.',
+        question: '"What do we already know, and what is the core performance problem?"',
+        example: 'Day 1: call a 2-hour kickoff. Sales manager shares recordings of failed objection calls. You\'re already learning from real data — not a brief document.',
+        deliverable: 'Project Brief · Content Inventory · SME Roster · Initial Scope Statement'
+      },
+      {
+        num: '02 / 03', label: 'ITERATIVE DESIGN', title: 'Iterative Design',
+        desc: 'Build rough prototypes fast — paper, Figma, rough Storyline. Put them in front of SMEs and real learners within days. Gather reaction. Revise. Loop again until the design stabilises.',
+        question: '"What are we learning from each iteration that changes the next version?"',
+        example: 'By Day 5: rough Storyline prototype — one scenario, two branches. Show 3 sales reps. They say the wrong response doesn\'t feel realistic. You fix it before building 12 more scenarios.',
+        deliverable: 'Paper Prototype · Rough Prototype v1 → v2 · SME Feedback Logs · Revised Storyboard'
+      },
+      {
+        num: '03 / 03', label: 'ITERATIVE DEVELOPMENT', title: 'Iterative Development',
+        desc: 'Build the real course incrementally. Each sprint produces a testable module. User testing with real learners at each stage — not at the end. Fix issues while they\'re still cheap to fix.',
+        question: '"Are real learners responding as we expect — and what do the xAPI logs tell us?"',
+        example: 'Sprint 1: scenarios for "price too high" objection. Test with 5 reps, gather data, refine. Sprint 2: "not the right time" objection. Each module is validated before the next begins.',
+        deliverable: 'Tested Module Builds · Learner Testing Reports · Final Polished Course · Launch Package'
+      }
+    ]
+  },
+  fcid: {
+    color: '#5fc39c',
+    steps: [
+      {
+        num: '01 / 04', label: 'C1 · LEARNING TASKS', title: 'Learning Tasks',
+        desc: 'The backbone of 4C/ID. Whole, real-world tasks — not decontextualised exercises. Start with the full task from day one, even if supported. Increase complexity progressively across a task class.',
+        question: '"Can the learner perform this whole task right now, with the right level of support?"',
+        example: 'From session 1, reps handle a full sales call simulation — intro, discovery, objection, close. Not just the objection step in isolation. Supported at first, scaffolding removed over time.',
+        deliverable: 'Task Classes (by difficulty) · Learning Task Sequence · Performance Standards'
+      },
+      {
+        num: '02 / 04', label: 'C2 · SUPPORTIVE INFO', title: 'Supportive Information',
+        desc: 'The "why" behind the task — mental models, theories, case studies, examples. Not procedural steps. Supportive info stays constant across a task class and is always available, not delivered once and gone.',
+        question: '"What mental models do learners need to make good decisions during the task?"',
+        example: 'A reference guide on buyer psychology, objection types, and why each LAER step works. Learners access it during practice — not in a pre-course module they\'ll forget.',
+        deliverable: 'Case Studies · Cognitive Strategies · Mental Models · Reference Library'
+      },
+      {
+        num: '03 / 04', label: 'C3 · PROCEDURAL INFO', title: 'Procedural Information',
+        desc: 'The "how" — just-in-time, step-by-step. Delivered at the moment of need, not upfront. Fades as the learner internalises the process. This is how-to, not why-to.',
+        question: '"What specific steps does the learner need RIGHT NOW, at this exact point in the task?"',
+        example: 'A popup during the simulation: "Step 1: Listen. Step 2: Acknowledge. Step 3: Explore. Step 4: Respond." Visible on first attempts. Faded out by attempt 3.',
+        deliverable: 'Step-by-step Job Aids · Scaffolded Prompts · Fading Support Plans'
+      },
+      {
+        num: '04 / 04', label: 'C4 · PART-TASK PRACTICE', title: 'Part-task Practice',
+        desc: 'Drilling specific sub-skills that need to become automatic. Only for components that must be performed without conscious thought — not everything. Overuse is a common mistake.',
+        question: '"Which sub-skill needs to be automatic — performed without deliberate thought — before the full task works?"',
+        example: 'Tone-matching drill: reps hear 10 short buyer statements and must identify the emotional signal (frustration, curiosity, doubt) in under 2 seconds. The recognition must be instant.',
+        deliverable: 'Automaticity Drill Designs · Response Time Benchmarks · Mastery Criteria'
+      }
+    ]
+  },
+  blooms: {
+    color: '#7f9bc8',
+    steps: [
+      {
+        num: 'L1 / L6', label: 'REMEMBER', title: 'Remember',
+        desc: 'Lowest cognitive level. Recall previously learned information. Appropriate for facts, definitions, terms — but rarely the real job requirement on its own.',
+        question: '"Can the learner recall the LAER acronym and what each letter stands for?"',
+        example: 'Quiz question: "What does the A in LAER stand for?" — recall only. Measurable, but proves nothing about job performance. Most courses stop here.',
+        deliverable: 'Typical verbs: list, name, define, identify, recall, state'
+      },
+      {
+        num: 'L2 / L6', label: 'UNDERSTAND', title: 'Understand',
+        desc: 'Demonstrate comprehension — explain in own words, classify, summarise. Slightly higher than recall, but still below application. "Understand" is not a Bloom\'s verb — it\'s a hedge.',
+        question: '"Can the learner explain WHY the Acknowledge step prevents escalation?"',
+        example: '"Understand objection handling" ✗ — not a measurable objective. You can\'t write a test question for it. Always replace "understand" with a real cognitive verb.',
+        deliverable: 'Typical verbs: explain, summarise, classify, interpret, describe, paraphrase'
+      },
+      {
+        num: 'L3 / L6', label: 'APPLY', title: 'Apply',
+        desc: 'Use knowledge in a new situation. Execute or implement a learned procedure. This is where most corporate training objectives should live — and where most courses don\'t actually go.',
+        question: '"Can the learner apply LAER to a previously unseen objection — correctly?"',
+        example: '"Learners will handle the top 5 price objections using LAER in a branching simulation" ✓ — Apply level. This objective can drive a real assessment and a real scenario.',
+        deliverable: 'Typical verbs: use, execute, demonstrate, solve, apply, implement, carry out'
+      },
+      {
+        num: 'L4 / L6', label: 'ANALYZE', title: 'Analyze',
+        desc: 'Break information into parts. Examine relationships. Distinguish between components. Used when the job requires diagnosing problems, not just executing known procedures.',
+        question: '"Can the learner identify which type of objection is driving this buyer\'s hesitation?"',
+        example: '"Diagnose the root cause of a buyer\'s objection from a recorded sales call" — Analyze level. The learner must break the conversation apart to understand what\'s really happening.',
+        deliverable: 'Typical verbs: compare, examine, differentiate, analyse, attribute, organise'
+      },
+      {
+        num: 'L5 / L6', label: 'EVALUATE', title: 'Evaluate',
+        desc: 'Make judgements. Critique, justify, assess. Used when the learner must weigh options and defend a position — not just execute.',
+        question: '"Can the learner assess which response strategy was most effective in this call recording?"',
+        example: '"Listen to two objection responses and justify which one was more effective, citing LAER principles" — Evaluate level. High cognitive demand. Rarely achievable in a single training.',
+        deliverable: 'Typical verbs: judge, justify, argue, critique, assess, defend, evaluate'
+      },
+      {
+        num: 'L6 / L6', label: 'CREATE', title: 'Create',
+        desc: 'Highest level. Generate new ideas, products, or solutions. Combine elements in novel ways. Rarely the goal of corporate eLearning — but the right target for expert performers.',
+        question: '"Can the learner design a new objection-handling strategy for a product we haven\'t trained them on?"',
+        example: 'Expert sales reps: "Design a 3-step response framework for the category of objection you\'re currently least confident handling." Create level. No course needed — just the right prompt.',
+        deliverable: 'Typical verbs: design, construct, develop, formulate, invent, plan, produce'
+      }
+    ]
+  },
+  gagne: {
+    color: '#ef8c8f',
+    steps: [
+      {
+        num: '01 / 09', label: 'EVENT 1', title: 'Gain Attention',
+        desc: 'Get the learner\'s attention before any content. Not a title slide. A hook — a surprising statistic, a short story, a problem they recognise. Earn their focus.',
+        question: '"What will make this learner stop scrolling and actually engage?"',
+        example: 'Open with audio of a real failed sales call. 60 seconds. The learner hears a rep lose the deal. No narration. No slide. They\'re already in the problem.',
+        deliverable: 'Opening hook · Problem scenario · Attention device'
+      },
+      {
+        num: '02 / 09', label: 'EVENT 2', title: 'State Objectives',
+        desc: 'Tell learners what they will be able to do. Not what the course covers — what they will DO differently after it. Specific, performance-oriented language.',
+        question: '"Does this objective describe a job behaviour — or just topic coverage?"',
+        example: '"By the end, you\'ll handle the top 5 price objections without flinching. You\'ll know the technique. You\'ll have practised it. You\'ll use it on Monday."',
+        deliverable: 'Objective statements · Performance context · Success criteria'
+      },
+      {
+        num: '03 / 09', label: 'EVENT 3', title: 'Recall Prior Knowledge',
+        desc: 'Activate what learners already know. Connect new content to existing schemas. Ask a question they can partially answer. This makes the new information stick.',
+        question: '"What does this learner already know that the new content should connect to?"',
+        example: '"Think of a time a buyer said \'it\'s too expensive\' and you didn\'t know what to say. What did you try? What happened?" — activates the gap they\'re filling.',
+        deliverable: 'Opening question · Pre-assessment · Experience prompt'
+      },
+      {
+        num: '04 / 09', label: 'EVENT 4', title: 'Present Content',
+        desc: 'Introduce the new knowledge or skill. Not a data dump. Chunked, sequenced by difficulty, tied to the objective. This is where most courses spend 80% of their time. It should be 30%.',
+        question: '"Is this content chunk necessary for the objective — or is it nice to know?"',
+        example: 'Explain LAER: Listen, Acknowledge, Explore, Respond. Short. One model. With a worked example of each step. No additional frameworks. No history of the model.',
+        deliverable: 'Content chunks · Worked examples · Explanations · Diagrams'
+      },
+      {
+        num: '05 / 09', label: 'EVENT 5', title: 'Provide Guidance',
+        desc: 'Help learners understand HOW to apply — not just WHAT to apply. Worked examples, job aids, cues, mnemonics. Guidance is a scaffold — it should fade as competence grows.',
+        question: '"What support does the learner need to attempt the skill — before they try it?"',
+        example: 'Show a model response to the "price too high" objection. Annotated. Highlight each LAER step in the response. Then remove the annotations in the next example.',
+        deliverable: 'Worked examples · Annotated models · Mnemonics · Fading job aids'
+      },
+      {
+        num: '06 / 09', label: 'EVENT 6 ← THE MISSING ONE', title: 'Elicit Performance',
+        desc: 'Make them TRY before they see feedback. Not a content page with a quiz at the end. The learner must attempt the skill first — then receive feedback. This event is skipped in the majority of eLearning.',
+        question: '"Does the learner attempt the skill before seeing the answer — or do they just review content and check boxes?"',
+        example: 'The learner hears a buyer say "It\'s just too expensive." They must choose a response BEFORE seeing any model or feedback. Their choice reveals the gap. That\'s the learning moment.',
+        deliverable: 'Scenario with forced response · Practice problem · Branching challenge'
+      },
+      {
+        num: '07 / 09', label: 'EVENT 7', title: 'Provide Feedback',
+        desc: 'Informational feedback — not just correct/incorrect. Tell learners WHY their response worked or didn\'t, and what they should do differently. Specific, not generic.',
+        question: '"Does this feedback explain the why — or just flag right/wrong?"',
+        example: 'After a wrong branch: "You went straight to Respond without Exploring the real concern. The buyer said \'expensive\' — but they meant \'I\'m not convinced it\'s worth it.\' Here\'s the difference."',
+        deliverable: 'Corrective feedback · Explanatory feedback · Branch consequence text'
+      },
+      {
+        num: '08 / 09', label: 'EVENT 8', title: 'Assess Performance',
+        desc: 'Formal measurement of the objective. Not a content quiz — a performance assessment. Tests the learner\'s ability to DO the thing, not just recall the theory.',
+        question: '"Does this assessment measure the job behaviour — or just course content knowledge?"',
+        example: 'Final scenario: 3 fresh objections the learner hasn\'t seen. No LAER prompt. No hints. They respond. xAPI logs every branch choice. Score is based on appropriate technique use.',
+        deliverable: 'Performance assessment · Scenario test · xAPI tracked scoring'
+      },
+      {
+        num: '09 / 09', label: 'EVENT 9', title: 'Retention & Transfer',
+        desc: 'Help learners keep it and use it beyond the course. Spaced repetition, job aids, manager coaching prompts, follow-up challenges. Most courses end at Event 8. That\'s where forgetting begins.',
+        question: '"What happens after the course closes — and does the learning survive it?"',
+        example: 'Day 1 after completion: a 3-question scenario pushed to phone — one fresh objection. Day 30: manager checklist — did the rep use LAER on 3 calls this month?',
+        deliverable: 'Spaced practice plan · Manager coaching guide · Post-training job aid · 30-day follow-up'
+      }
+    ]
+  },
+  merrill: {
+    color: '#f59e42',
+    steps: [
+      {
+        num: '0 / P1–P4', label: 'ANCHOR · PROBLEM-CENTRED', title: 'Problem-Centred',
+        desc: 'Not a principle — the anchor. Every effective course is organised around solving a real, whole problem. Not topics. Not chapters. A situation the learner will actually face.',
+        question: '"What is the real-world problem this entire course is built around solving?"',
+        example: 'The problem: "A buyer says it\'s too expensive and you lose the deal." The entire course addresses this one problem. Every principle rotates around that anchor.',
+        deliverable: 'Problem statement · Real-world scenario · Course anchor definition'
+      },
+      {
+        num: 'P1 / P4', label: 'ACTIVATION', title: 'Activation',
+        desc: 'Connect to what the learner already knows or has experienced. Ask them to recall a past experience with the problem. This creates hooks for the new information.',
+        question: '"What relevant experience can this learner draw on — and how do I surface it first?"',
+        example: '"Think of the last time a buyer said it was too expensive. What did you say? What happened?" Their answer — however imperfect — is the bridge to new technique.',
+        deliverable: 'Opening question · Experience prompt · Prior knowledge activation'
+      },
+      {
+        num: 'P2 / P4', label: 'DEMONSTRATION', title: 'Demonstration',
+        desc: 'Show the skill being performed — not slides about it. An expert demonstrating the task. Annotated with the why. Not a lecture. Not a list of tips. Demonstration.',
+        question: '"Am I showing the skill being performed — or am I explaining it through slides?"',
+        example: 'A recorded call where a senior rep handles the price objection perfectly. Each LAER step highlighted as it happens. The learner watches real technique, not theory.',
+        deliverable: 'Worked examples · Video demonstrations · Annotated expert models'
+      },
+      {
+        num: 'P3 / P4', label: 'APPLICATION', title: 'Application',
+        desc: 'The learner now does it — for real, with feedback. Practice at the right level of difficulty. Not a knowledge check. Performance. Errors and corrections are the point.',
+        question: '"Is the learner actively doing the skill — or passively reviewing content?"',
+        example: 'Branching scenario: the learner hears the objection and must respond. Their choice leads to a consequence. They try again. Three attempts. Feedback at each branch.',
+        deliverable: 'Practice scenarios · Branching simulations · Role-play exercises · Corrective feedback'
+      },
+      {
+        num: 'P4 / P4', label: 'INTEGRATION', title: 'Integration',
+        desc: 'The learner reflects on and integrates the skill into real practice. Not a completion screen. A reflection prompt, a real-world task, a commitment to use it this week.',
+        question: '"How does this learner take what they\'ve just practised into their actual job — right now?"',
+        example: 'Final screen: "Your next 3 calls are your practice ground. Use LAER on the first real objection you hear. Screenshot your attempt in your sales notes and share with your manager."',
+        deliverable: 'Reflection activity · Real-world application task · Commitment prompt · Transfer plan'
+      }
+    ]
+  },
+  kirk: {
+    color: '#5ecdc8',
+    steps: [
+      {
+        num: 'L1 / L4', label: 'REACTION', title: 'L1: Reaction',
+        desc: 'Did learners find the training useful, relevant, and engaging? Measured through post-course surveys — "smile sheets." Easiest to collect. Least predictive of actual behaviour change.',
+        question: '"Did learners feel it was worth their time — and what does that tell us?"',
+        example: '"Rate your agreement: this training prepared me to handle price objections." — 4.2/5. Useful data point. Proves nothing about whether they\'ll actually use the technique.',
+        deliverable: 'Post-course survey · NPS prompt · Reaction data dashboard'
+      },
+      {
+        num: 'L2 / L4', label: 'LEARNING', title: 'L2: Learning',
+        desc: 'Did learners acquire the intended knowledge, skills, or attitudes? Measured through pre/post tests, assessments, or observed role-plays. More meaningful than L1 — still doesn\'t prove transfer.',
+        question: '"Can we confirm learners know WHAT to do — before checking if they actually do it?"',
+        example: 'Pre/post test: before training 48% of reps could correctly identify the right LAER response. After training: 83%. Knowledge gain is confirmed. Job use is still unknown.',
+        deliverable: 'Pre/post assessment · Knowledge check · Skill observation rubric'
+      },
+      {
+        num: 'L3 / L4', label: 'BEHAVIOUR', title: 'L3: Behavior',
+        desc: 'Are learners applying the new skills on the job? Measured at 30, 60, 90 days post-training. Manager observations, call recordings, performance reviews. This is where the real test happens.',
+        question: '"Are reps actually using LAER on real calls — and do their managers know to look for it?"',
+        example: '30-day follow-up: manager listens to 3 calls per rep. Checklist: Did they Listen? Did they Acknowledge before Responding? Only L3 data proves the training transferred.',
+        deliverable: 'Manager observation checklist · 30/60/90-day follow-up protocol · Call review rubric'
+      },
+      {
+        num: 'L4 / L4', label: 'RESULTS', title: 'L4: Results',
+        desc: 'Did the training produce the business result? Revenue, error rates, close rates, customer satisfaction, safety incidents. The measure your stakeholder actually cares about.',
+        question: '"Did the close rate actually move — and can we attribute it to this training?"',
+        example: 'Q3 close rate for trained reps vs Q2: +8%. Untrained cohort: +1%. Attribution is hard — but the correlation exists. Only L4 data wins a budget argument.',
+        deliverable: 'Business metrics tracking · ROI calculation · Stakeholder KPI report'
+      }
+    ]
+  }
+};
+
+/* ═══════════════════════════════════════════════════════
+   STEPPER STATE & RENDERING
+═══════════════════════════════════════════════════════ */
+
+const stepState = {};
+Object.keys(MODELS).forEach(key => { stepState[key] = 0; });
+
+function renderStepper(key) {
+  const model = MODELS[key];
+  const idx = stepState[key];
+  const step = model.steps[idx];
+  const total = model.steps.length;
+
+  // dots
+  const dotsEl = document.getElementById('dots-' + key);
+  dotsEl.innerHTML = model.steps.map((s, i) => {
+    const isActive = i === idx;
+    return `<div class="phase-dot ${isActive ? 'active' : ''}"
+      style="${isActive ? 'background:' + model.color + ';border-color:' + model.color + ';' : ''}"
+      onclick="jumpStep('${key}',${i})">${s.label}</div>`;
+  }).join('');
+
+  // content
+  const contentEl = document.getElementById('content-' + key);
+  contentEl.innerHTML = `
+    <div class="step-main">
+      <span class="step-num">${step.num}</span>
+      <span class="step-title" style="color:${model.color !== '#fbbf0e' ? model.color : '#151515'};">${step.title}</span>
+      <p class="step-desc">${step.desc}</p>
+      <div class="step-question">${step.question}</div>
+    </div>
+    <div class="step-side">
+      <div class="step-example">
+        <div class="step-example-label">In our example · Sales objection course</div>
+        <div class="step-example-text">${step.example}</div>
+      </div>
+      <div class="step-deliverable">
+        <div class="step-deliverable-label">Deliverables / Output</div>
+        <div class="step-deliverable-text">${step.deliverable}</div>
+      </div>
+    </div>`;
+
+  // nav
+  document.getElementById('prev-' + key).disabled = idx === 0;
+  document.getElementById('next-' + key).disabled = idx === total - 1;
+  document.getElementById('prog-' + key).textContent = `${idx + 1} / ${total}`;
+}
+
+function nextStep(key) {
+  if (stepState[key] < MODELS[key].steps.length - 1) {
+    stepState[key]++;
+    renderStepper(key);
+  }
+}
+function prevStep(key) {
+  if (stepState[key] > 0) {
+    stepState[key]--;
+    renderStepper(key);
+  }
+}
+function jumpStep(key, idx) {
+  stepState[key] = idx;
+  renderStepper(key);
+}
+
+// init all steppers
+Object.keys(MODELS).forEach(key => renderStepper(key));
+
+
+/* ═══════════════════════════════════════════════════════
+   TAB SWITCHING
+═══════════════════════════════════════════════════════ */
+
+function switchTab(name, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  btn.classList.add('active');
+}
+
+
+/* ═══════════════════════════════════════════════════════
+   SCENARIO DIAGNOSTIC
+═══════════════════════════════════════════════════════ */
+
+const diagAnswers = [null, null, null];
+let diagCurrentStep = 0;
+
+const RESULTS = [
+  // waterfall → addie
+  { cond: (a) => a[0] === 0, name: 'ADDIE', color: '#fbbf0e', textColor: '#151515', type: 'ID Model · Sequential Process',
+    why: 'Your fixed timeline and defined deliverables are ADDIE\'s home turf. Clear scope, waterfall delivery, stakeholder handoffs at each phase. Start with Analysis — do not skip it.',
+    doFirst: 'Run a needs analysis before touching a slide. Confirm the performance gap is a training problem, not a process or motivation problem.',
+    watchOut: 'Don\'t treat ADDIE as a linear lock-step. Evaluation is ongoing, not just a final step.',
+    alsoUse: ['Bloom\'s for objectives', 'Gagné\'s 9 for sequencing', 'Kirkpatrick for evaluation'] },
+  // iterative → sam
+  { cond: (a) => a[0] === 1, name: 'SAM', color: '#b994e0', textColor: '#fff', type: 'ID Model · Agile / Iterative',
+    why: 'You have SME access and room to pivot — SAM was built for this. Get a rough prototype in front of real people within a week. Their reaction will reshape everything before you\'ve sunk weeks into the wrong approach.',
+    doFirst: 'Hold a Savvy Start — a kickoff session with all stakeholders in one room. Gather what exists, align on the problem, sketch a first prototype.',
+    watchOut: 'SAM needs willing, available SMEs. If your stakeholders disappear between reviews, it stalls. Have a feedback SLA agreed upfront.',
+    alsoUse: ['Merrill\'s for problem-first design', 'Bloom\'s for writing objectives', 'Gagné\'s 9 to audit event coverage'] },
+  // complex skill → 4c/id
+  { cond: (a) => a[0] === 2, name: '4C/ID', color: '#5fc39c', textColor: '#fff', type: 'ID Model · Complex Skills',
+    why: 'Your learners need to perform a whole, complex task under real-world pressure. 4C/ID is the only model built specifically for this. Training parts in isolation — then expecting whole-task performance — is why so many complex-skill trainings fail.',
+    doFirst: 'Define your Learning Tasks (C1) first. Design the whole task at varying difficulty levels. Everything else — Supportive Info, Procedural Info, Part-task Practice — supports the task, not the other way around.',
+    watchOut: '4C/ID is the most demanding of the three models. Don\'t apply it to awareness training or simple process walkthroughs — it\'ll be overkill.',
+    alsoUse: ['Merrill\'s Application principle for scenario design', 'Kirkpatrick L3/L4 for measurement'] },
+  // audit → kirkpatrick
+  { cond: (a) => a[0] === 3, name: 'Kirkpatrick', color: '#5ecdc8', textColor: '#fff', type: 'Framework · Evaluation',
+    why: 'You\'re evaluating what exists, not designing from scratch. Kirkpatrick gives you a 4-level measurement framework. Start at L3 — are people actually using what they learned on the job? Most orgs never get there.',
+    doFirst: 'Work backwards: define what L4 (business result) and L3 (behaviour change) would look like before designing any measurement instruments.',
+    watchOut: 'Kirkpatrick is NOT a design model. It tells you how to measure — not how to build better learning.',
+    alsoUse: ['Bloom\'s to audit existing objectives', 'Gagné\'s 9 to diagnose gaps in the course sequence'] },
+  // vague objectives → bloom's
+  { cond: (a) => a[1] === 0, name: "Bloom's", color: '#7f9bc8', textColor: '#fff', type: 'Taxonomy · Cognitive Levels',
+    why: 'Vague objectives are a vocabulary problem, and Bloom\'s fixes it. Start with the verb. "Understand" is not a Bloom\'s verb — it\'s a hedge. Find the right level and the right action verb, and the objective writes itself.',
+    doFirst: 'List your current objectives. Circle every vague verb (understand, know, be aware of, learn about). Replace each with a Bloom\'s action verb at the right cognitive level.',
+    watchOut: "Bloom's is a taxonomy, not a design process. Don't use it to sequence a course — it tells you what level to target, not how to teach it.",
+    alsoUse: ['Gagné\'s 9 to sequence the instruction around the objective', 'Kirkpatrick to define L2 assessment'] },
+  // thin sequence → gagne
+  { cond: (a) => a[1] === 1, name: "Gagné's 9", color: '#ef8c8f', textColor: '#fff', type: 'Principles · Instruction',
+    why: 'Your course feels incomplete because a Gagné event is missing. Map your existing sequence against the 9 events. The gap will be obvious. Almost always: Event 6 (Elicit Performance) is skipped.',
+    doFirst: 'Print the 9 events. Put your current course design next to them. Mark which events you have and which you\'re missing. The missing ones explain why learners feel unsupported.',
+    watchOut: "Gagné's 9 is a sequencing lens, not a rigid checklist. Events can compress or combine — what matters is whether the logic is there, not the exact count.",
+    alsoUse: ["Bloom's for writing the objective that drives Event 2", 'Merrill\'s for strengthening the application events'] },
+  // passive → merrill
+  { cond: (a) => a[1] === 2, name: "Merrill's", color: '#f59e42', textColor: '#151515', type: 'Principles · Instruction',
+    why: "If learners are watching and not doing, Merrill's fixes it. Problem-centred, Application-focused design. The problem is the anchor. The application is the goal. Everything between is in service of those two.",
+    doFirst: 'Identify the real-world problem your course is built around. If you can\'t state it in one sentence, you don\'t have it yet. That problem statement rewrites your course structure.',
+    watchOut: "Demonstration in Merrill's means showing the skill being performed — not explaining it in slides. Don't conflate 'present content' with 'demonstrate'.",
+    alsoUse: ['SAM for iterative design of the scenario', "Gagné's 9 to check all instruction events are covered"] },
+  // prove ROI → kirkpatrick
+  { cond: (a) => a[1] === 3, name: 'Kirkpatrick', color: '#5ecdc8', textColor: '#fff', type: 'Framework · Evaluation',
+    why: 'Completions prove attendance. Kirkpatrick L3 and L4 prove impact. Define those metrics with your stakeholder before you build anything — because you can\'t retrofit measurement onto a course that wasn\'t designed for it.',
+    doFirst: 'Have a L4 conversation with the business stakeholder before designing. Ask: "What business result matters most, and how will we know this training contributed to it?"',
+    watchOut: 'Kirkpatrick is NOT a design model. Use it during scoping, not development.',
+    alsoUse: ['xAPI for L2 data collection', 'Bloom\'s to design measurable L2 assessments', 'Gagné\'s 9 to ensure the course actually generates learning'] }
+];
+
+function selectDiag(qIdx, optIdx, el) {
+  diagAnswers[qIdx] = optIdx;
+  el.closest('.diag-options').querySelectorAll('.diag-opt').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  const btn = document.getElementById('diag-next-' + qIdx);
+  if (btn) btn.disabled = false;
+}
+
+function diagNext() {
+  const current = diagCurrentStep;
+  if (diagAnswers[current] === null) return;
+  document.getElementById('diag-step-' + current).classList.remove('active');
+  diagCurrentStep++;
+  document.getElementById('diag-step-' + diagCurrentStep).classList.add('active');
+  // update progress dots
+  for (let i = 0; i < 3; i++) {
+    const dot = document.getElementById('dp' + i);
+    if (i < diagCurrentStep) dot.className = 'diag-prog-dot done';
+    else if (i === diagCurrentStep) dot.className = 'diag-prog-dot current';
+    else dot.className = 'diag-prog-dot';
+  }
+}
+
+function diagBack() {
+  document.getElementById('diag-step-' + diagCurrentStep).classList.remove('active');
+  diagCurrentStep--;
+  document.getElementById('diag-step-' + diagCurrentStep).classList.add('active');
+  for (let i = 0; i < 3; i++) {
+    const dot = document.getElementById('dp' + i);
+    if (i < diagCurrentStep) dot.className = 'diag-prog-dot done';
+    else if (i === diagCurrentStep) dot.className = 'diag-prog-dot current';
+    else dot.className = 'diag-prog-dot';
+  }
+}
+
+function diagSubmit() {
+  // find matching result
+  let result = RESULTS.find(r => r.cond(diagAnswers));
+  if (!result) result = RESULTS[0]; // fallback
+
+  const card = document.getElementById('result-card');
+  card.innerHTML = `
+    <div class="result-header" style="border-top: 5px solid ${result.color};">
+      <div class="result-rec">
+        <div class="result-label">Primary recommendation</div>
+        <div class="result-name" style="color:${result.color !== '#fbbf0e' ? result.color : '#151515'};">${result.name}</div>
+        <div class="result-type">${result.type}</div>
+      </div>
+      <div style="max-width:380px;">
+        <div class="result-label">Why this one</div>
+        <div class="result-why">${result.why}</div>
+      </div>
+    </div>
+    <div class="result-body">
+      <div class="result-box hl" style="${result.color !== '#fbbf0e' ? 'background:' + result.color + ';' : ''}">
+        <div class="result-box-label" style="${result.color !== '#fbbf0e' ? 'color:rgba(255,255,255,0.55);' : ''}">Do this first</div>
+        <div class="result-box-text" style="${result.color !== '#fbbf0e' ? 'color:#fff;' : ''}">${result.doFirst}</div>
+      </div>
+      <div class="result-box">
+        <div class="result-box-label">Watch out for</div>
+        <div class="result-box-text">${result.watchOut}</div>
+      </div>
+    </div>
+    <div class="result-secondary">
+      <div class="result-secondary-label">Also layer in</div>
+      <div class="result-tags">
+        ${result.alsoUse.map(t => `<span class="result-tag">${t}</span>`).join('')}
+      </div>
+    </div>`;
+
+  document.getElementById('diag-question-area').style.display = 'none';
+  const resultEl = document.getElementById('diag-result');
+  resultEl.classList.add('show');
+}
+
+function diagReset() {
+  diagAnswers[0] = diagAnswers[1] = diagAnswers[2] = null;
+  diagCurrentStep = 0;
+  document.getElementById('diag-result').classList.remove('show');
+  document.getElementById('diag-question-area').style.display = '';
+  document.querySelectorAll('.diag-step').forEach((s, i) => {
+    s.classList.toggle('active', i === 0);
+  });
+  document.querySelectorAll('.diag-opt').forEach(o => o.classList.remove('selected'));
+  document.querySelectorAll('[id^="diag-next-"]').forEach(b => b.disabled = true);
+  for (let i = 0; i < 3; i++) {
+    const dot = document.getElementById('dp' + i);
+    dot.className = i === 0 ? 'diag-prog-dot current' : 'diag-prog-dot';
+  }
+}
+
+
+/* ═══════════════════════════════════════════════════════
+   SELF-QUIZ
+═══════════════════════════════════════════════════════ */
+
+const QUESTIONS = [
+  {
+    q: 'A stakeholder hands you a brief and says "we need training on objection handling by end of quarter." No iteration possible. Which model fits best?',
+    opts: ['SAM — because you can build prototypes fast', 'ADDIE — clear scope, waterfall, defined handoffs', '4C/ID — it\'s a complex skill', 'Kirkpatrick — measure it first'],
+    correct: 1,
+    feedback: 'ADDIE is the right call. Fixed timeline, clear deliverables, defined handoff points — that\'s exactly what ADDIE was built for. SAM requires iterative feedback loops, which aren\'t available here. The A (Analyze) is still essential — confirm it\'s a training problem before building.'
+  },
+  {
+    q: 'A learning objective says "learners will understand how to handle price objections." What\'s wrong with it?',
+    opts: ['"Handle" is too vague — needs more specificity', '"Understand" is not a measurable Bloom\'s verb — you can\'t test it', 'It should be at the Remember level, not higher', 'Nothing — it\'s a clear, measurable objective'],
+    correct: 1,
+    feedback: '"Understand" is the most misused word in instructional design. It\'s not a Bloom\'s verb — you can\'t write a test question for it. Replace it with an action verb: "demonstrate", "apply", "handle". The correct objective: "Learners will handle the top 5 price objections using the LAER model in a simulated scenario."'
+  },
+  {
+    q: 'Which Gagné event do most eLearning courses skip entirely?',
+    opts: ['Event 1: Gain Attention', 'Event 4: Present Content', 'Event 6: Elicit Performance', 'Event 9: Retention & Transfer'],
+    correct: 2,
+    feedback: 'Event 6 (Elicit Performance) is the most commonly skipped event. Most courses go Content → Feedback, skipping the Attempt entirely. The learner must try the skill before seeing feedback — that\'s where actual learning happens. Content → Quiz is assessment, not instruction.'
+  },
+  {
+    q: 'What is the KEY difference between ADDIE and SAM?',
+    opts: ['ADDIE is for complex skills; SAM is for simple ones', 'ADDIE is sequential and plan-first; SAM is iterative and prototype-first', 'ADDIE is for large teams; SAM is for solo IDs', 'They are the same model with different names'],
+    correct: 1,
+    feedback: 'ADDIE completes each phase before moving to the next. SAM gets a rough prototype in front of real people within days and iterates from their reaction. The key insight in SAM: feedback on a rough prototype beats feedback on a polished storyboard. Show early, fix cheap.'
+  },
+  {
+    q: 'Your course is well-designed but learners complete it and go back to their old behaviour. Which Kirkpatrick level has failed?',
+    opts: ['L1 Reaction — they didn\'t like the course', 'L2 Learning — they didn\'t learn the content', 'L3 Behavior — transfer to the job hasn\'t happened', 'L4 Results — the business metrics haven\'t moved'],
+    correct: 2,
+    feedback: 'L3 (Behavior) measures whether learners apply new skills on the job. Completing the course and passing an assessment only proves L2 (Learning). L3 requires manager observation, follow-up measurement, and a real commitment to checking whether the training transferred. This is where most orgs stop collecting data.'
+  },
+  {
+    q: 'In Merrill\'s First Principles, what is the most important principle — the one everything else orbits?',
+    opts: ['Demonstration — show the skill being performed', 'Application — learners must practice', 'Problem-centred — the course is built around solving a real problem', 'Integration — learners apply it in real life'],
+    correct: 2,
+    feedback: 'Problem-centred is the anchor of Merrill\'s — not a principle alongside the others, but the thing all four principles serve. If the course isn\'t built around a real problem the learner will face, Activation, Demonstration, Application and Integration are all just better-decorated information delivery.'
+  },
+  {
+    q: '4C/ID is described as the model with "four legs." What does removing any one leg do?',
+    opts: ['The model becomes more agile — fewer components is more efficient', 'Nothing critical — you can skip Part-task Practice for simple skills', 'The model collapses — all four components are interdependent', 'You get ADDIE — 4C/ID is just ADDIE with extra steps'],
+    correct: 2,
+    feedback: 'All four components are interdependent. You can\'t skip Supportive Info (the WHY) and expect learners to make good decisions during whole-task performance. You can\'t skip Part-task Practice for skills that must be automatic. The table metaphor is exact: one leg short and the whole thing tips.'
+  },
+  {
+    q: 'A manager asks: "Did the training actually work?" Which Kirkpatrick level gives the most convincing answer?',
+    opts: ['L1 — the post-course survey shows 4.5/5 satisfaction', 'L2 — 90% of learners passed the final assessment', 'L3 — managers confirm reps are using LAER on real calls', 'L4 — close rates improved 8% vs. the untrained cohort'],
+    correct: 3,
+    feedback: 'L4 (Results) is the only answer that moves a budget conversation. L1 proves they liked it. L2 proves they knew it. L3 proves they used it. L4 proves it mattered. Work backwards from L4: define the business result first, then design the training to achieve it. Most orgs never collect L3 or L4 data.'
+  }
+];
+
+let quizAnswered = 0;
+let quizCorrect = 0;
+const quizUserAnswers = new Array(QUESTIONS.length).fill(null);
+
+function buildQuiz() {
+  const container = document.getElementById('quiz-questions');
+  container.innerHTML = QUESTIONS.map((q, qIdx) => `
+    <div class="quiz-q-card" id="qcard-${qIdx}">
+      <div class="quiz-q-top">
+        <div class="quiz-q-num">QUESTION ${qIdx + 1} OF ${QUESTIONS.length}</div>
+        <div class="quiz-q-text">${q.q}</div>
+      </div>
+      <div class="quiz-options">
+        ${q.opts.map((opt, oIdx) => `
+          <div class="quiz-opt" id="qopt-${qIdx}-${oIdx}" onclick="answerQuiz(${qIdx},${oIdx})">
+            <span class="quiz-opt-key">${String.fromCharCode(65+oIdx)}</span>
+            <span>${opt}</span>
+          </div>`).join('')}
+      </div>
+      <div class="quiz-feedback" id="qfeedback-${qIdx}">
+        <strong>${q.correct !== null ? '✓ ' : ''}Explanation:</strong> ${q.feedback}
+      </div>
+    </div>`).join('');
+}
+
+function answerQuiz(qIdx, oIdx) {
+  if (quizUserAnswers[qIdx] !== null) return; // already answered
+  quizUserAnswers[qIdx] = oIdx;
+  quizAnswered++;
+
+  const q = QUESTIONS[qIdx];
+  // mark options
+  for (let i = 0; i < q.opts.length; i++) {
+    const optEl = document.getElementById('qopt-' + qIdx + '-' + i);
+    optEl.classList.add('answered');
+    if (i === q.correct) optEl.classList.add('correct');
+    else if (i === oIdx && i !== q.correct) optEl.classList.add('wrong');
+    else if (i !== oIdx) optEl.style.opacity = '0.5';
+  }
+
+  if (oIdx === q.correct) {
+    quizCorrect++;
+  }
+
+  // show feedback
+  document.getElementById('qfeedback-' + qIdx).classList.add('show');
+
+  // update score
+  document.getElementById('quiz-score-display').textContent = quizCorrect + '/' + QUESTIONS.length;
+
+  // check if all answered
+  if (quizAnswered === QUESTIONS.length) {
+    setTimeout(showQuizFinal, 600);
+  }
+}
+
+function showQuizFinal() {
+  const pct = quizCorrect / QUESTIONS.length;
+  let verdict, sub;
+  if (pct >= 0.875) {
+    verdict = 'You know these cold.';
+    sub = 'That\'s the standard to aim for. Every one of these distinctions comes up in a real project — usually at the moment when the wrong call is expensive.';
+  } else if (pct >= 0.625) {
+    verdict = 'Solid — with gaps worth closing.';
+    sub = 'The ones you missed are exactly the ones that trip up experienced IDs. Go back through the Phase Explorer on the models you got wrong.';
+  } else if (pct >= 0.375) {
+    verdict = 'You know the names. Not yet the distinctions.';
+    sub = 'Knowing ADDIE exists and knowing when to use it are different things. Work through the Phase Explorer — especially the "use when" and "not for" sections.';
+  } else {
+    verdict = 'Start with the Phase Explorer.';
+    sub = 'These distinctions take time. Step through each model in the Explorer tab — the scenario examples will make the differences concrete.';
+  }
+  document.getElementById('final-score-num').textContent = quizCorrect + '/' + QUESTIONS.length;
+  document.getElementById('final-score-label').textContent = Math.round(pct * 100) + '% correct';
+  document.getElementById('final-verdict').textContent = verdict;
+  document.getElementById('final-sub').textContent = sub;
+  document.getElementById('quiz-final').classList.add('show');
+}
+
+function quizRestart() {
+  quizAnswered = 0;
+  quizCorrect = 0;
+  quizUserAnswers.fill(null);
+  document.getElementById('quiz-score-display').textContent = '0/' + QUESTIONS.length;
+  document.getElementById('quiz-final').classList.remove('show');
+  buildQuiz();
+}
+
+buildQuiz();
+</script>
+</body>
+</html>
