@@ -67,9 +67,11 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);display:flex
 .cat-tab.active{background:var(--blue-dim);border-color:var(--blue-mid);color:var(--blue);}
 
 /* ── GALLERY AREA ────────────────────────────────────── */
-.gallery-area{flex:1;overflow-y:auto;overflow-x:hidden;min-height:0;}
-.gallery-area::-webkit-scrollbar{width:4px;}
-.gallery-area::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
+.gallery-area{flex:1;overflow-y:auto;overflow-x:hidden;min-height:0;scrollbar-width:thin;scrollbar-color:var(--muted2) var(--border);}
+.gallery-area::-webkit-scrollbar{width:6px;}
+.gallery-area::-webkit-scrollbar-track{background:var(--border);border-radius:3px;}
+.gallery-area::-webkit-scrollbar-thumb{background:var(--muted2);border-radius:3px;}
+.gallery-area::-webkit-scrollbar-thumb:hover{background:var(--muted);}
 .grid-meta{display:flex;align-items:center;justify-content:space-between;
   padding:10px 16px 4px;font-size:.72rem;color:var(--muted);}
 .grid-meta-hint{display:flex;align-items:center;gap:6px;}
