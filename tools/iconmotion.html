@@ -1672,6 +1672,8 @@ function toggleFav(e, name) {
     : [name, ...state.favs];
   localStorage.setItem('im_favs', JSON.stringify(state.favs));
   e.target.classList.toggle('on', state.favs.includes(name));
+  // Re-render if we're viewing the Fav category (removal should disappear immediately)
+  if (state.cat === 'Fav') renderIconGrid();
 }
 
 // ═══════════════════════════════════════════════════════
@@ -2240,11 +2242,16 @@ function exportDownSVG() {
 function exportCSS() {
   if (!state.icon) { showToast('Pick an icon first', 'err'); return; }
   if (!canExport(exportCSS)) return;
+  if (state.anim === 'draw-on') { showToast("Draw-on doesn't export as CSS — use SVG instead", 'err'); return; }
   const dur = (1 / state.speed).toFixed(2) + 's';
   const kfName = getAnimKeyframeName();
-  const css = `/* ${state.icon} — ${state.anim} */\n.icon-animated {\n  animation: ${kfName} ${dur} ${state.easing} ${state.delay}s ${state.loops};\n}\n\n${getKeyframeCSS().replace(/@keyframes/g, '\n@keyframes')}`;
+  let staggerNote = '';
+  if (state.stagger) {
+    staggerNote = `/* Note: stagger timing not included in CSS export — apply per-element animation-delay manually */\n`;
+  }
+  const css = `/* ${state.icon} — ${state.anim}${state.stagger ? ' (staggered)' : ''} */\n${staggerNote}.icon-animated {\n  animation: ${kfName} ${dur} ${state.easing} ${state.delay}s ${state.loops};\n}\n\n${getKeyframeCSS().replace(/@keyframes/g, '\n@keyframes')}`;
   navigator.clipboard.writeText(css)
-    .then(() => { showToast('CSS copied!', 'ok'); countExport(); })
+    .then(() => { showToast(state.stagger ? 'CSS copied (stagger timing not included)' : 'CSS copied!', 'ok'); countExport(); })
     .catch(() => showToast('Clipboard blocked', 'err'));
 }
 
@@ -2287,6 +2294,7 @@ function exportPNG() {
 function exportStorylineJS() {
   if (!state.icon) { showToast('Pick an icon first', 'err'); return; }
   if (!canExport(exportStorylineJS)) return;
+  if (state.anim === 'draw-on') { showToast("Draw-on can't export as Storyline JS — use SVG", 'err'); return; }
   if (!state.svgRaw) return;
   const parser = new DOMParser();
   const doc2 = parser.parseFromString(state.svgRaw, 'image/svg+xml');
@@ -2783,7 +2791,7 @@ function closePaywallModal(){ document.getElementById('paywallModal').classList.
 function openCheckout(type) {
   const email = currentUser ? encodeURIComponent(currentUser.email) : '';
   const base  = type === 'monthly' ? LS_MONTHLY_URL : LS_ONE_TIME_URL;
-  const url   = email ? `${base}?checkout[email]=${email}` : base;
+  const url   = email ? `${base}?email=${email}` : base;
   window.open(url, '_blank');
 }
 
