@@ -2384,34 +2384,39 @@ const TOUR_STEPS = [
     title: 'Welcome to IconMotion',
     body: '1100+ Lucide icons, 16 animations, 6 export formats — including Storyline JS that drops animated icons directly into your slides. Light, fast, free.',
     target: null,
+    card: { top:'50%', left:'50%', transform:'translate(-50%,-50%)' },
   },
   {
     title: '① Search & browse',
-    body: 'Type to search 1100+ icons instantly. Use the category tabs to filter by type. Hover any icon for a live animation preview.',
-    target: '.search-wrap',
-    placement: 'below',
+    body: 'Type to search icons instantly. Hover any icon card for a live animation preview before clicking.',
+    target: '.hdr-search',
+    card: { top:'68px', left:'50%', transform:'translateX(-50%)' },
+    arrow: { cls:'up', style:'top:-10px;left:50%;transform:translateX(-50%)' },
   },
   {
-    title: '② Category filters',
-    body: 'Click any category tab to browse icons by type. The count updates live as you filter.',
+    title: '② Filter by category',
+    body: 'Use the category tabs to browse by type — eLearning, People, Actions, Dev, and more. The count updates live.',
     target: '.cat-bar',
-    placement: 'below',
+    card: { top:'108px', left:'50%', transform:'translateX(-50%)' },
+    arrow: { cls:'up', style:'top:-10px;left:50%;transform:translateX(-50%)' },
   },
   {
-    title: '③ Click to open studio',
-    body: 'Click any icon card to open the studio — animation controls, per-layer color pickers, size, stroke, and all 6 export formats in one panel.',
-    target: '#iconGrid',
-    placement: 'below',
+    title: '③ Click any icon → Studio opens',
+    body: 'Click an icon to open the studio: choose animation, adjust speed/delay/loops, color layers individually, then export in any format.',
+    target: null,
+    card: { top:'50%', left:'50%', transform:'translate(-50%,-50%)' },
   },
   {
     title: '④ Export anywhere',
-    body: 'Copy SVG · Download SVG · Copy CSS Keyframes · PNG 2× · Storyline JS · Animated GIF. Storyline JS drops paste-ready code straight into an Execute JavaScript trigger.',
+    body: 'Copy SVG · Download SVG · Copy CSS Keyframes · PNG 2× · Storyline JS · Animated GIF. Storyline JS pastes directly into an Execute JavaScript trigger.',
     target: null,
+    card: { top:'50%', left:'50%', transform:'translate(-50%,-50%)' },
   },
   {
-    title: '⑤ Quick shortcuts',
-    body: 'R = replay · Arrow keys = navigate grid · ⌘Z / ⌘⇧Z = undo/redo layer colors · Esc = close drawer · 🎲 Random for quick discovery.',
+    title: '⑤ Shortcuts',
+    body: 'R = replay · Arrow keys = navigate grid · ⌘Z / ⌘⇧Z = undo/redo colors · Esc = close drawer · 🎲 Random for quick discovery.',
     target: null,
+    card: { top:'50%', left:'50%', transform:'translate(-50%,-50%)' },
   },
 ];
 let tourStep = 0;
@@ -2430,7 +2435,7 @@ function startTour() {
 }
 
 function showTourStep(idx) {
-  const step  = TOUR_STEPS[idx];
+  const step   = TOUR_STEPS[idx];
   const isLast = idx >= TOUR_STEPS.length - 1;
   document.getElementById('tourTitle').textContent = step.title;
   document.getElementById('tourBody').textContent  = step.body;
@@ -2443,50 +2448,28 @@ function showTourStep(idx) {
   const card = document.getElementById('tourCard');
   card.querySelectorAll('.tour-arrow').forEach(a => a.remove());
 
-  if (!step.target) {
-    // Centered card, no highlight
+  // Highlight target element
+  if (step.target) {
+    const el = document.querySelector(step.target);
+    if (el) {
+      const r = el.getBoundingClientRect();
+      hl.style.cssText = `left:${r.left-4}px;top:${r.top-4}px;width:${r.width+8}px;height:${r.height+8}px;display:block;`;
+    } else {
+      hl.style.display = 'none';
+    }
+  } else {
     hl.style.display = 'none';
-    card.style.cssText = 'top:50%;left:50%;transform:translate(-50%,-50%);';
-    return;
   }
 
-  const el = document.querySelector(step.target);
-  if (!el) { hl.style.display = 'none'; card.style.cssText = 'top:50%;left:50%;transform:translate(-50%,-50%);'; return; }
+  // Position card
+  card.style.cssText = '';
+  Object.assign(card.style, step.card);
 
-  const r     = el.getBoundingClientRect();
-  const cardW = 272;
-  const gap   = 14;
-  const pad   = 10;
-  const vw    = window.innerWidth;
-  const vh    = window.innerHeight;
-
-  // Highlight the element
-  hl.style.cssText = `left:${r.left-4}px;top:${r.top-4}px;width:${r.width+8}px;height:${r.height+8}px;display:block;`;
-
-  // Auto-position card: prefer below, fall back to above
-  const spaceBelow = vh - r.bottom;
-  const spaceAbove = r.top;
-  let cardLeft = Math.min(Math.max(r.left + r.width / 2 - cardW / 2, pad), vw - cardW - pad);
-
-  card.style.cssText = `width:${cardW}px;`;
-
-  if (spaceBelow >= 180 || spaceBelow >= spaceAbove) {
-    // Place below
-    card.style.top  = (r.bottom + gap) + 'px';
-    card.style.left = cardLeft + 'px';
+  // Add arrow if defined
+  if (step.arrow) {
     const arrow = document.createElement('div');
-    arrow.className = 'tour-arrow up';
-    const arrowLeft = Math.min(Math.max(r.left + r.width / 2 - cardLeft - 8, 12), cardW - 28);
-    arrow.style.cssText = `position:absolute;top:-10px;left:${arrowLeft}px;`;
-    card.appendChild(arrow);
-  } else {
-    // Place above
-    card.style.top  = Math.max(r.top - 175, pad) + 'px';
-    card.style.left = cardLeft + 'px';
-    const arrow = document.createElement('div');
-    arrow.className = 'tour-arrow down';
-    const arrowLeft = Math.min(Math.max(r.left + r.width / 2 - cardLeft - 8, 12), cardW - 28);
-    arrow.style.cssText = `position:absolute;bottom:-10px;left:${arrowLeft}px;`;
+    arrow.className = 'tour-arrow ' + step.arrow.cls;
+    arrow.style.cssText = 'position:absolute;' + step.arrow.style;
     card.appendChild(arrow);
   }
 }
