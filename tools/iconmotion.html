@@ -2216,8 +2216,31 @@ function getKeyframeCSS() {
 }
 
 // ═══════════════════════════════════════════════════════
-// EXPORTS
+// EXPORTS — shared color helper
 // ═══════════════════════════════════════════════════════
+// Applies global stroke + per-layer custom colors to a freshly-parsed SVG element.
+// Must be called after parsing state.svgRaw for any static export (PNG, GIF, Storyline JS).
+function _applySVGColors(svgEl) {
+  svgEl.setAttribute('stroke',          state.color);
+  svgEl.setAttribute('stroke-width',    state.stroke);
+  svgEl.setAttribute('fill',            'none');
+  svgEl.setAttribute('stroke-linecap',  'round');
+  svgEl.setAttribute('stroke-linejoin', 'round');
+  // Replace any child-level currentColor so it resolves correctly outside the DOM
+  svgEl.querySelectorAll('[stroke="currentColor"]').forEach(el => {
+    el.removeAttribute('stroke'); // let it inherit the root stroke value
+  });
+  // Apply per-layer custom colors and visibility
+  if (state.layers.length > 0) {
+    const els = [...svgEl.querySelectorAll('path,circle,line,polyline,ellipse,polygon,rect')];
+    state.layers.forEach((l, i) => {
+      if (!els[i]) return;
+      if (l.customColor) els[i].setAttribute('stroke', l.color);
+      if (!l.visible)    els[i].setAttribute('display', 'none');
+    });
+  }
+}
+
 function exportCopySVG() {
   if (!state.icon) { showToast('Pick an icon first', 'err'); return; }
   if (!canExport(exportCopySVG)) return;
@@ -2262,13 +2285,10 @@ function exportPNG() {
   const doc2 = parser.parseFromString(state.svgRaw, 'image/svg+xml');
   const svgEl = doc2.querySelector('svg');
   if (!svgEl) return;
-  svgEl.setAttribute('width', state.size * 2);
+  svgEl.setAttribute('width',  state.size * 2);
   svgEl.setAttribute('height', state.size * 2);
-  svgEl.setAttribute('stroke', state.color);
-  svgEl.setAttribute('stroke-width', state.stroke);
-  svgEl.setAttribute('fill', 'none');
-  svgEl.setAttribute('stroke-linecap', 'round');
-  svgEl.setAttribute('stroke-linejoin', 'round');
+  svgEl.setAttribute('xmlns',  'http://www.w3.org/2000/svg');
+  _applySVGColors(svgEl);
   const svgStr = new XMLSerializer().serializeToString(svgEl);
   const blob = new Blob([svgStr], { type: 'image/svg+xml;charset=utf-8' });
   const url = URL.createObjectURL(blob);
@@ -2299,11 +2319,8 @@ function exportStorylineJS() {
   const parser = new DOMParser();
   const doc2 = parser.parseFromString(state.svgRaw, 'image/svg+xml');
   const svg = doc2.querySelector('svg');
-  svg.setAttribute('stroke', state.color);
-  svg.setAttribute('stroke-width', state.stroke);
-  svg.setAttribute('fill', 'none');
-  svg.setAttribute('stroke-linecap', 'round');
-  svg.setAttribute('stroke-linejoin', 'round');
+  svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+  _applySVGColors(svg);
   const svgStr = new XMLSerializer().serializeToString(svg)
     .replace(/\\/g, '\\\\').replace(/"/g, '\\"').replace(/\n/g, '');
   const kfCSS = getKeyframeCSS().replace(/\\/g, '\\\\').replace(/"/g, '\\"');
@@ -2393,14 +2410,11 @@ async function exportGIF(SIZE) {
     const parser = new DOMParser();
     const d = parser.parseFromString(state.svgRaw, 'image/svg+xml');
     const svgEl = d.querySelector('svg');
-    svgEl.setAttribute('width', iSize); svgEl.setAttribute('height', iSize);
-    svgEl.setAttribute('stroke', state.color); svgEl.setAttribute('stroke-width', state.stroke);
-    svgEl.setAttribute('fill', 'none'); svgEl.setAttribute('stroke-linecap', 'round');
-    svgEl.setAttribute('stroke-linejoin', 'round'); svgEl.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+    svgEl.setAttribute('width',  iSize);
+    svgEl.setAttribute('height', iSize);
+    svgEl.setAttribute('xmlns',  'http://www.w3.org/2000/svg');
     svgEl.removeAttribute('style');
-    svgEl.querySelectorAll('[stroke]').forEach(el => {
-      if (el.getAttribute('stroke') === 'currentColor') el.setAttribute('stroke', state.color);
-    });
+    _applySVGColors(svgEl);
     const svgStr = new XMLSerializer().serializeToString(svgEl);
     const blob = new Blob([svgStr], { type: 'image/svg+xml;charset=utf-8' });
     const url = URL.createObjectURL(blob);
