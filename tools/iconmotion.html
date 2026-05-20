@@ -274,6 +274,13 @@ input[type=color]{width:28px;height:28px;border:1.5px solid var(--border);border
 .exp-btn .el{font-size:.59rem;color:var(--muted2);margin-top:1px;}
 .exp-btn:hover .el{color:inherit;opacity:.7;}
 .sec-export-disabled .exp-btn{opacity:.35;pointer-events:none;cursor:default;}
+.gif-size-picker{display:none;grid-column:1/-1;grid-template-columns:repeat(3,1fr);gap:5px;margin-top:-2px;}
+.gif-size-picker.open{display:grid;}
+.gif-size-opt{padding:5px 4px;border-radius:8px;border:1.5px solid var(--border);background:var(--surface2);
+  color:var(--muted);font-size:.65rem;font-weight:500;cursor:pointer;transition:all .15s;font-family:var(--mono);
+  text-align:center;}
+.gif-size-opt:hover{border-color:var(--blue);background:var(--blue-dim);color:var(--blue);}
+.gif-size-opt.loading{opacity:.45;pointer-events:none;}
 
 /* ── LAYER PANEL ──────────────────────────────────────── */
 .layer-panel{display:flex;flex-direction:column;border-bottom:1px solid var(--border);flex:1;min-height:0;}
@@ -628,7 +635,12 @@ input[type=color]{width:28px;height:28px;border:1.5px solid var(--border);border
             <button class="exp-btn" onclick="exportCSS()"><span class="ei">⎘</span>Copy CSS<span class="el">Keyframes</span></button>
             <button class="exp-btn" onclick="exportPNG()"><span class="ei">↓</span>PNG 2×<span class="el">Static</span></button>
             <button class="exp-btn full sl-btn" onclick="exportStorylineJS()"><span class="ei">📋</span>Copy Storyline JS<span class="el">Paste into Execute JavaScript trigger</span></button>
-            <button class="exp-btn full" onclick="exportGIF()" id="gifBtn"><span class="ei">↓</span>Download GIF<span class="el">Animated · 200×200px</span></button>
+            <button class="exp-btn full" onclick="toggleGIFPicker()" id="gifBtn"><span class="ei">↓</span>Download GIF<span class="el">Choose size →</span></button>
+            <div class="gif-size-picker" id="gifSizePicker">
+              <button class="gif-size-opt" onclick="exportGIF(200)" data-size="200">200×200</button>
+              <button class="gif-size-opt" onclick="exportGIF(300)" data-size="300">300×300</button>
+              <button class="gif-size-opt" onclick="exportGIF(500)" data-size="500">500×500</button>
+            </div>
           </div>
           <div style="margin-top:8px;font-size:.63rem;color:var(--muted2);line-height:1.5;text-align:center;">
             Built by <a href="https://abhishektrivedi.com" target="_blank" style="color:var(--blue);text-decoration:none;font-weight:600;">Abhishek Trivedi</a>
@@ -1291,6 +1303,15 @@ function init() {
     }
   });
 
+  // Dismiss GIF size picker on outside click
+  document.addEventListener('click', e => {
+    const picker = document.getElementById('gifSizePicker');
+    const btn    = document.getElementById('gifBtn');
+    if (picker.classList.contains('open') && !picker.contains(e.target) && e.target !== btn && !btn.contains(e.target)) {
+      picker.classList.remove('open');
+    }
+  });
+
   if (!localStorage.getItem('im_toured')) {
     setTimeout(startTour, 700);
   }
@@ -1307,6 +1328,7 @@ function openDrawer() {
 function closeDrawer() {
   document.getElementById('drawer').classList.remove('open');
   document.getElementById('drawerBackdrop').classList.remove('open');
+  document.getElementById('gifSizePicker').classList.remove('open');
 }
 
 function initDrawerResize() { /* no-op: modal has fixed responsive sizing */ }
@@ -2316,15 +2338,25 @@ function exportStorylineJS() {
     .catch(() => showToast('Clipboard blocked', 'err'));
 }
 
-async function exportGIF() {
+function toggleGIFPicker() {
+  const picker = document.getElementById('gifSizePicker');
+  picker.classList.toggle('open');
+}
+
+async function exportGIF(SIZE) {
   if (!state.icon) { showToast('Pick an icon first', 'err'); return; }
-  if (!canExport(exportGIF)) return;
+  if (!canExport(() => exportGIF(SIZE))) return;
   if (state.anim === 'draw-on') { showToast("Draw-on can't export as GIF — use SVG", 'err'); return; }
   if (typeof GIF === 'undefined') { showToast('GIF library not loaded', 'err'); return; }
+  // Close picker and lock all size buttons during generation
+  const picker = document.getElementById('gifSizePicker');
+  picker.classList.remove('open');
+  const sizeOpts = picker.querySelectorAll('.gif-size-opt');
+  sizeOpts.forEach(b => b.classList.add('loading'));
   const btn = document.getElementById('gifBtn');
   btn.style.opacity = '.45';
   btn.style.pointerEvents = 'none';
-  showToast('Fetching GIF encoder…');
+  showToast(`Generating ${SIZE}×${SIZE} GIF…`);
   let workerUrl;
   try {
     const r = await fetch('https://cdn.jsdelivr.net/npm/gif.js@0.2.0/dist/gif.worker.js');
@@ -2333,10 +2365,10 @@ async function exportGIF() {
     workerUrl = URL.createObjectURL(new Blob([txt], { type: 'text/javascript' }));
   } catch(e) {
     btn.style.opacity = ''; btn.style.pointerEvents = '';
+    sizeOpts.forEach(b => b.classList.remove('loading'));
     showToast('Could not load GIF encoder', 'err'); return;
   }
-  showToast('Generating GIF…');
-  const SIZE = 200, FPS = 20;
+  const FPS = 20;
   const dur = Math.max(0.2, 1 / state.speed);
   const FRAMES = Math.round(dur * FPS);
   const FRAME_DELAY = Math.round(1000 / FPS);
@@ -2389,13 +2421,15 @@ async function exportGIF() {
   }
   gif.on('finished', blob => {
     btn.style.opacity = ''; btn.style.pointerEvents = '';
+    sizeOpts.forEach(b => b.classList.remove('loading'));
     URL.revokeObjectURL(workerUrl);
-    triggerDownload(URL.createObjectURL(blob), `${state.icon}-${state.anim}.gif`);
-    showToast('GIF downloaded!', 'ok');
+    triggerDownload(URL.createObjectURL(blob), `${state.icon}-${state.anim}-${SIZE}.gif`);
+    showToast(`GIF downloaded (${SIZE}×${SIZE})!`, 'ok');
     countExport();
   });
   gif.on('error', err => {
     btn.style.opacity = ''; btn.style.pointerEvents = '';
+    sizeOpts.forEach(b => b.classList.remove('loading'));
     URL.revokeObjectURL(workerUrl);
     showToast('GIF generation failed', 'err');
   });
