@@ -760,7 +760,7 @@ input[type=color]{width:28px;height:28px;border:1.5px solid var(--border);border
     <svg class="s-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
     <input type="text" id="searchInput" placeholder="Search 2100+ icons…" autocomplete="off">
   </div>
-  <button class="morph-nav-btn" id="morphPageBtn" onclick="toggleMorphPage()" title="Browse 552 animated morph pairs">
+  <button class="morph-nav-btn" id="morphPageBtn" onclick="toggleMorphPage()" title="Browse 447 animated morph pairs">
     <svg viewBox="0 0 24 24"><path d="M4 12s0-6 8-6 8 6 8 6-0 6-8 6-8-6-8-6z"/><circle cx="12" cy="12" r="2.5"/></svg>
     Morph Pairs
   </button>
@@ -776,7 +776,7 @@ input[type=color]{width:28px;height:28px;border:1.5px solid var(--border);border
         <svg viewBox="0 0 12 12"><rect x="0" y="0" width="12" height="12"/></svg>
       </button>
     </div>
-    <span class="hdr-pill" id="iconCountPill">2116 icons · 552 morph pairs</span>
+    <span class="hdr-pill" id="iconCountPill">2116 icons · 447 morph pairs</span>
     <button class="hdr-btn hdr-rnd" onclick="randomIcon()" title="Pick a random icon">🎲 Random</button>
     <button class="hdr-btn" id="selectModeBtn" onclick="toggleSelectMode()" title="Multi-select icons for batch ZIP download">✓ Select</button>
     <span class="export-counter" id="exportCounter" style="display:none"></span>
@@ -1520,76 +1520,101 @@ function buildCard(card, fromName, toName, fromLabel, toLabel) {
     var p = document.createElementNS(NS,'path'); p.setAttribute('d',d); p.style.opacity='0'; svg.appendChild(p); toOnlyEls.push(p);
   });
   card.innerHTML = '';
+  card.style.cssText = 'background:#FFFFFF;border:1.5px solid #E2E8F0;border-radius:14px;padding:14px 10px 10px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;position:relative;transition:border-color .2s,background .2s,box-shadow .2s;cursor:default;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.06);';
+  card.onmouseenter = function(){ card.style.borderColor='#2563EB'; card.style.background='#EFF6FF'; card.style.boxShadow='0 4px 16px rgba(37,99,235,.12)'; svg.setAttribute('stroke','#1D4ED8'); };
+  card.onmouseleave = function(){ card.style.borderColor='#E2E8F0'; card.style.background='#FFFFFF'; card.style.boxShadow='0 1px 3px rgba(0,0,0,.06)'; svg.setAttribute('stroke', colorPick.value); };
+
+  // SVG area
   var svgWrap = document.createElement('div');
-  svgWrap.style.cssText = 'display:flex;align-items:center;justify-content:center;height:72px;flex-shrink:0;';
+  svgWrap.style.cssText = 'display:flex;align-items:center;justify-content:center;height:68px;flex-shrink:0;';
   svgWrap.appendChild(svg);
   card.appendChild(svgWrap);
+
+  // Pair label
   var lbl = document.createElement('div');
-  lbl.style.cssText = 'font-size:10.5px;color:#64748B;text-align:center;margin-top:4px;font-family:"JetBrains Mono",monospace;line-height:1.4;';
-  lbl.textContent = fromLabel + ' → ' + toLabel;
+  lbl.style.cssText = 'font-size:10px;color:#64748B;text-align:center;margin-top:6px;font-family:"JetBrains Mono",monospace;line-height:1.5;letter-spacing:.01em;';
+  var fromSpan = document.createElement('span');
+  fromSpan.style.cssText = 'color:#0F172A;font-weight:600;';
+  fromSpan.textContent = fromLabel;
+  var arrowSpan = document.createElement('span');
+  arrowSpan.style.cssText = 'color:#94A3B8;margin:0 3px;font-weight:400;';
+  arrowSpan.textContent = '→';
+  var toSpan = document.createElement('span');
+  toSpan.style.cssText = 'color:#0F172A;font-weight:600;';
+  toSpan.textContent = toLabel;
+  lbl.appendChild(fromSpan);
+  lbl.appendChild(arrowSpan);
+  lbl.appendChild(toSpan);
   card.appendChild(lbl);
-  // Per-card color picker — pill button
+
+  // Spacer — pushes footer to bottom
+  var spacer = document.createElement('div');
+  spacer.style.cssText = 'flex:1;';
+  card.appendChild(spacer);
+
+  // ── Single footer row: [● color] [½·1·2·3×] [↓] ──────────────────────────
   var colorPick = document.createElement('input');
   colorPick.type = 'color';
   colorPick.value = '#1e3a5f';
   colorPick.style.cssText = 'width:0;height:0;opacity:0;position:absolute;pointer-events:none;';
-  var colorBtn = document.createElement('button');
-  colorBtn.title = 'Change icon color';
-  colorBtn.style.cssText = 'display:flex;align-items:center;justify-content:center;gap:5px;margin:6px auto 2px;padding:4px 10px;border:1.5px solid #E2E8F0;border-radius:20px;background:#F8FAFC;cursor:pointer;font-size:10px;color:#64748B;font-family:"JetBrains Mono",monospace;transition:border-color .15s,background .15s;min-width:70px;';
-  var colorDot = document.createElement('span');
-  colorDot.style.cssText = 'width:10px;height:10px;border-radius:50%;background:#1e3a5f;flex-shrink:0;display:inline-block;border:1px solid rgba(0,0,0,.1);transition:background .1s;';
-  var colorTxt = document.createElement('span');
-  colorTxt.textContent = 'color';
-  colorBtn.appendChild(colorDot);
-  colorBtn.appendChild(colorTxt);
-  colorBtn.appendChild(colorPick);
-  colorPick.oninput = function() {
+
+  var cardFoot = document.createElement('div');
+  cardFoot.style.cssText = 'display:flex;align-items:center;gap:5px;width:100%;padding:0 2px;';
+
+  // Color swatch
+  var colorSwatch = document.createElement('button');
+  colorSwatch.title = 'Change icon color';
+  colorSwatch.style.cssText = 'width:20px;height:20px;border-radius:50%;background:#1e3a5f;border:2px solid #CBD5E1;cursor:pointer;flex-shrink:0;padding:0;transition:transform .15s,border-color .15s;position:relative;';
+  colorSwatch.appendChild(colorPick);
+  colorSwatch.onmouseenter = function(){ colorSwatch.style.transform='scale(1.18)'; colorSwatch.style.borderColor='#93C5FD'; };
+  colorSwatch.onmouseleave = function(){ colorSwatch.style.transform='scale(1)'; colorSwatch.style.borderColor='#CBD5E1'; };
+  colorSwatch.onclick = function(e){ e.stopPropagation(); colorPick.click(); };
+  colorPick.oninput = function(){
     var col = colorPick.value;
-    colorDot.style.background = col;
+    colorSwatch.style.background = col;
     svg.setAttribute('stroke', col);
   };
-  colorBtn.onmouseenter = function(){ colorBtn.style.borderColor='#93C5FD'; colorBtn.style.background='#EFF6FF'; colorBtn.style.color='#2563EB'; };
-  colorBtn.onmouseleave = function(){ colorBtn.style.borderColor='#E2E8F0'; colorBtn.style.background='#F8FAFC'; colorBtn.style.color='#64748B'; };
-  colorBtn.onclick = function(e){ e.stopPropagation(); colorPick.click(); };
-  card.appendChild(colorBtn);
 
-  // Per-card speed control
-  var speedRow = document.createElement('div');
-  speedRow.style.cssText = 'display:flex;align-items:center;justify-content:center;gap:3px;margin:3px 0 2px;';
-  var speeds = [['½×', 0.5], ['1×', 1], ['2×', 2], ['3×', 3]];
-  var speedChips = [];
+  // Speed chips
   card._activeSpeed = 1;
-  speeds.forEach(function(pair) {
+  var speedChips = [];
+  var speedWrap = document.createElement('div');
+  speedWrap.style.cssText = 'display:flex;gap:2px;flex:1;justify-content:center;';
+  [['½', 0.5], ['1×', 1], ['2×', 2], ['3×', 3]].forEach(function(pair) {
     var label = pair[0], val = pair[1];
     var chip = document.createElement('button');
     chip.textContent = label;
     chip.dataset.speed = val;
-    var isDefault = (val === 1);
-    chip.style.cssText = 'font-size:9px;padding:2px 5px;border-radius:8px;cursor:pointer;font-family:"JetBrains Mono",monospace;font-weight:600;transition:all .12s;border:1px solid ' + (isDefault ? '#93C5FD' : '#E2E8F0') + ';background:' + (isDefault ? '#DBEAFE' : '#F8FAFC') + ';color:' + (isDefault ? '#2563EB' : '#94A3B8') + ';';
-    chip.onclick = function(e) {
+    var active = (val === 1);
+    chip.style.cssText = 'font-size:9.5px;padding:3px 6px;border-radius:6px;cursor:pointer;font-family:"JetBrains Mono",monospace;font-weight:700;transition:all .12s;line-height:1;border:1px solid '+(active?'#93C5FD':'#E2E8F0')+';background:'+(active?'#DBEAFE':'transparent')+';color:'+(active?'#2563EB':'#94A3B8')+';';
+    chip.onclick = function(e){
       e.stopPropagation();
       card._activeSpeed = val;
       if (card._tl) card._tl.timeScale(val);
-      speedChips.forEach(function(c) {
-        var active = (c.dataset.speed == val);
-        c.style.borderColor  = active ? '#93C5FD' : '#E2E8F0';
-        c.style.background   = active ? '#DBEAFE' : '#F8FAFC';
-        c.style.color        = active ? '#2563EB' : '#94A3B8';
+      speedChips.forEach(function(c){
+        var a = (c.dataset.speed == val);
+        c.style.borderColor = a ? '#93C5FD' : '#E2E8F0';
+        c.style.background  = a ? '#DBEAFE' : 'transparent';
+        c.style.color       = a ? '#2563EB' : '#94A3B8';
       });
     };
     speedChips.push(chip);
-    speedRow.appendChild(chip);
+    speedWrap.appendChild(chip);
   });
-  card.appendChild(speedRow);
 
+  // Download button — icon only
   var dlBtn = document.createElement('button');
-  dlBtn.textContent = '↓ SVG';
   dlBtn.title = 'Download animated SVG';
-  dlBtn.style.cssText = 'display:block;margin:4px auto 0;font-size:10px;padding:3px 10px;border:1px solid #BFDBFE;border-radius:12px;background:#EFF6FF;color:#2563EB;cursor:pointer;font-family:"JetBrains Mono",monospace;font-weight:600;transition:background .15s,border-color .15s;';
+  dlBtn.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>';
+  dlBtn.style.cssText = 'width:26px;height:26px;border-radius:7px;border:1px solid #BFDBFE;background:#EFF6FF;color:#2563EB;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .15s,border-color .15s;';
   dlBtn.onmouseenter = function(){ dlBtn.style.background='#DBEAFE'; dlBtn.style.borderColor='#93C5FD'; };
   dlBtn.onmouseleave = function(){ dlBtn.style.background='#EFF6FF'; dlBtn.style.borderColor='#BFDBFE'; };
   dlBtn.onclick = function(e){ e.stopPropagation(); buildDownloadSVG(fromName, toName, fromLabel, toLabel, colorPick.value, card._activeSpeed || 1); };
-  card.appendChild(dlBtn);
+
+  cardFoot.appendChild(colorSwatch);
+  cardFoot.appendChild(speedWrap);
+  cardFoot.appendChild(dlBtn);
+  card.appendChild(cardFoot);
   card.dataset.ready = '1';
   if (morphEls.length || toOnlyEls.length || fromOnlyEls.length) {
     var tl = gsap.timeline({ repeat:-1, yoyo:true, repeatDelay:0.9, delay: Math.random()*0.8 });
@@ -1639,11 +1664,11 @@ function renderMorphGrid(pairs) {
 
   pairs.forEach(function(pair) {
     var card = document.createElement('div');
-    card.style.cssText = 'background:#FFFFFF;border:1.5px solid #E2E8F0;border-radius:14px;padding:14px 8px 10px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;position:relative;transition:border-color .2s,background .2s,box-shadow .2s;cursor:default;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.06);';
+    card.style.cssText = 'background:#FFFFFF;border:1.5px solid #E2E8F0;border-radius:14px;padding:14px 10px 10px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;position:relative;transition:border-color .2s,background .2s,box-shadow .2s;cursor:default;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.06);';
     card.onmouseenter = function(){ card.style.borderColor='#2563EB'; card.style.background='#EFF6FF'; card.style.boxShadow='0 4px 16px rgba(37,99,235,.12)'; };
     card.onmouseleave = function(){ card.style.borderColor='#E2E8F0'; card.style.background='#FFFFFF'; card.style.boxShadow='0 1px 3px rgba(0,0,0,.06)'; };
     var skel = document.createElement('div');
-    skel.style.cssText = 'width:52px;height:52px;margin:10px auto 8px;background:#E2E8F0;border-radius:10px;animation:morphSkelPulse 1.5s ease-in-out infinite;';
+    skel.style.cssText = 'width:52px;height:52px;margin:8px auto 6px;background:#E2E8F0;border-radius:10px;animation:morphSkelPulse 1.5s ease-in-out infinite;';
     card.appendChild(skel);
     card.dataset.from  = pair[0]; card.dataset.to    = pair[1];
     card.dataset.froml = pair[2]||pair[0]; card.dataset.tol   = pair[3]||pair[1];
@@ -1712,8 +1737,8 @@ function buildMorphTabs() {
     btn.style.cssText = 'flex-shrink:0;padding:5px 13px;border-radius:20px;border:1px solid #CBD5E1;background:#F8FAFC;color:#64748B;font-size:11.5px;cursor:pointer;font-family:"JetBrains Mono",monospace;transition:all .15s;white-space:nowrap;';
     btn.textContent = cat.label + (cat.id==='all' ? ' ('+cat.pairs.length+')' : ' ('+cat.pairs.length+')');
     if (cat.id === 'all') {
-      btn.style.background = '#c0392b';
-      btn.style.borderColor = '#c0392b';
+      btn.style.background = '#1e3a5f';
+      btn.style.borderColor = '#1e3a5f';
       btn.style.color = '#fff';
       btn.style.fontWeight = '600';
     }
@@ -1777,7 +1802,7 @@ document.head.appendChild(skSt);
       Back
     </button>
     <div style="font-weight:700;color:#f5f0eb;font-size:.95rem;font-family:'Inter',sans-serif;">⬡ Morph Pairs</div>
-    <div style="font-size:.75rem;color:rgba(245,240,235,.5);font-family:'JetBrains Mono',monospace;">552 pairs · animated SVG morphing</div>
+    <div style="font-size:.75rem;color:rgba(245,240,235,.5);font-family:'JetBrains Mono',monospace;">447 pairs · animated SVG morphing</div>
 
     <!-- Search -->
     <div style="position:relative;margin-left:auto;max-width:260px;width:100%;">
@@ -1794,10 +1819,10 @@ document.head.appendChild(skSt);
   <div id="morphCatTabs" style="display:flex;gap:6px;padding:10px 20px;overflow-x:auto;flex-shrink:0;border-bottom:1px solid #E2E8F0;scrollbar-width:none;background:#FFFFFF;"></div>
 
   <!-- Pair count -->
-  <div id="morphPairCount" style="padding:8px 20px 4px;font-size:.72rem;color:#94A3B8;font-family:'JetBrains Mono',monospace;flex-shrink:0;"></div>
+  <div id="morphPairCount" style="padding:6px 20px 2px;font-size:.7rem;color:#94A3B8;font-family:'JetBrains Mono',monospace;flex-shrink:0;display:flex;align-items:center;gap:8px;"></div>
 
   <!-- Grid -->
-  <div id="morphPageGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(128px,1fr));grid-auto-rows:200px;align-content:start;gap:10px;padding:12px 20px 24px;overflow-y:auto;flex:1;background:#F1F5F9;"></div>
+  <div id="morphPageGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));grid-auto-rows:175px;align-content:start;gap:8px;padding:12px 20px 24px;overflow-y:auto;flex:1;background:#F1F5F9;"></div>
 </div>
 </body>
 </html>
