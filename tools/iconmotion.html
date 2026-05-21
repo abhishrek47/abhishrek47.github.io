@@ -757,24 +757,67 @@ input[type=color]{width:28px;height:28px;border:1.5px solid var(--border);border
 .disclaimer-strip a:hover{color:var(--text);}
 
 /* ── Coffee social-proof toast ───────────────────────────────── */
+@keyframes cft-in{from{opacity:0;transform:translateY(16px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes cft-out{from{opacity:1;transform:translateY(0) scale(1)}to{opacity:0;transform:translateY(10px) scale(.97)}}
+@keyframes kofi-ping{0%,100%{transform:scale(1)}40%{transform:scale(1.2)}70%{transform:scale(.95)}}
 #coffeeToast{
-  position:fixed;bottom:20px;left:20px;z-index:890;
-  background:var(--surface);border:1.5px solid var(--border);
+  position:fixed;bottom:24px;left:24px;z-index:890;
+  background:var(--surface);
+  border:1.5px solid var(--border);
   border-left:3px solid #FF5E5B;
-  border-radius:10px;padding:10px 14px;
-  font-size:.78rem;color:var(--text);
-  box-shadow:0 4px 20px rgba(0,0,0,.13);
-  display:flex;align-items:center;gap:8px;
-  max-width:260px;
-  opacity:0;transform:translateY(12px);pointer-events:none;
-  transition:opacity .35s ease,transform .35s ease;
-  white-space:nowrap;
+  border-radius:14px;
+  padding:0;
+  width:272px;
+  box-shadow:0 8px 32px rgba(0,0,0,.14),0 2px 8px rgba(0,0,0,.08);
+  opacity:0;pointer-events:none;
+  display:none;
+  overflow:hidden;
 }
-#coffeeToast.cft-show{opacity:1;transform:translateY(0);pointer-events:auto;}
-#coffeeToast .cft-icon{font-size:1rem;flex-shrink:0;}
-#coffeeToast .cft-text{line-height:1.4;}
-#coffeeToast .cft-name{font-weight:700;color:var(--text);}
-#coffeeToast .cft-action{color:var(--muted);font-size:.73rem;}
+#coffeeToast.cft-show{
+  display:block;pointer-events:auto;
+  animation:cft-in .38s cubic-bezier(0.16,1,0.3,1) forwards;
+}
+#coffeeToast.cft-hide{
+  animation:cft-out .25s ease forwards;
+}
+.cft-top{
+  display:flex;align-items:center;gap:10px;
+  padding:12px 14px 10px;
+}
+.cft-avatar{
+  width:34px;height:34px;border-radius:50%;flex-shrink:0;
+  background:linear-gradient(135deg,#FF5E5B,#ff8a5b);
+  display:flex;align-items:center;justify-content:center;
+  font-size:.75rem;font-weight:700;color:#fff;letter-spacing:.02em;
+}
+.cft-body{flex:1;min-width:0;}
+.cft-name{
+  font-size:.8rem;font-weight:700;color:var(--text);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  line-height:1.3;
+}
+.cft-action{font-size:.72rem;color:var(--muted);margin-top:1px;line-height:1.3;}
+.cft-action em{color:#FF5E5B;font-style:normal;font-weight:600;}
+.cft-divider{height:1px;background:var(--border);margin:0;}
+.cft-cta{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:9px 14px;gap:8px;
+  text-decoration:none;
+  transition:background .15s;
+}
+.cft-cta:hover{background:rgba(255,94,91,.06);}
+.cft-cta-text{font-size:.73rem;color:var(--muted);line-height:1.35;}
+.cft-cta-btn{
+  display:inline-flex;align-items:center;gap:4px;
+  font-size:.72rem;font-weight:700;color:#FF5E5B;
+  white-space:nowrap;flex-shrink:0;
+  padding:4px 9px;border-radius:20px;
+  border:1.5px solid rgba(255,94,91,.3);
+  background:rgba(255,94,91,.06);
+  transition:all .15s;
+}
+.cft-cta:hover .cft-cta-btn{background:#FF5E5B;color:#fff;border-color:#FF5E5B;}
+.kofi-fab.kofi-ping{animation:kofi-ping .55s ease;}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/flubber@0.4.2/build/flubber.min.js"></script>
 <script>
@@ -1885,12 +1928,19 @@ document.addEventListener('click', function(e){
 </script>
 
 <!-- ── Coffee social-proof toast ─────────────────────────────── -->
-<div id="coffeeToast">
-  <span class="cft-icon">☕</span>
-  <div class="cft-text">
-    <div class="cft-name" id="coffeeToastName"></div>
-    <div class="cft-action">just bought a coffee</div>
+<div id="coffeeToast" role="status" aria-live="polite">
+  <div class="cft-top">
+    <div class="cft-avatar" id="coffeeToastAvatar">☕</div>
+    <div class="cft-body">
+      <div class="cft-name" id="coffeeToastName">Sarah M. from London</div>
+      <div class="cft-action">just supported <em>IconMotion</em> ☕</div>
+    </div>
   </div>
+  <div class="cft-divider"></div>
+  <a class="cft-cta" href="https://ko-fi.com/abhishektrivedi" target="_blank" rel="noopener">
+    <span class="cft-cta-text">Enjoying free icons &amp; morph pairs?</span>
+    <span class="cft-cta-btn">Support too →</span>
+  </a>
 </div>
 
 <script>
@@ -2106,14 +2156,32 @@ document.addEventListener('click', function(e){
     return name;
   }
 
+  function initials(name){
+    /* Extract first two letters of first word for avatar */
+    var parts=name.split(' from ')[0].trim().split(' ');
+    return (parts[0]||'').charAt(0).toUpperCase()+(parts[1]||'').replace('.','').charAt(0).toUpperCase();
+  }
+
   function showToastCoffee(){
     var name=nextName();
     var el=document.getElementById('coffeeToast');
     var nm=document.getElementById('coffeeToastName');
+    var av=document.getElementById('coffeeToastAvatar');
     if(!el||!nm)return;
+    /* Reset animation state */
+    el.classList.remove('cft-show','cft-hide');
+    void el.offsetWidth; /* reflow */
     nm.textContent=name;
+    if(av){ av.textContent=initials(name); }
     el.classList.add('cft-show');
-    setTimeout(function(){ el.classList.remove('cft-show'); },5500);
+    /* Ping the Ko-fi FAB to visually link both elements */
+    var fab=document.getElementById('kofiFab');
+    if(fab){ fab.classList.add('kofi-ping'); setTimeout(function(){fab.classList.remove('kofi-ping');},600); }
+    /* Auto-dismiss after 7s with out-animation */
+    setTimeout(function(){
+      el.classList.add('cft-hide');
+      setTimeout(function(){ el.classList.remove('cft-show','cft-hide'); },260);
+    },7000);
     scheduleNext();
   }
 
