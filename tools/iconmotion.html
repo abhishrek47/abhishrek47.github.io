@@ -1770,16 +1770,24 @@ function renderMorphPairsGrid(pairs) {
     grid.appendChild(card);
   });
 
+  var _batchIdx = 0;
   _obs = new IntersectionObserver(function(entries) {
     entries.forEach(function(entry) {
       if (!entry.isIntersecting) return;
       var card = entry.target;
       if (card.dataset.ready) { _obs.unobserve(card); return; }
       _obs.unobserve(card);
+      card._buildIdx = _batchIdx++;
+      /* Small stagger so GSAP doesn't get a simultaneous batch of timeline creates */
+      var buildDelay = card._buildIdx ? card._buildIdx * 30 : 0;
       Promise.all([fetchIconPaths(card.dataset.from), fetchIconPaths(card.dataset.to)])
-        .then(function(){ buildCard(card, card.dataset.from, card.dataset.to, card.dataset.froml, card.dataset.tol); });
+        .then(function(){
+          setTimeout(function(){
+            if (card.isConnected) buildCard(card, card.dataset.from, card.dataset.to, card.dataset.froml, card.dataset.tol);
+          }, buildDelay);
+        });
     });
-  }, { rootMargin:'120px', threshold:0 });
+  }, { root: grid, rootMargin:'200px', threshold:0 });
   grid.querySelectorAll('[data-from]').forEach(function(c){ _obs.observe(c); });
 }
 
