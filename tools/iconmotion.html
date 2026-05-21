@@ -1721,7 +1721,7 @@ input[type=color]{width:28px;height:28px;border:1.5px solid var(--border);border
     var svg = document.createElementNS(NS, 'svg');
     svg.setAttribute('viewBox','0 0 24 24');
     svg.setAttribute('fill','none');
-    svg.setAttribute('stroke','#e2e8f0');
+    svg.setAttribute('stroke','#f5f0eb');
     svg.setAttribute('stroke-width','1.6');
     svg.setAttribute('stroke-linecap','round');
     svg.setAttribute('stroke-linejoin','round');
@@ -1769,14 +1769,14 @@ input[type=color]{width:28px;height:28px;border:1.5px solid var(--border);border
     card.appendChild(svgWrap);
 
     var lbl = document.createElement('div');
-    lbl.style.cssText = 'font-size:11px;color:#7a8a99;text-align:center;margin-top:6px;font-family:monospace;line-height:1.3;';
+    lbl.style.cssText = 'font-size:11px;color:rgba(245,240,235,.6);text-align:center;margin-top:6px;font-family:monospace;line-height:1.3;';
     lbl.textContent = fromLabel + ' → ' + toLabel;
     card.appendChild(lbl);
 
     // Download button
     var dlBtn = document.createElement('button');
     dlBtn.textContent = '↓ SVG';
-    dlBtn.style.cssText = 'display:block;margin:8px auto 0;font-size:10px;padding:2px 8px;border:1px solid #c0392b;border-radius:12px;background:transparent;color:#c0392b;cursor:pointer;font-family:monospace;';
+    dlBtn.style.cssText = 'display:block;margin:8px auto 0;font-size:10px;padding:3px 10px;border:1px solid rgba(192,57,43,.7);border-radius:12px;background:rgba(192,57,43,.12);color:#f5f0eb;cursor:pointer;font-family:monospace;transition:background .15s;';
     dlBtn.onclick = function(e){
       e.stopPropagation();
       buildDownloadSVG(fromName, toName, fromLabel, toLabel);
@@ -1860,8 +1860,8 @@ input[type=color]{width:28px;height:28px;border:1.5px solid var(--border);border
     pairs.forEach(function(pair) {
       var card = document.createElement('div');
       card.style.cssText = [
-        'background:#111',
-        'border:1px solid #222',
+        'background:rgba(255,255,255,.07)',
+        'border:1px solid rgba(255,255,255,.12)',
         'border-radius:14px',
         'padding:18px 10px 12px',
         'cursor:default',
@@ -1870,15 +1870,15 @@ input[type=color]{width:28px;height:28px;border:1.5px solid var(--border);border
         'align-items:center',
         'justify-content:center',
         'position:relative',
-        'transition:border-color .2s,box-shadow .2s',
-        'color:#e2e8f0',
+        'transition:border-color .2s,box-shadow .2s,background .2s',
+        'color:#f5f0eb',
       ].join(';');
-      card.onmouseenter = function(){ card.style.borderColor='rgba(0,255,136,0.35)'; card.style.boxShadow='0 0 16px rgba(0,255,136,0.12)'; };
-      card.onmouseleave = function(){ card.style.borderColor='#222'; card.style.boxShadow='none'; };
+      card.onmouseenter = function(){ card.style.borderColor='rgba(192,57,43,.7)'; card.style.boxShadow='0 0 18px rgba(192,57,43,.18)'; card.style.background='rgba(255,255,255,.11)'; };
+      card.onmouseleave = function(){ card.style.borderColor='rgba(255,255,255,.12)'; card.style.boxShadow='none'; card.style.background='rgba(255,255,255,.07)'; };
 
       // Skeleton placeholder
       var skel = document.createElement('div');
-      skel.style.cssText = 'width:48px;height:48px;background:#2a2a2a;border-radius:8px;animation:im-pulse 1.5s ease-in-out infinite;';
+      skel.style.cssText = 'width:48px;height:48px;background:rgba(255,255,255,.1);border-radius:8px;animation:im-pulse 1.5s ease-in-out infinite;';
       card.appendChild(skel);
 
       card.dataset.from  = pair[0];
@@ -1917,18 +1917,18 @@ input[type=color]{width:28px;height:28px;border:1.5px solid var(--border);border
     // Pulse keyframe
     var styleEl = document.createElement('style');
     styleEl.textContent = [
-      '@keyframes im-pulse{0%,100%{opacity:.4}50%{opacity:.8}}',
-      '#im-gpov{position:fixed;inset:0;z-index:999999;background:rgba(0,0,0,.7);opacity:0;pointer-events:none;transition:opacity .25s;display:flex;align-items:center;justify-content:center;padding:16px;box-sizing:border-box;}',
+      '@keyframes im-pulse{0%,100%{opacity:.15}50%{opacity:.35)}',
+      '#im-gpov{position:fixed;inset:0;z-index:999999;background:rgba(8,18,32,.88);opacity:0;pointer-events:none;transition:opacity .28s;display:flex;align-items:center;justify-content:center;padding:16px;box-sizing:border-box;}',
       '#im-gpov.open{opacity:1;pointer-events:all;}',
-      '#im-gppanel{background:#0e1117;border-radius:16px;width:100%;max-width:1100px;max-height:90vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 24px 64px rgba(0,0,0,.6);}',
-      '#im-gpheader{padding:20px 24px 0;border-bottom:1px solid #222;}',
+      '#im-gppanel{background:#1e3a5f;border-radius:18px;width:100%;max-width:1100px;max-height:90vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 28px 80px rgba(0,0,0,.7);}',
+      '#im-gpheader{padding:20px 24px 0;border-bottom:1px solid rgba(255,255,255,.1);}',
       '#im-gptabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:12px;scrollbar-width:none;}',
       '#im-gptabs::-webkit-scrollbar{display:none;}',
-      '.im-tab{flex-shrink:0;padding:6px 14px;border-radius:20px;border:1px solid #333;background:transparent;color:#888;font-size:12px;cursor:pointer;font-family:monospace;transition:all .15s;white-space:nowrap;}',
-      '.im-tab:hover{border-color:#555;color:#ccc;}',
-      '.im-tab.active{background:#c0392b;border-color:#c0392b;color:#fff;}',
-      '#im-gpgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px;padding:16px;overflow-y:auto;flex:1;}',
-      '#im-gpcount{font-size:11px;color:#555;font-family:monospace;margin-bottom:8px;}',
+      '.im-tab{flex-shrink:0;padding:6px 14px;border-radius:20px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.05);color:rgba(245,240,235,.55);font-size:12px;cursor:pointer;font-family:monospace;transition:all .15s;white-space:nowrap;}',
+      '.im-tab:hover{border-color:rgba(255,255,255,.4);color:#f5f0eb;background:rgba(255,255,255,.1);}',
+      '.im-tab.active{background:#c0392b;border-color:#c0392b;color:#fff;font-weight:600;}',
+      '#im-gpgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(118px,1fr));gap:10px;padding:16px 20px 20px;overflow-y:auto;flex:1;}',
+      '#im-gpcount{font-size:11px;color:rgba(245,240,235,.4);font-family:monospace;margin-bottom:8px;}',
     ].join('');
     document.head.appendChild(styleEl);
 
@@ -1953,7 +1953,7 @@ input[type=color]{width:28px;height:28px;border:1.5px solid var(--border);border
     title.textContent = '⬡ IconMotion — Morph Library';
     var closeBtn = document.createElement('button');
     closeBtn.textContent = '✕';
-    closeBtn.style.cssText = 'background:none;border:none;color:#666;font-size:18px;cursor:pointer;padding:0 4px;';
+    closeBtn.style.cssText = 'background:none;border:none;color:rgba(245,240,235,.4);font-size:18px;cursor:pointer;padding:0 4px;transition:color .15s;';
     closeBtn.onclick = function(){ ov.classList.remove('open'); };
     titleRow.appendChild(title);
     titleRow.appendChild(closeBtn);
