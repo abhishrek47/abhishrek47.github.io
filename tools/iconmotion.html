@@ -713,6 +713,14 @@ input[type=color]{width:28px;height:28px;border:1.5px solid var(--border);border
   border-color:var(--blue);color:var(--blue);}
 #morphMainBtnIcon{font-size:.9rem;}
 #morphMainBtnLabel{flex:1;text-align:left;}
+
+/* ── Hidden UI elements ─────────────────────────────────────── */
+/* Remove Morph button from animation picker */
+#morphMainBtn{display:none !important;}
+/* Remove dynamically-injected MORPH TARGET drawer section */
+#morphSection{display:none !important;}
+/* Remove ⇌ morph pair badges from home grid icon cells */
+.morph-badge{display:none !important;}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/flubber@0.4.2/build/flubber.min.js"></script>
 <script>
@@ -950,11 +958,6 @@ input[type=color]{width:28px;height:28px;border:1.5px solid var(--border);border
             <span class="erb-icon">📋</span>
             <span class="erb-text"><span class="erb-label">Copy Storyline JS</span><span class="erb-sub">Execute JavaScript trigger</span></span>
             <span class="erb-arrow">⎘</span>
-          </button>
-          <button class="exp-row-btn pptx-btn" onclick="exportPPTX()">
-            <span class="erb-icon">↓</span>
-            <span class="erb-text"><span class="erb-label">Download PPTX</span><span class="erb-sub">PowerPoint · animated slide</span></span>
-            <span class="erb-arrow">↓</span>
           </button>
         </div>
         <div class="exp-credits">
