@@ -969,7 +969,7 @@ input[type=color]{width:28px;height:28px;border:1.5px solid var(--border);border
     <button class="am-close" onclick="closeSignInModal()">✕</button>
     <span class="am-icon">⚡</span>
     <div class="am-title">Sign in to export</div>
-    <div class="am-sub">Get 15 free exports — SVG, CSS, PNG, GIF, Storyline JS.<br>No credit card required.</div>
+    <div class="am-sub">Get 15 free downloads — icons &amp; morph pairs, all formats. No credit card required.</div>
     <button class="google-btn" onclick="signInWithGoogle()">
       <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
         <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
@@ -988,8 +988,8 @@ input[type=color]{width:28px;height:28px;border:1.5px solid var(--border);border
   <div class="auth-modal paywall-modal">
     <button class="am-close" onclick="closePaywallModal()">✕</button>
     <span class="am-icon">🚀</span>
-    <div class="am-title" id="paywallTitle">You've used all 15 free exports</div>
-    <div class="am-sub" id="paywallSub">Upgrade to Pro for unlimited exports — all formats, all animations, all features. One payment, no limits.</div>
+    <div class="am-title" id="paywallTitle">You've used all 15 free downloads</div>
+    <div class="am-sub" id="paywallSub">Upgrade to Pro for unlimited exports — icons, morph pairs, all formats, all animations. One payment, no limits.</div>
     <div class="plan-grid">
       <div class="plan-card" onclick="openCheckout('one-time')">
         <div class="plan-pill">Best Value</div>
@@ -1529,7 +1529,7 @@ function buildCard(card, fromName, toName, fromLabel, toLabel) {
   colorPick.style.cssText = 'width:0;height:0;opacity:0;position:absolute;pointer-events:none;';
 
   var cardFoot = document.createElement('div');
-  cardFoot.style.cssText = 'display:flex;align-items:center;gap:5px;width:100%;padding:0 2px;';
+  cardFoot.style.cssText = 'display:flex;align-items:center;gap:5px;width:100%;padding:2px 6px 4px;';
 
   // Color swatch
   var colorSwatch = document.createElement('button');
@@ -1597,6 +1597,10 @@ function buildCard(card, fromName, toName, fromLabel, toLabel) {
 
 // ── Download animated SVG ─────────────────────────────────────────────────────
 function buildDownloadSVG(fromName, toName, fromLabel, toLabel, color, speed) {
+  // Gate against free limit (same as homepage exports)
+  if (typeof canExport === 'function') {
+    if (!canExport(function(){ buildDownloadSVG(fromName, toName, fromLabel, toLabel, color, speed); })) return;
+  }
   var strokeColor = (color && color.length) ? color : '#1e3a5f';
   var fP = cache[fromName]||['M 0 0'], tP = cache[toName]||['M 0 0'];
   var mp = matchPaths(fP, tP);
@@ -1619,6 +1623,8 @@ function buildDownloadSVG(fromName, toName, fromLabel, toLabel, color, speed) {
   var blob = new Blob([svgParts.join('\n')], {type:'image/svg+xml'});
   var a = document.createElement('a'); a.href = URL.createObjectURL(blob);
   a.download = fromName+'-to-'+toName+'.svg'; a.click();
+  // Count this export against the free limit
+  if (typeof countExport === 'function') countExport();
 }
 
 // ── Render morph page grid ─────────────────────────────────────────────────────
