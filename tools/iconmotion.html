@@ -1553,6 +1553,33 @@ function buildCard(card, fromName, toName, fromLabel, toLabel) {
   colorBtn.onclick = function(e){ e.stopPropagation(); colorPick.click(); };
   card.appendChild(colorBtn);
 
+  // Per-card speed control
+  var speedRow = document.createElement('div');
+  speedRow.style.cssText = 'display:flex;align-items:center;justify-content:center;gap:3px;margin:3px 0 2px;';
+  var speeds = [['½×', 0.5], ['1×', 1], ['2×', 2], ['3×', 3]];
+  var speedChips = [];
+  speeds.forEach(function(pair) {
+    var label = pair[0], val = pair[1];
+    var chip = document.createElement('button');
+    chip.textContent = label;
+    chip.dataset.speed = val;
+    var isDefault = (val === 1);
+    chip.style.cssText = 'font-size:9px;padding:2px 5px;border-radius:8px;cursor:pointer;font-family:"JetBrains Mono",monospace;font-weight:600;transition:all .12s;border:1px solid ' + (isDefault ? '#93C5FD' : '#E2E8F0') + ';background:' + (isDefault ? '#DBEAFE' : '#F8FAFC') + ';color:' + (isDefault ? '#2563EB' : '#94A3B8') + ';';
+    chip.onclick = function(e) {
+      e.stopPropagation();
+      if (card._tl) card._tl.timeScale(val);
+      speedChips.forEach(function(c) {
+        var active = (c.dataset.speed == val);
+        c.style.borderColor  = active ? '#93C5FD' : '#E2E8F0';
+        c.style.background   = active ? '#DBEAFE' : '#F8FAFC';
+        c.style.color        = active ? '#2563EB' : '#94A3B8';
+      });
+    };
+    speedChips.push(chip);
+    speedRow.appendChild(chip);
+  });
+  card.appendChild(speedRow);
+
   var dlBtn = document.createElement('button');
   dlBtn.textContent = '↓ SVG';
   dlBtn.title = 'Download animated SVG';
@@ -1768,7 +1795,7 @@ document.head.appendChild(skSt);
   <div id="morphPairCount" style="padding:8px 20px 4px;font-size:.72rem;color:#94A3B8;font-family:'JetBrains Mono',monospace;flex-shrink:0;"></div>
 
   <!-- Grid -->
-  <div id="morphPageGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(128px,1fr));grid-auto-rows:170px;align-content:start;gap:10px;padding:12px 20px 24px;overflow-y:auto;flex:1;background:#F1F5F9;"></div>
+  <div id="morphPageGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(128px,1fr));grid-auto-rows:200px;align-content:start;gap:10px;padding:12px 20px 24px;overflow-y:auto;flex:1;background:#F1F5F9;"></div>
 </div>
 </body>
 </html>
