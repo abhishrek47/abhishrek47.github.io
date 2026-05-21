@@ -1558,6 +1558,7 @@ function buildCard(card, fromName, toName, fromLabel, toLabel) {
   speedRow.style.cssText = 'display:flex;align-items:center;justify-content:center;gap:3px;margin:3px 0 2px;';
   var speeds = [['½×', 0.5], ['1×', 1], ['2×', 2], ['3×', 3]];
   var speedChips = [];
+  card._activeSpeed = 1;
   speeds.forEach(function(pair) {
     var label = pair[0], val = pair[1];
     var chip = document.createElement('button');
@@ -1567,6 +1568,7 @@ function buildCard(card, fromName, toName, fromLabel, toLabel) {
     chip.style.cssText = 'font-size:9px;padding:2px 5px;border-radius:8px;cursor:pointer;font-family:"JetBrains Mono",monospace;font-weight:600;transition:all .12s;border:1px solid ' + (isDefault ? '#93C5FD' : '#E2E8F0') + ';background:' + (isDefault ? '#DBEAFE' : '#F8FAFC') + ';color:' + (isDefault ? '#2563EB' : '#94A3B8') + ';';
     chip.onclick = function(e) {
       e.stopPropagation();
+      card._activeSpeed = val;
       if (card._tl) card._tl.timeScale(val);
       speedChips.forEach(function(c) {
         var active = (c.dataset.speed == val);
@@ -1586,7 +1588,7 @@ function buildCard(card, fromName, toName, fromLabel, toLabel) {
   dlBtn.style.cssText = 'display:block;margin:4px auto 0;font-size:10px;padding:3px 10px;border:1px solid #BFDBFE;border-radius:12px;background:#EFF6FF;color:#2563EB;cursor:pointer;font-family:"JetBrains Mono",monospace;font-weight:600;transition:background .15s,border-color .15s;';
   dlBtn.onmouseenter = function(){ dlBtn.style.background='#DBEAFE'; dlBtn.style.borderColor='#93C5FD'; };
   dlBtn.onmouseleave = function(){ dlBtn.style.background='#EFF6FF'; dlBtn.style.borderColor='#BFDBFE'; };
-  dlBtn.onclick = function(e){ e.stopPropagation(); buildDownloadSVG(fromName, toName, fromLabel, toLabel, colorPick.value); };
+  dlBtn.onclick = function(e){ e.stopPropagation(); buildDownloadSVG(fromName, toName, fromLabel, toLabel, colorPick.value, card._activeSpeed || 1); };
   card.appendChild(dlBtn);
   card.dataset.ready = '1';
   if (morphEls.length || toOnlyEls.length || fromOnlyEls.length) {
@@ -1599,11 +1601,11 @@ function buildCard(card, fromName, toName, fromLabel, toLabel) {
 }
 
 // ── Download animated SVG ─────────────────────────────────────────────────────
-function buildDownloadSVG(fromName, toName, fromLabel, toLabel, color) {
+function buildDownloadSVG(fromName, toName, fromLabel, toLabel, color, speed) {
   var strokeColor = (color && color.length) ? color : '#1e3a5f';
   var fP = cache[fromName]||['M 0 0'], tP = cache[toName]||['M 0 0'];
   var mp = matchPaths(fP, tP);
-  var dur = 2.6, frames = 20;
+  var dur = parseFloat(((2.6 / (speed || 1)).toFixed(2))), frames = 20;
   var svgParts = ['<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="'+strokeColor+'" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">'];
   mp.identical.forEach(function(m){ svgParts.push('<path d="'+m.d+'"/>'); });
   mp.morphPairs.forEach(function(m) {
