@@ -1438,7 +1438,6 @@ for (var ci = 1; ci < CATEGORIES.length; ci++) {
 var _currentPairs = CATEGORIES[0].pairs;
 var _currentCatId = 'all';
 var _searchTerm = '';
-var _morphColor = '#1e3a5f';
 var _obs = null;
 var _gsapReady = false;
 
@@ -1500,7 +1499,7 @@ function buildCard(card, fromName, toName, fromLabel, toLabel) {
   var svg = document.createElementNS(NS, 'svg');
   svg.setAttribute('viewBox','0 0 24 24');
   svg.setAttribute('fill','none');
-  svg.setAttribute('stroke', _morphColor);
+  svg.setAttribute('stroke', '#1e3a5f');
   svg.setAttribute('stroke-width','1.6');
   svg.setAttribute('stroke-linecap','round');
   svg.setAttribute('stroke-linejoin','round');
@@ -1528,13 +1527,38 @@ function buildCard(card, fromName, toName, fromLabel, toLabel) {
   lbl.style.cssText = 'font-size:10.5px;color:#64748B;text-align:center;margin-top:4px;font-family:"JetBrains Mono",monospace;line-height:1.4;';
   lbl.textContent = fromLabel + ' → ' + toLabel;
   card.appendChild(lbl);
+  // Per-card color picker
+  var colorRow = document.createElement('div');
+  colorRow.style.cssText = 'display:flex;align-items:center;justify-content:center;gap:5px;margin:6px 0 2px;';
+  var colorDot = document.createElement('div');
+  colorDot.style.cssText = 'width:12px;height:12px;border-radius:50%;background:#1e3a5f;border:1.5px solid #CBD5E1;flex-shrink:0;pointer-events:none;transition:background .1s;';
+  var colorPick = document.createElement('input');
+  colorPick.type = 'color';
+  colorPick.value = '#1e3a5f';
+  colorPick.title = 'Pick icon color';
+  colorPick.style.cssText = 'width:0;height:0;opacity:0;position:absolute;pointer-events:none;';
+  var colorLabel = document.createElement('label');
+  colorLabel.title = 'Change icon color';
+  colorLabel.style.cssText = 'font-size:9.5px;color:#94A3B8;cursor:pointer;font-family:"JetBrains Mono",monospace;user-select:none;display:flex;align-items:center;gap:4px;';
+  colorLabel.textContent = 'color';
+  colorLabel.appendChild(colorPick);
+  colorPick.oninput = function() {
+    var col = colorPick.value;
+    colorDot.style.background = col;
+    svg.setAttribute('stroke', col);
+  };
+  colorLabel.onclick = function(e) { e.stopPropagation(); colorPick.click(); };
+  colorRow.appendChild(colorDot);
+  colorRow.appendChild(colorLabel);
+  card.appendChild(colorRow);
+
   var dlBtn = document.createElement('button');
   dlBtn.textContent = '↓ SVG';
   dlBtn.title = 'Download animated SVG';
-  dlBtn.style.cssText = 'display:block;margin:8px auto 0;font-size:10px;padding:3px 10px;border:1px solid #BFDBFE;border-radius:12px;background:#EFF6FF;color:#2563EB;cursor:pointer;font-family:"JetBrains Mono",monospace;font-weight:600;transition:background .15s,border-color .15s;';
+  dlBtn.style.cssText = 'display:block;margin:4px auto 0;font-size:10px;padding:3px 10px;border:1px solid #BFDBFE;border-radius:12px;background:#EFF6FF;color:#2563EB;cursor:pointer;font-family:"JetBrains Mono",monospace;font-weight:600;transition:background .15s,border-color .15s;';
   dlBtn.onmouseenter = function(){ dlBtn.style.background='#DBEAFE'; dlBtn.style.borderColor='#93C5FD'; };
   dlBtn.onmouseleave = function(){ dlBtn.style.background='#EFF6FF'; dlBtn.style.borderColor='#BFDBFE'; };
-  dlBtn.onclick = function(e){ e.stopPropagation(); buildDownloadSVG(fromName, toName, fromLabel, toLabel); };
+  dlBtn.onclick = function(e){ e.stopPropagation(); buildDownloadSVG(fromName, toName, fromLabel, toLabel, colorPick.value); };
   card.appendChild(dlBtn);
   card.dataset.ready = '1';
   if (morphEls.length || toOnlyEls.length || fromOnlyEls.length) {
@@ -1547,11 +1571,12 @@ function buildCard(card, fromName, toName, fromLabel, toLabel) {
 }
 
 // ── Download animated SVG ─────────────────────────────────────────────────────
-function buildDownloadSVG(fromName, toName, fromLabel, toLabel) {
+function buildDownloadSVG(fromName, toName, fromLabel, toLabel, color) {
+  var strokeColor = (color && color.length) ? color : '#1e3a5f';
   var fP = cache[fromName]||['M 0 0'], tP = cache[toName]||['M 0 0'];
   var mp = matchPaths(fP, tP);
   var dur = 2.6, frames = 20;
-  var svgParts = ['<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">'];
+  var svgParts = ['<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="'+strokeColor+'" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">'];
   mp.identical.forEach(function(m){ svgParts.push('<path d="'+m.d+'"/>'); });
   mp.morphPairs.forEach(function(m) {
     var stl = gsap.timeline({ paused:true });
@@ -1705,24 +1730,6 @@ window.toggleMorphPage = function() {
   }
 };
 
-// ── Morph page color picker ───────────────────────────────────────────────────
-window.setMorphColor = function(color) {
-  _morphColor = color;
-  // Repaint all already-built SVGs instantly
-  document.querySelectorAll('#morphPageGrid svg').forEach(function(svg) {
-    svg.setAttribute('stroke', color);
-  });
-  // Update swatch active state
-  document.querySelectorAll('.mph-swatch').forEach(function(sw) {
-    sw.style.outline = (sw.dataset.color === color) ? '2.5px solid #2563EB' : 'none';
-    sw.style.outlineOffset = '2px';
-    sw.style.transform = (sw.dataset.color === color) ? 'scale(1.25)' : 'scale(1)';
-  });
-  // Sync custom color input
-  var ci = document.getElementById('morphColorInput');
-  if (ci) ci.value = color;
-};
-
 // Add skeleton keyframe
 var skSt = document.createElement('style');
 skSt.textContent = '@keyframes morphSkelPulse{0%,100%{opacity:.4}50%{opacity:.9}}';
@@ -1741,33 +1748,6 @@ document.head.appendChild(skSt);
     </button>
     <div style="font-weight:700;color:#f5f0eb;font-size:.95rem;font-family:'Inter',sans-serif;">⬡ Morph Pairs</div>
     <div style="font-size:.75rem;color:rgba(245,240,235,.5);font-family:'JetBrains Mono',monospace;">552 pairs · animated SVG morphing</div>
-
-    <!-- Color picker -->
-    <div style="display:flex;align-items:center;gap:6px;margin-left:12px;flex-shrink:0;">
-      <span style="font-size:.68rem;color:rgba(245,240,235,.55);font-family:'Inter',sans-serif;letter-spacing:.04em;">Color</span>
-      <div style="display:flex;align-items:center;gap:5px;">
-        <!-- Preset swatches -->
-        <button class="mph-swatch" data-color="#1e3a5f" onclick="setMorphColor('#1e3a5f')" title="Navy (default)"
-          style="width:18px;height:18px;border-radius:50%;background:#1e3a5f;border:2px solid rgba(255,255,255,.3);cursor:pointer;transition:transform .15s,outline .15s;outline:2.5px solid #2563EB;outline-offset:2px;transform:scale(1.25);"></button>
-        <button class="mph-swatch" data-color="#2563EB" onclick="setMorphColor('#2563EB')" title="Blue"
-          style="width:18px;height:18px;border-radius:50%;background:#2563EB;border:2px solid rgba(255,255,255,.3);cursor:pointer;transition:transform .15s,outline .15s;"></button>
-        <button class="mph-swatch" data-color="#c0392b" onclick="setMorphColor('#c0392b')" title="Terracotta"
-          style="width:18px;height:18px;border-radius:50%;background:#c0392b;border:2px solid rgba(255,255,255,.3);cursor:pointer;transition:transform .15s,outline .15s;"></button>
-        <button class="mph-swatch" data-color="#16a34a" onclick="setMorphColor('#16a34a')" title="Green"
-          style="width:18px;height:18px;border-radius:50%;background:#16a34a;border:2px solid rgba(255,255,255,.3);cursor:pointer;transition:transform .15s,outline .15s;"></button>
-        <button class="mph-swatch" data-color="#7c3aed" onclick="setMorphColor('#7c3aed')" title="Purple"
-          style="width:18px;height:18px;border-radius:50%;background:#7c3aed;border:2px solid rgba(255,255,255,.3);cursor:pointer;transition:transform .15s,outline .15s;"></button>
-        <button class="mph-swatch" data-color="#0F172A" onclick="setMorphColor('#0F172A')" title="Black"
-          style="width:18px;height:18px;border-radius:50%;background:#0F172A;border:2px solid rgba(255,255,255,.3);cursor:pointer;transition:transform .15s,outline .15s;"></button>
-        <!-- Custom color -->
-        <label title="Custom color" style="width:18px;height:18px;border-radius:50%;border:2px solid rgba(255,255,255,.4);overflow:hidden;cursor:pointer;display:block;position:relative;flex-shrink:0;" >
-          <span style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:9px;pointer-events:none;color:#fff;background:linear-gradient(135deg,#e74c3c,#f39c12,#2ecc71,#3498db,#9b59b6);">✦</span>
-          <input id="morphColorInput" type="color" value="#1e3a5f"
-            style="position:absolute;inset:0;opacity:0;width:100%;height:100%;cursor:pointer;border:none;"
-            oninput="setMorphColor(this.value)">
-        </label>
-      </div>
-    </div>
 
     <!-- Search -->
     <div style="position:relative;margin-left:auto;max-width:260px;width:100%;">
