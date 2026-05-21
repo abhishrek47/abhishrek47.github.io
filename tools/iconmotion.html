@@ -1038,113 +1038,95 @@ input[type=color]{width:28px;height:28px;border:1.5px solid var(--border);border
 (function () {
   'use strict';
 
-  // ── Curated morph pairs ────────────────────────────────────────────────────
   const PAIRS = [
-    // Shield family — all share identical outline base path
-    ['shield', 'shield-check',    'Shield', 'Verified'],
-    ['shield', 'shield-x',        'Shield', 'Blocked'],
-    ['shield', 'shield-alert',    'Shield', 'Alert'],
-    ['shield', 'shield-off',      'Shield', 'Off'],
-    // Lock
-    ['lock', 'lock-open',         'Lock', 'Unlock'],
-    // Visibility
-    ['eye', 'eye-off',            'Show', 'Hide'],
-    // Volume
-    ['volume-2', 'volume-x',      'Volume', 'Mute'],
-    // Mic / Camera
-    ['mic', 'mic-off',            'Mic', 'Muted'],
-    ['camera', 'camera-off',      'Camera', 'Off'],
-    // Bell
-    ['bell', 'bell-off',          'Bell', 'Silent'],
-    ['bell', 'bell-ring',         'Bell', 'Ringing'],
-    // User
-    ['user', 'user-check',        'User', 'Verified'],
-    ['user', 'user-x',            'User', 'Removed'],
-    // Bookmark
-    ['bookmark', 'bookmark-check','Bookmark', 'Saved'],
-    // Network
-    ['wifi', 'wifi-off',          'Online', 'Offline'],
-    ['bluetooth', 'bluetooth-off','Bluetooth', 'Off'],
-    // Status
-    ['circle-check', 'circle-x',  'Success', 'Error'],
-    ['thumbs-up', 'thumbs-down',  'Like', 'Dislike'],
-    // Heart / Star
-    ['heart', 'heart-off',        'Heart', 'Off'],
-    ['star', 'star-off',          'Starred', 'Plain'],
-    // Power
-    ['power', 'power-off',        'Power On', 'Power Off'],
-    // L&D
-    ['book-open', 'book',         'Reading', 'Closed'],
+    ['shield',    'shield-check',  'Shield',    'Verified'],
+    ['shield',    'shield-x',      'Shield',    'Blocked'],
+    ['shield',    'shield-alert',  'Shield',    'Alert'],
+    ['shield',    'shield-off',    'Shield',    'Off'],
+    ['lock',      'lock-open',     'Lock',      'Unlock'],
+    ['eye',       'eye-off',       'Show',      'Hide'],
+    ['volume-2',  'volume-x',      'Volume',    'Mute'],
+    ['mic',       'mic-off',       'Mic',       'Muted'],
+    ['camera',    'camera-off',    'Camera',    'Off'],
+    ['bell',      'bell-off',      'Bell',      'Silent'],
+    ['bell',      'bell-ring',     'Bell',      'Ringing'],
+    ['user',      'user-check',    'User',      'Verified'],
+    ['user',      'user-x',        'User',      'Removed'],
+    ['bookmark',  'bookmark-check','Bookmark',  'Saved'],
+    ['wifi',      'wifi-off',      'Online',    'Offline'],
+    ['bluetooth', 'bluetooth-off', 'Bluetooth', 'Off'],
+    ['circle-check','circle-x',   'Success',   'Error'],
+    ['thumbs-up', 'thumbs-down',  'Like',      'Dislike'],
+    ['heart',     'heart-off',    'Heart',     'Off'],
+    ['star',      'star-off',     'Starred',   'Plain'],
+    ['power',     'power-off',    'Power On',  'Power Off'],
+    ['book-open', 'book',         'Reading',   'Closed'],
   ];
 
   const LUCIDE = 'https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/';
+  const NS = 'http://www.w3.org/2000/svg';
+  const _cache = {};
 
-  // ── CSS ────────────────────────────────────────────────────────────────────
+  // ── CSS ─────────────────────────────────────────────────────────────────────
   const CSS = `
-  #im-fab{position:fixed;bottom:28px;right:28px;z-index:8900;
-    background:#c0392b;color:#fff;border:none;border-radius:32px;
-    padding:13px 22px;font-size:14px;font-weight:700;cursor:pointer;
-    display:flex;align-items:center;gap:8px;letter-spacing:.02em;
+  #im-fab{position:fixed;bottom:28px;right:28px;z-index:8900;background:#c0392b;
+    color:#fff;border:none;border-radius:32px;padding:13px 22px;font-size:14px;
+    font-weight:700;cursor:pointer;display:flex;align-items:center;gap:8px;
     box-shadow:0 4px 24px rgba(192,57,43,.45);transition:all .2s;}
   #im-fab:hover{background:#e74c3c;transform:translateY(-2px);}
-  #im-morph-ov{position:fixed;inset:0;background:rgba(0,0,0,.72);
-    z-index:9100;display:none;overflow-y:auto;padding:32px 16px 48px;}
+  #im-morph-ov{position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:9100;
+    display:none;overflow-y:auto;padding:32px 16px 48px;}
   #im-morph-ov.open{display:block;}
-  #im-morph-panel{background:#f5f0eb;max-width:1080px;margin:0 auto;
+  #im-morph-panel{background:#f5f0eb;max-width:1100px;margin:0 auto;
     border-radius:16px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.4);}
-  #im-mhdr{background:#1e3a5f;color:#fff;padding:24px 32px;
-    display:flex;align-items:flex-start;justify-content:space-between;gap:16px;}
-  #im-mhdr h2{margin:0;font-size:22px;font-weight:700;letter-spacing:-.01em;}
-  #im-mhdr p{margin:5px 0 0;font-size:13px;opacity:.65;line-height:1.4;}
+  #im-mhdr{background:#1e3a5f;color:#fff;padding:24px 32px;display:flex;
+    align-items:flex-start;justify-content:space-between;gap:16px;}
+  #im-mhdr h2{margin:0;font-size:22px;font-weight:700;}
+  #im-mhdr p{margin:5px 0 0;font-size:13px;opacity:.65;}
   #im-mclose{background:rgba(255,255,255,.14);border:none;color:#fff;
     border-radius:8px;padding:9px 18px;font-size:13px;font-weight:600;
-    cursor:pointer;white-space:nowrap;flex-shrink:0;}
+    cursor:pointer;flex-shrink:0;}
   #im-mclose:hover{background:rgba(255,255,255,.25);}
-  #im-mgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));
+  #im-mgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(185px,1fr));
     gap:14px;padding:24px 28px 32px;}
-  .im-card{background:#fff;border-radius:12px;padding:18px 14px 14px;
-    text-align:center;box-shadow:0 2px 10px rgba(0,0,0,.07);
-    transition:box-shadow .2s,transform .2s;}
-  .im-card:hover{box-shadow:0 8px 24px rgba(0,0,0,.15);transform:translateY(-3px);}
-  .im-preview{width:76px;height:76px;margin:0 auto 11px;background:#1e3a5f;
+  .im-card{background:#fff;border-radius:12px;padding:18px 14px 14px;text-align:center;
+    box-shadow:0 2px 10px rgba(0,0,0,.07);transition:box-shadow .2s,transform .2s;}
+  .im-card:hover{box-shadow:0 8px 24px rgba(0,0,0,.14);transform:translateY(-3px);}
+  .im-preview{width:76px;height:76px;margin:0 auto 12px;background:#1e3a5f;
     border-radius:10px;display:flex;align-items:center;justify-content:center;}
   .im-preview svg{width:46px;height:46px;}
-  .im-lbl{font-size:11.5px;color:#555;margin-bottom:11px;min-height:30px;
+  .im-lbl{font-size:11.5px;color:#555;margin-bottom:12px;min-height:28px;
     display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:4px;}
   .im-lbl b{color:#1a1a1a;font-weight:700;}
-  .im-lbl span{color:#c0392b;font-size:13px;}
+  .im-lbl .arr{color:#c0392b;font-size:14px;font-weight:700;}
   .im-dl{width:100%;background:#1e3a5f;color:#fff;border:none;border-radius:8px;
     padding:8px 0;font-size:12px;font-weight:700;cursor:pointer;
     transition:background .2s;letter-spacing:.02em;}
   .im-dl:hover{background:#162d4a;}
   .im-dl:disabled{opacity:.5;cursor:wait;}
-  .im-card.err .im-dl{display:none;}
-  .im-card.err .im-preview{background:#eee;}
   .im-loading{text-align:center;padding:60px;color:#888;font-size:15px;}
   `;
 
-  // ── SVG path extraction ────────────────────────────────────────────────────
-  const _cache = {};
-
+  // ── Path extraction ──────────────────────────────────────────────────────────
   function elToD(el) {
     const tag = (el.tagName || '').toLowerCase().replace(/.*:/, '');
     const g = a => el.getAttribute(a) || '0';
     if (tag === 'path') return el.getAttribute('d') || '';
     if (tag === 'line') return `M${g('x1')},${g('y1')} L${g('x2')},${g('y2')}`;
     if (tag === 'circle') {
-      const cx = +g('cx'), cy = +g('cy'), r = +g('r');
+      const cx=+g('cx'),cy=+g('cy'),r=+g('r');
       return `M${cx-r},${cy} A${r},${r} 0 1 1 ${cx+r},${cy} A${r},${r} 0 1 1 ${cx-r},${cy} Z`;
     }
     if (tag === 'rect') {
       const x=+g('x'),y=+g('y'),w=+g('width'),h=+g('height'),rx=+(g('rx')||g('ry'));
-      if (!rx) return `M${x},${y} H${x+w} V${y+h} H${x} Z`;
+      if(!rx) return `M${x},${y} H${x+w} V${y+h} H${x} Z`;
       return `M${x+rx},${y} H${x+w-rx} A${rx},${rx} 0 0 1 ${x+w},${y+rx} V${y+h-rx} A${rx},${rx} 0 0 1 ${x+w-rx},${y+h} H${x+rx} A${rx},${rx} 0 0 1 ${x},${y+h-rx} V${y+rx} A${rx},${rx} 0 0 1 ${x+rx},${y} Z`;
     }
-    if (tag === 'polyline' || tag === 'polygon') {
-      const pts = (el.getAttribute('points') || '').trim().split(/[\s,]+/);
-      let d = '';
-      for (let i = 0; i < pts.length; i += 2) d += (i ? 'L' : 'M') + pts[i] + ',' + pts[i+1];
-      return tag === 'polygon' ? d + 'Z' : d;
+    if (tag==='polyline'||tag==='polygon') {
+      const pts=(el.getAttribute('points')||'').trim().split(/[\s,]+/);
+      let d='';
+      for(let i=0;i<pts.length;i+=2) d+=(i?'L':'M')+pts[i]+','+pts[i+1];
+      return tag==='polygon'?d+'Z':d;
     }
     return '';
   }
@@ -1154,8 +1136,7 @@ input[type=color]{width:28px;height:28px;border:1.5px solid var(--border);border
     try {
       const r = await fetch(LUCIDE + name + '.svg');
       if (!r.ok) throw 0;
-      const txt = await r.text();
-      const doc = new DOMParser().parseFromString(txt, 'image/svg+xml');
+      const doc = new DOMParser().parseFromString(await r.text(), 'image/svg+xml');
       const ds = [...doc.querySelectorAll('path,line,rect,circle,polyline,polygon')]
         .map(elToD).filter(d => d && d.length > 2);
       _cache[name] = ds.length ? ds : null;
@@ -1163,194 +1144,272 @@ input[type=color]{width:28px;height:28px;border:1.5px solid var(--border);border
     return _cache[name];
   }
 
-  // ── Animation ──────────────────────────────────────────────────────────────
-  function startAnim(svgEl, dsA, dsB) {
-    const fl = window.flubber;
-    if (!fl) return null;
-    let interps;
-    try { interps = fl.interpolateAll(dsA, dsB, { maxSegmentLength: 4 }); }
-    catch { return null; }
+  // ── Path length helper (creates temp off-screen SVG) ─────────────────────────
+  function measureLen(d) {
+    const svg = document.createElementNS(NS, 'svg');
+    svg.setAttribute('viewBox', '0 0 24 24');
+    svg.style.cssText = 'position:fixed;top:-9999px;left:-9999px;width:24px;height:24px;';
+    const p = document.createElementNS(NS, 'path');
+    p.setAttribute('d', d);
+    svg.appendChild(p);
+    document.body.appendChild(svg);
+    const len = p.getTotalLength() || 30;
+    document.body.removeChild(svg);
+    return len;
+  }
+
+  // ── Analyse pair: find shared vs unique paths ────────────────────────────────
+  function analyse(dsA, dsB) {
+    const shared  = dsA.filter(d => dsB.includes(d));
+    const onlyA   = dsA.filter(d => !dsB.includes(d));
+    const onlyB   = dsB.filter(d => !dsA.includes(d));
+    return { shared, onlyA, onlyB };
+  }
+
+  // ── PREVIEW ANIMATION ────────────────────────────────────────────────────────
+  // Strategy:
+  //   Shared paths  → static stroke
+  //   Source-only   → stroke draws OFF  (dashoffset 0 → len)
+  //   Target-only   → stroke draws ON   (dashoffset len → 0)
+  //   No shared     → opacity crossfade (fallback)
+
+  function animatePair(svgEl, dsA, dsB) {
     svgEl.innerHTML = '';
-    const NS = 'http://www.w3.org/2000/svg';
-    const pathEls = interps.map(() => {
+    const { shared, onlyA, onlyB } = analyse(dsA, dsB);
+
+    // --- shared: static ---
+    shared.forEach(d => {
       const p = document.createElementNS(NS, 'path');
+      p.setAttribute('d', d);
       svgEl.appendChild(p);
-      return p;
     });
-    const dur = 1800;
+
+    // --- source-only: will draw OFF ---
+    const outItems = onlyA.map(d => {
+      const len = measureLen(d);
+      const p = document.createElementNS(NS, 'path');
+      p.setAttribute('d', d);
+      p.setAttribute('stroke-dasharray', len);
+      p.setAttribute('stroke-dashoffset', 0);
+      svgEl.appendChild(p);
+      return { p, len };
+    });
+
+    // --- target-only: will draw ON ---
+    const inItems = onlyB.map(d => {
+      const len = measureLen(d);
+      const p = document.createElementNS(NS, 'path');
+      p.setAttribute('d', d);
+      p.setAttribute('stroke-dasharray', len);
+      p.setAttribute('stroke-dashoffset', len); // start hidden
+      svgEl.appendChild(p);
+      return { p, len };
+    });
+
+    // Crossfade fallback when nothing shared
+    if (!shared.length && !outItems.length && !inItems.length) {
+      dsA.forEach(d => { const p=document.createElementNS(NS,'path'); p.setAttribute('d',d); svgEl.appendChild(p); });
+      return null;
+    }
+    if (!shared.length && (outItems.length || inItems.length)) {
+      // use opacity group crossfade
+      return animateCrossfade(svgEl, dsA, dsB);
+    }
+
+    // rAF loop: 1s out → hold 0.4s → 1s in → hold 0.4s → repeat
+    const DUR = 1000, HOLD = 400;
+    const TOTAL = (DUR + HOLD) * 2;
     let start = null, raf;
-    const ease = t => t < .5 ? 2*t*t : -1+(4-2*t)*t;
+    const ease = t => t<.5 ? 2*t*t : -1+(4-2*t)*t;
+
     function tick(ts) {
       if (!start) start = ts;
-      const cp = (ts - start) % (dur * 2), fwd = cp < dur;
-      const raw = fwd ? cp/dur : (cp-dur)/dur;
-      const t = ease(fwd ? raw : 1-raw);
-      interps.forEach((fn, i) => { try { pathEls[i].setAttribute('d', fn(t)); } catch {} });
+      const phase = (ts - start) % TOTAL;
+      let t; // 0 = source state, 1 = target state
+      if (phase < DUR)             t = ease(phase / DUR);
+      else if (phase < DUR + HOLD) t = 1;
+      else if (phase < DUR*2+HOLD) t = ease(1 - (phase - DUR - HOLD) / DUR);
+      else                          t = 0;
+
+      outItems.forEach(({ p, len }) => p.setAttribute('stroke-dashoffset', len * t));
+      inItems.forEach( ({ p, len }) => p.setAttribute('stroke-dashoffset', len * (1 - t)));
       raf = requestAnimationFrame(tick);
     }
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
   }
 
-  // ── SMIL SVG download ──────────────────────────────────────────────────────
+  function animateCrossfade(svgEl, dsA, dsB) {
+    svgEl.innerHTML = '';
+    const gA = document.createElementNS(NS, 'g');
+    const gB = document.createElementNS(NS, 'g');
+    gB.setAttribute('opacity', '0');
+    dsA.forEach(d => { const p=document.createElementNS(NS,'path'); p.setAttribute('d',d); gA.appendChild(p); });
+    dsB.forEach(d => { const p=document.createElementNS(NS,'path'); p.setAttribute('d',d); gB.appendChild(p); });
+    svgEl.appendChild(gA); svgEl.appendChild(gB);
+    const DUR = 700, HOLD = 800, TOTAL = (DUR + HOLD) * 2;
+    let start=null, raf;
+    const ease = t => t<.5?2*t*t:-1+(4-2*t)*t;
+    function tick(ts) {
+      if(!start) start=ts;
+      const ph=(ts-start)%TOTAL;
+      let t;
+      if(ph<DUR)             t=ease(ph/DUR);
+      else if(ph<DUR+HOLD)   t=1;
+      else if(ph<DUR*2+HOLD) t=ease(1-(ph-DUR-HOLD)/DUR);
+      else                   t=0;
+      gA.setAttribute('opacity', 1-t);
+      gB.setAttribute('opacity', t);
+      raf=requestAnimationFrame(tick);
+    }
+    raf=requestAnimationFrame(tick);
+    return ()=>cancelAnimationFrame(raf);
+  }
+
+  // ── DOWNLOAD: SMIL stroke-dashoffset animated SVG ────────────────────────────
+  function buildDownloadSVG(dsA, dsB, fromLbl, toLbl) {
+    const { shared, onlyA, onlyB } = analyse(dsA, dsB);
+    const KT = '0;0.28;0.5;0.78;1';
+    const pathTags = [];
+
+    shared.forEach(d => {
+      pathTags.push(`  <path d="${d.replace(/"/g,"'")}" fill="none"/>`);
+    });
+
+    onlyA.forEach(d => {
+      const len = +(measureLen(d).toFixed(3));
+      pathTags.push(
+        `  <path d="${d.replace(/"/g,"'")}" fill="none" stroke-dasharray="${len}" stroke-dashoffset="0">\n` +
+        `    <animate attributeName="stroke-dashoffset" values="0;0;${len};${len};0" keyTimes="${KT}" dur="2.8s" repeatCount="indefinite"/>\n  </path>`
+      );
+    });
+
+    onlyB.forEach(d => {
+      const len = +(measureLen(d).toFixed(3));
+      pathTags.push(
+        `  <path d="${d.replace(/"/g,"'")}" fill="none" stroke-dasharray="${len}" stroke-dashoffset="${len}">\n` +
+        `    <animate attributeName="stroke-dashoffset" values="${len};${len};0;0;${len}" keyTimes="${KT}" dur="2.8s" repeatCount="indefinite"/>\n  </path>`
+      );
+    });
+
+    // Crossfade fallback
+    if (!shared.length) {
+      const gA = `  <g>\n${dsA.map(d=>`    <path d="${d.replace(/"/g,"'")}" fill="none"/>`).join('\n')}\n    <animate attributeName="opacity" values="1;1;0;0;1" keyTimes="${KT}" dur="2.8s" repeatCount="indefinite"/>\n  </g>`;
+      const gB = `  <g opacity="0">\n${dsB.map(d=>`    <path d="${d.replace(/"/g,"'")}" fill="none"/>`).join('\n')}\n    <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="${KT}" dur="2.8s" repeatCount="indefinite"/>\n  </g>`;
+      return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="150" height="150" fill="none" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><!-- ${fromLbl} → ${toLbl} -->\n${gA}\n${gB}\n</svg>`;
+    }
+
+    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="150" height="150" fill="none" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><!-- ${fromLbl} → ${toLbl} -->\n${pathTags.join('\n')}\n</svg>`;
+  }
+
   async function downloadSVG(fromName, toName, fromLbl, toLbl) {
-    const fl = window.flubber;
-    if (!fl) return;
     const [dsA, dsB] = await Promise.all([fetchPaths(fromName), fetchPaths(toName)]);
-    if (!dsA || !dsB) return;
-    let interps;
-    try { interps = fl.interpolateAll(dsA, dsB, { maxSegmentLength: 4 }); }
-    catch { return; }
-
-    const N = 20;
-    // Forward: 0→1, backward: 1→0, gives smooth loop
-    const fwdTs = Array.from({length: N+1}, (_,i) => i/N);
-    const bwdTs = Array.from({length: N-1}, (_,i) => 1-(i+1)/N);
-    const allTs = [...fwdTs, ...bwdTs];
-    const totalFrames = allTs.length;
-    const KT = allTs.map((_,i) => (i/(totalFrames-1)).toFixed(4)).join(';');
-
-    const pathTags = interps.map(fn => {
-      const vals = allTs.map(t => { try { return fn(t); } catch { return fn(0); } });
-      const d0 = vals[0].replace(/"/g, "'");
-      const valStr = vals.map(d => d.replace(/"/g, "'")).join(';');
-      return `  <path d="${d0}" fill="none">\n    <animate attributeName="d" values="${valStr}" keyTimes="${KT}" dur="2s" repeatCount="indefinite" calcMode="linear"/>\n  </path>`;
-    }).join('\n');
-
-    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="150" height="150"\n     fill="none" stroke="#1a1a1a" stroke-width="2"\n     stroke-linecap="round" stroke-linejoin="round">\n  <!-- IconMotion Morph: ${fromLbl} → ${toLbl} -->\n${pathTags}\n</svg>`;
-
-    const blob = new Blob([svg], {type:'image/svg+xml'});
+    if (!dsA || !dsB) { alert('Could not load icon data'); return; }
+    const svg = buildDownloadSVG(dsA, dsB, fromLbl, toLbl);
     const a = Object.assign(document.createElement('a'), {
-      href: URL.createObjectURL(blob),
+      href: URL.createObjectURL(new Blob([svg], {type:'image/svg+xml'})),
       download: `morph-${fromName}-to-${toName}.svg`
     });
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
     URL.revokeObjectURL(a.href);
   }
 
-  // ── Build a single card ────────────────────────────────────────────────────
+  // ── Build card ───────────────────────────────────────────────────────────────
   async function buildCard(fromName, toName, fromLbl, toLbl) {
     const card = document.createElement('div');
     card.className = 'im-card';
-    const NS = 'http://www.w3.org/2000/svg';
     card.innerHTML = `
       <div class="im-preview">
         <svg viewBox="0 0 24 24" fill="none" stroke="#5da8ff"
              stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></svg>
       </div>
-      <div class="im-lbl"><b>${fromLbl}</b><span>⇌</span><b>${toLbl}</b></div>
+      <div class="im-lbl"><b>${fromLbl}</b><span class="arr">⇌</span><b>${toLbl}</b></div>
       <button class="im-dl">↓ Download SVG</button>`;
 
     const svgEl = card.querySelector('svg');
     const dlBtn = card.querySelector('.im-dl');
-    let stopFn = null;
 
     const [dsA, dsB] = await Promise.all([fetchPaths(fromName), fetchPaths(toName)]);
 
     if (!dsA || !dsB) {
-      card.classList.add('err');
-      svgEl.innerHTML = `<line x1="4" y1="4" x2="20" y2="20" stroke="#ccc"/>
-        <line x1="20" y1="4" x2="4" y2="20" stroke="#ccc"/>`;
+      svgEl.innerHTML = `<line x1="4" y1="4" x2="20" y2="20" stroke="#ddd"/>
+                         <line x1="20" y1="4" x2="4" y2="20" stroke="#ddd"/>`;
+      dlBtn.style.display = 'none';
       return card;
     }
 
-    stopFn = startAnim(svgEl, dsA, dsB);
+    let stopFn = animatePair(svgEl, dsA, dsB);
+
+    // Pause when off-screen
+    const io = new IntersectionObserver(([e]) => {
+      if (!e.isIntersecting) { if(stopFn){stopFn();stopFn=null;} }
+      else if (!stopFn) stopFn = animatePair(svgEl, dsA, dsB);
+    }, {threshold:0});
+    io.observe(card);
 
     dlBtn.addEventListener('click', async () => {
-      dlBtn.disabled = true;
-      dlBtn.textContent = '⏳ Generating…';
+      dlBtn.disabled = true; dlBtn.textContent = '⏳ Generating…';
       await downloadSVG(fromName, toName, fromLbl, toLbl);
-      dlBtn.disabled = false;
-      dlBtn.textContent = '↓ Download SVG';
+      dlBtn.disabled = false; dlBtn.textContent = '↓ Download SVG';
     });
-
-    // Pause animation when card out of viewport
-    const io = new IntersectionObserver(([e]) => {
-      if (!e.isIntersecting && stopFn) { stopFn(); stopFn = null; }
-      else if (e.isIntersecting && !stopFn) stopFn = startAnim(svgEl, dsA, dsB);
-    }, { threshold: 0 });
-    io.observe(card);
 
     return card;
   }
 
-  // ── Remove morph UI from editor ───────────────────────────────────────────
+  // ── Remove morph from editor ─────────────────────────────────────────────────
   function removeMorphFromEditor() {
-    // Find and hide Morph button — look for the span/div with exactly text "Morph"
     document.querySelectorAll('*').forEach(el => {
-      if (el.childElementCount === 0 && el.textContent.trim() === 'Morph'
-          && !el.closest('#im-morph-ov')) {
+      if (el.childElementCount === 0 && el.textContent.trim() === 'Morph' && !el.closest('#im-morph-ov')) {
         let t = el;
-        // Walk up to find the clickable container
         while (t.parentElement && t.parentElement.childElementCount <= 4
-               && !['BODY','MAIN','SECTION'].includes(t.parentElement.tagName)) {
-          t = t.parentElement;
-        }
+               && !['BODY','MAIN'].includes(t.parentElement.tagName)) t = t.parentElement;
         t.style.display = 'none';
       }
     });
-    // Remove dynamically added morph section
     const sec = document.getElementById('morphSection');
     if (sec) sec.style.display = 'none';
   }
 
-  // ── Main init ──────────────────────────────────────────────────────────────
+  // ── Main init ────────────────────────────────────────────────────────────────
   function init() {
-    // CSS
     const style = document.createElement('style');
     style.textContent = CSS;
     document.head.appendChild(style);
 
-    // Overlay
     const ov = document.createElement('div');
     ov.id = 'im-morph-ov';
-    ov.innerHTML = `
-      <div id="im-morph-panel">
-        <div id="im-mhdr">
-          <div>
-            <h2>⇌ Morph Pairs</h2>
-            <p>${PAIRS.length} curated icon transitions — animated SVG, ready for eLearning</p>
-          </div>
-          <button id="im-mclose">✕ Close</button>
-        </div>
-        <div id="im-mgrid"><div class="im-loading">Loading morph pairs…</div></div>
-      </div>`;
+    ov.innerHTML = `<div id="im-morph-panel">
+      <div id="im-mhdr">
+        <div><h2>⇌ Morph Pairs</h2>
+          <p>${PAIRS.length} curated transitions · SMIL animated SVG download · eLearning ready</p></div>
+        <button id="im-mclose">✕ Close</button>
+      </div>
+      <div id="im-mgrid"><div class="im-loading">Loading…</div></div>
+    </div>`;
     document.body.appendChild(ov);
-
     ov.querySelector('#im-mclose').addEventListener('click', () => ov.classList.remove('open'));
-    ov.addEventListener('click', e => { if (e.target === ov) ov.classList.remove('open'); });
+    ov.addEventListener('click', e => { if (e.target===ov) ov.classList.remove('open'); });
 
-    // FAB
     const fab = document.createElement('button');
-    fab.id = 'im-fab';
-    fab.textContent = '⇌ Morph Pairs';
+    fab.id = 'im-fab'; fab.textContent = '⇌ Morph Pairs';
     fab.addEventListener('click', async () => {
       ov.classList.add('open');
       const grid = ov.querySelector('#im-mgrid');
       if (grid.querySelector('.im-loading')) {
         grid.innerHTML = '';
-        // Load all cards in parallel
-        const cards = await Promise.all(
-          PAIRS.map(([f,t,fl,tl]) => buildCard(f,t,fl,tl))
-        );
+        const cards = await Promise.all(PAIRS.map(([f,t,fl,tl]) => buildCard(f,t,fl,tl)));
         cards.forEach(c => grid.appendChild(c));
       }
     });
     document.body.appendChild(fab);
 
-    // Remove morph from editor on open + watch for it dynamically
     const obs = new MutationObserver(removeMorphFromEditor);
-    obs.observe(document.body, { childList: true, subtree: true });
+    obs.observe(document.body, {childList:true, subtree:true});
     removeMorphFromEditor();
   }
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
-  } else {
-    init();
-  }
+  if (document.readyState==='loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
 })();
 
 </script>
