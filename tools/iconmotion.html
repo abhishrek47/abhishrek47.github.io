@@ -709,6 +709,25 @@ input[type=color]{width:28px;height:28px;border:1.5px solid var(--border);border
 #morphMainBtnLabel{flex:1;text-align:left;}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/flubber@0.4.2/build/flubber.min.js"></script>
+<script>
+// Patch flubber.interpolate: route compound paths through interpolateAll
+(function(){
+  if(!window.flubber||!window.flubber.interpolate)return;
+  var _orig=window.flubber.interpolate.bind(window.flubber);
+  function splitPaths(d){
+    return(d||'').split(/\s(?=M)/).filter(function(s){return s.trim().length>2;});
+  }
+  window.flubber.interpolate=function(from,to,opts){
+    var fa=splitPaths(from),ta=splitPaths(to);
+    // Single path on both sides — use original (fastest path)
+    if(fa.length<=1&&ta.length<=1)return _orig(from,to,opts);
+    // Compound path — use interpolateAll per subpath
+    var o=Object.assign({maxSegmentLength:4},opts||{});
+    var interps=window.flubber.interpolateAll(fa,ta,o);
+    return function(t){return interps.map(function(fn){return fn(t);}).join(' ');};
+  };
+})();
+</script>
 </head>
 <body>
 
