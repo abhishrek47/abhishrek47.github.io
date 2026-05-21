@@ -1042,9 +1042,9 @@ input[type=color]{width:28px;height:28px;border:1.5px solid var(--border);border
 
   const NS  = 'http://www.w3.org/2000/svg';
   const CDN = 'https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/';
+  const SHAPES = 'path,circle,rect,line,polyline,polygon,ellipse';
   const cache = {};
 
-  /* ── 22 curated pairs ─────────────────────────────────────── */
   const PAIRS = [
     ['shield','shield-check','Shield','Verified'],
     ['shield','shield-x','Shield','Blocked'],
@@ -1070,7 +1070,6 @@ input[type=color]{width:28px;height:28px;border:1.5px solid var(--border);border
     ['book-open','book','Reading','Closed'],
   ];
 
-  /* ── CSS ─────────────────────────────────────────────────── */
   const CSS = `
     #im-gpov{
       position:fixed;inset:0;background:rgba(0,0,0,.6);
@@ -1093,7 +1092,7 @@ input[type=color]{width:28px;height:28px;border:1.5px solid var(--border);border
       font-family:'Inter',system-ui,sans-serif;
       font-size:1.05rem;font-weight:700;color:#1a1a1a;
       display:flex;align-items:center;gap:8px;}
-    #im-mhdr h2 span.im-badge{
+    #im-mhdr h2 .im-badge{
       font-size:.62rem;font-weight:600;background:#1e3a5f;color:#fff;
       border-radius:20px;padding:2px 9px;letter-spacing:.04em;}
     #im-mhdr p{font-size:.72rem;color:#888;margin-top:2px;}
@@ -1106,8 +1105,7 @@ input[type=color]{width:28px;height:28px;border:1.5px solid var(--border);border
     #im-mgrid{
       display:grid;
       grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
-      gap:12px;padding:16px 20px 20px;
-      overflow-y:auto;flex:1;
+      gap:12px;padding:16px 20px 20px;overflow-y:auto;flex:1;
       scrollbar-width:thin;scrollbar-color:#c0cfe0 #e0d8d0;}
     #im-mgrid::-webkit-scrollbar{width:5px;}
     #im-mgrid::-webkit-scrollbar-thumb{background:#b0bdc9;border-radius:3px;}
@@ -1115,8 +1113,7 @@ input[type=color]{width:28px;height:28px;border:1.5px solid var(--border);border
       grid-column:1/-1;text-align:center;padding:40px;
       color:#888;font:.82rem 'Inter',system-ui,sans-serif;
       display:flex;align-items:center;justify-content:center;gap:10px;}
-    .im-spin{
-      display:inline-block;width:20px;height:20px;
+    .im-spin{display:inline-block;width:20px;height:20px;
       border:2.5px solid #ddd;border-top-color:#1e3a5f;
       border-radius:50%;animation:im-gsap-spin .7s linear infinite;flex-shrink:0;}
     @keyframes im-gsap-spin{to{transform:rotate(360deg)}}
@@ -1125,36 +1122,26 @@ input[type=color]{width:28px;height:28px;border:1.5px solid var(--border);border
       display:flex;flex-direction:column;align-items:center;
       padding:14px 10px 10px;gap:8px;
       transition:box-shadow .15s,border-color .15s,transform .15s;}
-    .im-mcard:hover{
-      border-color:#1e3a5f;
-      box-shadow:0 6px 24px rgba(30,58,95,.14);
-      transform:translateY(-2px);}
-    .im-mc-preview{
-      width:56px;height:56px;display:flex;
+    .im-mcard:hover{border-color:#1e3a5f;
+      box-shadow:0 6px 24px rgba(30,58,95,.14);transform:translateY(-2px);}
+    .im-mc-preview{width:56px;height:56px;display:flex;
       align-items:center;justify-content:center;}
-    .im-mc-preview svg{
-      width:48px;height:48px;overflow:visible;
-      stroke:#1e3a5f;stroke-width:2;
-      stroke-linecap:round;stroke-linejoin:round;fill:none;}
-    .im-mc-labels{
-      display:flex;align-items:center;gap:5px;
-      font:.67rem 'Inter',system-ui,sans-serif;
-      color:#555;white-space:nowrap;justify-content:center;width:100%;}
+    .im-mc-preview svg{width:48px;height:48px;overflow:visible;
+      stroke:#1e3a5f;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;fill:none;}
+    .im-mc-labels{display:flex;align-items:center;gap:5px;
+      font:.67rem 'Inter',system-ui,sans-serif;color:#555;
+      white-space:nowrap;justify-content:center;width:100%;}
     .im-mc-arr{color:#1e3a5f;font-size:.8rem;font-weight:700;}
-    .im-mc-dl{
-      padding:4px 12px;border-radius:20px;
+    .im-mc-dl{padding:4px 12px;border-radius:20px;
       border:1.5px solid #1e3a5f;background:transparent;color:#1e3a5f;
       font:.65rem 'Inter',system-ui,sans-serif;font-weight:600;
       cursor:pointer;transition:all .12s;white-space:nowrap;}
     .im-mc-dl:hover{background:#1e3a5f;color:#fff;}
     .im-mc-dl:disabled{opacity:.4;cursor:default;}
-    .im-err-msg{
-      grid-column:1/-1;text-align:center;padding:30px;
+    .im-err-msg{grid-column:1/-1;text-align:center;padding:30px;
       color:#c0392b;font:.8rem 'Inter',system-ui,sans-serif;line-height:1.6;}
-    #im-fab{
-      position:fixed;bottom:22px;right:22px;z-index:999998;
-      padding:9px 18px;border-radius:24px;
-      background:#1e3a5f;color:#fff;
+    #im-fab{position:fixed;bottom:22px;right:22px;z-index:999998;
+      padding:9px 18px;border-radius:24px;background:#1e3a5f;color:#fff;
       border:none;cursor:pointer;
       font:.78rem 'Inter',system-ui,sans-serif;font-weight:700;
       box-shadow:0 4px 20px rgba(30,58,95,.4);
@@ -1162,20 +1149,18 @@ input[type=color]{width:28px;height:28px;border:1.5px solid var(--border);border
       display:flex;align-items:center;gap:7px;}
     #im-fab:hover{background:#162d4a;transform:translateY(-2px);
       box-shadow:0 6px 28px rgba(30,58,95,.5);}
-    #im-fab .fab-icon{font-size:.95rem;}
     @media(max-width:480px){
       #im-mgrid{grid-template-columns:repeat(2,1fr);}
-      #im-fab{bottom:14px;right:14px;padding:8px 13px;font-size:.72rem;}
+      #im-fab{bottom:14px;right:14px;font-size:.72rem;}
     }
   `;
 
-  /* ── Dynamic GSAP loader ─────────────────────────────────── */
+  /* ── Dynamic GSAP loader ────────────────────────────────────────── */
   function loadScript(src) {
-    return new Promise((resolve, reject) => {
-      if (document.querySelector('script[src="' + src + '"]') && window.gsap) {
-        resolve(); return;
-      }
-      const s = document.createElement('script');
+    return new Promise(function(resolve, reject) {
+      var existing = document.querySelector('script[src="' + src + '"]');
+      if (existing) { resolve(); return; }
+      var s = document.createElement('script');
       s.src = src;
       s.onload = resolve;
       s.onerror = reject;
@@ -1183,10 +1168,10 @@ input[type=color]{width:28px;height:28px;border:1.5px solid var(--border);border
     });
   }
 
-  let gsapReady = false;
+  var gsapReady = false;
 
   async function ensureGSAP() {
-    if (gsapReady && window.gsap && window.MorphSVGPlugin) return true;
+    if (gsapReady) return true;
     if (window.gsap && window.MorphSVGPlugin) {
       gsap.registerPlugin(MorphSVGPlugin);
       gsapReady = true; return true;
@@ -1198,193 +1183,265 @@ input[type=color]{width:28px;height:28px;border:1.5px solid var(--border);border
         gsap.registerPlugin(MorphSVGPlugin);
         gsapReady = true; return true;
       }
-      return false;
-    } catch(e) {
-      console.error('IconMotion: GSAP load failed', e);
-      return false;
-    }
+    } catch(e) { console.error('GSAP load failed', e); }
+    return false;
   }
 
-  /* ── Fetch icon paths ─────────────────────────────────────── */
-  async function fetchPaths(name) {
+  /* ── Fetch ALL shapes → convert to paths via MorphSVGPlugin ──────── */
+  async function fetchIconPaths(name) {
     if (cache[name]) return cache[name];
     try {
-      const r = await fetch(CDN + name + '.svg');
+      var r = await fetch(CDN + name + '.svg');
       if (!r.ok) throw new Error('HTTP ' + r.status);
-      const txt = await r.text();
-      const doc = new DOMParser().parseFromString(txt, 'image/svg+xml');
-      const ps = Array.from(doc.querySelectorAll('path')).map(p => p.getAttribute('d'));
-      cache[name] = ps.length ? ps : ['M 0 0'];
+      var txt = await r.text();
+      var doc = new DOMParser().parseFromString(txt, 'image/svg+xml');
+
+      /* Clone all shape elements into a temp in-document SVG */
+      var tempSvg = document.createElementNS(NS, 'svg');
+      tempSvg.setAttribute('viewBox', '0 0 24 24');
+      tempSvg.style.cssText = 'position:fixed;top:-9999px;left:-9999px;width:24px;height:24px;visibility:hidden;';
+      document.body.appendChild(tempSvg);
+
+      Array.from(doc.querySelectorAll(SHAPES)).forEach(function(s) {
+        var el = document.createElementNS(NS, s.tagName.toLowerCase());
+        Array.from(s.attributes).forEach(function(a) { el.setAttribute(a.name, a.value); });
+        tempSvg.appendChild(el);
+      });
+
+      /* Convert rect, circle, line etc → path */
+      Array.from(tempSvg.querySelectorAll('circle,rect,line,polyline,polygon,ellipse'))
+        .forEach(function(el) { MorphSVGPlugin.convertToPath(el); });
+
+      var paths = Array.from(tempSvg.querySelectorAll('path'))
+        .map(function(p) { return p.getAttribute('d') || ''; })
+        .filter(function(d) { return d.trim().length > 2; });
+
+      document.body.removeChild(tempSvg);
+      cache[name] = paths.length ? paths : ['M 0 0'];
     } catch(e) {
-      console.warn('IconMotion: failed to fetch', name, e);
+      console.warn('IconMotion: fetch failed for', name, e.message);
       cache[name] = ['M 0 0'];
     }
     return cache[name];
   }
 
-  /* ── Create SVG element set ───────────────────────────────── */
-  function makeSVG(paths) {
-    const svg = document.createElementNS(NS, 'svg');
-    svg.setAttribute('viewBox', '0 0 24 24');
-    svg.setAttribute('fill', 'none');
-    const els = paths.map(d => {
-      const p = document.createElementNS(NS, 'path');
-      p.setAttribute('d', d);
-      svg.appendChild(p);
-      return p;
+  /* ── Smart path matching ─────────────────────────────────────────── */
+  /* Pass 1: exact-string matches (identical paths → static)            */
+  /* Pass 2: remaining paths matched by index order (morph)            */
+  function matchPaths(fP, tP) {
+    var usedF = {}, usedT = {};
+    var identical = [], morphPairs = [];
+
+    fP.forEach(function(d, fi) {
+      for (var ti = 0; ti < tP.length; ti++) {
+        if (!usedT[ti] && tP[ti] === d) {
+          identical.push({ d: d, fi: fi, ti: ti });
+          usedF[fi] = true; usedT[ti] = true;
+          break;
+        }
+      }
     });
-    return { svg, els };
+
+    var remF = fP.map(function(d,i){return{d:d,i:i};}).filter(function(x){return !usedF[x.i];});
+    var remT = tP.map(function(d,i){return{d:d,i:i};}).filter(function(x){return !usedT[x.i];});
+    var mLen = Math.min(remF.length, remT.length);
+    for (var k = 0; k < mLen; k++) {
+      morphPairs.push({ fD: remF[k].d, tD: remT[k].d });
+      usedF[remF[k].i] = true; usedT[remT[k].i] = true;
+    }
+
+    var fromOnly = fP.filter(function(_,i){return !usedF[i];});
+    var toOnly   = tP.filter(function(_,i){return !usedT[i];});
+
+    return { identical: identical, morphPairs: morphPairs, fromOnly: fromOnly, toOnly: toOnly };
   }
 
-  /* ── Build one morph card ─────────────────────────────────── */
-  async function buildCard(fromName, toName, fromLabel, toLabel) {
-    const [fP, tP] = await Promise.all([fetchPaths(fromName), fetchPaths(toName)]);
+  /* ── Build preview SVG + GSAP animation ─────────────────────────── */
+  function makeEl(d, opacity) {
+    var p = document.createElementNS(NS, 'path');
+    p.setAttribute('d', d);
+    if (opacity !== undefined) p.style.opacity = String(opacity);
+    return p;
+  }
 
-    const card = document.createElement('div');
+  function makeSVG() {
+    var svg = document.createElementNS(NS, 'svg');
+    svg.setAttribute('viewBox', '0 0 24 24');
+    svg.setAttribute('fill', 'none');
+    return svg;
+  }
+
+  async function buildCard(fromName, toName, fromLabel, toLabel) {
+    var paths = await Promise.all([fetchIconPaths(fromName), fetchIconPaths(toName)]);
+    var fP = paths[0], tP = paths[1];
+    var match = matchPaths(fP, tP);
+
+    var card = document.createElement('div');
     card.className = 'im-mcard';
 
-    const { svg, els } = makeSVG(fP);
+    var svg = makeSVG();
+    var morphEls = [];   /* elements that will morph */
 
-    /* Extra to-paths (target has more paths) — start invisible */
-    const extraToEls = tP.slice(fP.length).map(d => {
-      const p = document.createElementNS(NS, 'path');
-      p.setAttribute('d', d);
-      p.style.opacity = '0';
-      svg.appendChild(p);
-      return p;
+    /* Static identical paths */
+    match.identical.forEach(function(m) { svg.appendChild(makeEl(m.d)); });
+
+    /* Morphing paths — start at 'from' shape */
+    match.morphPairs.forEach(function(m) {
+      var el = makeEl(m.fD);
+      svg.appendChild(el);
+      morphEls.push({ el: el, to: m.tD });
     });
 
-    const extraFromEls = els.slice(tP.length);
-    const matchLen = Math.min(fP.length, tP.length);
-
-    /* GSAP animation */
-    const tl = gsap.timeline({
-      repeat: -1, yoyo: true, repeatDelay: 0.8,
-      delay: Math.random() * 0.5
+    /* From-only paths — will fade out */
+    var fromOnlyEls = match.fromOnly.map(function(d) {
+      var el = makeEl(d); svg.appendChild(el); return el;
     });
 
-    for (let i = 0; i < matchLen; i++) {
-      if (fP[i] !== tP[i]) {
-        tl.to(els[i], {
-          morphSVG: { shape: tP[i], origin: '50% 50%' },
-          duration: 1.1,
-          ease: 'power2.inOut'
-        }, 0);
-      }
+    /* To-only paths — will fade in */
+    var toOnlyEls = match.toOnly.map(function(d) {
+      var el = makeEl(d, 0); svg.appendChild(el); return el;
+    });
+
+    /* GSAP timeline */
+    var tl = gsap.timeline({ repeat:-1, yoyo:true, repeatDelay:0.9,
+                              delay: Math.random()*0.5 });
+
+    morphEls.forEach(function(m) {
+      tl.to(m.el, { morphSVG:{ shape: m.to, origin:'50% 50%' },
+                    duration: 1.1, ease:'power2.inOut' }, 0);
+    });
+    if (toOnlyEls.length) {
+      tl.to(toOnlyEls, { opacity:1, duration:0.5, ease:'power1.inOut',
+                          stagger:0.07 }, 0.4);
     }
-    if (extraToEls.length) {
-      tl.to(extraToEls, { opacity: 1, duration: 0.5, ease: 'power1.inOut', stagger: 0.08 }, 0.4);
-    }
-    if (extraFromEls.length) {
-      tl.to(extraFromEls, { opacity: 0, duration: 0.5, ease: 'power1.inOut' }, 0.3);
+    if (fromOnlyEls.length) {
+      tl.to(fromOnlyEls, { opacity:0, duration:0.5, ease:'power1.inOut' }, 0.3);
     }
 
-    /* Card markup */
-    const preview  = document.createElement('div');
+    /* Card DOM */
+    var preview = document.createElement('div');
     preview.className = 'im-mc-preview';
     preview.appendChild(svg);
 
-    const labels = document.createElement('div');
-    labels.className = 'im-mc-labels';
-    labels.innerHTML = '<span>' + fromLabel + '</span>'
+    var lbl = document.createElement('div');
+    lbl.className = 'im-mc-labels';
+    lbl.innerHTML = '<span>' + fromLabel + '</span>'
       + '<span class="im-mc-arr">⇌</span>'
       + '<span>' + toLabel + '</span>';
 
-    const dlBtn = document.createElement('button');
+    var dlBtn = document.createElement('button');
     dlBtn.className = 'im-mc-dl';
     dlBtn.textContent = '⬇ SVG';
-    dlBtn.addEventListener('click', async () => {
+    dlBtn.addEventListener('click', function() {
       dlBtn.textContent = '…'; dlBtn.disabled = true;
-      try {
-        const svgStr = await buildDownloadSVG(fP, tP, fromName, toName);
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(new Blob([svgStr], { type: 'image/svg+xml' }));
-        a.download = fromName + '-to-' + toName + '.svg';
-        document.body.appendChild(a); a.click(); document.body.removeChild(a);
-      } catch(e) { console.error('Download failed:', e); }
-      finally { dlBtn.textContent = '⬇ SVG'; dlBtn.disabled = false; }
+      buildDownloadSVG(fP, tP, match, fromName, toName)
+        .then(function(svgStr) {
+          var a = document.createElement('a');
+          a.href = URL.createObjectURL(new Blob([svgStr], {type:'image/svg+xml'}));
+          a.download = fromName + '-to-' + toName + '.svg';
+          document.body.appendChild(a); a.click(); document.body.removeChild(a);
+        })
+        .catch(function(e){ console.error('Download error:', e); })
+        .finally(function(){ dlBtn.textContent = '⬇ SVG'; dlBtn.disabled = false; });
     });
 
     card.appendChild(preview);
-    card.appendChild(labels);
+    card.appendChild(lbl);
     card.appendChild(dlBtn);
     return card;
   }
 
-  /* ── Capture GSAP keyframes → SMIL download SVG ─────────── */
-  async function buildDownloadSVG(fP, tP, fromName, toName) {
-    const SAMPLES = 20;
-    const host = document.createElement('div');
-    host.style.cssText = 'position:fixed;top:-9999px;left:-9999px;width:24px;height:24px;';
+  /* ── Download: capture GSAP keyframes → SMIL SVG ────────────────── */
+  async function buildDownloadSVG(fP, tP, match, fromName, toName) {
+    var SAMPLES = 20;
+    var host = document.createElement('div');
+    host.style.cssText = 'position:fixed;top:-9999px;left:-9999px;width:24px;height:24px;visibility:hidden;';
     document.body.appendChild(host);
 
-    const { svg: offSvg, els: offEls } = makeSVG(fP);
-    host.appendChild(offSvg);
+    var svg = makeSVG();
+    host.appendChild(svg);
 
-    const matchLen = Math.min(fP.length, tP.length);
-    const stl = gsap.timeline({ paused: true });
-    for (let i = 0; i < matchLen; i++) {
-      if (fP[i] !== tP[i]) {
-        stl.to(offEls[i], { morphSVG: { shape: tP[i], origin: '50% 50%' }, duration: 1 }, 0);
-      }
-    }
-
-    /* Sample forward keyframes */
-    const fwdFrames = Array.from({ length: SAMPLES + 1 }, (_, k) => {
-      stl.progress(k / SAMPLES);
-      return offEls.map(el => el.getAttribute('d') || '');
+    /* Build off-screen morph elements */
+    var offEls = match.morphPairs.map(function(m) {
+      var el = makeEl(m.fD); svg.appendChild(el); return { el:el, to:m.tD };
     });
+
+    var stl = gsap.timeline({ paused:true });
+    offEls.forEach(function(m) {
+      stl.to(m.el, { morphSVG:{ shape:m.to, origin:'50% 50%' }, duration:1 }, 0);
+    });
+
+    /* Sample forward frames */
+    var fwdFrames = [];
+    for (var k = 0; k <= SAMPLES; k++) {
+      stl.progress(k / SAMPLES);
+      fwdFrames.push(offEls.map(function(m){ return m.el.getAttribute('d') || ''; }));
+    }
     document.body.removeChild(host);
 
-    const revFrames = fwdFrames.slice().reverse().slice(1);
-    const allFrames = [...fwdFrames, ...revFrames];
-    const N = allFrames.length;
-    const keyTimes = Array.from({ length: N }, (_, i) => (i / (N - 1)).toFixed(4)).join(';');
-    const dur = '2.6s';
-    const stroke = '#1e3a5f';
+    /* Build forward+reverse for seamless loop */
+    var revFrames = fwdFrames.slice().reverse().slice(1);
+    var allFrames = fwdFrames.concat(revFrames);
+    var N = allFrames.length;
+    var keyTimes = [];
+    for (var i=0; i<N; i++) keyTimes.push((i/(N-1)).toFixed(4));
+    var keyTimesStr = keyTimes.join(';');
+    var dur = '2.6s';
+    var stroke = '#1e3a5f';
 
-    let lines = '';
-    for (let i = 0; i < fP.length; i++) {
-      const isMatched = i < matchLen;
-      const isSame = isMatched && fP[i] === tP[i];
-      if (!isMatched || isSame) {
-        lines += '  <path d="' + esc(fP[i]) + '" fill="none" stroke="' + stroke + '" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>\n';
-      } else {
-        const dVals = allFrames.map(f => f[i]).join(';');
-        lines += '  <path d="' + esc(fP[i]) + '" fill="none" stroke="' + stroke + '" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">\n';
-        lines += '    <animate attributeName="d" values="' + esc(dVals) + '" keyTimes="' + keyTimes + '" dur="' + dur + '" repeatCount="indefinite" calcMode="linear"/>\n';
-        lines += '  </path>\n';
-      }
+    function pathTag(d, animate) {
+      var open = '  <path d="' + esc(d) + '" fill="none" stroke="' + stroke
+        + '" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"';
+      if (!animate) return open + '/>\n';
+      return open + '>\n    ' + animate + '\n  </path>\n';
     }
-    tP.slice(matchLen).forEach(function(d) {
-      lines += '  <path d="' + esc(d) + '" fill="none" stroke="' + stroke + '" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="0">\n';
-      lines += '    <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.3;0.5;0.7;1" dur="' + dur + '" repeatCount="indefinite"/>\n';
-      lines += '  </path>\n';
+
+    var lines = '';
+
+    /* Static identical paths */
+    match.identical.forEach(function(m) { lines += pathTag(m.d, null); });
+
+    /* Morphing paths */
+    match.morphPairs.forEach(function(m, idx) {
+      var vals = allFrames.map(function(f){ return f[idx]; }).join(';');
+      lines += pathTag(m.fD,
+        '<animate attributeName="d" values="' + esc(vals) + '" keyTimes="' + keyTimesStr
+        + '" dur="' + dur + '" repeatCount="indefinite" calcMode="linear"/>');
     });
-    fP.slice(matchLen).forEach(function(d) {
-      lines += '  <path d="' + esc(d) + '" fill="none" stroke="' + stroke + '" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">\n';
-      lines += '    <animate attributeName="opacity" values="1;1;0;0;1" keyTimes="0;0.3;0.5;0.7;1" dur="' + dur + '" repeatCount="indefinite"/>\n';
-      lines += '  </path>\n';
+
+    /* To-only paths: fade in at mid */
+    match.toOnly.forEach(function(d) {
+      lines += '  <path d="' + esc(d) + '" fill="none" stroke="' + stroke
+        + '" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="0">\n'
+        + '    <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.3;0.5;0.7;1" dur="' + dur + '" repeatCount="indefinite"/>\n'
+        + '  </path>\n';
+    });
+
+    /* From-only paths: fade out at mid */
+    match.fromOnly.forEach(function(d) {
+      lines += '  <path d="' + esc(d) + '" fill="none" stroke="' + stroke
+        + '" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">\n'
+        + '    <animate attributeName="opacity" values="1;1;0;0;1" keyTimes="0;0.3;0.5;0.7;1" dur="' + dur + '" repeatCount="indefinite"/>\n'
+        + '  </path>\n';
     });
 
     return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">\n'
-      + '  <!-- ' + fromName + ' → ' + toName + ' | IconMotion · abhishektrivedi.com -->\n'
+      + '  <!-- ' + fromName + ' → ' + toName + ' | GSAP MorphSVGPlugin · IconMotion · abhishektrivedi.com -->\n'
       + lines + '</svg>';
   }
 
   function esc(s) {
-    return (s || '').replace(/&/g, '&amp;').replace(/"/g, '&quot;');
+    return (s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;');
   }
 
-  /* ── Remove morph controls from editor ───────────────────── */
+  /* ── Remove editor morph controls ───────────────────────────────── */
   function removeMorphFromEditor() {
     document.querySelectorAll('[class*="morph"],[id*="morph"],[data-morph]').forEach(function(el) {
       if (el.id === 'im-gpov' || el.id === 'im-fab') return;
       var t = el;
-      while (t.parentElement
-             && t.parentElement.childElementCount <= 4
-             && t.parentElement !== document.body
-             && t.parentElement.tagName !== 'MAIN') {
+      while (t.parentElement && t.parentElement !== document.body
+             && t.parentElement.tagName !== 'MAIN'
+             && t.parentElement.childElementCount <= 4) {
         t = t.parentElement;
       }
       t.style.display = 'none';
@@ -1393,70 +1450,57 @@ input[type=color]{width:28px;height:28px;border:1.5px solid var(--border);border
     if (sec) sec.style.display = 'none';
   }
 
-  /* ── Init ─────────────────────────────────────────────────── */
+  /* ── Init ────────────────────────────────────────────────────────── */
   function init() {
-    /* CSS */
     var style = document.createElement('style');
     style.textContent = CSS;
     document.head.appendChild(style);
 
-    /* Overlay — created before GSAP loads */
     var ov = document.createElement('div');
     ov.id = 'im-gpov';
     ov.innerHTML = '<div id="im-gppanel">'
-      + '<div id="im-mhdr">'
-      + '<div><h2>Morph Pairs <span class="im-badge">GSAP MorphSVG</span></h2>'
-      + '<p>' + PAIRS.length + ' curated transitions · true path morphing · SMIL SVG download</p></div>'
-      + '<button id="im-mclose">✕ Close</button>'
-      + '</div>'
+      + '<div id="im-mhdr"><div>'
+      + '<h2>Morph Pairs <span class="im-badge">GSAP MorphSVG</span></h2>'
+      + '<p>' + PAIRS.length + ' curated transitions · true path morphing · SMIL SVG download</p>'
+      + '</div><button id="im-mclose">✕ Close</button></div>'
       + '<div id="im-mgrid"><div class="im-loading"><span class="im-spin"></span>Loading…</div></div>'
       + '</div>';
     document.body.appendChild(ov);
 
-    ov.querySelector('#im-mclose').addEventListener('click', function() {
-      ov.classList.remove('open');
-    });
-    ov.addEventListener('click', function(e) {
-      if (e.target === ov) ov.classList.remove('open');
-    });
+    ov.querySelector('#im-mclose').addEventListener('click', function(){ ov.classList.remove('open'); });
+    ov.addEventListener('click', function(e){ if (e.target===ov) ov.classList.remove('open'); });
 
     var loaded = false;
 
-    /* FAB — always created */
     var fab = document.createElement('button');
     fab.id = 'im-fab';
-    fab.innerHTML = '<span class="fab-icon">⇌</span> Morph Pairs';
+    fab.innerHTML = '<span style="font-size:.9rem">⇄</span> Morph Pairs';
     fab.addEventListener('click', function() {
-      /* Show overlay immediately */
       ov.classList.add('open');
       if (loaded) return;
-
       var grid = ov.querySelector('#im-mgrid');
-
-      /* Load GSAP dynamically, then build cards */
       ensureGSAP().then(function(ok) {
         if (!ok) {
-          grid.innerHTML = '<div class="im-err-msg">Could not load GSAP MorphSVGPlugin.<br>Check your internet connection and reload.</div>';
+          grid.innerHTML = '<div class="im-err-msg">Could not load GSAP MorphSVGPlugin.<br>Check internet connection and reload.</div>';
           return;
         }
         grid.innerHTML = '<div class="im-loading"><span class="im-spin"></span>Building morph pairs…</div>';
-        Promise.all(PAIRS.map(function(pair) {
-          return buildCard(pair[0], pair[1], pair[2], pair[3]);
-        })).then(function(cards) {
-          grid.innerHTML = '';
-          cards.forEach(function(c) { grid.appendChild(c); });
-          loaded = true;
-        }).catch(function(e) {
-          console.error('IconMotion Morph: card build failed', e);
-          grid.innerHTML = '<div class="im-err-msg">Error building morph pairs. See console for details.</div>';
-        });
+        Promise.all(PAIRS.map(function(p){ return buildCard(p[0],p[1],p[2],p[3]); }))
+          .then(function(cards) {
+            grid.innerHTML = '';
+            cards.forEach(function(c){ grid.appendChild(c); });
+            loaded = true;
+          })
+          .catch(function(e){
+            console.error('Morph build error:', e);
+            grid.innerHTML = '<div class="im-err-msg">Error loading pairs. See console.</div>';
+          });
       });
     });
     document.body.appendChild(fab);
 
-    /* MutationObserver — suppress morph controls in editor */
     var obs = new MutationObserver(removeMorphFromEditor);
-    obs.observe(document.body, { childList: true, subtree: true });
+    obs.observe(document.body, { childList:true, subtree:true });
     removeMorphFromEditor();
   }
 
