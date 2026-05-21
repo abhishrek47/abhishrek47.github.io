@@ -249,7 +249,6 @@ select.ctrl-sel{width:100%;background:var(--surface2);border:1.5px solid var(--b
 select.ctrl-sel:focus{border-color:var(--orange);}
 
 /* Color */
-.color-swatches{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:7px;}
 .color-swatches{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-bottom:8px;}
 .csw{width:20px;height:20px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:all .12s;box-shadow:inset 0 0 0 1px rgba(0,0,0,.12);}
 .csw:hover{transform:scale(1.15);}
@@ -400,6 +399,20 @@ input[type=color]{width:28px;height:28px;border:1.5px solid var(--border);border
 
 /* ── KEYFRAMES ────────────────────────────────────────── */
 @keyframes shimmer{0%,100%{opacity:.25}50%{opacity:.6}}
+@keyframes logo-pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.18)}}
+@keyframes card-enter{from{opacity:0;transform:translateY(10px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes morph-page-in{from{opacity:0;transform:scale(.985)}to{opacity:1;transform:scale(1)}}
+@keyframes count-up{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+@keyframes empty-bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+@keyframes morphHdrShimmer{0%,100%{transform:translateX(-100%)}50%{transform:translateX(100%)}}
+.logo-icon:hover svg{animation:logo-pulse .4s ease;}
+#morphPage.morph-entering{animation:morph-page-in .22s cubic-bezier(.4,0,.2,1) forwards;}
+.morph-card-anim{animation:card-enter .28s ease both;}
+.im-empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:48px 24px;color:var(--muted2);text-align:center;gap:10px;}
+.im-empty-icon{font-size:2.8rem;animation:empty-bob 2.4s ease-in-out infinite;}
+.im-empty-title{font-size:.9rem;font-weight:600;color:var(--muted);}
+.im-empty-sub{font-size:.78rem;line-height:1.6;max-width:240px;}
 @keyframes im-pop{0%{transform:scale(0);opacity:0}60%{transform:scale(1.2);opacity:1}100%{transform:scale(1);opacity:1}}
 @keyframes im-bounce{0%,100%{transform:translateY(0)}20%{transform:translateY(-18px)}40%{transform:translateY(-8px)}60%{transform:translateY(-14px)}80%{transform:translateY(-4px)}}
 @keyframes im-spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
@@ -583,7 +596,7 @@ input[type=color]{width:28px;height:28px;border:1.5px solid var(--border);border
 .col-m-count{font-size:.62rem;color:var(--muted);margin-top:1px;}
 .col-m-actions{display:flex;align-items:center;gap:5px;flex-shrink:0;}
 .col-m-btn{padding:4px 9px;border-radius:6px;border:1px solid var(--border);
-  background:var(--bg2);cursor:pointer;font:.68rem var(--font);font-weight:600;
+  background:var(--surface2);cursor:pointer;font:.68rem var(--font);font-weight:600;
   color:var(--muted);transition:all .1s;}
 .col-m-btn:hover{background:var(--border);color:var(--text);}
 .col-m-btn.view{color:var(--blue);border-color:var(--blue);}
@@ -625,13 +638,13 @@ input[type=color]{width:28px;height:28px;border:1.5px solid var(--border);border
 .morph-pair-name{color:var(--text);}
 .morph-pair-arrow{font-size:1rem;color:var(--blue);}
 .morph-search{width:100%;padding:6px 10px;border:1px solid var(--border);border-radius:7px;
-  background:var(--bg2);font:.72rem var(--font);color:var(--text);outline:none;
+  background:var(--surface2);font:.72rem var(--font);color:var(--text);outline:none;
   margin-bottom:6px;margin-top:2px;}
 .morph-search:focus{border-color:var(--blue);}
 .morph-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:3px;max-height:140px;
   overflow-y:auto;padding:2px 0;}
 .morph-cell{width:100%;aspect-ratio:1;border-radius:6px;border:1px solid var(--border);
-  background:var(--bg2);cursor:pointer;display:flex;align-items:center;justify-content:center;
+  background:var(--surface2);cursor:pointer;display:flex;align-items:center;justify-content:center;
   padding:0;transition:all .1s;}
 .morph-cell:hover{border-color:var(--blue);background:rgba(37,99,235,.08);}
 .morph-cell.active{border-color:var(--blue);background:rgba(37,99,235,.15);box-shadow:0 0 0 2px var(--blue);}
@@ -855,7 +868,7 @@ input[type=color]{width:28px;height:28px;border:1.5px solid var(--border);border
   </div>
   <div class="hdr-search">
     <svg class="s-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-    <input type="text" id="searchInput" placeholder="Search 2100+ icons…" autocomplete="off">
+    <input type="text" id="searchInput" placeholder="Search 2116 icons…" autocomplete="off">
   </div>
   <button class="morph-nav-btn" id="morphPageBtn" onclick="toggleMorphPage()" title="Browse 447 animated morph pairs">
     <svg viewBox="0 0 24 24"><path d="M4 12s0-6 8-6 8 6 8 6-0 6-8 6-8-6-8-6z"/><circle cx="12" cy="12" r="2.5"/></svg>
@@ -1730,11 +1743,23 @@ function renderMorphPairsGrid(pairs) {
   grid.querySelectorAll('[data-ready]').forEach(function(c){ if(c._tl) c._tl.kill(); });
   grid.innerHTML = '';
   var countEl = document.getElementById('morphPairCount');
-  if (countEl) countEl.textContent = pairs.length + ' pairs';
+  if (countEl) countEl.textContent = pairs.length + ' pair' + (pairs.length === 1 ? '' : 's');
 
-  pairs.forEach(function(pair) {
+  // Empty state
+  if (!pairs.length) {
+    var es = document.createElement('div');
+    es.className = 'im-empty-state';
+    es.style.cssText = 'grid-column:1/-1;';
+    es.innerHTML = '<span class="im-empty-icon">⬡</span><div class="im-empty-title">No pairs found</div><div class="im-empty-sub">Try a different search term — pairs are named by icon (e.g. "play", "lock", "arrow")</div>';
+    grid.appendChild(es);
+    return;
+  }
+
+  pairs.forEach(function(pair, i) {
     var card = document.createElement('div');
     card.style.cssText = 'background:#FFFFFF;border:1.5px solid #E2E8F0;border-radius:14px;padding:14px 10px 10px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;position:relative;transition:border-color .2s,background .2s,box-shadow .2s;cursor:default;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.06);';
+    card.classList.add('morph-card-anim');
+    card.style.animationDelay = Math.min(i * 18, 320) + 'ms';
     card.onmouseenter = function(){ card.style.borderColor='#2563EB'; card.style.background='#EFF6FF'; card.style.boxShadow='0 4px 16px rgba(37,99,235,.12)'; };
     card.onmouseleave = function(){ card.style.borderColor='#E2E8F0'; card.style.background='#FFFFFF'; card.style.boxShadow='0 1px 3px rgba(0,0,0,.06)'; };
     var skel = document.createElement('div');
@@ -1805,7 +1830,14 @@ function buildMorphTabs() {
   CATEGORIES.forEach(function(cat) {
     var btn = document.createElement('button');
     btn.style.cssText = 'flex-shrink:0;padding:5px 13px;border-radius:20px;border:1px solid #CBD5E1;background:#F8FAFC;color:#64748B;font-size:11.5px;cursor:pointer;font-family:"JetBrains Mono",monospace;transition:all .15s;white-space:nowrap;';
-    btn.textContent = cat.label + (cat.id==='all' ? ' ('+cat.pairs.length+')' : ' ('+cat.pairs.length+')');
+    /* Label with pair count badge */
+    btn.textContent = cat.label;
+    if (cat.pairs.length > 0) {
+      var badge = document.createElement('span');
+      badge.textContent = cat.pairs.length;
+      badge.style.cssText = 'margin-left:5px;font-size:9.5px;padding:1px 5px;border-radius:10px;background:rgba(255,255,255,.18);color:inherit;font-weight:700;vertical-align:middle;';
+      btn.appendChild(badge);
+    }
     if (cat.id === 'all') {
       btn.style.background = '#1e3a5f';
       btn.style.borderColor = '#1e3a5f';
@@ -1843,8 +1875,15 @@ window.toggleMorphPage = function() {
     page.style.display = 'none';
     if (btn) { btn.classList.remove('active'); btn.textContent = ''; btn.insertAdjacentHTML('afterbegin','<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12s0-6 8-6 8 6 8 6-0 6-8 6-8-6-8-6z"/><circle cx="12" cy="12" r="2.5"/></svg> Morph Pairs'); }
   } else {
-    // Open
+    // Close kofi popup if open
+    var kofiPop = document.getElementById('kofiPopup');
+    if (kofiPop) kofiPop.classList.remove('open');
+    // Open with entrance animation
     page.style.display = 'flex';
+    page.classList.remove('morph-entering');
+    void page.offsetWidth; // reflow
+    page.classList.add('morph-entering');
+    setTimeout(function(){ page.classList.remove('morph-entering'); }, 240);
     if (btn) { btn.classList.add('active'); btn.textContent = '✕ Close Morph'; }
     ensureGSAP(function() {
       _gsapReady = true;
@@ -1866,7 +1905,8 @@ document.head.appendChild(skSt);
 <div id="morphPage" style="display:none;position:fixed;inset:0;z-index:500;background:#F1F5F9;flex-direction:column;overflow:hidden;">
 
   <!-- Morph page header -->
-  <div style="background:#1e3a5f;border-bottom:1px solid rgba(255,255,255,.12);padding:0 20px;height:52px;display:flex;align-items:center;gap:14px;flex-shrink:0;">
+  <div style="background:linear-gradient(135deg,#1e3a5f 0%,#162d4a 60%,#1a3558 100%);border-bottom:1px solid rgba(255,255,255,.12);padding:0 20px;height:52px;display:flex;align-items:center;gap:14px;flex-shrink:0;position:relative;overflow:hidden;" id="morphPageHdr">
+    <div style="position:absolute;inset:0;background:linear-gradient(90deg,transparent 0%,rgba(255,255,255,.03) 50%,transparent 100%);animation:morphHdrShimmer 4s ease-in-out infinite;pointer-events:none;"></div>
     <button onclick="toggleMorphPage()" style="background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:7px;color:#f5f0eb;padding:5px 12px;cursor:pointer;font:.78rem 'Inter',sans-serif;display:flex;align-items:center;gap:6px;transition:all .15s;" onmouseenter="this.style.background='rgba(255,255,255,.18)'" onmouseleave="this.style.background='rgba(255,255,255,.1)'">
       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
       Back
@@ -1925,6 +1965,66 @@ document.addEventListener('click', function(e){
     pop.classList.remove('open');
   }
 });
+
+/* ── Count-up animation on icon pill ──────────────────────────── */
+(function(){
+  function animateCountUp(el, target, duration) {
+    var start = 0, startTime = null;
+    function step(ts) {
+      if (!startTime) startTime = ts;
+      var prog = Math.min((ts - startTime) / duration, 1);
+      // ease-out cubic
+      var ease = 1 - Math.pow(1 - prog, 3);
+      var val = Math.floor(ease * target);
+      el.textContent = val.toLocaleString() + ' icons · 447 morph pairs';
+      if (prog < 1) requestAnimationFrame(step);
+      else el.textContent = target.toLocaleString() + ' icons · 447 morph pairs';
+    }
+    requestAnimationFrame(step);
+  }
+  // Wait for obfuscated script to populate the pill, then animate
+  var pill = document.getElementById('iconCountPill');
+  if (!pill) return;
+  var obs = new MutationObserver(function(mutations, o) {
+    var txt = pill.textContent || '';
+    var m = txt.match(/(\d[\d,]+)\s+icons/);
+    if (m) {
+      o.disconnect();
+      var target = parseInt(m[1].replace(/,/g,''), 10);
+      pill.textContent = '0 icons · 447 morph pairs';
+      setTimeout(function(){ animateCountUp(pill, target, 1200); }, 300);
+    }
+  });
+  obs.observe(pill, { childList: true, subtree: true, characterData: true });
+})();
+
+/* ── Main grid empty state (search no results) ────────────────── */
+(function(){
+  var EMPTY_ID = '_im_grid_empty';
+  function checkEmpty() {
+    var grid = document.getElementById('iconGrid');
+    var area = document.getElementById('galleryArea');
+    if (!grid || !area) return;
+    var existing = document.getElementById(EMPTY_ID);
+    var hasRealCells = grid.querySelector('.icon-cell') !== null;
+    var hasPlaceholders = grid.querySelector('.ic-placeholder') !== null;
+    if (!hasRealCells && !hasPlaceholders && grid.children.length === 0) {
+      if (!existing) {
+        var es = document.createElement('div');
+        es.id = EMPTY_ID;
+        es.className = 'im-empty-state';
+        es.innerHTML = '<span class="im-empty-icon">🔍</span><div class="im-empty-title">No icons found</div><div class="im-empty-sub">Try a shorter term — search matches icon names (e.g. "arrow", "user", "chart")</div>';
+        area.appendChild(es);
+      }
+    } else {
+      if (existing) existing.remove();
+    }
+  }
+  var grid = document.getElementById('iconGrid');
+  if (grid) {
+    new MutationObserver(checkEmpty).observe(grid, { childList: true });
+  }
+})();
 </script>
 
 <!-- ── Coffee social-proof toast ─────────────────────────────── -->
@@ -2163,6 +2263,9 @@ document.addEventListener('click', function(e){
   }
 
   function showToastCoffee(){
+    /* Skip if morph page is open — wrong context for a support nudge */
+    var mp=document.getElementById('morphPage');
+    if(mp&&mp.style.display==='flex'){scheduleNext();return;}
     var name=nextName();
     var el=document.getElementById('coffeeToast');
     var nm=document.getElementById('coffeeToastName');
