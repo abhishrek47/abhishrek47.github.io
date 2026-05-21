@@ -1652,7 +1652,7 @@ function buildDownloadSVG(fromName, toName, fromLabel, toLabel, color, speed) {
 }
 
 // ── Render morph page grid ─────────────────────────────────────────────────────
-function renderMorphGrid(pairs) {
+function renderMorphPairsGrid(pairs) {
   var grid = document.getElementById('morphPageGrid');
   if (!grid) return;
   if (_obs) { _obs.disconnect(); _obs = null; }
@@ -1703,7 +1703,7 @@ window.filterMorphPairs = function(term) {
   _searchTerm = (term||'').toLowerCase().trim();
   var base = _currentCatId === 'all' ? CATEGORIES[0].pairs
     : (CATEGORIES.find(function(c){ return c.id===_currentCatId; })||CATEGORIES[0]).pairs;
-  if (!_searchTerm) { renderMorphGrid(base); return; }
+  if (!_searchTerm) { renderMorphPairsGrid(base); return; }
   // Score each pair: 3=token exact match, 2=token starts-with, 1=full-name substring (fallback)
   var scored = [];
   base.forEach(function(p) {
@@ -1724,7 +1724,7 @@ window.filterMorphPairs = function(term) {
     if (score > 0) scored.push({ p:p, s:score });
   });
   scored.sort(function(a,b){ return b.s - a.s; });
-  renderMorphGrid(scored.map(function(x){ return x.p; }));
+  renderMorphPairsGrid(scored.map(function(x){ return x.p; }));
 };
 
 // ── Build category tabs ───────────────────────────────────────────────────────
@@ -1755,7 +1755,7 @@ function buildMorphTabs() {
       _currentCatId = cat.id;
       _searchTerm = '';
       var si = document.getElementById('morphSearch'); if(si) si.value='';
-      renderMorphGrid(cat.pairs);
+      renderMorphPairsGrid(cat.pairs);
     };
     tabsEl.appendChild(btn);
   });
@@ -1780,7 +1780,7 @@ window.toggleMorphPage = function() {
       _gsapReady = true;
       buildMorphTabs();
       _currentCatId = 'all'; _searchTerm = '';
-      renderMorphGrid(CATEGORIES[0].pairs);
+      renderMorphPairsGrid(CATEGORIES[0].pairs);
     });
   }
 };
