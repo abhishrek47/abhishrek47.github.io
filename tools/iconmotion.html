@@ -1527,30 +1527,30 @@ function buildCard(card, fromName, toName, fromLabel, toLabel) {
   lbl.style.cssText = 'font-size:10.5px;color:#64748B;text-align:center;margin-top:4px;font-family:"JetBrains Mono",monospace;line-height:1.4;';
   lbl.textContent = fromLabel + ' → ' + toLabel;
   card.appendChild(lbl);
-  // Per-card color picker
-  var colorRow = document.createElement('div');
-  colorRow.style.cssText = 'display:flex;align-items:center;justify-content:center;gap:5px;margin:6px 0 2px;';
-  var colorDot = document.createElement('div');
-  colorDot.style.cssText = 'width:12px;height:12px;border-radius:50%;background:#1e3a5f;border:1.5px solid #CBD5E1;flex-shrink:0;pointer-events:none;transition:background .1s;';
+  // Per-card color picker — pill button
   var colorPick = document.createElement('input');
   colorPick.type = 'color';
   colorPick.value = '#1e3a5f';
-  colorPick.title = 'Pick icon color';
   colorPick.style.cssText = 'width:0;height:0;opacity:0;position:absolute;pointer-events:none;';
-  var colorLabel = document.createElement('label');
-  colorLabel.title = 'Change icon color';
-  colorLabel.style.cssText = 'font-size:9.5px;color:#94A3B8;cursor:pointer;font-family:"JetBrains Mono",monospace;user-select:none;display:flex;align-items:center;gap:4px;';
-  colorLabel.textContent = 'color';
-  colorLabel.appendChild(colorPick);
+  var colorBtn = document.createElement('button');
+  colorBtn.title = 'Change icon color';
+  colorBtn.style.cssText = 'display:flex;align-items:center;justify-content:center;gap:5px;margin:6px auto 2px;padding:4px 10px;border:1.5px solid #E2E8F0;border-radius:20px;background:#F8FAFC;cursor:pointer;font-size:10px;color:#64748B;font-family:"JetBrains Mono",monospace;transition:border-color .15s,background .15s;min-width:70px;';
+  var colorDot = document.createElement('span');
+  colorDot.style.cssText = 'width:10px;height:10px;border-radius:50%;background:#1e3a5f;flex-shrink:0;display:inline-block;border:1px solid rgba(0,0,0,.1);transition:background .1s;';
+  var colorTxt = document.createElement('span');
+  colorTxt.textContent = 'color';
+  colorBtn.appendChild(colorDot);
+  colorBtn.appendChild(colorTxt);
+  colorBtn.appendChild(colorPick);
   colorPick.oninput = function() {
     var col = colorPick.value;
     colorDot.style.background = col;
     svg.setAttribute('stroke', col);
   };
-  colorLabel.onclick = function(e) { e.stopPropagation(); colorPick.click(); };
-  colorRow.appendChild(colorDot);
-  colorRow.appendChild(colorLabel);
-  card.appendChild(colorRow);
+  colorBtn.onmouseenter = function(){ colorBtn.style.borderColor='#93C5FD'; colorBtn.style.background='#EFF6FF'; colorBtn.style.color='#2563EB'; };
+  colorBtn.onmouseleave = function(){ colorBtn.style.borderColor='#E2E8F0'; colorBtn.style.background='#F8FAFC'; colorBtn.style.color='#64748B'; };
+  colorBtn.onclick = function(e){ e.stopPropagation(); colorPick.click(); };
+  card.appendChild(colorBtn);
 
   var dlBtn = document.createElement('button');
   dlBtn.textContent = '↓ SVG';
