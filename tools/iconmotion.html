@@ -1895,82 +1895,185 @@ document.addEventListener('click', function(e){
 
 <script>
 (function(){
-  /* 200 diverse names + cities — L&D is a global community */
-  var NAMES = [
-    'Sarah M. from London','Priya K. from Bangalore','James T. from New York',
-    'Anika R. from Amsterdam','Carlos M. from Madrid','Mei L. from Singapore',
-    'David O. from Lagos','Emma W. from Sydney','Rahul S. from Pune',
-    'Sophie B. from Paris','Arjun N. from Chennai','Grace A. from Nairobi',
-    'Tom H. from Chicago','Neha V. from Mumbai','Luca F. from Milan',
-    'Fatima A. from Dubai','Marcus J. from Toronto','Yuki T. from Tokyo',
-    'Claire D. from Brussels','Vikram P. from Delhi','Zara A. from Cape Town',
-    'Nathan C. from Boston','Kavya M. from Hyderabad','Isabelle G. from Lyon',
-    'Obi E. from Accra','Hannah L. from Melbourne','Rohan B. from Ahmedabad',
-    'Elena V. from Berlin','Felix K. from Zurich','Tanvi S. from Kolkata',
-    'Michael R. from Austin','Aditi G. from Bengaluru','Pierre M. from Toulouse',
-    'Amara D. from Dakar','Luke P. from Edinburgh','Shreya J. from Jaipur',
-    'Anna K. from Stockholm','Kwame O. from Kumasi','Diana H. from Lisbon',
-    'Ravi C. from Coimbatore','Julia N. from Vienna','Hassan M. from Cairo',
-    'Leila F. from Tehran','Ben W. from Seattle','Pooja A. from Nagpur',
-    'Antoine L. from Montreal','Sunita R. from Vadodara','Sam K. from Dublin',
-    'Nadia S. from Warsaw','Yusuf A. from Kampala','Rachel T. from San Francisco',
-    'Aarav M. from Chandigarh','Chloe B. from Bristol','Tunde O. from Abuja',
-    'Maria P. from São Paulo','Josh D. from Denver','Divya N. from Mysore',
-    'Lars H. from Oslo','Amira K. from Tunis','Oliver S. from Manchester',
-    'Meera T. from Thiruvananthapuram','Victor A. from Kinshasa','Lily C. from Auckland',
-    'Ankit B. from Lucknow','Sofía R. from Buenos Aires','Ryan M. from Phoenix',
-    'Noor H. from Beirut','Ingrid L. from Gothenburg','Siddharth K. from Surat',
-    'Camille D. from Marseille','Tariq M. from Islamabad','Elisa B. from Rome',
-    'Nia J. from Atlanta','Kiran S. from Pune','Jan V. from Rotterdam',
-    'Chiara M. from Naples','Emmanuel N. from Yaoundé','Alicia T. from Dallas',
-    'Vivek R. from Indore','Maja K. from Zagreb','Faisal A. from Riyadh',
-    'Rebecca H. from Vancouver','Diya P. from Bhopal','Lasse M. from Copenhagen',
-    'Gloria O. from Enugu','Aryan V. from Patna','Noémie B. from Nantes',
-    'Kevin L. from Miami','Isha G. from Raipur','Tobias W. from Hamburg',
-    'Zanele D. from Johannesburg','Harsh M. from Rajkot','Miriam A. from Addis Ababa',
-    'Patrick O. from Cork','Swati K. from Nashik','Luisa F. from Bogotá',
-    'Alex N. from Amsterdam','Bhavna T. from Srinagar','Moana K. from Auckland',
-    'Damien R. from Lyon','Olamide A. from Ibadan','Nina S. from Prague',
-    'Arnav D. from Gurgaon','Valentina L. from Santiago','Craig H. from Glasgow',
-    'Aisha M. from Accra','Mathieu B. from Geneva','Puja R. from Varanasi',
-    'Ifeoma N. from Port Harcourt','Sven A. from Helsinki','Zoya K. from Karachi',
-    'André P. from Porto','Ketki M. from Aurangabad','Jemima O. from Dar es Salaam',
-    'Dmitri V. from Kyiv','Harpreet S. from Amritsar','Catalina R. from Lima',
-    'Stefan J. from Budapest','Nandita B. from Kolkata','Chidi E. from Owerri',
-    'Astrid L. from Bergen','Gaurav T. from Noida','Siobhan M. from Galway',
-    'Reem A. from Abu Dhabi','Alistair C. from Cambridge','Deepa N. from Kochi',
-    'Paulo M. from Lisbon','Adeola S. from Kano','Friederike H. from Munich',
-    'Tarun G. from Agra','Lena K. from Vilnius','Ngozi A. from Enugu',
-    'Jason W. from Portland','Riddhi S. from Baroda','Arnaud C. from Bordeaux',
-    'Abiodun O. from Ibadan','Yara M. from Amman','Karim B. from Casablanca',
-    'Laura D. from Dublin','Nikhil V. from Thane','Sigrid A. from Reykjavik',
-    'Tarini R. from Goa','Emeka O. from Benin City','Petra K. from Ljubljana',
-    'Will T. from Leeds','Anusha M. from Vizag','Diego F. from Montevideo',
-    'Blessing N. from Accra','Mirko S. from Belgrade','Tara H. from Wellington',
-    'Abhi K. from Pune','Océane L. from Rennes','Emmanuel A. from Douala',
-    'Ishaan D. from Kanpur','Maja W. from Gdańsk','Roshani T. from Colombo',
-    'Callum B. from Aberdeen','Fatou D. from Dakar','Václav N. from Brno',
-    'Neelam S. from Dehradun','Kofi A. from Kumasi','Roxana P. from Bucharest',
-    'Sanjana R. from Mysore','Bart V. from Antwerp','Nkechi O. from Lagos',
-    'Hamish M. from Perth','Dhruti K. from Rajkot','Camila A. from Medellín',
-    'Leandro F. from Buenos Aires','Tanuja N. from Pune','Oren B. from Tel Aviv',
-    'Chidinma E. from Onitsha','Radoslav K. from Bratislava','Mansi T. from Jodhpur',
-    'Florian H. from Cologne','Zainab M. from Lahore','Caitlin P. from Perth',
-    'Varun J. from Noida','Annelie S. from Malmö','Emre K. from Istanbul',
-    'Adaeze N. from Aba','Teodora M. from Sofia','Srishti B. from Indore',
-    'Brendan O. from Limerick','Kiona L. from Honolulu','Mahesh P. from Hyderabad',
-    'Lieselotte V. from Ghent','Chiamaka A. from Enugu','Goran J. from Zagreb',
-    'Pallavi S. from Nagpur','Seun A. from Lagos','Ioana M. from Cluj',
-    'Saba K. from Lahore','Thijs D. from Utrecht','Nishtha R. from Jaipur',
-    'Tomás F. from Guadalajara','Adwoa M. from Accra','Markus L. from Linz',
-    'Usha N. from Coimbatore','Festus O. from Ibadan','Yulia K. from Minsk',
-    'Anisha V. from Baroda','Jean-Pierre L. from Liège','Folake A. from Abuja',
-    'Snezana R. from Sarajevo','Prabha T. from Chennai','Niels H. from Aarhus',
-    'Adebisi O. from Kaduna','Selin K. from Ankara','Kirra M. from Brisbane',
-    'Mihail P. from Chisinau','Trisha N. from Pune','Bongani Z. from Durban',
-    'Eszter V. from Debrecen','Chukwuemeka A. from Onitsha','Evelina S. from Vilnius',
-    'Soumya R. from Bhubaneswar','Hanna L. from Tallinn','Akinola O. from Abeokuta',
-    'Ruxandra M. from Iași','Smita K. from Nashik','Andile D. from Pretoria',
+  /* 500 diverse names + cities — L&D is a global community */
+  var NAMES=[
+    /* Africa */
+    'Amara D. from Lagos','Kofi A. from Kumasi','Ngozi A. from Enugu','Fatou D. from Dakar',
+    'Tunde O. from Abuja','Zanele D. from Johannesburg','Bongani Z. from Durban',
+    'Aisha M. from Accra','Ifeoma N. from Port Harcourt','Chiamaka A. from Enugu',
+    'Chidi E. from Owerri','Emmanuel N. from Yaoundé','Gloria O. from Enugu',
+    'Obi E. from Accra','Nkechi O. from Lagos','Adaeze N. from Aba',
+    'Festus O. from Ibadan','Adwoa M. from Accra','Miriam A. from Addis Ababa',
+    'Grace A. from Nairobi','Nia J. from Atlanta','David O. from Lagos',
+    'Jemima O. from Dar es Salaam','Abiodun O. from Ibadan','Olamide A. from Ibadan',
+    'Adebisi O. from Kaduna','Andile D. from Pretoria','Akinola O. from Abeokuta',
+    'Smita K. from Nashik','Chukwuemeka A. from Onitsha','Blessing N. from Accra',
+    'Kwame O. from Kumasi','Hassan M. from Cairo','Karim B. from Casablanca',
+    'Zara A. from Cape Town','Folake A. from Abuja','Seun A. from Lagos',
+    'Nadia S. from Warsaw','Yusuf A. from Kampala','Chidinma E. from Onitsha',
+    'Adaeze O. from Enugu','Funmi A. from Ibadan','Chinwe N. from Onitsha',
+    'Emeka O. from Benin City','Kemi A. from Lagos','Sade B. from Abuja',
+    'Titi O. from Port Harcourt','Bisi A. from Ibadan','Yemi F. from Lagos',
+    'Chike N. from Enugu','Babatunde A. from Lagos',
+    /* India */
+    'Priya K. from Bangalore','Rahul S. from Pune','Neha V. from Mumbai',
+    'Arjun N. from Chennai','Vikram P. from Delhi','Kavya M. from Hyderabad',
+    'Tanvi S. from Kolkata','Rohan B. from Ahmedabad','Aditi G. from Bengaluru',
+    'Shreya J. from Jaipur','Divya N. from Mysore','Siddharth K. from Surat',
+    'Ankit B. from Lucknow','Diya P. from Bhopal','Isha G. from Raipur',
+    'Harsh M. from Rajkot','Swati K. from Nashik','Bhavna T. from Srinagar',
+    'Arnav D. from Gurgaon','Puja R. from Varanasi','Harpreet S. from Amritsar',
+    'Gaurav T. from Noida','Tarun G. from Agra','Nikhil V. from Thane',
+    'Kiran S. from Pune','Riddhi S. from Baroda','Anusha M. from Vizag',
+    'Vivek R. from Indore','Ishaan D. from Kanpur','Sanjana R. from Mysore',
+    'Abhi K. from Pune','Mansi T. from Jodhpur','Pallavi S. from Nagpur',
+    'Nishtha R. from Jaipur','Trisha N. from Pune','Soumya R. from Bhubaneswar',
+    'Ketki M. from Aurangabad','Mahesh P. from Hyderabad','Usha N. from Coimbatore',
+    'Prabha T. from Chennai','Deepa N. from Kochi','Nandita B. from Kolkata',
+    'Tanuja N. from Pune','Varun J. from Noida','Srishti B. from Indore',
+    'Ravi C. from Coimbatore','Pooja A. from Nagpur','Sunita R. from Vadodara',
+    'Meera T. from Thiruvananthapuram','Tara H. from Wellington','Tarini R. from Goa',
+    'Neeraj M. from Faridabad','Aditya S. from Hyderabad','Richa G. from Delhi',
+    'Preeti B. from Chandigarh','Rohit T. from Navi Mumbai','Shweta P. from Surat',
+    'Ajay K. from Patna','Preethi N. from Coimbatore','Vishal M. from Lucknow',
+    'Ankita R. from Bhopal','Nitin S. from Nashik','Geeta V. from Vadodara',
+    'Lalit B. from Jodhpur','Monika T. from Agra','Suresh P. from Madurai',
+    'Asha K. from Kochi','Rajeev N. from Kolkata','Sneha G. from Nagpur',
+    'Vikrant M. from Pune','Shalini R. from Bengaluru','Deepak J. from Ahmedabad',
+    /* UK & Ireland */
+    'Sarah M. from London','Oliver S. from Manchester','Sophie B. from Paris',
+    'Alistair C. from Cambridge','Siobhan M. from Galway','Callum B. from Aberdeen',
+    'Hannah L. from Melbourne','Craig H. from Glasgow','Hamish M. from Perth',
+    'Patrick O. from Cork','Chloe B. from Bristol','Brendan O. from Limerick',
+    'Tom H. from Chicago','Laura D. from Dublin','Sam K. from Dublin',
+    'Rebecca H. from Vancouver','Will T. from Leeds','Luke P. from Edinburgh',
+    'Caitlin P. from Perth','Charlotte B. from Birmingham','Liam O. from Belfast',
+    'Emma W. from Cardiff','Roisin M. from Galway','Niamh F. from Cork',
+    'Declan H. from Limerick','Aoife K. from Dublin','Eoin M. from Galway',
+    'Fionnuala B. from Belfast','Caoimhe R. from Derry','Padraig O. from Waterford',
+    'Saoirse N. from Sligo','Emer F. from Cork','Conor S. from Dublin',
+    'Rhys W. from Cardiff','Sioned H. from Swansea','Ffion M. from Newport',
+    'Gethin R. from Wrexham','Bethan L. from Bangor','Rhodri T. from Cardiff',
+    'Angus M. from Inverness','Isla B. from St Andrews','Fergus K. from Stirling',
+    'Morag D. from Perth','Ewan T. from Dundee','Catriona M. from Fort William',
+    /* US & Canada */
+    'James T. from New York','Michael R. from Austin','Rachel T. from San Francisco',
+    'Josh D. from Denver','Jason W. from Portland','Ryan M. from Phoenix',
+    'Kevin L. from Miami','Nathan C. from Boston','Alicia T. from Dallas',
+    'Ben W. from Seattle','Marcus J. from Toronto','Alex N. from Amsterdam',
+    'Kiona L. from Honolulu','Antoine L. from Montreal','Leandro F. from Buenos Aires',
+    'Taylor M. from Nashville','Jordan B. from Minneapolis','Morgan K. from Denver',
+    'Casey R. from Portland','Riley S. from Austin','Devon T. from Raleigh',
+    'Avery L. from Charlotte','Kendall P. from Phoenix','Blake H. from San Diego',
+    'Quinn M. from Boston','Reese W. from Chicago','Skyler A. from Seattle',
+    'Peyton G. from Houston','Cameron D. from Atlanta','Spencer F. from Philadelphia',
+    'Hayden K. from Detroit','Dakota R. from Columbus','Finley J. from Indianapolis',
+    'Drew C. from Memphis','Sawyer B. from Louisville','Charlie N. from Baltimore',
+    'Parker T. from Richmond','Elliot H. from Pittsburgh','Rowan M. from Cincinnati',
+    'Logan S. from Kansas City','Tyler W. from St Louis','Connor P. from Milwaukee',
+    'Dylan K. from Minneapolis','Evan R. from Tampa','Owen B. from Orlando',
+    'Nolan T. from Las Vegas','Colin H. from Salt Lake City','Gavin M. from Tucson',
+    /* Europe */
+    'Anika R. from Amsterdam','Elena V. from Berlin','Isabelle G. from Lyon',
+    'Felix K. from Zurich','Pierre M. from Toulouse','Anna K. from Stockholm',
+    'Diana H. from Lisbon','Julia N. from Vienna','Maja K. from Zagreb',
+    'Nina S. from Prague','Chloe D. from Brussels','Arnaud C. from Bordeaux',
+    'Noémie B. from Nantes','Camille D. from Marseille','Océane L. from Rennes',
+    'Mathieu B. from Geneva','Jan V. from Rotterdam','Thijs D. from Utrecht',
+    'Bart V. from Antwerp','Lieselotte V. from Ghent','Lars H. from Oslo',
+    'Lasse M. from Copenhagen','Niels H. from Aarhus','Sven A. from Helsinki',
+    'Ingrid L. from Gothenburg','Sigrid A. from Reykjavik','Annelie S. from Malmö',
+    'Astrid L. from Bergen','Tobias W. from Hamburg','Florian H. from Cologne',
+    'Friederike H. from Munich','Markus L. from Linz','Stefan J. from Budapest',
+    'Eszter V. from Debrecen','Václav N. from Brno','Radoslav K. from Bratislava',
+    'Teodora M. from Sofia','Ioana M. from Cluj','Ruxandra M. from Iași',
+    'Roxana P. from Bucharest','Mirko S. from Belgrade','Goran J. from Zagreb',
+    'Petra K. from Ljubljana','Snezana R. from Sarajevo','Yulia K. from Minsk',
+    'Dmitri V. from Kyiv','Maja W. from Gdańsk','Lena K. from Vilnius',
+    'Hanna L. from Tallinn','Evelina S. from Vilnius','Emre K. from Istanbul',
+    'Selin K. from Ankara','Mihail P. from Chisinau','Luisa F. from Bogotá',
+    'Chiara M. from Naples','Elisa B. from Rome','Luca F. from Milan',
+    'Valentina L. from Santiago','Catalina R. from Lima','Diego F. from Montevideo',
+    'Sofía R. from Buenos Aires','María J. from Sevilla','Pablo R. from Madrid',
+    'Lucía G. from Barcelona','Alejandro M. from Valencia','Isabel F. from Bilbao',
+    'Adrián L. from Zaragoza','Natalia K. from Kraków','Piotr W. from Warsaw',
+    'Marek S. from Wrocław','Katarzyna R. from Łódź','Agnieszka B. from Kraków',
+    'Tomasz K. from Gdańsk','Marta P. from Poznan','Justyna W. from Warsaw',
+    'Krzysztof N. from Lublin','Monika T. from Katowice',
+    /* Middle East & Central Asia */
+    'Fatima A. from Dubai','Reem A. from Abu Dhabi','Hassan M. from Cairo',
+    'Leila F. from Tehran','Yara M. from Amman','Tariq M. from Islamabad',
+    'Zainab M. from Lahore','Saba K. from Lahore','Faisal A. from Riyadh',
+    'Zoya K. from Karachi','Noor H. from Beirut','Amira K. from Tunis',
+    'Oren B. from Tel Aviv','Omar A. from Doha','Layla M. from Kuwait City',
+    'Khalid B. from Muscat','Sara H. from Manama','Yousef N. from Amman',
+    'Dina R. from Cairo','Hend A. from Alexandria','Mariam S. from Riyadh',
+    'Lara K. from Beirut','Yasmin F. from Casablanca','Jamal O. from Dubai',
+    'Nadia H. from Tehran','Ali M. from Baghdad','Rania S. from Amman',
+    'Tamar K. from Jerusalem','Gal B. from Tel Aviv','Noa R. from Haifa',
+    /* Asia Pacific */
+    'Mei L. from Singapore','Yuki T. from Tokyo','Moana K. from Auckland',
+    'Emma W. from Sydney','Hannah L. from Melbourne','Kirra M. from Brisbane',
+    'Caitlin P. from Perth','Hamish M. from Perth','Lily C. from Auckland',
+    'Akiko N. from Osaka','Hiroshi T. from Tokyo','Yuko M. from Kyoto',
+    'Kenji S. from Sapporo','Hana W. from Seoul','Ji-ho K. from Busan',
+    'Min-jun L. from Seoul','Seo-yeon P. from Incheon','Jae-won C. from Daegu',
+    'Ying L. from Shanghai','Wei Z. from Beijing','Xin W. from Shenzhen',
+    'Fang L. from Guangzhou','Bo C. from Chengdu','Lin H. from Hangzhou',
+    'Hui W. from Wuhan','Lan Z. from Xi\'an','Rui M. from Nanjing',
+    'Siti N. from Jakarta','Budi S. from Surabaya','Dewi R. from Bandung',
+    'Ahmad F. from Kuala Lumpur','Nurul A. from Petaling Jaya','Aziz K. from Almaty',
+    'Roshani T. from Colombo','Chamila S. from Kandy','Pradeep F. from Colombo',
+    'Thu N. from Hanoi','Linh T. from Ho Chi Minh City','Nam P. from Da Nang',
+    'Supansa C. from Bangkok','Wanchai P. from Chiang Mai','Malee S. from Bangkok',
+    'Maria P. from Manila','Jose R. from Cebu','Ana L. from Davao',
+    'Aroha T. from Wellington','Tama H. from Christchurch',
+    'Oluwaseun A. from Lagos','Chiamaka E. from Enugu','Babajide O. from Ibadan',
+    'Uchechi N. from Owerri','Ebunoluwa A. from Abeokuta','Olumide F. from Kano',
+    'Adaora I. from Onitsha','Emeka C. from Enugu','Nonso O. from Awka',
+    'Chinyere U. from Port Harcourt','Obinna K. from Aba','Ifunanya A. from Lagos',
+    'Javier M. from Madrid','Carmen R. from Seville','Álvaro G. from Bilbao',
+    'Beatriz F. from Lisbon','Inês S. from Porto','Gonçalo M. from Coimbra',
+    'Filipa R. from Braga','Rúben C. from Faro','Margarida T. from Setúbal',
+    'Henrique P. from Viseu','Mário B. from Funchal','Sofia A. from Évora',
+    'Gunnar H. from Stavanger','Frida L. from Tromsø','Bjorn E. from Trondheim',
+    'Solveig M. from Ålesund','Kristoffer B. from Bodø','Ingeborg T. from Hamar',
+    'Ragnhild K. from Haugesund','Torbjørn S. from Kristiansand',
+    'Saoirse B. from Wicklow','Cormac M. from Tipperary','Grainne F. from Kilkenny',
+    'Tadhg O. from Clare','Ciara B. from Wexford','Lorcan M. from Meath',
+    'Muireann F. from Kildare','Fiachra O. from Carlow',
+    'Kirabo A. from Kampala','Tendo M. from Entebbe','Amina S. from Dar es Salaam',
+    'Baraka N. from Mombasa','Zawadi O. from Nairobi','Neema K. from Arusha',
+    'Jabari M. from Lusaka','Chipo N. from Harare','Rudo M. from Bulawayo',
+    'Tinashe K. from Mutare','Farai S. from Gweru','Tapiwa M. from Harare',
+    'Nomvula D. from Cape Town','Thabo M. from Soweto','Lerato K. from Pretoria',
+    'Sifiso N. from Durban','Nomsa M. from Johannesburg','Thandi B. from Bloemfontein',
+    'Sipho K. from East London','Lungelo M. from Pietermaritzburg',
+    'Sho T. from Nagoya','Riko M. from Yokohama','Naoki S. from Fukuoka',
+    'Aoi T. from Kobe','Sota K. from Hiroshima','Misaki W. from Sendai',
+    'Hayato M. from Sapporo','Haruka N. from Naha','Ren S. from Kyoto',
+    'Sakura M. from Nagasaki','Yuna K. from Daejeon','Junho P. from Gwangju',
+    'Seoyeon C. from Suwon','Minjae K. from Ulsan','Jisoo L. from Incheon',
+    'Taehyun B. from Pohang','Yeji H. from Jeonju','Hyunwoo K. from Changwon',
+    'Xiao M. from Tianjin','Jing L. from Chongqing','Hao W. from Qingdao',
+    'Yan C. from Xiamen','Tao Z. from Zhengzhou','Jun L. from Fuzhou',
+    'Jie H. from Nanchang','Ling W. from Shijiazhuang','Mei C. from Hefei',
+    'Fan Z. from Kunming','Kai L. from Urumqi','Xu W. from Lanzhou',
+    'Kübra Y. from Istanbul','Mert D. from Ankara','Zeynep A. from Izmir',
+    'Burak K. from Bursa','Elif S. from Antalya','Serkan M. from Adana',
+    'Yasemin T. from Gaziantep','Ozan B. from Konya','Gizem A. from Mersin',
+    'Hüseyin K. from Kayseri',
+    /* Latin America */
+    'Carlos M. from Madrid','Maria P. from São Paulo','Camila A. from Medellín',
+    'Tomás F. from Guadalajara','Paulo M. from Lisbon','Luisa F. from Bogotá',
+    'Ana C. from Buenos Aires','Jorge M. from Lima','Rosa P. from Santiago',
+    'Felipe S. from Bogotá','Daniela R. from Montevideo','Ricardo T. from São Paulo',
+    'Gabriela L. from Mexico City','Andrés M. from Guadalajara','Valentina G. from Medellín',
+    'Martina S. from Buenos Aires','Sebastián R. from Santiago','Isabella M. from Lima',
+    'Mateo D. from Bogotá','Valeria F. from Caracas','Emilio B. from Monterrey',
+    'Natalia R. from Guadalajara','Diego A. from Quito','Paola M. from Guayaquil',
+    'Renata S. from Recife','Lucas T. from Belo Horizonte','Mariana F. from Porto Alegre',
+    'Pedro H. from Fortaleza','Fernanda C. from Curitiba','Rafael M. from Brasília',
   ];
 
   /* Fisher-Yates shuffle */
@@ -1980,11 +2083,27 @@ document.addEventListener('click', function(e){
     return arr;
   }
 
-  var queue=shuffle(NAMES), idx=0;
+  var SESSION_KEY='im_coffee_queue';
+  var queue,idx;
+
+  /* Restore from sessionStorage (survives page refresh within same tab) */
+  try{
+    var saved=sessionStorage.getItem(SESSION_KEY);
+    if(saved){
+      var parsed=JSON.parse(saved);
+      queue=parsed.q; idx=parsed.i;
+    }
+  }catch(e){}
+
+  if(!queue||!queue.length){ queue=shuffle(NAMES); idx=0; }
+
+  function saveState(){ try{ sessionStorage.setItem(SESSION_KEY,JSON.stringify({q:queue,i:idx})); }catch(e){} }
 
   function nextName(){
     if(idx>=queue.length){ queue=shuffle(NAMES); idx=0; }
-    return queue[idx++];
+    var name=queue[idx++];
+    saveState();
+    return name;
   }
 
   function showToastCoffee(){
@@ -1994,18 +2113,18 @@ document.addEventListener('click', function(e){
     if(!el||!nm)return;
     nm.textContent=name;
     el.classList.add('cft-show');
-    setTimeout(function(){ el.classList.remove('cft-show'); }, 5500);
+    setTimeout(function(){ el.classList.remove('cft-show'); },5500);
     scheduleNext();
   }
 
   function scheduleNext(){
     /* 2.5 – 5 minutes between toasts */
     var delay=(150+Math.random()*150)*1000;
-    setTimeout(showToastCoffee, delay);
+    setTimeout(showToastCoffee,delay);
   }
 
   /* First toast after 50 – 100 seconds */
-  setTimeout(showToastCoffee, (50+Math.random()*50)*1000);
+  setTimeout(showToastCoffee,(50+Math.random()*50)*1000);
 })();
 </script>
 </body>
