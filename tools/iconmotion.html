@@ -1564,7 +1564,7 @@ function buildCard(card, fromName, toName, fromLabel, toLabel) {
   // Color swatch
   var colorSwatch = document.createElement('button');
   colorSwatch.title = 'Change icon color';
-  colorSwatch.style.cssText = 'width:20px;height:20px;border-radius:50%;background:#1e3a5f;border:2px solid #CBD5E1;cursor:pointer;flex-shrink:0;padding:0;transition:transform .15s,border-color .15s;position:relative;';
+  colorSwatch.style.cssText = 'width:16px;height:16px;border-radius:50%;background:#1e3a5f;border:2px solid #CBD5E1;cursor:pointer;flex-shrink:0;padding:0;transition:transform .15s,border-color .15s;position:relative;';
   colorSwatch.appendChild(colorPick);
   colorSwatch.onmouseenter = function(){ colorSwatch.style.transform='scale(1.18)'; colorSwatch.style.borderColor='#93C5FD'; };
   colorSwatch.onmouseleave = function(){ colorSwatch.style.transform='scale(1)'; colorSwatch.style.borderColor='#CBD5E1'; };
@@ -1586,7 +1586,7 @@ function buildCard(card, fromName, toName, fromLabel, toLabel) {
     chip.textContent = label;
     chip.dataset.speed = val;
     var active = (val === 1);
-    chip.style.cssText = 'font-size:9.5px;padding:3px 6px;border-radius:6px;cursor:pointer;font-family:"JetBrains Mono",monospace;font-weight:700;transition:all .12s;line-height:1;border:1px solid '+(active?'#93C5FD':'#E2E8F0')+';background:'+(active?'#DBEAFE':'transparent')+';color:'+(active?'#2563EB':'#94A3B8')+';';
+    chip.style.cssText = 'font-size:9px;padding:2px 4px;border-radius:5px;cursor:pointer;font-family:"JetBrains Mono",monospace;font-weight:700;transition:all .12s;line-height:1;border:1px solid '+(active?'#93C5FD':'#E2E8F0')+';background:'+(active?'#DBEAFE':'transparent')+';color:'+(active?'#2563EB':'#94A3B8')+';white-space:nowrap;';
     chip.onclick = function(e){
       e.stopPropagation();
       card._activeSpeed = val;
@@ -1606,7 +1606,7 @@ function buildCard(card, fromName, toName, fromLabel, toLabel) {
   var dlBtn = document.createElement('button');
   dlBtn.title = 'Download animated SVG';
   dlBtn.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>';
-  dlBtn.style.cssText = 'width:26px;height:26px;border-radius:7px;border:1px solid #BFDBFE;background:#EFF6FF;color:#2563EB;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .15s,border-color .15s;';
+  dlBtn.style.cssText = 'width:22px;height:22px;border-radius:6px;border:1px solid #BFDBFE;background:#EFF6FF;color:#2563EB;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .15s,border-color .15s;';
   dlBtn.onmouseenter = function(){ dlBtn.style.background='#DBEAFE'; dlBtn.style.borderColor='#93C5FD'; };
   dlBtn.onmouseleave = function(){ dlBtn.style.background='#EFF6FF'; dlBtn.style.borderColor='#BFDBFE'; };
   dlBtn.onclick = function(e){ e.stopPropagation(); buildDownloadSVG(fromName, toName, fromLabel, toLabel, colorPick.value, card._activeSpeed || 1); };
