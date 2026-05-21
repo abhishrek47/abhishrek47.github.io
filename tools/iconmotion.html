@@ -1045,189 +1045,654 @@ input[type=color]{width:28px;height:28px;border:1.5px solid var(--border);border
   const SHAPES = 'path,circle,rect,line,polyline,polygon,ellipse';
   const cache = {};
 
-  const PAIRS = [
-    ['shield','shield-check','Shield','Verified'],
-    ['shield','shield-x','Shield','Blocked'],
-    ['shield','shield-alert','Shield','Alert'],
-    ['shield','shield-off','Shield','Off'],
-    ['lock','lock-open','Lock','Unlock'],
-    ['eye','eye-off','Show','Hide'],
-    ['volume-2','volume-x','Volume','Mute'],
-    ['mic','mic-off','Mic','Muted'],
-    ['camera','camera-off','Camera','Off'],
-    ['bell','bell-off','Bell','Silent'],
-    ['bell','bell-ring','Bell','Ringing'],
-    ['user','user-check','User','Verified'],
-    ['user','user-x','User','Removed'],
-    ['bookmark','bookmark-check','Bookmark','Saved'],
-    ['wifi','wifi-off','Online','Offline'],
-    ['bluetooth','bluetooth-off','Bluetooth','Off'],
-    ['circle-check','circle-x','Success','Error'],
-    ['thumbs-up','thumbs-down','Like','Dislike'],
-    ['heart','heart-off','Heart','Off'],
-    ['star','star-off','Starred','Plain'],
-    ['power','power-off','Power On','Power Off'],
-    ['book-open','book','Reading','Closed'],
+  // ── 559 pairs in 12 categories ──────────────────────────────────────────────
+  const CATEGORIES = [
+    { id:'arrows', label:'Arrows', pairs:[
+      ['arrow-up','arrow-down','Up','Down'],
+      ['arrow-left','arrow-right','Left','Right'],
+      ['arrow-up-left','arrow-up-right','↖','↗'],
+      ['arrow-down-left','arrow-down-right','↙','↘'],
+      ['arrow-up-from-line','arrow-down-from-line','From ↑','From ↓'],
+      ['arrow-left-from-line','arrow-right-from-line','From ←','From →'],
+      ['arrow-up-to-line','arrow-down-to-line','To ↑','To ↓'],
+      ['arrow-left-to-line','arrow-right-to-line','To ←','To →'],
+      ['chevron-up','chevron-down','Chevron ↑','Chevron ↓'],
+      ['chevron-left','chevron-right','Chevron ←','Chevron →'],
+      ['chevron-up-circle','chevron-down-circle','Circle ↑','Circle ↓'],
+      ['chevron-left-circle','chevron-right-circle','Circle ←','Circle →'],
+      ['chevron-up-square','chevron-down-square','Square ↑','Square ↓'],
+      ['chevron-left-square','chevron-right-square','Square ←','Square →'],
+      ['chevron-first','chevron-last','First','Last'],
+      ['arrow-big-up','arrow-big-down','Big ↑','Big ↓'],
+      ['arrow-big-left','arrow-big-right','Big ←','Big →'],
+      ['arrow-big-up-dash','arrow-big-down-dash','Dash ↑','Dash ↓'],
+      ['rotate-ccw','rotate-cw','Rotate ←','Rotate →'],
+      ['refresh-ccw','refresh-cw','Refresh ←','Refresh →'],
+      ['undo','redo','Undo','Redo'],
+      ['undo-2','redo-2','Undo All','Redo All'],
+      ['skip-forward','skip-back','Skip →','Skip ←'],
+      ['fast-forward','rewind','Fast →','Rewind'],
+      ['step-forward','step-back','Step →','Step ←'],
+      ['zoom-in','zoom-out','Zoom In','Zoom Out'],
+      ['maximize','minimize','Maximize','Minimize'],
+      ['maximize-2','minimize-2','Expand','Collapse'],
+      ['expand','shrink','Expand','Shrink'],
+      ['upload','download','Upload','Download'],
+      ['upload-cloud','download-cloud','Cloud ↑','Cloud ↓'],
+      ['log-in','log-out','Log In','Log Out'],
+      ['flip-horizontal','flip-vertical','Flip H','Flip V'],
+      ['flip-horizontal-2','flip-vertical-2','Flip H2','Flip V2'],
+      ['arrow-up-a-z','arrow-down-a-z','A→Z ↑','Z→A ↓'],
+      ['arrow-up-0-1','arrow-down-0-1','0→1 ↑','1→0 ↓'],
+      ['arrow-up-narrow-wide','arrow-down-narrow-wide','Narrow Wide ↑','Narrow Wide ↓'],
+      ['arrow-up-wide-narrow','arrow-down-wide-narrow','Wide Narrow ↑','Wide Narrow ↓'],
+      ['send','send-horizontal','Send ↑','Send →'],
+      ['move-up','move-down','Move ↑','Move ↓'],
+      ['move-left','move-right','Move ←','Move →'],
+      ['move-up-right','move-down-left','Move ↗','Move ↙'],
+      ['corner-up-left','corner-up-right','Corner ↖','Corner ↗'],
+      ['corner-down-left','corner-down-right','Corner ↙','Corner ↘'],
+      ['fold-horizontal','unfold-horizontal','Fold H','Unfold H'],
+      ['fold-vertical','unfold-vertical','Fold V','Unfold V'],
+      ['import','export','Import','Export'],
+      ['panel-left','panel-right','Panel ←','Panel →'],
+      ['panel-top','panel-bottom','Panel ↑','Panel ↓'],
+      ['sort-asc','sort-desc','Sort A→Z','Sort Z→A'],
+    ]},
+    { id:'media', label:'Media', pairs:[
+      ['play','pause','Play','Pause'],
+      ['play-circle','pause-circle','Play ○','Pause ○'],
+      ['play-square','pause-square','Play □','Pause □'],
+      ['volume-1','volume-2','Low Vol','High Vol'],
+      ['volume-2','volume-x','Volume','Mute'],
+      ['volume-off','volume','Silent','Volume'],
+      ['mic','mic-off','Mic','Mic Off'],
+      ['mic-2','mic-vocal','Mic 2','Vocal'],
+      ['camera','camera-off','Camera','Camera Off'],
+      ['camera','camera-2','Camera','Camera 2'],
+      ['video','video-off','Video','Video Off'],
+      ['video','video-2','Video','Video 2'],
+      ['image','image-off','Image','Image Off'],
+      ['image-plus','image-minus','Add Image','Remove Image'],
+      ['image-up','image-down','Image ↑','Image ↓'],
+      ['music','music-2','Music','Music 2'],
+      ['music-2','music-3','Music 2','Music 3'],
+      ['music-3','music-4','Music 3','Music 4'],
+      ['headphones','headphones-off','Headphones','Headphones Off'],
+      ['speaker','speaker-off','Speaker','Speaker Off'],
+      ['speaker','speaker-x','Speaker','Muted'],
+      ['film','clapperboard','Film','Clapper'],
+      ['disc','disc-2','Disc','Disc 2'],
+      ['disc-2','disc-3','Disc 2','Disc 3'],
+      ['tv','tv-2','TV','TV 2'],
+      ['monitor','monitor-off','Monitor','Monitor Off'],
+      ['radio','podcast','Radio','Podcast'],
+      ['airplay','cast','Airplay','Cast'],
+      ['subtitles','captions-off','Subtitles','Captions Off'],
+      ['repeat','repeat-1','Repeat All','Repeat One'],
+      ['repeat','repeat-2','Repeat','Repeat 2'],
+      ['shuffle','list-music','Shuffle','Playlist'],
+      ['ear','ear-off','Ear','Ear Off'],
+      ['rewind','fast-forward','Rewind','Fast Fwd'],
+      ['skip-back','skip-forward','Skip Back','Skip Fwd'],
+      ['clapperboard','clapperboard-close','Scene Open','Scene Close'],
+      ['monitor-play','monitor-stop','Monitor Play','Monitor Stop'],
+      ['music-off','music','Music Off','Music'],
+      ['camera-off','camera','Camera Off','Camera'],
+      ['video-off','video','Video Off','Video'],
+      ['mic-off','mic','Muted','Unmuted'],
+      ['pause','play','Pause','Play'],
+      ['list-music','shuffle','Playlist','Shuffle'],
+      ['volume-x','volume-2','Unmute','Volume'],
+      ['speaker-x','speaker','Speaker X','Speaker'],
+    ]},
+    { id:'security', label:'Security', pairs:[
+      ['lock','unlock','Lock','Unlock'],
+      ['lock-keyhole','lock-keyhole-open','Locked','Unlocked'],
+      ['shield','shield-check','Shield','Verified'],
+      ['shield','shield-x','Shield','Blocked'],
+      ['shield','shield-off','Shield','Shield Off'],
+      ['shield-check','shield-x','Safe','Unsafe'],
+      ['shield-alert','shield-ban','Alert','Banned'],
+      ['eye','eye-off','Visible','Hidden'],
+      ['key','key-round','Key','Round Key'],
+      ['key-round','key-square','Round Key','Square Key'],
+      ['fingerprint','scan-face','Fingerprint','Face ID'],
+      ['scan','scan-line','Scan','Scan Line'],
+      ['scan-barcode','scan-qr-code','Barcode','QR Code'],
+      ['alarm-smoke','fire-extinguisher','Smoke Alarm','Fire'],
+      ['radiation','biohazard','Radiation','Biohazard'],
+      ['skull','skull-crossbones','Skull','Danger'],
+      ['siren','siren-off','Siren','Siren Off'],
+      ['alarm-check','alarm-minus','Alarm OK','Alarm Off'],
+      ['ban','circle-slash','Ban','Slash'],
+      ['circle-check','circle-x','Check','X'],
+      ['badge-check','badge-x','Badge OK','Badge X'],
+      ['badge-alert','badge-info','Alert','Info'],
+      ['verified','badge-check','Verified','Badge'],
+      ['user-check','user-x','User OK','User X'],
+      ['key','fingerprint','Key','Print'],
+      ['lock','key','Lock','Key'],
+      ['shield','lock','Shield','Lock'],
+      ['wifi','wifi-off','WiFi','WiFi Off'],
+      ['bluetooth','bluetooth-off','BT','BT Off'],
+      ['zap','zap-off','Active','Inactive'],
+    ]},
+    { id:'users', label:'Users', pairs:[
+      ['user','user-check','User','Verified'],
+      ['user','user-x','User','Removed'],
+      ['user','user-plus','User','Add User'],
+      ['user','user-minus','User','Remove'],
+      ['user-check','user-x','Active','Blocked'],
+      ['user-plus','user-minus','Add','Remove'],
+      ['user-round','user-round-check','User Round','User OK'],
+      ['user-round','user-round-x','User Round','User X'],
+      ['user-round','user-round-plus','User Round','Add'],
+      ['user-round','user-round-minus','User Round','Remove'],
+      ['users','users-round','Users','Users Round'],
+      ['user-cog','user-pen','User Settings','User Edit'],
+      ['user-search','user-2','Search','User 2'],
+      ['user-lock','user-unlock','User Lock','User Unlock'],
+      ['person-standing','person-standing-dress','Standing','Dress'],
+      ['baby','baby-doll','Baby','Baby Doll'],
+      ['user','bot','Human','Bot'],
+      ['bot','bot-off','Bot','Bot Off'],
+      ['contact','contact-2','Contact','Contact 2'],
+      ['id-card','credit-card','ID Card','Credit Card'],
+      ['smile','frown','Happy','Sad'],
+      ['smile','meh','Happy','Neutral'],
+      ['frown','meh','Sad','Neutral'],
+      ['laugh','smile','Laugh','Smile'],
+      ['angry','frown','Angry','Frown'],
+      ['heart','heart-crack','Heart','Broken'],
+      ['hand','hand-helping','Hand','Helping'],
+      ['hand','handshake','Hand','Handshake'],
+      ['accessibility','persons-standing','Access','Standing'],
+      ['footprints','person-standing','Footprints','Standing'],
+    ]},
+    { id:'status', label:'Status', pairs:[
+      ['check','x','Check','X'],
+      ['check-circle','x-circle','Check ○','X ○'],
+      ['check-circle-2','x-circle','Check 2','X'],
+      ['check-square','x-square','Check □','X □'],
+      ['circle-check','circle-x','Circle Check','Circle X'],
+      ['circle-check-big','circle-alert','OK','Alert'],
+      ['circle-alert','circle-x','Alert','Error'],
+      ['triangle-alert','triangle-right','Warning','Right'],
+      ['bell','bell-off','Bell','Bell Off'],
+      ['bell','bell-ring','Quiet','Ringing'],
+      ['bell-ring','bell-off','Ringing','Muted'],
+      ['alarm-clock','alarm-clock-off','Alarm','Alarm Off'],
+      ['alarm-clock-check','alarm-clock-minus','Alarm OK','Alarm Off'],
+      ['clock','clock-alert','Clock','Clock Alert'],
+      ['badge','badge-check','Badge','Verified'],
+      ['badge','badge-alert','Badge','Alert'],
+      ['badge','badge-x','Badge','X'],
+      ['thumbs-up','thumbs-down','Up','Down'],
+      ['star','star-off','Star','Star Off'],
+      ['star','star-half','Full Star','Half Star'],
+      ['heart','heart-off','Heart','Heart Off'],
+      ['bookmark','bookmark-check','Bookmark','Saved'],
+      ['bookmark','bookmark-x','Bookmark','Removed'],
+      ['bookmark-plus','bookmark-minus','Add Bookmark','Remove'],
+      ['flag','flag-off','Flag','No Flag'],
+      ['flag','flag-triangle-left','Flag','Left Flag'],
+      ['flag-triangle-left','flag-triangle-right','Flag ←','Flag →'],
+      ['trophy','award','Trophy','Award'],
+      ['award','medal','Award','Medal'],
+      ['percent','hash','Percent','Hash'],
+      ['activity','activity-square','Activity','Activity □'],
+      ['loader','loader-circle','Loader','Loader ○'],
+      ['loader-circle','loader-pinwheel','Loader ○','Pinwheel'],
+      ['loader-pinwheel','hourglass','Pinwheel','Hourglass'],
+      ['hourglass','timer','Hourglass','Timer'],
+      ['timer','timer-off','Timer','Timer Off'],
+      ['timer-reset','timer','Reset','Timer'],
+      ['power','power-off','Power','Power Off'],
+      ['power-circle','power-square','Power ○','Power □'],
+      ['toggle-left','toggle-right','Off','On'],
+      ['switch-camera','switch','Switch Cam','Switch'],
+      ['check','minus','Check','Minus'],
+      ['plus','minus','Plus','Minus'],
+      ['circle-plus','circle-minus','Add','Remove'],
+      ['square-plus','square-minus','Add □','Remove □'],
+    ]},
+    { id:'comms', label:'Communication', pairs:[
+      ['mail','mail-open','Mail','Mail Open'],
+      ['mail','mail-check','Mail','Mail OK'],
+      ['mail-open','mail-x','Mail Open','Mail X'],
+      ['mail-plus','mail-minus','Mail +','Mail -'],
+      ['message-circle','message-square','Bubble ○','Bubble □'],
+      ['message-circle','message-circle-off','Chat','Chat Off'],
+      ['message-square','message-square-off','Chat □','Chat Off'],
+      ['message-square-plus','message-square-minus','Add Chat','Remove Chat'],
+      ['message-square-check','message-square-x','Chat OK','Chat X'],
+      ['messages-square','message-square','Group Chat','Single'],
+      ['phone','phone-off','Phone','Phone Off'],
+      ['phone','phone-call','Phone','Calling'],
+      ['phone-call','phone-missed','Calling','Missed'],
+      ['phone-incoming','phone-outgoing','Incoming','Outgoing'],
+      ['phone-missed','phone-forwarded','Missed','Forwarded'],
+      ['voicemail','phone','Voicemail','Phone'],
+      ['signal','signal-low','Signal Full','Signal Low'],
+      ['signal-low','signal-medium','Signal Low','Medium'],
+      ['signal-medium','signal-high','Signal Med','High'],
+      ['signal-zero','signal-low','No Signal','Low'],
+      ['rss','antenna','RSS','Antenna'],
+      ['globe','globe-2','Globe','Globe 2'],
+      ['globe-2','globe-lock','Globe 2','Globe Lock'],
+      ['wifi','wifi-off','WiFi','WiFi Off'],
+      ['wifi-high','wifi-low','WiFi High','WiFi Low'],
+      ['wifi-low','wifi-zero','WiFi Low','WiFi Off'],
+      ['share','share-2','Share','Share 2'],
+      ['share-2','forward','Share 2','Forward'],
+      ['reply','reply-all','Reply','Reply All'],
+      ['reply-all','forward','Reply All','Forward'],
+      ['inbox','send','Inbox','Send'],
+      ['inbox','archive','Inbox','Archive'],
+      ['send','inbox','Send','Inbox'],
+      ['at-sign','hash','@','#'],
+      ['link','link-2','Link','Link 2'],
+      ['link-2','unlink','Link 2','Unlink'],
+      ['unlink','link','Unlink','Link'],
+      ['link-2-off','link-2','Link Off','Link'],
+      ['qr-code','barcode','QR','Barcode'],
+      ['satellite','satellite-dish','Satellite','Dish'],
+      ['radio-tower','antenna','Tower','Antenna'],
+      ['network','router','Network','Router'],
+      ['router','server','Router','Server'],
+      ['server','database','Server','Database'],
+      ['database','hard-drive','Database','Drive'],
+    ]},
+    { id:'files', label:'Files', pairs:[
+      ['file','file-text','File','File Text'],
+      ['file-text','file-code','File Text','File Code'],
+      ['file-code','file-code-2','Code','Code 2'],
+      ['file','file-plus','File','Add File'],
+      ['file','file-minus','File','Remove File'],
+      ['file-plus','file-minus','Add File','Remove File'],
+      ['file-check','file-x','File OK','File X'],
+      ['file-check-2','file-x-2','File OK 2','File X 2'],
+      ['file','file-image','File','Image File'],
+      ['file','file-video','File','Video File'],
+      ['file','file-audio','File','Audio File'],
+      ['file','file-archive','File','Archive'],
+      ['file','file-json','File','JSON'],
+      ['file','file-spreadsheet','File','Spreadsheet'],
+      ['file','file-presentation','File','Presentation'],
+      ['file-up','file-down','File ↑','File ↓'],
+      ['file-input','file-output','File In','File Out'],
+      ['file-search','file-search-2','Search','Search 2'],
+      ['folder','folder-open','Folder','Open'],
+      ['folder-open','folder-closed','Open','Closed'],
+      ['folder','folder-plus','Folder','Add'],
+      ['folder','folder-minus','Folder','Remove'],
+      ['folder-plus','folder-minus','Add Folder','Remove'],
+      ['folder-check','folder-x','Folder OK','Folder X'],
+      ['folder','folder-lock','Folder','Locked'],
+      ['folder-lock','folder-open','Locked','Unlocked'],
+      ['folder','folder-git','Folder','Git'],
+      ['folder','folder-git-2','Folder','Git 2'],
+      ['folder-sync','folder','Sync','Folder'],
+      ['folder-heart','folder-star','Fav Folder','Star Folder'],
+      ['clipboard','clipboard-check','Clipboard','Done'],
+      ['clipboard','clipboard-x','Clipboard','Clear'],
+      ['clipboard-plus','clipboard-minus','Add','Remove'],
+      ['clipboard-copy','clipboard-paste','Copy','Paste'],
+      ['clipboard-list','clipboard-type','List','Type'],
+      ['copy','files','Copy','Files'],
+      ['files','git-compare-arrows','Files','Compare'],
+      ['trash','trash-2','Trash','Trash 2'],
+      ['archive','archive-x','Archive','Archive X'],
+      ['archive-restore','archive','Restore','Archive'],
+      ['save','save-all','Save','Save All'],
+      ['file-terminal','terminal-square','File Term','Term □'],
+      ['terminal','terminal-square','Terminal','Terminal □'],
+      ['hard-drive','hard-drive-download','Drive','Drive ↓'],
+      ['hard-drive','hard-drive-upload','Drive','Drive ↑'],
+    ]},
+    { id:'devices', label:'Devices', pairs:[
+      ['smartphone','smartphone-charging','Phone','Charging'],
+      ['smartphone','smartphone-nfc','Phone','NFC'],
+      ['tablet','tablet-smartphone','Tablet','Mobile'],
+      ['laptop','laptop-minimal','Laptop','Minimal'],
+      ['laptop','laptop-2','Laptop','Laptop 2'],
+      ['monitor','monitor-smartphone','Desktop','+ Phone'],
+      ['monitor','monitor-check','Monitor','Monitor OK'],
+      ['monitor-check','monitor-x','Monitor OK','Monitor X'],
+      ['monitor-play','monitor-pause','Monitor Play','Pause'],
+      ['printer','printer-check','Print','Print OK'],
+      ['keyboard','keyboard-off','Keyboard','KB Off'],
+      ['mouse','mouse-pointer','Mouse','Mouse Ptr'],
+      ['mouse-pointer','mouse-pointer-2','Ptr','Ptr 2'],
+      ['mouse-pointer-2','mouse-pointer-click','Ptr 2','Click'],
+      ['cpu','cpu-medium','CPU','CPU Med'],
+      ['server','server-off','Server','Server Off'],
+      ['server','server-crash','Server','Crash'],
+      ['server-crash','server','Crashed','OK'],
+      ['battery','battery-charging','Battery','Charging'],
+      ['battery-full','battery-medium','Full','Medium'],
+      ['battery-medium','battery-low','Medium','Low'],
+      ['battery-low','battery-warning','Low','Warning'],
+      ['battery-warning','battery-off','Warning','Dead'],
+      ['plug','plug-zap','Plug','Fast Charge'],
+      ['plug-2','plug','Plug 2','Plug'],
+      ['usb','usb-2','USB','USB 2'],
+      ['airplay','cast','Airplay','Cast'],
+      ['bluetooth','bluetooth-connected','BT','BT On'],
+      ['bluetooth-connected','bluetooth-off','BT On','BT Off'],
+      ['nfc','wifi','NFC','WiFi'],
+      ['speaker','speaker-2','Speaker','Speaker 2'],
+      ['headphones','headphone','HP','HP Single'],
+      ['watch','clock','Watch','Clock'],
+      ['camera','webcam','Camera','Webcam'],
+      ['monitor-speaker','tv','Monitor Spkr','TV'],
+      ['tv','tv-minimal','TV','TV Min'],
+      ['router','server','Router','Server'],
+      ['cpu','memory-stick','CPU','Memory'],
+      ['memory-stick','hard-drive','Memory','Drive'],
+      ['hard-drive','database','Drive','DB'],
+      ['database','server','DB','Server'],
+      ['gamepad','gamepad-2','Gamepad','Gamepad 2'],
+      ['joystick','gamepad','Joystick','Gamepad'],
+    ]},
+    { id:'weather', label:'Weather', pairs:[
+      ['sun','moon','Day','Night'],
+      ['sun','cloud-sun','Clear','Partly Cloudy'],
+      ['cloud-sun','cloud','Partly Cloudy','Cloudy'],
+      ['cloud','cloud-rain','Cloud','Rain'],
+      ['cloud-rain','cloud-drizzle','Rain','Drizzle'],
+      ['cloud-drizzle','cloud-snow','Drizzle','Snow'],
+      ['cloud-snow','cloud-fog','Snow','Fog'],
+      ['cloud-fog','cloud-lightning','Fog','Lightning'],
+      ['cloud-lightning','cloud-hail','Lightning','Hail'],
+      ['sun-dim','sun','Dim','Bright'],
+      ['sun-medium','sun-dim','Medium','Dim'],
+      ['moon','moon-star','Moon','Moon+Star'],
+      ['cloud-moon','cloud-sun','Night Cloud','Day Cloud'],
+      ['cloud-moon-rain','cloud-rain','Rainy Night','Rain'],
+      ['snowflake','cloud-snow','Snowflake','Snow'],
+      ['thermometer','thermometer-snowflake','Temp','Cold'],
+      ['thermometer','thermometer-sun','Temp','Hot'],
+      ['thermometer-sun','thermometer-snowflake','Hot','Cold'],
+      ['wind','tornado','Wind','Tornado'],
+      ['tornado','cloud-lightning','Tornado','Storm'],
+      ['rainbow','cloud-sun','Rainbow','Cloudy'],
+      ['umbrella','umbrella-off','Umbrella','No Umbrella'],
+      ['droplets','droplet','Droplets','Droplet'],
+      ['droplet','flame','Water','Fire'],
+      ['flame','snowflake','Fire','Ice'],
+      ['wave','wind','Wave','Wind'],
+      ['sunset','sunrise','Sunset','Sunrise'],
+      ['eclipse','sun','Eclipse','Sun'],
+      ['sun-moon','sun','Sun Moon','Sun'],
+      ['cloud-cog','cloud','Cloud Settings','Cloud'],
+    ]},
+    { id:'layout', label:'Layout', pairs:[
+      ['layout-dashboard','layout-grid','Dashboard','Grid'],
+      ['layout-grid','grid-2x2','Grid','Grid 2x2'],
+      ['grid-2x2','grid-3x3','Grid 2x2','Grid 3x3'],
+      ['rows-2','rows-3','2 Rows','3 Rows'],
+      ['columns-2','columns-3','2 Cols','3 Cols'],
+      ['layout-list','layout-grid','List','Grid'],
+      ['list','grid-2x2','List','Grid'],
+      ['list','list-tree','List','Tree List'],
+      ['list','list-checks','List','Checklist'],
+      ['table','table-2','Table','Table 2'],
+      ['table-2','table-properties','Table 2','Properties'],
+      ['panel-left','panel-right','Panel L','Panel R'],
+      ['panel-top','panel-bottom','Panel T','Panel B'],
+      ['panel-left-close','panel-right-close','Close L','Close R'],
+      ['sidebar','sidebar-close','Sidebar','Close'],
+      ['square','circle','Square','Circle'],
+      ['circle','triangle','Circle','Triangle'],
+      ['triangle','pentagon','Triangle','Pentagon'],
+      ['hexagon','octagon','Hexagon','Octagon'],
+      ['rectangle-horizontal','rectangle-vertical','Rect H','Rect V'],
+      ['ratio','crop','Ratio','Crop'],
+      ['align-left','align-right','Align L','Align R'],
+      ['align-center','align-justify','Center','Justify'],
+      ['align-start-horizontal','align-end-horizontal','Start H','End H'],
+      ['align-start-vertical','align-end-vertical','Start V','End V'],
+      ['align-center-horizontal','align-center-vertical','Center H','Center V'],
+      ['align-horizontal-space-between','align-vertical-space-between','Horiz Space','Vert Space'],
+      ['stretch-horizontal','stretch-vertical','Stretch H','Stretch V'],
+      ['scaling','scaling-squared','Scale','Scale □'],
+      ['focus','frame','Focus','Frame'],
+      ['maximize','minimize','Max','Min'],
+      ['fullscreen','minimize-2','Fullscreen','Exit'],
+    ]},
+    { id:'edit', label:'Edit & Tools', pairs:[
+      ['pen','pen-off','Pen','Pen Off'],
+      ['pen','pen-line','Pen','Pen Line'],
+      ['pen-line','pen-tool','Pen Line','Pen Tool'],
+      ['pencil','pencil-off','Pencil','Pencil Off'],
+      ['pencil','pencil-line','Pencil','Pencil Line'],
+      ['pencil-ruler','pencil','Ruler+Pencil','Pencil'],
+      ['eraser','pencil','Eraser','Pencil'],
+      ['paintbrush','paintbrush-2','Brush','Brush 2'],
+      ['paintbrush-2','paintbrush-vertical','Brush 2','Brush V'],
+      ['palette','paintbrush','Palette','Brush'],
+      ['brush','paint-bucket','Brush','Fill'],
+      ['paint-bucket','palette','Bucket','Palette'],
+      ['highlighter','marker','Highlight','Marker'],
+      ['scissors','scissors-line-dashed','Cut','Dashed Cut'],
+      ['scissors','slice','Scissors','Slice'],
+      ['knife','scissors','Knife','Scissors'],
+      ['ruler','ruler-square','Ruler','Ruler □'],
+      ['ruler-square','scale','Ruler □','Scale'],
+      ['scale','scale-3d','Scale','Scale 3D'],
+      ['magnet','magnet-off','Magnet','Magnet Off'],
+      ['wrench','wrench-screwdriver','Wrench','Wrench+Screw'],
+      ['screwdriver','wrench','Screwdriver','Wrench'],
+      ['hammer','gavel','Hammer','Gavel'],
+      ['gavel','hammer','Gavel','Hammer'],
+      ['wand','wand-2','Wand','Wand 2'],
+      ['wand-2','wand-sparkles','Wand 2','Magic'],
+      ['sparkles','zap','Sparkles','Zap'],
+      ['zap','flashlight','Zap','Flashlight'],
+      ['flashlight','flashlight-off','Light','Light Off'],
+      ['flashlight-off','flashlight','Off','On'],
+      ['settings','settings-2','Settings','Settings 2'],
+      ['settings-2','sliders-horizontal','Settings 2','Sliders'],
+      ['sliders-horizontal','sliders-vertical','Sliders H','Sliders V'],
+      ['sliders-vertical','mixer-horizontal','Sliders V','Mixer H'],
+      ['mixer-horizontal','mixer-vertical','Mixer H','Mixer V'],
+      ['pipette','dropper','Pipette','Dropper'],
+      ['crop','scissors','Crop','Scissors'],
+      ['rotate-cw','rotate-ccw','Rotate R','Rotate L'],
+      ['flip-horizontal','flip-vertical','Flip H','Flip V'],
+      ['type','text-cursor','Type','Cursor'],
+      ['text-cursor','text-cursor-input','Cursor','Input'],
+      ['spellcheck','spell-check-2','Spellcheck','Check 2'],
+      ['bold','italic','Bold','Italic'],
+      ['italic','underline','Italic','Underline'],
+      ['underline','strikethrough','Underline','Strike'],
+      ['strikethrough','subscript','Strike','Sub'],
+      ['subscript','superscript','Sub','Super'],
+      ['link','unlink','Link','Unlink'],
+      ['quote','unquote','Quote','Unquote'],
+      ['indent','outdent','Indent','Outdent'],
+    ]},
+    { id:'commerce', label:'Commerce', pairs:[
+      ['shopping-cart','shopping-basket','Cart','Basket'],
+      ['shopping-basket','shopping-bag','Basket','Bag'],
+      ['shopping-bag','package','Bag','Package'],
+      ['shopping-cart-plus','shopping-cart-minus','Add Cart','Remove'],
+      ['package','package-open','Package','Open'],
+      ['package-open','package-check','Open','Received'],
+      ['package-check','package-x','Received','Returned'],
+      ['package-plus','package-minus','Add Pkg','Remove Pkg'],
+      ['store','building-storefront','Store','Storefront'],
+      ['building-storefront','warehouse','Storefront','Warehouse'],
+      ['warehouse','factory','Warehouse','Factory'],
+      ['credit-card','credit-card-off','Card','Card Off'],
+      ['wallet','wallet-cards','Wallet','Cards'],
+      ['wallet-cards','credit-card','Cards','Credit Card'],
+      ['banknote','coins','Banknote','Coins'],
+      ['coins','piggy-bank','Coins','Savings'],
+      ['piggy-bank','trending-up','Savings','Growth'],
+      ['trending-up','trending-down','Up Trend','Down Trend'],
+      ['dollar-sign','euro','Dollar','Euro'],
+      ['euro','pound-sterling','Euro','Pound'],
+      ['pound-sterling','japanese-yen','Pound','Yen'],
+      ['receipt','receipt-cent','Receipt','Receipt ¢'],
+      ['receipt-cent','receipt-euro','Cent','Euro'],
+      ['receipt-euro','receipt-pound','Euro','Pound'],
+      ['tag','tags','Tag','Tags'],
+      ['tags','tag-off','Tags','No Tag'],
+      ['ticket','ticket-check','Ticket','Used'],
+      ['gift','gift-off','Gift','No Gift'],
+      ['percent','percent-diamond','Percent','Diamond %'],
+      ['barcode','scan-barcode','Barcode','Scan'],
+      ['scan-barcode','scan-qr-code','Barcode','QR Code'],
+      ['qr-code','link','QR Code','Link'],
+      ['handshake','hand-coins','Handshake','Pay'],
+      ['hand-coins','hand-heart','Coins','Care'],
+      ['truck','truck-delivery','Truck','Delivery'],
+      ['truck-delivery','package','Delivery','Package'],
+      ['shipping-box','archive-box','Shipping','Archive'],
+      ['box','boxes','Box','Boxes'],
+      ['boxes','archive','Boxes','Archive'],
+      ['scale','weight','Scale','Weight'],
+    ]},
+    { id:'misc', label:'Misc', pairs:[
+      ['home','building','Home','Building'],
+      ['building','building-2','Building','Building 2'],
+      ['building-2','landmark','Building 2','Landmark'],
+      ['landmark','castle','Landmark','Castle'],
+      ['castle','church','Castle','Church'],
+      ['map','map-pinned','Map','Pinned Map'],
+      ['map-pin','map-pin-off','Pin','Pin Off'],
+      ['map-pin','map-pin-check','Pin','Pin OK'],
+      ['map-pin-check','map-pin-x','Pin OK','Pin X'],
+      ['navigation','navigation-2','Nav','Nav 2'],
+      ['navigation-2','navigation-off','Nav 2','Nav Off'],
+      ['compass','navigation','Compass','Navigate'],
+      ['globe','earth','Globe','Earth'],
+      ['earth','earth-lock','Earth','Earth Lock'],
+      ['mountain','mountain-snow','Mountain','Snowy'],
+      ['tree','tree-palm','Tree','Palm'],
+      ['tree-palm','tree-pine','Palm','Pine'],
+      ['tree-pine','leaf','Pine','Leaf'],
+      ['leaf','flower','Leaf','Flower'],
+      ['flower','flower-2','Flower','Flower 2'],
+      ['sun','flower','Sun','Flower'],
+      ['apple','cherry','Apple','Cherry'],
+      ['cherry','grapes','Cherry','Grapes'],
+      ['grapes','banana','Grapes','Banana'],
+      ['utensils','utensils-crossed','Utensils','Crossed'],
+      ['coffee','cup-soda','Coffee','Soda'],
+      ['cup-soda','wine','Soda','Wine'],
+      ['wine','beer','Wine','Beer'],
+      ['beer','martini','Beer','Cocktail'],
+      ['pizza','sandwich','Pizza','Sandwich'],
+      ['sandwich','soup','Sandwich','Soup'],
+      ['soup','salad','Soup','Salad'],
+      ['cat','dog','Cat','Dog'],
+      ['dog','rabbit','Dog','Rabbit'],
+      ['rabbit','bird','Rabbit','Bird'],
+      ['bird','fish','Bird','Fish'],
+      ['fish','bug','Fish','Bug'],
+      ['bug','bug-off','Bug','Bug Off'],
+      ['bug-off','bug','No Bug','Bug'],
+      ['anchor','ship','Anchor','Ship'],
+      ['ship','sailboat','Ship','Sailboat'],
+      ['sailboat','anchor','Sailboat','Anchor'],
+      ['car','car-front','Car','Car Front'],
+      ['car-front','bike','Car Front','Bike'],
+      ['bike','bicycle','Bike','Bicycle'],
+      ['bicycle','car','Bicycle','Car'],
+      ['plane','plane-takeoff','Plane','Take Off'],
+      ['plane-takeoff','plane-landing','Take Off','Landing'],
+      ['plane-landing','plane','Landing','Plane'],
+      ['train','tram-front','Train','Tram'],
+      ['tram-front','train-front','Tram','Train Front'],
+      ['train-front','train-track','Train Front','Track'],
+      ['cable-car','gondola','Cable Car','Gondola'],
+      ['bus','bus-front','Bus','Bus Front'],
+      ['truck','train','Truck','Train'],
+      ['fuel','gauge','Fuel','Gauge'],
+      ['gauge','speedometer','Gauge','Speedo'],
+      ['camera','photo','Camera','Photo'],
+      ['photo','image','Photo','Image'],
+      ['image','images','Image','Images'],
+      ['images','gallery-horizontal','Images','Gallery H'],
+      ['gallery-horizontal','gallery-vertical','Gallery H','Gallery V'],
+      ['syringe','pill','Syringe','Pill'],
+      ['pill','capsule','Pill','Capsule'],
+      ['stethoscope','heart-pulse','Stethoscope','Pulse'],
+      ['heart-pulse','activity','Pulse','Activity'],
+      ['microscope','telescope','Microscope','Telescope'],
+      ['test-tube','flask-conical','Test Tube','Flask'],
+      ['flask-conical','beaker','Flask','Beaker'],
+      ['dna','atom','DNA','Atom'],
+      ['atom','zap','Atom','Zap'],
+      ['wand-sparkles','sparkles','Wand','Sparkles'],
+      ['sparkles','stars','Sparkles','Stars'],
+      ['stars','star','Stars','Star'],
+    ]},
   ];
 
-  const CSS = `
-    #im-gpov{
-      position:fixed;inset:0;background:rgba(0,0,0,.6);
-      backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);
-      z-index:999999;display:flex;align-items:center;justify-content:center;
-      opacity:0;pointer-events:none;transition:opacity .22s ease;}
-    #im-gpov.open{opacity:1;pointer-events:all;}
-    #im-gppanel{
-      background:#f5f0eb;border-radius:18px;
-      box-shadow:0 24px 80px rgba(0,0,0,.35);
-      width:min(96vw,1100px);max-height:90vh;
-      display:flex;flex-direction:column;overflow:hidden;
-      transform:translateY(16px) scale(.97);
-      transition:transform .22s cubic-bezier(.4,0,.2,1);}
-    #im-gpov.open #im-gppanel{transform:none;}
-    #im-mhdr{
-      display:flex;align-items:center;justify-content:space-between;
-      padding:16px 22px 12px;border-bottom:1.5px solid #e0d8d0;flex-shrink:0;}
-    #im-mhdr h2{
-      font-family:'Inter',system-ui,sans-serif;
-      font-size:1.05rem;font-weight:700;color:#1a1a1a;
-      display:flex;align-items:center;gap:8px;}
-    #im-mhdr h2 .im-badge{
-      font-size:.62rem;font-weight:600;background:#1e3a5f;color:#fff;
-      border-radius:20px;padding:2px 9px;letter-spacing:.04em;}
-    #im-mhdr p{font-size:.72rem;color:#888;margin-top:2px;}
-    #im-mclose{
-      padding:6px 14px;border-radius:8px;
-      border:1.5px solid #e0d8d0;background:transparent;
-      color:#888;font:.73rem 'Inter',system-ui,sans-serif;
-      cursor:pointer;transition:all .12s;font-weight:500;}
-    #im-mclose:hover{border-color:#c0392b;color:#c0392b;}
-    #im-mgrid{
-      display:grid;
-      grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
-      gap:12px;padding:16px 20px 20px;overflow-y:auto;flex:1;
-      scrollbar-width:thin;scrollbar-color:#c0cfe0 #e0d8d0;}
-    #im-mgrid::-webkit-scrollbar{width:5px;}
-    #im-mgrid::-webkit-scrollbar-thumb{background:#b0bdc9;border-radius:3px;}
-    .im-loading{
-      grid-column:1/-1;text-align:center;padding:40px;
-      color:#888;font:.82rem 'Inter',system-ui,sans-serif;
-      display:flex;align-items:center;justify-content:center;gap:10px;}
-    .im-spin{display:inline-block;width:20px;height:20px;
-      border:2.5px solid #ddd;border-top-color:#1e3a5f;
-      border-radius:50%;animation:im-gsap-spin .7s linear infinite;flex-shrink:0;}
-    @keyframes im-gsap-spin{to{transform:rotate(360deg)}}
-    .im-mcard{
-      background:#fff;border:1.5px solid #e0d8d0;border-radius:14px;
-      display:flex;flex-direction:column;align-items:center;
-      padding:14px 10px 10px;gap:8px;
-      transition:box-shadow .15s,border-color .15s,transform .15s;}
-    .im-mcard:hover{border-color:#1e3a5f;
-      box-shadow:0 6px 24px rgba(30,58,95,.14);transform:translateY(-2px);}
-    .im-mc-preview{width:56px;height:56px;display:flex;
-      align-items:center;justify-content:center;}
-    .im-mc-preview svg{width:48px;height:48px;overflow:visible;
-      stroke:#1e3a5f;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;fill:none;}
-    .im-mc-labels{display:flex;align-items:center;gap:5px;
-      font:.67rem 'Inter',system-ui,sans-serif;color:#555;
-      white-space:nowrap;justify-content:center;width:100%;}
-    .im-mc-arr{color:#1e3a5f;font-size:.8rem;font-weight:700;}
-    .im-mc-dl{padding:4px 12px;border-radius:20px;
-      border:1.5px solid #1e3a5f;background:transparent;color:#1e3a5f;
-      font:.65rem 'Inter',system-ui,sans-serif;font-weight:600;
-      cursor:pointer;transition:all .12s;white-space:nowrap;}
-    .im-mc-dl:hover{background:#1e3a5f;color:#fff;}
-    .im-mc-dl:disabled{opacity:.4;cursor:default;}
-    .im-err-msg{grid-column:1/-1;text-align:center;padding:30px;
-      color:#c0392b;font:.8rem 'Inter',system-ui,sans-serif;line-height:1.6;}
-    #im-fab{position:fixed;bottom:22px;right:22px;z-index:999998;
-      padding:9px 18px;border-radius:24px;background:#1e3a5f;color:#fff;
-      border:none;cursor:pointer;
-      font:.78rem 'Inter',system-ui,sans-serif;font-weight:700;
-      box-shadow:0 4px 20px rgba(30,58,95,.4);
-      transition:all .15s;letter-spacing:.02em;
-      display:flex;align-items:center;gap:7px;}
-    #im-fab:hover{background:#162d4a;transform:translateY(-2px);
-      box-shadow:0 6px 28px rgba(30,58,95,.5);}
-    @media(max-width:480px){
-      #im-mgrid{grid-template-columns:repeat(2,1fr);}
-      #im-fab{bottom:14px;right:14px;font-size:.72rem;}
-    }
-  `;
+  // flatten ALL pairs for "All" tab
+  const ALL_PAIRS = [];
+  CATEGORIES.forEach(function(cat) { cat.pairs.forEach(function(p){ ALL_PAIRS.push(p); }); });
 
-  /* ── Dynamic GSAP loader ────────────────────────────────────────── */
-  function loadScript(src) {
-    return new Promise(function(resolve, reject) {
-      var existing = document.querySelector('script[src="' + src + '"]');
-      if (existing) { resolve(); return; }
-      var s = document.createElement('script');
-      s.src = src;
-      s.onload = resolve;
-      s.onerror = reject;
-      document.head.appendChild(s);
-    });
+  // ── GSAP loader ─────────────────────────────────────────────────────────────
+  function ensureGSAP(cb) {
+    if (window.gsap && window.MorphSVGPlugin) { cb(); return; }
+    var g1 = document.createElement('script');
+    g1.src = 'https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js';
+    g1.onload = function() {
+      var g2 = document.createElement('script');
+      g2.src = 'https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/MorphSVGPlugin.min.js';
+      g2.onload = function() {
+        if (window.gsap && window.MorphSVGPlugin) {
+          gsap.registerPlugin(MorphSVGPlugin);
+          cb();
+        }
+      };
+      document.head.appendChild(g2);
+    };
+    document.head.appendChild(g1);
   }
 
-  var gsapReady = false;
-
-  async function ensureGSAP() {
-    if (gsapReady) return true;
-    if (window.gsap && window.MorphSVGPlugin) {
-      gsap.registerPlugin(MorphSVGPlugin);
-      gsapReady = true; return true;
-    }
-    try {
-      await loadScript('https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js');
-      await loadScript('https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/MorphSVGPlugin.min.js');
-      if (window.gsap && window.MorphSVGPlugin) {
-        gsap.registerPlugin(MorphSVGPlugin);
-        gsapReady = true; return true;
-      }
-    } catch(e) { console.error('GSAP load failed', e); }
-    return false;
-  }
-
-  /* ── Fetch ALL shapes → convert to paths via MorphSVGPlugin ──────── */
+  // ── Fetch all shape paths for an icon ───────────────────────────────────────
   async function fetchIconPaths(name) {
-    if (cache[name]) return cache[name];
+    if (cache[name]) return;
     try {
-      var r = await fetch(CDN + name + '.svg');
-      if (!r.ok) throw new Error('HTTP ' + r.status);
-      var txt = await r.text();
-      var doc = new DOMParser().parseFromString(txt, 'image/svg+xml');
+      var res = await fetch(CDN + name + '.svg');
+      if (!res.ok) throw new Error('404');
+      var txt = await res.text();
+      var parser = new DOMParser();
+      var doc = parser.parseFromString(txt, 'image/svg+xml');
 
-      /* Clone all shape elements into a temp in-document SVG */
       var tempSvg = document.createElementNS(NS, 'svg');
-      tempSvg.setAttribute('viewBox', '0 0 24 24');
+      tempSvg.setAttribute('viewBox','0 0 24 24');
       tempSvg.style.cssText = 'position:fixed;top:-9999px;left:-9999px;width:24px;height:24px;visibility:hidden;';
       document.body.appendChild(tempSvg);
 
       Array.from(doc.querySelectorAll(SHAPES)).forEach(function(s) {
         var el = document.createElementNS(NS, s.tagName.toLowerCase());
-        Array.from(s.attributes).forEach(function(a) { el.setAttribute(a.name, a.value); });
+        Array.from(s.attributes).forEach(function(a){ el.setAttribute(a.name, a.value); });
         tempSvg.appendChild(el);
       });
 
-      /* Convert rect, circle, line etc → path */
       Array.from(tempSvg.querySelectorAll('circle,rect,line,polyline,polygon,ellipse'))
-        .forEach(function(el) { MorphSVGPlugin.convertToPath(el); });
+        .forEach(function(el){ MorphSVGPlugin.convertToPath(el); });
 
       var paths = Array.from(tempSvg.querySelectorAll('path'))
-        .map(function(p) { return p.getAttribute('d') || ''; })
-        .filter(function(d) { return d.trim().length > 2; });
+        .map(function(p){ return p.getAttribute('d')||''; })
+        .filter(function(d){ return d.trim().length > 2; });
 
       document.body.removeChild(tempSvg);
       cache[name] = paths.length ? paths : ['M 0 0'];
     } catch(e) {
-      console.warn('IconMotion: fetch failed for', name, e.message);
       cache[name] = ['M 0 0'];
     }
-    return cache[name];
   }
 
-  /* ── Smart path matching ─────────────────────────────────────────── */
-  /* Pass 1: exact-string matches (identical paths → static)            */
-  /* Pass 2: remaining paths matched by index order (morph)            */
+  // ── Smart two-pass path matching ─────────────────────────────────────────────
   function matchPaths(fP, tP) {
     var usedF = {}, usedT = {};
     var identical = [], morphPairs = [];
@@ -1235,9 +1700,8 @@ input[type=color]{width:28px;height:28px;border:1.5px solid var(--border);border
     fP.forEach(function(d, fi) {
       for (var ti = 0; ti < tP.length; ti++) {
         if (!usedT[ti] && tP[ti] === d) {
-          identical.push({ d: d, fi: fi, ti: ti });
-          usedF[fi] = true; usedT[ti] = true;
-          break;
+          identical.push({ d:d });
+          usedF[fi]=true; usedT[ti]=true; break;
         }
       }
     });
@@ -1245,270 +1709,347 @@ input[type=color]{width:28px;height:28px;border:1.5px solid var(--border);border
     var remF = fP.map(function(d,i){return{d:d,i:i};}).filter(function(x){return !usedF[x.i];});
     var remT = tP.map(function(d,i){return{d:d,i:i};}).filter(function(x){return !usedT[x.i];});
     var mLen = Math.min(remF.length, remT.length);
-    for (var k = 0; k < mLen; k++) {
-      morphPairs.push({ fD: remF[k].d, tD: remT[k].d });
-      usedF[remF[k].i] = true; usedT[remT[k].i] = true;
+    for (var k=0; k<mLen; k++) {
+      morphPairs.push({ fD:remF[k].d, tD:remT[k].d });
+      usedF[remF[k].i]=true; usedT[remT[k].i]=true;
     }
 
     var fromOnly = fP.filter(function(_,i){return !usedF[i];});
     var toOnly   = tP.filter(function(_,i){return !usedT[i];});
-
-    return { identical: identical, morphPairs: morphPairs, fromOnly: fromOnly, toOnly: toOnly };
+    return { identical, morphPairs, fromOnly, toOnly };
   }
 
-  /* ── Build preview SVG + GSAP animation ─────────────────────────── */
-  function makeEl(d, opacity) {
-    var p = document.createElementNS(NS, 'path');
-    p.setAttribute('d', d);
-    if (opacity !== undefined) p.style.opacity = String(opacity);
-    return p;
-  }
+  // ── Build animated card ───────────────────────────────────────────────────────
+  function buildCard(card, fromName, toName, fromLabel, toLabel) {
+    var fP = cache[fromName] || ['M 0 0'];
+    var tP = cache[toName]   || ['M 0 0'];
+    var { identical, morphPairs, fromOnly, toOnly } = matchPaths(fP, tP);
 
-  function makeSVG() {
     var svg = document.createElementNS(NS, 'svg');
-    svg.setAttribute('viewBox', '0 0 24 24');
-    svg.setAttribute('fill', 'none');
-    return svg;
-  }
+    svg.setAttribute('viewBox','0 0 24 24');
+    svg.setAttribute('fill','none');
+    svg.setAttribute('stroke','currentColor');
+    svg.setAttribute('stroke-width','1.5');
+    svg.setAttribute('stroke-linecap','round');
+    svg.setAttribute('stroke-linejoin','round');
+    svg.style.cssText = 'width:56px;height:56px;overflow:visible;';
 
-  async function buildCard(fromName, toName, fromLabel, toLabel) {
-    var paths = await Promise.all([fetchIconPaths(fromName), fetchIconPaths(toName)]);
-    var fP = paths[0], tP = paths[1];
-    var match = matchPaths(fP, tP);
+    var morphEls = [], toOnlyEls = [], fromOnlyEls = [];
 
-    var card = document.createElement('div');
-    card.className = 'im-mcard';
-
-    var svg = makeSVG();
-    var morphEls = [];   /* elements that will morph */
-
-    /* Static identical paths */
-    match.identical.forEach(function(m) { svg.appendChild(makeEl(m.d)); });
-
-    /* Morphing paths — start at 'from' shape */
-    match.morphPairs.forEach(function(m) {
-      var el = makeEl(m.fD);
-      svg.appendChild(el);
-      morphEls.push({ el: el, to: m.tD });
+    // static (identical) paths
+    identical.forEach(function(m) {
+      var p = document.createElementNS(NS,'path');
+      p.setAttribute('d', m.d);
+      svg.appendChild(p);
     });
 
-    /* From-only paths — will fade out */
-    var fromOnlyEls = match.fromOnly.map(function(d) {
-      var el = makeEl(d); svg.appendChild(el); return el;
+    // morphing paths
+    morphPairs.forEach(function(m) {
+      var p = document.createElementNS(NS,'path');
+      p.setAttribute('d', m.fD);
+      svg.appendChild(p);
+      morphEls.push({ el:p, to:m.tD });
     });
 
-    /* To-only paths — will fade in */
-    var toOnlyEls = match.toOnly.map(function(d) {
-      var el = makeEl(d, 0); svg.appendChild(el); return el;
+    // fade-out (from-only) paths
+    fromOnly.forEach(function(d) {
+      var p = document.createElementNS(NS,'path');
+      p.setAttribute('d', d);
+      svg.appendChild(p);
+      fromOnlyEls.push(p);
     });
 
-    /* GSAP timeline */
-    var tl = gsap.timeline({ repeat:-1, yoyo:true, repeatDelay:0.9,
-                              delay: Math.random()*0.5 });
-
-    morphEls.forEach(function(m) {
-      tl.to(m.el, { morphSVG:{ shape: m.to, origin:'50% 50%' },
-                    duration: 1.1, ease:'power2.inOut' }, 0);
+    // fade-in (to-only) paths
+    toOnly.forEach(function(d) {
+      var p = document.createElementNS(NS,'path');
+      p.setAttribute('d', d);
+      p.style.opacity = '0';
+      svg.appendChild(p);
+      toOnlyEls.push(p);
     });
-    if (toOnlyEls.length) {
-      tl.to(toOnlyEls, { opacity:1, duration:0.5, ease:'power1.inOut',
-                          stagger:0.07 }, 0.4);
-    }
-    if (fromOnlyEls.length) {
-      tl.to(fromOnlyEls, { opacity:0, duration:0.5, ease:'power1.inOut' }, 0.3);
-    }
 
-    /* Card DOM */
-    var preview = document.createElement('div');
-    preview.className = 'im-mc-preview';
-    preview.appendChild(svg);
+    // Replace placeholder content
+    card.innerHTML = '';
+    var svgWrap = document.createElement('div');
+    svgWrap.style.cssText = 'display:flex;align-items:center;justify-content:center;height:72px;';
+    svgWrap.appendChild(svg);
+    card.appendChild(svgWrap);
 
     var lbl = document.createElement('div');
-    lbl.className = 'im-mc-labels';
-    lbl.innerHTML = '<span>' + fromLabel + '</span>'
-      + '<span class="im-mc-arr">⇌</span>'
-      + '<span>' + toLabel + '</span>';
-
-    var dlBtn = document.createElement('button');
-    dlBtn.className = 'im-mc-dl';
-    dlBtn.textContent = '⬇ SVG';
-    dlBtn.addEventListener('click', function() {
-      dlBtn.textContent = '…'; dlBtn.disabled = true;
-      buildDownloadSVG(fP, tP, match, fromName, toName)
-        .then(function(svgStr) {
-          var a = document.createElement('a');
-          a.href = URL.createObjectURL(new Blob([svgStr], {type:'image/svg+xml'}));
-          a.download = fromName + '-to-' + toName + '.svg';
-          document.body.appendChild(a); a.click(); document.body.removeChild(a);
-        })
-        .catch(function(e){ console.error('Download error:', e); })
-        .finally(function(){ dlBtn.textContent = '⬇ SVG'; dlBtn.disabled = false; });
-    });
-
-    card.appendChild(preview);
+    lbl.style.cssText = 'font-size:11px;color:#888;text-align:center;margin-top:6px;font-family:monospace;line-height:1.3;';
+    lbl.textContent = fromLabel + ' → ' + toLabel;
     card.appendChild(lbl);
+
+    // Download button
+    var dlBtn = document.createElement('button');
+    dlBtn.textContent = '↓ SVG';
+    dlBtn.style.cssText = 'display:block;margin:8px auto 0;font-size:10px;padding:2px 8px;border:1px solid #c0392b;border-radius:12px;background:transparent;color:#c0392b;cursor:pointer;font-family:monospace;';
+    dlBtn.onclick = function(e){
+      e.stopPropagation();
+      buildDownloadSVG(fromName, toName, fromLabel, toLabel);
+    };
     card.appendChild(dlBtn);
-    return card;
-  }
 
-  /* ── Download: capture GSAP keyframes → SMIL SVG ────────────────── */
-  async function buildDownloadSVG(fP, tP, match, fromName, toName) {
-    var SAMPLES = 20;
-    var host = document.createElement('div');
-    host.style.cssText = 'position:fixed;top:-9999px;left:-9999px;width:24px;height:24px;visibility:hidden;';
-    document.body.appendChild(host);
+    card.dataset.ready = '1';
 
-    var svg = makeSVG();
-    host.appendChild(svg);
-
-    /* Build off-screen morph elements */
-    var offEls = match.morphPairs.map(function(m) {
-      var el = makeEl(m.fD); svg.appendChild(el); return { el:el, to:m.tD };
-    });
-
-    var stl = gsap.timeline({ paused:true });
-    offEls.forEach(function(m) {
-      stl.to(m.el, { morphSVG:{ shape:m.to, origin:'50% 50%' }, duration:1 }, 0);
-    });
-
-    /* Sample forward frames */
-    var fwdFrames = [];
-    for (var k = 0; k <= SAMPLES; k++) {
-      stl.progress(k / SAMPLES);
-      fwdFrames.push(offEls.map(function(m){ return m.el.getAttribute('d') || ''; }));
-    }
-    document.body.removeChild(host);
-
-    /* Build forward+reverse for seamless loop */
-    var revFrames = fwdFrames.slice().reverse().slice(1);
-    var allFrames = fwdFrames.concat(revFrames);
-    var N = allFrames.length;
-    var keyTimes = [];
-    for (var i=0; i<N; i++) keyTimes.push((i/(N-1)).toFixed(4));
-    var keyTimesStr = keyTimes.join(';');
-    var dur = '2.6s';
-    var stroke = '#1e3a5f';
-
-    function pathTag(d, animate) {
-      var open = '  <path d="' + esc(d) + '" fill="none" stroke="' + stroke
-        + '" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"';
-      if (!animate) return open + '/>\n';
-      return open + '>\n    ' + animate + '\n  </path>\n';
-    }
-
-    var lines = '';
-
-    /* Static identical paths */
-    match.identical.forEach(function(m) { lines += pathTag(m.d, null); });
-
-    /* Morphing paths */
-    match.morphPairs.forEach(function(m, idx) {
-      var vals = allFrames.map(function(f){ return f[idx]; }).join(';');
-      lines += pathTag(m.fD,
-        '<animate attributeName="d" values="' + esc(vals) + '" keyTimes="' + keyTimesStr
-        + '" dur="' + dur + '" repeatCount="indefinite" calcMode="linear"/>');
-    });
-
-    /* To-only paths: fade in at mid */
-    match.toOnly.forEach(function(d) {
-      lines += '  <path d="' + esc(d) + '" fill="none" stroke="' + stroke
-        + '" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="0">\n'
-        + '    <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.3;0.5;0.7;1" dur="' + dur + '" repeatCount="indefinite"/>\n'
-        + '  </path>\n';
-    });
-
-    /* From-only paths: fade out at mid */
-    match.fromOnly.forEach(function(d) {
-      lines += '  <path d="' + esc(d) + '" fill="none" stroke="' + stroke
-        + '" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">\n'
-        + '    <animate attributeName="opacity" values="1;1;0;0;1" keyTimes="0;0.3;0.5;0.7;1" dur="' + dur + '" repeatCount="indefinite"/>\n'
-        + '  </path>\n';
-    });
-
-    return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">\n'
-      + '  <!-- ' + fromName + ' → ' + toName + ' | GSAP MorphSVGPlugin · IconMotion · abhishektrivedi.com -->\n'
-      + lines + '</svg>';
-  }
-
-  function esc(s) {
-    return (s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;');
-  }
-
-  /* ── Remove editor morph controls ───────────────────────────────── */
-  function removeMorphFromEditor() {
-    document.querySelectorAll('[class*="morph"],[id*="morph"],[data-morph]').forEach(function(el) {
-      if (el.id === 'im-gpov' || el.id === 'im-fab') return;
-      var t = el;
-      while (t.parentElement && t.parentElement !== document.body
-             && t.parentElement.tagName !== 'MAIN'
-             && t.parentElement.childElementCount <= 4) {
-        t = t.parentElement;
+    // Animate
+    if (morphEls.length || toOnlyEls.length || fromOnlyEls.length) {
+      var tl = gsap.timeline({ repeat:-1, yoyo:true, repeatDelay:0.9, delay: Math.random()*0.8 });
+      if (morphEls.length) {
+        morphEls.forEach(function(m) {
+          tl.to(m.el, { morphSVG:{ shape: m.to, origin:'50% 50%' }, duration:1.1, ease:'power2.inOut' }, 0);
+        });
       }
-      t.style.display = 'none';
-    });
-    var sec = document.getElementById('morphSection');
-    if (sec) sec.style.display = 'none';
+      if (toOnlyEls.length) tl.to(toOnlyEls, { opacity:1, duration:0.5, ease:'power1.inOut', stagger:0.07 }, 0.4);
+      if (fromOnlyEls.length) tl.to(fromOnlyEls, { opacity:0, duration:0.5, ease:'power1.inOut' }, 0.3);
+      card._tl = tl;
+    }
   }
 
-  /* ── Init ────────────────────────────────────────────────────────── */
-  function init() {
-    var style = document.createElement('style');
-    style.textContent = CSS;
-    document.head.appendChild(style);
+  // ── Download animated SVG ──────────────────────────────────────────────────────
+  function buildDownloadSVG(fromName, toName, fromLabel, toLabel) {
+    var fP = cache[fromName] || ['M 0 0'];
+    var tP = cache[toName]   || ['M 0 0'];
+    var { identical, morphPairs, fromOnly, toOnly } = matchPaths(fP, tP);
 
+    var dur = 2.6, frames = 20;
+    var svgParts = ['<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">'];
+
+    identical.forEach(function(m){ svgParts.push('<path d="'+m.d+'"/>'); });
+
+    morphPairs.forEach(function(m) {
+      // Sample GSAP keyframes
+      var stl = gsap.timeline({ paused:true });
+      var probe = document.createElementNS(NS,'path');
+      probe.setAttribute('d', m.fD);
+      document.body.appendChild(probe);
+      stl.to(probe, { morphSVG:{ shape:m.tD, origin:'50% 50%' }, duration:dur/2, ease:'power2.inOut' });
+
+      var kvals = [], ktimes = [];
+      for (var i=0; i<=frames; i++) {
+        stl.progress(i/frames);
+        kvals.push(probe.getAttribute('d'));
+        ktimes.push((i/frames/2).toFixed(3));
+      }
+      // reverse
+      for (var j=frames-1; j>=0; j--) {
+        stl.progress(j/frames);
+        kvals.push(probe.getAttribute('d'));
+        ktimes.push((0.5+(frames-j)/frames/2).toFixed(3));
+      }
+      document.body.removeChild(probe);
+      stl.kill();
+
+      svgParts.push('<path d="'+m.fD+'"><animate attributeName="d" values="'+kvals.join(';')+'" keyTimes="'+ktimes.join(';')+'" dur="'+dur+'s" repeatCount="indefinite" calcMode="linear"/></path>');
+    });
+
+    fromOnly.forEach(function(d){ svgParts.push('<path d="'+d+'"><animate attributeName="opacity" values="1;1;0;0;1" keyTimes="0;0.25;0.35;0.75;1" dur="'+dur+'s" repeatCount="indefinite"/></path>'); });
+    toOnly.forEach(function(d){ svgParts.push('<path d="'+d+'"><animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.4;0.5;0.75;1" dur="'+dur+'s" repeatCount="indefinite"/></path>'); });
+
+    svgParts.push('</svg>');
+    var blob = new Blob([svgParts.join('\n')], {type:'image/svg+xml'});
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = fromName+'-to-'+toName+'.svg';
+    a.click();
+  }
+
+  // ── Render cards for current tab ──────────────────────────────────────────────
+  var currentPairs = ALL_PAIRS;
+  var obs = null;
+
+  function renderGrid(pairs, grid) {
+    // Stop old observer
+    if (obs) { obs.disconnect(); obs = null; }
+
+    grid.innerHTML = '';
+
+    pairs.forEach(function(pair) {
+      var card = document.createElement('div');
+      card.style.cssText = [
+        'background:#1a1a1a',
+        'border:1px solid #2a2a2a',
+        'border-radius:12px',
+        'padding:16px 10px 10px',
+        'cursor:default',
+        'min-height:120px',
+        'display:flex',
+        'flex-direction:column',
+        'align-items:center',
+        'justify-content:center',
+        'position:relative',
+      ].join(';');
+
+      // Skeleton placeholder
+      var skel = document.createElement('div');
+      skel.style.cssText = 'width:48px;height:48px;background:#2a2a2a;border-radius:8px;animation:im-pulse 1.5s ease-in-out infinite;';
+      card.appendChild(skel);
+
+      card.dataset.from  = pair[0];
+      card.dataset.to    = pair[1];
+      card.dataset.froml = pair[2] || pair[0];
+      card.dataset.tol   = pair[3] || pair[1];
+
+      grid.appendChild(card);
+    });
+
+    // IntersectionObserver for lazy loading
+    obs = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (!entry.isIntersecting) return;
+        var card = entry.target;
+        if (card.dataset.ready) { obs.unobserve(card); return; }
+        obs.unobserve(card);
+
+        var fromName  = card.dataset.from;
+        var toName    = card.dataset.to;
+        var fromLabel = card.dataset.froml;
+        var toLabel   = card.dataset.tol;
+
+        Promise.all([fetchIconPaths(fromName), fetchIconPaths(toName)])
+          .then(function(){ buildCard(card, fromName, toName, fromLabel, toLabel); });
+      });
+    }, { rootMargin: '100px', threshold: 0 });
+
+    grid.querySelectorAll('[data-from]').forEach(function(c){ obs.observe(c); });
+  }
+
+  // ── Create gallery UI ─────────────────────────────────────────────────────────
+  function createGallery() {
+    if (document.getElementById('im-gpov')) return;
+
+    // Pulse keyframe
+    var styleEl = document.createElement('style');
+    styleEl.textContent = [
+      '@keyframes im-pulse{0%,100%{opacity:.4}50%{opacity:.8}}',
+      '#im-gpov{position:fixed;inset:0;z-index:999999;background:rgba(0,0,0,.7);opacity:0;pointer-events:none;transition:opacity .25s;display:flex;align-items:center;justify-content:center;padding:16px;box-sizing:border-box;}',
+      '#im-gpov.open{opacity:1;pointer-events:all;}',
+      '#im-gppanel{background:#111;border-radius:16px;width:100%;max-width:1100px;max-height:90vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 24px 64px rgba(0,0,0,.6);}',
+      '#im-gpheader{padding:20px 24px 0;border-bottom:1px solid #222;}',
+      '#im-gptabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:12px;scrollbar-width:none;}',
+      '#im-gptabs::-webkit-scrollbar{display:none;}',
+      '.im-tab{flex-shrink:0;padding:6px 14px;border-radius:20px;border:1px solid #333;background:transparent;color:#888;font-size:12px;cursor:pointer;font-family:monospace;transition:all .15s;white-space:nowrap;}',
+      '.im-tab:hover{border-color:#555;color:#ccc;}',
+      '.im-tab.active{background:#c0392b;border-color:#c0392b;color:#fff;}',
+      '#im-gpgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px;padding:16px;overflow-y:auto;flex:1;}',
+      '#im-gpcount{font-size:11px;color:#555;font-family:monospace;margin-bottom:8px;}',
+    ].join('');
+    document.head.appendChild(styleEl);
+
+    // Overlay
     var ov = document.createElement('div');
     ov.id = 'im-gpov';
-    ov.innerHTML = '<div id="im-gppanel">'
-      + '<div id="im-mhdr"><div>'
-      + '<h2>Morph Pairs <span class="im-badge">GSAP MorphSVG</span></h2>'
-      + '<p>' + PAIRS.length + ' curated transitions · true path morphing · SMIL SVG download</p>'
-      + '</div><button id="im-mclose">✕ Close</button></div>'
-      + '<div id="im-mgrid"><div class="im-loading"><span class="im-spin"></span>Loading…</div></div>'
-      + '</div>';
+    ov.addEventListener('click', function(e){ if(e.target===ov) ov.classList.remove('open'); });
+
+    // Panel
+    var panel = document.createElement('div');
+    panel.id = 'im-gppanel';
+
+    // Header
+    var header = document.createElement('div');
+    header.id = 'im-gpheader';
+
+    // Title row
+    var titleRow = document.createElement('div');
+    titleRow.style.cssText = 'display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;';
+    var title = document.createElement('div');
+    title.style.cssText = 'font-family:monospace;color:#f5f0eb;font-size:15px;font-weight:700;';
+    title.textContent = '⬡ IconMotion — Morph Library';
+    var closeBtn = document.createElement('button');
+    closeBtn.textContent = '✕';
+    closeBtn.style.cssText = 'background:none;border:none;color:#666;font-size:18px;cursor:pointer;padding:0 4px;';
+    closeBtn.onclick = function(){ ov.classList.remove('open'); };
+    titleRow.appendChild(title);
+    titleRow.appendChild(closeBtn);
+    header.appendChild(titleRow);
+
+    // Count
+    var countEl = document.createElement('div');
+    countEl.id = 'im-gpcount';
+    countEl.textContent = ALL_PAIRS.length + ' pairs  ·  click any icon to download animated SVG';
+    header.appendChild(countEl);
+
+    // Tab bar
+    var tabs = document.createElement('div');
+    tabs.id = 'im-gptabs';
+
+    function makeTab(id, label, pairs) {
+      var btn = document.createElement('button');
+      btn.className = 'im-tab';
+      btn.textContent = label;
+      btn.addEventListener('click', function() {
+        tabs.querySelectorAll('.im-tab').forEach(function(t){ t.classList.remove('active'); });
+        btn.classList.add('active');
+        countEl.textContent = pairs.length + ' pairs  ·  click ↓ SVG to download animated SVG';
+        currentPairs = pairs;
+        renderGrid(pairs, grid);
+      });
+      return btn;
+    }
+
+    var allTab = makeTab('all', 'All (' + ALL_PAIRS.length + ')', ALL_PAIRS);
+    allTab.classList.add('active');
+    tabs.appendChild(allTab);
+
+    CATEGORIES.forEach(function(cat) {
+      tabs.appendChild(makeTab(cat.id, cat.label + ' (' + cat.pairs.length + ')', cat.pairs));
+    });
+
+    header.appendChild(tabs);
+    panel.appendChild(header);
+
+    // Grid
+    var grid = document.createElement('div');
+    grid.id = 'im-gpgrid';
+    panel.appendChild(grid);
+
+    ov.appendChild(panel);
     document.body.appendChild(ov);
 
-    ov.querySelector('#im-mclose').addEventListener('click', function(){ ov.classList.remove('open'); });
-    ov.addEventListener('click', function(e){ if (e.target===ov) ov.classList.remove('open'); });
+    // Initial render
+    renderGrid(ALL_PAIRS, grid);
 
-    var loaded = false;
+    return ov;
+  }
 
-    var fab = document.createElement('button');
+  // ── FAB button ───────────────────────────────────────────────────────────────
+  var fab = document.getElementById('im-fab');
+  if (!fab) {
+    fab = document.createElement('button');
     fab.id = 'im-fab';
-    fab.innerHTML = '<span style="font-size:.9rem">⇄</span> Morph Pairs';
-    fab.addEventListener('click', function() {
-      ov.classList.add('open');
-      if (loaded) return;
-      var grid = ov.querySelector('#im-mgrid');
-      ensureGSAP().then(function(ok) {
-        if (!ok) {
-          grid.innerHTML = '<div class="im-err-msg">Could not load GSAP MorphSVGPlugin.<br>Check internet connection and reload.</div>';
-          return;
-        }
-        grid.innerHTML = '<div class="im-loading"><span class="im-spin"></span>Building morph pairs…</div>';
-        Promise.all(PAIRS.map(function(p){ return buildCard(p[0],p[1],p[2],p[3]); }))
-          .then(function(cards) {
-            grid.innerHTML = '';
-            cards.forEach(function(c){ grid.appendChild(c); });
-            loaded = true;
-          })
-          .catch(function(e){
-            console.error('Morph build error:', e);
-            grid.innerHTML = '<div class="im-err-msg">Error loading pairs. See console.</div>';
-          });
-      });
-    });
+    fab.innerHTML = '⬡';
+    fab.title = 'Icon Morph Library';
+    fab.style.cssText = [
+      'position:fixed',
+      'bottom:24px',
+      'right:24px',
+      'z-index:99998',
+      'width:52px',
+      'height:52px',
+      'border-radius:50%',
+      'background:#c0392b',
+      'color:#fff',
+      'border:none',
+      'font-size:22px',
+      'cursor:pointer',
+      'box-shadow:0 4px 20px rgba(192,57,43,.5)',
+      'transition:transform .15s,box-shadow .15s',
+      'display:flex',
+      'align-items:center',
+      'justify-content:center',
+    ].join(';');
+    fab.onmouseenter = function(){ fab.style.transform='scale(1.1)'; fab.style.boxShadow='0 6px 28px rgba(192,57,43,.7)'; };
+    fab.onmouseleave = function(){ fab.style.transform='scale(1)'; fab.style.boxShadow='0 4px 20px rgba(192,57,43,.5)'; };
     document.body.appendChild(fab);
-
-    var obs = new MutationObserver(removeMorphFromEditor);
-    obs.observe(document.body, { childList:true, subtree:true });
-    removeMorphFromEditor();
   }
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
-  } else {
-    init();
-  }
+  fab.onclick = function() {
+    ensureGSAP(function() {
+      var ov = document.getElementById('im-gpov') || createGallery();
+      ov.classList.toggle('open');
+    });
+  };
+
 })();
 
 </script>
