@@ -2195,5 +2195,34 @@ document.addEventListener('click', function(e){
   setTimeout(showToastCoffee,(50+Math.random()*50)*1000);
 })();
 </script>
+
+<script>
+/* ── Code protection ───────────────────────────────────────────── */
+(function(){
+  'use strict';
+  document.addEventListener('contextmenu',function(e){e.preventDefault();showProtectWarn();return false;});
+  document.addEventListener('keydown',function(e){
+    var k=e.key?e.key.toLowerCase():'';
+    var c=e.ctrlKey||e.metaKey;
+    if(c&&['u','s','a','p'].includes(k)){e.preventDefault();showProtectWarn();return false;}
+    if(c&&e.shiftKey&&['i','j','c','k'].includes(k)){e.preventDefault();showProtectWarn();return false;}
+    if(e.key==='F12'){e.preventDefault();showProtectWarn();return false;}
+  });
+  document.addEventListener('selectstart',function(e){
+    if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA'||e.target.tagName==='SELECT')return;
+    e.preventDefault();return false;
+  });
+  document.addEventListener('dragstart',function(e){e.preventDefault();return false;});
+  function showProtectWarn(){
+    if(document.getElementById('_im_protect_toast'))return;
+    var t=document.createElement('div');
+    t.id='_im_protect_toast';
+    t.innerHTML='🔒 &nbsp;IconMotion is protected. Built by <a href="https://abhishektrivedi.com" target="_blank" style="color:#FF5E5B;text-decoration:none;font-weight:700;">Abhishek Trivedi</a>.';
+    t.style.cssText='position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#0f0e0c;color:#f5f2eb;padding:12px 22px;border-radius:8px;font-family:sans-serif;font-size:13px;border:1px solid rgba(255,94,91,0.35);border-left:3px solid #FF5E5B;z-index:9999999;box-shadow:0 4px 24px rgba(0,0,0,0.45);pointer-events:none;white-space:nowrap;';
+    document.body.appendChild(t);
+    setTimeout(function(){if(t.parentNode)t.parentNode.removeChild(t);},3000);
+  }
+})();
+</script>
 </body>
 </html>
