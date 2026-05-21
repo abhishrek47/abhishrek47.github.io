@@ -715,7 +715,7 @@ input[type=color]{width:28px;height:28px;border:1.5px solid var(--border);border
   if(!window.flubber||!window.flubber.interpolate)return;
   var _orig=window.flubber.interpolate.bind(window.flubber);
   function splitPaths(d){
-    return(d||'').split(/\s(?=M)/).filter(function(s){return s.trim().length>2;});
+    return(d||'').split(/\s+(?=[Mm])/).filter(function(s){return s.trim().length>2;});
   }
   window.flubber.interpolate=function(from,to,opts){
     var fa=splitPaths(from),ta=splitPaths(to);
