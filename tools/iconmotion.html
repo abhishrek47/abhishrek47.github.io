@@ -2280,11 +2280,11 @@ document.addEventListener('click', function(e){
     /* Ping the Ko-fi FAB to visually link both elements */
     var fab=document.getElementById('kofiFab');
     if(fab){ fab.classList.add('kofi-ping'); setTimeout(function(){fab.classList.remove('kofi-ping');},600); }
-    /* Auto-dismiss after 7s with out-animation */
+    /* Auto-dismiss after 12s with out-animation */
     setTimeout(function(){
       el.classList.add('cft-hide');
       setTimeout(function(){ el.classList.remove('cft-show','cft-hide'); },260);
-    },7000);
+    },12000);
     scheduleNext();
   }
 
