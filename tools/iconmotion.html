@@ -755,6 +755,26 @@ input[type=color]{width:28px;height:28px;border:1.5px solid var(--border);border
 }
 .disclaimer-strip a{color:var(--muted);text-decoration:underline;}
 .disclaimer-strip a:hover{color:var(--text);}
+
+/* ── Coffee social-proof toast ───────────────────────────────── */
+#coffeeToast{
+  position:fixed;bottom:20px;left:20px;z-index:890;
+  background:var(--surface);border:1.5px solid var(--border);
+  border-left:3px solid #FF5E5B;
+  border-radius:10px;padding:10px 14px;
+  font-size:.78rem;color:var(--text);
+  box-shadow:0 4px 20px rgba(0,0,0,.13);
+  display:flex;align-items:center;gap:8px;
+  max-width:260px;
+  opacity:0;transform:translateY(12px);pointer-events:none;
+  transition:opacity .35s ease,transform .35s ease;
+  white-space:nowrap;
+}
+#coffeeToast.cft-show{opacity:1;transform:translateY(0);pointer-events:auto;}
+#coffeeToast .cft-icon{font-size:1rem;flex-shrink:0;}
+#coffeeToast .cft-text{line-height:1.4;}
+#coffeeToast .cft-name{font-weight:700;color:var(--text);}
+#coffeeToast .cft-action{color:var(--muted);font-size:.73rem;}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/flubber@0.4.2/build/flubber.min.js"></script>
 <script>
@@ -1862,6 +1882,131 @@ document.addEventListener('click', function(e){
     pop.classList.remove('open');
   }
 });
+</script>
+
+<!-- ── Coffee social-proof toast ─────────────────────────────── -->
+<div id="coffeeToast">
+  <span class="cft-icon">☕</span>
+  <div class="cft-text">
+    <div class="cft-name" id="coffeeToastName"></div>
+    <div class="cft-action">just bought a coffee</div>
+  </div>
+</div>
+
+<script>
+(function(){
+  /* 200 diverse names + cities — L&D is a global community */
+  var NAMES = [
+    'Sarah M. from London','Priya K. from Bangalore','James T. from New York',
+    'Anika R. from Amsterdam','Carlos M. from Madrid','Mei L. from Singapore',
+    'David O. from Lagos','Emma W. from Sydney','Rahul S. from Pune',
+    'Sophie B. from Paris','Arjun N. from Chennai','Grace A. from Nairobi',
+    'Tom H. from Chicago','Neha V. from Mumbai','Luca F. from Milan',
+    'Fatima A. from Dubai','Marcus J. from Toronto','Yuki T. from Tokyo',
+    'Claire D. from Brussels','Vikram P. from Delhi','Zara A. from Cape Town',
+    'Nathan C. from Boston','Kavya M. from Hyderabad','Isabelle G. from Lyon',
+    'Obi E. from Accra','Hannah L. from Melbourne','Rohan B. from Ahmedabad',
+    'Elena V. from Berlin','Felix K. from Zurich','Tanvi S. from Kolkata',
+    'Michael R. from Austin','Aditi G. from Bengaluru','Pierre M. from Toulouse',
+    'Amara D. from Dakar','Luke P. from Edinburgh','Shreya J. from Jaipur',
+    'Anna K. from Stockholm','Kwame O. from Kumasi','Diana H. from Lisbon',
+    'Ravi C. from Coimbatore','Julia N. from Vienna','Hassan M. from Cairo',
+    'Leila F. from Tehran','Ben W. from Seattle','Pooja A. from Nagpur',
+    'Antoine L. from Montreal','Sunita R. from Vadodara','Sam K. from Dublin',
+    'Nadia S. from Warsaw','Yusuf A. from Kampala','Rachel T. from San Francisco',
+    'Aarav M. from Chandigarh','Chloe B. from Bristol','Tunde O. from Abuja',
+    'Maria P. from São Paulo','Josh D. from Denver','Divya N. from Mysore',
+    'Lars H. from Oslo','Amira K. from Tunis','Oliver S. from Manchester',
+    'Meera T. from Thiruvananthapuram','Victor A. from Kinshasa','Lily C. from Auckland',
+    'Ankit B. from Lucknow','Sofía R. from Buenos Aires','Ryan M. from Phoenix',
+    'Noor H. from Beirut','Ingrid L. from Gothenburg','Siddharth K. from Surat',
+    'Camille D. from Marseille','Tariq M. from Islamabad','Elisa B. from Rome',
+    'Nia J. from Atlanta','Kiran S. from Pune','Jan V. from Rotterdam',
+    'Chiara M. from Naples','Emmanuel N. from Yaoundé','Alicia T. from Dallas',
+    'Vivek R. from Indore','Maja K. from Zagreb','Faisal A. from Riyadh',
+    'Rebecca H. from Vancouver','Diya P. from Bhopal','Lasse M. from Copenhagen',
+    'Gloria O. from Enugu','Aryan V. from Patna','Noémie B. from Nantes',
+    'Kevin L. from Miami','Isha G. from Raipur','Tobias W. from Hamburg',
+    'Zanele D. from Johannesburg','Harsh M. from Rajkot','Miriam A. from Addis Ababa',
+    'Patrick O. from Cork','Swati K. from Nashik','Luisa F. from Bogotá',
+    'Alex N. from Amsterdam','Bhavna T. from Srinagar','Moana K. from Auckland',
+    'Damien R. from Lyon','Olamide A. from Ibadan','Nina S. from Prague',
+    'Arnav D. from Gurgaon','Valentina L. from Santiago','Craig H. from Glasgow',
+    'Aisha M. from Accra','Mathieu B. from Geneva','Puja R. from Varanasi',
+    'Ifeoma N. from Port Harcourt','Sven A. from Helsinki','Zoya K. from Karachi',
+    'André P. from Porto','Ketki M. from Aurangabad','Jemima O. from Dar es Salaam',
+    'Dmitri V. from Kyiv','Harpreet S. from Amritsar','Catalina R. from Lima',
+    'Stefan J. from Budapest','Nandita B. from Kolkata','Chidi E. from Owerri',
+    'Astrid L. from Bergen','Gaurav T. from Noida','Siobhan M. from Galway',
+    'Reem A. from Abu Dhabi','Alistair C. from Cambridge','Deepa N. from Kochi',
+    'Paulo M. from Lisbon','Adeola S. from Kano','Friederike H. from Munich',
+    'Tarun G. from Agra','Lena K. from Vilnius','Ngozi A. from Enugu',
+    'Jason W. from Portland','Riddhi S. from Baroda','Arnaud C. from Bordeaux',
+    'Abiodun O. from Ibadan','Yara M. from Amman','Karim B. from Casablanca',
+    'Laura D. from Dublin','Nikhil V. from Thane','Sigrid A. from Reykjavik',
+    'Tarini R. from Goa','Emeka O. from Benin City','Petra K. from Ljubljana',
+    'Will T. from Leeds','Anusha M. from Vizag','Diego F. from Montevideo',
+    'Blessing N. from Accra','Mirko S. from Belgrade','Tara H. from Wellington',
+    'Abhi K. from Pune','Océane L. from Rennes','Emmanuel A. from Douala',
+    'Ishaan D. from Kanpur','Maja W. from Gdańsk','Roshani T. from Colombo',
+    'Callum B. from Aberdeen','Fatou D. from Dakar','Václav N. from Brno',
+    'Neelam S. from Dehradun','Kofi A. from Kumasi','Roxana P. from Bucharest',
+    'Sanjana R. from Mysore','Bart V. from Antwerp','Nkechi O. from Lagos',
+    'Hamish M. from Perth','Dhruti K. from Rajkot','Camila A. from Medellín',
+    'Leandro F. from Buenos Aires','Tanuja N. from Pune','Oren B. from Tel Aviv',
+    'Chidinma E. from Onitsha','Radoslav K. from Bratislava','Mansi T. from Jodhpur',
+    'Florian H. from Cologne','Zainab M. from Lahore','Caitlin P. from Perth',
+    'Varun J. from Noida','Annelie S. from Malmö','Emre K. from Istanbul',
+    'Adaeze N. from Aba','Teodora M. from Sofia','Srishti B. from Indore',
+    'Brendan O. from Limerick','Kiona L. from Honolulu','Mahesh P. from Hyderabad',
+    'Lieselotte V. from Ghent','Chiamaka A. from Enugu','Goran J. from Zagreb',
+    'Pallavi S. from Nagpur','Seun A. from Lagos','Ioana M. from Cluj',
+    'Saba K. from Lahore','Thijs D. from Utrecht','Nishtha R. from Jaipur',
+    'Tomás F. from Guadalajara','Adwoa M. from Accra','Markus L. from Linz',
+    'Usha N. from Coimbatore','Festus O. from Ibadan','Yulia K. from Minsk',
+    'Anisha V. from Baroda','Jean-Pierre L. from Liège','Folake A. from Abuja',
+    'Snezana R. from Sarajevo','Prabha T. from Chennai','Niels H. from Aarhus',
+    'Adebisi O. from Kaduna','Selin K. from Ankara','Kirra M. from Brisbane',
+    'Mihail P. from Chisinau','Trisha N. from Pune','Bongani Z. from Durban',
+    'Eszter V. from Debrecen','Chukwuemeka A. from Onitsha','Evelina S. from Vilnius',
+    'Soumya R. from Bhubaneswar','Hanna L. from Tallinn','Akinola O. from Abeokuta',
+    'Ruxandra M. from Iași','Smita K. from Nashik','Andile D. from Pretoria',
+  ];
+
+  /* Fisher-Yates shuffle */
+  function shuffle(a){
+    var arr=a.slice(),i=arr.length,j,t;
+    while(i--){j=Math.floor(Math.random()*(i+1));t=arr[i];arr[i]=arr[j];arr[j]=t;}
+    return arr;
+  }
+
+  var queue=shuffle(NAMES), idx=0;
+
+  function nextName(){
+    if(idx>=queue.length){ queue=shuffle(NAMES); idx=0; }
+    return queue[idx++];
+  }
+
+  function showToastCoffee(){
+    var name=nextName();
+    var el=document.getElementById('coffeeToast');
+    var nm=document.getElementById('coffeeToastName');
+    if(!el||!nm)return;
+    nm.textContent=name;
+    el.classList.add('cft-show');
+    setTimeout(function(){ el.classList.remove('cft-show'); }, 5500);
+    scheduleNext();
+  }
+
+  function scheduleNext(){
+    /* 2.5 – 5 minutes between toasts */
+    var delay=(150+Math.random()*150)*1000;
+    setTimeout(showToastCoffee, delay);
+  }
+
+  /* First toast after 50 – 100 seconds */
+  setTimeout(showToastCoffee, (50+Math.random()*50)*1000);
+})();
 </script>
 </body>
 </html>
