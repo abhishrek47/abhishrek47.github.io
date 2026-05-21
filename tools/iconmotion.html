@@ -80,26 +80,6 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);display:flex
 .gallery-area::-webkit-scrollbar-thumb:hover{background:var(--muted);}
 .grid-meta{display:flex;align-items:center;justify-content:space-between;
   padding:10px 16px 4px;font-size:.72rem;color:var(--muted);}
-.hdr-btn.sel-active{background:var(--blue);color:#fff;border-color:var(--blue);}
-.icon-cell .sel-check{display:none;position:absolute;top:4px;right:4px;width:18px;height:18px;
-  border-radius:4px;border:2px solid var(--border2);background:var(--surface);z-index:2;
-  pointer-events:none;align-items:center;justify-content:center;font-size:.65rem;}
-.select-mode .icon-cell .sel-check{display:flex;}
-.select-mode .icon-cell.sel-selected{border-color:var(--blue);background:rgba(37,99,235,.08);}
-.select-mode .icon-cell.sel-selected .sel-check{background:var(--blue);border-color:var(--blue);color:#fff;}
-.select-bar{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);
-  background:var(--text);color:#fff;border-radius:12px;padding:10px 16px;
-  display:flex;align-items:center;gap:12px;font-size:.82rem;font-weight:600;
-  box-shadow:0 4px 24px rgba(0,0,0,.35);transition:transform .22s ease;z-index:300;
-  white-space:nowrap;}
-.select-bar.open{transform:translateX(-50%) translateY(0);}
-.select-bar-count{opacity:.7;font-weight:400;font-size:.75rem;}
-.select-bar-btn{padding:6px 14px;border-radius:7px;border:none;cursor:pointer;
-  font:.78rem var(--font);font-weight:600;transition:opacity .12s;}
-.select-bar-btn.dl{background:var(--blue);color:#fff;}
-.select-bar-btn.dl:hover{opacity:.85;}
-.select-bar-btn.cancel{background:rgba(255,255,255,.15);color:#fff;}
-.select-bar-btn.cancel:hover{background:rgba(255,255,255,.25);}
 .fav-zip-btn{padding:3px 10px;border-radius:6px;border:1px solid var(--border2);
   background:var(--surface2);color:var(--muted);font:.7rem var(--font);cursor:pointer;
   display:none;align-items:center;gap:4px;transition:all .12s;}
@@ -568,9 +548,6 @@ input[type=color]{width:28px;height:28px;border:1.5px solid var(--border);border
   transition:background .1s;}
 .col-pop-new:hover{background:var(--border);}
 
-/* Select bar — collection button */
-.select-bar-btn.col{background:rgba(37,99,235,.85);color:#fff;}
-.select-bar-btn.col:hover{opacity:.85;}
 
 /* Collection picker modal */
 .col-pick-list{padding:6px 0;}
@@ -778,8 +755,6 @@ input[type=color]{width:28px;height:28px;border:1.5px solid var(--border);border
     </div>
     <span class="hdr-pill" id="iconCountPill">2116 icons · 447 morph pairs</span>
     <button class="hdr-btn hdr-rnd" onclick="randomIcon()" title="Pick a random icon">🎲 Random</button>
-    <button class="hdr-btn" id="selectModeBtn" onclick="toggleSelectMode()" title="Multi-select icons for batch ZIP download">✓ Select</button>
-    <span class="export-counter" id="exportCounter" style="display:none"></span>
     <button class="go-pro-btn" id="goProBtn" style="display:none" onclick="showPaywallModal('upgrade')">⚡ Go Pro</button>
     <div class="user-chip" id="userChip">
       <button class="auth-sign-btn" onclick="signInWithGoogle()">Sign in</button>
@@ -808,12 +783,7 @@ input[type=color]{width:28px;height:28px;border:1.5px solid var(--border);border
 </main>
 
 <!-- MULTI-SELECT ACTION BAR -->
-<div class="select-bar" id="selectBar">
-  <span id="selectCount" class="select-bar-count">0 selected</span>
-  <button class="select-bar-btn dl" onclick="downloadSelectionZIP()">⬇ Download ZIP</button>
-  <button class="select-bar-btn col" onclick="showColPickerModal()">📁 Save to Collection</button>
-  <button class="select-bar-btn cancel" onclick="toggleSelectMode()">✕ Cancel</button>
-</div>
+
 
 <!-- MODAL BACKDROP -->
 <div class="drawer-backdrop" id="drawerBackdrop" onclick="closeDrawer()"></div>
