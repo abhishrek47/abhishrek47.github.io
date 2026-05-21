@@ -73,7 +73,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);display:flex
 .cat-tab.active{background:var(--blue-dim);border-color:var(--blue-mid);color:var(--blue);}
 
 /* ── GALLERY AREA ────────────────────────────────────── */
-.gallery-area{flex:1;overflow-y:auto;overflow-x:hidden;min-height:0;scrollbar-width:thin;scrollbar-color:var(--muted2) var(--border);}
+.gallery-area{flex:1;overflow-y:auto;overflow-x:hidden;min-height:0;scrollbar-width:thin;scrollbar-color:var(--muted2) var(--border);transform:translateZ(0);-webkit-overflow-scrolling:touch;}
 .gallery-area::-webkit-scrollbar{width:6px;}
 .gallery-area::-webkit-scrollbar-track{background:var(--border);border-radius:3px;}
 .gallery-area::-webkit-scrollbar-thumb{background:var(--muted2);border-radius:3px;}
@@ -2210,9 +2210,9 @@ document.addEventListener('click', function(e){
   });
   document.addEventListener('selectstart',function(e){
     if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA'||e.target.tagName==='SELECT')return;
-    e.preventDefault();return false;
+    e.preventDefault();
   });
-  document.addEventListener('dragstart',function(e){e.preventDefault();return false;});
+  document.addEventListener('dragstart',function(e){e.preventDefault();});
   function showProtectWarn(){
     if(document.getElementById('_im_protect_toast'))return;
     var t=document.createElement('div');
