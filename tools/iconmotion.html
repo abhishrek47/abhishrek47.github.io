@@ -1040,13 +1040,6 @@ input[type=color]{width:28px;height:28px;border:1.5px solid var(--border);border
 (function(){
   'use strict';
 
-  /* ── Wait for GSAP ──────────────────────────────────────────── */
-  if (!window.gsap || !window.MorphSVGPlugin) {
-    console.warn('IconMotion Morph: GSAP or MorphSVGPlugin not loaded');
-    return;
-  }
-  gsap.registerPlugin(MorphSVGPlugin);
-
   const NS  = 'http://www.w3.org/2000/svg';
   const CDN = 'https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/';
   const cache = {};
@@ -1079,15 +1072,12 @@ input[type=color]{width:28px;height:28px;border:1.5px solid var(--border);border
 
   /* ── CSS ─────────────────────────────────────────────────── */
   const CSS = `
-    /* overlay */
     #im-morph-ov{
       position:fixed;inset:0;background:rgba(0,0,0,.6);
       backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);
-      z-index:9000;display:flex;align-items:center;justify-content:center;
+      z-index:999999;display:flex;align-items:center;justify-content:center;
       opacity:0;pointer-events:none;transition:opacity .22s ease;}
     #im-morph-ov.open{opacity:1;pointer-events:all;}
-
-    /* panel */
     #im-morph-panel{
       background:#f5f0eb;border-radius:18px;
       box-shadow:0 24px 80px rgba(0,0,0,.35);
@@ -1096,29 +1086,23 @@ input[type=color]{width:28px;height:28px;border:1.5px solid var(--border);border
       transform:translateY(16px) scale(.97);
       transition:transform .22s cubic-bezier(.4,0,.2,1);}
     #im-morph-ov.open #im-morph-panel{transform:none;}
-
-    /* header */
     #im-mhdr{
       display:flex;align-items:center;justify-content:space-between;
-      padding:16px 22px 12px;
-      border-bottom:1.5px solid #e0d8d0;flex-shrink:0;}
+      padding:16px 22px 12px;border-bottom:1.5px solid #e0d8d0;flex-shrink:0;}
     #im-mhdr h2{
       font-family:'Inter',system-ui,sans-serif;
       font-size:1.05rem;font-weight:700;color:#1a1a1a;
       display:flex;align-items:center;gap:8px;}
-    #im-mhdr h2 span{
-      font-size:.65rem;font-weight:600;background:#1e3a5f;color:#fff;
+    #im-mhdr h2 span.im-badge{
+      font-size:.62rem;font-weight:600;background:#1e3a5f;color:#fff;
       border-radius:20px;padding:2px 9px;letter-spacing:.04em;}
-    #im-mhdr p{
-      font-size:.72rem;color:#888;margin-top:2px;}
+    #im-mhdr p{font-size:.72rem;color:#888;margin-top:2px;}
     #im-mclose{
       padding:6px 14px;border-radius:8px;
       border:1.5px solid #e0d8d0;background:transparent;
       color:#888;font:.73rem 'Inter',system-ui,sans-serif;
       cursor:pointer;transition:all .12s;font-weight:500;}
     #im-mclose:hover{border-color:#c0392b;color:#c0392b;}
-
-    /* grid */
     #im-mgrid{
       display:grid;
       grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
@@ -1126,101 +1110,119 @@ input[type=color]{width:28px;height:28px;border:1.5px solid var(--border);border
       overflow-y:auto;flex:1;
       scrollbar-width:thin;scrollbar-color:#c0cfe0 #e0d8d0;}
     #im-mgrid::-webkit-scrollbar{width:5px;}
-    #im-mgrid::-webkit-scrollbar-track{background:#e8e2da;}
     #im-mgrid::-webkit-scrollbar-thumb{background:#b0bdc9;border-radius:3px;}
-
-    /* loading */
     .im-loading{
       grid-column:1/-1;text-align:center;padding:40px;
-      color:#888;font:.82rem 'Inter',system-ui,sans-serif;}
+      color:#888;font:.82rem 'Inter',system-ui,sans-serif;
+      display:flex;align-items:center;justify-content:center;gap:10px;}
     .im-spin{
-      display:inline-block;width:24px;height:24px;
+      display:inline-block;width:20px;height:20px;
       border:2.5px solid #ddd;border-top-color:#1e3a5f;
-      border-radius:50%;animation:im-gsap-spin .7s linear infinite;
-      vertical-align:middle;margin-right:8px;}
+      border-radius:50%;animation:im-gsap-spin .7s linear infinite;flex-shrink:0;}
     @keyframes im-gsap-spin{to{transform:rotate(360deg)}}
-
-    /* card */
     .im-mcard{
       background:#fff;border:1.5px solid #e0d8d0;border-radius:14px;
       display:flex;flex-direction:column;align-items:center;
       padding:14px 10px 10px;gap:8px;
-      transition:box-shadow .15s,border-color .15s,transform .15s;
-      cursor:default;}
+      transition:box-shadow .15s,border-color .15s,transform .15s;}
     .im-mcard:hover{
       border-color:#1e3a5f;
       box-shadow:0 6px 24px rgba(30,58,95,.14);
       transform:translateY(-2px);}
-
-    /* preview */
     .im-mc-preview{
       width:56px;height:56px;display:flex;
       align-items:center;justify-content:center;}
     .im-mc-preview svg{
-      width:48px;height:48px;
+      width:48px;height:48px;overflow:visible;
       stroke:#1e3a5f;stroke-width:2;
       stroke-linecap:round;stroke-linejoin:round;fill:none;}
-
-    /* labels */
     .im-mc-labels{
       display:flex;align-items:center;gap:5px;
       font:.67rem 'Inter',system-ui,sans-serif;
-      color:#555;white-space:nowrap;
-      justify-content:center;width:100%;flex-wrap:wrap;}
-    .im-mc-arr{color:#1e3a5f;font-size:.8rem;font-weight:600;}
-
-    /* download */
+      color:#555;white-space:nowrap;justify-content:center;width:100%;}
+    .im-mc-arr{color:#1e3a5f;font-size:.8rem;font-weight:700;}
     .im-mc-dl{
       padding:4px 12px;border-radius:20px;
-      border:1.5px solid #1e3a5f;
-      background:transparent;color:#1e3a5f;
+      border:1.5px solid #1e3a5f;background:transparent;color:#1e3a5f;
       font:.65rem 'Inter',system-ui,sans-serif;font-weight:600;
       cursor:pointer;transition:all .12s;white-space:nowrap;}
     .im-mc-dl:hover{background:#1e3a5f;color:#fff;}
     .im-mc-dl:disabled{opacity:.4;cursor:default;}
-
-    /* badge note */
-    .im-morph-note{
-      grid-column:1/-1;
-      text-align:center;font:.62rem 'Inter',system-ui,sans-serif;
-      color:#aaa;padding:4px 0 0;letter-spacing:.04em;}
-
-    /* FAB */
+    .im-err-msg{
+      grid-column:1/-1;text-align:center;padding:30px;
+      color:#c0392b;font:.8rem 'Inter',system-ui,sans-serif;line-height:1.6;}
     #im-fab{
-      position:fixed;bottom:22px;right:22px;z-index:8000;
-      padding:9px 16px;border-radius:24px;
+      position:fixed;bottom:22px;right:22px;z-index:999998;
+      padding:9px 18px;border-radius:24px;
       background:#1e3a5f;color:#fff;
       border:none;cursor:pointer;
       font:.78rem 'Inter',system-ui,sans-serif;font-weight:700;
       box-shadow:0 4px 20px rgba(30,58,95,.4);
       transition:all .15s;letter-spacing:.02em;
-      display:flex;align-items:center;gap:6px;}
+      display:flex;align-items:center;gap:7px;}
     #im-fab:hover{background:#162d4a;transform:translateY(-2px);
       box-shadow:0 6px 28px rgba(30,58,95,.5);}
-    #im-fab::before{content:'⇌';font-size:.9rem;}
-
+    #im-fab .fab-icon{font-size:.95rem;}
     @media(max-width:480px){
       #im-mgrid{grid-template-columns:repeat(2,1fr);}
       #im-fab{bottom:14px;right:14px;padding:8px 13px;font-size:.72rem;}
     }
   `;
 
-  /* ── Fetch paths ──────────────────────────────────────────── */
+  /* ── Dynamic GSAP loader ─────────────────────────────────── */
+  function loadScript(src) {
+    return new Promise((resolve, reject) => {
+      if (document.querySelector('script[src="' + src + '"]') && window.gsap) {
+        resolve(); return;
+      }
+      const s = document.createElement('script');
+      s.src = src;
+      s.onload = resolve;
+      s.onerror = reject;
+      document.head.appendChild(s);
+    });
+  }
+
+  let gsapReady = false;
+
+  async function ensureGSAP() {
+    if (gsapReady && window.gsap && window.MorphSVGPlugin) return true;
+    if (window.gsap && window.MorphSVGPlugin) {
+      gsap.registerPlugin(MorphSVGPlugin);
+      gsapReady = true; return true;
+    }
+    try {
+      await loadScript('https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js');
+      await loadScript('https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/MorphSVGPlugin.min.js');
+      if (window.gsap && window.MorphSVGPlugin) {
+        gsap.registerPlugin(MorphSVGPlugin);
+        gsapReady = true; return true;
+      }
+      return false;
+    } catch(e) {
+      console.error('IconMotion: GSAP load failed', e);
+      return false;
+    }
+  }
+
+  /* ── Fetch icon paths ─────────────────────────────────────── */
   async function fetchPaths(name) {
     if (cache[name]) return cache[name];
     try {
-      const r   = await fetch(CDN + name + '.svg');
+      const r = await fetch(CDN + name + '.svg');
+      if (!r.ok) throw new Error('HTTP ' + r.status);
       const txt = await r.text();
       const doc = new DOMParser().parseFromString(txt, 'image/svg+xml');
-      const ps  = Array.from(doc.querySelectorAll('path')).map(p => p.getAttribute('d'));
+      const ps = Array.from(doc.querySelectorAll('path')).map(p => p.getAttribute('d'));
       cache[name] = ps.length ? ps : ['M 0 0'];
     } catch(e) {
+      console.warn('IconMotion: failed to fetch', name, e);
       cache[name] = ['M 0 0'];
     }
     return cache[name];
   }
 
-  /* ── Create SVG element ───────────────────────────────────── */
+  /* ── Create SVG element set ───────────────────────────────── */
   function makeSVG(paths) {
     const svg = document.createElementNS(NS, 'svg');
     svg.setAttribute('viewBox', '0 0 24 24');
@@ -1234,17 +1236,16 @@ input[type=color]{width:28px;height:28px;border:1.5px solid var(--border);border
     return { svg, els };
   }
 
-  /* ── Build one card ───────────────────────────────────────── */
+  /* ── Build one morph card ─────────────────────────────────── */
   async function buildCard(fromName, toName, fromLabel, toLabel) {
     const [fP, tP] = await Promise.all([fetchPaths(fromName), fetchPaths(toName)]);
 
     const card = document.createElement('div');
     card.className = 'im-mcard';
 
-    /* Preview SVG — start with from-paths */
     const { svg, els } = makeSVG(fP);
 
-    /* Extra to-paths (target has more paths than source) */
+    /* Extra to-paths (target has more paths) — start invisible */
     const extraToEls = tP.slice(fP.length).map(d => {
       const p = document.createElementNS(NS, 'path');
       p.setAttribute('d', d);
@@ -1253,18 +1254,15 @@ input[type=color]{width:28px;height:28px;border:1.5px solid var(--border);border
       return p;
     });
 
-    /* Build GSAP timeline ─ repeat+yoyo = forward morph then reverse */
+    const extraFromEls = els.slice(tP.length);
     const matchLen = Math.min(fP.length, tP.length);
-    const extraFromEls = els.slice(tP.length); // source has more paths
 
+    /* GSAP animation */
     const tl = gsap.timeline({
-      repeat: -1,
-      yoyo: true,
-      repeatDelay: 0.8,
-      delay: Math.random() * 0.4  // stagger card start times slightly
+      repeat: -1, yoyo: true, repeatDelay: 0.8,
+      delay: Math.random() * 0.5
     });
 
-    /* Morph matched paths */
     for (let i = 0; i < matchLen; i++) {
       if (fP[i] !== tP[i]) {
         tl.to(els[i], {
@@ -1274,63 +1272,48 @@ input[type=color]{width:28px;height:28px;border:1.5px solid var(--border);border
         }, 0);
       }
     }
-
-    /* Fade in extra target paths */
     if (extraToEls.length) {
-      tl.to(extraToEls, {
-        opacity: 1, duration: 0.5, ease: 'power1.inOut', stagger: 0.08
-      }, 0.4);
+      tl.to(extraToEls, { opacity: 1, duration: 0.5, ease: 'power1.inOut', stagger: 0.08 }, 0.4);
     }
-
-    /* Fade out extra source paths */
     if (extraFromEls.length) {
-      tl.to(extraFromEls, {
-        opacity: 0, duration: 0.5, ease: 'power1.inOut'
-      }, 0.3);
+      tl.to(extraFromEls, { opacity: 0, duration: 0.5, ease: 'power1.inOut' }, 0.3);
     }
 
     /* Card markup */
-    const wrap = document.createElement('div');
-    wrap.style.cssText = 'display:contents;';
-    wrap.innerHTML = `
-      <div class="im-mc-preview"></div>
-      <div class="im-mc-labels">
-        <span>${fromLabel}</span>
-        <span class="im-mc-arr">⇌</span>
-        <span>${toLabel}</span>
-      </div>
-      <button class="im-mc-dl">⬇ SVG</button>
-    `;
-    card.appendChild(wrap);
-    card.querySelector('.im-mc-preview').appendChild(svg);
+    const preview  = document.createElement('div');
+    preview.className = 'im-mc-preview';
+    preview.appendChild(svg);
 
-    /* Download */
-    card.querySelector('.im-mc-dl').addEventListener('click', async () => {
-      const btn = card.querySelector('.im-mc-dl');
-      btn.textContent = '…'; btn.disabled = true;
+    const labels = document.createElement('div');
+    labels.className = 'im-mc-labels';
+    labels.innerHTML = '<span>' + fromLabel + '</span>'
+      + '<span class="im-mc-arr">⇌</span>'
+      + '<span>' + toLabel + '</span>';
+
+    const dlBtn = document.createElement('button');
+    dlBtn.className = 'im-mc-dl';
+    dlBtn.textContent = '⬇ SVG';
+    dlBtn.addEventListener('click', async () => {
+      dlBtn.textContent = '…'; dlBtn.disabled = true;
       try {
-        const svgStr = await buildDownloadSVG(fP, tP, fromName, toName, tl);
+        const svgStr = await buildDownloadSVG(fP, tP, fromName, toName);
         const a = document.createElement('a');
-        a.href = URL.createObjectURL(new Blob([svgStr], {type:'image/svg+xml'}));
-        a.download = `${fromName}-to-${toName}.svg`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-      } catch(e) {
-        console.error('Download error:', e);
-      } finally {
-        btn.textContent = '⬇ SVG'; btn.disabled = false;
-      }
+        a.href = URL.createObjectURL(new Blob([svgStr], { type: 'image/svg+xml' }));
+        a.download = fromName + '-to-' + toName + '.svg';
+        document.body.appendChild(a); a.click(); document.body.removeChild(a);
+      } catch(e) { console.error('Download failed:', e); }
+      finally { dlBtn.textContent = '⬇ SVG'; dlBtn.disabled = false; }
     });
 
+    card.appendChild(preview);
+    card.appendChild(labels);
+    card.appendChild(dlBtn);
     return card;
   }
 
-  /* ── Build download SVG (SMIL keyframe capture) ──────────── */
+  /* ── Capture GSAP keyframes → SMIL download SVG ─────────── */
   async function buildDownloadSVG(fP, tP, fromName, toName) {
     const SAMPLES = 20;
-
-    /* Off-screen SVG for keyframe sampling */
     const host = document.createElement('div');
     host.style.cssText = 'position:fixed;top:-9999px;left:-9999px;width:24px;height:24px;';
     document.body.appendChild(host);
@@ -1339,28 +1322,21 @@ input[type=color]{width:28px;height:28px;border:1.5px solid var(--border);border
     host.appendChild(offSvg);
 
     const matchLen = Math.min(fP.length, tP.length);
-
-    /* Paused timeline for sampling */
     const stl = gsap.timeline({ paused: true });
     for (let i = 0; i < matchLen; i++) {
       if (fP[i] !== tP[i]) {
-        stl.to(offEls[i], {
-          morphSVG: { shape: tP[i], origin: '50% 50%' },
-          duration: 1
-        }, 0);
+        stl.to(offEls[i], { morphSVG: { shape: tP[i], origin: '50% 50%' }, duration: 1 }, 0);
       }
     }
 
-    /* Capture forward keyframes */
+    /* Sample forward keyframes */
     const fwdFrames = Array.from({ length: SAMPLES + 1 }, (_, k) => {
       stl.progress(k / SAMPLES);
       return offEls.map(el => el.getAttribute('d') || '');
     });
-
     document.body.removeChild(host);
 
-    /* Build forward + reverse for seamless loop */
-    const revFrames = fwdFrames.slice().reverse().slice(1); // skip duplicate midpoint
+    const revFrames = fwdFrames.slice().reverse().slice(1);
     const allFrames = [...fwdFrames, ...revFrames];
     const N = allFrames.length;
     const keyTimes = Array.from({ length: N }, (_, i) => (i / (N - 1)).toFixed(4)).join(';');
@@ -1368,117 +1344,118 @@ input[type=color]{width:28px;height:28px;border:1.5px solid var(--border);border
     const stroke = '#1e3a5f';
 
     let lines = '';
-
-    /* Morphing paths */
     for (let i = 0; i < fP.length; i++) {
       const isMatched = i < matchLen;
-      const from = fP[i];
       const isSame = isMatched && fP[i] === tP[i];
-
       if (!isMatched || isSame) {
-        /* Static path */
-        lines += `  <path d="${esc(from)}" fill="none" stroke="${stroke}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>\n`;
+        lines += '  <path d="' + esc(fP[i]) + '" fill="none" stroke="' + stroke + '" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>\n';
       } else {
-        /* Animated path — SMIL d interpolation */
         const dVals = allFrames.map(f => f[i]).join(';');
-        lines += `  <path d="${esc(from)}" fill="none" stroke="${stroke}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <animate attributeName="d"
-      values="${esc(dVals)}"
-      keyTimes="${keyTimes}"
-      dur="${dur}"
-      repeatCount="indefinite"
-      calcMode="linear"/>
-  </path>\n`;
+        lines += '  <path d="' + esc(fP[i]) + '" fill="none" stroke="' + stroke + '" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">\n';
+        lines += '    <animate attributeName="d" values="' + esc(dVals) + '" keyTimes="' + keyTimes + '" dur="' + dur + '" repeatCount="indefinite" calcMode="linear"/>\n';
+        lines += '  </path>\n';
       }
     }
-
-    /* Extra target paths — fade in at midpoint */
-    tP.slice(matchLen).forEach(d => {
-      lines += `  <path d="${esc(d)}" fill="none" stroke="${stroke}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="0">
-    <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.3;0.5;0.7;1" dur="${dur}" repeatCount="indefinite"/>
-  </path>\n`;
+    tP.slice(matchLen).forEach(function(d) {
+      lines += '  <path d="' + esc(d) + '" fill="none" stroke="' + stroke + '" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="0">\n';
+      lines += '    <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.3;0.5;0.7;1" dur="' + dur + '" repeatCount="indefinite"/>\n';
+      lines += '  </path>\n';
+    });
+    fP.slice(matchLen).forEach(function(d) {
+      lines += '  <path d="' + esc(d) + '" fill="none" stroke="' + stroke + '" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">\n';
+      lines += '    <animate attributeName="opacity" values="1;1;0;0;1" keyTimes="0;0.3;0.5;0.7;1" dur="' + dur + '" repeatCount="indefinite"/>\n';
+      lines += '  </path>\n';
     });
 
-    /* Extra source paths — fade out at midpoint */
-    fP.slice(matchLen).forEach(d => {
-      lines += `  <path d="${esc(d)}" fill="none" stroke="${stroke}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <animate attributeName="opacity" values="1;1;0;0;1" keyTimes="0;0.3;0.5;0.7;1" dur="${dur}" repeatCount="indefinite"/>
-  </path>\n`;
-    });
-
-    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
-  <!-- ${fromName} → ${toName} | GSAP MorphSVGPlugin · IconMotion · abhishektrivedi.com -->
-${lines}</svg>`;
+    return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">\n'
+      + '  <!-- ' + fromName + ' → ' + toName + ' | IconMotion · abhishektrivedi.com -->\n'
+      + lines + '</svg>';
   }
 
   function esc(s) {
     return (s || '').replace(/&/g, '&amp;').replace(/"/g, '&quot;');
   }
 
-  /* ── Remove morph section from editor ────────────────────── */
+  /* ── Remove morph controls from editor ───────────────────── */
   function removeMorphFromEditor() {
-    document.querySelectorAll('[class*="morph"],[id*="morph"],[data-morph]').forEach(el => {
+    document.querySelectorAll('[class*="morph"],[id*="morph"],[data-morph]').forEach(function(el) {
       if (el.id === 'im-morph-ov' || el.id === 'im-fab') return;
-      let t = el;
-      while (t.parentElement && t.parentElement.childElementCount <= 4
-             && !['BODY','MAIN'].includes(t.parentElement.tagName)) t = t.parentElement;
+      var t = el;
+      while (t.parentElement
+             && t.parentElement.childElementCount <= 4
+             && t.parentElement !== document.body
+             && t.parentElement.tagName !== 'MAIN') {
+        t = t.parentElement;
+      }
       t.style.display = 'none';
     });
-    const sec = document.getElementById('morphSection');
+    var sec = document.getElementById('morphSection');
     if (sec) sec.style.display = 'none';
   }
 
   /* ── Init ─────────────────────────────────────────────────── */
   function init() {
-    /* Inject CSS */
-    const style = document.createElement('style');
+    /* CSS */
+    var style = document.createElement('style');
     style.textContent = CSS;
     document.head.appendChild(style);
 
-    /* Overlay */
-    const ov = document.createElement('div');
+    /* Overlay — created before GSAP loads */
+    var ov = document.createElement('div');
     ov.id = 'im-morph-ov';
-    ov.innerHTML = `<div id="im-morph-panel">
-      <div id="im-mhdr">
-        <div>
-          <h2>Morph Pairs <span>GSAP MorphSVG</span></h2>
-          <p>${PAIRS.length} curated transitions · true path morphing · SMIL animated SVG download</p>
-        </div>
-        <button id="im-mclose">✕ Close</button>
-      </div>
-      <div id="im-mgrid"><div class="im-loading"><span class="im-spin"></span>Loading icons…</div></div>
-    </div>`;
+    ov.innerHTML = '<div id="im-morph-panel">'
+      + '<div id="im-mhdr">'
+      + '<div><h2>Morph Pairs <span class="im-badge">GSAP MorphSVG</span></h2>'
+      + '<p>' + PAIRS.length + ' curated transitions · true path morphing · SMIL SVG download</p></div>'
+      + '<button id="im-mclose">✕ Close</button>'
+      + '</div>'
+      + '<div id="im-mgrid"><div class="im-loading"><span class="im-spin"></span>Loading…</div></div>'
+      + '</div>';
     document.body.appendChild(ov);
-    ov.querySelector('#im-mclose').addEventListener('click', () => ov.classList.remove('open'));
-    ov.addEventListener('click', e => { if (e.target === ov) ov.classList.remove('open'); });
 
-    let loaded = false;
+    ov.querySelector('#im-mclose').addEventListener('click', function() {
+      ov.classList.remove('open');
+    });
+    ov.addEventListener('click', function(e) {
+      if (e.target === ov) ov.classList.remove('open');
+    });
 
-    /* FAB */
-    const fab = document.createElement('button');
+    var loaded = false;
+
+    /* FAB — always created */
+    var fab = document.createElement('button');
     fab.id = 'im-fab';
-    fab.textContent = 'Morph Pairs';
-    fab.addEventListener('click', async () => {
+    fab.innerHTML = '<span class="fab-icon">⇌</span> Morph Pairs';
+    fab.addEventListener('click', function() {
+      /* Show overlay immediately */
       ov.classList.add('open');
       if (loaded) return;
-      loaded = true;
-      const grid = ov.querySelector('#im-mgrid');
 
-      const cards = await Promise.all(
-        PAIRS.map(([f, t, fl, tl]) => buildCard(f, t, fl, tl))
-      );
-      grid.innerHTML = '';
-      cards.forEach(c => grid.appendChild(c));
+      var grid = ov.querySelector('#im-mgrid');
 
-      const note = document.createElement('p');
-      note.className = 'im-morph-note';
-      note.textContent = 'Powered by GSAP MorphSVGPlugin · True bezier path morphing';
-      grid.appendChild(note);
+      /* Load GSAP dynamically, then build cards */
+      ensureGSAP().then(function(ok) {
+        if (!ok) {
+          grid.innerHTML = '<div class="im-err-msg">Could not load GSAP MorphSVGPlugin.<br>Check your internet connection and reload.</div>';
+          return;
+        }
+        grid.innerHTML = '<div class="im-loading"><span class="im-spin"></span>Building morph pairs…</div>';
+        Promise.all(PAIRS.map(function(pair) {
+          return buildCard(pair[0], pair[1], pair[2], pair[3]);
+        })).then(function(cards) {
+          grid.innerHTML = '';
+          cards.forEach(function(c) { grid.appendChild(c); });
+          loaded = true;
+        }).catch(function(e) {
+          console.error('IconMotion Morph: card build failed', e);
+          grid.innerHTML = '<div class="im-err-msg">Error building morph pairs. See console for details.</div>';
+        });
+      });
     });
     document.body.appendChild(fab);
 
-    /* Observer to keep morph out of editor */
-    const obs = new MutationObserver(removeMorphFromEditor);
+    /* MutationObserver — suppress morph controls in editor */
+    var obs = new MutationObserver(removeMorphFromEditor);
     obs.observe(document.body, { childList: true, subtree: true });
     removeMorphFromEditor();
   }
