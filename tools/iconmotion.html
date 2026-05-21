@@ -1072,20 +1072,20 @@ input[type=color]{width:28px;height:28px;border:1.5px solid var(--border);border
 
   /* ── CSS ─────────────────────────────────────────────────── */
   const CSS = `
-    #im-morph-ov{
+    #im-gpov{
       position:fixed;inset:0;background:rgba(0,0,0,.6);
       backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);
       z-index:999999;display:flex;align-items:center;justify-content:center;
       opacity:0;pointer-events:none;transition:opacity .22s ease;}
-    #im-morph-ov.open{opacity:1;pointer-events:all;}
-    #im-morph-panel{
+    #im-gpov.open{opacity:1;pointer-events:all;}
+    #im-gppanel{
       background:#f5f0eb;border-radius:18px;
       box-shadow:0 24px 80px rgba(0,0,0,.35);
       width:min(96vw,1100px);max-height:90vh;
       display:flex;flex-direction:column;overflow:hidden;
       transform:translateY(16px) scale(.97);
       transition:transform .22s cubic-bezier(.4,0,.2,1);}
-    #im-morph-ov.open #im-morph-panel{transform:none;}
+    #im-gpov.open #im-gppanel{transform:none;}
     #im-mhdr{
       display:flex;align-items:center;justify-content:space-between;
       padding:16px 22px 12px;border-bottom:1.5px solid #e0d8d0;flex-shrink:0;}
@@ -1379,7 +1379,7 @@ input[type=color]{width:28px;height:28px;border:1.5px solid var(--border);border
   /* ── Remove morph controls from editor ───────────────────── */
   function removeMorphFromEditor() {
     document.querySelectorAll('[class*="morph"],[id*="morph"],[data-morph]').forEach(function(el) {
-      if (el.id === 'im-morph-ov' || el.id === 'im-fab') return;
+      if (el.id === 'im-gpov' || el.id === 'im-fab') return;
       var t = el;
       while (t.parentElement
              && t.parentElement.childElementCount <= 4
@@ -1402,8 +1402,8 @@ input[type=color]{width:28px;height:28px;border:1.5px solid var(--border);border
 
     /* Overlay — created before GSAP loads */
     var ov = document.createElement('div');
-    ov.id = 'im-morph-ov';
-    ov.innerHTML = '<div id="im-morph-panel">'
+    ov.id = 'im-gpov';
+    ov.innerHTML = '<div id="im-gppanel">'
       + '<div id="im-mhdr">'
       + '<div><h2>Morph Pairs <span class="im-badge">GSAP MorphSVG</span></h2>'
       + '<p>' + PAIRS.length + ' curated transitions · true path morphing · SMIL SVG download</p></div>'
