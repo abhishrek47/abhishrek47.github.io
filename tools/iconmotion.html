@@ -1517,7 +1517,7 @@ function buildCard(card, fromName, toName, fromLabel, toLabel) {
   });
   card.innerHTML = '';
   var svgWrap = document.createElement('div');
-  svgWrap.style.cssText = 'display:flex;align-items:center;justify-content:center;height:80px;';
+  svgWrap.style.cssText = 'display:flex;align-items:center;justify-content:center;height:72px;flex-shrink:0;';
   svgWrap.appendChild(svg);
   card.appendChild(svgWrap);
   var lbl = document.createElement('div');
@@ -1580,11 +1580,11 @@ function renderMorphGrid(pairs) {
 
   pairs.forEach(function(pair) {
     var card = document.createElement('div');
-    card.style.cssText = 'background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.11);border-radius:14px;padding:16px 10px 12px;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;transition:border-color .2s,background .2s,box-shadow .2s;cursor:default;';
+    card.style.cssText = 'background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.11);border-radius:14px;padding:14px 8px 10px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;position:relative;transition:border-color .2s,background .2s,box-shadow .2s;cursor:default;overflow:hidden;';
     card.onmouseenter = function(){ card.style.borderColor='rgba(192,57,43,.65)'; card.style.background='rgba(255,255,255,.12)'; card.style.boxShadow='0 0 16px rgba(192,57,43,.15)'; };
     card.onmouseleave = function(){ card.style.borderColor='rgba(255,255,255,.11)'; card.style.background='rgba(255,255,255,.07)'; card.style.boxShadow='none'; };
     var skel = document.createElement('div');
-    skel.style.cssText = 'width:56px;height:56px;background:rgba(255,255,255,.1);border-radius:10px;animation:morphSkelPulse 1.5s ease-in-out infinite;';
+    skel.style.cssText = 'width:52px;height:52px;margin:10px auto 8px;background:rgba(255,255,255,.1);border-radius:10px;animation:morphSkelPulse 1.5s ease-in-out infinite;';
     card.appendChild(skel);
     card.dataset.from  = pair[0]; card.dataset.to    = pair[1];
     card.dataset.froml = pair[2]||pair[0]; card.dataset.tol   = pair[3]||pair[1];
@@ -1605,14 +1605,42 @@ function renderMorphGrid(pairs) {
 }
 
 // ── Filter pairs by search term ───────────────────────────────────────────────
+// Word-boundary prefix search: split icon names by '-' and labels by ' ',
+// then check if ANY token STARTS WITH the search term.
+// Prevents 'clock' matching 'lock', 'blocked' matching 'lock', etc.
+function _morphTokens(pair) {
+  return [pair[0], pair[1]].join('-').split('-')
+    .concat((pair[2]||'').split(/[\s\-]+/))
+    .concat((pair[3]||'').split(/[\s\-]+/))
+    .map(function(t){ return t.toLowerCase(); })
+    .filter(function(t){ return t.length > 0; });
+}
 window.filterMorphPairs = function(term) {
   _searchTerm = (term||'').toLowerCase().trim();
   var base = _currentCatId === 'all' ? CATEGORIES[0].pairs
     : (CATEGORIES.find(function(c){ return c.id===_currentCatId; })||CATEGORIES[0]).pairs;
-  var filtered = _searchTerm
-    ? base.filter(function(p){ return (p[0]+p[1]+p[2]+p[3]).toLowerCase().indexOf(_searchTerm) >= 0; })
-    : base;
-  renderMorphGrid(filtered);
+  if (!_searchTerm) { renderMorphGrid(base); return; }
+  // Score each pair: 3=token exact match, 2=token starts-with, 1=full-name substring (fallback)
+  var scored = [];
+  base.forEach(function(p) {
+    var tokens = _morphTokens(p);
+    var score = 0;
+    tokens.forEach(function(tok) {
+      if (tok === _searchTerm) score = Math.max(score, 3);
+      else if (tok.indexOf(_searchTerm) === 0) score = Math.max(score, 2);
+    });
+    // Fallback: full icon-name substring (lower priority, avoids cross-word matches)
+    if (score === 0) {
+      var fromWords = p[0].split('-');
+      var toWords   = p[1].split('-');
+      if (fromWords.some(function(w){ return w.startsWith(_searchTerm); }) ||
+          toWords.some(function(w){ return w.startsWith(_searchTerm); }))
+        score = 2;
+    }
+    if (score > 0) scored.push({ p:p, s:score });
+  });
+  scored.sort(function(a,b){ return b.s - a.s; });
+  renderMorphGrid(scored.map(function(x){ return x.p; }));
 };
 
 // ── Build category tabs ───────────────────────────────────────────────────────
@@ -1710,7 +1738,7 @@ document.head.appendChild(skSt);
   <div id="morphPairCount" style="padding:8px 20px 4px;font-size:.72rem;color:rgba(245,240,235,.4);font-family:'JetBrains Mono',monospace;flex-shrink:0;"></div>
 
   <!-- Grid -->
-  <div id="morphPageGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(128px,1fr));gap:10px;padding:10px 20px 20px;overflow-y:auto;flex:1;"></div>
+  <div id="morphPageGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(128px,1fr));grid-auto-rows:170px;align-content:start;gap:10px;padding:10px 20px 20px;overflow-y:auto;flex:1;"></div>
 </div>
 </body>
 </html>
